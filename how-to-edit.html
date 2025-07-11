@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Resume Template Guide</title>
+    <style>
+        :root {
+            --primary-color: #3a86ff;
+            --secondary-color: #2b2d42;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gray-color: #6c757d;
+            --success-color: #28a745;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f7;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h1 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        h3 {
+            color: var(--secondary-color);
+            margin-top: 25px;
+        }
+        
+        .feature-list {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        .steps {
+            counter-reset: step-counter;
+        }
+        
+        .step {
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 25px;
+        }
+        
+        .step:before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background-color: var(--primary-color);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .note {
+            background-color: #e7f5ff;
+            padding: 15px;
+            border-left: 4px solid var(--primary-color);
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .warning {
+            background-color: #fff3bf;
+            padding: 15px;
+            border-left: 4px solid #ffd43b;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .file-structure {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-family: monospace;
+            line-height: 1.8;
+        }
+        
+        .tip-box {
+            background-color: #ebfbee;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+        
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        ul, ol {
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Modern Resume Template Guide</h1>
+        <p>Create a sleek, professional resume with this modern, one-page scrolling template.</p>
+    </header>
+    
+    <div class="section">
+        <p>This guide walks you through the process of customizing your resume using the provided template files, from editing your data to previewing and deploying your resume.</p>
+    </div>
+    
+    <div class="section">
+        <h2><span class="emoji">💡</span> Features</h2>
+        <div class="feature-list">
+            <ul>
+                <li><strong>Modern Design</strong>: Clean, one-page scrolling layout with a professional look.</li>
+                <li><strong>Fully Responsive</strong>: Adapts seamlessly to desktops, tablets, and mobile devices using HTML and CSS.</li>
+                <li><strong>Data-Driven</strong>: All content is loaded dynamically from a <code>data.json</code> file.</li>
+                <li><strong>Easy Deployment</strong>: Host your resume on platforms like Netlify or GitHub Pages with minimal setup.</li>
+                <li><strong>Editable</strong>: Use the included <code>form.html</code> to easily input and update your resume data.</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2><span class="emoji">🛠</span> How to Create Your Resume</h2>
+        <p>Follow these steps to build and customize your resume using the template:</p>
+        
+        <div class="steps">
+            <div class="step">
+                <h3>Receive and Organize Files</h3>
+                <ul>
+                    <li>Upon receiving the template, unzip the folder if necessary. You'll find files including <code>index.html</code>, <code>form.html</code>, <code>data.json</code>, <code>style.css</code>, <code>main.js</code>, and an <code>assets</code> folder with <code>profile.jpg</code>.</li>
+                    <li>Create a dedicated folder on your computer to store these files (e.g., <code>MyResume</code>).</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <h3>Backup the Original <code>data.json</code></h3>
+                <ul>
+                    <li>Before making changes, create a backup of the <code>data.json</code> file to preserve the sample data as a reference.</li>
+                    <li>Copy <code>data.json</code> and save it as <code>data-backup.json</code> in the same folder or another safe location.</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <h3>Open the Resume Builder Form</h3>
+                <ul>
+                    <li>Open <code>form.html</code> in a web browser (e.g., Chrome, Firefox). This file provides a user-friendly interface to input your resume data.</li>
+                    <li>The form includes sections for personal information, skills, experience, education, languages, projects, and social links.</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <h3>Load Existing <code>data.json</code> as a Guide</h3>
+                <ul>
+                    <li>In the form, click the <strong>"Load Existing Data"</strong> button at the bottom.</li>
+                    <li>Select the original <code>data.json</code> file from the template folder. This loads the sample data into the form, serving as a guide for the expected format.</li>
+                    <li>Review the sample data to understand how to structure your information.</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <h3>Input Your Data</h3>
+                <ul>
+                    <li>Replace the sample data with your own information in each section of the form:
+                        <ul>
+                            <li><strong>Personal Information</strong>: Enter your name, job title, email, phone, and location.</li>
+                            <li><strong>About You</strong>: Write a brief professional summary.</li>
+                            <li><strong>Skills</strong>: Add skills and set proficiency levels using the sliders.</li>
+                            <li><strong>Work Experience</strong>: Include job positions, companies, dates, and responsibilities.</li>
+                            <li><strong>Education</strong>: List degrees, institutions, locations, and years.</li>
+                            <li><strong>Languages</strong>: Add languages and proficiency levels.</li>
+                            <li><strong>Projects</strong>: Describe projects with names, descriptions, and optional URLs.</li>
+                            <li><strong>Social Links</strong>: Select platforms (GitHub, LinkedIn, Facebook, Twitter, Instagram) and add profile URLs.</li>
+                        </ul>
+                    </li>
+                    <li>Use the <strong>"Add"</strong> buttons to include additional entries for skills, experience, etc., and the <strong>"Remove"</strong> buttons to delete unwanted entries.</li>
+                    <li>Ensure all required fields (marked with <code>required</code>) are filled to avoid errors when saving.</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <h3>Save Your Data</h3>
+                <ul>
+                    <li>Once you've entered all your information, click the <strong>"Generate Resume"</strong> button at the bottom of the form.</li>
+                    <li>The form will validate your input and prompt you to download a new <code>data.json</code> file.</li>
+                    <li>Save this file in the template folder, replacing the original <code>data.json</code> (your backup ensures the sample data is safe).</li>
+                    <li>If you encounter validation errors (e.g., missing required fields or no skills added), correct them and try again.</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <h3>Preview Your Resume</h3>
+                <ul>
+                    <li>Open <code>index.html</code> in a web browser to view your resume.</li>
+                    <li>You'll be prompted to select a <code>data.json</code> file. Choose the <code>data.json</code> you just saved from the form.</li>
+                    <li>The resume will load with your data, styled according to the template's modern design. Verify that all information displays correctly.</li>
+                    <li>Replace <code>assets/profile.jpg</code> with your own photo (keep the filename as <code>profile.jpg</code>) to personalize the resume further.</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <h3>Edit Your Resume (Optional)</h3>
+                <ul>
+                    <li>If you need to make changes, reopen <code>form.html</code> in your browser.</li>
+                    <li>Click <strong>"Load Existing Data"</strong> and select your saved <code>data.json</code> file to load your current resume data.</li>
+                    <li>Update the necessary fields, then click <strong>"Generate Resume"</strong> to save a new <code>data.json</code>.</li>
+                    <li>Repeat the preview process by opening <code>index.html</code> and selecting the updated <code>data.json</code>.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2><span class="emoji">🚀</span> Deployment Tips</h2>
+        <p>Share your resume online by hosting it on a web platform:</p>
+        
+        <h3>Netlify</h3>
+        <ul>
+            <li>Sign up at <a href="https://www.netlify.com/" target="_blank">Netlify</a>.</li>
+            <li>Use the "Netlify Drop" feature to drag and drop your template folder, or connect your GitHub repository.</li>
+            <li>Netlify will provide a public URL (e.g., <code>your-resume.netlify.app</code>) to share your resume.</li>
+        </ul>
+        
+        <h3>GitHub Pages</h3>
+        <ul>
+            <li>Create a GitHub repository and push your template folder to it.</li>
+            <li>Enable GitHub Pages in the repository settings, selecting the main branch and the root folder.</li>
+            <li>Access your resume at <code>https://yourusername.github.io/your-repo-name</code>.</li>
+        </ul>
+        
+        <h3>Other Hosting</h3>
+        <ul>
+            <li>Upload the entire folder to any web host supporting static files (e.g., Vercel, Firebase Hosting).</li>
+            <li>Ensure <code>index.html</code> is set as the default entry point.</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <h2><span class="emoji">🧠</span> Customization Notes</h2>
+        <ul>
+            <li><strong>Styling</strong>: Modify <code>style.css</code> to tweak colors, fonts, or layout. For example, change the <code>--primary-color</code> variable to alter the theme.</li>
+            <li><strong>Content</strong>: The <code>main.js</code> file controls how <code>data.json</code> data is loaded into <code>index.html</code>. Advanced users can edit <code>main.js</code> to adjust the display logic.</li>
+            <li><strong>Profile Photo</strong>: Ensure your <code>profile.jpg</code> is optimized (e.g., 200x200 pixels, &lt;500KB) for fast loading.</li>
+            <li><strong>Browser Compatibility</strong>: Test <code>index.html</code> and <code>form.html</code> in multiple browsers (Chrome, Firefox, Safari) to ensure consistency.</li>
+            <li><strong>Data Format</strong>: The <code>data.json</code> file must match the structure expected by the template. Use <code>form.html</code> to generate it to avoid errors.</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <h2><span class="emoji">🔧</span> Troubleshooting</h2>
+        <ul>
+            <li><strong>Resume Not Loading</strong>: Ensure you selected the correct <code>data.json</code> file in <code>index.html</code>. Verify the JSON structure by loading it in <code>form.html</code>.</li>
+            <li><strong>Form Validation Errors</strong>: Check that all required fields are filled and at least one skill is added before generating <code>data.json</code>.</li>
+            <li><strong>Display Issues</strong>: Clear your browser cache or try a different browser if the resume doesn't render correctly.</li>
+            <li><strong>Deployment Errors</strong>: Confirm all files, including the <code>assets</code> folder, are uploaded to your hosting platform.</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <h2><span class="emoji">📦</span> Files Overview</h2>
+        <div class="file-structure">
+            <div>📁 MyResume/</div>
+            <div>├── 📄 index.html <span class="gray-text"># The main resume page</span></div>
+            <div>├── 📄 form.html <span class="gray-text"># The resume builder form</span></div>
+            <div>├── 📄 data.json <span class="gray-text"># Stores your resume data</span></div>
+            <div>├── 📄 style.css <span class="gray-text"># Visual styling</span></div>
+            <div>├── 📄 main.js <span class="gray-text"># Loads data into index.html</span></div>
+            <div>├── 📄 form.js <span class="gray-text"># Form functionality</span></div>
+            <div>└── 📁 assets/</div>
+            <div>    └── 📄 profile.jpg <span class="gray-text"># Your profile photo</span></div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2><span class="emoji">🌟</span> Additional Tips</h2>
+        <div class="tip-box">
+            <ul>
+                <li><strong>Keep Data Concise</strong>: Use short, impactful descriptions to fit the one-page design.</li>
+                <li><strong>Regular Backups</strong>: Save versions of <code>data.json</code> (e.g., <code>data-2025-07-10.json</code>) before major edits.</li>
+                <li><strong>Shareable Links</strong>: After deploying, share your resume URL on job applications or social media.</li>
+                <li><strong>Print Version</strong>: Open <code>index.html</code>, select your <code>data.json</code>, and use the browser's print function (Ctrl+P) to save as a PDF for physical copies.</li>
+            </ul>
+        </div>
+        
+        <p>This template makes it easy to create, edit, and share a professional resume. Enjoy building your standout resume!</p>
+    </div>
+</body>
+</html>

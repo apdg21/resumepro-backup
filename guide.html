@@ -21,31 +21,32 @@
         
         /* Consistent Header Styling */
         header {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 1.5rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            }
-        
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+           background-color: white;
+           box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+           padding: 1.5rem 0;
+           position: sticky;
+           top: 0;
+           z-index: 100;
+           width: 100%; /* Ensure header spans full viewport width */
            }
+
+      .header-content {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 2rem;
+          display: flex;
+         justify-content: space-between;
+         align-items: center;
+         }
         
-        .logo {
+        .header-content .logo {
             font-size: 1.8rem;
             font-weight: 700;
             color: var(--primary-color);
             text-decoration: none;
         }
         
-        .cta-button {
+        .header-content .cta-button {
             display: inline-block;
             background-color: var(--primary-color);
             color: white;
@@ -66,9 +67,9 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: var(--dark-color);
-            max-width: 1200px;
+            
             margin: 0 auto;
-            padding: 20px;
+            padding: 0px;
             background-color: #f5f5f7;
         }
         .content-wrapper {

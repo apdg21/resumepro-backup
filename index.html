@@ -149,19 +149,24 @@
         }
         
         .template-image {
-            height: 200px;
+            position: relative;
+            height: 500px; /* Fixed height for consistency */
             overflow: hidden;
+            pointer-events: none;
+            background-color: #f5f5f5; /* Light background for empty space */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
         }
         
-        .template-image img {
+        .template-image iframe {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        
-        .template-card:hover .template-image img {
-            transform: scale(1.05);
+            height: 100%; /* Make iframe taller than container */
+            border: none;
+            transform: scale(1); /* Scale down to fit */
+            transform-origin: top center; /* Scale from top center */
+            pointer-events: none;
         }
         
         .template-info {
@@ -421,21 +426,108 @@
             color: #adb5bd;
             font-size: 0.9rem;
         }
-        .template-image {
-          position: relative;
-          padding-top: 56.25%; /* 16:9 Aspect Ratio */
-          height: 400px;  
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
         }
-
-       .template-image iframe {
-         position: absolute;
-         top: 0;
-         left: 0;
-         width: 100%;
-         height: 100%;
-         border: none;
-       }
-
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 1000px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-header {
+            padding: 1rem;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .view-options {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            padding: 0.5rem 1rem;
+        }
+        
+        .view-btn {
+            padding: 0.5rem 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray);
+            border-bottom: 2px solid transparent;
+        }
+        
+        .view-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        
+        .modal-iframe-container {
+            flex: 1;
+            overflow: auto;
+            position: relative;
+        }
+        
+        .modal-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .desktop-view .modal-iframe {
+            width: 100%;
+            height: 700px;
+        }
+        
+        .mobile-view .modal-iframe {
+            width: 375px;
+            height: 667px;
+            margin: 0 auto;
+            display: block;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
         
         @media (max-width: 768px) {
             .hero h1 {
@@ -448,6 +540,17 @@
             
             .template-actions {
                 flex-direction: column;
+            }
+            
+            .view-options {
+                display: none;
+            }
+            
+            .mobile-view .modal-iframe {
+                width: 100%;
+                height: 500px;
+                border: none;
+                border-radius: 0;
             }
         }
     </style>
@@ -488,13 +591,13 @@
                 <!-- Template 1 -->
                 <div class="template-card">
                     <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableresume/style1/" loading="lazy"></iframe>
+                        <iframe class="thumbs" src="https://apdg21.github.io/editableresume/style1/" loading="lazy" scrolling="no"></iframe>
                     </div>
                     <div class="template-info">
                         <h3>Timeless</h3>
                         <p>A clean, single-column layout with a classic font and minimalistic design, perfect for traditional roles like law or academia.</p>
                         <div class="template-actions">
-                            <a href="https://apdg21.github.io/editableresume/style1/" target="_blank" class="btn btn-outline">Live Preview</a>
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style1/">Live Preview</a>
                             <a href="https://etsy.com" target="_blank" class="btn btn-solid">Buy Now ($19)</a>
                         </div>
                     </div>
@@ -503,13 +606,13 @@
                 <!-- Template 2 -->
                 <div class="template-card">
                     <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableresume/style2/" loading="lazy"></iframe>
+                        <iframe src="https://apdg21.github.io/editableresume/style2/" loading="lazy" scrolling="no"></iframe>
                     </div>
                     <div class="template-info">
                         <h3>Sleek</h3>
                         <p>Features modern typography and a streamlined two-column format, ideal for tech professionals or startups.</p>
                         <div class="template-actions">
-                            <a href="https://apdg21.github.io/editableresume/style2/" target="_blank" class="btn btn-outline">Live Preview</a>
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style2/">Live Preview</a>
                             <a href="https://etsy.com" target="_blank" class="btn btn-solid">Buy Now ($19)</a>
                         </div>
                     </div>
@@ -518,13 +621,13 @@
                 <!-- Template 3 -->
                 <div class="template-card">
                     <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableresume/style3/" loading="lazy"></iframe>
+                        <iframe src="https://apdg21.github.io/editableresume/style3/" loading="lazy" scrolling="no"></iframe>
                     </div>
                     <div class="template-info">
                         <h3>Executive</h3>
                         <p>A formal, structured design with bold section headers and a professional tone, suited for corporate or leadership positions.</p>
                         <div class="template-actions">
-                            <a href="https://apdg21.github.io/editableresume/style3/" target="_blank" class="btn btn-outline">Live Preview</a>
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style3/">Live Preview</a>
                             <a href="https://etsy.com" target="_blank" class="btn btn-solid">Buy Now ($24)</a>
                         </div>
                     </div>
@@ -533,13 +636,13 @@
                 <!-- Template 4 -->
                 <div class="template-card">
                     <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableresume/style4/" loading="lazy"></iframe>
+                        <iframe src="https://apdg21.github.io/editableresume/style4/" loading="lazy" scrolling="no"></iframe>
                     </div>
                     <div class="template-info">
                         <h3>Vivid</h3>
                         <p>Incorporates colorful accents and creative icons, great for designers or marketers aiming to showcase personality.</p>
                         <div class="template-actions">
-                            <a href="https://apdg21.github.io/editableresume/style4/" target="_blank" class="btn btn-outline">Live Preview</a>
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style4/">Live Preview</a>
                             <a href="https://etsy.com" target="_blank" class="btn btn-solid">Buy Now ($22)</a>
                         </div>
                     </div>
@@ -548,13 +651,13 @@
                 <!-- Template 5 -->
                 <div class="template-card">
                     <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableresume/style5/" loading="lazy"></iframe>
+                        <iframe src="https://apdg21.github.io/editableresume/style5/" loading="lazy" scrolling="no"></iframe>
                     </div>
                     <div class="template-info"> 
                         <h3>Pure</h3>
                         <p>A minimalist, distraction-free template with a monochromatic palette, versatile for any industry.</p>
                         <div class="template-actions">
-                            <a href="https://apdg21.github.io/editableresume/style5/" target="_blank" class="btn btn-outline">Live Preview</a>
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style5/">Live Preview</a>
                             <a href="https://etsy.com" target="_blank" class="btn btn-solid">Buy Now ($21)</a>
                         </div>
                     </div>
@@ -563,13 +666,13 @@
                 <!-- Template 6 -->
                 <div class="template-card">
                     <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableresume/style6/" loading="lazy"></iframe>
+                        <iframe src="https://apdg21.github.io/editableresume/style6/" loading="lazy" scrolling="no"></iframe>
                     </div>
                     <div class="template-info">
                         <h3>Refined</h3>
                         <p>Elegant with subtle design elements like thin lines and sophisticated fonts, ideal for high-end or executive roles.</p>
                         <div class="template-actions">
-                            <a href="https://apdg21.github.io/editableresume/style6/" target="_blank" class="btn btn-outline">Live Preview</a>
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style6/">Live Preview</a>
                             <a href="https://etsy.com" target="_blank" class="btn btn-solid">Buy Now ($23)</a>
                         </div>
                     </div>
@@ -581,13 +684,13 @@
                 <!-- Template 7 -->
                 <div class="template-card">
                     <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableresume/style7/" loading="lazy"></iframe>
+                        <iframe src="https://apdg21.github.io/editableresume/style7/" loading="lazy" scrolling="no"></iframe>
                     </div>
                     <div class="template-info">
                         <h3>Dynamic</h3>
                         <p>Bold typography and contrasting colors create a striking look, perfect for competitive fields like sales or media.</p>
                         <div class="template-actions">
-                            <a href="https://apdg21.github.io/editableresume/style7/" target="_blank" class="btn btn-outline">Live Preview</a>
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style7/">Live Preview</a>
                             <a href="https://etsy.com" target="_blank" class="btn btn-solid">Buy Now ($22)</a>
                         </div>
                     </div>
@@ -596,13 +699,13 @@
                 <!-- Template 8 -->
                 <div class="template-card">
                     <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableresume/style8/" loading="lazy"></iframe>
+                        <iframe src="https://apdg21.github.io/editableresume/style8/" loading="lazy" scrolling="no"></iframe>
                     </div>
                     <div class="template-info">
                         <h3>SkillFocus</h3>
                         <p>Prioritizes skills and achievements in a functional layout, ideal for career changers or those with non-linear work histories.</p>
                         <div class="template-actions">
-                            <a href="https://apdg21.github.io/editableresume/style8/" target="_blank" class="btn btn-outline">Live Preview</a>
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style8/">Live Preview</a>
                             <a href="https://etsy.com" target="_blank" class="btn btn-solid">Buy Now ($18)</a>
                         </div>
                     </div>
@@ -611,13 +714,13 @@
                 <!-- Template 9 -->
                 <div class="template-card">
                     <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableresume/style9/" loading="lazy"></iframe>
+                        <iframe src="https://apdg21.github.io/editableresume/style9/" loading="lazy" scrolling="no"></iframe>
                     </div>
                     <div class="template-info">
                         <h3>Corporate</h3>
                         <p>A polished, organized design with a focus on clarity, tailored for business or finance professionals.</p>
                         <div class="template-actions">
-                            <a href="https://apdg21.github.io/editableresume/style9/" target="_blank" class="btn btn-outline">Live Preview</a>
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style9/">Live Preview</a>
                             <a href="https://etsy.com" target="_blank" class="btn btn-solid">Buy Now ($20)</a>
                         </div>
                     </div>
@@ -626,13 +729,13 @@
                 <!-- Template 10 -->
                 <div class="template-card">
                     <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableresume/style10/" loading="lazy"></iframe>
+                        <iframe src="https://apdg21.github.io/editableresume/style10/" loading="lazy" scrolling="no"></iframe>
                     </div>
                     <div class="template-info">
                         <h3>Trendy</h3>
                         <p>Combines stylish fonts and a modern layout with creative flair, suited for fashion or creative industry roles.</p>
                         <div class="template-actions">
-                            <a href="https://apdg21.github.io/editableresume/style10/" target="_blank" class="btn btn-outline">Live Preview</a>
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style10/">Live Preview</a>
                             <a href="https://etsy.com" target="_blank" class="btn btn-solid">Buy Now ($21)</a>
                         </div>
                     </div>
@@ -823,6 +926,25 @@
         </div>
     </footer>
     
+    <!-- Modal for template preview -->
+    <div class="modal" id="previewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Template Preview</div>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="view-options">
+                <button class="view-btn active" data-view="desktop">Desktop View</button>
+                <button class="view-btn" data-view="mobile">Mobile View</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-iframe-container">
+                    <iframe class="modal-iframe desktop-view" frameborder="0"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <script>
         // FAQ toggle functionality
         document.querySelectorAll('.faq-question').forEach(question => {
@@ -857,6 +979,73 @@
             
             // Scroll to templates section
             document.getElementById('templates').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Modal functionality
+        const modal = document.getElementById('previewModal');
+        const modalIframe = document.querySelector('.modal-iframe');
+        const viewBtns = document.querySelectorAll('.view-btn');
+        const closeModal = document.querySelector('.close-modal');
+        const previewBtns = document.querySelectorAll('.preview-btn');
+        
+        // Open modal when preview button is clicked
+        previewBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const url = btn.getAttribute('data-url');
+                modalIframe.src = url;
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+                
+                // On mobile, default to mobile view
+                if (window.innerWidth <= 768) {
+                    setView('mobile');
+                } else {
+                    setView('desktop');
+                }
+            });
+        });
+        
+        // Close modal
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // View toggle functionality
+        viewBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const view = btn.getAttribute('data-view');
+                setView(view);
+                
+                // Update active button
+                viewBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+        
+        function setView(view) {
+            const iframeContainer = document.querySelector('.modal-iframe-container');
+            const iframe = document.querySelector('.modal-iframe');
+            
+            iframeContainer.className = 'modal-iframe-container';
+            iframe.className = 'modal-iframe';
+            
+            if (view === 'mobile') {
+                iframeContainer.classList.add('mobile-view');
+                iframe.classList.add('mobile-view');
+            } else {
+                iframeContainer.classList.add('desktop-view');
+                iframe.classList.add('desktop-view');
+            }
         }
     </script>
 </body>

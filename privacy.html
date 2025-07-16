@@ -125,6 +125,50 @@
             border-top: 1px solid #eee;
             padding-top: 1rem;
         }
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 10rem 1.5rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding: 10px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
         
         @media (max-width: 768px) {
             .header-content {
@@ -142,6 +186,10 @@
             .policy-header h1 {
                 font-size: 2rem;
             }
+           footer {         
+            padding: 3rem 0 1.5rem !important;
+        }
+
         }
     </style>
 </head>
@@ -235,5 +283,49 @@
             </div>
         </div>
     </div>
+<footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>ResumePro</h3>
+                    <p>Professional digital resume templates designed to help you stand out and land your dream job.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Templates</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Timeless</a></li>
+                        <li><a href="#">Sleek</a></li>
+                        <li><a href="#">Executive</a></li>
+                        <li><a href="#">All Templates</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://apdg21.github.io/resumepro/help#editing">How to Edit</a></li>
+                        <li><a href="https://apdg21.github.io/resumepro/help#hosting">Hosting Guide</a></li>
+                        <li><a href="https://apdg21.github.io/resumepro/help#tips">Resume Tips</a></li>
+                        <li><a href="https://apdg21.github.io/resumepro/guide">GUIDE</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 ResumePro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

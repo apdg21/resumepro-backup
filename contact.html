@@ -279,7 +279,9 @@
             
             <div class="contact-form">
                 <h2>Send Us a Message</h2>
-                <form id="contactForm">
+                <form id="contactForm" action="https://formsubmit.co/reload.adolf2023@gmail.com" method="POST">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_next" value="https://resumepro.com/thank-you.html">
                     <div class="form-group">
                         <label for="name">Your Name</label>
                         <input type="text" id="name" name="name" class="form-control" required>
@@ -312,77 +314,41 @@
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Get form values
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value;
-            const message = document.getElementById('message').value;
             const statusMessage = document.getElementById('statusMessage');
+            const form = this;
+            const formData = new FormData(form);
             
-            // Simple validation
-            if(!name || !email || !subject || !message) {
+            // Simple client-side validation
+            if(!formData.get('name') || !formData.get('email') || !formData.get('subject') || !formData.get('message')) {
                 statusMessage.textContent = 'Please fill in all fields.';
                 statusMessage.className = 'status-message error';
+                statusMessage.style.display = 'block';
                 return;
             }
             
-            // Prepare data for sending (you'll replace this with actual email sending logic)
-            const formData = {
-                name: name,
-                email: email,
-                subject: subject,
-                message: message
-            };
-            
-            // Here's where you would normally send the data to your server
-            // For this example, we'll simulate a successful submission
-            
-            // Simulate API call with timeout
             statusMessage.textContent = 'Sending your message...';
             statusMessage.className = 'status-message';
             statusMessage.style.display = 'block';
             
-            setTimeout(() => {
-                // This is where you would normally handle the actual email submission
-                // For now, we'll just show a success message
-                
-                // Replace this with your actual email sending code
-                // Example using FormSubmit.co (free service):
-                // fetch("https://formsubmit.co/ajax/reload.adolf2023@gmail.com", {
-                //     method: "POST",
-                //     headers: { 
-                //         'Content-Type': 'application/json',
-                //         'Accept': 'application/json'
-                //     },
-                //     body: JSON.stringify(formData)
-                // })
-                // .then(response => response.json())
-                // .then(data => {
-                //     statusMessage.textContent = 'Message sent successfully!';
-                //     statusMessage.className = 'status-message success';
-                //     document.getElementById('contactForm').reset();
-                // })
-                // .catch(error => {
-                //     statusMessage.textContent = 'There was an error sending your message. Please try again.';
-                //     statusMessage.className = 'status-message error';
-                // });
-                
-                // For now, just show success message
-                statusMessage.textContent = 'Message sent successfully! (Demo - replace with real email sending code)';
-                statusMessage.className = 'status-message success';
-                document.getElementById('contactForm').reset();
-                
-            }, 1500);
+            fetch('https://formsubmit.co/ajax/reload.adolf2023@gmail.com', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success === 'true') {
+                    statusMessage.textContent = 'Message sent successfully!';
+                    statusMessage.className = 'status-message success';
+                    form.reset();
+                } else {
+                    throw new Error('Submission failed');
+                }
+            })
+            .catch(error => {
+                statusMessage.textContent = 'There was an error sending your message. Please try again.';
+                statusMessage.className = 'status-message error';
+            });
         });
-        
-        // To actually send emails, you have several options:
-        // 1. Use FormSubmit.co (free) - just change the form action to:
-        //    <form action="https://formsubmit.co/YOUR_EMAIL@gmail.com" method="POST">
-        //    and add <input type="hidden" name="_captcha" value="false">
-        //    and <input type="hidden" name="_next" value="https://yourdomain.com/thank-you.html">
-        //
-        // 2. Use a server-side solution (PHP, Node.js, etc.)
-        // 3. Use a service like EmailJS (free tier available)
     </script>
 </body>
 </html>

@@ -861,14 +861,28 @@
             </div>
             
             <div class="faq-item">
-                <div class="faq-question">
-                    <span>Can I customize the colors and fonts?</span>
-                    <span class="faq-toggle">+</span>
-                </div>
-                <div class="faq-answer">
-                    <p>Yes! Each template includes a configuration file where you can change colors, fonts, and other design elements without touching any code. Advanced users can further customize the CSS if desired.</p>
-                </div>
-            </div>
+    <div class="faq-question">
+        <span>Can I customize the colors and fonts?</span>
+        <span class="faq-toggle">+</span>
+    </div>
+    <div class="faq-answer">
+        <p>Absolutely! You can personalize your resume by editing the <code>style.css</code> file included with your template. Simply:</p>
+        <ol>
+            <li>Open <code>style.css</code> in any text editor</li>
+            <li>Modify the color variables (like <code>--primary-color</code>) and font properties</li>
+            <li>Save your changes and refresh your resume page</li>
+        </ol>
+        <p>For advanced customization, you can edit any CSS rules in the file. No coding experience is needed for basic changes - just follow the clear comments we've included.</p>
+        <p><strong>Example customization:</strong></p>
+        <pre>/* ======== Customize These Values ======== */
+:root {
+  --primary-color: #3a86ff;  /* Change main accent color */
+  --text-color: #2b2d42;     /* Change text color */
+  --font-main: 'Segoe UI', sans-serif; /* Change font */
+}</pre>
+        <p>All templates include detailed instructions in the <code>README.md</code> file for common customizations.</p>
+    </div>
+</div>
             
             <div class="faq-item">
                 <div class="faq-question">

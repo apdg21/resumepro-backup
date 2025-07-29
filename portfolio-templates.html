@@ -286,9 +286,12 @@
             }
             
             .countdown {
-                flex-direction: column;
+                flex-direction: row;
                 gap: 0.5rem;
             }
+            .countdown-item {
+             padding: 1rem 1rem;
+             }
             
             .dropdown-content {
                 left: auto;
@@ -334,19 +337,19 @@
         
         <div class="countdown">
             <div class="countdown-item">
-                <div class="countdown-number" id="days">14</div>
+                <div class="countdown-number" id="days">00</div>
                 <div class="countdown-label">Days</div>
             </div>
             <div class="countdown-item">
-                <div class="countdown-number" id="hours">06</div>
+                <div class="countdown-number" id="hours">00</div>
                 <div class="countdown-label">Hours</div>
             </div>
             <div class="countdown-item">
-                <div class="countdown-number" id="minutes">45</div>
+                <div class="countdown-number" id="minutes">00</div>
                 <div class="countdown-label">Minutes</div>
             </div>
             <div class="countdown-item">
-                <div class="countdown-number" id="seconds">30</div>
+                <div class="countdown-number" id="seconds">00</div>
                 <div class="countdown-label">Seconds</div>
             </div>
         </div>
@@ -406,29 +409,37 @@
     </footer>
 
     <script>
-        // Simple countdown timer (for demonstration)
+        // Set the launch date (2 weeks from now)
+        const launchDate = new Date();
+        launchDate.setDate(launchDate.getDate() + 14);
+        launchDate.setHours(0, 0, 0, 0); // Set to midnight for clean countdown
+        
         function updateCountdown() {
-            // Set the launch date (2 weeks from now)
-            const launchDate = new Date();
-            launchDate.setDate(launchDate.getDate() + 14);
-            
             const now = new Date();
             const diff = launchDate - now;
             
+            // Calculate time units
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
             
+            // Update display
             document.getElementById('days').textContent = days.toString().padStart(2, '0');
             document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
             document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
             document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            
+            // If countdown is finished
+            if (diff < 0) {
+                clearInterval(countdownInterval);
+                document.querySelector('.countdown').innerHTML = '<div style="font-size: 1.5rem; color: var(--primary);">Templates are now available!</div>';
+            }
         }
         
-        // Update countdown every second
+        // Run immediately and then every second
         updateCountdown();
-        setInterval(updateCountdown, 1000);
+        const countdownInterval = setInterval(updateCountdown, 1000);
         
         // Form submission
         document.querySelector('.notify-form').addEventListener('submit', function(e) {

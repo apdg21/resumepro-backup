@@ -609,10 +609,25 @@
             document.querySelector('.nav-menu').classList.toggle('active');
         });
 
-        // Close menu when clicking a nav link or dropdown item
-        document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
+        // Toggle dropdown on mobile
+        document.querySelectorAll('.dropdown .nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                // Prevent default link behavior
+                e.preventDefault();
+                // Toggle active class on parent dropdown
+                const dropdown = link.closest('.dropdown');
+                dropdown.classList.toggle('active');
+            });
+        });
+
+        // Close menu when clicking a non-dropdown nav link or dropdown item
+        document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
             link.addEventListener('click', () => {
                 document.querySelector('.nav-menu').classList.remove('active');
+                // Remove active class from all dropdowns
+                document.querySelectorAll('.dropdown').forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
             });
         });
     </script>

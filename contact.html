@@ -28,11 +28,11 @@
             line-height: 1.6;
         }
         
-        /* Enhanced Header with Dropdown */
+         /* Header Styles */
         header {
             background-color: white;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 1.5rem 0;
+            padding: 1rem 0;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -42,7 +42,7 @@
         .header-content {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 0 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -70,7 +70,6 @@
         .nav-menu {
             display: flex;
             list-style: none;
-            margin-right: 2rem;
         }
         
         .nav-item {
@@ -135,20 +134,19 @@
             transform: rotate(180deg);
         }
         
-        .cta-button {
-            display: inline-block;
-            background-color: var(--primary);
-            color: white;
-            padding: 0.6rem 1.2rem;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
+        /* Hamburger Menu Styles */
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--dark);
+            cursor: pointer;
+            padding: 0.5rem;
         }
         
-        .cta-button:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-2px);
+        .nav-menu.active {
+            display: flex;
         }
         
         /* Contact Page Styles */
@@ -347,7 +345,72 @@
             font-size: 0.9rem;
         }
         
+        /* Mobile Responsiveness */
         @media (max-width: 768px) {
+            .header-content {
+                flex-direction: row;
+                padding: 1rem;
+                align-items: center;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .nav-container {
+                width: auto;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                padding: 1rem;
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .nav-item {
+                margin-left: 0;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .nav-link {
+                padding: 0.5rem 0;
+                font-size: 1rem;
+            }
+            
+            .dropdown-content {
+                display: none;
+                position: static;
+                width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+                background-color: #f8f9fa;
+                padding-left: 1rem;
+            }
+            
+            .dropdown.active .dropdown-content {
+                display: block;
+            }
+            
+            .dropdown-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.95rem;
+            }
+
             .contact-header h1 {
                 font-size: 2rem;
             }
@@ -358,24 +421,7 @@
 	    footer {         
             padding: 1rem 0 1.5rem !important;
         }
-        .header-content {
-                flex-direction: column;
-                padding: 0rem;
-            }
-            
-            .logo {
-                margin-bottom: 1rem;
-            }
-            
-            .nav-container {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .nav-menu {
-                margin-right: 0;
-            }
-            
+                  
             .hero h1 {
                 font-size: 2.2rem;
             }
@@ -390,15 +436,11 @@
                 align-items: center;
             }
             
-            .dropdown-content {
-                left: auto;
-                right: 0;
             }
-        }
     </style>
 </head>
 <body>
-     <!-- Enhanced Header with Dropdown -->
+    <!-- Header with Blog Menu Item -->
     <header>
         <div class="header-content">
             <a href="index.html" class="logo">
@@ -407,6 +449,7 @@
             </a>
             
             <div class="nav-container">
+                <button class="hamburger">☰</button>
                 <ul class="nav-menu">
                     <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
                     <li class="nav-item dropdown">
@@ -419,11 +462,19 @@
                             <a href="portfolio-templates.html" class="dropdown-item">Portfolio Templates</a>
                         </div>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a href="blog.html" class="nav-link">
+                            Blog
+                            <span class="dropdown-icon">▼</span>
+                        </a>
+                        <div class="dropdown-content">
+                            <a href="portfolio-best-practices.html" class="dropdown-item">Portfolio Best Practices</a>
+                            <a href="portfolio-maintenance.html" class="dropdown-item">Portfolio Maintenance</a>
+                        </div>
+                    </li>
                     <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
                     <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
                 </ul>
-                
-                
             </div>
         </div>
     </header>
@@ -577,6 +628,34 @@
             .catch(error => {
                 statusMessage.textContent = 'There was an error sending your message. Please try again.';
                 statusMessage.className = 'status-message error';
+            });
+        });
+    </script>
+ <script>
+        // Hamburger menu toggle
+        document.querySelector('.hamburger').addEventListener('click', () => {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+
+        // Toggle dropdown on mobile
+        document.querySelectorAll('.dropdown .nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                // Prevent default link behavior
+                e.preventDefault();
+                // Toggle active class on parent dropdown
+                const dropdown = link.closest('.dropdown');
+                dropdown.classList.toggle('active');
+            });
+        });
+
+        // Close menu when clicking a non-dropdown nav link or dropdown item
+        document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-menu').classList.remove('active');
+                // Remove active class from all dropdowns
+                document.querySelectorAll('.dropdown').forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
             });
         });
     </script>

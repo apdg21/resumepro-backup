@@ -33,7 +33,7 @@
             background-color: white;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             padding: 1rem 0;
-            position: sticky;
+            position: fixed;
             top: 0;
             z-index: 100;
             width: 100%;
@@ -152,7 +152,7 @@
         /* Blog Content Styles */
         .blog-container {
             max-width: 800px;
-            margin: 3rem auto;
+            margin: 8rem auto;
             padding: 0 2rem;
         }
         
@@ -398,46 +398,10 @@
     </style>
 </head>
 <body>
-    <!-- Header with Blog Menu Item -->
-    <!-- Header with Blog Menu Item -->
-    <header>
-        <div class="header-content">
-            <a href="index.html" class="logo">
-                <span class="logo-icon">📄</span>
-                <span>ResumePro</span>
-            </a>
-            
-            <div class="nav-container">
-                <button class="hamburger">☰</button>
-                <ul class="nav-menu">
-                    <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link">
-                            Templates
-                            <span class="dropdown-icon">▼</span>
-                        </a>
-                        <div class="dropdown-content">
-                            <a href="resume-templates.html" class="dropdown-item">Resume Templates</a>
-                            <a href="portfolio-templates.html" class="dropdown-item">Portfolio Templates</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a href="blog.html" class="nav-link">
-                            Blog
-                            <span class="dropdown-icon">▼</span>
-                        </a>
-                        <div class="dropdown-content">
-                            <a href="portfolio-best-practices.html" class="dropdown-item">Portfolio Best Practices</a>
-                            <a href="portfolio-maintenance.html" class="dropdown-item">Portfolio Maintenance</a>
-                        </div>
-                    </li>
-                    <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-                    <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-                </ul>
-            </div>
-        </div>
-    </header>
-
+  <!-- Header Placeholder -->
+    <div id="header-placeholder">
+        <noscript>Please enable JavaScript to view the navigation menu.</noscript>
+    </div>
     <!-- Blog Content -->
     <main class="blog-container">
         <div class="blog-header">
@@ -576,5 +540,40 @@
             });
         });
     </script>
+    <script>
+        // Load header dynamically
+        fetch('header.html')
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to load header');
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+                
+                // Re-attach event listeners for hamburger menu and dropdowns
+                document.querySelector('.hamburger').addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.toggle('active');
+                });
+
+                document.querySelectorAll('.dropdown .nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const dropdown = link.closest('.dropdown');
+                        dropdown.classList.toggle('active');
+                    });
+                });
+
+                document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
+                    link.addEventListener('click', () => {
+                        document.querySelector('.nav-menu').classList.remove('active');
+                        document.querySelectorAll('.dropdown').forEach(dropdown => {
+                            dropdown.classList.remove('active');
+                        });
+                    });
+                });
+            })
+            .catch(error => console.error('Error loading header:', error));
+    </script>
+
 </body>
 </html>

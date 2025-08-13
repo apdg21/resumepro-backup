@@ -629,26 +629,6 @@
             })
             .catch(error => console.error('Error loading header:', error));
     </script>
-  <script>
-      // Run cleanUrl on initial load
-        window.addEventListener('load', cleanUrl);
-
-        // Handle popstate for back/forward navigation
-        window.addEventListener('popstate', () => {
-            const path = window.location.pathname;
-            const targetUrl = path.endsWith('.html') ? path : `${path}.html`;
-            fetch(targetUrl)
-                .then(response => {
-                    if (!response.ok) throw new Error(`Failed to load ${targetUrl}`);
-                    return response.text();
-                })
-                .then(html => {
-                    document.documentElement.innerHTML = html;
-                    attachEventListeners();
-                    cleanUrl();
-                })
-                .catch(error => console.error('Error on popstate:', error));
-        });
-  </script>
+  <script src="clean-urls.js"></script>
 </body>
 </html>

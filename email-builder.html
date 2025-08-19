@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Email Template Builder</title>
+    <!-- Tailwind CSS for the application UI. The email template itself will use tables and inline styles. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the app's UI */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .builder-container {
+            min-height: 100vh;
+        }
+
+        .section-panel {
+            min-height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid #e5e7eb;
+        }
+
+        .preview-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .preview-iframe {
+            width: 100%;
+            height: 100%;
+            min-height: 100vh;
+            border: none;
+            background-color: #ffffff;
+            overflow-y: auto; /* Ensure vertical scrolling */
+        }
+
+        .section-item {
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .section-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .section-item.active {
+            background-color: #e5e7eb;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .draggable-handle {
+            cursor: grab;
+        }
+
+        input[type="text"], input[type="number"], input[type="color"], textarea, select {
+            @apply w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500;
+        }
+
+        label {
+            @apply block text-sm font-medium text-gray-700 mt-2;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .message-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #10B981;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        details summary {
+            @apply cursor-pointer p-2 bg-gray-200 rounded-lg text-gray-700 font-medium;
+        }
+
+        details[open] summary {
+            @apply bg-gray-300;
+        }
+
+        @media (max-width: 480px) {
+            .preview-container {
+                max-width: 320px;
+            }
+        }
+        @media (min-width: 1024px) {
+       .lg\:w-1\/3 {
+           width: 33.333333%;
+           overflow-y: scroll;
+           height: 100vh;
+    }
+}
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex flex-col lg:flex-row builder-container">
+        <!-- Left Panel: Controls and Inputs -->
+        <div class="w-full lg:w-1/3 bg-white p-4 section-panel">
+            <h1 class="text-2xl font-bold mb-4 text-center text-gray-800">Email Builder</h1>
+            
+            <!-- Canvas Settings -->
+            <div class="mb-6 p-4 border border-dashed border-gray-300 rounded-lg">
+                <h2 class="text-lg font-semibold mb-2">Canvas Settings</h2>
+                <div>
+                    <label for="canvas-width">Canvas Width (px)</label>
+                    <input type="number" id="canvas-width" value="600" min="300" max="800">
+                </div>
+                <div class="mt-2">
+                    <button id="preview-toggle" onclick="togglePreview()" class="w-full p-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition duration-300">
+                        Switch to Mobile Preview (320px)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Undo/Redo Controls -->
+            <div class="mb-6 p-4 border border-dashed border-gray-300 rounded-lg">
+                <h2 class="text-lg font-semibold mb-2">History</h2>
+                <div class="flex space-x-2">
+                    <button onclick="undo()" class="w-1/2 p-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition duration-300" disabled id="undo-button">
+                        Undo
+                    </button>
+                    <button onclick="redo()" class="w-1/2 p-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition duration-300" disabled id="redo-button">
+                        Redo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section Picker -->
+            <div id="section-picker" class="mb-6 p-4 border border-dashed border-gray-300 rounded-lg">
+                <h2 class="text-lg font-semibold mb-2">Add a Section</h2>
+                <div class="flex space-x-2">
+                    <select id="section-type-select" class="w-full">
+                        <option value="header">Header</option>
+                        <option value="title-text">Title & Text</option>
+                        <option value="text-image">2-Col Text/Image</option>
+                        <option value="hero">Hero (Image with Overlay)</option>
+                        <option value="image-only">Image Only</option>
+                        <option value="single-column-blocks">Single Column Blocks</option>
+                        <option value="two-column-blocks">Two Column Blocks</option>
+                        <option value="three-column-blocks">Three Column Blocks</option>
+                        <option value="divider">Divider</option>
+                        <option value="custom-html">Custom HTML</option>
+                    </select>
+                    <button onclick="addSection()" class="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">
+                        Add
+                    </button>
+                </div>
+            </div>
+
+            <!-- List of sections added -->
+            <div id="sections-list" class="mb-6">
+                <h2 class="text-lg font-semibold mb-2">Sections</h2>
+                <div id="section-list-container" class="space-y-2">
+                    <!-- Section list items will be generated here -->
+                    <div class="text-center text-gray-400 p-4">Add a section to get started</div>
+                </div>
+            </div>
+
+            <!-- Active Section Properties -->
+            <div id="properties-panel" class="p-4 bg-gray-50 rounded-lg hidden">
+                <h2 class="text-lg font-semibold mb-2">Section Properties</h2>
+                <div id="property-inputs">
+                    <!-- Dynamic inputs will be generated here -->
+                </div>
+                <button onclick="removeSection()" class="mt-4 w-full p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300">
+                    Remove Section
+                </button>
+            </div>
+
+            <!-- Output Code Area -->
+            <div class="mt-8">
+                <h2 class="text-lg font-semibold mb-2">Final HTML Code</h2>
+                <textarea id="code-output" rows="10" readonly class="w-full p-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 font-mono text-xs"></textarea>
+                <button onclick="copyCode()" class="w-full mt-2 p-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300">
+                    Copy Code
+                </button>
+                <button onclick="saveToFile()" class="w-full mt-2 p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">
+                    Save to File
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Panel: Live Preview -->
+        <div class="w-full lg:w-2/3 p-4 bg-gray-200 flex justify-center items-start">
+            <div class="preview-container">
+                <iframe id="preview-frame" class="preview-iframe rounded-lg shadow-lg"></iframe>
+            </div>
+        </div>
+    </div>
+    
+    <div id="message-box" class="message-box"></div>
+
+    <script>
+        // Data model for the email sections and history
+        let sections = [];
+        let activeSectionIndex = null;
+        let canvasWidth = 600;
+        let isMobilePreview = false;
+        let history = [];
+        let historyIndex = -1;
+        const maxHistory = 20;
+
+        // Get DOM elements
+        const previewFrame = document.getElementById('preview-frame');
+        const propertiesPanel = document.getElementById('properties-panel');
+        const propertyInputs = document.getElementById('property-inputs');
+        const codeOutput = document.getElementById('code-output');
+        const sectionListContainer = document.getElementById('section-list-container');
+        const sectionTypeSelect = document.getElementById('section-type-select');
+        const messageBox = document.getElementById('message-box');
+        const canvasWidthInput = document.getElementById('canvas-width');
+        const previewToggleButton = document.getElementById('preview-toggle');
+        const undoButton = document.getElementById('undo-button');
+        const redoButton = document.getElementById('redo-button');
+
+        // Font options for email-safe fonts
+        const fontOptions = [
+            {value: 'Arial, Helvetica, sans-serif', label: 'Arial'},
+            {value: '"Times New Roman", Times, serif', label: 'Times New Roman'},
+            {value: '"Georgia", serif', label: 'Georgia'},
+            {value: '"Verdana", Geneva, sans-serif', label: 'Verdana'},
+            {value: '"Helvetica", Arial, sans-serif', label: 'Helvetica'},
+            {value: '"Courier New", Courier, monospace', label: 'Courier New'}
+        ];
+
+        // Add event listener for canvas width input
+        canvasWidthInput.oninput = (e) => {
+            const value = parseInt(e.target.value);
+            if (value >= 300 && value <= 800) {
+                canvasWidth = value;
+                saveHistory();
+                updatePreview();
+            } else {
+                showMessage('Canvas width must be between 300 and 800 pixels.');
+                canvasWidthInput.value = canvasWidth;
+            }
+        };
+
+        // Function to sanitize HTML
+        function sanitizeHtml(html) {
+            const div = document.createElement('div');
+            div.innerHTML = html;
+            // Remove script tags and dangerous attributes
+            const scripts = div.getElementsByTagName('script');
+            while (scripts.length) scripts[0].parentNode.removeChild(scripts[0]);
+            ['onerror', 'onload', 'onclick', 'onmouseover'].forEach(attr => {
+                const elements = div.querySelectorAll(`[${attr}]`);
+                elements.forEach(el => el.removeAttribute(attr));
+            });
+            return div.innerHTML;
+        }
+
+        // Function to validate HTML
+        function validateHtml(html) {
+            if (!html || html.trim() === '') {
+                return '<p>Please enter valid HTML content</p>';
+            }
+            try {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                if (!doc.body.children.length) {
+                    return '<p>Invalid HTML content</p>';
+                }
+                return html;
+            } catch (error) {
+                console.error('Invalid HTML:', error);
+                return '<p>Invalid HTML content</p>';
+            }
+        }
+
+        // Function to escape HTML for safe rendering
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        // Function to generate common styles
+        function generateCommonStyles(content) {
+            try {
+                const backgroundStyle = getBackgroundStyle(content);
+                const borderStyle = `border: ${content.borderWidth} ${content.borderStyle} ${content.borderColor}; border-radius: ${content.borderRadius};`;
+                const paddingStyle = `padding-top: ${content.paddingTop}; padding-bottom: ${content.paddingBottom}; padding-left: ${content.paddingLeft}; padding-right: ${content.paddingRight};`;
+                const marginStyle = `margin-top: ${content.marginTop}; margin-bottom: ${content.marginBottom}; margin-left: ${content.marginLeft}; margin-right: ${content.marginRight};`;
+                return {
+                    tableStyle: `width: 100%; max-width: ${isMobilePreview ? 320 : canvasWidth}px; min-width: 0; ${backgroundStyle} ${borderStyle} ${marginStyle}`,
+                    paddingStyle
+                };
+            } catch (error) {
+                console.error('Error generating common styles:', error);
+                return { tableStyle: '', paddingStyle: '' };
+            }
+        }
+
+        // History management
+        function saveHistory() {
+            try {
+                // Truncate future history
+                history = history.slice(0, historyIndex + 1);
+                // Save current state
+                history.push({
+                    sections: JSON.parse(JSON.stringify(sections)),
+                    activeSectionIndex: activeSectionIndex,
+                    canvasWidth: canvasWidth
+                });
+                // Limit history size
+                if (history.length > maxHistory) {
+                    history.shift();
+                }
+                historyIndex = history.length - 1;
+                updateHistoryButtons();
+            } catch (error) {
+                console.error('Error saving history:', error);
+                showMessage('Error saving history: ' + error.message);
+            }
+        }
+
+        function undo() {
+            try {
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    const state = history[historyIndex];
+                    sections = JSON.parse(JSON.stringify(state.sections));
+                    activeSectionIndex = state.activeSectionIndex;
+                    canvasWidth = state.canvasWidth;
+                    canvasWidthInput.value = canvasWidth;
+                    updateSectionList();
+                    showProperties();
+                    updatePreview();
+                    updateHistoryButtons();
+                    showMessage('Undo successful');
+                }
+            } catch (error) {
+                console.error('Error undoing action:', error);
+                showMessage('Error undoing action: ' + error.message);
+            }
+        }
+
+        function redo() {
+            try {
+                if (historyIndex < history.length - 1) {
+                    historyIndex++;
+                    const state = history[historyIndex];
+                    sections = JSON.parse(JSON.stringify(state.sections));
+                    activeSectionIndex = state.activeSectionIndex;
+                    canvasWidth = state.canvasWidth;
+                    canvasWidthInput.value = canvasWidth;
+                    updateSectionList();
+                    showProperties();
+                    updatePreview();
+                    updateHistoryButtons();
+                    showMessage('Redo successful');
+                }
+            } catch (error) {
+                console.error('Error redoing action:', error);
+                showMessage('Error redoing action: ' + error.message);
+            }
+        }
+
+        function updateHistoryButtons() {
+            undoButton.disabled = historyIndex <= 0;
+            redoButton.disabled = historyIndex >= history.length - 1;
+        }
+
+        // Toggle mobile preview
+        function togglePreview() {
+            try {
+                isMobilePreview = !isMobilePreview;
+                previewToggleButton.textContent = isMobilePreview ? 'Switch to Desktop Preview' : 'Switch to Mobile Preview (320px)';
+                updatePreview();
+                showMessage(isMobilePreview ? 'Switched to mobile preview' : 'Switched to desktop preview');
+            } catch (error) {
+                console.error('Error toggling preview:', error);
+                showMessage('Error toggling preview: ' + error.message);
+            }
+        }
+
+        // Initial render of the preview
+        saveHistory();
+        updatePreview();
+
+        // Function to add a new section
+        function addSection() {
+            try {
+                const type = sectionTypeSelect.value;
+                if (!type) {
+                    showMessage('Error: No section type selected');
+                    return;
+                }
+                const newSection = {
+                    id: Date.now(),
+                    type: type,
+                    content: getDefaultContent(type)
+                };
+                sections.push(newSection);
+                activeSectionIndex = sections.length - 1;
+                saveHistory();
+                updateSectionList();
+                showProperties();
+                updatePreview();
+                showMessage(`Added ${type.replace(/-/g, ' ')} section`);
+            } catch (error) {
+                console.error('Error adding section:', error);
+                showMessage('Error adding section: ' + error.message);
+            }
+        }
+
+        function getDefaultContent(type) {
+            try {
+                const commonStyles = {
+                    backgroundType: 'color',
+                    backgroundColor: '#ffffff',
+                    backgroundImage: '',
+                    backgroundGradient: 'linear-gradient(to right, #ffffff, #ffffff)',
+                    borderWidth: '0px',
+                    borderColor: '#000000',
+                    borderStyle: 'solid',
+                    borderRadius: '0px',
+                    paddingTop: '20px',
+                    paddingBottom: '20px',
+                    paddingLeft: '20px',
+                    paddingRight: '20px',
+                    marginTop: '0px',
+                    marginBottom: '0px',
+                    marginLeft: '0px',
+                    marginRight: '0px',
+                    fontFamily: 'Arial, Helvetica, sans-serif'
+                };
+                switch (type) {
+                    case 'header':
+                        return {
+                            ...commonStyles,
+                            image: 'https://placehold.co/600x150/000000/FFFFFF?text=Logo',
+                            altText: 'Company Logo',
+                            link: '#',
+                            align: 'center',
+                            imageWidth: '100%'
+                        };
+                    case 'title-text':
+                        return {
+                            ...commonStyles,
+                            title: 'Your Title Here',
+                            text: 'This is a paragraph of text. You can edit this.',
+                            fontSizeTitle: '24px',
+                            fontSizeText: '16px',
+                            lineHeightTitle: '1.2',
+                            lineHeightText: '1.5',
+                            textColorTitle: '#000000',
+                            textColorText: '#333333',
+                            textAlign: 'center'
+                        };
+                    case 'text-image':
+                        return {
+                            ...commonStyles,
+                            image: 'https://placehold.co/250x250/F3F4F6/6B7280?text=Image',
+                            altText: 'Content Image',
+                            text: 'This is some text next to an image.',
+                            fontSize: '16px',
+                            lineHeight: '1.5',
+                            textColor: '#333333',
+                            textAlign: 'left',
+                            direction: 'text-left',
+                            showButton: false,
+                            buttonText: 'Click Me',
+                            buttonLink: '#',
+                            buttonBackground: '#007bff',
+                            buttonColor: '#ffffff',
+                            buttonFontSize: '16px',
+                            buttonPadding: '10px 20px',
+                            buttonBorderRadius: '4px'
+                        };
+                    case 'hero':
+                        return {
+                            ...commonStyles,
+                            backgroundType: 'image',
+                            backgroundImage: 'https://placehold.co/600x300/EEEEEE/808080?text=Hero',
+                            overlayTitle: 'Hero Title',
+                            overlayText: 'Hero description text.',
+                            overlayTextColor: '#ffffff',
+                            overlayAlign: 'center',
+                            showOverlayButton: true,
+                            overlayButtonText: 'Learn More',
+                            overlayButtonLink: '#',
+                            overlayButtonBackground: '#ffffff',
+                            overlayButtonColor: '#000000',
+                            overlayButtonAlign: 'center',
+                            overlayButtonWidth: 'auto',
+                            overlayButtonFontSize: '16px',
+                            overlayButtonBorderWidth: '0px',
+                            overlayButtonBorderStyle: 'solid',
+                            overlayButtonBorderColor: '#000000',
+                            lineHeightTitle: '1.2',
+                            lineHeightText: '1.5'
+                        };
+                    case 'image-only':
+                        return {
+                            ...commonStyles,
+                            image: 'https://placehold.co/600x300/EEEEEE/808080?text=Image',
+                            altText: 'Full Width Image',
+                            link: '#',
+                            borderWidth: '0px',
+                            borderColor: '#000000',
+                            borderStyle: 'solid',
+                            borderRadius: '0px'
+                        };
+                    case 'single-column-blocks':
+                        return {
+                            ...commonStyles,
+                            blocks: getDefaultBlocks(),
+                            order: ['image', 'title', 'text', 'button'],
+                            visible: {image: true, title: true, text: true, button: true}
+                        };
+                    case 'two-column-blocks':
+                        return {
+                            ...commonStyles,
+                            columns: [
+                                { blocks: getDefaultBlocks() },
+                                { blocks: getDefaultBlocks() }
+                            ]
+                        };
+                    case 'three-column-blocks':
+                        return {
+                            ...commonStyles,
+                            columns: [
+                                { blocks: getDefaultBlocks() },
+                                { blocks: getDefaultBlocks() },
+                                { blocks: getDefaultBlocks() }
+                            ]
+                        };
+                    case 'divider':
+                        return {
+                            ...commonStyles,
+                            height: '1px',
+                            color: '#cccccc',
+                            style: 'solid',
+                            align: 'center',
+                            width: '100%'
+                        };
+                    case 'custom-html':
+                        return {
+                            ...commonStyles,
+                            html: '<p>Your custom HTML here</p>'
+                        };
+                    default:
+                        throw new Error(`Unknown section type: ${type}`);
+                }
+            } catch (error) {
+                console.error('Error in getDefaultContent:', error);
+                throw new Error('Failed to initialize section content: ' + error.message);
+            }
+        }
+
+        function getDefaultBlocks() {
+            try {
+                return {
+                    image: {url: 'https://placehold.co/200x200/EEEEEE/808080?text=Image', altText: 'Block Image', link: '#', align: 'center'},
+                    title: {text: 'Title', fontSize: '20px', color: '#000000', align: 'center', lineHeight: '1.2', fontFamily: 'Arial, Helvetica, sans-serif'},
+                    text: {text: 'Description text.', fontSize: '14px', color: '#333333', align: 'center', lineHeight: '1.5', fontFamily: 'Arial, Helvetica, sans-serif'},
+                    button: {text: 'Button', link: '#', background: '#007bff', color: '#ffffff', fontSize: '16px', align: 'center', padding: '10px 20px', borderRadius: '4px'}
+                };
+            } catch (error) {
+                console.error('Error in getDefaultBlocks:', error);
+                throw new Error('Failed to initialize default blocks: ' + error.message);
+            }
+        }
+
+        function removeSection() {
+            try {
+                if (activeSectionIndex !== null && confirm('Are you sure you want to remove this section?')) {
+                    sections.splice(activeSectionIndex, 1);
+                    activeSectionIndex = null;
+                    saveHistory();
+                    updateSectionList();
+                    showProperties();
+                    updatePreview();
+                    showMessage('Section removed');
+                }
+            } catch (error) {
+                console.error('Error removing section:', error);
+                showMessage('Error removing section: ' + error.message);
+            }
+        }
+
+        function updateSectionList() {
+            try {
+                sectionListContainer.innerHTML = '';
+                if (sections.length === 0) {
+                    sectionListContainer.innerHTML = '<div class="text-center text-gray-400 p-4">Add a section to get started</div>';
+                } else {
+                    sections.forEach((section, index) => {
+                        const sectionName = section.type.replace(/-/g, ' ').split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+                        const sectionItem = document.createElement('div');
+                        sectionItem.classList.add('section-item', 'p-3', 'rounded-lg', 'flex', 'items-center', 'justify-between');
+                        sectionItem.draggable = true;
+                        sectionItem.setAttribute('tabindex', '0');
+                        sectionItem.setAttribute('aria-label', `Section ${sectionName}, click to edit or drag to reorder`);
+                        if (index === activeSectionIndex) {
+                            sectionItem.classList.add('active');
+                            sectionItem.setAttribute('aria-selected', 'true');
+                        } else {
+                            sectionItem.setAttribute('aria-selected', 'false');
+                        }
+                        sectionItem.innerHTML = `
+                            <span class="font-medium text-gray-700">${sectionName}</span>
+                            <span class="draggable-handle text-gray-400">☰</span>
+                        `;
+                        sectionItem.ondragstart = (e) => {
+                            e.dataTransfer.setData('text/plain', index);
+                        };
+                        sectionItem.ondragover = (e) => e.preventDefault();
+                        sectionItem.ondrop = (e) => {
+                            e.preventDefault();
+                            const draggedIndex = parseInt(e.dataTransfer.getData('text/plain'));
+                            const dropIndex = index;
+                            if (draggedIndex !== dropIndex) {
+                                const [draggedSection] = sections.splice(draggedIndex, 1);
+                                sections.splice(dropIndex, 0, draggedSection);
+                                activeSectionIndex = dropIndex;
+                                saveHistory();
+                                updateSectionList();
+                                updatePreview();
+                                showProperties();
+                            }
+                        };
+                        sectionItem.onclick = () => {
+                            activeSectionIndex = index;
+                            showProperties();
+                            updateSectionList();
+                            updatePreview();
+                        };
+                        sectionItem.onkeydown = (e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                activeSectionIndex = index;
+                                showProperties();
+                                updateSectionList();
+                                updatePreview();
+                            }
+                        };
+                        sectionListContainer.appendChild(sectionItem);
+                    });
+                }
+            } catch (error) {
+                console.error('Error updating section list:', error);
+                showMessage('Error updating section list: ' + error.message);
+            }
+        }
+
+        function showProperties() {
+            try {
+                if (activeSectionIndex === null) {
+                    propertiesPanel.classList.add('hidden');
+                    return;
+                }
+
+                propertiesPanel.classList.remove('hidden');
+                propertyInputs.innerHTML = '';
+                const section = sections[activeSectionIndex];
+                const content = section.content;
+
+                // Collapsible section for common styles
+                const commonDetails = document.createElement('details');
+                commonDetails.classList.add('mb-2');
+                commonDetails.open = true;
+                const commonSummary = document.createElement('summary');
+                commonSummary.textContent = 'Common Styles';
+                commonDetails.appendChild(commonSummary);
+                const commonContainer = document.createElement('div');
+                commonContainer.classList.add('p-2');
+                commonDetails.appendChild(commonContainer);
+                propertyInputs.appendChild(commonDetails);
+
+                function createInput(label, key, type = 'text', defaultValue = '', options = null, target = content, container = propertyInputs) {
+                    const div = document.createElement('div');
+                    div.classList.add('mb-2');
+                    const labelEl = document.createElement('label');
+                    labelEl.textContent = label;
+                    labelEl.htmlFor = key;
+                    let inputEl;
+                    if (type === 'textarea') {
+                        inputEl = document.createElement('textarea');
+                        inputEl.rows = 4;
+                    } else if (type === 'select') {
+                        inputEl = document.createElement('select');
+                        options.forEach(opt => {
+                            const optionEl = document.createElement('option');
+                            optionEl.value = opt.value;
+                            optionEl.text = opt.label;
+                            if (target[key] === opt.value) optionEl.selected = true;
+                            inputEl.appendChild(optionEl);
+                        });
+                    } else {
+                        inputEl = document.createElement('input');
+                        inputEl.type = type;
+                    }
+                    inputEl.id = key;
+                    inputEl.value = target[key] || defaultValue;
+                    inputEl.setAttribute('aria-label', label);
+                    inputEl.oninput = (e) => {
+                        let value = e.target.value;
+                        if (key === 'html') {
+                            value = validateHtml(value);
+                        }
+                        if (['paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', 'marginTop', 'marginBottom', 'marginLeft', 'marginRight', 'fontSize', 'fontSizeTitle', 'fontSizeText', 'borderWidth', 'borderRadius', 'imageWidth', 'overlayButtonWidth', 'overlayButtonFontSize', 'overlayButtonBorderWidth', 'height', 'width', 'buttonPadding', 'buttonBorderRadius'].includes(key)) {
+                            value = value.match(/^\d+$/) ? `${value}px` : value;
+                        } else if (['lineHeight', 'lineHeightTitle', 'lineHeightText'].includes(key)) {
+                            const numValue = parseFloat(value);
+                            if (!isNaN(numValue) && numValue >= 0.8 && numValue <= 2.0) {
+                                value = numValue.toString();
+                            } else {
+                                value = defaultValue;
+                                showMessage(`Invalid ${label}. Use a value between 0.8 and 2.0.`);
+                            }
+                        }
+                        target[key] = value;
+                        saveHistory();
+                        updatePreview();
+                    };
+                    inputEl.onblur = (e) => {
+                        let value = e.target.value;
+                        if (['paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', 'marginTop', 'marginBottom', 'marginLeft', 'marginRight', 'fontSize', 'fontSizeTitle', 'fontSizeText', 'borderWidth', 'borderRadius', 'imageWidth', 'overlayButtonWidth', 'overlayButtonFontSize', 'overlayButtonBorderWidth', 'height', 'width', 'buttonPadding', 'buttonBorderRadius'].includes(key)) {
+                            if (!value.match(/^\d+px$/)) {
+                                value = value.replace(/[^0-9]/g, '');
+                                value = value ? `${value}px` : '0px';
+                                inputEl.value = value;
+                                target[key] = value;
+                                saveHistory();
+                                showMessage(`Invalid ${label}. Use a numeric value in pixels.`);
+                                updatePreview();
+                            }
+                        } else if (['lineHeight', 'lineHeightTitle', 'lineHeightText'].includes(key)) {
+                            const numValue = parseFloat(value);
+                            if (isNaN(numValue) || numValue < 0.8 || numValue > 2.0) {
+                                value = defaultValue;
+                                inputEl.value = value;
+                                target[key] = value;
+                                showMessage(`Invalid ${label}. Use a value between 0.8 and 2.0.`);
+                                saveHistory();
+                                updatePreview();
+                            }
+                        } else if (key === 'html') {
+                            value = validateHtml(value);
+                            inputEl.value = value;
+                            target[key] = value;
+                            saveHistory();
+                            showMessage('Custom HTML validated');
+                            updatePreview();
+                        }
+                        if (key.includes('image') || key === 'url') {
+                            if (!value.match(/^(http|https):\/\/[^\s$.?#].[^\s]*\.(jpg|jpeg|png|gif|webp)$/i)) {
+                                showMessage(`Invalid ${label}. Use a valid image URL (jpg, jpeg, png, gif, or webp).`);
+                                inputEl.value = target[key] || 'https://placehold.co/600x150/000000/FFFFFF?text=Placeholder';
+                                target[key] = inputEl.value;
+                                saveHistory();
+                                updatePreview();
+                            }
+                        }
+                    };
+                    div.appendChild(labelEl);
+                    div.appendChild(inputEl);
+                    container.appendChild(div);
+                }
+
+                // Common styles inputs
+                createInput('Background Type', 'backgroundType', 'select', 'color', [
+                    {value: 'color', label: 'Color'},
+                    {value: 'image', label: 'Image'},
+                    {value: 'gradient', label: 'Gradient'}
+                ], content, commonContainer);
+                if (content.backgroundType === 'color') {
+                    createInput('Background Color', 'backgroundColor', 'color', '#ffffff', null, content, commonContainer);
+                } else if (content.backgroundType === 'image') {
+                    createInput('Background Image URL', 'backgroundImage', 'text', '', null, content, commonContainer);
+                } else if (content.backgroundType === 'gradient') {
+                    createInput('Background Gradient', 'backgroundGradient', 'text', 'linear-gradient(to right, #ffffff, #ffffff)', null, content, commonContainer);
+                }
+                createInput('Border Width', 'borderWidth', 'text', '0px', null, content, commonContainer);
+                createInput('Border Color', 'borderColor', 'color', '#000000', null, content, commonContainer);
+                createInput('Border Style', 'borderStyle', 'select', 'solid', [
+                    {value: 'solid', label: 'Solid'},
+                    {value: 'dashed', label: 'Dashed'},
+                    {value: 'dotted', label: 'Dotted'},
+                    {value: 'none', label: 'None'}
+                ], content, commonContainer);
+                createInput('Border Radius', 'borderRadius', 'text', '0px', null, content, commonContainer);
+                createInput('Padding Top', 'paddingTop', 'text', '20px', null, content, commonContainer);
+                createInput('Padding Bottom', 'paddingBottom', 'text', '20px', null, content, commonContainer);
+                createInput('Padding Left', 'paddingLeft', 'text', '20px', null, content, commonContainer);
+                createInput('Padding Right', 'paddingRight', 'text', '20px', null, content, commonContainer);
+                createInput('Margin Top', 'marginTop', 'text', '0px', null, content, commonContainer);
+                createInput('Margin Bottom', 'marginBottom', 'text', '0px', null, content, commonContainer);
+                createInput('Margin Left', 'marginLeft', 'text', '0px', null, content, commonContainer);
+                createInput('Margin Right', 'marginRight', 'text', '0px', null, content, commonContainer);
+
+                // Collapsible section for section-specific properties
+                const specificDetails = document.createElement('details');
+                specificDetails.classList.add('mb-2');
+                specificDetails.open = true;
+                const specificSummary = document.createElement('summary');
+                specificSummary.textContent = 'Section-Specific Properties';
+                specificDetails.appendChild(specificSummary);
+                const specificContainer = document.createElement('div');
+                specificContainer.classList.add('p-2');
+                specificDetails.appendChild(specificContainer);
+                propertyInputs.appendChild(specificDetails);
+
+                // Type-specific inputs
+                switch (section.type) {
+                    case 'header':
+                        createInput('Image URL', 'image', 'text', '', null, content, specificContainer);
+                        createInput('Alt Text', 'altText', 'text', 'Company Logo', null, content, specificContainer);
+                        createInput('Link URL', 'link', 'text', '#', null, content, specificContainer);
+                        createInput('Align', 'align', 'select', 'center', [
+                            {value: 'left', label: 'Left'},
+                            {value: 'center', label: 'Center'},
+                            {value: 'right', label: 'Right'}
+                        ], content, specificContainer);
+                        createInput('Image Width (px)', 'imageWidth', 'text', '100%', null, content, specificContainer);
+                        break;
+                    case 'title-text':
+                        createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
+                        createInput('Title', 'title', 'text', 'Your Title Here', null, content, specificContainer);
+                        createInput('Text', 'text', 'textarea', 'This is a paragraph of text.', null, content, specificContainer);
+                        createInput('Title Font Size', 'fontSizeTitle', 'text', '24px', null, content, specificContainer);
+                        createInput('Title Line Height', 'lineHeightTitle', 'text', '1.2', null, content, specificContainer);
+                        createInput('Text Font Size', 'fontSizeText', 'text', '16px', null, content, specificContainer);
+                        createInput('Text Line Height', 'lineHeightText', 'text', '1.5', null, content, specificContainer);
+                        createInput('Title Color', 'textColorTitle', 'color', '#000000', null, content, specificContainer);
+                        createInput('Text Color', 'textColorText', 'color', '#333333', null, content, specificContainer);
+                        createInput('Text Align', 'textAlign', 'select', 'center', [
+                            {value: 'left', label: 'Left'},
+                            {value: 'center', label: 'Center'},
+                            {value: 'right', label: 'Right'}
+                        ], content, specificContainer);
+                        break;
+                    case 'text-image':
+                        createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
+                        createInput('Image URL', 'image', 'text', '', null, content, specificContainer);
+                        createInput('Alt Text', 'altText', 'text', 'Content Image', null, content, specificContainer);
+                        createInput('Text', 'text', 'textarea', 'This is some text next to an image.', null, content, specificContainer);
+                        createInput('Text Font Size', 'fontSize', 'text', '16px', null, content, specificContainer);
+                        createInput('Text Line Height', 'lineHeight', 'text', '1.5', null, content, specificContainer);
+                        createInput('Text Color', 'textColor', 'color', '#333333', null, content, specificContainer);
+                        createInput('Text Align', 'textAlign', 'select', 'left', [
+                            {value: 'left', label: 'Left'},
+                            {value: 'center', label: 'Center'},
+                            {value: 'right', label: 'Right'}
+                        ], content, specificContainer);
+                        createInput('Direction', 'direction', 'select', 'text-left', [
+                            {value: 'text-left', label: 'Text Left, Image Right'},
+                            {value: 'text-right', label: 'Text Right, Image Left'}
+                        ], content, specificContainer);
+                        createCheckbox('Show Button', 'showButton', specificContainer);
+                        if (content.showButton) {
+                            createInput('Button Text', 'buttonText', 'text', 'Click Me', null, content, specificContainer);
+                            createInput('Button Link', 'buttonLink', 'text', '#', null, content, specificContainer);
+                            createInput('Button Background', 'buttonBackground', 'color', '#007bff', null, content, specificContainer);
+                            createInput('Button Color', 'buttonColor', 'color', '#ffffff', null, content, specificContainer);
+                            createInput('Button Font Size', 'buttonFontSize', 'text', '16px', null, content, specificContainer);
+                            createInput('Button Padding', 'buttonPadding', 'text', '10px 20px', null, content, specificContainer);
+                            createInput('Button Border Radius', 'buttonBorderRadius', 'text', '4px', null, content, specificContainer);
+                        }
+                        break;
+                    case 'hero':
+                        createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
+                        if (content.backgroundType === 'image') {
+                            createInput('Background Image URL', 'backgroundImage', 'text', '', null, content, specificContainer);
+                        }
+                        createInput('Overlay Title', 'overlayTitle', 'text', 'Hero Title', null, content, specificContainer);
+                        createInput('Overlay Text', 'overlayText', 'textarea', 'Hero description text.', null, content, specificContainer);
+                        createInput('Overlay Title Line Height', 'lineHeightTitle', 'text', '1.2', null, content, specificContainer);
+                        createInput('Overlay Text Line Height', 'lineHeightText', 'text', '1.5', null, content, specificContainer);
+                        createInput('Overlay Text Color', 'overlayTextColor', 'color', '#ffffff', null, content, specificContainer);
+                        createInput('Overlay Align', 'overlayAlign', 'select', 'center', [
+                            {value: 'left', label: 'Left'},
+                            {value: 'center', label: 'Center'},
+                            {value: 'right', label: 'Right'}
+                        ], content, specificContainer);
+                        createCheckbox('Show Overlay Button', 'showOverlayButton', specificContainer);
+                        if (content.showOverlayButton) {
+                            createInput('Overlay Button Text', 'overlayButtonText', 'text', 'Learn More', null, content, specificContainer);
+                            createInput('Overlay Button Link', 'overlayButtonLink', 'text', '#', null, content, specificContainer);
+                            createInput('Overlay Button Background', 'overlayButtonBackground', 'color', '#ffffff', null, content, specificContainer);
+                            createInput('Overlay Button Color', 'overlayButtonColor', 'color', '#000000', null, content, specificContainer);
+                            createInput('Overlay Button Align', 'overlayButtonAlign', 'select', 'center', [
+                                {value: 'left', label: 'Left'},
+                                {value: 'center', label: 'Center'},
+                                {value: 'right', label: 'Right'}
+                            ], content, specificContainer);
+                            createInput('Overlay Button Width (px)', 'overlayButtonWidth', 'text', 'auto', null, content, specificContainer);
+                            createInput('Overlay Button Font Size', 'overlayButtonFontSize', 'text', '16px', null, content, specificContainer);
+                            createInput('Overlay Button Border Width', 'overlayButtonBorderWidth', 'text', '0px', null, content, specificContainer);
+                            createInput('Overlay Button Border Color', 'overlayButtonBorderColor', 'color', '#000000', null, content, specificContainer);
+                            createInput('Overlay Button Border Style', 'overlayButtonBorderStyle', 'select', 'solid', [
+                                {value: 'solid', label: 'Solid'},
+                                {value: 'dashed', label: 'Dashed'},
+                                {value: 'dotted', label: 'Dotted'},
+                                {value: 'none', label: 'None'}
+                            ], content, specificContainer);
+                        }
+                        break;
+                    case 'image-only':
+                        createInput('Image URL', 'image', 'text', '', null, content, specificContainer);
+                        createInput('Alt Text', 'altText', 'text', 'Full Width Image', null, content, specificContainer);
+                        createInput('Link URL', 'link', 'text', '#', null, content, specificContainer);
+                        createInput('Border Width', 'borderWidth', 'text', '0px', null, content, specificContainer);
+                        createInput('Border Color', 'borderColor', 'color', '#000000', null, content, specificContainer);
+                        createInput('Border Style', 'borderStyle', 'select', 'solid', [
+                            {value: 'solid', label: 'Solid'},
+                            {value: 'dashed', label: 'Dashed'},
+                            {value: 'dotted', label: 'Dotted'},
+                            {value: 'none', label: 'None'}
+                        ], content, specificContainer);
+                        createInput('Border Radius', 'borderRadius', 'text', '0px', null, content, specificContainer);
+                        break;
+                    case 'single-column-blocks':
+                        addBlockProperties(content, 'single', specificContainer);
+                        break;
+                    case 'two-column-blocks':
+                        content.columns.forEach((col, colIndex) => {
+                            const colDetails = document.createElement('details');
+                            colDetails.classList.add('mt-2');
+                            colDetails.open = true;
+                            const colSummary = document.createElement('summary');
+                            colSummary.textContent = `Column ${colIndex + 1}`;
+                            colDetails.appendChild(colSummary);
+                            const colContainer = document.createElement('div');
+                            colContainer.classList.add('p-2');
+                            colDetails.appendChild(colContainer);
+                            specificContainer.appendChild(colDetails);
+                            addBlockProperties(col, 'multi', colContainer);
+                        });
+                        break;
+                    case 'three-column-blocks':
+                        content.columns.forEach((col, colIndex) => {
+                            const colDetails = document.createElement('details');
+                            colDetails.classList.add('mt-2');
+                            colDetails.open = true;
+                            const colSummary = document.createElement('summary');
+                            colSummary.textContent = `Column ${colIndex + 1}`;
+                            colDetails.appendChild(colSummary);
+                            const colContainer = document.createElement('div');
+                            colContainer.classList.add('p-2');
+                            colDetails.appendChild(colContainer);
+                            specificContainer.appendChild(colDetails);
+                            addBlockProperties(col, 'multi', colContainer);
+                        });
+                        break;
+                    case 'divider':
+                        createInput('Height (px)', 'height', 'text', '1px', null, content, specificContainer);
+                        createInput('Color', 'color', 'color', '#cccccc', null, content, specificContainer);
+                        createInput('Style', 'style', 'select', 'solid', [
+                            {value: 'solid', label: 'Solid'},
+                            {value: 'dashed', label: 'Dashed'},
+                            {value: 'dotted', label: 'Dotted'}
+                        ], content, specificContainer);
+                        createInput('Align', 'align', 'select', 'center', [
+                            {value: 'left', label: 'Left'},
+                            {value: 'center', label: 'Center'},
+                            {value: 'right', label: 'Right'}
+                        ], content, specificContainer);
+                        createInput('Width (%)', 'width', 'text', '100%', null, content, specificContainer);
+                        break;
+                    case 'custom-html':
+                        createInput('Custom HTML', 'html', 'textarea', '<p>Your custom HTML here</p>', null, content, specificContainer);
+                        break;
+                }
+
+                function createCheckbox(label, key, container = propertyInputs) {
+                    const div = document.createElement('div');
+                    div.classList.add('mb-2');
+                    const labelEl = document.createElement('label');
+                    labelEl.textContent = label;
+                    const inputEl = document.createElement('input');
+                    inputEl.type = 'checkbox';
+                    inputEl.checked = content[key];
+                    inputEl.setAttribute('aria-label', label);
+                    inputEl.onchange = (e) => {
+                        content[key] = e.target.checked;
+                        saveHistory();
+                        showProperties();
+                        updatePreview();
+                    };
+                    div.appendChild(labelEl);
+                    div.appendChild(inputEl);
+                    container.appendChild(div);
+                }
+
+                function addBlockProperties(blocksObj, mode, container = propertyInputs) {
+                    if (mode === 'single') {
+                        const orderSelect = document.createElement('select');
+                        orderSelect.multiple = true;
+                        orderSelect.setAttribute('aria-label', 'Block Order');
+                        ['image', 'title', 'text', 'button'].forEach(blockType => {
+                            const opt = document.createElement('option');
+                            opt.value = blockType;
+                            opt.text = blockType.charAt(0).toUpperCase() + blockType.slice(1);
+                            opt.selected = blocksObj.order.includes(blockType);
+                            orderSelect.appendChild(opt);
+                        });
+                        orderSelect.onchange = () => {
+                            blocksObj.order = Array.from(orderSelect.selectedOptions).map(opt => opt.value);
+                            saveHistory();
+                            updatePreview();
+                        };
+                        const orderDiv = document.createElement('div');
+                        orderDiv.classList.add('mb-2');
+                        const orderLabel = document.createElement('label');
+                        orderLabel.textContent = 'Block Order (multi-select and drag to reorder)';
+                        orderDiv.appendChild(orderLabel);
+                        orderDiv.appendChild(orderSelect);
+                        container.appendChild(orderDiv);
+
+                        ['image', 'title', 'text', 'button'].forEach(blockType => {
+                            const visDiv = document.createElement('div');
+                            visDiv.classList.add('mb-2');
+                            const visLabel = document.createElement('label');
+                            visLabel.textContent = `Show ${blockType.charAt(0).toUpperCase() + blockType.slice(1)}`;
+                            const visInput = document.createElement('input');
+                            visInput.type = 'checkbox';
+                            visInput.checked = blocksObj.visible[blockType];
+                            visInput.setAttribute('aria-label', `Show ${blockType} block`);
+                            visInput.onchange = (e) => {
+                                blocksObj.visible[blockType] = e.target.checked;
+                                saveHistory();
+                                updatePreview();
+                            };
+                            visDiv.appendChild(visLabel);
+                            visDiv.appendChild(visInput);
+                            container.appendChild(visDiv);
+                        });
+                    }
+
+                    const blockTypes = ['image', 'title', 'text', 'button'];
+                    blockTypes.forEach(blockType => {
+                        const block = blocksObj.blocks[blockType];
+                        const blockDetails = document.createElement('details');
+                        blockDetails.classList.add('mt-2');
+                        blockDetails.open = true;
+                        const blockSummary = document.createElement('summary');
+                        blockSummary.textContent = `${blockType.charAt(0).toUpperCase() + blockType.slice(1)} Block`;
+                        blockDetails.appendChild(blockSummary);
+                        const blockContainer = document.createElement('div');
+                        blockContainer.classList.add('p-2');
+                        blockDetails.appendChild(blockContainer);
+                        container.appendChild(blockDetails);
+
+                        if (blockType === 'image') {
+                            createInput('Image URL', 'url', 'text', '', null, block, blockContainer);
+                            createInput('Alt Text', 'altText', 'text', 'Block Image', null, block, blockContainer);
+                            createInput('Link URL', 'link', 'text', '#', null, block, blockContainer);
+                            createInput('Align', 'align', 'select', 'center', [
+                                {value: 'left', label: 'Left'},
+                                {value: 'center', label: 'Center'},
+                                {value: 'right', label: 'Right'}
+                            ], block, blockContainer);
+                        } else if (blockType === 'title' || blockType === 'text') {
+                            createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, block, blockContainer);
+                            createInput(blockType === 'title' ? 'Title Text' : 'Text', 'text', blockType === 'text' ? 'textarea' : 'text', '', null, block, blockContainer);
+                            createInput('Font Size', 'fontSize', 'text', '', null, block, blockContainer);
+                            createInput('Line Height', 'lineHeight', 'text', blockType === 'title' ? '1.2' : '1.5', null, block, blockContainer);
+                            createInput('Color', 'color', 'color', '', null, block, blockContainer);
+                            createInput('Align', 'align', 'select', 'center', [
+                                {value: 'left', label: 'Left'},
+                                {value: 'center', label: 'Center'},
+                                {value: 'right', label: 'Right'}
+                            ], block, blockContainer);
+                        } else if (blockType === 'button') {
+                            createInput('Button Text', 'text', 'text', '', null, block, blockContainer);
+                            createInput('Button Link', 'link', 'text', '', null, block, blockContainer);
+                            createInput('Background Color', 'background', 'color', '', null, block, blockContainer);
+                            createInput('Text Color', 'color', 'color', '', null, block, blockContainer);
+                            createInput('Font Size', 'fontSize', 'text', '', null, block, blockContainer);
+                            createInput('Padding', 'padding', 'text', '', null, block, blockContainer);
+                            createInput('Border Radius', 'borderRadius', 'text', '', null, block, blockContainer);
+                            createInput('Align', 'align', 'select', 'center', [
+                                {value: 'left', label: 'Left'},
+                                {value: 'center', label: 'Center'},
+                                {value: 'right', label: 'Right'}
+                            ], block, blockContainer);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error showing properties:', error);
+                showMessage('Error showing properties: ' + error.message);
+            }
+        }
+
+        function generateSectionHtml(section) {
+            try {
+                const content = section.content;
+                const { tableStyle, paddingStyle } = generateCommonStyles(content);
+                const fontStyle = content.fontFamily ? `font-family: ${content.fontFamily};` : '';
+
+                switch (section.type) {
+                    case 'header':
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                                <tr>
+                                    <td align="${content.align}" style="${paddingStyle}">
+                                        <a href="${content.link}" target="_blank">
+                                            <img src="${content.image}" alt="${escapeHtml(content.altText || 'Header')}" style="display: block; width: ${content.imageWidth}; max-width: 100%; height: auto; border-radius: ${content.borderRadius};" />
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+                    case 'title-text':
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                                <tr>
+                                    <td align="${content.textAlign}" style="${paddingStyle} ${fontStyle}">
+                                        <h1 style="font-size: ${content.fontSizeTitle}; line-height: ${content.lineHeightTitle}; color: ${content.textColorTitle}; margin: 0;">${escapeHtml(content.title)}</h1>
+                                        <p style="font-size: ${content.fontSizeText}; line-height: ${content.lineHeightText}; color: ${content.textColorText}; margin-top: 10px;">${escapeHtml(content.text)}</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+                    case 'text-image':
+                        const columnWidth = Math.floor(((isMobilePreview ? 320 : canvasWidth) - 40) / 2);
+                        const textContent = `
+                            <div style="font-size: ${content.fontSize}; line-height: ${content.lineHeight}; color: ${content.textColor}; text-align: ${content.textAlign}; margin: 0; ${fontStyle}">
+                                ${escapeHtml(content.text)}
+                                ${content.showButton ? `
+                                    <table cellpadding="0" cellspacing="0" border="0" style="margin-top: 15px;">
+                                        <tr>
+                                            <td style="background-color: ${content.buttonBackground}; border-radius: ${content.buttonBorderRadius};">
+                                                <a href="${content.buttonLink}" target="_blank" style="font-size: ${content.buttonFontSize}; color: ${content.buttonColor}; padding: ${content.buttonPadding}; display: inline-block; text-decoration: none;">${escapeHtml(content.buttonText)}</a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                ` : ''}
+                            </div>
+                        `;
+                        const imageContent = `
+                            <img src="${content.image}" alt="${escapeHtml(content.altText || 'Image')}" style="display: block; width: 100%; max-width: 100%; height: auto;" />
+                        `;
+                        const leftContent = content.direction === 'text-left' ? textContent : imageContent;
+                        const rightContent = content.direction === 'text-left' ? imageContent : textContent;
+
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                                <tr>
+                                    <td style="${paddingStyle}">
+                                        <table cellpadding="0" cellspacing="0" border="0" width="100%" role="presentation">
+                                            <tr>
+                                                <td class="column" style="width: ${columnWidth}px; vertical-align: top; padding: 0 10px;" width="${columnWidth}">
+                                                    ${leftContent}
+                                                </td>
+                                                <td class="column" style="width: ${columnWidth}px; vertical-align: top; padding: 0 10px;" width="${columnWidth}">
+                                                    ${rightContent}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+                    case 'hero':
+                        const buttonHtml = content.showOverlayButton ? `
+                            <table cellpadding="0" cellspacing="0" border="0" align="${content.overlayButtonAlign}" style="margin-top: 20px; width: ${content.overlayButtonWidth};">
+                                <tr>
+                                    <td style="background-color: ${content.overlayButtonBackground}; border: ${content.overlayButtonBorderWidth} ${content.overlayButtonBorderStyle} ${content.overlayButtonBorderColor}; border-radius: 4px;">
+                                        <a href="${content.overlayButtonLink}" target="_blank" style="font-size: ${content.overlayButtonFontSize}; color: ${content.overlayButtonColor}; padding: 12px 24px; display: block; text-decoration: none; text-align: center;">${escapeHtml(content.overlayButtonText)}</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        ` : '';
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle} background-image: url(${content.backgroundImage}); background-size: cover; background-position: center;" role="presentation">
+                                <tr>
+                                    <td style="${paddingStyle} text-align: ${content.overlayAlign}; color: ${content.overlayTextColor}; ${fontStyle}">
+                                        <h1 style="font-size: 32px; line-height: ${content.lineHeightTitle}; margin: 0;">${escapeHtml(content.overlayTitle)}</h1>
+                                        <p style="font-size: 18px; line-height: ${content.lineHeightText}; margin-top: 10px;">${escapeHtml(content.overlayText)}</p>
+                                        ${buttonHtml}
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+                    case 'image-only':
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                                <tr>
+                                    <td style="${paddingStyle}">
+                                        <a href="${content.link}" target="_blank">
+                                            <img src="${content.image}" alt="${escapeHtml(content.altText || 'Image')}" style="display: block; width: 100%; max-width: 100%; height: auto; border: ${content.borderWidth} ${content.borderStyle} ${content.borderColor}; border-radius: ${content.borderRadius};" />
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+                    case 'single-column-blocks':
+                        const blocksHtml = content.order.filter(type => content.visible[type]).map(type => generateBlockHtml(content.blocks[type], type)).join('');
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                                <tr>
+                                    <td style="${paddingStyle}">
+                                        ${blocksHtml}
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+                    case 'two-column-blocks':
+                        return generateMultiColumnHtml(content, 2);
+                    case 'three-column-blocks':
+                        return generateMultiColumnHtml(content, 3);
+                    case 'divider':
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                                <tr>
+                                    <td style="${paddingStyle} text-align: ${content.align};">
+                                        <hr style="border: none; height: ${content.height}; width: ${content.width}; background-color: ${content.color}; border-top: ${content.height} ${content.style} ${content.color}; margin: 0 auto;" />
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+                    case 'custom-html':
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                                <tr>
+                                    <td style="${paddingStyle} font-family: ${content.fontFamily}; font-size: 16px; line-height: 1.5; max-width: 100%;">
+                                        ${sanitizeHtml(content.html)}
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+                }
+            } catch (error) {
+                console.error('Error generating section HTML:', error);
+                return `<div>Error rendering section ${section.type}: ${error.message}</div>`;
+            }
+        }
+
+        function generateBlockHtml(block, type) {
+            try {
+                const fontStyle = block.fontFamily ? `font-family: ${block.fontFamily};` : '';
+                switch (type) {
+                    case 'image':
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%" align="${block.align}" style="margin-bottom: 10px;">
+                                <tr>
+                                    <td>
+                                        <a href="${block.link}" target="_blank">
+                                            <img src="${block.url}" alt="${escapeHtml(block.altText || 'Image')}" style="display: block; width: 100%; max-width: 100%; height: auto;" />
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+                    case 'title':
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%" align="${block.align}" style="margin-bottom: 10px;">
+                                <tr>
+                                    <td style="${fontStyle} font-size: ${block.fontSize}; line-height: ${block.lineHeight}; color: ${block.color}; text-align: ${block.align};">
+                                        <h2 style="margin: 0;">${escapeHtml(block.text)}</h2>
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+                    case 'text':
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%" align="${block.align}" style="margin-bottom: 10px;">
+                                <tr>
+                                    <td style="${fontStyle} font-size: ${block.fontSize}; line-height: ${block.lineHeight}; color: ${block.color}; text-align: ${block.align};">
+                                        <p style="margin: 0;">${escapeHtml(block.text)}</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+                    case 'button':
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" align="${block.align}" style="margin-bottom: 10px;">
+                                <tr>
+                                    <td style="background-color: ${block.background}; border-radius: ${block.borderRadius};">
+                                        <a href="${block.link}" target="_blank" style="font-size: ${block.fontSize}; color: ${block.color}; padding: ${block.padding}; display: block; text-decoration: none; text-align: center;">${escapeHtml(block.text)}</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+                }
+            } catch (error) {
+                console.error('Error generating block HTML:', error);
+                return `<div>Error rendering block ${type}: ${error.message}</div>`;
+            }
+        }
+
+        function generateMultiColumnHtml(content, numColumns) {
+            try {
+                if (!content.columns || !Array.isArray(content.columns)) {
+                    throw new Error('Columns array is undefined or not an array');
+                }
+                const columnWidth = Math.floor(((isMobilePreview ? 320 : canvasWidth) - (numColumns * 20)) / numColumns);
+                let columnsHtml = '';
+                let msoHtml = `<table cellpadding="0" cellspacing="0" border="0" align="center" role="presentation"><tr>`;
+                content.columns.forEach((col, index) => {
+                    if (!col || !col.blocks || typeof col.blocks !== 'object') {
+                        console.warn(`Invalid blocks in column ${index + 1}, using default blocks`);
+                        col = { blocks: getDefaultBlocks() };
+                    }
+                    const blocksHtml = Object.keys(col.blocks)
+                        .filter(type => col.blocks[type])
+                        .map(type => generateBlockHtml(col.blocks[type], type))
+                        .join('');
+                    columnsHtml += `
+                        <td class="column" style="width: ${columnWidth}px; vertical-align: top; padding: 0 10px;" width="${columnWidth}">
+                            <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; max-width: ${columnWidth}px; vertical-align: top;" role="presentation">
+                                <tr>
+                                    <td style="padding: 10px;">
+                                        ${blocksHtml}
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    `;
+                    msoHtml += `
+                        <td style="width: ${columnWidth}px; vertical-align: top; padding: 0 10px;">
+                            ${blocksHtml}
+                        </td>
+                    `;
+                });
+                msoHtml += `</tr></table>`;
+                const { tableStyle } = generateCommonStyles(content);
+                return `
+                    <!--[if mso]>${msoHtml}<![endif]-->
+                    <!--[if !mso]><!-->
+                    <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                        <tr>
+                            ${columnsHtml}
+                        </tr>
+                    </table>
+                    <!--<![endif]-->
+                `;
+            } catch (error) {
+                console.error('Error generating multi-column HTML:', error);
+                return `<div>Error rendering multi-column section: ${error.message}</div>`;
+            }
+        }
+
+        function getBackgroundStyle(content) {
+            try {
+                if (content.backgroundType === 'color') {
+                    return `background-color: ${content.backgroundColor};`;
+                } else if (content.backgroundType === 'image') {
+                    return `background-image: url(${content.backgroundImage}); background-size: cover; background-position: center;`;
+                } else if (content.backgroundType === 'gradient') {
+                    return `background: ${content.backgroundGradient};`;
+                }
+                return '';
+            } catch (error) {
+                console.error('Error generating background style:', error);
+                return '';
+            }
+        }
+
+        function generateEmailHtml() {
+            try {
+                const sectionsHtml = sections.map(generateSectionHtml).join('');
+                
+                const fullHtml = `
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Template</title>
+    <!--[if mso]>
+    <style type="text/css">
+        body, table, td, a { font-family: Arial, Helvetica, sans-serif !important; }
+        .column { width: 100% !important; }
+    </style>
+    <![endif]-->
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        table {
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+        td {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border: 0;
+        }
+        a {
+            text-decoration: none;
+        }
+        .container {
+            width: 100%;
+            max-width: ${canvasWidth}px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        .column {
+            vertical-align: top;
+        }
+        .custom-html-content {
+            max-width: 100%;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+        .custom-html-content img {
+            max-width: 100% !important;
+            height: auto !important;
+        }
+        .custom-html-content p, .custom-html-content div, .custom-html-content span {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        @media only screen and (max-width: 480px) {
+            .container {
+                width: 100% !important;
+                max-width: 320px !important;
+                min-width: 0 !important;
+            }
+            .column {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 10px 0 !important;
+            }
+            img {
+                width: 100% !important;
+                max-width: 100% !important;
+                height: auto !important;
+            }
+            table[role="presentation"] {
+                width: 100% !important;
+                max-width: 320px !important;
+            }
+            h1 {
+                font-size: 24px !important;
+            }
+            p, .custom-html-content p, .custom-html-content div, .custom-html-content span {
+                font-size: 14px !important;
+            }
+            a:not([href^=tel]):not([href^=mailto]) {
+                font-size: 14px !important;
+                padding: 8px 16px !important;
+            }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f6f6f6;">
+    <center style="width: 100%; background-color: #f6f6f6;">
+        <table class="container" cellpadding="0" cellspacing="0" border="0" align="center" style="width: 100%; max-width: ${canvasWidth}px; min-width: 0; background-color: #ffffff;" role="presentation">
+            ${sectionsHtml}
+        </table>
+    </center>
+</body>
+</html>
+                `;
+                return fullHtml;
+            } catch (error) {
+                console.error('Error generating email HTML:', error);
+                return `<div>Error generating email: ${error.message}</div>`;
+            }
+        }
+
+        function updatePreview() {
+            try {
+                const doc = previewFrame.contentWindow.document;
+                doc.open();
+                doc.write(generateEmailHtml());
+                doc.close();
+                codeOutput.value = generateEmailHtml();
+
+                // Event delegation for section clicks
+                doc.body.removeEventListener('click', handlePreviewClick);
+                doc.body.addEventListener('click', handlePreviewClick);
+
+                // Adjust iframe width for mobile preview
+                previewFrame.style.maxWidth = isMobilePreview ? '320px' : `${canvasWidth}px`;
+            } catch (error) {
+                console.error('Error updating preview:', error);
+                showMessage('Error updating preview: ' + error.message);
+            }
+        }
+
+        function handlePreviewClick(e) {
+            try {
+                const table = e.target.closest('table[role="presentation"]');
+                if (table) {
+                    e.stopPropagation();
+                    const sectionsInPreview = previewFrame.contentWindow.document.body.querySelectorAll('table[role="presentation"]');
+                    const index = Array.from(sectionsInPreview).indexOf(table);
+                    if (index !== -1) {
+                        activeSectionIndex = index;
+                        sectionsInPreview.forEach((t, i) => {
+                            t.style.outline = i === activeSectionIndex ? '2px solid #3b82f6' : 'none';
+                        });
+                        showProperties();
+                        updateSectionList();
+                    }
+                }
+            } catch (error) {
+                console.error('Error handling preview click:', error);
+                showMessage('Error selecting section in preview: ' + error.message);
+            }
+        }
+
+        function copyCode() {
+            try {
+                codeOutput.select();
+                document.execCommand('copy');
+                showMessage('HTML code copied to clipboard!');
+            } catch (error) {
+                console.error('Error copying code:', error);
+                showMessage('Error copying code: ' + error.message);
+            }
+        }
+
+        function saveToFile() {
+            try {
+                const htmlContent = generateEmailHtml();
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'email-template.html';
+                a.click();
+                URL.revokeObjectURL(url);
+                showMessage('Template saved as email-template.html!');
+            } catch (error) {
+                console.error('Error saving to file:', error);
+                showMessage('Error saving to file: ' + error.message);
+            }
+        }
+
+        function showMessage(msg) {
+            messageBox.textContent = msg;
+            messageBox.style.opacity = '1';
+            setTimeout(() => {
+                messageBox.style.opacity = '0';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

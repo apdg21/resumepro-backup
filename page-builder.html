@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Webpage Builder</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        #root {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar {
+            background-color: #ffffff;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            overflow-y: scroll;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+        }
+
+        .sidebar h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+        }
+
+        .preview-area {
+            background-color: #f3f4f6;
+            padding: 1.5rem;
+            min-height: 100vh;
+        }
+
+        .preview-container {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            width: 1100px;
+        }
+
+        .section-preview {
+            transition: all 0.3s ease;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            min-height: 100px;
+        }
+
+        .section-preview:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .selected-section {
+            border: 2px solid #3b82f6;
+            background-color: rgba(59, 130, 246, 0.05);
+            border-radius: 0.5rem;
+        }
+
+        button {
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        input, select, textarea {
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.6rem;
+            width: 100%;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .item-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .item-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .mobile-preview {
+            width: 375px;
+            margin: 0 auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            background: #f3f4f6;
+            color: #4b5563;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-button.active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .link-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .column-layout {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .draggable-item {
+            padding: 1rem;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+            cursor: grab;
+            transition: all 0.2s;
+        }
+
+        .draggable-item:hover {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+
+        .drop-zone {
+            min-height: 0px;
+            border: 2px dashed #d1d5db;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .drop-zone.active {
+            border-color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        .column {
+            position: relative;
+            padding: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            background: #f9fafb;
+            min-height: 100px;
+        }
+
+        .column-resize-handle {
+            position: absolute;
+            top: 0;
+            right: -5px;
+            width: 10px;
+            height: 100%;
+            cursor: col-resize;
+            background: transparent;
+            z-index: 10;
+        }
+
+        .column-resize-handle:hover::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 4px;
+            width: 2px;
+            height: 100%;
+            background: #3b82f6;
+        }
+
+        .column-content {
+            min-height: 50px;
+            padding: 0.5rem;
+        }
+
+        .element {
+            padding: 0.75rem;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            margin-bottom: 0.5rem;
+            cursor: move;
+        }
+
+        .element:hover {
+            border-color: #3b82f6;
+        }
+
+        .grid-layout {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .width-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .width-slider {
+            flex: 1;
+        }
+
+        .width-input {
+            width: 60px;
+        }
+
+        .style-control-group {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        .style-control-group h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #374151;
+        }
+
+        .color-picker-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .color-preview {
+            width: 30px;
+            height: 30px;
+            border-radius: 0.375rem;
+            border: 1px solid #d1d5db;
+        }
+
+        .range-value {
+            min-width: 40px;
+            text-align: right;
+            font-size: 0.875rem;
+        }
+
+        .section-header {
+            display: none; /* Hide section headers in preview */
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                padding: 1rem;
+            }
+
+            .preview-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <script>
+        // Section types with categories
+        const sectionCategories = {
+            "Layout": ["1 Column", "2 Columns", "3 Columns"],
+            "Content": ["Text", "Image", "Button", "Heading", "Paragraph"],
+            "Elements": ["Card", "Form", "Divider"]
+        };
+
+        // Font options
+        const fontOptions = [
+            "Inter, sans-serif",
+            "Arial, sans-serif",
+            "Helvetica, sans-serif",
+            "Georgia, serif",
+            "Times New Roman, serif",
+            "Courier New, monospace",
+            "Verdana, sans-serif",
+            "Impact, sans-serif"
+        ];
+
+        // Element types for drag and drop
+        const elementTypes = {
+            "Text": { 
+                icon: "fa-font", 
+                defaultContent: "This is a text element. You can edit me!",
+                defaultStyles: {
+                    fontSize: "16px",
+                    color: "#000000",
+                    fontFamily: "Inter, sans-serif",
+                    fontWeight: "normal",
+                    textAlign: "left",
+                    lineHeight: "1.5",
+                    padding: "0px",
+                    margin: "0px",
+                    backgroundColor: "transparent",
+                    border: "none",
+                    borderRadius: "0px"
+                }
+            },
+            "Image": { 
+                icon: "fa-image", 
+                defaultContent: "https://via.placeholder.com/300x200",
+                defaultStyles: {
+                    width: "100%",
+                    height: "auto",
+                    padding: "0px",
+                    margin: "0px",
+                    border: "none",
+                    borderRadius: "0px"
+                }
+            },
+            "Button": { 
+                icon: "fa-square", 
+                defaultContent: "Click Me",
+                defaultStyles: {
+                    fontSize: "16px",
+                    color: "#ffffff",
+                    fontFamily: "Inter, sans-serif",
+                    fontWeight: "bold",
+                    padding: "10px 20px",
+                    margin: "0px",
+                    backgroundColor: "#3b82f6",
+                    border: "none",
+                    borderRadius: "6px",
+                    textAlign: "center"
+                }
+            },
+            "Heading": { 
+                icon: "fa-heading", 
+                defaultContent: "This is a Heading",
+                defaultStyles: {
+                    fontSize: "24px",
+                    color: "#000000",
+                    fontFamily: "Inter, sans-serif",
+                    fontWeight: "bold",
+                    textAlign: "left",
+                    lineHeight: "1.2",
+                    padding: "0px",
+                    margin: "0px 0px 16px 0px",
+                    backgroundColor: "transparent",
+                    border: "none",
+                    borderRadius: "0px"
+                }
+            },
+            "Paragraph": { 
+                icon: "fa-paragraph", 
+                defaultContent: "This is a paragraph of text. You can replace it with your own content.",
+                defaultStyles: {
+                    fontSize: "16px",
+                    color: "#333333",
+                    fontFamily: "Inter, sans-serif",
+                    fontWeight: "normal",
+                    textAlign: "left",
+                    lineHeight: "1.6",
+                    padding: "0px",
+                    margin: "0px 0px 16px 0px",
+                    backgroundColor: "transparent",
+                    border: "none",
+                    borderRadius: "0px"
+                }
+            },
+            "Card": { 
+                icon: "fa-id-card", 
+                defaultContent: "Card Title\nCard content goes here.",
+                defaultStyles: {
+                    fontSize: "16px",
+                    color: "#000000",
+                    fontFamily: "Inter, sans-serif",
+                    fontWeight: "normal",
+                    textAlign: "left",
+                    lineHeight: "1.5",
+                    padding: "20px",
+                    margin: "0px",
+                    backgroundColor: "#ffffff",
+                    border: "1px solid #e5e7eb",
+                    borderRadius: "8px",
+                    boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+                }
+            },
+            "Form": {
+                icon: "fa-window-restore",
+                defaultContent: "Name:\nEmail:\nMessage:",
+                defaultStyles: {
+                    padding: "20px",
+                    margin: "0px",
+                    backgroundColor: "#f9fafb",
+                    border: "1px solid #e5e7eb",
+                    borderRadius: "8px"
+                }
+            },
+            "Divider": {
+                icon: "fa-minus",
+                defaultContent: "",
+                defaultStyles: {
+                    height: "1px",
+                    backgroundColor: "#e5e7eb",
+                    margin: "20px 0",
+                    border: "none"
+                }
+            }
+        };
+
+        // Templates for different section types
+        const templates = {
+            "1 Column": {
+                columns: 1,
+                widths: [100],
+                elements: []
+            },
+            "2 Columns": {
+                columns: 2,
+                widths: [50, 50],
+                elements: []
+            },
+            "3 Columns": {
+                columns: 3,
+                widths: [33.33, 33.33, 33.33],
+                elements: []
+            }
+        };
+
+        function WebpageBuilder() {
+            const [sections, setSections] = React.useState([]);
+            const [selectedSection, setSelectedSection] = React.useState(null);
+            const [selectedColumn, setSelectedColumn] = React.useState(null);
+            const [selectedElement, setSelectedElement] = React.useState(null);
+            const [isMobileView, setIsMobileView] = React.useState(false);
+            const [activeTab, setActiveTab] = React.useState('content');
+            const [draggedElement, setDraggedElement] = React.useState(null);
+            const [selectedCategory, setSelectedCategory] = React.useState('Layout');
+            const [htmlExport, setHtmlExport] = React.useState('');
+            const [showExportModal, setShowExportModal] = React.useState(false);
+            const [showImportModal, setShowImportModal] = React.useState(false);
+            const [importHtml, setImportHtml] = React.useState('');
+
+            // Add a new section
+            const addSection = (type) => {
+                if (!type) return;
+                
+                let newSection;
+                
+                if (templates[type]) {
+                    // Use template if available
+                    newSection = {
+                        id: Date.now(),
+                        type,
+                        columns: templates[type].columns,
+                        widths: [...templates[type].widths],
+                        elements: Array(templates[type].columns).fill().map(() => [])
+                    };
+                } else {
+                    // Create a default section
+                    newSection = {
+                        id: Date.now(),
+                        type,
+                        columns: 1,
+                        widths: [100],
+                        elements: [[]]
+                    };
+                }
+                
+                setSections([...sections, newSection]);
+                setSelectedSection(newSection);
+            };
+
+            // Remove a section
+            const removeSection = (sectionId) => {
+                setSections(sections.filter(section => section.id !== sectionId));
+                if (selectedSection && selectedSection.id === sectionId) {
+                    setSelectedSection(null);
+                    setSelectedColumn(null);
+                    setSelectedElement(null);
+                }
+            };
+
+            // Add a column to a section
+            const addColumn = (sectionId) => {
+                setSections(sections.map(section => {
+                    if (section.id === sectionId) {
+                        const newWidth = 100 / (section.columns + 1);
+                        const newWidths = section.widths.map(width => width * (section.columns / (section.columns + 1)));
+                        newWidths.push(newWidth);
+                        
+                        return {
+                            ...section,
+                            columns: section.columns + 1,
+                            widths: newWidths,
+                            elements: [...section.elements, []]
+                        };
+                    }
+                    return section;
+                }));
+            };
+
+            // Remove a column from a section
+            const removeColumn = (sectionId, columnIndex) => {
+                setSections(sections.map(section => {
+                    if (section.id === sectionId) {
+                        if (section.columns <= 1) return section; // Can't remove the last column
+                        
+                        const removedWidth = section.widths[columnIndex];
+                        const newWidths = section.widths.filter((_, i) => i !== columnIndex);
+                        const widthRatio = 100 / (100 - removedWidth);
+                        const adjustedWidths = newWidths.map(width => width * widthRatio);
+                        
+                        return {
+                            ...section,
+                            columns: section.columns - 1,
+                            widths: adjustedWidths,
+                            elements: section.elements.filter((_, i) => i !== columnIndex)
+                        };
+                    }
+                    return section;
+                }));
+            };
+
+            // Update column width
+            const updateColumnWidth = (sectionId, columnIndex, newWidth) => {
+                setSections(sections.map(section => {
+                    if (section.id === sectionId) {
+                        const oldWidth = section.widths[columnIndex];
+                        const widthDiff = newWidth - oldWidth;
+                        const remainingColumns = section.columns - 1;
+                        
+                        // Calculate how much to adjust other columns
+                        const adjustmentPerColumn = -widthDiff / remainingColumns;
+                        
+                        const newWidths = section.widths.map((width, i) => {
+                            if (i === columnIndex) return newWidth;
+                            return width + adjustmentPerColumn;
+                        });
+                        
+                        return {
+                            ...section,
+                            widths: newWidths
+                        };
+                    }
+                    return section;
+                }));
+            };
+
+            // Handle drag start for elements
+            const handleDragStart = (e, elementType) => {
+                setDraggedElement(elementType);
+                e.dataTransfer.setData('text/plain', elementType);
+                e.dataTransfer.effectAllowed = 'move';
+            };
+
+            // Handle drag over for drop zones
+            const handleDragOver = (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                e.currentTarget.classList.add('active');
+            };
+
+            // Handle drag leave for drop zones
+            const handleDragLeave = (e) => {
+                e.preventDefault();
+                e.currentTarget.classList.remove('active');
+            };
+
+            // Handle drop for adding elements
+            const handleDrop = (e, sectionId, columnIndex) => {
+                e.preventDefault();
+                e.currentTarget.classList.remove('active');
+                
+                const elementType = e.dataTransfer.getData('text/plain');
+                if (!elementType) return;
+                
+                const newElement = {
+                    id: Date.now(),
+                    type: elementType,
+                    content: elementTypes[elementType].defaultContent,
+                    styles: {...elementTypes[elementType].defaultStyles}
+                };
+                
+                setSections(sections.map(section => {
+                    if (section.id === sectionId) {
+                        const newElements = [...section.elements];
+                        newElements[columnIndex] = [...newElements[columnIndex], newElement];
+                        return {
+                            ...section,
+                            elements: newElements
+                        };
+                    }
+                    return section;
+                }));
+            };
+
+            // Handle element content update
+            const updateElementContent = (sectionId, columnIndex, elementId, newContent) => {
+                setSections(sections.map(section => {
+                    if (section.id === sectionId) {
+                        const newElements = section.elements.map((column, cIndex) => {
+                            if (cIndex === columnIndex) {
+                                return column.map(element => {
+                                    if (element.id === elementId) {
+                                        return {
+                                            ...element,
+                                            content: newContent
+                                        };
+                                    }
+                                    return element;
+                                });
+                            }
+                            return column;
+                        });
+                        
+                        return {
+                            ...section,
+                            elements: newElements
+                        };
+                    }
+                    return section;
+                }));
+            };
+
+            // Handle element style update
+            const updateElementStyle = (sectionId, columnIndex, elementId, styleProperty, value) => {
+                setSections(sections.map(section => {
+                    if (section.id === sectionId) {
+                        const newElements = section.elements.map((column, cIndex) => {
+                            if (cIndex === columnIndex) {
+                                return column.map(element => {
+                                    if (element.id === elementId) {
+                                        return {
+                                            ...element,
+                                            styles: {
+                                                ...element.styles,
+                                                [styleProperty]: value
+                                            }
+                                        };
+                                    }
+                                    return element;
+                                });
+                            }
+                            return column;
+                        });
+                        
+                        return {
+                            ...section,
+                            elements: newElements
+                        };
+                    }
+                    return section;
+                }));
+            };
+
+            // Remove an element
+            const removeElement = (sectionId, columnIndex, elementId) => {
+                setSections(sections.map(section => {
+                    if (section.id === sectionId) {
+                        const newElements = section.elements.map((column, cIndex) => {
+                            if (cIndex === columnIndex) {
+                                return column.filter(element => element.id !== elementId);
+                            }
+                            return column;
+                        });
+                        
+                        return {
+                            ...section,
+                            elements: newElements
+                        };
+                    }
+                    return section;
+                }));
+                
+                if (selectedElement && selectedElement.id === elementId) {
+                    setSelectedElement(null);
+                }
+            };
+
+            // Generate HTML from the current layout
+            const generateHTML = () => {
+                let html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Webpage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -15px;
+        }
+        .column {
+            padding: 0 15px;
+            box-sizing: border-box;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3b82f6;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">\n`;
+
+                sections.forEach(section => {
+                    html += `        <div class="section">\n`;
+                    html += `            <div class="row">\n`;
+                    
+                    section.elements.forEach((column, colIndex) => {
+                        const width = section.widths[colIndex];
+                        html += `                <div class="column" style="width: ${width}%">\n`;
+                        
+                        column.forEach(element => {
+                            const styleString = Object.entries(element.styles || {}).map(([key, value]) => {
+                                const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+                                return `${cssKey}: ${value};`;
+                            }).join(' ');
+                            
+                            switch (element.type) {
+                                case "Text":
+                                    html += `                    <div style="${styleString}">${element.content}</div>\n`;
+                                    break;
+                                case "Image":
+                                    html += `                    <img src="${element.content}" alt="Image" style="${styleString}">\n`;
+                                    break;
+                                case "Button":
+                                    html += `                    <a href="#" class="btn" style="${styleString}">${element.content}</a>\n`;
+                                    break;
+                                case "Heading":
+                                    html += `                    <h2 style="${styleString}">${element.content}</h2>\n`;
+                                    break;
+                                case "Paragraph":
+                                    html += `                    <p style="${styleString}">${element.content}</p>\n`;
+                                    break;
+                                case "Card":
+                                    const cardContent = element.content.split('\n');
+                                    html += `                    <div class="card" style="${styleString}">\n`;
+                                    html += `                        <h3>${cardContent[0] || "Card Title"}</h3>\n`;
+                                    html += `                        <p>${cardContent[1] || "Card content"}</p>\n`;
+                                    html += `                    </div>\n`;
+                                    break;
+                                case "Form":
+                                    const formFields = element.content.split('\n');
+                                    html += `                    <form style="${styleString}">\n`;
+                                    formFields.forEach(field => {
+                                        if (field.trim()) {
+                                            html += `                        <div style="margin-bottom: 15px;">\n`;
+                                            html += `                            <label>${field}</label>\n`;
+                                            html += `                            <input type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">\n`;
+                                            html += `                        </div>\n`;
+                                        }
+                                    });
+                                    html += `                        <button type="submit" class="btn">Submit</button>\n`;
+                                    html += `                    </form>\n`;
+                                    break;
+                                case "Divider":
+                                    html += `                    <hr style="${styleString}">\n`;
+                                    break;
+                                default:
+                                    html += `                    <div style="${styleString}">${element.content}</div>\n`;
+                            }
+                        });
+                        
+                        html += `                </div>\n`;
+                    });
+                    
+                    html += `            </div>\n`;
+                    html += `        </div>\n`;
+                });
+                
+                html += `    </div>\n`;
+                html += `</body>\n`;
+                html += `</html>`;
+                
+                return html;
+            };
+
+            // Copy HTML to clipboard
+            const copyHTML = () => {
+                const html = generateHTML();
+                navigator.clipboard.writeText(html).then(() => {
+                    alert("HTML copied to clipboard!");
+                }).catch(err => {
+                    console.error("Failed to copy HTML: ", err);
+                });
+            };
+
+            // Export HTML to file
+            const exportHTML = () => {
+                const html = generateHTML();
+                setHtmlExport(html);
+                setShowExportModal(true);
+            };
+
+            // Download HTML file
+            const downloadHTML = () => {
+                const blob = new Blob([htmlExport], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'website.html';
+                a.click();
+                URL.revokeObjectURL(url);
+            };
+
+            // Import HTML
+            const importHTML = () => {
+                // This is a simplified version - in a real app you'd parse the HTML properly
+                try {
+                    // Clear current sections
+                    setSections([]);
+                    setSelectedSection(null);
+                    setSelectedElement(null);
+                    
+                    // Add a simple section with the imported content
+                    const newSection = {
+                        id: Date.now(),
+                        type: "Imported",
+                        columns: 1,
+                        widths: [100],
+                        elements: [[{
+                            id: Date.now(),
+                            type: "Text",
+                            content: "Imported content. This is a basic implementation. A full HTML parser would be needed for complete import functionality.",
+                            styles: elementTypes["Text"].defaultStyles
+                        }]]
+                    };
+                    
+                    setSections([newSection]);
+                    setShowImportModal(false);
+                    setImportHtml('');
+                    
+                    alert("HTML imported successfully (basic implementation)");
+                } catch (err) {
+                    console.error("Failed to import HTML: ", err);
+                    alert("Error importing HTML");
+                }
+            };
+
+            // Preview in new tab
+            const previewInNewTab = () => {
+                const html = generateHTML();
+                const blob = new Blob([html], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                window.open(url, '_blank');
+            };
+
+            // Render element based on type
+            const renderElement = (element) => {
+                const style = element.styles || {};
+                
+                switch (element.type) {
+                    case "Text":
+                        return React.createElement('div', { 
+                            style: {
+                                fontSize: style.fontSize,
+                                color: style.color,
+                                fontFamily: style.fontFamily,
+                                fontWeight: style.fontWeight,
+                                textAlign: style.textAlign,
+                                lineHeight: style.lineHeight,
+                                padding: style.padding,
+                                margin: style.margin,
+                                backgroundColor: style.backgroundColor,
+                                border: style.border,
+                                borderRadius: style.borderRadius
+                            }
+                        }, element.content);
+                    case "Image":
+                        return React.createElement('img', { 
+                            src: element.content, 
+                            alt: "Image",
+                            style: {
+                                width: style.width,
+                                height: style.height,
+                                padding: style.padding,
+                                margin: style.margin,
+                                border: style.border,
+                                borderRadius: style.borderRadius
+                            }
+                        });
+                    case "Button":
+                        return React.createElement('button', { 
+                            style: {
+                                fontSize: style.fontSize,
+                                color: style.color,
+                                fontFamily: style.fontFamily,
+                                fontWeight: style.fontWeight,
+                                padding: style.padding,
+                                margin: style.margin,
+                                backgroundColor: style.backgroundColor,
+                                border: style.border,
+                                borderRadius: style.borderRadius,
+                                textAlign: style.textAlign,
+                                cursor: 'pointer'
+                            }
+                        }, element.content);
+                    case "Heading":
+                        return React.createElement('h3', { 
+                            style: {
+                                fontSize: style.fontSize,
+                                color: style.color,
+                                fontFamily: style.fontFamily,
+                                fontWeight: style.fontWeight,
+                                textAlign: style.textAlign,
+                                lineHeight: style.lineHeight,
+                                padding: style.padding,
+                                margin: style.margin,
+                                backgroundColor: style.backgroundColor,
+                                border: style.border,
+                                borderRadius: style.borderRadius
+                            }
+                        }, element.content);
+                    case "Paragraph":
+                        return React.createElement('p', { 
+                            style: {
+                                fontSize: style.fontSize,
+                                color: style.color,
+                                fontFamily: style.fontFamily,
+                                fontWeight: style.fontWeight,
+                                textAlign: style.textAlign,
+                                lineHeight: style.lineHeight,
+                                padding: style.padding,
+                                margin: style.margin,
+                                backgroundColor: style.backgroundColor,
+                                border: style.border,
+                                borderRadius: style.borderRadius
+                            }
+                        }, element.content);
+                    case "Card":
+                        const cardContent = element.content.split('\n');
+                        return React.createElement('div', { 
+                            style: {
+                                fontSize: style.fontSize,
+                                color: style.color,
+                                fontFamily: style.fontFamily,
+                                fontWeight: style.fontWeight,
+                                textAlign: style.textAlign,
+                                lineHeight: style.lineHeight,
+                                padding: style.padding,
+                                margin: style.margin,
+                                backgroundColor: style.backgroundColor,
+                                border: style.border,
+                                borderRadius: style.borderRadius,
+                                boxShadow: style.boxShadow
+                            }
+                        },
+                            React.createElement('h4', { style: {fontWeight: 'bold', marginBottom: '10px'} }, cardContent[0] || "Card Title"),
+                            React.createElement('p', null, cardContent[1] || "Card content goes here.")
+                        );
+                    case "Form":
+                        const formFields = element.content.split('\n');
+                        return React.createElement('div', { 
+                            style: {
+                                padding: style.padding,
+                                margin: style.margin,
+                                backgroundColor: style.backgroundColor,
+                                border: style.border,
+                                borderRadius: style.borderRadius
+                            }
+                        },
+                            formFields.map((field, index) => 
+                                field.trim() && React.createElement('div', { key: index, style: {marginBottom: '15px'} },
+                                    React.createElement('label', { style: {display: 'block', marginBottom: '5px'} }, field),
+                                    React.createElement('input', { 
+                                        type: "text", 
+                                        style: {width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px'}
+                                    })
+                                )
+                            ),
+                            React.createElement('button', { 
+                                type: "button",
+                                style: {padding: '10px 20px', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer'}
+                            }, "Submit")
+                        );
+                    case "Divider":
+                        return React.createElement('hr', { 
+                            style: {
+                                height: style.height,
+                                backgroundColor: style.backgroundColor,
+                                margin: style.margin,
+                                border: style.border,
+                                borderRadius: style.borderRadius
+                            }
+                        });
+                    default:
+                        return React.createElement('div', { style: style }, element.content);
+                }
+            };
+
+            // Render column width controls
+            const renderColumnWidthControls = (section) => {
+                return React.createElement('div', { className: "width-controls mb-4" },
+                    React.createElement('h4', { className: "text-sm font-medium mb-2" }, "Column Widths"),
+                    React.createElement('div', { className: "space-y-2" },
+                        section.widths.map((width, index) => 
+                            React.createElement('div', { key: index, className: "width-control" },
+                                React.createElement('span', { className: "text-sm" }, `Column ${index + 1}:`),
+                                React.createElement('input', {
+                                    type: "range",
+                                    min: "10",
+                                    max: "90",
+                                    value: width,
+                                    onChange: (e) => updateColumnWidth(section.id, index, parseFloat(e.target.value)),
+                                    className: "width-slider"
+                                }),
+                                React.createElement('input', {
+                                    type: "number",
+                                    value: Math.round(width),
+                                    onChange: (e) => updateColumnWidth(section.id, index, parseFloat(e.target.value)),
+                                    className: "width-input",
+                                    min: "10",
+                                    max: "90"
+                                }),
+                                React.createElement('span', { className: "text-sm" }, "%")
+                            )
+                        )
+                    )
+                );
+            };
+
+            // Render style controls for the selected element
+            const renderStyleControls = () => {
+                if (!selectedElement) return null;
+                
+                const styles = selectedElement.styles || {};
+                
+                return React.createElement('div', null,
+                    React.createElement('div', { className: "style-control-group" },
+                        React.createElement('h4', null, "Typography"),
+                        React.createElement('div', { className: "properties-grid" },
+                            React.createElement('div', null,
+                                React.createElement('label', { className: "block text-sm font-medium mb-1" }, "Font Size"),
+                                React.createElement('div', { className: "flex items-center gap-2" },
+                                    React.createElement('input', {
+                                        type: "range",
+                                        min: "8",
+                                        max: "72",
+                                        value: parseInt(styles.fontSize) || 16,
+                                        onChange: (e) => updateElementStyle(
+                                            selectedSection.id, 
+                                            selectedColumn, 
+                                            selectedElement.id, 
+                                            'fontSize', 
+                                            `${e.target.value}px`
+                                        ),
+                                        className: "flex-1"
+                                    }),
+                                    React.createElement('span', { className: "range-value" }, `${parseInt(styles.fontSize) || 16}px`)
+                                )
+                            ),
+                            React.createElement('div', null,
+                                React.createElement('label', { className: "block text-sm font-medium mb-1" }, "Font Family"),
+                                React.createElement('select', {
+                                    value: styles.fontFamily || "Inter, sans-serif",
+                                    onChange: (e) => updateElementStyle(
+                                        selectedSection.id, 
+                                        selectedColumn, 
+                                        selectedElement.id, 
+                                        'fontFamily', 
+                                        e.target.value
+                                    ),
+                                    className: "w-full"
+                                },
+                                    fontOptions.map(font => 
+                                        React.createElement('option', { key: font, value: font }, font.split(',')[0])
+                                    )
+                                )
+                            ),
+                            React.createElement('div', null,
+                                React.createElement('label', { className: "block text-sm font-medium mb-1" }, "Font Weight"),
+                                React.createElement('select', {
+                                    value: styles.fontWeight || "normal",
+                                    onChange: (e) => updateElementStyle(
+                                        selectedSection.id, 
+                                        selectedColumn, 
+                                        selectedElement.id, 
+                                        'fontWeight', 
+                                        e.target.value
+                                    ),
+                                    className: "w-full"
+                                },
+                                    React.createElement('option', { value: "normal" }, "Normal"),
+                                    React.createElement('option', { value: "bold" }, "Bold"),
+                                    React.createElement('option', { value: "lighter" }, "Lighter"),
+                                    React.createElement('option', { value: "bolder" }, "Bolder")
+                                )
+                            ),
+                            React.createElement('div', null,
+                                React.createElement('label', { className: "block text-sm font-medium mb-1" }, "Text Align"),
+                                React.createElement('select', {
+                                    value: styles.textAlign || "left",
+                                    onChange: (e) => updateElementStyle(
+                                        selectedSection.id, 
+                                        selectedColumn, 
+                                        selectedElement.id, 
+                                        'textAlign', 
+                                        e.target.value
+                                    ),
+                                    className: "w-full"
+                                },
+                                    React.createElement('option', { value: "left" }, "Left"),
+                                    React.createElement('option', { value: "center" }, "Center"),
+                                    React.createElement('option', { value: "right" }, "Right"),
+                                    React.createElement('option', { value: "justify" }, "Justify")
+                                )
+                            ),
+                            React.createElement('div', null,
+                                React.createElement('label', { className: "block text-sm font-medium mb-1" }, "Line Height"),
+                                React.createElement('div', { className: "flex items-center gap-2" },
+                                    React.createElement('input', {
+                                        type: "range",
+                                        min: "1",
+                                        max: "3",
+                                        step: "0.1",
+                                        value: parseFloat(styles.lineHeight) || 1.5,
+                                        onChange: (e) => updateElementStyle(
+                                            selectedSection.id, 
+                                            selectedColumn, 
+                                            selectedElement.id, 
+                                            'lineHeight', 
+                                            e.target.value
+                                        ),
+                                        className: "flex-1"
+                                    }),
+                                    React.createElement('span', { className: "range-value" }, styles.lineHeight || "1.5")
+                                )
+                            )
+                        )
+                    ),
+                    
+                    React.createElement('div', { className: "style-control-group" },
+                        React.createElement('h4', null, "Colors"),
+                        React.createElement('div', { className: "properties-grid" },
+                            React.createElement('div', null,
+                                React.createElement('label', { className: "block text-sm font-medium mb-1" }, "Text Color"),
+                                React.createElement('div', { className: "color-picker-container" },
+                                    React.createElement('input', {
+                                        type: "color",
+                                        value: styles.color || "#000000",
+                                        onChange: (e) => updateElementStyle(
+                                            selectedSection.id, 
+                                            selectedColumn, 
+                                            selectedElement.id, 
+                                            'color', 
+                                            e.target.value
+                                        ),
+                                        className: "color-picker"
+                                    }),
+                                    React.createElement('div', { 
+                                        className: "color-preview",
+                                        style: { backgroundColor: styles.color || "#000000" }
+                                    }),
+                                    React.createElement('input', {
+                                        type: "text",
+                                        value: styles.color || "#000000",
+                                        onChange: (e) => updateElementStyle(
+                                            selectedSection.id, 
+                                            selectedColumn, 
+                                            selectedElement.id, 
+                                            'color', 
+                                            e.target.value
+                                        ),
+                                        className: "flex-1"
+                                    })
+                                )
+                            ),
+                            React.createElement('div', null,
+                                React.createElement('label', { className: "block text-sm font-medium mb-1" }, "Background Color"),
+                                React.createElement('div', { className: "color-picker-container" },
+                                    React.createElement('input', {
+                                        type: "color",
+                                        value: styles.backgroundColor || "transparent",
+                                        onChange: (e) => updateElementStyle(
+                                            selectedSection.id, 
+                                            selectedColumn, 
+                                            selectedElement.id, 
+                                            'backgroundColor', 
+                                            e.target.value
+                                        ),
+                                        className: "color-picker"
+                                    }),
+                                    React.createElement('div', { 
+                                        className: "color-preview",
+                                        style: { backgroundColor: styles.backgroundColor || "transparent" }
+                                    }),
+                                    React.createElement('input', {
+                                        type: "text",
+                                        value: styles.backgroundColor || "transparent",
+                                        onChange: (e) => updateElementStyle(
+                                            selectedSection.id, 
+                                            selectedColumn, 
+                                            selectedElement.id, 
+                                            'backgroundColor', 
+                                            e.target.value
+                                        ),
+                                        className: "flex-1"
+                                    })
+                                )
+                            )
+                        )
+                    ),
+                    
+                    React.createElement('div', { className: "style-control-group" },
+                        React.createElement('h4', null, "Spacing"),
+                        React.createElement('div', { className: "properties-grid" },
+                            React.createElement('div', null,
+                                React.createElement('label', { className: "block text-sm font-medium mb-1" }, "Padding"),
+                                React.createElement('input', {
+                                    type: "text",
+                                    value: styles.padding || "0px",
+                                    onChange: (e) => updateElementStyle(
+                                        selectedSection.id, 
+                                        selectedColumn, 
+                                        selectedElement.id, 
+                                        'padding', 
+                                        e.target.value
+                                    ),
+                                    className: "w-full",
+                                    placeholder: "e.g., 10px or 10px 20px"
+                                })
+                            ),
+                            React.createElement('div', null,
+                                React.createElement('label', { className: "block text-sm font-medium mb-1" }, "Margin"),
+                                React.createElement('input', {
+                                    type: "text",
+                                    value: styles.margin || "0px",
+                                    onChange: (e) => updateElementStyle(
+                                        selectedSection.id, 
+                                        selectedColumn, 
+                                        selectedElement.id, 
+                                        'margin', 
+                                        e.target.value
+                                    ),
+                                    className: "w-full",
+                                    placeholder: "e.g., 10px or 10px 20px"
+                                })
+                            )
+                        )
+                    ),
+                    
+                    React.createElement('div', { className: "style-control-group" },
+                        React.createElement('h4', null, "Borders"),
+                        React.createElement('div', { className: "properties-grid" },
+                            React.createElement('div', null,
+                                React.createElement('label', { className: "block text-sm font-medium mb-1" }, "Border"),
+                                React.createElement('input', {
+                                    type: "text",
+                                    value: styles.border || "none",
+                                    onChange: (e) => updateElementStyle(
+                                        selectedSection.id, 
+                                        selectedColumn, 
+                                        selectedElement.id, 
+                                        'border', 
+                                        e.target.value
+                                    ),
+                                    className: "w-full",
+                                    placeholder: "e.g., 1px solid #000"
+                                })
+                            ),
+                            React.createElement('div', null,
+                                React.createElement('label', { className: "block text-sm font-medium mb-1" }, "Border Radius"),
+                                React.createElement('input', {
+                                    type: "text",
+                                    value: styles.borderRadius || "0px",
+                                    onChange: (e) => updateElementStyle(
+                                        selectedSection.id, 
+                                        selectedColumn, 
+                                        selectedElement.id, 
+                                        'borderRadius', 
+                                        e.target.value
+                                    ),
+                                    className: "w-full",
+                                    placeholder: "e.g., 5px"
+                                })
+                            )
+                        )
+                    )
+                );
+            };
+
+            // Render export modal
+            const renderExportModal = () => {
+                if (!showExportModal) return null;
+                
+                return React.createElement('div', { className: "modal" },
+                    React.createElement('div', { className: "modal-content" },
+                        React.createElement('h2', { className: "text-xl font-bold mb-4" }, "Export HTML"),
+                        React.createElement('textarea', {
+                            value: htmlExport,
+                            onChange: (e) => setHtmlExport(e.target.value),
+                            className: "w-full h-64 p-2 border rounded",
+                            readOnly: true
+                        }),
+                        React.createElement('div', { className: "flex justify-between mt-4" },
+                            React.createElement('button', {
+                                className: "px-4 py-2 bg-gray-300 rounded",
+                                onClick: () => setShowExportModal(false)
+                            }, "Close"),
+                            React.createElement('button', {
+                                className: "px-4 py-2 bg-blue-500 text-white rounded",
+                                onClick: downloadHTML
+                            }, "Download HTML")
+                        )
+                    )
+                );
+            };
+
+            // Render import modal
+            const renderImportModal = () => {
+                if (!showImportModal) return null;
+                
+                return React.createElement('div', { className: "modal" },
+                    React.createElement('div', { className: "modal-content" },
+                        React.createElement('h2', { className: "text-xl font-bold mb-4" }, "Import HTML"),
+                        React.createElement('textarea', {
+                            value: importHtml,
+                            onChange: (e) => setImportHtml(e.target.value),
+                            className: "w-full h-64 p-2 border rounded",
+                            placeholder: "Paste your HTML code here"
+                        }),
+                        React.createElement('div', { className: "flex justify-between mt-4" },
+                            React.createElement('button', {
+                                className: "px-4 py-2 bg-gray-300 rounded",
+                                onClick: () => setShowImportModal(false)
+                            }, "Cancel"),
+                            React.createElement('button', {
+                                className: "px-4 py-2 bg-blue-500 text-white rounded",
+                                onClick: importHTML
+                            }, "Import HTML")
+                        )
+                    )
+                );
+            };
+
+            return React.createElement('div', { className: "flex flex-col lg:flex-row h-screen" },
+                // Left sidebar
+                React.createElement('div', { className: "sidebar w-full lg:w-1/4" },
+                    React.createElement('h1', null, "Webpage Builder"),
+                    
+                    // Tools section
+                    React.createElement('div', { className: "mb-6" },
+                        React.createElement('h2', null, "Tools"),
+                        React.createElement('div', { className: "grid grid-cols-2 gap-2" },
+                            React.createElement('button', {
+                                className: "p-2 bg-blue-500 text-white rounded text-sm",
+                                onClick: copyHTML
+                            }, "Copy HTML"),
+                            React.createElement('button', {
+                                className: "p-2 bg-green-500 text-white rounded text-sm",
+                                onClick: exportHTML
+                            }, "Export HTML"),
+                            React.createElement('button', {
+                                className: "p-2 bg-purple-500 text-white rounded text-sm",
+                                onClick: () => setShowImportModal(true)
+                            }, "Import HTML"),
+                            React.createElement('button', {
+                                className: "p-2 bg-yellow-500 text-white rounded text-sm",
+                                onClick: previewInNewTab
+                            }, "Preview Page")
+                        )
+                    ),
+                    
+                    // Section selection
+                    React.createElement('div', { className: "mb-6" },
+                        React.createElement('h2', null, "Add Section"),
+                        React.createElement('select', {
+                            value: selectedCategory,
+                            onChange: (e) => setSelectedCategory(e.target.value),
+                            className: "w-full mb-2"
+                        },
+                            Object.keys(sectionCategories).map(category => 
+                                React.createElement('option', { key: category, value: category }, category)
+                            )
+                        ),
+                        React.createElement('div', { className: "grid grid-cols-2 gap-2" },
+                            sectionCategories[selectedCategory].map(type => 
+                                React.createElement('button', {
+                                    key: type,
+                                    className: "p-2 bg-gray-100 rounded text-sm hover:bg-blue-100",
+                                    onClick: () => addSection(type)
+                                }, type)
+                            )
+                        )
+                    ),
+                    
+                    // Elements for drag and drop
+                    React.createElement('div', { className: "mb-6" },
+                        React.createElement('h2', null, "Elements"),
+                        React.createElement('div', { className: "space-y-2" },
+                            Object.entries(elementTypes).map(([type, config]) => 
+                                React.createElement('div', {
+                                    key: type,
+                                    className: "draggable-item",
+                                    draggable: true,
+                                    onDragStart: (e) => handleDragStart(e, type)
+                                },
+                                    React.createElement('i', { className: `fas ${config.icon} mr-2` }),
+                                    type
+                                )
+                            )
+                        )
+                    ),
+                    
+                    // Section controls
+                    selectedSection && React.createElement('div', { className: "mb-6" },
+                        React.createElement('h2', null, "Section Controls"),
+                        React.createElement('div', { className: "space-y-2" },
+                            renderColumnWidthControls(selectedSection),
+                            React.createElement('button', {
+                                className: "w-full p-2 bg-blue-500 text-white rounded",
+                                onClick: () => addColumn(selectedSection.id)
+                            }, "Add Column"),
+                            React.createElement('button', {
+                                className: "w-full p-2 bg-red-500 text-white rounded",
+                                onClick: () => removeSection(selectedSection.id)
+                            }, "Remove Section")
+                        )
+                    ),
+                    
+                    // Element editor
+                    selectedElement && React.createElement('div', { className: "mb-6" },
+                        React.createElement('h2', null, "Element Editor"),
+                        React.createElement('div', { className: "space-y-4" },
+                            React.createElement('div', null,
+                                React.createElement('label', { className: "block text-sm font-medium mb-1" }, "Content"),
+                                React.createElement('textarea', {
+                                    value: selectedElement.content,
+                                    onChange: (e) => updateElementContent(
+                                        selectedSection.id, 
+                                        selectedColumn, 
+                                        selectedElement.id, 
+                                        e.target.value
+                                    ),
+                                    className: "w-full",
+                                    rows: 4
+                                })
+                            ),
+                            renderStyleControls(),
+                            React.createElement('button', {
+                                className: "w-full p-2 bg-red-500 text-white rounded",
+                                onClick: () => removeElement(
+                                    selectedSection.id, 
+                                    selectedColumn, 
+                                    selectedElement.id
+                                )
+                            }, "Remove Element")
+                        )
+                    )
+                ),
+                
+                // Main preview area
+                React.createElement('div', { className: "preview-area flex-grow overflow-auto" },
+                    React.createElement('div', { className: "preview-container" },
+                        React.createElement('div', { className: "flex justify-between items-center mb-4" },
+                            React.createElement('h2', { className: "text-xl font-bold" }, "Page Preview"),
+                            React.createElement('button', {
+                                className: "px-3 py-1 bg-gray-200 rounded hover:bg-gray-300",
+                                onClick: () => setIsMobileView(!isMobileView)
+                            }, isMobileView ? "Desktop View" : "Mobile View")
+                        ),
+                        
+                        // Drop zone for new sections
+                        React.createElement('div', {
+                            className: "drop-zone",
+                            onDragOver: handleDragOver,
+                            onDragLeave: handleDragLeave,
+                            onDrop: (e) => handleDrop(e, 'new')
+                        }, "Drag elements here to create a new section"),
+                        
+                        // Render sections
+                        React.createElement('div', {
+                            className: isMobileView ? "mobile-preview" : "",
+                            style: { width: isMobileView ? "375px" : "100%" }
+                        },
+                            sections.length === 0 ?
+                                React.createElement('div', { className: "text-center py-12 text-gray-500" },
+                                    React.createElement('p', null, "No sections added yet."),
+                                    React.createElement('p', null, "Add a section or drag elements to begin.")
+                                ) :
+                                sections.map(section => 
+                                    React.createElement('div', { 
+                                        key: section.id,
+                                        className: `section-preview ${selectedSection && selectedSection.id === section.id ? 'selected-section' : ''}`,
+                                        onClick: () => setSelectedSection(section)
+                                    },
+                                        // Section header removed from preview
+                                        
+                                        // Render columns
+                                        React.createElement('div', { 
+                                            className: "grid-layout p-4",
+                                            style: { 
+                                                gridTemplateColumns: section.widths.map(w => `${w}%`).join(' ')
+                                            }
+                                        },
+                                            section.elements.map((column, columnIndex) => 
+                                                React.createElement('div', { 
+                                                    key: columnIndex,
+                                                    className: `column ${selectedColumn === columnIndex ? 'border-blue-500' : ''}`,
+                                                    onClick: (e) => {
+                                                        e.stopPropagation();
+                                                        setSelectedColumn(columnIndex);
+                                                        setSelectedElement(null);
+                                                    }
+                                                },
+                                                    // Column resize handle
+                                                    React.createElement('div', {
+                                                        className: "column-resize-handle",
+                                                        onMouseDown: (e) => {
+                                                            e.stopPropagation();
+                                                            const startX = e.clientX;
+                                                            const startWidth = section.widths[columnIndex];
+                                                            const nextWidth = section.widths[columnIndex + 1];
+                                                            
+                                                            const doDrag = (e) => {
+                                                                const delta = e.clientX - startX;
+                                                                const container = e.currentTarget.parentElement.parentElement;
+                                                                const containerWidth = container.offsetWidth;
+                                                                const deltaPercent = (delta / containerWidth) * 100;
+                                                                
+                                                                const newWidth = Math.max(10, Math.min(90, startWidth + deltaPercent));
+                                                                const newNextWidth = nextWidth - deltaPercent;
+                                                                
+                                                                if (newNextWidth >= 10) {
+                                                                    updateColumnWidth(section.id, columnIndex, newWidth);
+                                                                    updateColumnWidth(section.id, columnIndex + 1, newNextWidth);
+                                                                }
+                                                            };
+                                                            
+                                                            const stopDrag = () => {
+                                                                document.removeEventListener('mousemove', doDrag);
+                                                                document.removeEventListener('mouseup', stopDrag);
+                                                            };
+                                                            
+                                                            document.addEventListener('mousemove', doDrag);
+                                                            document.addEventListener('mouseup', stopDrag);
+                                                        }
+                                                    }),
+                                                    
+                                                    // Column drop zone
+                                                    React.createElement('div', {
+                                                        className: "column-content",
+                                                        onDragOver: handleDragOver,
+                                                        onDragLeave: handleDragLeave,
+                                                        onDrop: (e) => handleDrop(e, section.id, columnIndex)
+                                                    },
+                                                        // Render elements in column
+                                                        column.map(element => 
+                                                            React.createElement('div', {
+                                                                key: element.id,
+                                                                className: `element ${selectedElement && selectedElement.id === element.id ? 'border-blue-500' : ''}`,
+                                                                onClick: (e) => {
+                                                                    e.stopPropagation();
+                                                                    setSelectedElement(element);
+                                                                    setSelectedColumn(columnIndex);
+                                                                }
+                                                            }, renderElement(element))
+                                                        ),
+                                                        
+                                                        // Empty column placeholder
+                                                        column.length === 0 &&
+                                                        React.createElement('div', { className: "text-center text-gray-400 py-4" },
+                                                            "Drag elements here or click to add content"
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                        )
+                    )
+                ),
+                
+                // Modals
+                renderExportModal(),
+                renderImportModal()
+            );
+        }
+
+        ReactDOM.render(React.createElement(WebpageBuilder), document.getElementById('root'));
+    </script>
+</body>
+</html>

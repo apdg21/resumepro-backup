@@ -401,9 +401,18 @@
             margin-bottom: 0.25rem;
         }
 
-        .custom-css-editor {
+        .custom-css-editor, .custom-js-editor {
             font-family: monospace;
             min-height: 120px;
+        }
+
+        .element-button {
+            background-color: #3b82f6 !important;
+            color: white !important;
+        }
+
+        .element-button:hover {
+            background-color: #2563eb !important;
         }
 
         @media (max-width: 768px) {
@@ -494,7 +503,6 @@
                     borderRadius: "0px",
                     width: "auto",
                     height: "auto",
-                    backgroundImage: "none",
                     className: "text-element"
                 }
             },
@@ -509,7 +517,6 @@
                     margin: "0px auto",
                     border: "none",
                     borderRadius: "0px",
-                    color: "#000000",
                     display: "block",
                     objectFit: "contain",
                     className: "image-element"
@@ -698,6 +705,11 @@
         let showImportModal = false;
         let importHtml = '';
         let isSidebarOpen = false;
+        let globalCSS = '';
+        let globalJS = '';
+
+        // Remember scroll position
+        let lastScrollPosition = 0;
 
         // Validate style value
         function isValidStyleValue(property, value) {
@@ -821,6 +833,8 @@
         // Update column width
         function updateColumnWidth(sectionId, columnIndex, newWidth) {
             if (isNaN(newWidth) || newWidth < 10 || newWidth > 90) return;
+            
+            // Smoothly update the width
             sections = sections.map(section => {
                 if (section.id === sectionId) {
                     const oldWidth = section.widths[columnIndex];
@@ -831,12 +845,16 @@
                     
                     const newWidths = section.widths.map((width, i) => {
                         if (i === columnIndex) return newWidth;
-                        return width + adjustmentPerColumn;
+                        return Math.max(10, Math.min(90, width + adjustmentPerColumn));
                     });
+                    
+                    // Normalize to ensure total is 100%
+                    const total = newWidths.reduce((sum, width) => sum + width, 0);
+                    const normalizedWidths = newWidths.map(width => (width / total) * 100);
                     
                     return {
                         ...section,
-                        widths: newWidths
+                        widths: normalizedWidths
                     };
                 }
                 return section;
@@ -895,7 +913,6 @@
                 type: elementType,
                 content: elementTypes[elementType].defaultContent,
                 styles: {...elementTypes[elementType].defaultStyles},
-                customCSS: "",
                 className: `${elementType.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`
             };
             
@@ -910,6 +927,12 @@
                 }
                 return section;
             });
+            
+            // Select the new element
+            selectedElement = newElement;
+            selectedColumn = columnIndex;
+            selectedSection = sections.find(s => s.id === sectionId);
+            
             renderApp();
         }
 
@@ -957,35 +980,6 @@
                                             ...element.styles,
                                             [styleProperty]: value
                                         }
-                                    };
-                                }
-                                return element;
-                            });
-                        }
-                        return column;
-                    });
-                    
-                    return {
-                        ...section,
-                        elements: newElements
-                    };
-                }
-                return section;
-            });
-            renderApp();
-        }
-
-        // Update element custom CSS
-        function updateElementCustomCSS(sectionId, columnIndex, elementId, customCSS) {
-            sections = sections.map(section => {
-                if (section.id === sectionId) {
-                    const newElements = section.elements.map((column, cIndex) => {
-                        if (cIndex === columnIndex) {
-                            return column.map(element => {
-                                if (element.id === elementId) {
-                                    return {
-                                        ...element,
-                                        customCSS: customCSS
                                     };
                                 }
                                 return element;
@@ -1112,22 +1106,11 @@
             max-width: 100%;
             height: auto;
         }
-        /* Custom CSS from elements */\n`;
-
-            // Add custom CSS from all elements
-            sections.forEach(section => {
-                section.elements.forEach(column => {
-                    column.forEach(element => {
-                        if (element.customCSS && element.customCSS.trim() !== '') {
-                            html += `        .${element.className} {\n`;
-                            html += `            ${element.customCSS.replace(/\n/g, '\n            ')}\n`;
-                            html += `        }\n\n`;
-                        }
-                    });
-                });
-            });
-
-            html += `        @media (max-width: 768px) {
+        
+        /* Global CSS */
+        ${globalCSS}
+        
+        @media (max-width: 768px) {
             .row {
                 flex-direction: column;
             }
@@ -1217,6 +1200,12 @@
             });
             
             html += `    </div>\n`;
+            
+            // Add global JavaScript
+            if (globalJS.trim() !== '') {
+                html += `    <script>\n        ${globalJS}\n    <\/script>\n`;
+            }
+            
             html += `</body>\n`;
             html += `</html>`;
             
@@ -1273,7 +1262,6 @@
                         type: "Text",
                         content: "Imported content. This is a basic implementation. A full HTML parser would be needed for complete import functionality.",
                         styles: elementTypes["Text"].defaultStyles,
-                        customCSS: "",
                         className: "imported-element"
                     }]],
                     styles: {
@@ -1322,14 +1310,34 @@
             else if (alignment === 'right') marginValue = '0px 0px 0px auto';
             
             updateElementStyle(selectedSection.id, selectedColumn, selectedElement.id, 'margin', marginValue);
+            updateElementStyle(selectedSection.id, selectedColumn, selectedElement.id, 'display', 'block');
         }
 
-        // Set background gradient
+        // Set button alignment
+        function setButtonAlignment(alignment) {
+            if (!selectedElement || selectedElement.type !== 'Button') return;
+            
+            let displayValue = 'inline-block';
+            let marginValue = '0px';
+            
+            if (alignment === 'center') {
+                displayValue = 'block';
+                marginValue = '0px auto';
+            } else if (alignment === 'right') {
+                displayValue = 'block';
+                marginValue = '0px 0px 0px auto';
+            }
+            
+            updateElementStyle(selectedSection.id, selectedColumn, selectedElement.id, 'display', displayValue);
+            updateElementStyle(selectedSection.id, selectedColumn, selectedElement.id, 'margin', marginValue);
+        }
+
+        // Set background gradient for sections
         function setBackgroundGradient(gradientType) {
-            if (!selectedElement) return;
+            if (!selectedSection) return;
             
             let gradientValue = 'none';
-            const color1 = selectedElement.styles.backgroundColor || '#3b82f6';
+            const color1 = selectedSection.styles.backgroundColor || '#3b82f6';
             const color2 = color1.replace(/\d+\)/, '0.8)');
             
             switch(gradientType) {
@@ -1344,13 +1352,12 @@
                     gradientValue = 'none';
             }
             
-            updateElementStyle(selectedSection.id, selectedColumn, selectedElement.id, 'backgroundImage', gradientValue);
+            updateSectionStyle(selectedSection.id, 'backgroundImage', gradientValue);
         }
 
         // Render element based on type
         function renderElement(element) {
             const style = element.styles || {};
-            const customStyle = element.customCSS ? ` style="${element.customCSS}"` : '';
             
             switch (element.type) {
                 case "Text":
@@ -1364,12 +1371,11 @@
                         padding: ${style.padding || "0px"};
                         margin: ${style.margin || "0px"};
                         background-color: ${style.backgroundColor || "transparent"};
-                        background-image: ${style.backgroundImage || "none"};
                         border: ${style.border || "none"};
                         border-radius: ${style.borderRadius || "0px"};
                         width: ${style.width || "auto"};
                         height: ${style.height || "auto"};
-                    " ${customStyle}>${element.content}</div>`;
+                    ">${element.content}</div>`;
                 case "Image":
                     return `<img src="${element.content}" alt="Image" class="${style.className}" style="
                         width: ${style.width || "100%"};
@@ -1381,7 +1387,7 @@
                         border-radius: ${style.borderRadius || "0px"};
                         object-fit: ${style.objectFit || "contain"};
                         display: ${style.display || "block"};
-                    " ${customStyle}>`;
+                    ">`;
                 case "Button":
                     return `<button class="${style.className}" style="
                         font-size: ${style.fontSize || "16px"};
@@ -1391,14 +1397,14 @@
                         padding: ${style.padding || "10px 20px"};
                         margin: ${style.margin || "0px"};
                         background-color: ${style.backgroundColor || "#3b82f6"};
-                        background-image: ${style.backgroundImage || "none"};
                         border: ${style.border || "none"};
                         border-radius: ${style.borderRadius || "6px"};
                         text-align: ${style.textAlign || "center"};
                         width: ${style.width || "auto"};
                         height: ${style.height || "auto"};
+                        display: ${style.display || "inline-block"};
                         cursor: pointer;
-                    " ${customStyle}>${element.content}</button>`;
+                    ">${element.content}</button>`;
                 case "Heading":
                     return `<h2 class="${style.className}" style="
                         font-size: ${style.fontSize || "24px"};
@@ -1410,12 +1416,11 @@
                         padding: ${style.padding || "0px"};
                         margin: ${style.margin || "0px 0px 16px 0px"};
                         background-color: ${style.backgroundColor || "transparent"};
-                        background-image: ${style.backgroundImage || "none"};
                         border: ${style.border || "none"};
                         border-radius: ${style.borderRadius || "0px"};
                         width: ${style.width || "auto"};
                         height: ${style.height || "auto"};
-                    " ${customStyle}>${element.content}</h2>`;
+                    ">${element.content}</h2>`;
                 case "Paragraph":
                     return `<p class="${style.className}" style="
                         font-size: ${style.fontSize || "16px"};
@@ -1427,12 +1432,11 @@
                         padding: ${style.padding || "0px"};
                         margin: ${style.margin || "0px 0px 16px 0px"};
                         background-color: ${style.backgroundColor || "transparent"};
-                        background-image: ${style.backgroundImage || "none"};
                         border: ${style.border || "none"};
                         border-radius: ${style.borderRadius || "0px"};
                         width: ${style.width || "auto"};
                         height: ${style.height || "auto"};
-                    " ${customStyle}>${element.content}</p>`;
+                    ">${element.content}</p>`;
                 case "Card":
                     const cardContent = element.content.split('\n');
                     return `<div class="card ${style.className}" style="
@@ -1445,13 +1449,12 @@
                         padding: ${style.padding || "20px"};
                         margin: ${style.margin || "0px"};
                         background-color: ${style.backgroundColor || "#ffffff"};
-                        background-image: ${style.backgroundImage || "none"};
                         border: ${style.border || "1px solid #e5e7eb"};
                         border-radius: ${style.borderRadius || "8px"};
                         box-shadow: ${style.boxShadow || "0 2px 4px rgba(0,0,0,0.1)"};
                         width: ${style.width || "auto"};
                         height: ${style.height || "auto"};
-                    " ${customStyle}>
+                    ">
                         <h3>${cardContent[0] || "Card Title"}</h3>
                         <p>${cardContent[1] || "Card content"}</p>
                     </div>`;
@@ -1461,13 +1464,12 @@
                         padding: ${style.padding || "20px"};
                         margin: ${style.margin || "0px"};
                         background-color: ${style.backgroundColor || "#f9fafb"};
-                        background-image: ${style.backgroundImage || "none"};
                         border: ${style.border || "1px solid #e5e7eb"};
                         border-radius: ${style.borderRadius || "8px"};
                         width: ${style.width || "auto"};
                         height: ${style.height || "auto"};
                         color: ${style.color || "#000000"};
-                    " ${customStyle}>
+                    ">
                         ${formFields.map(field => field.trim() ? `
                             <div style="margin-bottom: 15px;">
                                 <label>${field}</label>
@@ -1491,7 +1493,7 @@
                         margin: ${style.margin || "20px 0"};
                         border: ${style.border || "none"};
                         width: ${style.width || "100%"};
-                    " ${customStyle}>`;
+                    ">`;
                 case "Custom HTML":
                     return element.content;
                 default:
@@ -1502,18 +1504,20 @@
                         padding: ${style.padding || "0px"};
                         margin: ${style.margin || "0px"};
                         background-color: ${style.backgroundColor || "transparent"};
-                        background-image: ${style.backgroundImage || "none"};
                         border: ${style.border || "none"};
                         border-radius: ${style.borderRadius || "0px"};
                         width: ${style.width || "auto"};
                         height: ${style.height || "auto"};
-                    " ${customStyle}>${element.content}</div>`;
+                    ">${element.content}</div>`;
             }
         }
 
         // Render the entire application
         function renderApp() {
             const root = document.getElementById('root');
+            
+            // Remember scroll position before rendering
+            lastScrollPosition = root.scrollTop;
             
             root.innerHTML = `
                 <div class="flex h-screen">
@@ -1525,6 +1529,37 @@
                     <!-- Sidebar -->
                     <div class="sidebar w-80 ${isSidebarOpen ? 'active' : ''}">
                         <h1 class="text-2xl font-bold text-gray-800">Webpage Builder</h1>
+                        
+                        <!-- Global Settings -->
+                        <div class="mb-6">
+                            <h3 class="font-semibold text-gray-700 mb-3">Global Settings</h3>
+                            <div class="flex gap-2 mb-3">
+                                <button class="tab-button ${activeTab === 'global-css' ? 'active' : ''}" 
+                                    onclick="activeTab = 'global-css'; renderApp()">
+                                    Global CSS
+                                </button>
+                                <button class="tab-button ${activeTab === 'global-js' ? 'active' : ''}" 
+                                    onclick="activeTab = 'global-js'; renderApp()">
+                                    Global JS
+                                </button>
+                            </div>
+                            
+                            ${activeTab === 'global-css' ? `
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Global CSS</label>
+                                    <textarea class="custom-css-editor" 
+                                        onchange="globalCSS = this.value; renderApp()"
+                                        placeholder="Enter global CSS code">${globalCSS}</textarea>
+                                </div>
+                            ` : activeTab === 'global-js' ? `
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Global JavaScript</label>
+                                    <textarea class="custom-js-editor" 
+                                        onchange="globalJS = this.value; renderApp()"
+                                        placeholder="Enter global JavaScript code">${globalJS}</textarea>
+                                </div>
+                            ` : ''}
+                        </div>
                         
                         <!-- Section Selection -->
                         <div class="mb-6">
@@ -1600,10 +1635,10 @@
                                             ${selectedSection.widths.map((width, index) => `
                                                 <div class="width-control mb-2">
                                                     <span class="text-xs text-gray-600">Column ${index + 1}</span>
-                                                    <input type="range" min="10" max="90" value="${width}" 
+                                                    <input type="range" min="10" max="90" value="${Math.round(width)}" 
                                                         class="width-slider"
                                                         oninput="updateColumnWidth(${selectedSection.id}, ${index}, parseFloat(this.value))">
-                                                    <input type="number" min="10" max="90" value="${width}" 
+                                                    <input type="number" min="10" max="90" value="${Math.round(width)}" 
                                                         class="width-input"
                                                         oninput="updateColumnWidth(${selectedSection.id}, ${index}, parseFloat(this.value))">
                                                     <span class="text-xs text-gray-600">%</span>
@@ -1626,6 +1661,26 @@
                                                     onchange="updateSectionStyle(${selectedSection.id}, 'backgroundColor', this.value)">
                                                 <input type="text" value="${selectedSection.styles.backgroundColor || 'transparent'}" 
                                                     onchange="updateSectionStyle(${selectedSection.id}, 'backgroundColor', this.value)">
+                                            </div>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Background Gradient</label>
+                                            <div class="alignment-buttons">
+                                                <div class="alignment-btn ${selectedSection.styles.backgroundImage && selectedSection.styles.backgroundImage.includes('linear-gradient') ? 'active' : ''}" 
+                                                    onclick="setBackgroundGradient('linear')">
+                                                    <i class="fas fa-sliders-h"></i>
+                                                    <span class="text-xs">Linear</span>
+                                                </div>
+                                                <div class="alignment-btn ${selectedSection.styles.backgroundImage && selectedSection.styles.backgroundImage.includes('radial-gradient') ? 'active' : ''}" 
+                                                    onclick="setBackgroundGradient('radial')">
+                                                    <i class="fas fa-circle"></i>
+                                                    <span class="text-xs">Radial</span>
+                                                </div>
+                                                <div class="alignment-btn ${!selectedSection.styles.backgroundImage || selectedSection.styles.backgroundImage === 'none' ? 'active' : ''}" 
+                                                    onclick="setBackgroundGradient('none')">
+                                                    <i class="fas fa-times"></i>
+                                                    <span class="text-xs">None</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1670,10 +1725,6 @@
                                         onclick="activeTab = 'style'; renderApp()">
                                         Style
                                     </button>
-                                    <button class="tab-button ${activeTab === 'advanced' ? 'active' : ''}" 
-                                        onclick="activeTab = 'advanced'; renderApp()">
-                                        Advanced
-                                    </button>
                                 </div>
                                 
                                 ${activeTab === 'content' ? `
@@ -1713,6 +1764,29 @@
                                         </div>
                                     ` : ''}
                                     
+                                    ${selectedElement.type === 'Button' ? `
+                                        <div class="mb-4">
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Button Alignment</label>
+                                            <div class="alignment-buttons">
+                                                <div class="alignment-btn ${selectedElement.styles.margin === '0px 0px 0px auto' ? 'active' : ''}" 
+                                                    onclick="setButtonAlignment('right')">
+                                                    <i class="fas fa-align-right"></i>
+                                                    <span class="text-xs">Right</span>
+                                                </div>
+                                                <div class="alignment-btn ${selectedElement.styles.margin === '0px auto' ? 'active' : ''}" 
+                                                    onclick="setButtonAlignment('center')">
+                                                    <i class="fas fa-align-center"></i>
+                                                    <span class="text-xs">Center</span>
+                                                </div>
+                                                <div class="alignment-btn ${!selectedElement.styles.margin || selectedElement.styles.margin === '0px' ? 'active' : ''}" 
+                                                    onclick="setButtonAlignment('left')">
+                                                    <i class="fas fa-align-left"></i>
+                                                    <span class="text-xs">Left</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ` : ''}
+                                    
                                     ${['Text', 'Heading', 'Paragraph'].includes(selectedElement.type) ? `
                                         <div class="mb-4">
                                             <label class="block text-sm font-medium text-gray-700 mb-1">Text Alignment</label>
@@ -1740,7 +1814,7 @@
                                         onclick="removeElement(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id})">
                                         <i class="fas fa-trash mr-2"></i> Remove Element
                                     </button>
-                                ` : activeTab === 'style' ? `
+                                ` : `
                                     <div class="style-control-group">
                                         <h4>Typography</h4>
                                         <div class="mb-2">
@@ -1779,34 +1853,14 @@
                                                     onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'color', this.value)">
                                             </div>
                                         </div>
-                                        <div class="mb-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Background Color</label>
-                                            <div class="color-picker-container">
-                                                <input type="color" value="${selectedElement.styles.backgroundColor === 'transparent' ? '#ffffff' : (selectedElement.styles.backgroundColor || '#ffffff')}" 
-                                                    onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'backgroundColor', this.value)">
-                                                <input type="text" value="${selectedElement.styles.backgroundColor || 'transparent'}" 
-                                                    onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'backgroundColor', this.value)">
-                                            </div>
-                                        </div>
-                                        ${selectedElement.type !== 'Image' ? `
+                                        ${selectedElement.type === 'Button' ? `
                                             <div class="mb-2">
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">Background Gradient</label>
-                                                <div class="alignment-buttons">
-                                                    <div class="alignment-btn ${selectedElement.styles.backgroundImage && selectedElement.styles.backgroundImage.includes('linear-gradient') ? 'active' : ''}" 
-                                                        onclick="setBackgroundGradient('linear')">
-                                                        <i class="fas fa-sliders-h"></i>
-                                                        <span class="text-xs">Linear</span>
-                                                    </div>
-                                                    <div class="alignment-btn ${selectedElement.styles.backgroundImage && selectedElement.styles.backgroundImage.includes('radial-gradient') ? 'active' : ''}" 
-                                                        onclick="setBackgroundGradient('radial')">
-                                                        <i class="fas fa-circle"></i>
-                                                        <span class="text-xs">Radial</span>
-                                                    </div>
-                                                    <div class="alignment-btn ${!selectedElement.styles.backgroundImage || selectedElement.styles.backgroundImage === 'none' ? 'active' : ''}" 
-                                                        onclick="setBackgroundGradient('none')">
-                                                        <i class="fas fa-times"></i>
-                                                        <span class="text-xs">None</span>
-                                                    </div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">Background Color</label>
+                                                <div class="color-picker-container">
+                                                    <input type="color" value="${selectedElement.styles.backgroundColor === 'transparent' ? '#ffffff' : (selectedElement.styles.backgroundColor || '#3b82f6')}" 
+                                                        onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'backgroundColor', this.value)">
+                                                    <input type="text" value="${selectedElement.styles.backgroundColor || '#3b82f6'}" 
+                                                        onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'backgroundColor', this.value)">
                                                 </div>
                                             </div>
                                         ` : ''}
@@ -1875,17 +1929,7 @@
                                             </div>
                                         </div>
                                     ` : ''}
-                                ` : `
-                                    <div class="style-control-group">
-                                        <h4>Custom CSS</h4>
-                                        <div class="mb-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">CSS Code</label>
-                                            <textarea class="custom-css-editor" 
-                                                onchange="updateElementCustomCSS(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, this.value)"
-                                                placeholder="Enter custom CSS code">${selectedElement.customCSS || ''}</textarea>
-                                        </div>
-                                    </div>
-                                    
+
                                     <div class="style-control-group">
                                         <h4>Class Name</h4>
                                         <div class="mb-2">
@@ -1957,6 +2001,7 @@
                                         flex-direction: ${section.styles.flexDirection || 'row'};
                                         gap: ${section.styles.gap || '16px'};
                                         background-color: ${section.styles.backgroundColor || 'transparent'};
+                                        background-image: ${section.styles.backgroundImage || 'none'};
                                         padding: ${section.styles.padding || '16px'};
                                         color: ${section.styles.color || '#000000'};
                                     ">
@@ -2026,7 +2071,7 @@
                         <div class="modal-content">
                             <h3 class="text-lg font-medium text-gray-800 mb-4">Import HTML</h3>
                             <p class="text-gray-600 mb-4">Paste your HTML code below to import</p>
-                            <textarea rows="10" class="w-full mb-4" oninput="importHtml = this.value"></textarea>
+                            <textarea rows="10" class="w-full mb-4" oninput="importHtml = this.value">${importHtml}</textarea>
                             <div class="flex gap-2 justify-end">
                                 <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-lg px-4 py-2 text-sm font-medium"
                                     onclick="showImportModal = false; importHtml = ''; renderApp()">
@@ -2041,6 +2086,11 @@
                     </div>
                 ` : ''}
             `;
+            
+            // Restore scroll position after rendering
+            setTimeout(() => {
+                root.scrollTop = lastScrollPosition;
+            }, 0);
         }
 
         // Toggle sidebar on mobile

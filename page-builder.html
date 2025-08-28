@@ -49,6 +49,9 @@
             padding: 1.5rem;
             min-height: 100vh;
             flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center the preview container */
         }
 
         .preview-container {
@@ -59,8 +62,6 @@
             margin-bottom: 2rem;
             width: 100%;
             max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .section-preview {
@@ -70,11 +71,7 @@
             background: white;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             min-height: 100px;
-        }
-
-        .section-preview:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            width: 100%; /* Ensure full width */
         }
 
         .selected-section {
@@ -238,6 +235,11 @@
         .column-content {
             min-height: 50px;
             padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content horizontally */
+            justify-content: center; /* Center content vertically */
+            width: 100%;
         }
 
         .element {
@@ -247,6 +249,7 @@
             border-radius: 0.375rem;
             margin-bottom: 0.5rem;
             cursor: move;
+            width: 100%; /* Ensure elements take full width of column */
         }
 
         .element:hover {
@@ -494,7 +497,7 @@
                     color: "#000000",
                     fontFamily: "Inter, sans-serif",
                     fontWeight: "normal",
-                    textAlign: "left",
+                    textAlign: "center",
                     lineHeight: "1.5",
                     padding: "0px",
                     margin: "0px",
@@ -506,12 +509,12 @@
                     className: "text-element"
                 }
             },
-            "Image": { 
-                icon: "fa-image", 
-                defaultContent: "https://via.placeholder.com/300x200",
+            "Image": {
+                icon: "fa-image",
+                defaultContent: "https://via.placeholder.com/800x600",
                 defaultStyles: {
                     width: "100%",
-                    maxWidth: "300px",
+                    maxWidth: "1200px",
                     height: "auto",
                     padding: "0px",
                     margin: "0px auto",
@@ -531,13 +534,14 @@
                     fontFamily: "Inter, sans-serif",
                     fontWeight: "bold",
                     padding: "10px 20px",
-                    margin: "0px",
+                    margin: "0px auto",
                     backgroundColor: "#3b82f6",
                     border: "none",
                     borderRadius: "6px",
                     textAlign: "center",
                     width: "auto",
                     height: "auto",
+                    display: "block",
                     className: "button-element"
                 }
             },
@@ -549,7 +553,7 @@
                     color: "#000000",
                     fontFamily: "Inter, sans-serif",
                     fontWeight: "bold",
-                    textAlign: "left",
+                    textAlign: "center",
                     lineHeight: "1.2",
                     padding: "0px",
                     margin: "0px 0px 16px 0px",
@@ -569,7 +573,7 @@
                     color: "#333333",
                     fontFamily: "Inter, sans-serif",
                     fontWeight: "normal",
-                    textAlign: "left",
+                    textAlign: "center",
                     lineHeight: "1.6",
                     padding: "0px",
                     margin: "0px 0px 16px 0px",
@@ -589,10 +593,10 @@
                     color: "#000000",
                     fontFamily: "Inter, sans-serif",
                     fontWeight: "normal",
-                    textAlign: "left",
+                    textAlign: "center",
                     lineHeight: "1.5",
                     padding: "20px",
-                    margin: "0px",
+                    margin: "0px auto",
                     backgroundColor: "#ffffff",
                     border: "1px solid #e5e7eb",
                     borderRadius: "8px",
@@ -607,7 +611,7 @@
                 defaultContent: "Name:\nEmail:\nMessage:",
                 defaultStyles: {
                     padding: "20px",
-                    margin: "0px",
+                    margin: "0px auto",
                     backgroundColor: "#f9fafb",
                     border: "1px solid #e5e7eb",
                     borderRadius: "8px",
@@ -623,9 +627,9 @@
                 defaultStyles: {
                     height: "1px",
                     backgroundColor: "#e5e7eb",
-                    margin: "20px 0",
+                    margin: "20px auto",
                     border: "none",
-                    width: "100%",
+                    width: "80%",
                     className: "divider-element"
                 }
             },
@@ -634,7 +638,7 @@
                 defaultContent: "<div class='custom-content'>\n  <h3>Custom HTML</h3>\n  <p>You can add any HTML content here</p>\n</div>",
                 defaultStyles: {
                     padding: "20px",
-                    margin: "0px",
+                    margin: "0px auto",
                     backgroundColor: "#f0f9ff",
                     border: "1px dashed #3b82f6",
                     borderRadius: "8px",
@@ -651,9 +655,11 @@
                 columns: 1,
                 widths: [100],
                 elements: [],
+                columnAlignments: ["center"],
                 styles: {
                     display: "flex",
                     flexDirection: "row",
+                    justifyContent: "center",
                     gap: "16px",
                     backgroundColor: "transparent",
                     padding: "16px",
@@ -665,9 +671,11 @@
                 columns: 2,
                 widths: [50, 50],
                 elements: [],
+                columnAlignments: ["center", "center"],
                 styles: {
                     display: "flex",
                     flexDirection: "row",
+                    justifyContent: "center",
                     gap: "16px",
                     backgroundColor: "transparent",
                     padding: "16px",
@@ -679,9 +687,11 @@
                 columns: 3,
                 widths: [33.33, 33.33, 33.33],
                 elements: [],
+                columnAlignments: ["center", "center", "center"],
                 styles: {
                     display: "flex",
                     flexDirection: "row",
+                    justifyContent: "center",
                     gap: "16px",
                     backgroundColor: "transparent",
                     padding: "16px",
@@ -748,6 +758,7 @@
                     columns: templates[type].columns,
                     widths: [...templates[type].widths],
                     elements: Array(templates[type].columns).fill().map(() => []),
+                    columnAlignments: [...templates[type].columnAlignments],
                     styles: { ...templates[type].styles }
                 };
             } else {
@@ -757,9 +768,11 @@
                     columns: 1,
                     widths: [100],
                     elements: [[]],
+                    columnAlignments: ["center"],
                     styles: {
                         display: "flex",
                         flexDirection: "row",
+                        justifyContent: "center",
                         gap: "16px",
                         backgroundColor: "transparent",
                         padding: "16px",
@@ -799,7 +812,8 @@
                         ...section,
                         columns: section.columns + 1,
                         widths: newWidths,
-                        elements: [...section.elements, []]
+                        elements: [...section.elements, []],
+                        columnAlignments: [...section.columnAlignments, "center"]
                     };
                 }
                 return section;
@@ -822,7 +836,8 @@
                         ...section,
                         columns: section.columns - 1,
                         widths: adjustedWidths,
-                        elements: section.elements.filter((_, i) => i !== columnIndex)
+                        elements: section.elements.filter((_, i) => i !== columnIndex),
+                        columnAlignments: section.columnAlignments.filter((_, i) => i !== columnIndex)
                     };
                 }
                 return section;
@@ -855,6 +870,23 @@
                     return {
                         ...section,
                         widths: normalizedWidths
+                    };
+                }
+                return section;
+            });
+            renderApp();
+        }
+
+        // Update column alignment
+        function updateColumnAlignment(sectionId, columnIndex, alignment) {
+            sections = sections.map(section => {
+                if (section.id === sectionId) {
+                    const newAlignments = [...section.columnAlignments];
+                    newAlignments[columnIndex] = alignment;
+                    
+                    return {
+                        ...section,
+                        columnAlignments: newAlignments
                     };
                 }
                 return section;
@@ -1081,6 +1113,7 @@
             display: flex;
             flex-wrap: wrap;
             margin: 0 -15px;
+            justify-content: center;
         }
         .column {
             padding: 0 15px;
@@ -1135,7 +1168,14 @@
                 
                 section.elements.forEach((column, colIndex) => {
                     const width = section.widths[colIndex];
-                    html += `                <div class="column" style="width: ${width}%">\n`;
+                    const alignment = section.columnAlignments[colIndex] || "center";
+                    
+                    // Convert alignment to CSS text-align
+                    let textAlign = "center";
+                    if (alignment === "flex-start") textAlign = "left";
+                    if (alignment === "flex-end") textAlign = "right";
+                    
+                    html += `                <div class="column" style="width: ${width}%; text-align: ${textAlign}">\n`;
                     
                     column.forEach(element => {
                         const elementStyleString = Object.entries(element.styles || {}).map(([key, value]) => {
@@ -1163,22 +1203,21 @@
                             case "Card":
                                 const cardContent = element.content.split('\n');
                                 html += `                    <div class="card ${element.className}" style="${elementStyleString}">\n`;
-                                html += `                        <h3>${cardContent[0] || "Card Title"}</h3>\n`;
-                                html += `                        <p>${cardContent[1] || "Card content"}</p>\n`;
+                                if (cardContent[0]) html += `                        <h3>${cardContent[0]}</h3>\n`;
+                                if (cardContent[1]) html += `                        <p>${cardContent[1]}</p>\n`;
                                 html += `                    </div>\n`;
                                 break;
                             case "Form":
-                                const formFields = element.content.split('\n');
+                                const formContent = element.content.split('\n');
                                 html += `                    <form class="${element.className}" style="${elementStyleString}">\n`;
-                                formFields.forEach(field => {
+                                formContent.forEach(field => {
                                     if (field.trim()) {
-                                        html += `                        <div style="margin-bottom: 15px;">\n`;
-                                        html += `                            <label>${field}</label>\n`;
-                                        html += `                            <input type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">\n`;
-                                        html += `                        </div>\n`;
+                                        const fieldName = field.replace(':', '');
+                                        html += `                        <label>${fieldName}</label>\n`;
+                                        html += `                        <input type="text" name="${fieldName.toLowerCase()}"><br>\n`;
                                     }
                                 });
-                                html += `                        <button type="submit" class="btn">Submit</button>\n`;
+                                html += `                        <input type="submit" value="Submit">\n`;
                                 html += `                    </form>\n`;
                                 break;
                             case "Divider":
@@ -1201,912 +1240,718 @@
             
             html += `    </div>\n`;
             
-            // Add global JavaScript
-            if (globalJS.trim() !== '') {
+            if (globalJS) {
                 html += `    <script>\n        ${globalJS}\n    <\/script>\n`;
             }
             
-            html += `</body>\n`;
-            html += `</html>`;
+            html += `</body>\n</html>`;
             
             return html;
         }
 
-        // Copy HTML to clipboard
-        function copyHTML() {
-            const html = generateHTML();
-            navigator.clipboard.writeText(html).then(() => {
-                alert("HTML copied to clipboard!");
-            }).catch(err => {
-                console.error("Failed to copy HTML: ", err);
-            });
-        }
-
-        // Export HTML to file
-        function exportHTML() {
-            const html = generateHTML();
-            htmlExport = html;
-            showExportModal = true;
-            renderApp();
-        }
-
-        // Download HTML file
-        function downloadHTML() {
-            const blob = new Blob([htmlExport], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'website.html';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        // Import HTML
-        function importHTML() {
-            if (!importHtml.trim()) {
-                alert("Please enter valid HTML content");
-                return;
-            }
-            try {
-                sections = [];
-                selectedSection = null;
-                selectedElement = null;
-                
-                const newSection = {
-                    id: Date.now(),
-                    type: "Imported",
-                    columns: 1,
-                    widths: [100],
-                    elements: [[{
-                        id: Date.now(),
-                        type: "Text",
-                        content: "Imported content. This is a basic implementation. A full HTML parser would be needed for complete import functionality.",
-                        styles: elementTypes["Text"].defaultStyles,
-                        className: "imported-element"
-                    }]],
-                    styles: {
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: "16px",
-                        backgroundColor: "transparent",
-                        padding: "16px",
-                        color: "#000000",
-                        className: "imported-section"
-                    }
-                };
-                
-                sections = [newSection];
-                showImportModal = false;
-                importHtml = '';
-                renderApp();
-                
-                alert("HTML imported successfully (basic implementation)");
-            } catch (err) {
-                console.error("Failed to import HTML: ", err);
-                alert("Error importing HTML");
-            }
-        }
-
-        // Preview in new tab
-        function previewInNewTab() {
+        // Export the webpage
+        function exportWebpage() {
             const html = generateHTML();
             const blob = new Blob([html], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
-            window.open(url, '_blank');
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'webpage.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
-        // Set text alignment
-        function setTextAlignment(alignment) {
-            if (!selectedElement) return;
-            updateElementStyle(selectedSection.id, selectedColumn, selectedElement.id, 'textAlign', alignment);
-        }
-
-        // Set image alignment
-        function setImageAlignment(alignment) {
-            if (!selectedElement || selectedElement.type !== 'Image') return;
+        // Import webpage from HTML
+        function importWebpage() {
+            // This is a simplified version - in a real app, you'd parse the HTML
+            // and extract the sections, columns, and elements
             
-            let marginValue = '0px';
-            if (alignment === 'center') marginValue = '0px auto';
-            else if (alignment === 'right') marginValue = '0px 0px 0px auto';
-            
-            updateElementStyle(selectedSection.id, selectedColumn, selectedElement.id, 'margin', marginValue);
-            updateElementStyle(selectedSection.id, selectedColumn, selectedElement.id, 'display', 'block');
-        }
-
-        // Set button alignment
-        function setButtonAlignment(alignment) {
-            if (!selectedElement || selectedElement.type !== 'Button') return;
-            
-            let displayValue = 'inline-block';
-            let marginValue = '0px';
-            
-            if (alignment === 'center') {
-                displayValue = 'block';
-                marginValue = '0px auto';
-            } else if (alignment === 'right') {
-                displayValue = 'block';
-                marginValue = '0px 0px 0px auto';
-            }
-            
-            updateElementStyle(selectedSection.id, selectedColumn, selectedElement.id, 'display', displayValue);
-            updateElementStyle(selectedSection.id, selectedColumn, selectedElement.id, 'margin', marginValue);
-        }
-
-        // Set background gradient for sections
-        function setBackgroundGradient(gradientType) {
-            if (!selectedSection) return;
-            
-            let gradientValue = 'none';
-            const color1 = selectedSection.styles.backgroundColor || '#3b82f6';
-            const color2 = color1.replace(/\d+\)/, '0.8)');
-            
-            switch(gradientType) {
-                case 'linear':
-                    gradientValue = `linear-gradient(135deg, ${color1}, ${color2})`;
-                    break;
-                case 'radial':
-                    gradientValue = `radial-gradient(circle, ${color1}, ${color2})`;
-                    break;
-                case 'none':
-                default:
-                    gradientValue = 'none';
-            }
-            
-            updateSectionStyle(selectedSection.id, 'backgroundImage', gradientValue);
-        }
-
-        // Render element based on type
-        function renderElement(element) {
-            const style = element.styles || {};
-            
-            switch (element.type) {
-                case "Text":
-                    return `<div class="${style.className}" style="
-                        font-size: ${style.fontSize || "16px"};
-                        color: ${style.color || "#000000"};
-                        font-family: ${style.fontFamily || "Inter, sans-serif"};
-                        font-weight: ${style.fontWeight || "normal"};
-                        text-align: ${style.textAlign || "left"};
-                        line-height: ${style.lineHeight || "1.5"};
-                        padding: ${style.padding || "0px"};
-                        margin: ${style.margin || "0px"};
-                        background-color: ${style.backgroundColor || "transparent"};
-                        border: ${style.border || "none"};
-                        border-radius: ${style.borderRadius || "0px"};
-                        width: ${style.width || "auto"};
-                        height: ${style.height || "auto"};
-                    ">${element.content}</div>`;
-                case "Image":
-                    return `<img src="${element.content}" alt="Image" class="${style.className}" style="
-                        width: ${style.width || "100%"};
-                        max-width: ${style.maxWidth || "300px"};
-                        height: ${style.height || "auto"};
-                        padding: ${style.padding || "0px"};
-                        margin: ${style.margin || "0px auto"};
-                        border: ${style.border || "none"};
-                        border-radius: ${style.borderRadius || "0px"};
-                        object-fit: ${style.objectFit || "contain"};
-                        display: ${style.display || "block"};
-                    ">`;
-                case "Button":
-                    return `<button class="${style.className}" style="
-                        font-size: ${style.fontSize || "16px"};
-                        color: ${style.color || "#ffffff"};
-                        font-family: ${style.fontFamily || "Inter, sans-serif"};
-                        font-weight: ${style.fontWeight || "bold"};
-                        padding: ${style.padding || "10px 20px"};
-                        margin: ${style.margin || "0px"};
-                        background-color: ${style.backgroundColor || "#3b82f6"};
-                        border: ${style.border || "none"};
-                        border-radius: ${style.borderRadius || "6px"};
-                        text-align: ${style.textAlign || "center"};
-                        width: ${style.width || "auto"};
-                        height: ${style.height || "auto"};
-                        display: ${style.display || "inline-block"};
-                        cursor: pointer;
-                    ">${element.content}</button>`;
-                case "Heading":
-                    return `<h2 class="${style.className}" style="
-                        font-size: ${style.fontSize || "24px"};
-                        color: ${style.color || "#000000"};
-                        font-family: ${style.fontFamily || "Inter, sans-serif"};
-                        font-weight: ${style.fontWeight || "bold"};
-                        text-align: ${style.textAlign || "left"};
-                        line-height: ${style.lineHeight || "1.2"};
-                        padding: ${style.padding || "0px"};
-                        margin: ${style.margin || "0px 0px 16px 0px"};
-                        background-color: ${style.backgroundColor || "transparent"};
-                        border: ${style.border || "none"};
-                        border-radius: ${style.borderRadius || "0px"};
-                        width: ${style.width || "auto"};
-                        height: ${style.height || "auto"};
-                    ">${element.content}</h2>`;
-                case "Paragraph":
-                    return `<p class="${style.className}" style="
-                        font-size: ${style.fontSize || "16px"};
-                        color: ${style.color || "#333333"};
-                        font-family: ${style.fontFamily || "Inter, sans-serif"};
-                        font-weight: ${style.fontWeight || "normal"};
-                        text-align: ${style.textAlign || "left"};
-                        line-height: ${style.lineHeight || "1.6"};
-                        padding: ${style.padding || "0px"};
-                        margin: ${style.margin || "0px 0px 16px 0px"};
-                        background-color: ${style.backgroundColor || "transparent"};
-                        border: ${style.border || "none"};
-                        border-radius: ${style.borderRadius || "0px"};
-                        width: ${style.width || "auto"};
-                        height: ${style.height || "auto"};
-                    ">${element.content}</p>`;
-                case "Card":
-                    const cardContent = element.content.split('\n');
-                    return `<div class="card ${style.className}" style="
-                        font-size: ${style.fontSize || "16px"};
-                        color: ${style.color || "#000000"};
-                        font-family: ${style.fontFamily || "Inter, sans-serif"};
-                        font-weight: ${style.fontWeight || "normal"};
-                        text-align: ${style.textAlign || "left"};
-                        line-height: ${style.lineHeight || "1.5"};
-                        padding: ${style.padding || "20px"};
-                        margin: ${style.margin || "0px"};
-                        background-color: ${style.backgroundColor || "#ffffff"};
-                        border: ${style.border || "1px solid #e5e7eb"};
-                        border-radius: ${style.borderRadius || "8px"};
-                        box-shadow: ${style.boxShadow || "0 2px 4px rgba(0,0,0,0.1)"};
-                        width: ${style.width || "auto"};
-                        height: ${style.height || "auto"};
-                    ">
-                        <h3>${cardContent[0] || "Card Title"}</h3>
-                        <p>${cardContent[1] || "Card content"}</p>
-                    </div>`;
-                case "Form":
-                    const formFields = element.content.split('\n');
-                    return `<form class="${style.className}" style="
-                        padding: ${style.padding || "20px"};
-                        margin: ${style.margin || "0px"};
-                        background-color: ${style.backgroundColor || "#f9fafb"};
-                        border: ${style.border || "1px solid #e5e7eb"};
-                        border-radius: ${style.borderRadius || "8px"};
-                        width: ${style.width || "auto"};
-                        height: ${style.height || "auto"};
-                        color: ${style.color || "#000000"};
-                    ">
-                        ${formFields.map(field => field.trim() ? `
-                            <div style="margin-bottom: 15px;">
-                                <label>${field}</label>
-                                <input type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                            </div>
-                        ` : '').join('')}
-                        <button type="submit" style="
-                            padding: 10px 20px;
-                            background: #3b82f6;
-                            color: white;
-                            border: none;
-                            border-radius: 6px;
-                            font-weight: bold;
-                            cursor: pointer;
-                        ">Submit</button>
-                    </form>`;
-                case "Divider":
-                    return `<hr class="${style.className}" style="
-                        height: ${style.height || "1px"};
-                        background-color: ${style.backgroundColor || "#e5e7eb"};
-                        margin: ${style.margin || "20px 0"};
-                        border: ${style.border || "none"};
-                        width: ${style.width || "100%"};
-                    ">`;
-                case "Custom HTML":
-                    return element.content;
-                default:
-                    return `<div class="${style.className}" style="
-                        font-size: ${style.fontSize || "16px"};
-                        color: ${style.color || "#000000"};
-                        font-family: ${style.fontFamily || "Inter, sans-serif"};
-                        padding: ${style.padding || "0px"};
-                        margin: ${style.margin || "0px"};
-                        background-color: ${style.backgroundColor || "transparent"};
-                        border: ${style.border || "none"};
-                        border-radius: ${style.borderRadius || "0px"};
-                        width: ${style.width || "auto"};
-                        height: ${style.height || "auto"};
-                    ">${element.content}</div>`;
-            }
-        }
-
-        // Render the entire application
-        function renderApp() {
-            const root = document.getElementById('root');
-            
-            // Remember scroll position before rendering
-            lastScrollPosition = root.scrollTop;
-            
-            root.innerHTML = `
-                <div class="flex h-screen">
-                    <!-- Sidebar Toggle for Mobile -->
-                    <div class="sidebar-toggle" onclick="toggleSidebar()">
-                        <i class="fas fa-bars mr-2"></i> ${isSidebarOpen ? 'Close' : 'Open'} Sidebar
-                    </div>
-                    
-                    <!-- Sidebar -->
-                    <div class="sidebar w-80 ${isSidebarOpen ? 'active' : ''}">
-                        <h1 class="text-2xl font-bold text-gray-800">Webpage Builder</h1>
-                        
-                        <!-- Global Settings -->
-                        <div class="mb-6">
-                            <h3 class="font-semibold text-gray-700 mb-3">Global Settings</h3>
-                            <div class="flex gap-2 mb-3">
-                                <button class="tab-button ${activeTab === 'global-css' ? 'active' : ''}" 
-                                    onclick="activeTab = 'global-css'; renderApp()">
-                                    Global CSS
-                                </button>
-                                <button class="tab-button ${activeTab === 'global-js' ? 'active' : ''}" 
-                                    onclick="activeTab = 'global-js'; renderApp()">
-                                    Global JS
-                                </button>
-                            </div>
-                            
-                            ${activeTab === 'global-css' ? `
-                                <div class="mb-4">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Global CSS</label>
-                                    <textarea class="custom-css-editor" 
-                                        onchange="globalCSS = this.value; renderApp()"
-                                        placeholder="Enter global CSS code">${globalCSS}</textarea>
-                                </div>
-                            ` : activeTab === 'global-js' ? `
-                                <div class="mb-4">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Global JavaScript</label>
-                                    <textarea class="custom-js-editor" 
-                                        onchange="globalJS = this.value; renderApp()"
-                                        placeholder="Enter global JavaScript code">${globalJS}</textarea>
-                                </div>
-                            ` : ''}
-                        </div>
-                        
-                        <!-- Section Selection -->
-                        <div class="mb-6">
-                            <h3 class="font-semibold text-gray-700 mb-3">Add Section</h3>
-                            <div class="flex flex-wrap gap-2 mb-3">
-                                ${Object.keys(sectionCategories).map(category => `
-                                    <button class="tab-button ${selectedCategory === category ? 'active' : ''}" 
-                                        onclick="selectedCategory = '${category}'; renderApp()">
-                                        ${category}
-                                    </button>
-                                `).join('')}
-                            </div>
-                            <div class="grid grid-cols-2 gap-2">
-                                ${sectionCategories[selectedCategory].map(type => `
-                                    <button class="bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg p-3 text-sm font-medium flex items-center justify-center"
-                                        onclick="addSection('${type}')">
-                                        <i class="fas fa-plus mr-2"></i> ${type}
-                                    </button>
-                                `).join('')}
-                            </div>
-                        </div>
-                        
-                        <!-- Elements Library -->
-                        <div class="mb-6">
-                            <h3 class="font-semibold text-gray-700 mb-3">Elements</h3>
-                            <div class="grid grid-cols-2 gap-2">
-                                ${Object.entries(elementTypes).map(([type, data]) => `
-                                    <div class="draggable-item bg-gray-100 hover:bg-blue-100 rounded-lg p-3 text-sm font-medium flex items-center justify-center cursor-move"
-                                        draggable="true"
-                                        ondragstart="handleDragStart(event, '${type}')">
-                                        <i class="fas ${data.icon} mr-2"></i> ${type}
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                        
-                        <!-- Section Properties -->
-                        ${selectedSection ? `
-                            <div class="mb-6">
-                                <h3 class="font-semibold text-gray-700 mb-3">Section Properties</h3>
-                                
-                                <div class="flex gap-2 mb-3">
-                                    <button class="tab-button ${activeTab === 'content' ? 'active' : ''}" 
-                                        onclick="activeTab = 'content'; renderApp()">
-                                        Content
-                                    </button>
-                                    <button class="tab-button ${activeTab === 'style' ? 'active' : ''}" 
-                                        onclick="activeTab = 'style'; renderApp()">
-                                        Style
-                                    </button>
-                                </div>
-                                
-                                ${activeTab === 'content' ? `
-                                    <div class="mb-4">
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Columns</label>
-                                        <div class="flex items-center gap-2">
-                                            <button class="bg-red-500 hover:bg-red-600 text-white rounded-lg px-3 py-2 text-sm font-medium"
-                                                onclick="removeColumn(${selectedSection.id}, ${selectedSection.columns - 1})" 
-                                                ${selectedSection.columns <= 1 ? 'disabled' : ''}>
-                                                <i class="fas fa-minus"></i>
-                                            </button>
-                                            <span class="text-sm font-medium">${selectedSection.columns}</span>
-                                            <button class="bg-green-500 hover:bg-green-600 text-white rounded-lg px-3 py-2 text-sm font-medium"
-                                                onclick="addColumn(${selectedSection.id})">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    
-                                    ${selectedSection.columns > 0 ? `
-                                        <div class="mb-4">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Column Widths</label>
-                                            ${selectedSection.widths.map((width, index) => `
-                                                <div class="width-control mb-2">
-                                                    <span class="text-xs text-gray-600">Column ${index + 1}</span>
-                                                    <input type="range" min="10" max="90" value="${Math.round(width)}" 
-                                                        class="width-slider"
-                                                        oninput="updateColumnWidth(${selectedSection.id}, ${index}, parseFloat(this.value))">
-                                                    <input type="number" min="10" max="90" value="${Math.round(width)}" 
-                                                        class="width-input"
-                                                        oninput="updateColumnWidth(${selectedSection.id}, ${index}, parseFloat(this.value))">
-                                                    <span class="text-xs text-gray-600">%</span>
-                                                </div>
-                                            `).join('')}
-                                        </div>
-                                    ` : ''}
-                                    
-                                    <button class="bg-red-500 hover:bg-red-600 text-white rounded-lg w-full py-2 text-sm font-medium mb-4"
-                                        onclick="removeSection(${selectedSection.id})">
-                                        <i class="fas fa-trash mr-2"></i> Remove Section
-                                    </button>
-                                ` : `
-                                    <div class="style-control-group">
-                                        <h4>Background</h4>
-                                        <div class="mb-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Background Color</label>
-                                            <div class="color-picker-container">
-                                                <input type="color" value="${selectedSection.styles.backgroundColor === 'transparent' ? '#ffffff' : (selectedSection.styles.backgroundColor || '#ffffff')}" 
-                                                    onchange="updateSectionStyle(${selectedSection.id}, 'backgroundColor', this.value)">
-                                                <input type="text" value="${selectedSection.styles.backgroundColor || 'transparent'}" 
-                                                    onchange="updateSectionStyle(${selectedSection.id}, 'backgroundColor', this.value)">
-                                            </div>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Background Gradient</label>
-                                            <div class="alignment-buttons">
-                                                <div class="alignment-btn ${selectedSection.styles.backgroundImage && selectedSection.styles.backgroundImage.includes('linear-gradient') ? 'active' : ''}" 
-                                                    onclick="setBackgroundGradient('linear')">
-                                                    <i class="fas fa-sliders-h"></i>
-                                                    <span class="text-xs">Linear</span>
-                                                </div>
-                                                <div class="alignment-btn ${selectedSection.styles.backgroundImage && selectedSection.styles.backgroundImage.includes('radial-gradient') ? 'active' : ''}" 
-                                                    onclick="setBackgroundGradient('radial')">
-                                                    <i class="fas fa-circle"></i>
-                                                    <span class="text-xs">Radial</span>
-                                                </div>
-                                                <div class="alignment-btn ${!selectedSection.styles.backgroundImage || selectedSection.styles.backgroundImage === 'none' ? 'active' : ''}" 
-                                                    onclick="setBackgroundGradient('none')">
-                                                    <i class="fas fa-times"></i>
-                                                    <span class="text-xs">None</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="style-control-group">
-                                        <h4>Spacing</h4>
-                                        <div class="mb-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Padding</label>
-                                            <input type="text" value="${selectedSection.styles.padding || '16px'}" 
-                                                onchange="updateSectionStyle(${selectedSection.id}, 'padding', this.value)">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Gap</label>
-                                            <input type="text" value="${selectedSection.styles.gap || '16px'}" 
-                                                onchange="updateSectionStyle(${selectedSection.id}, 'gap', this.value)">
-                                        </div>
-                                    </div>
-
-                                    <div class="style-control-group">
-                                        <h4>Class Name</h4>
-                                        <div class="mb-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">CSS Class</label>
-                                            <input type="text" value="${selectedSection.styles.className || ''}" 
-                                                onchange="updateSectionStyle(${selectedSection.id}, 'className', this.value)">
-                                        </div>
-                                    </div>
-                                `}
-                            </div>
-                        ` : ''}
-                        
-                        <!-- Element Properties -->
-                        ${selectedElement ? `
-                            <div class="mb-6">
-                                <h3 class="font-semibold text-gray-700 mb-3">Element Properties</h3>
-                                
-                                <div class="flex gap-2 mb-3">
-                                    <button class="tab-button ${activeTab === 'content' ? 'active' : ''}" 
-                                        onclick="activeTab = 'content'; renderApp()">
-                                        Content
-                                    </button>
-                                    <button class="tab-button ${activeTab === 'style' ? 'active' : ''}" 
-                                        onclick="activeTab = 'style'; renderApp()">
-                                        Style
-                                    </button>
-                                </div>
-                                
-                                ${activeTab === 'content' ? `
-                                    <div class="mb-4">
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Content</label>
-                                        ${selectedElement.type === 'Custom HTML' ? `
-                                            <textarea 
-                                                onchange="updateElementContent(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, this.value)"
-                                                rows="6">${selectedElement.content}</textarea>
-                                        ` : `
-                                            <textarea 
-                                                onchange="updateElementContent(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, this.value)"
-                                                rows="4">${selectedElement.content}</textarea>
-                                        `}
-                                    </div>
-                                    
-                                    ${selectedElement.type === 'Image' ? `
-                                        <div class="mb-4">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Image Alignment</label>
-                                            <div class="alignment-buttons">
-                                                <div class="alignment-btn ${selectedElement.styles.margin === '0px 0px 0px auto' ? 'active' : ''}" 
-                                                    onclick="setImageAlignment('right')">
-                                                    <i class="fas fa-align-right"></i>
-                                                    <span class="text-xs">Right</span>
-                                                </div>
-                                                <div class="alignment-btn ${selectedElement.styles.margin === '0px auto' ? 'active' : ''}" 
-                                                    onclick="setImageAlignment('center')">
-                                                    <i class="fas fa-align-center"></i>
-                                                    <span class="text-xs">Center</span>
-                                                </div>
-                                                <div class="alignment-btn ${!selectedElement.styles.margin || selectedElement.styles.margin === '0px' ? 'active' : ''}" 
-                                                    onclick="setImageAlignment('left')">
-                                                    <i class="fas fa-align-left"></i>
-                                                    <span class="text-xs">Left</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ` : ''}
-                                    
-                                    ${selectedElement.type === 'Button' ? `
-                                        <div class="mb-4">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Button Alignment</label>
-                                            <div class="alignment-buttons">
-                                                <div class="alignment-btn ${selectedElement.styles.margin === '0px 0px 0px auto' ? 'active' : ''}" 
-                                                    onclick="setButtonAlignment('right')">
-                                                    <i class="fas fa-align-right"></i>
-                                                    <span class="text-xs">Right</span>
-                                                </div>
-                                                <div class="alignment-btn ${selectedElement.styles.margin === '0px auto' ? 'active' : ''}" 
-                                                    onclick="setButtonAlignment('center')">
-                                                    <i class="fas fa-align-center"></i>
-                                                    <span class="text-xs">Center</span>
-                                                </div>
-                                                <div class="alignment-btn ${!selectedElement.styles.margin || selectedElement.styles.margin === '0px' ? 'active' : ''}" 
-                                                    onclick="setButtonAlignment('left')">
-                                                    <i class="fas fa-align-left"></i>
-                                                    <span class="text-xs">Left</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ` : ''}
-                                    
-                                    ${['Text', 'Heading', 'Paragraph'].includes(selectedElement.type) ? `
-                                        <div class="mb-4">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Text Alignment</label>
-                                            <div class="alignment-buttons">
-                                                <div class="alignment-btn ${selectedElement.styles.textAlign === 'right' ? 'active' : ''}" 
-                                                    onclick="setTextAlignment('right')">
-                                                    <i class="fas fa-align-right"></i>
-                                                    <span class="text-xs">Right</span>
-                                                </div>
-                                                <div class="alignment-btn ${selectedElement.styles.textAlign === 'center' ? 'active' : ''}" 
-                                                    onclick="setTextAlignment('center')">
-                                                    <i class="fas fa-align-center"></i>
-                                                    <span class="text-xs">Center</span>
-                                                </div>
-                                                <div class="alignment-btn ${selectedElement.styles.textAlign === 'left' || !selectedElement.styles.textAlign ? 'active' : ''}" 
-                                                    onclick="setTextAlignment('left')">
-                                                    <i class="fas fa-align-left"></i>
-                                                    <span class="text-xs">Left</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ` : ''}
-                                    
-                                    <button class="bg-red-500 hover:bg-red-600 text-white rounded-lg w-full py-2 text-sm font-medium"
-                                        onclick="removeElement(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id})">
-                                        <i class="fas fa-trash mr-2"></i> Remove Element
-                                    </button>
-                                ` : `
-                                    <div class="style-control-group">
-                                        <h4>Typography</h4>
-                                        <div class="mb-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Font Family</label>
-                                            <select onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'fontFamily', this.value)">
-                                                ${fontOptions.map(font => `
-                                                    <option value="${font}" ${selectedElement.styles.fontFamily === font ? 'selected' : ''}>
-                                                        ${font.split(',')[0]}
-                                                    </option>
-                                                `).join('')}
-                                            </select>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Font Size</label>
-                                            <div class="input-with-unit">
-                                                <input type="text" value="${selectedElement.styles.fontSize || '16px'}" 
-                                                    onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'fontSize', this.value)">
-                                                <span class="unit">px</span>
-                                            </div>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Line Height</label>
-                                            <input type="text" value="${selectedElement.styles.lineHeight || '1.5'}" 
-                                                onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'lineHeight', this.value)">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="style-control-group">
-                                        <h4>Colors</h4>
-                                        <div class="mb-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Text Color</label>
-                                            <div class="color-picker-container">
-                                                <input type="color" value="${selectedElement.styles.color || '#000000'}" 
-                                                    onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'color', this.value)">
-                                                <input type="text" value="${selectedElement.styles.color || '#000000'}" 
-                                                    onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'color', this.value)">
-                                            </div>
-                                        </div>
-                                        ${selectedElement.type === 'Button' ? `
-                                            <div class="mb-2">
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">Background Color</label>
-                                                <div class="color-picker-container">
-                                                    <input type="color" value="${selectedElement.styles.backgroundColor === 'transparent' ? '#ffffff' : (selectedElement.styles.backgroundColor || '#3b82f6')}" 
-                                                        onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'backgroundColor', this.value)">
-                                                    <input type="text" value="${selectedElement.styles.backgroundColor || '#3b82f6'}" 
-                                                        onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'backgroundColor', this.value)">
-                                                </div>
-                                            </div>
-                                        ` : ''}
-                                    </div>
-                                    
-                                    <div class="style-control-group">
-                                        <h4>Spacing</h4>
-                                        <div class="mb-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Padding</label>
-                                            <input type="text" value="${selectedElement.styles.padding || '0px'}" 
-                                                onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'padding', this.value)">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Margin</label>
-                                            <input type="text" value="${selectedElement.styles.margin || '0px'}" 
-                                                onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'margin', this.value)">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="style-control-group">
-                                        <h4>Borders</h4>
-                                        <div class="mb-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Border</label>
-                                            <input type="text" value="${selectedElement.styles.border || 'none'}" 
-                                                onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'border', this.value)"
-                                                placeholder="e.g., 1px solid #000">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Border Radius</label>
-                                            <div class="input-with-unit">
-                                                <input type="text" value="${selectedElement.styles.borderRadius || '0px'}" 
-                                                    onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'borderRadius', this.value)">
-                                                <span class="unit">px</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    ${selectedElement.type === 'Image' ? `
-                                        <div class="style-control-group">
-                                            <h4>Image Properties</h4>
-                                            <div class="mb-2">
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">Width</label>
-                                                <div class="input-with-unit">
-                                                    <input type="text" value="${selectedElement.styles.width || '100%'}" 
-                                                        onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'width', this.value)">
-                                                    <span class="unit">px/%</span>
-                                                </div>
-                                            </div>
-                                            <div class="mb-2">
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">Max Width</label>
-                                                <div class="input-with-unit">
-                                                    <input type="text" value="${selectedElement.styles.maxWidth || '300px'}" 
-                                                        onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'maxWidth', this.value)">
-                                                    <span class="unit">px</span>
-                                                </div>
-                                            </div>
-                                            <div class="mb-2">
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">Object Fit</label>
-                                                <select onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'objectFit', this.value)">
-                                                    <option value="contain" ${selectedElement.styles.objectFit === 'contain' ? 'selected' : ''}>Contain</option>
-                                                    <option value="cover" ${selectedElement.styles.objectFit === 'cover' ? 'selected' : ''}>Cover</option>
-                                                    <option value="fill" ${selectedElement.styles.objectFit === 'fill' ? 'selected' : ''}>Fill</option>
-                                                    <option value="scale-down" ${selectedElement.styles.objectFit === 'scale-down' ? 'selected' : ''}>Scale Down</option>
-                                                    <option value="none" ${selectedElement.styles.objectFit === 'none' ? 'selected' : ''}>None</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    ` : ''}
-
-                                    <div class="style-control-group">
-                                        <h4>Class Name</h4>
-                                        <div class="mb-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">CSS Class</label>
-                                            <input type="text" value="${selectedElement.className || ''}" 
-                                                onchange="updateElementClassName(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, this.value)">
-                                        </div>
-                                    </div>
-                                `}
-                            </div>
-                        ` : ''}
-                        
-                        <!-- Export/Import Buttons -->
-                        <div class="mt-6">
-                            <button class="bg-green-500 hover:bg-green-600 text-white rounded-lg w-full py-2 text-sm font-medium mb-2"
-                                onclick="exportHTML()">
-                                <i class="fas fa-download mr-2"></i> Export HTML
-                            </button>
-                            <button class="bg-purple-500 hover:bg-purple-600 text-white rounded-lg w-full py-2 text-sm font-medium"
-                                onclick="showImportModal = true; renderApp()">
-                                <i class="fas fa-upload mr-2"></i> Import HTML
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Preview Area -->
-                    <div class="preview-area flex-1 overflow-auto">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-bold text-gray-800">Preview</h2>
-                            <div class="flex gap-2">
-                                <button class="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4 py-2 text-sm font-medium"
-                                    onclick="previewInNewTab()">
-                                    <i class="fas fa-eye mr-2"></i> Preview
-                                </button>
-                                <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg px-4 py-2 text-sm font-medium"
-                                    onclick="isMobileView = !isMobileView; renderApp()">
-                                    <i class="fas ${isMobileView ? 'fa-desktop' : 'fa-mobile-alt'} mr-2"></i> ${isMobileView ? 'Desktop' : 'Mobile'} View
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="${isMobileView ? 'mobile-preview' : ''}">
-                            ${sections.length === 0 ? `
-                                <div class="bg-white rounded-lg shadow p-8 text-center">
-                                    <i class="fas fa-plus-circle text-4xl text-gray-300 mb-4"></i>
-                                    <h3 class="text-lg font-medium text-gray-700 mb-2">No Sections Added</h3>
-                                    <p class="text-gray-500 mb-4">Add a section from the sidebar to get started</p>
-                                    <button class="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4 py-2 text-sm font-medium"
-                                        onclick="addSection('1 Column')">
-                                        <i class="fas fa-plus mr-2"></i> Add First Section
-                                    </button>
-                                </div>
-                            ` : ''}
-                            
-                            ${sections.map(section => `
-                                <div class="preview-container ${selectedSection && selectedSection.id === section.id ? 'selected-section' : ''}" 
-                                    onclick="selectedSection = ${JSON.stringify(section).replace(/"/g, '&quot;')}; selectedElement = null; renderApp()">
-                                    
-                                    <div class="section-header flex justify-between items-center mb-4">
-                                        <h3 class="text-lg font-medium text-gray-800">${section.type}</h3>
-                                        <button class="text-red-500 hover:text-red-700"
-                                            onclick="event.stopPropagation(); removeSection(${section.id})">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                    
-                                    <div class="section-preview" style="
-                                        display: ${section.styles.display || 'flex'};
-                                        flex-direction: ${section.styles.flexDirection || 'row'};
-                                        gap: ${section.styles.gap || '16px'};
-                                        background-color: ${section.styles.backgroundColor || 'transparent'};
-                                        background-image: ${section.styles.backgroundImage || 'none'};
-                                        padding: ${section.styles.padding || '16px'};
-                                        color: ${section.styles.color || '#000000'};
-                                    ">
-                                        ${section.elements.map((column, colIndex) => `
-                                            <div class="column" style="width: ${section.widths[colIndex]}%; position: relative;"
-                                                onclick="event.stopPropagation(); selectedColumn = ${colIndex}; selectedElement = null; renderApp()">
-                                                
-                                                <div class="column-resize-handle" 
-                                                    onclick="event.stopPropagation()"></div>
-                                                
-                                                <div class="column-content drop-zone"
-                                                    ondragover="handleDragOver(event)"
-                                                    ondragleave="handleDragLeave(event)"
-                                                    ondrop="handleDrop(event, ${section.id}, ${colIndex})"
-                                                    onclick="event.stopPropagation()">
-                                                    
-                                                    ${column.length === 0 ? `
-                                                        <div class="text-center text-gray-400 py-8">
-                                                            <i class="fas fa-arrow-down text-2xl mb-2"></i>
-                                                            <p>Drag elements here or click to add</p>
-                                                        </div>
-                                                    ` : ''}
-                                                    
-                                                    ${column.map(element => `
-                                                        <div class="element ${selectedElement && selectedElement.id === element.id ? 'selected-element' : ''}"
-                                                            onclick="event.stopPropagation(); selectedElement = ${JSON.stringify(element).replace(/"/g, '&quot;')}; selectedColumn = ${colIndex}; renderApp()">
-                                                            ${renderElement(element)}
-                                                        </div>
-                                                    `).join('')}
-                                                </div>
-                                            </div>
-                                        `).join('')}
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
+            try {
+                // This would be a complex HTML parser in a real implementation
+                alert("Import functionality would parse the HTML and extract the layout here. This is a simplified demo.");
                 
-                <!-- Export Modal -->
-                ${showExportModal ? `
-                    <div class="modal">
-                        <div class="modal-content">
-                            <h3 class="text-lg font-medium text-gray-800 mb-4">Export HTML</h3>
-                            <textarea rows="10" class="w-full mb-4" readonly>${htmlExport}</textarea>
-                            <div class="flex gap-2 justify-end">
-                                <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-lg px-4 py-2 text-sm font-medium"
-                                    onclick="showExportModal = false; renderApp()">
-                                    Cancel
-                                </button>
-                                <button class="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4 py-2 text-sm font-medium"
-                                    onclick="copyHTML()">
-                                    Copy to Clipboard
-                                </button>
-                                <button class="bg-green-500 hover:bg-green-600 text-white rounded-lg px-4 py-2 text-sm font-medium"
-                                    onclick="downloadHTML()">
-                                    Download HTML
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                ` : ''}
+                // For demo purposes, just add a sample section
+                addSection("2 Columns");
                 
-                <!-- Import Modal -->
-                ${showImportModal ? `
-                    <div class="modal">
-                        <div class="modal-content">
-                            <h3 class="text-lg font-medium text-gray-800 mb-4">Import HTML</h3>
-                            <p class="text-gray-600 mb-4">Paste your HTML code below to import</p>
-                            <textarea rows="10" class="w-full mb-4" oninput="importHtml = this.value">${importHtml}</textarea>
-                            <div class="flex gap-2 justify-end">
-                                <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-lg px-4 py-2 text-sm font-medium"
-                                    onclick="showImportModal = false; importHtml = ''; renderApp()">
-                                    Cancel
-                                </button>
-                                <button class="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4 py-2 text-sm font-medium"
-                                    onclick="importHTML()">
-                                    Import
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                ` : ''}
-            `;
-            
-            // Restore scroll position after rendering
-            setTimeout(() => {
-                root.scrollTop = lastScrollPosition;
-            }, 0);
+                // Close the modal
+                showImportModal = false;
+                renderApp();
+            } catch (error) {
+                alert("Error importing HTML: " + error.message);
+            }
         }
 
-        // Toggle sidebar on mobile
+        // Toggle mobile view
+        function toggleMobileView() {
+            isMobileView = !isMobileView;
+            renderApp();
+        }
+
+        // Toggle sidebar
         function toggleSidebar() {
             isSidebarOpen = !isSidebarOpen;
             renderApp();
         }
 
+        // Render the app
+        function renderApp() {
+            const root = document.getElementById('root');
+            if (!root) return;
+            
+            // Save scroll position before rendering
+            lastScrollPosition = window.scrollY;
+            
+            root.innerHTML = `
+                <div class="flex h-full">
+                    <!-- Sidebar Toggle Button (Mobile Only) -->
+                    <div class="sidebar-toggle" onclick="toggleSidebar()">
+                        <i class="fas ${isSidebarOpen ? 'fa-times' : 'fa-bars'}"></i> ${isSidebarOpen ? 'Close' : 'Open'} Sidebar
+                    </div>
+                    
+                    <!-- Sidebar -->
+                    <div class="sidebar ${isSidebarOpen ? 'active' : ''}" style="width: 320px;">
+                        <h1>Webpage Builder</h1>
+                        
+                        <!-- Tab Navigation -->
+                        <div class="flex mb-4 bg-gray-100 p-1 rounded-lg">
+                            <div class="w-1/2 text-center">
+                                <button class="tab-button ${activeTab === 'content' ? 'active' : ''}" onclick="activeTab = 'content'; renderApp();" style="width: 100%;">
+                                    <i class="fas fa-puzzle-piece"></i> Content
+                                </button>
+                            </div>
+                            <div class="w-1/2 text-center">
+                                <button class="tab-button ${activeTab === 'style' ? 'active' : ''}" onclick="activeTab = 'style'; renderApp();" style="width: 100%;">
+                                    <i class="fas fa-paint-brush"></i> Style
+                                </button>
+                            </div>
+                        </div>
+                        
+                        ${activeTab === 'content' ? renderContentTab() : ''}
+                        ${activeTab === 'style' ? renderStyleTab() : ''}
+                    </div>
+                    
+                    <!-- Main Content -->
+                    <div class="flex-1">
+                        <div class="preview-area">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-bold">Preview</h2>
+                                <div class="flex space-x-2">
+                                    <button onclick="toggleMobileView()" class="bg-blue-500 text-white px-4 py-2 rounded-lg">
+                                        <i class="fas ${isMobileView ? 'fa-desktop' : 'fa-mobile-alt'}"></i> ${isMobileView ? 'Desktop View' : 'Mobile View'}
+                                    </button>
+                                    <button onclick="exportWebpage()" class="bg-green-500 text-white px-4 py-2 rounded-lg">
+                                        <i class="fas fa-download"></i> Export
+                                    </button>
+                                    <button onclick="showImportModal = true; renderApp();" class="bg-purple-500 text-white px-4 py-2 rounded-lg">
+                                        <i class="fas fa-upload"></i> Import
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="${isMobileView ? 'mobile-preview' : 'preview-container'}">
+                                ${sections.length === 0 ? renderEmptyState() : ''}
+                                ${sections.map(section => renderSection(section)).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                ${showExportModal ? renderExportModal() : ''}
+                ${showImportModal ? renderImportModal() : ''}
+            `;
+            
+            // Restore scroll position after rendering
+            window.scrollTo(0, lastScrollPosition);
+        }
+
+        // Render content tab
+        function renderContentTab() {
+            return `
+                <div>
+                    <!-- Section Categories -->
+                    <div class="mb-6">
+                        <h3 class="font-semibold mb-2">Add Section</h3>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            ${Object.keys(sectionCategories).map(category => `
+                                <button 
+                                    class="${selectedCategory === category ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'} px-3 py-1 rounded-lg text-sm" 
+                                    onclick="selectedCategory = '${category}'; renderApp();">
+                                    ${category}
+                                </button>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-2">
+                            ${sectionCategories[selectedCategory].map(type => `
+                                <button 
+                                    class="bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-2 rounded-lg text-sm flex items-center justify-center" 
+                                    onclick="addSection('${type}')">
+                                    <i class="fas ${elementTypes[type]?.icon || 'fa-cube'} mr-1"></i> ${type}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <!-- Elements -->
+                    <div class="mb-6">
+                        <h3 class="font-semibold mb-2">Elements</h3>
+                        <div class="grid grid-cols-2 gap-2">
+                            ${Object.entries(elementTypes).map(([type, data]) => `
+                                <div 
+                                    class="draggable-item text-sm flex items-center justify-center" 
+                                    draggable="true" 
+                                    ondragstart="handleDragStart(event, '${type}')">
+                                    <i class="fas ${data.icon} mr-1"></i> ${type}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    ${selectedSection ? renderSectionProperties() : ''}
+                    ${selectedElement ? renderElementProperties() : ''}
+                </div>
+            `;
+        }
+
+        // Render style tab
+        function renderStyleTab() {
+            return `
+                <div>
+                    <!-- Global Styles -->
+                    <div class="mb-6">
+                        <h3 class="font-semibold mb-2">Global Styles</h3>
+                        
+                        <div class="style-control-group">
+                            <h4>Custom CSS</h4>
+                            <textarea 
+                                class="custom-css-editor" 
+                                placeholder="Add your custom CSS here..." 
+                                onchange="globalCSS = this.value; renderApp();">${globalCSS}</textarea>
+                        </div>
+                        
+                        <div class="style-control-group">
+                            <h4>Custom JavaScript</h4>
+                            <textarea 
+                                class="custom-js-editor" 
+                                placeholder="Add your custom JavaScript here..." 
+                                onchange="globalJS = this.value; renderApp();">${globalJS}</textarea>
+                        </div>
+                    </div>
+                    
+                    ${selectedSection ? renderSectionStyleControls() : ''}
+                    ${selectedElement ? renderElementStyleControls() : ''}
+                    
+                    ${!selectedSection && !selectedElement ? `
+                        <div class="text-center py-8 text-gray-500">
+                            <i class="fas fa-paint-brush text-4xl mb-2"></i>
+                            <p>Select a section or element to style it</p>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // Render section properties
+        function renderSectionProperties() {
+            return `
+                <div class="mb-6">
+                    <h3 class="font-semibold mb-2">Section Properties</h3>
+                    <div class="item-card">
+                        <div class="item-card-header">
+                            <span>${selectedSection.type}</span>
+                            <button class="text-red-500 hover:text-red-700" onclick="removeSection(${selectedSection.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Column Layout Controls -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium mb-1">Columns: ${selectedSection.columns}</label>
+                            <div class="flex space-x-2">
+                                <button class="bg-blue-500 text-white px-3 py-1 rounded text-sm flex-1" onclick="addColumn(${selectedSection.id})">
+                                    <i class="fas fa-plus"></i> Add Column
+                                </button>
+                                ${selectedSection.columns > 1 ? `
+                                    <button class="bg-red-500 text-white px-3 py-1 rounded text-sm flex-1" onclick="removeColumn(${selectedSection.id}, 0)">
+                                        <i class="fas fa-minus"></i> Remove Column
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                        
+                        <!-- Column Width Controls -->
+                        ${selectedSection.widths.map((width, index) => `
+                            <div class="width-control mb-2">
+                                <label class="block text-sm font-medium mb-1">Column ${index + 1} Width</label>
+                                <div class="flex items-center">
+                                    <input 
+                                        type="range" 
+                                        min="10" 
+                                        max="90" 
+                                        value="${width}" 
+                                        class="width-slider" 
+                                        oninput="updateColumnWidth(${selectedSection.id}, ${index}, parseInt(this.value))">
+                                    <input 
+                                        type="number" 
+                                        min="10" 
+                                        max="90" 
+                                        value="${Math.round(width)}" 
+                                        class="width-input" 
+                                        onchange="updateColumnWidth(${selectedSection.id}, ${index}, parseInt(this.value))">
+                                    <span class="ml-1">%</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render element properties
+        function renderElementProperties() {
+            return `
+                <div class="mb-6">
+                    <h3 class="font-semibold mb-2">Element Properties</h3>
+                    <div class="item-card">
+                        <div class="item-card-header">
+                            <span>${selectedElement.type}</span>
+                            <button class="text-red-500 hover:text-red-700" 
+                                onclick="removeElement(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Content Editor -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium mb-1">Content</label>
+                            ${selectedElement.type === 'Image' ? `
+                                <input 
+                                    type="text" 
+                                    value="${selectedElement.content}" 
+                                    placeholder="Image URL" 
+                                    onchange="updateElementContent(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, this.value)">
+                            ` : selectedElement.type === 'Custom HTML' ? `
+                                <textarea 
+                                    class="custom-html-editor" 
+                                    onchange="updateElementContent(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, this.value)">${selectedElement.content}</textarea>
+                            ` : `
+                                <textarea 
+                                    onchange="updateElementContent(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, this.value)">${selectedElement.content}</textarea>
+                            `}
+                        </div>
+                        
+                        <!-- Class Name -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium mb-1">CSS Class</label>
+                            <input 
+                                type="text" 
+                                value="${selectedElement.className}" 
+                                onchange="updateElementClassName(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, this.value)">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render section style controls
+        function renderSectionStyleControls() {
+            return `
+                <div class="mb-6">
+                    <h3 class="font-semibold mb-2">Section Styles</h3>
+                    <div class="item-card">
+                        <div class="item-card-header">
+                            <span>${selectedSection.type}</span>
+                        </div>
+                        
+                        <!-- Background Color -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium mb-1">Background Color</label>
+                            <div class="color-picker-container">
+                                <div class="color-preview" style="background-color: ${selectedSection.styles.backgroundColor || 'transparent'};"></div>
+                                <input 
+                                    type="text" 
+                                    value="${selectedSection.styles.backgroundColor || ''}" 
+                                    placeholder="e.g. #ffffff, transparent"
+                                    onchange="updateSectionStyle(${selectedSection.id}, 'backgroundColor', this.value)">
+                            </div>
+                        </div>
+                        
+                        <!-- Padding -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium mb-1">Padding</label>
+                            <input 
+                                type="text" 
+                                value="${selectedSection.styles.padding || ''}" 
+                                placeholder="e.g. 16px, 10px 20px"
+                                onchange="updateSectionStyle(${selectedSection.id}, 'padding', this.value)">
+                        </div>
+                        
+                        <!-- Class Name -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium mb-1">CSS Class</label>
+                            <input 
+                                type="text" 
+                                value="${selectedSection.styles.className || ''}" 
+                                onchange="updateSectionStyle(${selectedSection.id}, 'className', this.value)">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render element style controls
+        function renderElementStyleControls() {
+            return `
+                <div class="mb-6">
+                    <h3 class="font-semibold mb-2">Element Styles</h3>
+                    <div class="item-card">
+                        <div class="item-card-header">
+                            <span>${selectedElement.type}</span>
+                        </div>
+                        
+                        <!-- Text Color -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium mb-1">Text Color</label>
+                            <div class="color-picker-container">
+                                <div class="color-preview" style="background-color: ${selectedElement.styles.color || '#000000'};"></div>
+                                <input 
+                                    type="text" 
+                                    value="${selectedElement.styles.color || ''}" 
+                                    placeholder="e.g. #000000"
+                                    onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'color', this.value)">
+                            </div>
+                        </div>
+                        
+                        <!-- Background Color -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium mb-1">Background Color</label>
+                            <div class="color-picker-container">
+                                <div class="color-preview" style="background-color: ${selectedElement.styles.backgroundColor || 'transparent'};"></div>
+                                <input 
+                                    type="text" 
+                                    value="${selectedElement.styles.backgroundColor || ''}" 
+                                    placeholder="e.g. #ffffff, transparent"
+                                    onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'backgroundColor', this.value)">
+                            </div>
+                        </div>
+                        
+                        <!-- Font Size -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium mb-1">Font Size</label>
+                            <input 
+                                type="text" 
+                                value="${selectedElement.styles.fontSize || ''}" 
+                                placeholder="e.g. 16px, 1rem"
+                                onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'fontSize', this.value)">
+                        </div>
+                        
+                        <!-- Text Alignment -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium mb-1">Text Alignment</label>
+                            <select onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'textAlign', this.value)">
+                                <option value="left" ${selectedElement.styles.textAlign === 'left' ? 'selected' : ''}>Left</option>
+                                <option value="center" ${selectedElement.styles.textAlign === 'center' ? 'selected' : ''}>Center</option>
+                                <option value="right" ${selectedElement.styles.textAlign === 'right' ? 'selected' : ''}>Right</option>
+                                <option value="justify" ${selectedElement.styles.textAlign === 'justify' ? 'selected' : ''}>Justify</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Padding -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium mb-1">Padding</label>
+                            <input 
+                                type="text" 
+                                value="${selectedElement.styles.padding || ''}" 
+                                placeholder="e.g. 10px, 5px 10px"
+                                onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'padding', this.value)">
+                        </div>
+                        
+                        <!-- Margin -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium mb-1">Margin</label>
+                            <input 
+                                type="text" 
+                                value="${selectedElement.styles.margin || ''}" 
+                                placeholder="e.g. 10px, 5px 10px"
+                                onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'margin', this.value)">
+                        </div>
+                        
+                        <!-- Border -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium mb-1">Border</label>
+                            <input 
+                                type="text" 
+                                value="${selectedElement.styles.border || ''}" 
+                                placeholder="e.g. 1px solid #ccc"
+                                onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'border', this.value)">
+                        </div>
+                        
+                        <!-- Border Radius -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium mb-1">Border Radius</label>
+                            <input 
+                                type="text" 
+                                value="${selectedElement.styles.borderRadius || ''}" 
+                                placeholder="e.g. 4px, 50%"
+                                onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'borderRadius', this.value)">
+                        </div>
+                        
+                        <!-- Width -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium mb-1">Width</label>
+                            <input 
+                                type="text" 
+                                value="${selectedElement.styles.width || ''}" 
+                                placeholder="e.g. 100%, 200px"
+                                onchange="updateElementStyle(${selectedSection.id}, ${selectedColumn}, ${selectedElement.id}, 'width', this.value)">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render a section
+        function renderSection(section) {
+            const isSelected = selectedSection && selectedSection.id === section.id;
+            
+            return `
+                <div 
+                    class="section-preview ${isSelected ? 'selected-section' : ''}" 
+                    onclick="selectedSection = ${JSON.stringify(section).replace(/"/g, '&quot;')}; selectedColumn = null; selectedElement = null; renderApp();"
+                    style="${Object.entries(section.styles || {}).map(([key, value]) => {
+                        if (key === 'className') return '';
+                        const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+                        return `${cssKey}: ${value};`;
+                    }).join(' ')}"
+                >
+                    <div class="section-header p-2 bg-gray-100 text-center text-sm font-medium">
+                        ${section.type} (${section.columns} Column${section.columns !== 1 ? 's' : ''})
+                    </div>
+                    
+                    <div class="grid-layout" style="grid-template-columns: ${section.widths.map(w => `${w}%`).join(' ')};">
+                        ${section.elements.map((column, colIndex) => {
+                            const isColSelected = isSelected && selectedColumn === colIndex;
+                            
+                            return `
+                                <div 
+                                    class="column ${isColSelected ? 'border-2 border-blue-500' : ''}" 
+                                    onclick="event.stopPropagation(); selectedSection = ${JSON.stringify(section).replace(/"/g, '&quot;')}; selectedColumn = ${colIndex}; selectedElement = null; renderApp();"
+                                    ondrop="handleDrop(event, ${section.id}, ${colIndex})" 
+                                    ondragover="handleDragOver(event)" 
+                                    ondragleave="handleDragLeave(event)"
+                                    style="justify-content: ${section.columnAlignments[colIndex] || 'center'};"
+                                >
+                                    <div class="column-resize-handle" onclick="event.stopPropagation();"></div>
+                                    
+                                    <div class="column-content">
+                                        ${column.length === 0 ? `
+                                            <div class="drop-zone text-center text-gray-400 p-4">
+                                                <i class="fas fa-arrow-down mb-1"></i>
+                                                <p>Drop elements here</p>
+                                            </div>
+                                        ` : ''}
+                                        
+                                        ${column.map(element => {
+                                            const isElementSelected = selectedElement && selectedElement.id === element.id;
+                                            
+                                            return `
+                                                <div 
+                                                    class="element ${isElementSelected ? 'border-blue-500 bg-blue-50' : ''}" 
+                                                    onclick="event.stopPropagation(); selectedSection = ${JSON.stringify(section).replace(/"/g, '&quot;')}; selectedColumn = ${colIndex}; selectedElement = ${JSON.stringify(element).replace(/"/g, '&quot;')}; renderApp();"
+                                                    style="${Object.entries(element.styles || {}).map(([key, value]) => {
+                                                        if (key === 'className') return '';
+                                                        const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+                                                        return `${cssKey}: ${value};`;
+                                                    }).join(' ')}"
+                                                >
+                                                    ${renderElementContent(element)}
+                                                </div>
+                                            `;
+                                        }).join('')}
+                                    </div>
+                                    
+                                    <!-- Column Alignment Controls -->
+                                    ${isColSelected ? `
+                                        <div class="mt-2 p-2 bg-gray-100 rounded">
+                                            <label class="block text-sm font-medium mb-1">Column Alignment</label>
+                                            <div class="alignment-buttons">
+                                                <div class="alignment-btn ${section.columnAlignments[colIndex] === 'flex-start' ? 'active' : ''}" 
+                                                     onclick="updateColumnAlignment(${section.id}, ${colIndex}, 'flex-start')">
+                                                    <i class="fas fa-align-left"></i>
+                                                    <div>Left</div>
+                                                </div>
+                                                <div class="alignment-btn ${section.columnAlignments[colIndex] === 'center' ? 'active' : ''}" 
+                                                     onclick="updateColumnAlignment(${section.id}, ${colIndex}, 'center')">
+                                                    <i class="fas fa-align-center"></i>
+                                                    <div>Center</div>
+                                                </div>
+                                                <div class="alignment-btn ${section.columnAlignments[colIndex] === 'flex-end' ? 'active' : ''}" 
+                                                     onclick="updateColumnAlignment(${section.id}, ${colIndex}, 'flex-end')">
+                                                    <i class="fas fa-align-right"></i>
+                                                    <div>Right</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render element content based on type
+        function renderElementContent(element) {
+            switch (element.type) {
+                case "Text":
+                    return `<div>${element.content}</div>`;
+                case "Image":
+                    return `<img src="${element.content}" alt="Image" style="max-width: 100%; height: auto;">`;
+                case "Button":
+                    return `<button class="element-button" style="
+                        background-color: ${element.styles.backgroundColor || '#3b82f6'}; 
+                        color: ${element.styles.color || 'white'}; 
+                        padding: ${element.styles.padding || '10px 20px'}; 
+                        border-radius: ${element.styles.borderRadius || '6px'};
+                        border: ${element.styles.border || 'none'};
+                        font-weight: ${element.styles.fontWeight || 'bold'};
+                    ">${element.content}</button>`;
+                case "Heading":
+                    return `<h3>${element.content}</h3>`;
+                case "Paragraph":
+                    return `<p>${element.content}</p>`;
+                case "Card":
+                    const cardContent = element.content.split('\n');
+                    return `
+                        <div style="
+                            background-color: ${element.styles.backgroundColor || '#ffffff'}; 
+                            padding: ${element.styles.padding || '20px'}; 
+                            border-radius: ${element.styles.borderRadius || '8px'};
+                            border: ${element.styles.border || '1px solid #e5e7eb'};
+                            box-shadow: ${element.styles.boxShadow || '0 2px 4px rgba(0,0,0,0.1)'};
+                        ">
+                            ${cardContent[0] ? `<h4>${cardContent[0]}</h4>` : ''}
+                            ${cardContent[1] ? `<p>${cardContent[1]}</p>` : ''}
+                        </div>
+                    `;
+                case "Form":
+                    const formContent = element.content.split('\n');
+                    return `
+                        <form style="
+                            background-color: ${element.styles.backgroundColor || '#f9fafb'}; 
+                            padding: ${element.styles.padding || '20px'}; 
+                            border-radius: ${element.styles.borderRadius || '8px'};
+                            border: ${element.styles.border || '1px solid #e5e7eb'};
+                        ">
+                            ${formContent.map(field => {
+                                if (field.trim()) {
+                                    const fieldName = field.replace(':', '');
+                                    return `
+                                        <div class="mb-2">
+                                            <label>${fieldName}</label>
+                                            <input type="text" name="${fieldName.toLowerCase()}" class="w-full p-1 border rounded">
+                                        </div>
+                                    `;
+                                }
+                                return '';
+                            }).join('')}
+                            <input type="submit" value="Submit" class="bg-blue-500 text-white px-3 py-1 rounded mt-2">
+                        </form>
+                    `;
+                case "Divider":
+                    return `<hr style="
+                        height: ${element.styles.height || '1px'}; 
+                        background-color: ${element.styles.backgroundColor || '#e5e7eb'}; 
+                        margin: ${element.styles.margin || '20px 0'};
+                        border: ${element.styles.border || 'none'};
+                    ">`;
+                case "Custom HTML":
+                    return `<div>${element.content}</div>`;
+                default:
+                    return `<div>${element.content}</div>`;
+            }
+        }
+
+        // Render empty state
+        function renderEmptyState() {
+            return `
+                <div class="text-center py-12 text-gray-500">
+                    <i class="fas fa-plus-circle text-4xl mb-4"></i>
+                    <h3 class="text-xl font-medium mb-2">No Sections Added Yet</h3>
+                    <p>Start by adding a section from the sidebar</p>
+                </div>
+            `;
+        }
+
+        // Render export modal
+        function renderExportModal() {
+            const htmlCode = generateHTML();
+            
+            return `
+                <div class="modal">
+                    <div class="modal-content">
+                        <h2 class="text-xl font-bold mb-4">Export Webpage</h2>
+                        <p class="mb-4">Your HTML code is ready. You can copy it or download as a file.</p>
+                        
+                        <textarea class="w-full h-64 p-3 bg-gray-100 rounded mb-4" readonly>${htmlCode}</textarea>
+                        
+                        <div class="flex justify-end space-x-2">
+                            <button onclick="showExportModal = false; renderApp();" class="bg-gray-500 text-white px-4 py-2 rounded">
+                                Cancel
+                            </button>
+                            <button onclick="navigator.clipboard.writeText(\`${htmlCode.replace(/`/g, '\\`')}\'); alert('Copied to clipboard!');" class="bg-blue-500 text-white px-4 py-2 rounded">
+                                Copy to Clipboard
+                            </button>
+                            <button onclick="exportWebpage(); showExportModal = false;" class="bg-green-500 text-white px-4 py-2 rounded">
+                                Download HTML
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render import modal
+        function renderImportModal() {
+            return `
+                <div class="modal">
+                    <div class="modal-content">
+                        <h2 class="text-xl font-bold mb-4">Import Webpage</h2>
+                        <p class="mb-4">Paste your HTML code below to import a webpage.</p>
+                        
+                        <textarea 
+                            class="w-full h-64 p-3 bg-gray-100 rounded mb-4" 
+                            placeholder="Paste your HTML code here..."
+                            onchange="importHtml = this.value"></textarea>
+                        
+                        <div class="flex justify-end space-x-2">
+                            <button onclick="showImportModal = false; renderApp();" class="bg-gray-500 text-white px-4 py-2 rounded">
+                                Cancel
+                            </button>
+                            <button onclick="importWebpage();" class="bg-green-500 text-white px-4 py-2 rounded">
+                                Import
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
         // Initialize the app
         function initApp() {
             // Add a default section to start with
-            addSection('1 Column');
+            addSection("2 Columns");
+            
+            // Render the app
+            renderApp();
         }
 
-        // Start the app when the page loads
-        window.onload = initApp;
+        // Start the app
+        initApp();
     </script>
 </body>
 </html>

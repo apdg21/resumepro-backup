@@ -1297,75 +1297,103 @@
         }
 
         // Render the app
-        function renderApp() {
-            const root = document.getElementById('root');
-            if (!root) return;
-            
-            // Save scroll position before rendering
-            lastScrollPosition = window.scrollY;
-            
-            root.innerHTML = `
-                <div class="flex h-full">
-                    <!-- Sidebar Toggle Button (Mobile Only) -->
-                    <div class="sidebar-toggle" onclick="toggleSidebar()">
-                        <i class="fas ${isSidebarOpen ? 'fa-times' : 'fa-bars'}"></i> ${isSidebarOpen ? 'Close' : 'Open'} Sidebar
+function renderApp() {
+    const root = document.getElementById('root');
+    if (!root) return;
+
+    // 1. Get the currently focused element
+    const activeElement = document.activeElement;
+    let focusedElementId = null;
+    let cursorPosition = null;
+
+    if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
+        // Assign a unique ID if one doesn't exist
+        if (!activeElement.id) {
+            activeElement.id = 'temp-focused-element';
+        }
+        focusedElementId = activeElement.id;
+        cursorPosition = activeElement.selectionStart;
+    }
+
+    // 2. Save the sidebar's scroll position
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarScrollPosition = sidebar ? sidebar.scrollTop : 0;
+
+    // 3. Perform the full re-render
+    root.innerHTML = `
+        <div class="flex h-full">
+            <div class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas ${isSidebarOpen ? 'fa-times' : 'fa-bars'}"></i> ${isSidebarOpen ? 'Close' : 'Open'} Sidebar
+            </div>
+
+            <div class="sidebar ${isSidebarOpen ? 'active' : ''}" style="width: 320px;">
+                <h1>Webpage Builder</h1>
+
+                <div class="flex mb-4 bg-gray-100 p-1 rounded-lg">
+                    <div class="w-1/2 text-center">
+                        <button class="tab-button ${activeTab === 'content' ? 'active' : ''}" onclick="activeTab = 'content'; renderApp();" style="width: 100%;">
+                            <i class="fas fa-puzzle-piece"></i> Content
+                        </button>
                     </div>
-                    
-                    <!-- Sidebar -->
-                    <div class="sidebar ${isSidebarOpen ? 'active' : ''}" style="width: 320px;">
-                        <h1>Webpage Builder</h1>
-                        
-                        <!-- Tab Navigation -->
-                        <div class="flex mb-4 bg-gray-100 p-1 rounded-lg">
-                            <div class="w-1/2 text-center">
-                                <button class="tab-button ${activeTab === 'content' ? 'active' : ''}" onclick="activeTab = 'content'; renderApp();" style="width: 100%;">
-                                    <i class="fas fa-puzzle-piece"></i> Content
-                                </button>
-                            </div>
-                            <div class="w-1/2 text-center">
-                                <button class="tab-button ${activeTab === 'style' ? 'active' : ''}" onclick="activeTab = 'style'; renderApp();" style="width: 100%;">
-                                    <i class="fas fa-paint-brush"></i> Style
-                                </button>
-                            </div>
-                        </div>
-                        
-                        ${activeTab === 'content' ? renderContentTab() : ''}
-                        ${activeTab === 'style' ? renderStyleTab() : ''}
-                    </div>
-                    
-                    <!-- Main Content -->
-                    <div class="flex-1">
-                        <div class="preview-area">
-                            <div class="flex justify-between items-center mb-4">
-                                <h2 class="text-xl font-bold">Preview</h2>
-                                <div class="flex space-x-2">
-                                    <button onclick="toggleMobileView()" class="bg-blue-500 text-white px-4 py-2 rounded-lg">
-                                        <i class="fas ${isMobileView ? 'fa-desktop' : 'fa-mobile-alt'}"></i> ${isMobileView ? 'Desktop View' : 'Mobile View'}
-                                    </button>
-                                    <button onclick="exportWebpage()" class="bg-green-500 text-white px-4 py-2 rounded-lg">
-                                        <i class="fas fa-download"></i> Export
-                                    </button>
-                                    <button onclick="showImportModal = true; renderApp();" class="bg-purple-500 text-white px-4 py-2 rounded-lg">
-                                        <i class="fas fa-upload"></i> Import
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="${isMobileView ? 'mobile-preview' : 'preview-container'}">
-                                ${sections.length === 0 ? renderEmptyState() : ''}
-                                ${sections.map(section => renderSection(section)).join('')}
-                            </div>
-                        </div>
+                    <div class="w-1/2 text-center">
+                        <button class="tab-button ${activeTab === 'style' ? 'active' : ''}" onclick="activeTab = 'style'; renderApp();" style="width: 100%;">
+                            <i class="fas fa-paint-brush"></i> Style
+                        </button>
                     </div>
                 </div>
-                
-                ${showExportModal ? renderExportModal() : ''}
-                ${showImportModal ? renderImportModal() : ''}
-            `;
-            
-            // Restore scroll position after rendering
-            window.scrollTo(0, lastScrollPosition);
+
+                ${activeTab === 'content' ? renderContentTab() : ''}
+                ${activeTab === 'style' ? renderStyleTab() : ''}
+            </div>
+
+            <div class="flex-1">
+                <div class="preview-area">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold">Preview</h2>
+                        <div class="flex space-x-2">
+                            <button onclick="toggleMobileView()" class="bg-blue-500 text-white px-4 py-2 rounded-lg">
+                                <i class="fas ${isMobileView ? 'fa-desktop' : 'fa-mobile-alt'}"></i> ${isMobileView ? 'Desktop View' : 'Mobile View'}
+                            </button>
+                            <button onclick="exportWebpage()" class="bg-green-500 text-white px-4 py-2 rounded-lg">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                            <button onclick="showImportModal = true; renderApp();" class="bg-purple-500 text-white px-4 py-2 rounded-lg">
+                                <i class="fas fa-upload"></i> Import
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="${isMobileView ? 'mobile-preview' : 'preview-container'}">
+                        ${sections.length === 0 ? renderEmptyState() : ''}
+                        ${sections.map(section => renderSection(section)).join('')}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        ${showExportModal ? renderExportModal() : ''}
+        ${showImportModal ? renderImportModal() : ''}
+    `;
+
+    // 4. Restore the state after re-render is complete
+    setTimeout(() => {
+        // Restore sidebar scroll position
+        const updatedSidebar = document.querySelector('.sidebar');
+        if (updatedSidebar) {
+            updatedSidebar.scrollTop = sidebarScrollPosition;
         }
+
+        // Restore focus and cursor position
+        if (focusedElementId) {
+            const newActiveElement = document.getElementById(focusedElementId);
+            if (newActiveElement) {
+                newActiveElement.focus();
+                // Set the cursor position to the end of the text
+                newActiveElement.setSelectionRange(cursorPosition, cursorPosition);
+            }
+        }
+    }, 0);
+}
 
         // Render content tab
         function renderContentTab() {

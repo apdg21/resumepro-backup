@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Portfolio Templates | Dolfean</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --text: #333;
+            --text-light: #777;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 80px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 80px 0;
+        }
+        
+        .template-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .template-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .template-img {
+            height: 200px;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .template-img::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #667eea33, #764ba233);
+        }
+        
+        .template-info {
+            padding: 20px;
+        }
+        
+        .template-info h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .template-info p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .template-link {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        
+        .template-link:hover {
+            background-color: var(--secondary);
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .templates-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 20px;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">Dolfean Templates</a>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="container">
+            <h1>Premium Portfolio Templates</h1>
+            <p>Showcase your work with our collection of beautifully designed, responsive portfolio templates. Perfect for designers, photographers, and creatives.</p>
+            <a href="#templates" class="btn">Explore Templates</a>
+        </div>
+    </section>
+    
+    <section class="container" id="templates">
+        <div class="templates-grid">
+            <!-- Template 1 -->
+            <div class="template-card">
+                <div class="template-img">Minimalist & Adaptable Portfolio</div>
+                <div class="template-info">
+                    <h3>Minimalist & Adaptable</h3>
+                    <p>Clean, minimal design that adapts to any type of creative work with elegant simplicity.</p>
+                    <a href="https://dolfean.gumroad.com/l/minimalist-and-adaptable-portfolio" class="template-link">View Template</a>
+                </div>
+            </div>
+            
+            <!-- Template 2 -->
+            <div class="template-card">
+                <div class="template-img">Professional & Interactive Portfolio</div>
+                <div class="template-info">
+                    <h3>Professional & Interactive</h3>
+                    <p>Engage your audience with interactive elements while maintaining a professional appearance.</p>
+                    <a href="https://dolfean.gumroad.com/l/personal-and-interactive-portfolio" class="template-link">View Template</a>
+                </div>
+            </div>
+            
+            <!-- Template 3 -->
+            <div class="template-card">
+                <div class="template-img">Elegant Gallery Portfolio</div>
+                <div class="template-info">
+                    <h3>Elegant Gallery</h3>
+                    <p>Showcase your work in a sophisticated gallery format that emphasizes visual content.</p>
+                    <a href="https://dolfean.gumroad.com/l/elegan-gallery-portfolio" class="template-link">View Template</a>
+                </div>
+            </div>
+            
+            <!-- Template 4 -->
+            <div class="template-card">
+                <div class="template-img">Modern Grid Portfolio</div>
+                <div class="template-info">
+                    <h3>Modern Grid</h3>
+                    <p>A contemporary grid-based layout that organizes your work in an aesthetically pleasing way.</p>
+                    <a href="https://dolfean.gumroad.com/l/modern-grid-portfolio" class="template-link">View Template</a>
+                </div>
+            </div>
+            
+            <!-- Template 5 -->
+            <div class="template-card">
+                <div class="template-img">Photography Portfolio</div>
+                <div class="template-info">
+                    <h3>Photography Focused</h3>
+                    <p>Specifically designed to showcase photographic work with optimal image display.</p>
+                    <a href="https://dolfean.gumroad.com/l/photography-portfolio" class="template-link">View Template</a>
+                </div>
+            </div>
+            
+            <!-- Template 6 -->
+            <div class="template-card">
+                <div class="template-img">Structured Layout Portfolio</div>
+                <div class="template-info">
+                    <h3>Structured Layout</h3>
+                    <p>Organized and methodical design that presents your work in a clear, structured manner.</p>
+                    <a href="https://dolfean.gumroad.com/l/structured-layout-portfolio" class="template-link">View Template</a>
+                </div>
+            </div>
+            
+            <!-- Template 7 -->
+            <div class="template-card">
+                <div class="template-img">Dynamic Showcase Portfolio</div>
+                <div class="template-info">
+                    <h3>Dynamic Showcase</h3>
+                    <p>Bring your portfolio to life with dynamic elements and engaging transitions.</p>
+                    <a href="https://dolfean.gumroad.com/l/dynamic-showcase-portfolio" class="template-link">View Template</a>
+                </div>
+            </div>
+            
+            <!-- Template 8 -->
+            <div class="template-card">
+                <div class="template-img">Clean & Focused Portfolio</div>
+                <div class="template-info">
+                    <h3>Clean & Focused</h3>
+                    <p>Distraction-free design that keeps the attention exactly where it should be - on your work.</p>
+                    <a href="https://dolfean.gumroad.com/l/clean-and-focused-portfolio" class="template-link">View Template</a>
+                </div>
+            </div>
+            
+            <!-- Template 9 -->
+            <div class="template-card">
+                <div class="template-img">Simple Profile Portfolio</div>
+                <div class="template-info">
+                    <h3>Simple Profile</h3>
+                    <p>Perfect for personal branding with emphasis on your profile and key accomplishments.</p>
+                    <a href="https://dolfean.gumroad.com/l/simple-profile-portfolio" class="template-link">View Template</a>
+                </div>
+            </div>
+            
+            <!-- Template 10 -->
+            <div class="template-card">
+                <div class="template-img">Modern Minimalist Portfolio</div>
+                <div class="template-info">
+                    <h3>Modern Minimalist</h3>
+                    <p>Contemporary take on minimalism with sleek design and thoughtful whitespace.</p>
+                    <a href="https://dolfean.gumroad.com/l/modern-minimalist-portfolio" class="template-link">View Template</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Dolfean Portfolio Templates. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

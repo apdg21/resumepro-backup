@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced To-Do & Notes</title>
+    <meta name="theme-color" content="#6200ea">
+    <meta name="description" content="A to-do list and notes app with labels, dates, reminders, and calendar view.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6200ea;
+            --primary-dark: #3700b3;
+            --secondary-color: #03dac6;
+            --error-color: #b00020;
+            --surface-color: #ffffff;
+            --background-color: #f5f7f9;
+            --on-primary: #ffffff;
+            --on-surface: #000000;
+            --on-error: #ffffff;
+            --border-color: #e0e0e0;
+            --text-secondary: #5f6368;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .app-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        /* Login/Signup Styles */
+        #auth-container {
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .app-logo {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+        
+        .app-logo i {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .app-logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .app-tagline {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .login-card {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .login-title {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 24px;
+            font-size: 22px;
+            font-weight: 600;
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(98, 0, 234, 0.1);
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .auth-toggle {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 14px;
+        }
+        
+        button {
+            padding: 14px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s, transform 0.2s;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .demo-accounts {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .demo-accounts h3 {
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+        }
+        
+        .demo-account {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: white;
+            border-radius: 6px;
+        }
+        
+        /* App Content Styles */
+        #app-content {
+            display: none;
+        }
+        
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .app-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .app-main {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 15px;
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(98, 0, 234, 0.1);
+        }
+        
+        .btn-delete {
+            background-color: var(--error-color);
+        }
+        
+        .btn-logout {
+            background-color: #757575;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        
+        .items-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .item {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+        
+        .item:last-child {
+            border-bottom: none;
+        }
+        
+        .item-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .item-text {
+            flex: 1;
+            margin-right: 15px;
+        }
+        
+        .item-title {
+            font-weight: 500;
+            margin: 0 0 5px;
+        }
+        
+        .item-details {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+        
+        .item-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .item-action-btn {
+            padding: 6px 10px;
+            font-size: 13px;
+            border-radius: 6px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #9aa0a6;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        
+        .empty-state p {
+            margin: 0;
+            font-size: 15px;
+        }
+        
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4caf50;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: none;
+            animation: slideIn 0.3s;
+            max-width: 350px;
+        }
+        
+        .notification.error {
+            background-color: var(--error-color);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification"></div>
+    
+    <div class="app-container">
+        <!-- Login/Signup Form -->
+        <div id="auth-container">
+            <div class="app-logo">
+                <i class="fas fa-tasks"></i>
+                <h1>Enhanced To-Do & Notes</h1>
+            </div>
+            <p class="app-tagline">Organize your tasks and notes with reminders and calendar view</p>
+            
+            <div class="login-card">
+                <h2 class="login-title" id="auth-title">Login to Your Account</h2>
+                
+                <form class="login-form" id="auth-form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required placeholder="Your email address">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required placeholder="Your password">
+                    </div>
+                    <div id="confirm-password-group" class="form-group hidden">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" placeholder="Confirm your password">
+                    </div>
+                    
+                    <div class="form-options">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember-me">
+                            <label for="remember-me">Remember me</label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" id="auth-submit">Login</button>
+                </form>
+                
+                <div class="form-options" style="justify-content: center; margin-top: 20px;">
+                    <button type="button" class="auth-toggle" id="auth-toggle">
+                        Need to create an account?
+                    </button>
+                </div>
+                
+                <div class="demo-accounts">
+                    <h3>Demo Accounts (for testing):</h3>
+                    <div class="demo-account">
+                        <span>user1@example.com</span>
+                        <span>password1</span>
+                    </div>
+                    <div class="demo-account">
+                        <span>user2@example.com</span>
+                        <span>password2</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main App Content (initially hidden) -->
+        <div id="app-content">
+            <div class="app-header">
+                <div>
+                    <h1>Enhanced To-Do & Notes</h1>
+                    <p>Organize your tasks and notes with reminders</p>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">U</div>
+                    <span id="user-email">user@example.com</span>
+                    <button class="btn-logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            
+            <div class="app-main">
+                <div class="left-column">
+                    <div class="section">
+                        <h2 class="section-title"><i class="fas fa-check-circle"></i> Add New Task</h2>
+                        <div class="input-group">
+                            <input type="text" id="taskInput" placeholder="What do you need to do?">
+                        </div>
+                        <div class="input-group">
+                            <select id="taskStatus">
+                                <option value="To Do">To Do</option>
+                                <option value="In Process">In Process</option>
+                                <option value="Finished">Finished</option>
+                            </select>
+                        </div>
+                        <button onclick="addTask()">
+                            <i class="fas fa-plus"></i> Add Task
+                        </button>
+                    </div>
+                    
+                    <div class="section">
+                        <h2 class="section-title"><i class="fas fa-list"></i> My Tasks</h2>
+                        <ul class="items-list" id="taskList"></ul>
+                        <div id="taskEmptyState" class="empty-state">
+                            <i class="fas fa-check-square"></i>
+                            <p>No tasks yet. Add a task to get started!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="right-column">
+                    <div class="section">
+                        <h2 class="section-title"><i class="fas fa-sticky-note"></i> Add New Note</h2>
+                        <div class="input-group">
+                            <input type="text" id="noteTitle" placeholder="Note title">
+                        </div>
+                        <div class="input-group">
+                            <textarea id="noteContent" placeholder="Write your note here..."></textarea>
+                        </div>
+                        <button onclick="addNote()">
+                            <i class="fas fa-plus"></i> Add Note
+                        </button>
+                    </div>
+                    
+                    <div class="section">
+                        <h2 class="section-title"><i class="fas fa-notes"></i> My Notes</h2>
+                        <ul class="items-list" id="noteList"></ul>
+                        <div id="noteEmptyState" class="empty-state">
+                            <i class="fas fa-sticky-note"></i>
+                            <p>No notes yet. Add a note to get started!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // User management variables
+        let currentUser = null;
+        let isLoginMode = true;
+
+        // Demo accounts for testing
+        const demoAccounts = {
+            'user1@example.com': 'password1',
+            'user2@example.com': 'password2'
+        };
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if user is already logged in
+            const savedUser = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showAppContent();
+            }
+            
+            // Set up auth form toggle
+            document.getElementById('auth-toggle').addEventListener('click', toggleAuthMode);
+            document.getElementById('auth-form').addEventListener('submit', handleAuth);
+        });
+
+        // Toggle between login and signup
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            const confirmGroup = document.getElementById('confirm-password-group');
+            const authTitle = document.getElementById('auth-title');
+            const authSubmit = document.getElementById('auth-submit');
+            const authToggle = document.getElementById('auth-toggle');
+            
+            if (!isLoginMode) {
+                // Switch to signup
+                authTitle.textContent = 'Create an Account';
+                authSubmit.textContent = 'Sign Up';
+                authToggle.textContent = 'Already have an account?';
+                confirmGroup.classList.remove('hidden');
+            } else {
+                // Switch to login
+                authTitle.textContent = 'Login to Your Account';
+                authSubmit.textContent = 'Login';
+                authToggle.textContent = 'Need to create an account?';
+                confirmGroup.classList.add('hidden');
+            }
+        }
+
+        // Handle authentication (login/signup)
+        function handleAuth(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!isLoginMode) {
+                // Signup process
+                const confirmPassword = document.getElementById('confirm-password').value;
+                
+                if (password !== confirmPassword) {
+                    showNotification('Passwords do not match!', true);
+                    return;
+                }
+                
+                // Check if user already exists
+                const users = JSON.parse(localStorage.getItem('users') || '{}');
+                if (users[email]) {
+                    showNotification('User already exists with this email!', true);
+                    return;
+                }
+                
+                // Create new user
+                users[email] = {
+                    email: email,
+                    password: password, // In a real app, this would be hashed
+                    createdAt: new Date().toISOString()
+                };
+                
+                localStorage.setItem('users', JSON.stringify(users));
+                showNotification('Account created successfully!');
+                
+                // Auto-switch to login mode after successful signup
+                toggleAuthMode();
+                return;
+            }
+            
+            // Login process
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            
+            // Check demo accounts first
+            if (demoAccounts[email] && demoAccounts[email] === password) {
+                // Login successful with demo account
+                currentUser = {
+                    email: email,
+                    isDemo: true
+                };
+            } 
+            // Check registered accounts
+            else if (users[email] && users[email].password === password) {
+                // Login successful
+                currentUser = {
+                    email: email,
+                    isDemo: false
+                };
+            } else {
+                showNotification('Invalid email or password!', true);
+                return;
+            }
+            
+            // Save login state
+            const rememberMe = document.getElementById('remember-me').checked;
+            if (rememberMe) {
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            } else {
+                sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+            }
+            
+            showAppContent();
+            showNotification('Login successful! Welcome back!');
+        }
+
+        // Show the main app content
+        function showAppContent() {
+            document.getElementById('auth-container').style.display = 'none';
+            document.getElementById('app-content').style.display = 'block';
+            
+            // Set user info
+            document.getElementById('user-email').textContent = currentUser.email;
+            document.getElementById('user-avatar').textContent = currentUser.email.charAt(0).toUpperCase();
+            
+            // Load user data
+            loadUserData();
+        }
+
+        // Load data for the current user
+        function loadUserData() {
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            
+            if (userData[currentUser.email]) {
+                const data = userData[currentUser.email];
+                loadTasks(data.tasks || []);
+                loadNotes(data.notes || []);
+            } else {
+                // Initialize with empty data for new user
+                loadTasks([]);
+                loadNotes([]);
+            }
+            
+            checkEmptyStates();
+        }
+
+        // Save data for the current user
+        function saveUserData() {
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            
+            const tasks = [];
+            for (let li of document.getElementById('taskList').children) {
+                const text = li.querySelector('.item-title').textContent;
+                const status = li.querySelector('select').value;
+                const created = li.querySelector('.item-details span:nth-child(2)').textContent.replace('Created: ', '');
+                
+                tasks.push({ text, status, created });
+            }
+            
+            const notes = [];
+            for (let li of document.getElementById('noteList').children) {
+                const title = li.querySelector('.item-title').textContent;
+                const content = li.querySelector('p').textContent;
+                const created = li.querySelector('.item-details span').textContent.replace('Created: ', '');
+                
+                notes.push({ title, content, created });
+            }
+            
+            userData[currentUser.email] = {
+                tasks: tasks,
+                notes: notes,
+                lastUpdated: new Date().toISOString()
+            };
+            
+            localStorage.setItem('userData', JSON.stringify(userData));
+        }
+
+        // Add a new task
+        function addTask() {
+            const taskInput = document.getElementById('taskInput');
+            const taskStatus = document.getElementById('taskStatus');
+            const taskText = taskInput.value.trim();
+            
+            if (taskText === '') {
+                showNotification('Please enter a task!', true);
+                return;
+            }
+            
+            const task = {
+                text: taskText,
+                status: taskStatus.value,
+                created: new Date().toLocaleDateString()
+            };
+            
+            const taskList = document.getElementById('taskList');
+            const li = document.createElement('li');
+            li.className = 'item';
+            li.innerHTML = `
+                <div class="item-content">
+                    <div class="item-text">
+                        <h3 class="item-title">${task.text}</h3>
+                        <div class="item-details">
+                            <span>Status: ${task.status}</span>
+                            <span>Created: ${task.created}</span>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="item-action-btn btn-delete" onclick="this.parentElement.parentElement.parentElement.remove(); saveUserData(); checkEmptyStates()">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            taskList.appendChild(li);
+            taskInput.value = '';
+            
+            saveUserData();
+            checkEmptyStates();
+            showNotification('Task added successfully!');
+        }
+
+        // Add a new note
+        function addNote() {
+            const noteTitle = document.getElementById('noteTitle');
+            const noteContent = document.getElementById('noteContent');
+            const noteTitleText = noteTitle.value.trim();
+            const noteContentText = noteContent.value.trim();
+            
+            if (noteTitleText === '' || noteContentText === '') {
+                showNotification('Please enter both title and content for your note!', true);
+                return;
+            }
+            
+            const note = {
+                title: noteTitleText,
+                content: noteContentText,
+                created: new Date().toLocaleDateString()
+            };
+            
+            const noteList = document.getElementById('noteList');
+            const li = document.createElement('li');
+            li.className = 'item';
+            li.innerHTML = `
+                <div class="item-content">
+                    <div class="item-text">
+                        <h3 class="item-title">${note.title}</h3>
+                        <div class="item-details">
+                            <span>Created: ${note.created}</span>
+                        </div>
+                        <p>${note.content}</p>
+                    </div>
+                    <div class="item-actions">
+                        <button class="item-action-btn btn-delete" onclick="this.parentElement.parentElement.parentElement.remove(); saveUserData(); checkEmptyStates()">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            noteList.appendChild(li);
+            noteTitle.value = '';
+            noteContent.value = '';
+            
+            saveUserData();
+            checkEmptyStates();
+            showNotification('Note added successfully!');
+        }
+
+        // Load tasks from data
+        function loadTasks(tasks) {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+            
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.className = 'item';
+                li.innerHTML = `
+                    <div class="item-content">
+                        <div class="item-text">
+                            <h3 class="item-title">${task.text}</h3>
+                            <div class="item-details">
+                                <span>Status: ${task.status}</span>
+                                <span>Created: ${task.created}</span>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="item-action-btn btn-delete" onclick="this.parentElement.parentElement.parentElement.remove(); saveUserData(); checkEmptyStates()">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                taskList.appendChild(li);
+            });
+        }
+
+        // Load notes from data
+        function loadNotes(notes) {
+            const noteList = document.getElementById('noteList');
+            noteList.innerHTML = '';
+            
+            notes.forEach(note => {
+                const li = document.createElement('li');
+                li.className = 'item';
+                li.innerHTML = `
+                    <div class="item-content">
+                        <div class="item-text">
+                            <h3 class="item-title">${note.title}</h3>
+                            <div class="item-details">
+                                <span>Created: ${note.created}</span>
+                            </div>
+                            <p>${note.content}</p>
+                        </div>
+                        <div class="item-actions">
+                            <button class="item-action-btn btn-delete" onclick="this.parentElement.parentElement.parentElement.remove(); saveUserData(); checkEmptyStates()">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                noteList.appendChild(li);
+            });
+        }
+
+        // Check empty states
+        function checkEmptyStates() {
+            // Check tasks
+            if (document.getElementById('taskList').children.length === 0) {
+                document.getElementById('taskEmptyState').style.display = 'block';
+            } else {
+                document.getElementById('taskEmptyState').style.display = 'none';
+            }
+            
+            // Check notes
+            if (document.getElementById('noteList').children.length === 0) {
+                document.getElementById('noteEmptyState').style.display = 'block';
+            } else {
+                document.getElementById('noteEmptyState').style.display = 'none';
+            }
+        }
+
+        // Log out the current user
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            sessionStorage.removeItem('currentUser');
+            
+            document.getElementById('app-content').style.display = 'none';
+            document.getElementById('auth-container').style.display = 'block';
+            
+            // Clear form fields
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('confirm-password').value = '';
+            
+            // Reset to login mode
+            if (!isLoginMode) {
+                toggleAuthMode();
+            }
+            
+            showNotification('You have been logged out successfully.');
+        }
+
+        // Show notification
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = isError ? 'notification error' : 'notification';
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

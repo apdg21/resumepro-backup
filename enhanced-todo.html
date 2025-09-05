@@ -632,8 +632,150 @@
         <!-- Main App Content (initially hidden) -->
         <div id="app-content" class="hidden">
             <!-- Your app content remains exactly the same -->
+            <div class="main-content">
+            <div class="left-column">
+                <div class="tab-content active" id="tasks-tab">
+                    <div class="section">
+                        <h2 class="section-title"><i class="material-icons">checklist</i> Add New Task</h2>
+                        <div class="input-group">
+                            <input type="text" id="taskInput" placeholder="What do you need to do?">
+                        </div>
+                        <div class="input-group">
+                            <select id="taskStatus">
+                                <option value="To Do">To Do</option>
+                                <option value="In Process">In Process</option>
+                                <option value="Finished">Finished</option>
+                            </select>
+                        </div>
+                        <div class="reminder-form">
+                            <input type="datetime-local" id="taskReminder" style="display: none;">
+                            <button class="btn-reminder" onclick="openReminderModal('task')">
+                                <i class="material-icons">notifications</i> Set Reminder
+                            </button>
+                        </div>
+                        <button onclick="addTask()">
+                            <i class="material-icons">add</i> Add Task
+                        </button>
+                    </div>
+                    
+                    <div class="section">
+                        <h2 class="section-title"><i class="material-icons">format_list_bulleted</i> My Tasks</h2>
+                        <ul class="items-list" id="taskList"></ul>
+                        <div id="taskEmptyState" class="empty-state">
+                            <i class="material-icons">check_box</i>
+                            <p>No tasks yet. Add a task to get started!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="notes-tab">
+                    <div class="section">
+                        <h2 class="section-title"><i class="material-icons">note_add</i> Add New Note</h2>
+                        <div class="input-group">
+                            <input type="text" id="noteTitle" placeholder="Note title">
+                        </div>
+                        <div class="input-group">
+                            <textarea id="noteContent" placeholder="Write your note here..."></textarea>
+                        </div>
+                        <div class="reminder-form">
+                            <input type="datetime-local" id="noteReminder" style="display: none;">
+                            <button class="btn-reminder" onclick="openReminderModal('note')">
+                                <i class="material-icons">notifications</i> Set Reminder
+                            </button>
+                        </div>
+                        <button onclick="addNote()">
+                            <i class="material-icons">add</i> Add Note
+                        </button>
+                    </div>
+                    
+                    <div class="section">
+                        <h2 class="section-title"><i class="material-icons">notes</i> My Notes</h2>
+                        <ul class="items-list" id="noteList"></ul>
+                        <div id="noteEmptyState" class="empty-state">
+                            <i class="material-icons">note</i>
+                            <p>No notes yet. Add a note to get started!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="reminders-tab">
+                    <div class="explanation-box">
+                        <h3><i class="material-icons">info</i> How Reminders Work</h3>
+                        <p>Reminders are set for specific tasks or notes and will trigger a notification at the scheduled time. The notification will appear even if the app is closed (as long as the browser is running).</p>
+                        <p>To delete a reminder, click the delete button next to it in the list below. You can also edit reminders directly from tasks or notes.</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2 class="section-title"><i class="material-icons">notifications</i> Upcoming Reminders</h2>
+                        <ul class="items-list" id="remindersList"></ul>
+                        <div id="reminderEmptyState" class="empty-state">
+                            <i class="material-icons">notifications_off</i>
+                            <p>No reminders set. Add reminders to your tasks or notes!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="calendar-tab">
+                    <div class="section">
+                        <h2 class="section-title"><i class="material-icons">calendar_today</i> View by Date</h2>
+                        
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label for="startDate">From Date:</label>
+                                <input type="date" id="startDate">
+                            </div>
+                            <div class="input-group">
+                                <label for="endDate">To Date:</label>
+                                <input type="date" id="endDate">
+                            </div>
+                        </div>
+                        
+                        <button class="btn-filter" onclick="filterByDateRange()">
+                            <i class="material-icons">filter_list</i> Filter by Date Range
+                        </button>
+                        
+                        <div id="dateRangeInfo" class="date-range-info" style="display: none;">
+                            Showing items from <span id="startDateDisplay"></span> to <span id="endDateDisplay"></span>
+                        </div>
+                        
+                        <ul class="items-list" id="calendarList"></ul>
+                        <div id="calendarEmptyState" class="empty-state">
+                            <i class="material-icons">event_available</i>
+                            <p>No items for selected date range.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-column">
+                <div class="section">
+                    <h2 class="section-title"><i class="material-icons">today</i> Today's Overview</h2>
+                    <div id="todayStats">
+                        <p>Loading your daily overview...</p>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title"><i class="material-icons">insights</i> Quick Stats</h2>
+                    <div id="quickStats">
+                        <p>Your statistics will appear here</p>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title"><i class="material-icons">event</i> Quick Date Filter</h2>
+                    <div class="input-group">
+                        <label for="quickDate">View items for a specific date:</label>
+                        <input type="date" id="quickDate">
+                    </div>
+                    <button onclick="filterBySingleDate()">
+                        <i class="material-icons">search</i> View Items
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
+
 
     <script>
         // Google Apps Script deployment ID (replace with your own)

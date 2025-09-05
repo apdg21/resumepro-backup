@@ -637,7 +637,7 @@
 
     <script>
         // Google Apps Script deployment ID (replace with your own)
-        const scriptId = 'YOUR_GOOGLE_APPS_SCRIPT_ID_HERE';
+        const scriptId = 'https://script.google.com/macros/s/AKfycbyW-DJyZUQaEj9mqO5G47pPsR5vgZ23i-GKWpWoZnoHkBkN2csflrTEGsjBNLdRmtgj/exec';
         const scriptUrl = `https://script.google.com/macros/s/${scriptId}/exec`;
         
         // User management variables
@@ -919,7 +919,7 @@
 
         // Sync data with Google Sheets
         async function syncWithGoogleSheets() {
-            if (!isOnline || !currentUser || !scriptId || scriptId === 'YOUR_GOOGLE_APPS_SCRIPT_ID_HERE') {
+            if (!isOnline || !currentUser || !scriptId || scriptId === 'https://script.google.com/macros/s/AKfycbyW-DJyZUQaEj9mqO5G47pPsR5vgZ23i-GKWpWoZnoHkBkN2csflrTEGsjBNLdRmtgj/exec') {
                 return;
             }
             

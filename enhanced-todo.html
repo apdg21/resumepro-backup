@@ -1274,18 +1274,43 @@
 if (!isOnline || !currentUser || !scriptId) {
 return;
 }
+
+
 showSyncStatus('Syncing with Google Sheets...');
+
+
 try {
 // Process pending changes
 while (pendingChanges.length > 0) {
 const change = pendingChanges[0];
+
+
+// Build proper payload for backend
+const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+const currentUserData = userData[currentUser.email] || { tasks: [], notes: [], reminders: [], lastUpdated: new Date().toISOString() };
+
+
+const payload = {
+type: 'full_update',
+user: currentUser.email,
+data: {
+tasks: currentUserData.tasks || [],
+notes: currentUserData.notes || [],
+reminders: currentUserData.reminders || [],
+lastUpdated: currentUserData.lastUpdated || new Date().toISOString()
+}
+};
+
+
 const response = await fetch(scriptUrl, {
 method: 'POST',
 headers: {
 'Content-Type': 'application/json',
 },
-body: JSON.stringify(change)
+body: JSON.stringify(payload)
 });
+
+
 if (response.ok) {
 // Remove successfully synced change
 pendingChanges.shift();
@@ -1293,10 +1318,14 @@ pendingChanges.shift();
 throw new Error('Failed to sync with Google Sheets');
 }
 }
+
+
 // After syncing changes, get latest data from Sheets
 const response = await fetch(`${scriptUrl}?user=${encodeURIComponent(currentUser.email)}`);
 if (response.ok) {
 const remoteData = await response.json();
+
+
 if (remoteData && remoteData.tasks) {
 const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 const localData = userData[currentUser.email] || { tasks: [], notes: [], reminders: [] };
@@ -1304,6 +1333,8 @@ const localData = userData[currentUser.email] || { tasks: [], notes: [], reminde
 
 const remoteLastUpdated = new Date(remoteData.lastUpdated || 0);
 const localLastUpdated = new Date(localData.lastUpdated || 0);
+
+
 if (remoteLastUpdated > localLastUpdated) {
 loadTasks(remoteData.tasks || []);
 loadNotes(remoteData.notes || []);
@@ -1317,6 +1348,8 @@ showNotification('Data is up to date');
 }
 }
 }
+
+
 showSyncStatus('Synced with Google Sheets', true);
 setTimeout(() => {
 hideSyncStatus();

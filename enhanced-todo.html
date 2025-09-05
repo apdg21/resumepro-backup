@@ -904,7 +904,7 @@
             const users = JSON.parse(localStorage.getItem('users') || '{}');
             
             // Check demo accounts first
-            if (demoAccounts[email] && demoAccounts[email] === password) {
+            if (demoAccounts.hasOwnProperty(email) && demoAccounts[email] === password) {
                 // Login successful with demo account
                 currentUser = {
                     email: email,

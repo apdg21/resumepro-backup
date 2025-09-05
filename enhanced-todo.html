@@ -982,7 +982,6 @@
         </div>
     </div>
 
-
     <script>
         // Google Apps Script deployment ID (replace with your own)
         const scriptId = 'https://script.google.com/macros/s/AKfycbyW-DJyZUQaEj9mqO5G47pPsR5vgZ23i-GKWpWoZnoHkBkN2csflrTEGsjBNLdRmtgj/exec';
@@ -996,6 +995,8 @@
         let reminderTimeouts = {};
         let isOnline = true;
         let pendingChanges = [];
+        let currentReminderType = '';
+        let selectedReminderOption = '';
 
         // Demo accounts for testing
         const demoAccounts = {
@@ -1032,6 +1033,9 @@
             setInterval(() => {
                 if (currentUser) syncWithGoogleSheets();
             }, 5 * 60 * 1000);
+            
+            // Load reminder functionality
+            calculateDefaultReminderTimes();
         });
 
         // Check online status
@@ -1103,7 +1107,7 @@
                 return;
             }
             
-            // Login process - FIXED CODE
+            // Login process
             const users = JSON.parse(localStorage.getItem('users') || '{}');
             
             // Check demo accounts first
@@ -1367,8 +1371,12 @@
         // Set default dates
         function setDefaultDates() {
             const today = new Date();
-            document.getElementById('calendarDate').value = formatDate(today);
-            filterByDate();
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(today.getDate() - 7);
+            
+            document.getElementById('startDate').value = formatDate(oneWeekAgo);
+            document.getElementById('endDate').value = formatDate(today);
+            document.getElementById('quickDate').value = formatDate(today);
         }
         
         function formatDate(date) {
@@ -1376,6 +1384,45 @@
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');
             return `${year}-${month}-${day}`;
+        }
+
+        // Calculate default times for reminder options
+        function calculateDefaultReminderTimes() {
+            const now = new Date();
+            
+            // Later today (6:00 PM)
+            const laterToday = new Date();
+            laterToday.setHours(18, 0, 0, 0);
+            if (laterToday < now) {
+                laterToday.setDate(laterToday.getDate() + 1);
+            }
+            document.getElementById('later-today-time').textContent = formatTime(laterToday);
+            
+            // Tomorrow (9:00 AM)
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(9, 0, 0, 0);
+            document.getElementById('tomorrow-time').textContent = formatTime(tomorrow);
+            
+            // Next week (next Monday, 9:00 AM)
+            const nextWeek = new Date();
+            nextWeek.setDate(nextWeek.getDate() + (7 - nextWeek.getDay() + 1) % 7 || 7);
+            nextWeek.setHours(9, 0, 0, 0);
+            document.getElementById('next-week-time').textContent = formatTime(nextWeek);
+        }
+
+        function formatTime(date) {
+            const today = new Date();
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            if (date.toDateString() === today.toDateString()) {
+                return `Today, ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+            } else if (date.toDateString() === tomorrow.toDateString()) {
+                return `Tomorrow, ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+            } else {
+                return `${date.toLocaleDateString([], {weekday: 'long'})}, ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+            }
         }
 
         // Add a new task
@@ -1393,7 +1440,7 @@
                 id: Date.now(),
                 text: taskText,
                 status: taskStatus.value,
-                created: new Date().toLocaleDateString(),
+                created: new Date().toISOString().split('T')[0],
                 reminder: document.getElementById('taskReminder').dataset.tempReminder || null
             };
             
@@ -1436,7 +1483,7 @@
                 id: Date.now(),
                 title: noteTitleText,
                 content: noteContentText,
-                created: new Date().toLocaleDateString(),
+                created: new Date().toISOString().split('T')[0],
                 reminder: document.getElementById('noteReminder').dataset.tempReminder || null
             };
             
@@ -1464,81 +1511,233 @@
             showNotification('Note added successfully!');
         }
 
-        // Add a reminder
-        function addReminder(type) {
-            const reminderInput = document.getElementById(type + 'Reminder');
-            const reminderDateTime = reminderInput.value;
+        function openReminderModal(type) {
+            currentReminderType = type;
+            selectedReminderOption = '';
+            document.querySelectorAll('.reminder-option').forEach(opt => opt.classList.remove('selected'));
+            document.getElementById('customReminder').classList.add('hidden');
+            document.getElementById('reminderModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('reminderModal').style.display = 'none';
+        }
+
+        function selectReminderOption(option) {
+            selectedReminderOption = option;
+            document.querySelectorAll('.reminder-option').forEach(opt => opt.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
             
-            if (!reminderDateTime) {
-                showNotification('Please select a date and time for the reminder!', true);
+            if (option === 'custom') {
+                document.getElementById('customReminder').classList.remove('hidden');
+                
+                // Set default values for custom reminder
+                const now = new Date();
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                
+                document.getElementById('customReminderDate').value = formatDate(tomorrow);
+                document.getElementById('customReminderTime').value = '09:00';
+            } else {
+                document.getElementById('customReminder').classList.add('hidden');
+            }
+        }
+
+        function setReminder() {
+            if (!selectedReminderOption) {
+                showNotification('Please select a reminder option!', true);
                 return;
             }
             
-            // Validate the date is in the future
-            if (new Date(reminderDateTime) < new Date()) {
-                showNotification('Please select a future date and time for the reminder!', true);
-                return;
+            let reminderDateTime;
+            
+            switch(selectedReminderOption) {
+                case 'later-today':
+                    const laterToday = new Date();
+                    laterToday.setHours(18, 0, 0, 0);
+                    if (laterToday < new Date()) {
+                        laterToday.setDate(laterToday.getDate() + 1);
+                    }
+                    reminderDateTime = laterToday.toISOString().slice(0, 16);
+                    break;
+                    
+                case 'tomorrow':
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    tomorrow.setHours(9, 0, 0, 0);
+                    reminderDateTime = tomorrow.toISOString().slice(0, 16);
+                    break;
+                    
+                case 'next-week':
+                    const nextWeek = new Date();
+                    nextWeek.setDate(nextWeek.getDate() + (7 - nextWeek.getDay() + 1) % 7 || 7);
+                    nextWeek.setHours(9, 0, 0, 0);
+                    reminderDateTime = nextWeek.toISOString().slice(0, 16);
+                    break;
+                    
+                case 'custom':
+                    const date = document.getElementById('customReminderDate').value;
+                    const time = document.getElementById('customReminderTime').value;
+                    if (!date || !time) {
+                        showNotification('Please select both date and time for custom reminder!', true);
+                        return;
+                    }
+                    reminderDateTime = `${date}T${time}`;
+                    break;
             }
             
             // Store the reminder temporarily until the item is created
-            document.getElementById(type + 'Reminder').dataset.tempReminder = reminderDateTime;
-            reminderInput.value = '';
+            document.getElementById(currentReminderType + 'Reminder').dataset.tempReminder = reminderDateTime;
+            closeModal();
             
-            showNotification('Reminder set! It will be saved when you add the ' + type);
+            showNotification('Reminder set! It will be saved when you add the ' + currentReminderType);
         }
 
         // Create a list item for tasks or notes
         function createListItem(item, type) {
             const li = document.createElement('li');
             li.className = 'item';
-            if (item.reminder) {
+            if (item.reminder && new Date(item.reminder) > new Date()) {
                 li.classList.add('reminder-item');
             }
             
+            const itemContent = document.createElement('div');
+            itemContent.className = 'item-content';
+            
+            const itemText = document.createElement('div');
+            itemText.className = 'item-text';
+            
             if (type === 'task') {
-                li.innerHTML = `
-                    <div class="item-content">
-                        <div class="item-text">
-                            <h3 class="item-title">${item.text}</h3>
-                            <div class="item-details">
-                                <span>Status: ${item.status}</span>
-                                <span>Created: ${item.created}</span>
-                                ${item.reminder ? '<span class="reminder-badge">Reminder Set</span>' : ''}
-                            </div>
-                        </div>
-                        <div class="item-actions">
-                            <select class="item-action-btn" onchange="updateTaskStatus(this, ${item.id})">
-                                <option value="To Do" ${item.status === 'To Do' ? 'selected' : ''}>To Do</option>
-                                <option value="In Process" ${item.status === 'In Process' ? 'selected' : ''}>In Process</option>
-                                <option value="Finished" ${item.status === 'Finished' ? 'selected' : ''}>Finished</option>
-                            </select>
-                            <button class="item-action-btn btn-delete" onclick="deleteItem(this, 'task', ${item.id})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
+                itemText.innerHTML = `
+                    <h3 class="item-title">${item.text}</h3>
+                    <div class="item-details">
+                        <span>Status: ${item.status}</span>
+                        <span>Created: ${item.created}</span>
+                        ${item.reminder ? '<span class="reminder-badge">Reminder Set</span>' : ''}
                     </div>
                 `;
             } else {
-                li.innerHTML = `
-                    <div class="item-content">
-                        <div class="item-text">
-                            <h3 class="item-title">${item.title}</h3>
-                            <div class="item-details">
-                                <span>Created: ${item.created}</span>
-                                ${item.reminder ? '<span class="reminder-badge">Reminder Set</span>' : ''}
-                            </div>
-                            <p>${item.content}</p>
-                        </div>
-                        <div class="item-actions">
-                            <button class="item-action-btn btn-delete" onclick="deleteItem(this, 'note', ${item.id})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
+                itemText.innerHTML = `
+                    <h3 class="item-title">${item.title}</h3>
+                    <div class="item-details">
+                        <span>Created: ${item.created}</span>
+                        ${item.reminder ? '<span class="reminder-badge">Reminder Set</span>' : ''}
                     </div>
+                    <p>${item.content}</p>
                 `;
             }
             
+            const itemActions = document.createElement('div');
+            itemActions.className = 'item-actions';
+            
+            // Add reminder button
+            const reminderBtn = document.createElement('button');
+            reminderBtn.className = 'item-action-btn btn-reminder';
+            reminderBtn.innerHTML = `<i class="material-icons">${item.reminder ? 'notifications_active' : 'notifications'}</i>`;
+            reminderBtn.title = item.reminder ? 'Edit Reminder' : 'Add Reminder';
+            reminderBtn.onclick = () => {
+                openEditReminderModal(item, type, li, reminderBtn);
+            };
+            
+            // Delete button
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'item-action-btn btn-delete';
+            deleteBtn.innerHTML = '<i class="material-icons">delete</i>';
+            deleteBtn.title = 'Delete';
+            deleteBtn.onclick = () => {
+                // Remove any associated reminders
+                if (item.reminder) {
+                    removeReminder(item.id, type);
+                }
+                
+                li.remove();
+                saveUserData();
+                filterByDateRange();
+                checkEmptyStates();
+                updateStats();
+            };
+            
+            if (type === 'task') {
+                const statusSelect = document.createElement('select');
+                statusSelect.className = 'item-action-btn';
+                statusSelect.style.padding = '6px';
+                ['To Do', 'In Process', 'Finished'].forEach(status => {
+                    const option = document.createElement('option');
+                    option.value = status;
+                    option.textContent = status;
+                    option.selected = status === item.status;
+                    statusSelect.appendChild(option);
+                });
+                statusSelect.onchange = () => {
+                    item.status = statusSelect.value;
+                    saveUserData();
+                    filterByDateRange();
+                    updateStats();
+                };
+                itemActions.appendChild(statusSelect);
+            }
+            
+            itemActions.appendChild(reminderBtn);
+            itemActions.appendChild(deleteBtn);
+            
+            itemContent.appendChild(itemText);
+            itemContent.appendChild(itemActions);
+            
+            li.appendChild(itemContent);
             return li;
+        }
+
+        function openEditReminderModal(item, type, li, reminderBtn) {
+            currentReminderType = type;
+            selectedReminderOption = 'custom';
+            
+            // Pre-fill custom values if there's an existing reminder
+            if (item.reminder) {
+                const reminderDate = new Date(item.reminder);
+                document.getElementById('customReminderDate').value = formatDate(reminderDate);
+                document.getElementById('customReminderTime').value = reminderDate.toTimeString().slice(0, 5);
+            } else {
+                // Set default values
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                document.getElementById('customReminderDate').value = formatDate(tomorrow);
+                document.getElementById('customReminderTime').value = '09:00';
+            }
+            
+            document.querySelectorAll('.reminder-option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelector('.reminder-option[onclick="selectReminderOption(\'custom\')"]').classList.add('selected');
+            document.getElementById('customReminder').classList.remove('hidden');
+            
+            // Store reference to the item being edited
+            document.getElementById('reminderModal').dataset.editingItemId = item.id;
+            document.getElementById('reminderModal').dataset.listItem = li;
+            document.getElementById('reminderModal').dataset.reminderBtn = reminderBtn;
+            
+            document.getElementById('reminderModal').style.display = 'flex';
+        }
+
+        function removeReminder(id, type, li = null, reminderBtn = null) {
+            // Remove from reminders array
+            reminders = reminders.filter(r => r.id !== id);
+            
+            // Clear timeout
+            clearTimeout(reminderTimeouts[id]);
+            delete reminderTimeouts[id];
+            
+            // Update UI if elements provided
+            if (li && reminderBtn) {
+                // Update the specific item
+                saveUserData();
+                li.classList.remove('reminder-item');
+                reminderBtn.innerHTML = '<i class="material-icons">notifications</i>';
+                reminderBtn.title = 'Add Reminder';
+                
+                // Remove the reminder badge
+                const badge = li.querySelector('.reminder-badge');
+                if (badge) badge.remove();
+            }
+            
+            showNotification('Reminder removed!');
         }
 
         // Load tasks from data
@@ -1588,6 +1787,25 @@
                     // Remove the reminder after triggering
                     reminders = reminders.filter(r => r.id !== id);
                     saveUserData();
+                    
+                    // Update the UI to remove reminder badge
+                    const items = document.querySelectorAll('.item');
+                    items.forEach(item => {
+                        const itemTitle = item.querySelector('.item-title').textContent;
+                        if (itemTitle === title) {
+                            item.classList.remove('reminder-item');
+                            const badge = item.querySelector('.reminder-badge');
+                            if (badge) badge.remove();
+                            const reminderBtn = item.querySelector('.btn-reminder');
+                            if (reminderBtn) {
+                                reminderBtn.innerHTML = '<i class="material-icons">notifications</i>';
+                                reminderBtn.title = 'Add Reminder';
+                            }
+                        }
+                    });
+                    
+                    displayUpcomingReminders();
+                    checkEmptyStates();
                 }, timeUntilReminder);
             }
         }
@@ -1612,6 +1830,70 @@
             sortedReminders.forEach(reminder => {
                 const li = document.createElement('li');
                 li.className = 'item reminder-item';
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'item-action-btn btn-delete';
+                deleteBtn.innerHTML = '<i class="material-icons">delete</i>';
+                deleteBtn.title = 'Delete Reminder';
+                deleteBtn.onclick = () => {
+                    // Find the associated task or note
+                    let itemElement = null;
+                    if (reminder.type === 'task') {
+                        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                        const userTasks = userData[currentUser.email]?.tasks || [];
+                        const task = userTasks.find(t => t.id === reminder.id);
+                        if (task) {
+                            task.reminder = null;
+                            userData[currentUser.email].tasks = userTasks;
+                            localStorage.setItem('userData', JSON.stringify(userData));
+                            
+                            // Update UI
+                            const taskItems = document.querySelectorAll('#taskList .item');
+                            taskItems.forEach(item => {
+                                if (item.querySelector('.item-title').textContent === reminder.title) {
+                                    item.classList.remove('reminder-item');
+                                    const badge = item.querySelector('.reminder-badge');
+                                    if (badge) badge.remove();
+                                    const reminderBtn = item.querySelector('.btn-reminder');
+                                    if (reminderBtn) {
+                                        reminderBtn.innerHTML = '<i class="material-icons">notifications</i>';
+                                        reminderBtn.title = 'Add Reminder';
+                                    }
+                                }
+                            });
+                        }
+                    } else {
+                        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                        const userNotes = userData[currentUser.email]?.notes || [];
+                        const note = userNotes.find(n => n.id === reminder.id);
+                        if (note) {
+                            note.reminder = null;
+                            userData[currentUser.email].notes = userNotes;
+                            localStorage.setItem('userData', JSON.stringify(userData));
+                            
+                            // Update UI
+                            const noteItems = document.querySelectorAll('#noteList .item');
+                            noteItems.forEach(item => {
+                                if (item.querySelector('.item-title').textContent === reminder.title) {
+                                    item.classList.remove('reminder-item');
+                                    const badge = item.querySelector('.reminder-badge');
+                                    if (badge) badge.remove();
+                                    const reminderBtn = item.querySelector('.btn-reminder');
+                                    if (reminderBtn) {
+                                        reminderBtn.innerHTML = '<i class="material-icons">notifications</i>';
+                                        reminderBtn.title = 'Add Reminder';
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    
+                    // Remove the reminder
+                    removeReminder(reminder.id);
+                    li.remove();
+                    checkEmptyStates();
+                };
+                
                 li.innerHTML = `
                     <div class="item-content">
                         <div class="item-text">
@@ -1622,62 +1904,50 @@
                             </div>
                         </div>
                         <div class="item-actions">
-                            <button class="item-action-btn btn-delete" onclick="deleteReminder(${reminder.id})">
-                                <i class="fas fa-trash"></i>
-                            </button>
                         </div>
                     </div>
                 `;
+                
+                li.querySelector('.item-actions').appendChild(deleteBtn);
                 remindersList.appendChild(li);
             });
         }
 
-        // Delete a reminder
-        function deleteReminder(id) {
-            reminders = reminders.filter(r => r.id !== id);
-            saveUserData();
-            displayUpcomingReminders();
-            showNotification('Reminder deleted successfully!');
-        }
-
-        // Update task status
-        function updateTaskStatus(selectElement, taskId) {
-            const newStatus = selectElement.value;
-            // In a real app, you would update the task status in your data store
-            showNotification('Task status updated to: ' + newStatus);
-            saveUserData();
-        }
-
-        // Delete an item
-        function deleteItem(button, type, id) {
-            const li = button.closest('.item');
-            li.remove();
+        // Filter by date range
+        function filterByDateRange() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
             
-            // Remove any associated reminders
-            if (type === 'task') {
-                const taskText = li.querySelector('.item-title').textContent;
-                reminders = reminders.filter(r => !(r.type === 'task' && r.title === taskText));
-            } else {
-                const noteTitle = li.querySelector('.item-title').textContent;
-                reminders = reminders.filter(r => !(r.type === 'note' && r.title === noteTitle));
+            if (!startDate || !endDate) {
+                showNotification('Please select both start and end dates!', true);
+                return;
             }
             
-            saveUserData();
-            checkEmptyStates();
-            updateStats();
-            showNotification(`${type === 'task' ? 'Task' : 'Note'} deleted successfully!`);
-        }
-
-        // Filter by date
-        function filterByDate() {
-            const selectedDate = document.getElementById('calendarDate').value;
-            const tasks = JSON.parse(localStorage.getItem('userData') || '{}')[currentUser.email]?.tasks || [];
-            const notes = JSON.parse(localStorage.getItem('userData') || '{}')[currentUser.email]?.notes || [];
+            if (new Date(startDate) > new Date(endDate)) {
+                showNotification('Start date must be before end date!', true);
+                return;
+            }
+            
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            const tasks = userData[currentUser.email]?.tasks || [];
+            const notes = userData[currentUser.email]?.notes || [];
             const calendarList = document.getElementById('calendarList');
             calendarList.innerHTML = '';
 
-            const filteredTasks = tasks.filter(task => task.created === selectedDate);
-            const filteredNotes = notes.filter(note => note.created === selectedDate);
+            // Show date range info
+            document.getElementById('dateRangeInfo').style.display = 'block';
+            document.getElementById('startDateDisplay').textContent = formatDisplayDate(startDate);
+            document.getElementById('endDateDisplay').textContent = formatDisplayDate(endDate);
+
+            const filteredTasks = tasks.filter(task => {
+                const taskDate = new Date(task.created);
+                return taskDate >= new Date(startDate) && taskDate <= new Date(endDate);
+            });
+            
+            const filteredNotes = notes.filter(note => {
+                const noteDate = new Date(note.created);
+                return noteDate >= new Date(startDate) && noteDate <= new Date(endDate);
+            });
 
             if (filteredTasks.length === 0 && filteredNotes.length === 0) {
                 document.getElementById('calendarEmptyState').style.display = 'block';
@@ -1686,40 +1956,62 @@
             
             document.getElementById('calendarEmptyState').style.display = 'none';
 
-            filteredTasks.forEach(task => {
-                const li = document.createElement('li');
-                li.className = 'item calendar-item';
-                li.innerHTML = `
-                    <div class="item-content">
-                        <div class="item-text">
-                            <h3 class="item-title">${task.text}</h3>
-                            <div class="item-details">
-                                <span>Task • ${task.status}</span>
-                                <span>Created: ${task.created}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                calendarList.appendChild(li);
-            });
+            // Sort items by date
+            const allItems = [...filteredTasks.map(t => ({...t, type: 'task'})), ...filteredNotes.map(n => ({...n, type: 'note'}))];
+            allItems.sort((a, b) => new Date(a.created) - new Date(b.created));
 
-            filteredNotes.forEach(note => {
+            allItems.forEach(item => {
                 const li = document.createElement('li');
                 li.className = 'item calendar-item';
-                li.innerHTML = `
-                    <div class="item-content">
-                        <div class="item-text">
-                            <h3 class="item-title">${note.title}</h3>
-                            <div class="item-details">
-                                <span>Note</span>
-                                <span>Created: ${note.created}</span>
+                
+                if (item.type === 'task') {
+                    li.innerHTML = `
+                        <div class="item-content">
+                            <div class="item-text">
+                                <h3 class="item-title">${item.text}</h3>
+                                <div class="item-details">
+                                    <span>Task • ${item.status}</span>
+                                    <span>Created: ${item.created}</span>
+                                </div>
                             </div>
-                            <p>${note.content.substring(0, 100)}${note.content.length > 100 ? '...' : ''}</p>
                         </div>
-                    </div>
-                `;
+                    `;
+                } else {
+                    li.innerHTML = `
+                        <div class="item-content">
+                            <div class="item-text">
+                                <h3 class="item-title">${item.title}</h3>
+                                <div class="item-details">
+                                    <span>Note</span>
+                                    <span>Created: ${item.created}</span>
+                                </div>
+                                <p>${item.content.substring(0, 100)}${item.content.length > 100 ? '...' : ''}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                
                 calendarList.appendChild(li);
             });
+        }
+        
+        function filterBySingleDate() {
+            const date = document.getElementById('quickDate').value;
+            
+            if (!date) {
+                showNotification('Please select a date!', true);
+                return;
+            }
+            
+            document.getElementById('startDate').value = date;
+            document.getElementById('endDate').value = date;
+            
+            filterByDateRange();
+        }
+        
+        function formatDisplayDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
         }
 
         // Check empty states
@@ -1748,10 +2040,11 @@
 
         // Update stats
         function updateStats() {
-            const tasks = JSON.parse(localStorage.getItem('userData') || '{}')[currentUser.email]?.tasks || [];
-            const notes = JSON.parse(localStorage.getItem('userData') || '{}')[currentUser.email]?.notes || [];
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            const tasks = userData[currentUser.email]?.tasks || [];
+            const notes = userData[currentUser.email]?.notes || [];
             
-            const today = new Date().toLocaleDateString();
+            const today = new Date().toISOString().split('T')[0];
             const todayTasks = tasks.filter(task => task.created === today);
             const todayNotes = notes.filter(note => note.created === today);
             

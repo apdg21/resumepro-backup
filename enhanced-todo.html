@@ -1271,77 +1271,64 @@
 
         // Sync data with Google Sheets
         async function syncWithGoogleSheets() {
-            if (!isOnline || !currentUser || !scriptId || scriptId === 'AKfycbz1W9VGt5M4K1U-vmMFZxwQea7gyi_VsA2NuPPXWQ47YcxdA_zXcsIsI9JBLODP3Tz9') {
-                return;
-            }
-            
-            showSyncStatus('Syncing with Google Sheets...');
-            
-            try {
-                // Process pending changes
-                while (pendingChanges.length > 0) {
-                    const change = pendingChanges[0];
-                    
-                    const response = await fetch(scriptUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(change)
-                    });
-                    
-                    if (response.ok) {
-                        // Remove successfully synced change
-                        pendingChanges.shift();
-                    } else {
-                        throw new Error('Failed to sync with Google Sheets');
-                    }
-                }
-                
-                // After syncing changes, get latest data from Sheets
-                const response = await fetch(`${scriptUrl}?user=${encodeURIComponent(currentUser.email)}`);
-                if (response.ok) {
-                    const remoteData = await response.json();
-                    
-                    if (remoteData && remoteData.tasks) {
-                        // Merge remote data with local data
-                        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-                        const localData = userData[currentUser.email] || { tasks: [], notes: [], reminders: [] };
-                        
-                        // Simple merge strategy - prefer remote data if it's newer
-                        const remoteLastUpdated = new Date(remoteData.lastUpdated || 0);
-                        const localLastUpdated = new Date(localData.lastUpdated || 0);
-                        
-                        if (remoteLastUpdated > localLastUpdated) {
-                            // Use remote data
-                            loadTasks(remoteData.tasks || []);
-                            loadNotes(remoteData.notes || []);
-                            reminders = remoteData.reminders || [];
-                            loadReminders();
-                            
-                            // Update local storage
-                            userData[currentUser.email] = remoteData;
-                            localStorage.setItem('userData', JSON.stringify(userData));
-                            
-                            showNotification('Data synced from Google Sheets');
-                        } else {
-                            showNotification('Data is up to date');
-                        }
-                    }
-                }
-                
-                showSyncStatus('Synced with Google Sheets', true);
-                setTimeout(() => {
-                    hideSyncStatus();
-                }, 2000);
-            } catch (error) {
-                console.error('Error syncing with Google Sheets:', error);
-                showSyncStatus('Sync failed', true);
-                setTimeout(() => {
-                    hideSyncStatus();
-                }, 2000);
-            }
-        }
+if (!isOnline || !currentUser || !scriptId) {
+return;
+}
+showSyncStatus('Syncing with Google Sheets...');
+try {
+// Process pending changes
+while (pendingChanges.length > 0) {
+const change = pendingChanges[0];
+const response = await fetch(scriptUrl, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+},
+body: JSON.stringify(change)
+});
+if (response.ok) {
+// Remove successfully synced change
+pendingChanges.shift();
+} else {
+throw new Error('Failed to sync with Google Sheets');
+}
+}
+// After syncing changes, get latest data from Sheets
+const response = await fetch(`${scriptUrl}?user=${encodeURIComponent(currentUser.email)}`);
+if (response.ok) {
+const remoteData = await response.json();
+if (remoteData && remoteData.tasks) {
+const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+const localData = userData[currentUser.email] || { tasks: [], notes: [], reminders: [] };
+
+
+const remoteLastUpdated = new Date(remoteData.lastUpdated || 0);
+const localLastUpdated = new Date(localData.lastUpdated || 0);
+if (remoteLastUpdated > localLastUpdated) {
+loadTasks(remoteData.tasks || []);
+loadNotes(remoteData.notes || []);
+reminders = remoteData.reminders || [];
+loadReminders();
+userData[currentUser.email] = remoteData;
+localStorage.setItem('userData', JSON.stringify(userData));
+showNotification('Data synced from Google Sheets');
+} else {
+showNotification('Data is up to date');
+}
+}
+}
+showSyncStatus('Synced with Google Sheets', true);
+setTimeout(() => {
+hideSyncStatus();
+}, 2000);
+} catch (error) {
+console.error('Error syncing with Google Sheets:', error);
+showSyncStatus('Sync failed', true);
+setTimeout(() => {
+hideSyncStatus();
+}, 2000);
+}
+}
 
         // Manual sync trigger
         function manualSync() {

@@ -7,6 +7,7 @@
     <meta name="theme-color" content="#6200ea">
     <meta name="description" content="A to-do list and notes app with labels, dates, reminders, and calendar view.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
    <style>
         :root {
             --primary-color: #6200ea;
@@ -550,6 +551,145 @@
             from { transform: translateX(100px); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+
+        /* Material Icons */
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+            vertical-align: middle;
+        }
+
+        /* Modal styles for reminder setting */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 450px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        
+        .reminder-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .reminder-option {
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .reminder-option:hover {
+            border-color: var(--primary-color);
+            background-color: #f5f0ff;
+        }
+        
+        .reminder-option.selected {
+            border-color: var(--primary-color);
+            background-color: #f0e6ff;
+        }
+        
+        .reminder-option i {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+        
+        .custom-reminder {
+            margin-top: 20px;
+        }
+        
+        .custom-reminder.hidden {
+            display: none;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .input-row .input-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        .btn-filter {
+            background-color: #4caf50;
+        }
+        
+        .btn-filter:hover {
+            background-color: #3d8b40;
+        }
+        
+        .explanation-box {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .explanation-box h3 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
     </style>
 </head>
 <body>
@@ -557,6 +697,51 @@
     <div class="sync-status hidden" id="sync-status">
         <i class="fas fa-sync-alt"></i>
         <span id="sync-text">Syncing...</span>
+    </div>
+    
+    <!-- Reminder Modal -->
+    <div class="modal" id="reminderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Set Reminder</h2>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="reminder-options">
+                <div class="reminder-option" onclick="selectReminderOption('later-today')">
+                    <i class="material-icons">schedule</i>
+                    <div>Later Today</div>
+                    <small id="later-today-time">Today, 6:00 PM</small>
+                </div>
+                <div class="reminder-option" onclick="selectReminderOption('tomorrow')">
+                    <i class="material-icons">wb_sunny</i>
+                    <div>Tomorrow</div>
+                    <small id="tomorrow-time">Tomorrow, 9:00 AM</small>
+                </div>
+                <div class="reminder-option" onclick="selectReminderOption('next-week')">
+                    <i class="material-icons">event</i>
+                    <div>Next Week</div>
+                    <small id="next-week-time">Next Monday, 9:00 AM</small>
+                </div>
+                <div class="reminder-option" onclick="selectReminderOption('custom')">
+                    <i class="material-icons">edit_calendar</i>
+                    <div>Custom</div>
+                    <small>Select date & time</small>
+                </div>
+            </div>
+            <div class="custom-reminder hidden" id="customReminder">
+                <div class="input-group">
+                    <label for="customReminderDate">Date:</label>
+                    <input type="date" id="customReminderDate">
+                </div>
+                <div class="input-group">
+                    <label for="customReminderTime">Time:</label>
+                    <input type="time" id="customReminderTime">
+                </div>
+            </div>
+            <button onclick="setReminder()" style="width: 100%;">
+                <i class="material-icons">notifications</i> Set Reminder
+            </button>
+        </div>
     </div>
     
     <div class="app-container">
@@ -630,140 +815,173 @@
         </div>
         
         <!-- Main App Content (initially hidden) -->
-        <!-- Main App Content (initially hidden) -->
-<div id="app-content" class="hidden">
-    <div class="app-header">
-        <h1><i class="fas fa-tasks"></i> Enhanced To-Do & Notes</h1>
-        <div class="user-info">
-            <div class="user-avatar" id="user-avatar"></div>
-            <span id="user-email"></span>
-            <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
-            <button class="btn-logout" onclick="manualSync()"><i class="fas fa-sync"></i> Sync</button>
+        <div id="app-content" class="hidden">
+            <div class="app-header">
+                <h1><i class="fas fa-tasks"></i> Enhanced To-Do & Notes</h1>
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar"></div>
+                    <span id="user-email"></span>
+                    <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                    <button class="btn-logout" onclick="manualSync()"><i class="fas fa-sync"></i> Sync</button>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('tasks')">Tasks</button>
+                <button class="tab" onclick="showTab('notes')">Notes</button>
+                <button class="tab" onclick="showTab('reminders')">Reminders</button>
+                <button class="tab" onclick="showTab('calendar')">Calendar</button>
+                <button class="tab" onclick="showTab('stats')">Stats</button>
+            </div>
+
+            <div class="app-main">
+                <!-- Tasks Tab -->
+                <div id="tasks-tab" class="tab-content active">
+                    <div class="section">
+                        <h2 class="section-title"><i class="material-icons">checklist</i> Add New Task</h2>
+                        <div class="input-group">
+                            <input type="text" id="taskInput" placeholder="What do you need to do?">
+                        </div>
+                        <div class="input-group">
+                            <select id="taskStatus">
+                                <option value="To Do">To Do</option>
+                                <option value="In Process">In Process</option>
+                                <option value="Finished">Finished</option>
+                            </select>
+                        </div>
+                        <div class="reminder-form">
+                            <input type="datetime-local" id="taskReminder" style="display: none;">
+                            <button class="btn-reminder" onclick="openReminderModal('task')">
+                                <i class="material-icons">notifications</i> Set Reminder
+                            </button>
+                        </div>
+                        <button onclick="addTask()">
+                            <i class="material-icons">add</i> Add Task
+                        </button>
+                    </div>
+                    
+                    <div class="section">
+                        <h2 class="section-title"><i class="material-icons">format_list_bulleted</i> My Tasks</h2>
+                        <ul class="items-list" id="taskList"></ul>
+                        <div id="taskEmptyState" class="empty-state">
+                            <i class="material-icons">check_box</i>
+                            <p>No tasks yet. Add a task to get started!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Notes Tab -->
+                <div id="notes-tab" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title"><i class="material-icons">note_add</i> Add New Note</h2>
+                        <div class="input-group">
+                            <input type="text" id="noteTitle" placeholder="Note title">
+                        </div>
+                        <div class="input-group">
+                            <textarea id="noteContent" placeholder="Write your note here..."></textarea>
+                        </div>
+                        <div class="reminder-form">
+                            <input type="datetime-local" id="noteReminder" style="display: none;">
+                            <button class="btn-reminder" onclick="openReminderModal('note')">
+                                <i class="material-icons">notifications</i> Set Reminder
+                            </button>
+                        </div>
+                        <button onclick="addNote()">
+                            <i class="material-icons">add</i> Add Note
+                        </button>
+                    </div>
+                    
+                    <div class="section">
+                        <h2 class="section-title"><i class="material-icons">notes</i> My Notes</h2>
+                        <ul class="items-list" id="noteList"></ul>
+                        <div id="noteEmptyState" class="empty-state">
+                            <i class="material-icons">note</i>
+                            <p>No notes yet. Add a note to get started!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Reminders Tab -->
+                <div id="reminders-tab" class="tab-content">
+                    <div class="explanation-box">
+                        <h3><i class="material-icons">info</i> How Reminders Work</h3>
+                        <p>Reminders are set for specific tasks or notes and will trigger a notification at the scheduled time. The notification will appear even if the app is closed (as long as the browser is running).</p>
+                        <p>To delete a reminder, click the delete button next to it in the list below. You can also edit reminders directly from tasks or notes.</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2 class="section-title"><i class="material-icons">notifications</i> Upcoming Reminders</h2>
+                        <ul class="items-list" id="remindersList"></ul>
+                        <div id="reminderEmptyState" class="empty-state">
+                            <i class="material-icons">notifications_off</i>
+                            <p>No reminders set. Add reminders to your tasks or notes!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Calendar Tab -->
+                <div id="calendar-tab" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title"><i class="material-icons">calendar_today</i> View by Date</h2>
+                        
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label for="startDate">From Date:</label>
+                                <input type="date" id="startDate">
+                            </div>
+                            <div class="input-group">
+                                <label for="endDate">To Date:</label>
+                                <input type="date" id="endDate">
+                            </div>
+                        </div>
+                        
+                        <button class="btn-filter" onclick="filterByDateRange()">
+                            <i class="material-icons">filter_list</i> Filter by Date Range
+                        </button>
+                        
+                        <div id="dateRangeInfo" class="date-range-info" style="display: none;">
+                            Showing items from <span id="startDateDisplay"></span> to <span id="endDateDisplay"></span>
+                        </div>
+                        
+                        <ul class="items-list" id="calendarList"></ul>
+                        <div id="calendarEmptyState" class="empty-state">
+                            <i class="material-icons">event_available</i>
+                            <p>No items for selected date range.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats Tab -->
+                <div id="stats-tab" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title"><i class="material-icons">today</i> Today's Overview</h2>
+                        <div id="todayStats">
+                            <p>Loading your daily overview...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2 class="section-title"><i class="material-icons">insights</i> Quick Stats</h2>
+                        <div id="quickStats">
+                            <p>Your statistics will appear here</p>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2 class="section-title"><i class="material-icons">event</i> Quick Date Filter</h2>
+                        <div class="input-group">
+                            <label for="quickDate">View items for a specific date:</label>
+                            <input type="date" id="quickDate">
+                        </div>
+                        <button onclick="filterBySingleDate()">
+                            <i class="material-icons">search</i> View Items
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="tabs">
-        <button class="tab active" onclick="showTab('tasks')">Tasks</button>
-        <button class="tab" onclick="showTab('notes')">Notes</button>
-        <button class="tab" onclick="showTab('reminders')">Reminders</button>
-        <button class="tab" onclick="showTab('calendar')">Calendar</button>
-        <button class="tab" onclick="showTab('stats')">Stats</button>
-    </div>
-
-    <div class="app-main">
-        <!-- Tasks Tab -->
-        <div id="tasks-tab" class="tab-content active">
-            <div class="section">
-                <h2 class="section-title"><i class="fas fa-plus"></i> Add New Task</h2>
-                <div class="input-group">
-                    <input type="text" id="taskInput" placeholder="What needs to be done?">
-                </div>
-                <div class="input-group">
-                    <select id="taskStatus">
-                        <option value="To Do">To Do</option>
-                        <option value="In Process">In Process</option>
-                        <option value="Finished">Finished</option>
-                    </select>
-                </div>
-                <div class="reminder-form">
-                    <input type="datetime-local" id="taskReminder" placeholder="Set reminder">
-                    <button class="btn-reminder" onclick="addReminder('task')">Set Reminder</button>
-                </div>
-                <button onclick="addTask()">Add Task</button>
-            </div>
-
-            <div class="section">
-                <h2 class="section-title"><i class="fas fa-list"></i> Your Tasks</h2>
-                <ul class="items-list" id="taskList">
-                    <!-- Tasks will be added here dynamically -->
-                </ul>
-                <div id="taskEmptyState" class="empty-state">
-                    <i class="fas fa-clipboard-list"></i>
-                    <p>No tasks yet. Add one above!</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Notes Tab -->
-        <div id="notes-tab" class="tab-content">
-            <div class="section">
-                <h2 class="section-title"><i class="fas fa-sticky-note"></i> Add New Note</h2>
-                <div class="input-group">
-                    <input type="text" id="noteTitle" placeholder="Note title">
-                </div>
-                <div class="input-group">
-                    <textarea id="noteContent" placeholder="Note content"></textarea>
-                </div>
-                <div class="reminder-form">
-                    <input type="datetime-local" id="noteReminder" placeholder="Set reminder">
-                    <button class="btn-reminder" onclick="addReminder('note')">Set Reminder</button>
-                </div>
-                <button onclick="addNote()">Add Note</button>
-            </div>
-
-            <div class="section">
-                <h2 class="section-title"><i class="fas fa-sticky-note"></i> Your Notes</h2>
-                <ul class="items-list" id="noteList">
-                    <!-- Notes will be added here dynamically -->
-                </ul>
-                <div id="noteEmptyState" class="empty-state">
-                    <i class="fas fa-sticky-note"></i>
-                    <p>No notes yet. Add one above!</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Reminders Tab -->
-        <div id="reminders-tab" class="tab-content">
-            <div class="section">
-                <h2 class="section-title"><i class="fas fa-bell"></i> Upcoming Reminders</h2>
-                <ul class="items-list" id="remindersList">
-                    <!-- Reminders will be added here dynamically -->
-                </ul>
-                <div id="reminderEmptyState" class="empty-state">
-                    <i class="fas fa-bell-slash"></i>
-                    <p>No reminders set yet.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Calendar Tab -->
-        <div id="calendar-tab" class="tab-content">
-            <div class="section">
-                <h2 class="section-title"><i class="fas fa-calendar"></i> Calendar View</h2>
-                <div class="input-group">
-                    <input type="date" id="calendarDate" onchange="filterByDate()">
-                </div>
-                <div class="date-range-info">
-                    Viewing items for selected date
-                </div>
-                <ul class="items-list" id="calendarList">
-                    <!-- Calendar items will be added here dynamically -->
-                </ul>
-                <div id="calendarEmptyState" class="empty-state">
-                    <i class="fas fa-calendar-times"></i>
-                    <p>No items found for this date.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Stats Tab -->
-        <div id="stats-tab" class="tab-content">
-            <div class="section">
-                <h2 class="section-title"><i class="fas fa-chart-pie"></i> Today's Overview</h2>
-                <div id="todayStats">
-                    <!-- Today's stats will be added here dynamically -->
-                </div>
-            </div>
-            <div class="section">
-                <h2 class="section-title"><i class="fas fa-chart-bar"></i> Quick Statistics</h2>
-                <div id="quickStats">
-                    <!-- Quick stats will be added here dynamically -->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
     <script>
         // Google Apps Script deployment ID (replace with your own)

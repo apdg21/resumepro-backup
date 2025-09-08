@@ -984,8 +984,8 @@
 
     <script>
         // Google Apps Script deployment ID (replace with your own)
-        const scriptId = 'AKfycbycu3MPTGz7LsI97eeF_9zbym-o7AEgc7Okmj1AkmOM3oN77gDCha99pvSikfIuxNVu';
-        const scriptUrl = `https://script.google.com/macros/s/${scriptId}/exec`;
+        const scriptId = 'AKfycbzRbuJlOd41MUNbPByfjFf0lc0zqLVoxH1w9Tv6nm7pt6jh4sfTjL25HUmevjhUn9MB';
+        const scriptUrl = `https://script.google.com/macros/s/$AKfycbzRbuJlOd41MUNbPByfjFf0lc0zqLVoxH1w9Tv6nm7pt6jh4sfTjL25HUmevjhUn9MB/exec`;
         
         // User management variables
         let currentUser = null;
@@ -1275,100 +1275,177 @@
         }
 
         // Sync data with Google Sheets
-        async function syncWithGoogleSheets() {
-            if (!isOnline || !currentUser || !scriptUrl) {
-                return;
-            }
+async function syncWithGoogleSheets() {
+  if (!isOnline || !currentUser || !scriptUrl) {
+    return;
+  }
 
-            showSyncStatus('Syncing with Google Sheets...');
+  showSyncStatus('Syncing with Google Sheets...');
 
-            try {
-                // Get current user data
-                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-                const currentUserData = userData[currentUser.email] || { 
-                    tasks: [], 
-                    notes: [], 
-                    reminders: [], 
-                    lastUpdated: new Date().toISOString() 
-                };
+  try {
+    // Get current user data
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    const currentUserData = userData[currentUser.email] || { 
+      tasks: [], 
+      notes: [], 
+      reminders: [], 
+      lastUpdated: new Date().toISOString() 
+    };
 
-                // Prepare payload for backend
-                const payload = {
-                    type: 'full_update',
-                    user: currentUser.email,
-                    data: currentUserData
-                };
+    // Prepare payload for backend
+    const payload = {
+      type: 'full_update',
+      user: currentUser.email,
+      data: currentUserData
+    };
 
-                // Send data to Google Sheets
-                const response = await fetch(scriptUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload)
-                });
+    // Send data to Google Sheets using a proxy approach
+    const response = await fetch(scriptUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload)
+    });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-                const result = await response.json();
-                
-                if (result.status === 'error') {
-                    throw new Error(result.message);
-                }
+    const result = await response.json();
+    
+    if (result.status === 'error') {
+      throw new Error(result.message);
+    }
 
-                // After syncing changes, get latest data from Sheets
-                const getResponse = await fetch(`${scriptUrl}?user=${encodeURIComponent(currentUser.email)}`);
-                
-                if (!getResponse.ok) {
-                    throw new Error(`HTTP error! status: ${getResponse.status}`);
-                }
-                
-                const remoteData = await getResponse.json();
-                
-                if (remoteData && remoteData.status === 'success') {
-                    const remoteLastUpdated = new Date(remoteData.lastUpdated || 0);
-                    const localLastUpdated = new Date(currentUserData.lastUpdated || 0);
-                    
-                    // Only update if remote data is newer
-                    if (remoteLastUpdated > localLastUpdated) {
-                        loadTasks(remoteData.tasks || []);
-                        loadNotes(remoteData.notes || []);
-                        reminders = remoteData.reminders || [];
-                        loadReminders();
-                        
-                        // Update local storage
-                        userData[currentUser.email] = {
-                            tasks: remoteData.tasks || [],
-                            notes: remoteData.notes || [],
-                            reminders: remoteData.reminders || [],
-                            lastUpdated: remoteData.lastUpdated
-                        };
-                        
-                        localStorage.setItem('userData', JSON.stringify(userData));
-                        showNotification('Data synced from Google Sheets');
-                    } else {
-                        showNotification('Data is up to date');
-                    }
-                    
-                    // Clear pending changes after successful sync
-                    pendingChanges = [];
-                }
+    // After syncing changes, get latest data from Sheets
+    const getResponse = await fetch(`${scriptUrl}?user=${encodeURIComponent(currentUser.email)}`);
+    
+    if (!getResponse.ok) {
+      throw new Error(`HTTP error! status: ${getResponse.status}`);
+    }
+    
+    const remoteData = await getResponse.json();
+    
+    if (remoteData && remoteData.status === 'success') {
+      const remoteLastUpdated = new Date(remoteData.lastUpdated || 0);
+      const localLastUpdated = new Date(currentUserData.lastUpdated || 0);
+      
+      // Only update if remote data is newer
+      if (remoteLastUpdated > localLastUpdated) {
+        loadTasks(remoteData.tasks || []);
+        loadNotes(remoteData.notes || []);
+        reminders = remoteData.reminders || [];
+        loadReminders();
+        
+        // Update local storage
+        userData[currentUser.email] = {
+          tasks: remoteData.tasks || [],
+          notes: remoteData.notes || [],
+          reminders: remoteData.reminders || [],
+          lastUpdated: remoteData.lastUpdated
+        };
+        
+        localStorage.setItem('userData', JSON.stringify(userData));
+        showNotification('Data synced from Google Sheets');
+      } else {
+        showNotification('Data is up to date');
+      }
+      
+      // Clear pending changes after successful sync
+      pendingChanges = [];
+    }
 
-                showSyncStatus('Synced with Google Sheets', false);
-                setTimeout(() => {
-                    hideSyncStatus();
-                }, 2000);
-            } catch (error) {
-                console.error('Error syncing with Google Sheets:', error);
-                showSyncStatus('Sync failed: ' + error.message, true);
-                setTimeout(() => {
-                    hideSyncStatus();
-                }, 2000);
-            }
-        }
+    showSyncStatus('Synced with Google Sheets', false);
+    setTimeout(() => {
+      hideSyncStatus();
+    }, 2000);
+  } catch (error) {
+    console.error('Error syncing with Google Sheets:', error);
+    
+    // If CORS error, try using a proxy approach
+    if (error.message.includes('Failed to fetch') || error.message.includes('CORS')) {
+      showSyncStatus('Using fallback sync method...');
+      await syncWithGoogleSheetsFallback();
+    } else {
+      showSyncStatus('Sync failed: ' + error.message, true);
+      setTimeout(() => {
+        hideSyncStatus();
+      }, 2000);
+    }
+  }
+}
 
+// Fallback sync method using Google Apps Script URL parameters
+async function syncWithGoogleSheetsFallback() {
+  try {
+    // Get current user data
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    const currentUserData = userData[currentUser.email] || { 
+      tasks: [], 
+      notes: [], 
+      reminders: [], 
+      lastUpdated: new Date().toISOString() 
+    };
+
+    // Encode data as URL parameters (limited by URL length restrictions)
+    const encodedData = encodeURIComponent(JSON.stringify(currentUserData));
+    
+    // Use a GET request with URL parameters as a fallback
+    const response = await fetch(`${scriptUrl}?type=full_update&user=${encodeURIComponent(currentUser.email)}&data=${encodedData}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    
+    if (result.status === 'error') {
+      throw new Error(result.message);
+    }
+
+    // Get updated data
+    const getResponse = await fetch(`${scriptUrl}?user=${encodeURIComponent(currentUser.email)}`);
+    
+    if (!getResponse.ok) {
+      throw new Error(`HTTP error! status: ${getResponse.status}`);
+    }
+    
+    const remoteData = await getResponse.json();
+    
+    if (remoteData && remoteData.status === 'success') {
+      loadTasks(remoteData.tasks || []);
+      loadNotes(remoteData.notes || []);
+      reminders = remoteData.reminders || [];
+      loadReminders();
+      
+      // Update local storage
+      userData[currentUser.email] = {
+        tasks: remoteData.tasks || [],
+        notes: remoteData.notes || [],
+        reminders: remoteData.reminders || [],
+        lastUpdated: remoteData.lastUpdated
+      };
+      
+      localStorage.setItem('userData', JSON.stringify(userData));
+      showNotification('Data synced from Google Sheets (fallback method)');
+      
+      // Clear pending changes after successful sync
+      pendingChanges = [];
+    }
+
+    showSyncStatus('Synced with Google Sheets', false);
+    setTimeout(() => {
+      hideSyncStatus();
+    }, 2000);
+  } catch (error) {
+    console.error('Error in fallback sync:', error);
+    showSyncStatus('Fallback sync also failed', true);
+    setTimeout(() => {
+      hideSyncStatus();
+    }, 2000);
+  }
+}
         // Manual sync trigger
         function manualSync() {
             syncWithGoogleSheets();

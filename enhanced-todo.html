@@ -1270,97 +1270,98 @@
         }
 
         // Sync data with Google Sheets
-        async function syncWithGoogleSheets() {
-if (!isOnline || !currentUser || !scriptId) {
-return;
-}
+async function syncWithGoogleSheets() {
+  if (!isOnline || !currentUser || !scriptUrl) {
+    return;
+  }
 
+  showSyncStatus('Syncing with Google Sheets...');
 
-showSyncStatus('Syncing with Google Sheets...');
+  try {
+    // Get current user data
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    const currentUserData = userData[currentUser.email] || { 
+      tasks: [], 
+      notes: [], 
+      reminders: [], 
+      lastUpdated: new Date().toISOString() 
+    };
 
+    // Prepare payload for backend
+    const payload = {
+      type: 'full_update',
+      user: currentUser.email,
+      data: currentUserData
+    };
 
-try {
-// Process pending changes
-while (pendingChanges.length > 0) {
-const change = pendingChanges[0];
+    // Send data to Google Sheets
+    const response = await fetch(scriptUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload)
+    });
 
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-// Build proper payload for backend
-const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-const currentUserData = userData[currentUser.email] || { tasks: [], notes: [], reminders: [], lastUpdated: new Date().toISOString() };
+    const result = await response.json();
+    
+    if (result.status === 'error') {
+      throw new Error(result.message);
+    }
 
+    // After syncing changes, get latest data from Sheets
+    const getResponse = await fetch(`${scriptUrl}?user=${encodeURIComponent(currentUser.email)}`);
+    
+    if (!getResponse.ok) {
+      throw new Error(`HTTP error! status: ${getResponse.status}`);
+    }
+    
+    const remoteData = await getResponse.json();
+    
+    if (remoteData && remoteData.status === 'success') {
+      const remoteLastUpdated = new Date(remoteData.lastUpdated || 0);
+      const localLastUpdated = new Date(currentUserData.lastUpdated || 0);
+      
+      // Only update if remote data is newer
+      if (remoteLastUpdated > localLastUpdated) {
+        loadTasks(remoteData.tasks || []);
+        loadNotes(remoteData.notes || []);
+        reminders = remoteData.reminders || [];
+        loadReminders();
+        
+        // Update local storage
+        userData[currentUser.email] = {
+          tasks: remoteData.tasks || [],
+          notes: remoteData.notes || [],
+          reminders: remoteData.reminders || [],
+          lastUpdated: remoteData.lastUpdated
+        };
+        
+        localStorage.setItem('userData', JSON.stringify(userData));
+        showNotification('Data synced from Google Sheets');
+      } else {
+        showNotification('Data is up to date');
+      }
+      
+      // Clear pending changes after successful sync
+      pendingChanges = [];
+    }
 
-const payload = {
-type: 'full_update',
-user: currentUser.email,
-data: {
-tasks: currentUserData.tasks || [],
-notes: currentUserData.notes || [],
-reminders: currentUserData.reminders || [],
-lastUpdated: currentUserData.lastUpdated || new Date().toISOString()
-}
-};
-
-
-const response = await fetch(scriptUrl, {
-method: 'POST',
-headers: {
-'Content-Type': 'application/json',
-},
-body: JSON.stringify(payload)
-});
-
-
-if (response.ok) {
-// Remove successfully synced change
-pendingChanges.shift();
-} else {
-throw new Error('Failed to sync with Google Sheets');
-}
-}
-
-
-// After syncing changes, get latest data from Sheets
-const response = await fetch(`${scriptUrl}?user=${encodeURIComponent(currentUser.email)}`);
-if (response.ok) {
-const remoteData = await response.json();
-
-
-if (remoteData && remoteData.tasks) {
-const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-const localData = userData[currentUser.email] || { tasks: [], notes: [], reminders: [] };
-
-
-const remoteLastUpdated = new Date(remoteData.lastUpdated || 0);
-const localLastUpdated = new Date(localData.lastUpdated || 0);
-
-
-if (remoteLastUpdated > localLastUpdated) {
-loadTasks(remoteData.tasks || []);
-loadNotes(remoteData.notes || []);
-reminders = remoteData.reminders || [];
-loadReminders();
-userData[currentUser.email] = remoteData;
-localStorage.setItem('userData', JSON.stringify(userData));
-showNotification('Data synced from Google Sheets');
-} else {
-showNotification('Data is up to date');
-}
-}
-}
-
-
-showSyncStatus('Synced with Google Sheets', true);
-setTimeout(() => {
-hideSyncStatus();
-}, 2000);
-} catch (error) {
-console.error('Error syncing with Google Sheets:', error);
-showSyncStatus('Sync failed', true);
-setTimeout(() => {
-hideSyncStatus();
-}, 2000);
-}
+    showSyncStatus('Synced with Google Sheets', false);
+    setTimeout(() => {
+      hideSyncStatus();
+    }, 2000);
+  } catch (error) {
+    console.error('Error syncing with Google Sheets:', error);
+    showSyncStatus('Sync failed: ' + error.message, true);
+    setTimeout(() => {
+      hideSyncStatus();
+    }, 2000);
+  }
 }
 
         // Manual sync trigger

@@ -1269,7 +1269,7 @@
             syncWithGoogleSheets();
         }
 
-        // Sync data with Google Sheets
+  // Sync data with Google Sheets
 async function syncWithGoogleSheets() {
   if (!isOnline || !currentUser || !scriptUrl) {
     return;
@@ -1300,6 +1300,7 @@ async function syncWithGoogleSheets() {
       headers: {
         'Content-Type': 'application/json',
       },
+      mode: 'cors',
       body: JSON.stringify(payload)
     });
 
@@ -1314,7 +1315,9 @@ async function syncWithGoogleSheets() {
     }
 
     // After syncing changes, get latest data from Sheets
-    const getResponse = await fetch(`${scriptUrl}?user=${encodeURIComponent(currentUser.email)}`);
+    const getResponse = await fetch(`${scriptUrl}?user=${encodeURIComponent(currentUser.email)}`, {
+      mode: 'cors'
+    });
     
     if (!getResponse.ok) {
       throw new Error(`HTTP error! status: ${getResponse.status}`);

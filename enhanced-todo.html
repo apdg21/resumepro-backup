@@ -984,8 +984,8 @@
 
     <script>
         // Google Apps Script deployment ID (replace with your own)
-        const scriptId = 'AKfycbxfx6iea47SFwwiZnEg95UgfKo0sBg0-ornDFJS_GVKsRkyHUW-LoH5ojqGqiU79phw';
-        const scriptUrl = `https://script.google.com/macros/s/AKfycbxfx6iea47SFwwiZnEg95UgfKo0sBg0-ornDFJS_GVKsRkyHUW-LoH5ojqGqiU79phw/exec`;
+        const scriptId = 'AKfycbyyNy-GuXtedWw1AhyXW3KMbXcBQKk_nHtrXFthtWRuDxzIuLHAHFyH-hFaBJhLPeqZ';
+        const scriptUrl = `https://script.google.com/macros/s/AKfycbyyNy-GuXtedWw1AhyXW3KMbXcBQKk_nHtrXFthtWRuDxzIuLHAHFyH-hFaBJhLPeqZ/exec`;
         
         // User management variables
         let currentUser = null;
@@ -1299,6 +1299,8 @@ async function syncWithGoogleSheets() {
       data: currentUserData
     };
 
+    console.log('Sending data to Google Sheets:', payload);
+
     // Use a proxy to handle CORS issues
     const response = await fetchWithCorsProxy(scriptUrl, {
       method: 'POST',
@@ -1313,6 +1315,7 @@ async function syncWithGoogleSheets() {
     }
 
     const result = await response.json();
+    console.log('Google Sheets response:', result);
     
     if (result.status === 'error') {
       throw new Error(result.message);
@@ -1326,6 +1329,7 @@ async function syncWithGoogleSheets() {
     }
     
     const remoteData = await getResponse.json();
+    console.log('Google Sheets data retrieved:', remoteData);
     
     if (remoteData && remoteData.status === 'success') {
       const remoteLastUpdated = new Date(remoteData.lastUpdated || 0);
@@ -1366,6 +1370,28 @@ async function syncWithGoogleSheets() {
     setTimeout(() => {
       hideSyncStatus();
     }, 2000);
+  }
+}
+
+// Simple CORS proxy function
+async function fetchWithCorsProxy(url, options = {}) {
+  // Use a simple CORS proxy
+  const proxyUrl = 'https://api.allorigins.win/raw?url=';
+  
+  try {
+    const response = await fetch(proxyUrl + encodeURIComponent(url), options);
+    return response;
+  } catch (error) {
+    console.error('CORS proxy error:', error);
+    
+    // Fallback: try direct fetch
+    try {
+      const response = await fetch(url, options);
+      return response;
+    } catch (fallbackError) {
+      console.error('Direct fetch also failed:', fallbackError);
+      throw error;
+    }
   }
 }
 

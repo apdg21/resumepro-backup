@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
+        /* Your existing CSS styles remain unchanged */
         :root {
             --primary-color: #6200ea;
             --primary-dark: #3700b3;
@@ -622,6 +623,7 @@
             grid-template-columns: 1fr 1fr;
             gap: 15px;
             margin-bottom: 20px;
+            margin-top: 20px;
         }
         
         .reminder-option {
@@ -1510,7 +1512,7 @@
                     note.created || '',
                     note.reminder || ''
                 ]);
-            });
+            ]);
             
             // Add reminders
             userData.reminders.forEach(reminder => {
@@ -2304,7 +2306,7 @@
                                 <h3 class="item-title">${item.title}</h3>
                                 <div class="item-details">
                                     <span>Note</span>
-                                    <span>Created: ${item.created</span>
+                                    <span>Created: ${item.created}</span>
                                 </div>
                                 <p>${item.content.substring(0, 100)}${item.content.length > 100 ? '...' : ''}</p>
                             </div>

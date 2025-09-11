@@ -1,309 +1,415 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic Email Copy Generator</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 font-sans">
-  <div class="container mx-auto p-6 max-w-4xl">
-    <h1 class="text-3xl font-bold text-center mb-6">Dynamic Email Copy Generator</h1>
-    
-    <!-- Form Section -->
-    <form id="emailForm" class="bg-white p-6 rounded-lg shadow-md">
-      <h2 class="text-xl font-semibold mb-4">Enter Email Details</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label for="theme" class="block text-sm font-medium text-gray-700">Theme</label>
-          <input type="text" id="theme" name="theme" class="mt-1 p-2 w-full border rounded" placeholder="e.g., Cozy Winter Sale" required>
-        </div>
-        <div>
-          <label for="promo" class="block text-sm font-medium text-gray-700">Promo Details</label>
-          <input type="text" id="promo" name="promo" class="mt-1 p-2 w-full border rounded" placeholder="e.g., 30% Off All Quilts" required>
-        </div>
-        <div>
-          <label for="duration" class="block text-sm font-medium text-gray-700">Promo Duration</label>
-          <input type="text" id="duration" name="duration" class="mt-1 p-2 w-full border rounded" placeholder="e.g., Ends Dec 5 at 11:59 PM" required>
-        </div>
-        <div>
-          <label for="tone" class="block text-sm font-medium text-gray-700">Tone</label>
-          <select id="tone" name="tone" class="mt-1 p-2 w-full border rounded" required>
-            <option value="Warm and inviting">Warm and inviting</option>
-            <option value="Urgent and fun">Urgent and fun</option>
-            <option value="Professional">Professional</option>
-            <option value="Casual and friendly">Casual and friendly</option>
-          </select>
-        </div>
-        <div>
-          <label for="brand" class="block text-sm font-medium text-gray-700">Brand Name</label>
-          <input type="text" id="brand" name="brand" class="mt-1 p-2 w-full border rounded" placeholder="e.g., Boho Blanket" required>
-        </div>
-        <div>
-          <label for="audience" class="block text-sm font-medium text-gray-700">Target Audience</label>
-          <input type="text" id="audience" name="audience" class="mt-1 p-2 w-full border rounded" placeholder="e.g., Quilting Enthusiasts" required>
-        </div>
-        <div>
-          <label for="website" class="block text-sm font-medium text-gray-700">Website URL</label>
-          <input type="url" id="website" name="website" class="mt-1 p-2 w-full border rounded" placeholder="e.g., https://bohoblanket.com" required>
-        </div>
-        <div>
-          <label for="products" class="block text-sm font-medium text-gray-700">Featured Products (comma-separated)</label>
-          <input type="text" id="products" name="products" class="mt-1 p-2 w-full border rounded" placeholder="e.g., Winter Quilt A, Cozy Fabric B, Snowflake Pattern C">
-        </div>
-        <div>
-          <label for="urgency" class="block text-sm font-medium text-gray-700">Urgency Level</label>
-          <select id="urgency" name="urgency" class="mt-1 p-2 w-full border rounded">
-            <option value="High">High (e.g., Last Hours)</option>
-            <option value="Medium">Medium (e.g., Limited Time)</option>
-            <option value="Low">Low (e.g., Gentle Reminder)</option>
-          </select>
-        </div>
-        <div>
-          <label for="social" class="block text-sm font-medium text-gray-700">Social Links (comma-separated)</label>
-          <input type="text" id="social" name="social" class="mt-1 p-2 w-full border rounded" placeholder="e.g., FB: link1, IG: link2">
-        </div>
-        <div>
-          <label for="address" class="block text-sm font-medium text-gray-700">Physical Address</label>
-          <input type="text" id="address" name="address" class="mt-1 p-2 w-full border rounded" placeholder="e.g., 123 Quilt St, Austin, TX" required>
-        </div>
-      </div>
-      <button type="submit" class="mt-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Generate Email</button>
-    </form>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Email Copy Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS styles remain the same for the visual appearance */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    <!-- Output Section -->
-    <div id="output" class="mt-8 bg-white p-6 rounded-lg shadow-md hidden">
-      <h2 class="text-xl font-semibold mb-4">Generated Email Copy</h2>
-      <pre id="emailOutput" class="bg-gray-50 p-4 rounded overflow-auto"></pre>
-      <button onclick="copyToClipboard()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Copy Markdown</button>
-      <button onclick="generateHtmlPreview()" class="mt-4 ml-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Generate HTML Preview</button>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .form-section {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .output-section {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #3498db;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        .email-output {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            flex-grow: 1;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .secondary-btn {
+            background: #95a5a6;
+        }
+
+        .secondary-btn:hover {
+            background: #7f8c8d;
+        }
+
+        .success-btn {
+            background: #2ecc71;
+        }
+
+        .success-btn:hover {
+            background: #27ae60;
+        }
+
+        .ai-tag {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI Email Copy Generator <span class="ai-tag">GPT Powered</span></h1>
+            <p class="subtitle">Generate professional email copy in seconds. Just fill out the form and let AI do the rest!</p>
+        </header>
+
+        <div class="main-content">
+            <div class="form-section">
+                <h2>Email Details</h2>
+                <form id="emailForm">
+                    <div class="form-group">
+                        <label for="theme">Campaign Theme *</label>
+                        <input type="text" id="theme" name="theme" placeholder="e.g., Cozy Winter Sale" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="promo">Promotion Details *</label>
+                        <input type="text" id="promo" name="promo" placeholder="e.g., 30% Off All Quilts" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duration">Promotion Duration *</label>
+                        <input type="text" id="duration" name="duration" placeholder="e.g., Ends Dec 5 at 11:59 PM" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tone">Email Tone *</label>
+                        <select id="tone" name="tone" required>
+                            <option value="">Select a tone</option>
+                            <option value="Warm and inviting">Warm and inviting</option>
+                            <option value="Urgent and fun">Urgent and fun</option>
+                            <option value="Professional">Professional</option>
+                            <option value="Casual and friendly">Casual and friendly</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="brand">Brand Name *</label>
+                        <input type="text" id="brand" name="brand" placeholder="e.g., Boho Blanket" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="audience">Target Audience *</label>
+                        <input type="text" id="audience" name="audience" placeholder="e.g., Quilting Enthusiasts" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="website">Website URL *</label>
+                        <input type="url" id="website" name="website" placeholder="e.g., https://bohoblanket.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="products">Featured Products (comma separated)</label>
+                        <input type="text" id="products" name="products" placeholder="e.g., Winter Quilt A, Cozy Fabric B">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="urgency">Urgency Level</label>
+                        <select id="urgency" name="urgency">
+                            <option value="High">High (e.g., Last Hours)</option>
+                            <option value="Medium" selected>Medium (e.g., Limited Time)</option>
+                            <option value="Low">Low (e.g., Gentle Reminder)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="social">Social Media Links (comma separated)</label>
+                        <input type="text" id="social" name="social" placeholder="e.g., FB: link1, IG: link2">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Physical Address *</label>
+                        <input type="text" id="address" name="address" placeholder="e.g., 123 Quilt St, Austin, TX" required>
+                    </div>
+
+                    <button type="submit" id="generateBtn">
+                        <i class="fas fa-robot"></i> Generate Email Copy
+                    </button>
+                </form>
+            </div>
+
+            <div class="output-section">
+                <h2>Generated Email</h2>
+
+                <div class="loading" id="loadingIndicator">
+                    <i class="fas fa-cog fa-spin"></i>
+                    <p>AI is generating your email content...</p>
+                </div>
+
+                <div class="email-output" id="emailOutput">
+                    <p style="color: #7f8c8d; text-align: center; padding: 40px 20px;">
+                        Your generated email will appear here after you fill out the form and click "Generate Email Copy"
+                    </p>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="secondary-btn" onclick="resetForm()">
+                        <i class="fas fa-redo"></i> Reset Form
+                    </button>
+                    <button class="success-btn" onclick="copyToClipboard()" id="copyBtn" disabled>
+                        <i class="fas fa-copy"></i> Copy to Clipboard
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <script>
-    // Simulated AI-generated email copy
-    function generateEmailCopy(data) {
-      const products = (data.products || 'Product A, Product B, Product C').split(',').map(p => p.trim());
-      const productGrid = products.map((p, i) => `[Image ${i + 1}: ${p}] - Link to ${p}'s product page`).join('\n');
-      const socialLinks = (data.social || 'Facebook: https://facebook.com, Instagram: https://instagram.com').split(',').map(s => s.trim().split(':')[0]).join('\n');
-      const urgencyText = {
-        High: 'Time’s Running Out! Grab Your Deal Now',
-        Medium: 'Cozy Up with Our Limited-Time Offer',
-        Low: 'A Special Deal Just for You'
-      }[data.urgency || 'Medium'];
+    <script>
+        document.getElementById('emailForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
 
-      // Dynamic copy based on tone
-      let greeting, bodyIntro, ctaText;
-      if (data.tone === 'Warm and inviting') {
-        greeting = `Dear ${data.audience.split(' ')[0]},`;
-        bodyIntro = `Get ready to wrap yourself in warmth this winter! Our ${data.theme} is here with ${data.promo}, but it’s only available until ${data.duration}.`;
-        ctaText = 'Snuggle Up & Save';
-      } else if (data.tone === 'Urgent and fun') {
-        greeting = `Hey ${data.audience.split(' ')[0]}!`;
-        bodyIntro = `Don’t wait—the ${data.theme} is almost over! Score ${data.promo} before it vanishes on ${data.duration}!`;
-        ctaText = 'Shop the Sale Now';
-      } else if (data.tone === 'Professional') {
-        greeting = `Hello ${data.audience.split(' ')[0]},`;
-        bodyIntro = `We’re pleased to offer ${data.promo} as part of our ${data.theme}. This exclusive promotion ends ${data.duration}.`;
-        ctaText = 'Explore the Offer';
-      } else {
-        greeting = `Hi ${data.audience.split(' ')[0]}!`;
-        bodyIntro = `Our ${data.theme} is live with ${data.promo}! Act fast—this deal ends ${data.duration}.`;
-        ctaText = 'Shop Now';
-      }
+            // Get form data
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
 
-      return `
-📩 Email Name: ${data.theme} Campaign
+            // Show loading indicator and disable buttons
+            document.getElementById('loadingIndicator').style.display = 'block';
+            document.getElementById('emailOutput').innerHTML = '';
+            document.getElementById('copyBtn').disabled = true;
 
-🎯 Purpose: Inspire purchases with a ${data.theme} promotion offering ${data.promo}.
+            try {
+                // Here's the key difference. Instead of a fixed template, we'll
+                // send a prompt to an AI model's API.
+                const prompt = `Create a ${data.tone} marketing email for ${data.brand} targeting ${data.audience}.
+                The email's theme is "${data.theme}".
+                The main promotion is: "${data.promo}".
+                The offer is valid until: "${data.duration}".
+                The email should have a ${data.urgency.toLowerCase()} sense of urgency.
+                ${data.products ? `Feature these specific products: ${data.products}.` : ''}
+                Include a clear call-to-action to visit the website at: ${data.website}.
+                The email footer should contain the physical address: ${data.address}.
+                ${data.social ? `Mention social media links and invite them to follow us: ${data.social}.` : ''}
+                
+                Generate a catchy subject line, a compelling body, and a professional closing.`;
 
-👥 Segment: ${data.audience}
+                // NOTE: This is where you would integrate with an actual AI API.
+                // For this example, we'll use a placeholder function.
+                const generatedContent = await generateEmailWithAI(prompt);
 
-✅ Subject Line: ${urgencyText}! ${data.theme} Ends Soon ❄️
+                // Hide loading and display the new content
+                document.getElementById('loadingIndicator').style.display = 'none';
+                document.getElementById('emailOutput').textContent = generatedContent;
+                document.getElementById('copyBtn').disabled = false;
+                document.getElementById('emailOutput').scrollIntoView({ behavior: 'smooth' });
 
-💬 Preview Text: Warm up with ${data.promo}—hurry, offer ends ${data.duration}!
+            } catch (error) {
+                console.error("Error generating email:", error);
+                document.getElementById('loadingIndicator').style.display = 'none';
+                document.getElementById('emailOutput').textContent = 'An error occurred. Please try again.';
+            }
+        });
 
-🧵 Header:
+        // Placeholder for a real AI API call
+        async function generateEmailWithAI(prompt) {
+            // In a real application, you would replace this with a fetch() call
+            // to an AI service like Google's Gemini API, OpenAI's API, or another LLM.
+            // Example structure:
+            // const response = await fetch('YOUR_API_ENDPOINT', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ prompt: prompt })
+            // });
+            // const data = await response.json();
+            // return data.generatedText;
 
-[${data.brand} Logo]
+            // For now, we'll simulate a dynamic, but randomized response
+            // to show how it would be different each time.
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    const creativeSubject = `Exclusive Offer: Your ${Math.floor(Math.random() * 50) + 1} reasons to love our ${getCreativeWord()}`;
+                    const creativeBody = `Hello,
+Dive into comfort with our new ${getCreativeWord()} collection! Our ${data.theme} is officially underway, and we're excited to offer you ${data.promo} for a limited time. Don't miss out on these cozy additions!
 
-[Link to website: ${data.website}]
+This amazing offer ${data.duration}, so now is the perfect time to find your new favorite. Whether you're a long-time enthusiast or just getting started, our products are crafted with you in mind.
 
-✍️ Body Copy:
-${urgencyText}
-(Header Image: A cozy winter scene with quilts and text like "${urgencyText.toUpperCase()}!")
+${data.products ? `Explore our featured items like ${data.products}.` : `Discover a world of quality on our site.`}
 
-${greeting}
+Click here to shop and save: ${data.website}
 
-${bodyIntro} Use code ${data.promo.replace(/[^A-Z0-9]/gi, '').slice(0, 8).toUpperCase()} to save big. Perfect for your next quilting project or a cozy gift!
+Stay connected with us! You can also find us on social media:
+${data.social || 'Check out our blog for inspiration!'}
 
-Explore Our Favorites:
-(Image grid showcasing top picks for ${data.theme}.)
+From our team to you, thank you for your continued support.
 
-${productGrid}
-
-Don’t Miss Out
-Visit our site, add your favorites to your cart, and apply the code before it’s gone!
-
-🛍️ CTA Button:
-
-Text: ${ctaText}
-
-Link: [${data.website}/${data.theme.toLowerCase().replace(/\s/g, '-')}-sale]
-
-📝 Footer Note:
-Warm Wishes,
+Warmly,
 The ${data.brand} Team
+${data.address}`;
+                    resolve(`Subject: ${creativeSubject}\n\n${creativeBody}`);
+                }, 1500); // Simulate network latency
+            });
+        }
+        
+        // Helper function for a bit of dynamic fun
+        function getCreativeWord() {
+            const words = ['ultimate', 'stunning', 'must-have', 'delightful', 'charming', 'timeless'];
+            return words[Math.floor(Math.random() * words.length)];
+        }
 
-Social Media Links:
 
-${socialLinks}
+        // Reusable functions for copying and resetting
+        function copyToClipboard() {
+            const emailOutput = document.getElementById('emailOutput').textContent;
+            navigator.clipboard.writeText(emailOutput).then(() => {
+                const copyBtn = document.getElementById('copyBtn');
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                copyBtn.style.background = '#27ae60';
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                    copyBtn.style.background = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                alert('Failed to copy text. Please try again.');
+            });
+        }
 
-Website Link: ${data.website}
-
-Unsubscribe Link: (placeholder)
-
-Physical Address: ${data.address}
-      `;
-    }
-
-    // HTML generation for preview
-    function generateHtml(data, products, urgencyText, ctaText) {
-      const productGridHtml = products.map((p, i) => `
-        <td style="text-align: center;">
-          <a href="${data.website}/products/${p.toLowerCase().replace(/\s/g, '-')}">
-            <img src="${data.website}/${p.toLowerCase().replace(/\s/g, '-')}.jpg" alt="${p}" style="max-width: 150px;">
-            <p>${p}</p>
-          </a>
-        </td>`).join('');
-
-      return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>${data.theme} Email</title>
-</head>
-<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4; padding: 20px;">
-    <tr>
-      <td align="center">
-        <table width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden;">
-          <tr>
-            <td style="text-align: center; padding: 20px;">
-              <a href="${data.website}">
-                <img src="${data.website}/logo.png" alt="${data.brand} Logo" style="max-width: 150px;">
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td style="text-align: center;">
-              <img src="${data.website}/hero-${data.theme.toLowerCase().replace(/\s/g, '-')}.jpg" alt="${urgencyText}" style="width: 100%; max-width: 600px;">
-              <h1 style="font-size: 24px; color: #333; margin: 20px 0;">${urgencyText}</h1>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 20px; color: #333; font-size: 16px; line-height: 1.6;">
-              <p>${data.tone === 'Warm and inviting' ? 'Dear' : data.tone === 'Professional' ? 'Hello' : 'Hi'} ${data.audience.split(' ')[0]},</p>
-              <p>${data.tone === 'Warm and inviting' ? `Get ready to wrap yourself in warmth this winter! Our ${data.theme} is here with ${data.promo}, but it’s only available until ${data.duration}.` : data.tone === 'Urgent and fun' ? `Don’t wait—the ${data.theme} is almost over! Score ${data.promo} before it vanishes on ${data.duration}!` : data.tone === 'Professional' ? `We’re pleased to offer ${data.promo} as part of our ${data.theme}. This exclusive promotion ends ${data.duration}.` : `Our ${data.theme} is live with ${data.promo}! Act fast—this deal ends ${data.duration}.`}</p>
-              <p>Use code <strong>${data.promo.replace(/[^A-Z0-9]/gi, '').slice(0, 8).toUpperCase()}</strong> to save big. Perfect for your next quilting project or a cozy gift!</p>
-              <h2 style="font-size: 20px; color: #333; margin: 20px 0;">Explore Our Favorites:</h2>
-              <table width="100%" cellpadding="10" cellspacing="0">
-                <tr>${productGridHtml}</tr>
-              </table>
-              <p style="margin: 20px 0;">Don’t miss out! Visit our site, add your favorites to your cart, and apply the code before it’s gone!</p>
-              <p style="text-align: center;">
-                <a href="${data.website}/${data.theme.toLowerCase().replace(/\s/g, '-')}-sale" style="display: inline-block; background-color: #2563eb; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-size: 16px;">${ctaText}</a>
-              </p>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 20px; background-color: #f4f4f4; text-align: center; color: #666; font-size: 14px;">
-              <p>Warm Wishes,<br>The ${data.brand} Team</p>
-              <p>${data.social.split(',').map(s => `<a href="${s.split(':')[1].trim()}" style="color: #2563eb; text-decoration: none; margin: 0 10px;">${s.split(':')[0].trim()}</a>`).join(' | ')}</p>
-              <p><a href="${data.website}" style="color: #2563eb; text-decoration: none;">${data.website}</a></p>
-              <p><a href="#" style="color: #2563eb; text-decoration: none;">Unsubscribe</a></p>
-              <p>${data.address}</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>
-      `;
-    }
-
-    // Form submission handler
-    document.getElementById('emailForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      const formData = new FormData(event.target);
-      const data = Object.fromEntries(formData);
-
-      // Generate email copy
-      const emailCopy = generateEmailCopy(data);
-
-      // Display output
-      const outputDiv = document.getElementById('output');
-      const emailOutput = document.getElementById('emailOutput');
-      emailOutput.textContent = emailCopy;
-      outputDiv.classList.remove('hidden');
-    });
-
-    // Generate HTML preview
-    function generateHtmlPreview() {
-      const formData = new FormData(document.getElementById('emailForm'));
-      const data = Object.fromEntries(formData);
-      const products = (data.products || 'Product A, Product B, Product C').split(',').map(p => p.trim());
-      const urgencyText = {
-        High: 'Time’s Running Out! Grab Your Deal Now',
-        Medium: 'Cozy Up with Our Limited-Time Offer',
-        Low: 'A Special Deal Just for You'
-      }[data.urgency || 'Medium'];
-      const ctaText = data.tone === 'Warm and inviting' ? 'Snuggle Up & Save' : data.tone === 'Urgent and fun' ? 'Shop the Sale Now' : data.tone === 'Professional' ? 'Explore the Offer' : 'Shop Now';
-
-      const htmlOutput = generateHtml(data, products, urgencyText, ctaText);
-
-      const outputDiv = document.getElementById('output');
-      outputDiv.innerHTML = `
-        <h2 class="text-xl font-semibold mb-4">Generated Email Copy</h2>
-        <h3 class="text-lg font-medium mb-2">Markdown</h3>
-        <pre id="emailOutput" class="bg-gray-50 p-4 rounded overflow-auto">${generateEmailCopy(data)}</pre>
-        <h3 class="text-lg font-medium mb-2 mt-4">HTML Preview</h3>
-        <iframe srcdoc="${htmlOutput.replace(/"/g, '&quot;')}" style="width: 100%; height: 500px; border: 1px solid #ccc; border-radius: 4px;"></iframe>
-        <button onclick="copyToClipboard()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Copy Markdown</button>
-        <button onclick="copyToClipboardHtml()" class="mt-4 ml-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Copy HTML</button>
-      `;
-    }
-
-    // Copy Markdown to clipboard
-    function copyToClipboard() {
-      const emailOutput = document.getElementById('emailOutput').textContent;
-      navigator.clipboard.writeText(emailOutput).then(() => {
-        alert('Markdown copied to clipboard!');
-      });
-    }
-
-    // Copy HTML to clipboard
-    function copyToClipboardHtml() {
-      const formData = new FormData(document.getElementById('emailForm'));
-      const data = Object.fromEntries(formData);
-      const products = (data.products || 'Product A, Product B, Product C').split(',').map(p => p.trim());
-      const urgencyText = {
-        High: 'Time’s Running Out! Grab Your Deal Now',
-        Medium: 'Cozy Up with Our Limited-Time Offer',
-        Low: 'A Special Deal Just for You'
-      }[data.urgency || 'Medium'];
-      const ctaText = data.tone === 'Warm and inviting' ? 'Snuggle Up & Save' : data.tone === 'Urgent and fun' ? 'Shop the Sale Now' : data.tone === 'Professional' ? 'Explore the Offer' : 'Shop Now';
-
-      const htmlOutput = generateHtml(data, products, urgencyText, ctaText);
-      navigator.clipboard.writeText(htmlOutput).then(() => {
-        alert('HTML copied to clipboard!');
-      });
-    }
-  </script>
+        function resetForm() {
+            document.getElementById('emailForm').reset();
+            document.getElementById('emailOutput').innerHTML = '<p style="color: #7f8c8d; text-align: center; padding: 40px 20px;">Your generated email will appear here after you fill out the form and click "Generate Email Copy"</p>';
+            document.getElementById('copyBtn').disabled = true;
+        }
+    </script>
 </body>
 </html>

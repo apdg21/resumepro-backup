@@ -6,13 +6,14 @@
     <title>AI Email Copy Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* CSS styles remain the same for the visual appearance */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             color: #333;
@@ -20,37 +21,37 @@
             padding: 20px;
             min-height: 100vh;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         header {
             text-align: center;
             margin-bottom: 30px;
             padding: 20px;
         }
-        
+
         h1 {
             font-size: 2.5rem;
             color: #2c3e50;
             margin-bottom: 10px;
         }
-        
+
         .subtitle {
             font-size: 1.2rem;
             color: #7f8c8d;
             max-width: 800px;
             margin: 0 auto;
         }
-        
+
         .main-content {
             display: flex;
             gap: 30px;
             flex-wrap: wrap;
         }
-        
+
         .form-section {
             flex: 1;
             min-width: 300px;
@@ -59,7 +60,7 @@
             padding: 25px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
-        
+
         .output-section {
             flex: 1;
             min-width: 300px;
@@ -70,7 +71,7 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         h2 {
             font-size: 1.8rem;
             color: #3498db;
@@ -78,18 +79,18 @@
             padding-bottom: 10px;
             border-bottom: 2px solid #eee;
         }
-        
+
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
             color: #2c3e50;
         }
-        
+
         input, select, textarea {
             width: 100%;
             padding: 12px 15px;
@@ -98,13 +99,13 @@
             font-size: 16px;
             transition: border-color 0.3s;
         }
-        
+
         input:focus, select:focus, textarea:focus {
             border-color: #3498db;
             outline: none;
             box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
         }
-        
+
         button {
             background: #3498db;
             color: white;
@@ -117,11 +118,11 @@
             transition: background 0.3s;
             width: 100%;
         }
-        
+
         button:hover {
             background: #2980b9;
         }
-        
+
         .email-output {
             background: #f8f9fa;
             border-radius: 8px;
@@ -132,29 +133,29 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
         }
-        
+
         .action-buttons {
             display: flex;
             gap: 10px;
             margin-top: 20px;
         }
-        
+
         .secondary-btn {
             background: #95a5a6;
         }
-        
+
         .secondary-btn:hover {
             background: #7f8c8d;
         }
-        
+
         .success-btn {
             background: #2ecc71;
         }
-        
+
         .success-btn:hover {
             background: #27ae60;
         }
-        
+
         .ai-tag {
             display: inline-block;
             background: #3498db;
@@ -165,45 +166,23 @@
             margin-left: 10px;
             vertical-align: middle;
         }
-        
+
         @media (max-width: 768px) {
             .main-content {
                 flex-direction: column;
             }
         }
-        
+
         .loading {
             display: none;
             text-align: center;
             padding: 20px;
         }
-        
+
         .loading i {
             font-size: 2rem;
             color: #3498db;
             margin-bottom: 10px;
-        }
-        
-        .email-template {
-            border-left: 4px solid #3498db;
-            padding-left: 15px;
-            margin: 15px 0;
-        }
-        
-        .email-subject {
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
-        
-        .prompt-info {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: #7f8c8d;
         }
     </style>
 </head>
@@ -213,7 +192,7 @@
             <h1>AI Email Copy Generator <span class="ai-tag">GPT Powered</span></h1>
             <p class="subtitle">Generate professional email copy in seconds. Just fill out the form and let AI do the rest!</p>
         </header>
-        
+
         <div class="main-content">
             <div class="form-section">
                 <h2>Email Details</h2>
@@ -222,17 +201,17 @@
                         <label for="theme">Campaign Theme *</label>
                         <input type="text" id="theme" name="theme" placeholder="e.g., Cozy Winter Sale" required>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="promo">Promotion Details *</label>
                         <input type="text" id="promo" name="promo" placeholder="e.g., 30% Off All Quilts" required>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="duration">Promotion Duration *</label>
                         <input type="text" id="duration" name="duration" placeholder="e.g., Ends Dec 5 at 11:59 PM" required>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="tone">Email Tone *</label>
                         <select id="tone" name="tone" required>
@@ -241,31 +220,29 @@
                             <option value="Urgent and fun">Urgent and fun</option>
                             <option value="Professional">Professional</option>
                             <option value="Casual and friendly">Casual and friendly</option>
-                            <option value="Exciting and energetic">Exciting and energetic</option>
-                            <option value="Formal and corporate">Formal and corporate</option>
                         </select>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="brand">Brand Name *</label>
                         <input type="text" id="brand" name="brand" placeholder="e.g., Boho Blanket" required>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="audience">Target Audience *</label>
                         <input type="text" id="audience" name="audience" placeholder="e.g., Quilting Enthusiasts" required>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="website">Website URL *</label>
                         <input type="url" id="website" name="website" placeholder="e.g., https://bohoblanket.com" required>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="products">Featured Products (comma separated)</label>
                         <input type="text" id="products" name="products" placeholder="e.g., Winter Quilt A, Cozy Fabric B">
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="urgency">Urgency Level</label>
                         <select id="urgency" name="urgency">
@@ -274,41 +251,37 @@
                             <option value="Low">Low (e.g., Gentle Reminder)</option>
                         </select>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="social">Social Media Links (comma separated)</label>
                         <input type="text" id="social" name="social" placeholder="e.g., FB: link1, IG: link2">
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="address">Physical Address *</label>
                         <input type="text" id="address" name="address" placeholder="e.g., 123 Quilt St, Austin, TX" required>
                     </div>
-                    
+
                     <button type="submit" id="generateBtn">
                         <i class="fas fa-robot"></i> Generate Email Copy
                     </button>
                 </form>
-                
-                <div class="prompt-info">
-                    <p><strong>How it works:</strong> The AI analyzes your inputs and creates a unique email structure and copy tailored to your specific needs. Each generation will be different based on your inputs.</p>
-                </div>
             </div>
-            
+
             <div class="output-section">
-                <h2>AI-Generated Email</h2>
-                
+                <h2>Generated Email</h2>
+
                 <div class="loading" id="loadingIndicator">
                     <i class="fas fa-cog fa-spin"></i>
                     <p>AI is generating your email content...</p>
                 </div>
-                
+
                 <div class="email-output" id="emailOutput">
                     <p style="color: #7f8c8d; text-align: center; padding: 40px 20px;">
-                        Your AI-generated email will appear here after you fill out the form and click "Generate Email Copy"
+                        Your generated email will appear here after you fill out the form and click "Generate Email Copy"
                     </p>
                 </div>
-                
+
                 <div class="action-buttons">
                     <button class="secondary-btn" onclick="resetForm()">
                         <i class="fas fa-redo"></i> Reset Form
@@ -316,282 +289,54 @@
                     <button class="success-btn" onclick="copyToClipboard()" id="copyBtn" disabled>
                         <i class="fas fa-copy"></i> Copy to Clipboard
                     </button>
-                    <button class="success-btn" onclick="regenerateEmail()" id="regenerateBtn" disabled>
-                        <i class="fas fa-sync"></i> Regenerate
-                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let currentData = null;
-        
         document.getElementById('emailForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            
-            const formData = new FormData(event.target);
-            currentData = Object.fromEntries(formData);
-            
-            // Show loading indicator
-            document.getElementById('loadingIndicator').style.display = 'block';
-            document.getElementById('emailOutput').innerHTML = '';
-            document.getElementById('copyBtn').disabled = true;
-            document.getElementById('regenerateBtn').disabled = true;
-            
-            // Simulate API call delay
-            setTimeout(() => {
-                generateEmailCopy(currentData);
-            }, 1500);
+    event.preventDefault();
+    
+    // Get form data
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData);
+    
+    // Show loading indicator
+    document.getElementById('loadingIndicator').style.display = 'block';
+    document.getElementById('emailOutput').innerHTML = '';
+    document.getElementById('copyBtn').disabled = true;
+
+    try {
+        // REPLACE THIS URL with your deployed Google Apps Script URL
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycby0inO-djvi6FPaUNWcR-wOj79ERWIivIjQvAHrQOdxqS5Z_eR6hrA4eSvGNjexfsBI/exec'; 
+
+        const response = await fetch(scriptUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8',
+            },
+            body: JSON.stringify(data)
         });
-        
-        function generateEmailCopy(data) {
-            // Create a prompt for the AI
-            const prompt = `Create a ${data.tone} marketing email for ${data.brand} targeting ${data.audience}.
-            Theme: ${data.theme}
-            Promotion: ${data.promo}
-            Duration: ${data.duration}
-            Urgency: ${data.urgency}
-            Products: ${data.products || 'Not specified'}
-            Website: ${data.website}
-            Social: ${data.social || 'Not specified'}
-            Address: ${data.address}
-            
-            Generate a complete email with subject line, body, and footer.`;
-            
-            // Simulate different AI responses based on inputs
-            const templates = [
-                generateTemplate1,
-                generateTemplate2,
-                generateTemplate3,
-                generateTemplate4,
-                generateTemplate5
-            ];
-            
-            // Select a random template
-            const randomTemplate = templates[Math.floor(Math.random() * templates.length)];
-            const emailContent = randomTemplate(data);
-            
-            // Hide loading indicator and show content
-            document.getElementById('loadingIndicator').style.display = 'none';
-            document.getElementById('emailOutput').innerHTML = emailContent;
-            document.getElementById('copyBtn').disabled = false;
-            document.getElementById('regenerateBtn').disabled = false;
-            
-            // Scroll to output
-            document.getElementById('emailOutput').scrollIntoView({ behavior: 'smooth' });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
-        
-        function generateTemplate1(data) {
-            return `
-            <div class="email-template">
-                <div class="email-subject">Subject: You're Invited to Our ${data.theme}!</div>
-                
-                <p>Hello ${data.audience},</p>
-                
-                <p>We have something special just for you! As part of our ${data.theme}, we're offering ${data.promo}.</p>
-                
-                <p>This exclusive offer is available until ${data.duration}, so make sure to take advantage while you can!</p>
-                
-                ${data.products ? `<p>Featured products in this promotion:<br>
-                ${data.products.split(',').map(product => `• ${product.trim()}`).join('<br>')}</p>` : ''}
-                
-                <p>${data.urgency === 'High' ? '🚨 This is your final chance to save! The offer expires soon!' : 
-                data.urgency === 'Medium' ? '⏳ Limited time offer - shop now before stocks run out!' :
-                'Take your time browsing our collection, but remember this offer is for a limited time!'}</p>
-                
-                <p><strong><a href="${data.website}">Shop Now →</a></strong></p>
-                
-                ${data.social ? `<p>Follow us for more updates:<br>
-                ${data.social.split(',').map(social => `• ${social.trim()}`).join('<br>')}</p>` : ''}
-                
-                <p>Visit us in store:<br>
-                ${data.address}</p>
-                
-                <p>Thank you for your continued support!</p>
-                
-                <p>Best regards,<br>
-                The ${data.brand} Team</p>
-            </div>
-            `;
-        }
-        
-        function generateTemplate2(data) {
-            return `
-            <div class="email-template">
-                <div class="email-subject">Subject: ${data.theme} - Don't Miss Out!</div>
-                
-                <p>Dear ${data.audience},</p>
-                
-                <p>We're reaching out to let you know about our exciting ${data.theme} event! For a limited time, enjoy ${data.promo}.</p>
-                
-                <p>This special promotion ends on ${data.duration}, so now is the perfect time to shop.</p>
-                
-                ${data.products ? `<p>Check out these featured items:<br>
-                ${data.products.split(',').map(product => `✨ ${product.trim()}`).join('<br>')}</p>` : ''}
-                
-                <p>${data.urgency === 'High' ? '⏰ Final hours to save! This offer disappears soon!' : 
-                data.urgency === 'Medium' ? '🔔 Limited availability - act now!' :
-                'We wanted to make sure you knew about this special opportunity!'}</p>
-                
-                <p><strong><a href="${data.website}">Explore the Sale →</a></strong></p>
-                
-                ${data.social ? `<p>Stay connected with us:<br>
-                ${data.social.split(',').map(social => `🔗 ${social.trim()}`).join('<br>')}</p>` : ''}
-                
-                <p>Come visit our store:<br>
-                ${data.address}</p>
-                
-                <p>We appreciate your business!</p>
-                
-                <p>Warmly,<br>
-                The ${data.brand} Team</p>
-            </div>
-            `;
-        }
-        
-        function generateTemplate3(data) {
-            return `
-            <div class="email-template">
-                <div class="email-subject">Subject: Special Invitation: ${data.theme}</div>
-                
-                <p>Hi there,</p>
-                
-                <p>As a valued ${data.audience}, we wanted you to be among the first to know about our ${data.theme}!</p>
-                
-                <p>We're offering ${data.promo} until ${data.duration}.</p>
-                
-                ${data.products ? `<p>Don't miss these standout products:<br>
-                ${data.products.split(',').map(product => `🌟 ${product.trim()}`).join('<br>')}</p>` : ''}
-                
-                <p>${data.urgency === 'High' ? '❗ Last chance! This offer ends imminently!' : 
-                data.urgency === 'Medium' ? '📣 Limited time only - shop now!' :
-                'This special offer is available for a limited time!'}</p>
-                
-                <p><strong><a href="${data.website}">View Offers →</a></strong></p>
-                
-                ${data.social ? `<p>Follow us for more news:<br>
-                ${data.social.split(',').map(social => `🌐 ${social.trim()}`).join('<br>')}</p>` : ''}
-                
-                <p>Our store location:<br>
-                ${data.address}</p>
-                
-                <p>Thank you for choosing ${data.brand}!</p>
-                
-                <p>Sincerely,<br>
-                The ${data.brand} Team</p>
-            </div>
-            `;
-        }
-        
-        function generateTemplate4(data) {
-            return `
-            <div class="email-template">
-                <div class="email-subject">Subject: It's Here: ${data.theme}!</div>
-                
-                <p>Greetings ${data.audience},</p>
-                
-                <p>The moment you've been waiting for is here! Our ${data.theme} has begun, featuring ${data.promo}.</p>
-                
-                <p>But hurry - this special offer is only available until ${data.duration}!</p>
-                
-                ${data.products ? `<p>Featured highlights:<br>
-                ${data.products.split(',').map(product => `🎯 ${product.trim()}`).join('<br>')}</p>` : ''}
-                
-                <p>${data.urgency === 'High' ? '🔥 Final hours! Offer ending soon!' : 
-                data.urgency === 'Medium' ? '⌛ Time is running out - shop now!' :
-                'We hope you enjoy these special savings!'}</p>
-                
-                <p><strong><a href="${data.website}">Start Shopping →</a></strong></p>
-                
-                ${data.social ? `<p>Join our community:<br>
-                ${data.social.split(',').map(social => `📱 ${social.trim()}`).join('<br>')}</p>` : ''}
-                
-                <p>Visit us at:<br>
-                ${data.address}</p>
-                
-                <p>We're grateful for your support!</p>
-                
-                <p>Cheers,<br>
-                The ${data.brand} Team</p>
-            </div>
-            `;
-        }
-        
-        function generateTemplate5(data) {
-            return `
-            <div class="email-template">
-                <div class="email-subject">Subject: Exclusive Offer: ${data.theme}</div>
-                
-                <p>Good day,</p>
-                
-                <p>We're excited to present our ${data.theme}, exclusively for our valued customers like you!</p>
-                
-                <p>For a limited time, enjoy ${data.promo}. This special offer ends on ${data.duration}.</p>
-                
-                ${data.products ? `<p>Featured selections:<br>
-                ${data.products.split(',').map(product => `✔️ ${product.trim()}`).join('<br>')}</p>` : ''}
-                
-                <p>${data.urgency === 'High' ? '🚀 Act now! This offer expires shortly!' : 
-                data.urgency === 'Medium' ? '📆 Limited time promotion - don't miss out!' :
-                'We thought you might appreciate this special offer!'}</p>
-                
-                <p><strong><a href="${data.website}">Discover Deals →</a></strong></p>
-                
-                ${data.social ? `<p>Connect with us:<br>
-                ${data.social.split(',').map(social => `💬 ${social.trim()}`).join('<br>')}</p>` : ''}
-                
-                <p>Find us at:<br>
-                ${data.address}</p>
-                
-                <p>Thank you for being part of the ${data.brand} family!</p>
-                
-                <p>With appreciation,<br>
-                The ${data.brand} Team</p>
-            </div>
-            `;
-        }
-        
-        function copyToClipboard() {
-            const emailOutput = document.getElementById('emailOutput').textContent;
-            navigator.clipboard.writeText(emailOutput).then(() => {
-                // Show copied feedback
-                const copyBtn = document.getElementById('copyBtn');
-                const originalText = copyBtn.innerHTML;
-                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                copyBtn.style.background = '#27ae60';
-                
-                setTimeout(() => {
-                    copyBtn.innerHTML = originalText;
-                    copyBtn.style.background = '';
-                }, 2000);
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
-                alert('Failed to copy text. Please try again.');
-            });
-        }
-        
-        function resetForm() {
-            document.getElementById('emailForm').reset();
-            document.getElementById('emailOutput').innerHTML = '<p style="color: #7f8c8d; text-align: center; padding: 40px 20px;">Your AI-generated email will appear here after you fill out the form and click "Generate Email Copy"</p>';
-            document.getElementById('copyBtn').disabled = true;
-            document.getElementById('regenerateBtn').disabled = true;
-            currentData = null;
-        }
-        
-        function regenerateEmail() {
-            if (currentData) {
-                // Show loading indicator
-                document.getElementById('loadingIndicator').style.display = 'block';
-                document.getElementById('emailOutput').innerHTML = '';
-                document.getElementById('copyBtn').disabled = true;
-                
-                // Simulate API call delay
-                setTimeout(() => {
-                    generateEmailCopy(currentData);
-                }, 1000);
-            }
-        }
+
+        const generatedContent = await response.text();
+
+        // Hide loading and display the new content
+        document.getElementById('loadingIndicator').style.display = 'none';
+        document.getElementById('emailOutput').textContent = generatedContent;
+        document.getElementById('copyBtn').disabled = false;
+        document.getElementById('emailOutput').scrollIntoView({ behavior: 'smooth' });
+
+    } catch (error) {
+        console.error("Error generating email:", error);
+        document.getElementById('loadingIndicator').style.display = 'none';
+        document.getElementById('emailOutput').textContent = 'An error occurred. Please try again.';
+    }
+});
     </script>
 </body>
 </html>

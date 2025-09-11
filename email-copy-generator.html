@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Email Copy Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <div class="container mx-auto p-6 max-w-4xl">
+    <h1 class="text-3xl font-bold text-center mb-6">Dynamic Email Copy Generator</h1>
+    
+    <!-- Form Section -->
+    <form id="emailForm" class="bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold mb-4">Enter Email Details</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="theme" class="block text-sm font-medium text-gray-700">Theme</label>
+          <input type="text" id="theme" name="theme" class="mt-1 p-2 w-full border rounded" placeholder="e.g., Cozy Winter Sale" required>
+        </div>
+        <div>
+          <label for="promo" class="block text-sm font-medium text-gray-700">Promo Details</label>
+          <input type="text" id="promo" name="promo" class="mt-1 p-2 w-full border rounded" placeholder="e.g., 30% Off All Quilts" required>
+        </div>
+        <div>
+          <label for="duration" class="block text-sm font-medium text-gray-700">Promo Duration</label>
+          <input type="text" id="duration" name="duration" class="mt-1 p-2 w-full border rounded" placeholder="e.g., Ends Dec 5 at 11:59 PM" required>
+        </div>
+        <div>
+          <label for="tone" class="block text-sm font-medium text-gray-700">Tone</label>
+          <select id="tone" name="tone" class="mt-1 p-2 w-full border rounded" required>
+            <option value="Warm and inviting">Warm and inviting</option>
+            <option value="Urgent and fun">Urgent and fun</option>
+            <option value="Professional">Professional</option>
+            <option value="Casual and friendly">Casual and friendly</option>
+          </select>
+        </div>
+        <div>
+          <label for="brand" class="block text-sm font-medium text-gray-700">Brand Name</label>
+          <input type="text" id="brand" name="brand" class="mt-1 p-2 w-full border rounded" placeholder="e.g., Boho Blanket" required>
+        </div>
+        <div>
+          <label for="audience" class="block text-sm font-medium text-gray-700">Target Audience</label>
+          <input type="text" id="audience" name="audience" class="mt-1 p-2 w-full border rounded" placeholder="e.g., Quilting Enthusiasts" required>
+        </div>
+        <div>
+          <label for="website" class="block text-sm font-medium text-gray-700">Website URL</label>
+          <input type="url" id="website" name="website" class="mt-1 p-2 w-full border rounded" placeholder="e.g., https://bohoblanket.com" required>
+        </div>
+        <div>
+          <label for="products" class="block text-sm font-medium text-gray-700">Featured Products (comma-separated)</label>
+          <input type="text" id="products" name="products" class="mt-1 p-2 w-full border rounded" placeholder="e.g., Winter Quilt A, Cozy Fabric B, Snowflake Pattern C">
+        </div>
+        <div>
+          <label for="urgency" class="block text-sm font-medium text-gray-700">Urgency Level</label>
+          <select id="urgency" name="urgency" class="mt-1 p-2 w-full border rounded">
+            <option value="High">High (e.g., Last Hours)</option>
+            <option value="Medium">Medium (e.g., Limited Time)</option>
+            <option value="Low">Low (e.g., Gentle Reminder)</option>
+          </select>
+        </div>
+        <div>
+          <label for="social" class="block text-sm font-medium text-gray-700">Social Links (comma-separated)</label>
+          <input type="text" id="social" name="social" class="mt-1 p-2 w-full border rounded" placeholder="e.g., FB: link1, IG: link2">
+        </div>
+        <div>
+          <label for="address" class="block text-sm font-medium text-gray-700">Physical Address</label>
+          <input type="text" id="address" name="address" class="mt-1 p-2 w-full border rounded" placeholder="e.g., 123 Quilt St, Austin, TX" required>
+        </div>
+      </div>
+      <button type="submit" class="mt-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Generate Email</button>
+    </form>
+
+    <!-- Output Section -->
+    <div id="output" class="mt-8 bg-white p-6 rounded-lg shadow-md hidden">
+      <h2 class="text-xl font-semibold mb-4">Generated Email Copy</h2>
+      <pre id="emailOutput" class="bg-gray-50 p-4 rounded overflow-auto"></pre>
+      <button onclick="copyToClipboard()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Copy Markdown</button>
+      <button onclick="generateHtmlPreview()" class="mt-4 ml-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Generate HTML Preview</button>
+    </div>
+  </div>
+
+  <script>
+    // Simulated AI-generated email copy
+    function generateEmailCopy(data) {
+      const products = (data.products || 'Product A, Product B, Product C').split(',').map(p => p.trim());
+      const productGrid = products.map((p, i) => `[Image ${i + 1}: ${p}] - Link to ${p}'s product page`).join('\n');
+      const socialLinks = (data.social || 'Facebook: https://facebook.com, Instagram: https://instagram.com').split(',').map(s => s.trim().split(':')[0]).join('\n');
+      const urgencyText = {
+        High: 'Time’s Running Out! Grab Your Deal Now',
+        Medium: 'Cozy Up with Our Limited-Time Offer',
+        Low: 'A Special Deal Just for You'
+      }[data.urgency || 'Medium'];
+
+      // Dynamic copy based on tone
+      let greeting, bodyIntro, ctaText;
+      if (data.tone === 'Warm and inviting') {
+        greeting = `Dear ${data.audience.split(' ')[0]},`;
+        bodyIntro = `Get ready to wrap yourself in warmth this winter! Our ${data.theme} is here with ${data.promo}, but it’s only available until ${data.duration}.`;
+        ctaText = 'Snuggle Up & Save';
+      } else if (data.tone === 'Urgent and fun') {
+        greeting = `Hey ${data.audience.split(' ')[0]}!`;
+        bodyIntro = `Don’t wait—the ${data.theme} is almost over! Score ${data.promo} before it vanishes on ${data.duration}!`;
+        ctaText = 'Shop the Sale Now';
+      } else if (data.tone === 'Professional') {
+        greeting = `Hello ${data.audience.split(' ')[0]},`;
+        bodyIntro = `We’re pleased to offer ${data.promo} as part of our ${data.theme}. This exclusive promotion ends ${data.duration}.`;
+        ctaText = 'Explore the Offer';
+      } else {
+        greeting = `Hi ${data.audience.split(' ')[0]}!`;
+        bodyIntro = `Our ${data.theme} is live with ${data.promo}! Act fast—this deal ends ${data.duration}.`;
+        ctaText = 'Shop Now';
+      }
+
+      return `
+📩 Email Name: ${data.theme} Campaign
+
+🎯 Purpose: Inspire purchases with a ${data.theme} promotion offering ${data.promo}.
+
+👥 Segment: ${data.audience}
+
+✅ Subject Line: ${urgencyText}! ${data.theme} Ends Soon ❄️
+
+💬 Preview Text: Warm up with ${data.promo}—hurry, offer ends ${data.duration}!
+
+🧵 Header:
+
+[${data.brand} Logo]
+
+[Link to website: ${data.website}]
+
+✍️ Body Copy:
+${urgencyText}
+(Header Image: A cozy winter scene with quilts and text like "${urgencyText.toUpperCase()}!")
+
+${greeting}
+
+${bodyIntro} Use code ${data.promo.replace(/[^A-Z0-9]/gi, '').slice(0, 8).toUpperCase()} to save big. Perfect for your next quilting project or a cozy gift!
+
+Explore Our Favorites:
+(Image grid showcasing top picks for ${data.theme}.)
+
+${productGrid}
+
+Don’t Miss Out
+Visit our site, add your favorites to your cart, and apply the code before it’s gone!
+
+🛍️ CTA Button:
+
+Text: ${ctaText}
+
+Link: [${data.website}/${data.theme.toLowerCase().replace(/\s/g, '-')}-sale]
+
+📝 Footer Note:
+Warm Wishes,
+The ${data.brand} Team
+
+Social Media Links:
+
+${socialLinks}
+
+Website Link: ${data.website}
+
+Unsubscribe Link: (placeholder)
+
+Physical Address: ${data.address}
+      `;
+    }
+
+    // HTML generation for preview
+    function generateHtml(data, products, urgencyText, ctaText) {
+      const productGridHtml = products.map((p, i) => `
+        <td style="text-align: center;">
+          <a href="${data.website}/products/${p.toLowerCase().replace(/\s/g, '-')}">
+            <img src="${data.website}/${p.toLowerCase().replace(/\s/g, '-')}.jpg" alt="${p}" style="max-width: 150px;">
+            <p>${p}</p>
+          </a>
+        </td>`).join('');
+
+      return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>${data.theme} Email</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4; padding: 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden;">
+          <tr>
+            <td style="text-align: center; padding: 20px;">
+              <a href="${data.website}">
+                <img src="${data.website}/logo.png" alt="${data.brand} Logo" style="max-width: 150px;">
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">
+              <img src="${data.website}/hero-${data.theme.toLowerCase().replace(/\s/g, '-')}.jpg" alt="${urgencyText}" style="width: 100%; max-width: 600px;">
+              <h1 style="font-size: 24px; color: #333; margin: 20px 0;">${urgencyText}</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 20px; color: #333; font-size: 16px; line-height: 1.6;">
+              <p>${data.tone === 'Warm and inviting' ? 'Dear' : data.tone === 'Professional' ? 'Hello' : 'Hi'} ${data.audience.split(' ')[0]},</p>
+              <p>${data.tone === 'Warm and inviting' ? `Get ready to wrap yourself in warmth this winter! Our ${data.theme} is here with ${data.promo}, but it’s only available until ${data.duration}.` : data.tone === 'Urgent and fun' ? `Don’t wait—the ${data.theme} is almost over! Score ${data.promo} before it vanishes on ${data.duration}!` : data.tone === 'Professional' ? `We’re pleased to offer ${data.promo} as part of our ${data.theme}. This exclusive promotion ends ${data.duration}.` : `Our ${data.theme} is live with ${data.promo}! Act fast—this deal ends ${data.duration}.`}</p>
+              <p>Use code <strong>${data.promo.replace(/[^A-Z0-9]/gi, '').slice(0, 8).toUpperCase()}</strong> to save big. Perfect for your next quilting project or a cozy gift!</p>
+              <h2 style="font-size: 20px; color: #333; margin: 20px 0;">Explore Our Favorites:</h2>
+              <table width="100%" cellpadding="10" cellspacing="0">
+                <tr>${productGridHtml}</tr>
+              </table>
+              <p style="margin: 20px 0;">Don’t miss out! Visit our site, add your favorites to your cart, and apply the code before it’s gone!</p>
+              <p style="text-align: center;">
+                <a href="${data.website}/${data.theme.toLowerCase().replace(/\s/g, '-')}-sale" style="display: inline-block; background-color: #2563eb; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-size: 16px;">${ctaText}</a>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 20px; background-color: #f4f4f4; text-align: center; color: #666; font-size: 14px;">
+              <p>Warm Wishes,<br>The ${data.brand} Team</p>
+              <p>${data.social.split(',').map(s => `<a href="${s.split(':')[1].trim()}" style="color: #2563eb; text-decoration: none; margin: 0 10px;">${s.split(':')[0].trim()}</a>`).join(' | ')}</p>
+              <p><a href="${data.website}" style="color: #2563eb; text-decoration: none;">${data.website}</a></p>
+              <p><a href="#" style="color: #2563eb; text-decoration: none;">Unsubscribe</a></p>
+              <p>${data.address}</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+      `;
+    }
+
+    // Form submission handler
+    document.getElementById('emailForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const data = Object.fromEntries(formData);
+
+      // Generate email copy
+      const emailCopy = generateEmailCopy(data);
+
+      // Display output
+      const outputDiv = document.getElementById('output');
+      const emailOutput = document.getElementById('emailOutput');
+      emailOutput.textContent = emailCopy;
+      outputDiv.classList.remove('hidden');
+    });
+
+    // Generate HTML preview
+    function generateHtmlPreview() {
+      const formData = new FormData(document.getElementById('emailForm'));
+      const data = Object.fromEntries(formData);
+      const products = (data.products || 'Product A, Product B, Product C').split(',').map(p => p.trim());
+      const urgencyText = {
+        High: 'Time’s Running Out! Grab Your Deal Now',
+        Medium: 'Cozy Up with Our Limited-Time Offer',
+        Low: 'A Special Deal Just for You'
+      }[data.urgency || 'Medium'];
+      const ctaText = data.tone === 'Warm and inviting' ? 'Snuggle Up & Save' : data.tone === 'Urgent and fun' ? 'Shop the Sale Now' : data.tone === 'Professional' ? 'Explore the Offer' : 'Shop Now';
+
+      const htmlOutput = generateHtml(data, products, urgencyText, ctaText);
+
+      const outputDiv = document.getElementById('output');
+      outputDiv.innerHTML = `
+        <h2 class="text-xl font-semibold mb-4">Generated Email Copy</h2>
+        <h3 class="text-lg font-medium mb-2">Markdown</h3>
+        <pre id="emailOutput" class="bg-gray-50 p-4 rounded overflow-auto">${generateEmailCopy(data)}</pre>
+        <h3 class="text-lg font-medium mb-2 mt-4">HTML Preview</h3>
+        <iframe srcdoc="${htmlOutput.replace(/"/g, '&quot;')}" style="width: 100%; height: 500px; border: 1px solid #ccc; border-radius: 4px;"></iframe>
+        <button onclick="copyToClipboard()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Copy Markdown</button>
+        <button onclick="copyToClipboardHtml()" class="mt-4 ml-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Copy HTML</button>
+      `;
+    }
+
+    // Copy Markdown to clipboard
+    function copyToClipboard() {
+      const emailOutput = document.getElementById('emailOutput').textContent;
+      navigator.clipboard.writeText(emailOutput).then(() => {
+        alert('Markdown copied to clipboard!');
+      });
+    }
+
+    // Copy HTML to clipboard
+    function copyToClipboardHtml() {
+      const formData = new FormData(document.getElementById('emailForm'));
+      const data = Object.fromEntries(formData);
+      const products = (data.products || 'Product A, Product B, Product C').split(',').map(p => p.trim());
+      const urgencyText = {
+        High: 'Time’s Running Out! Grab Your Deal Now',
+        Medium: 'Cozy Up with Our Limited-Time Offer',
+        Low: 'A Special Deal Just for You'
+      }[data.urgency || 'Medium'];
+      const ctaText = data.tone === 'Warm and inviting' ? 'Snuggle Up & Save' : data.tone === 'Urgent and fun' ? 'Shop the Sale Now' : data.tone === 'Professional' ? 'Explore the Offer' : 'Shop Now';
+
+      const htmlOutput = generateHtml(data, products, urgencyText, ctaText);
+      navigator.clipboard.writeText(htmlOutput).then(() => {
+        alert('HTML copied to clipboard!');
+      });
+    }
+  </script>
+</body>
+</html>

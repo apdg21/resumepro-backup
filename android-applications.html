@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResumePro | Professional Digital Templates</title>
+    <title>Android Applications | ResumePro Developer</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <style>
         :root {
@@ -13,6 +13,8 @@
             --light: #f8f9fa;
             --gray: #6c757d;
             --success: #28a745;
+            --android-green: #3ddc84;
+            --android-dark: #0f9d58;
         }
         
         * {
@@ -28,134 +30,171 @@
             line-height: 1.6;
         }
         
-        /* Enhanced Header with Dropdown */
-        /* Header Styles */
-        header {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 1rem 0;
-            position: fixed;
-            top: 0;
-            z-index: 100;
-            width: 100%;
+        /* Android Apps Hero Section */
+        .android-hero {
+            background: linear-gradient(135deg, #0f9d58 0%, #1e8e3e 100%);
+            color: white;
+            text-align: center;
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
         }
         
-        .header-content {
+        .android-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .android-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            padding: 20px;
+        }
+        
+        .android-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* App Showcase Section */
+        .apps-showcase {
+            padding: 4rem 1rem;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
         
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
         }
         
-        .logo-icon {
-            margin-right: 10px;
-            font-size: 1.5em;
-        }
-        
-        .nav-container {
-            display: flex;
-            align-items: center;
-        }
-        
-        .nav-menu {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-item {
-            position: relative;
-            margin-left: 1.5rem;
-        }
-        
-        .nav-link {
-            color: var(--dark);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-            display: flex;
-            align-items: center;
-        }
-        
-        .nav-link:hover {
-            color: var(--primary);
-        }
-        
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .dropdown-content {
-            display: none;
-            position: absolute;
+        .app-card-detailed {
             background-color: white;
-            min-width: 200px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            z-index: 1;
-            top: 100%;
-            left: 0;
-            padding: 0.5rem 0;
-        }
-        
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-        
-        .dropdown-item {
-            padding: 0.8rem 1.5rem;
-            text-decoration: none;
-            display: block;
-            color: var(--dark);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
         }
         
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-            color: var(--primary);
+        .app-card-detailed:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
         }
         
-        .dropdown-icon {
-            margin-left: 5px;
-            transition: transform 0.3s ease;
-        }
-        
-        .dropdown:hover .dropdown-icon {
-            transform: rotate(180deg);
-        }
-        
-        /* Hamburger Menu Styles */
-        .hamburger {
-            display: none;
-            font-size: 1.5rem;
-            background: none;
-            border: none;
-            color: var(--dark);
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-        
-        .nav-menu.active {
+        .app-header-detailed {
+            background: linear-gradient(135deg, #3a86ff 0%, #2667cc 100%);
+            color: white;
+            padding: 2rem;
             display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .app-icon-large {
+            font-size: 3.5rem;
+            background: rgba(255,255,255,0.1);
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .app-title-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .app-status-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .app-body-detailed {
+            padding: 2rem;
+        }
+        
+        .app-description-detailed {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+        
+        .features-section h3,
+        .tech-stack-section h3 {
+            color: var(--dark);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.3rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .feature-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .feature-item strong {
+            color: var(--dark);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        
+        .feature-item p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 1rem 0;
+        }
+        
+        .tech-tag {
+            background: #e3f2fd;
+            color: #0d47a1;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .app-links-detailed {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+            flex-wrap: wrap;
         }
         
         .cta-button {
             display: inline-block;
             background-color: var(--primary);
             color: white;
-            padding: 0.6rem 1.2rem;
-            border-radius: 4px;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
@@ -166,154 +205,31 @@
             transform: translateY(-2px);
         }
         
-        /* Android Apps Section Styles (NEW) */
-        .mobile-apps-section {
-            margin: 40px 0;
-            padding: 40px;
-            background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
-            color: white;
-            border-radius: 12px;
-            text-align: center;
+        .play-store-btn {
+            background: var(--android-green);
+            color: #000;
         }
         
-        .mobile-apps-section h2 {
-            font-size: 2rem;
-            margin-bottom: 15px;
-        }
-        
-        .mobile-apps-section p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            max-width: 700px;
-            margin: 0 auto 30px;
-        }
-        
-        .apps-container {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            margin-top: 30px;
-        }
-        
-        .app-card {
-            background: white;
-            color: var(--dark);
-            border-radius: 12px;
-            padding: 25px;
-            width: 280px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            text-align: left;
-            transition: transform 0.3s ease;
-        }
-        
-        .app-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .app-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-        
-        .app-card h3 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 1.4rem;
-        }
-        
-        .app-description {
-            color: #555;
-            margin-bottom: 20px;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-        
-        .app-links {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .view-apps-btn {
-            display: inline-block;
-            background: white;
+        .privacy-btn {
+            background: transparent;
             color: var(--primary);
-            padding: 10px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            margin-top: 25px;
-            transition: all 0.3s ease;
+            border: 2px solid var(--primary);
         }
         
-        .view-apps-btn:hover {
-            background: #f8f9fa;
-            transform: translateY(-2px);
+        .privacy-btn:hover {
+            background: #f0f8ff;
         }
         
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 8rem 0 5rem;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        }
-        
-        .hero h1 {
-            font-size: 2.8rem;
-            margin-bottom: 1.5rem;
-            color: var(--dark);
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--gray);
-            max-width: 700px;
-            margin: 0 auto 2rem;
-            padding: 20px;
-        }
-        
-        .template-types {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
+        /* Development Updates Section */
+        .updates-section {
+            padding: 4rem 1rem;
+            background-color: #f8f9fa;
             margin-top: 2rem;
         }
         
-        .template-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 2rem;
-            width: 280px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
-        }
-        
-        .template-card:hover {
-            transform: translateY(-10px);
-        }
-        
-        .template-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-        
-        .template-card h3 {
-            margin-bottom: 1rem;
-            color: var(--dark);
-        }
-        
-        .template-card p {
-            color: var(--gray);
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-        }
-        
-        /* Features Section */
-        .features {
-            padding: 5rem 0;
-            background-color: white;
+        .updates-container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         .section-title {
@@ -333,51 +249,94 @@
             margin: 0 auto;
         }
         
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
+        .updates-timeline {
+            max-width: 800px;
             margin: 0 auto;
-            padding: 0 2rem;
         }
         
-        .feature-card {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 2rem;
+        .update-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--android-green);
+            position: relative;
+        }
+        
+        .update-date {
+            color: var(--android-dark);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .update-date::before {
+            content: "📅";
+            font-size: 1.1rem;
+        }
+        
+        /* Developer Info Section */
+        .developer-info {
+            padding: 4rem 1rem;
             text-align: center;
+            background: white;
         }
         
-        .feature-icon {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
+        .developer-container {
+            max-width: 800px;
+            margin: 0 auto;
         }
         
-        .feature-card h3 {
-            margin-bottom: 1rem;
+        .developer-info h2 {
             color: var(--dark);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
         }
         
-        .feature-card p {
+        .developer-info p {
             color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .developer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .secondary-button {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .secondary-button:hover {
+            background-color: #f8f9fa;
         }
         
         /* CTA Section */
-        .cta-section {
-            padding: 5rem 0;
+        .cta-section-android {
+            padding: 5rem 1rem;
             text-align: center;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
         
-        .cta-section h2 {
+        .cta-section-android h2 {
             font-size: 2.2rem;
             margin-bottom: 1.5rem;
         }
         
-        .cta-section p {
+        .cta-section-android p {
             max-width: 600px;
             margin: 0 auto 2rem;
             opacity: 0.9;
@@ -387,22 +346,14 @@
             display: flex;
             justify-content: center;
             gap: 1rem;
+            flex-wrap: wrap;
         }
         
-        .secondary-button {
-            background-color: white;
-            color: var(--primary);
-        }
-        
-        .secondary-button:hover {
-            background-color: #f8f9fa;
-        }
-        
-        /* Footer */
+        /* Footer Styles */
         footer {
             background-color: var(--dark);
             color: white;
-            padding: 3rem 0 1.5rem;
+            padding: 3rem 1rem 1.5rem;
         }
         
         .footer-content {
@@ -411,7 +362,6 @@
             gap: 2rem;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 2rem;
         }
         
         .footer-column h3 {
@@ -444,90 +394,38 @@
             border-top: 1px solid rgba(255,255,255,0.1);
             color: #adb5bd;
             font-size: 0.9rem;
+            max-width: 1200px;
+            margin: 2rem auto 0;
         }
         
+        /* Responsive Styles */
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: row;
-                padding: 1rem;
-                align-items: center;
+            .android-hero {
+                padding: 7rem 1rem 3rem;
             }
             
-            .logo {
-                font-size: 1.5rem;
-            }
-            
-            .nav-container {
-                width: auto;
-            }
-            
-            .hamburger {
-                display: block;
-            }
-            
-            .nav-menu {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background-color: white;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-                padding: 1rem;
-            }
-            
-            .nav-menu.active {
-                display: flex;
-            }
-            
-            .nav-item {
-                margin-left: 0;
-                width: 100%;
-                margin-bottom: 0.5rem;
-            }
-            
-            .nav-link {
-                padding: 0.5rem 0;
-                font-size: 1rem;
-            }
-            
-            .dropdown-content {
-                position: static;
-                width: 100%;
-                box-shadow: none;
-                border-radius: 0;
-                background-color: #f8f9fa;
-                padding-left: 1rem;
-            }
-            
-            .dropdown-item {
-                padding: 0.5rem 1rem;
-                font-size: 0.95rem;
-            }
-            
-            .hero h1 {
+            .android-hero h1 {
                 font-size: 2.2rem;
             }
             
-            .template-types {
+            .android-hero p {
+                font-size: 1rem;
+                padding: 0;
+            }
+            
+            .app-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .app-header-detailed {
                 flex-direction: column;
-                align-items: center;
+                text-align: center;
+                gap: 1rem;
+                padding: 1.5rem;
             }
             
-            .mobile-apps-section {
-                padding: 30px 20px;
-                margin: 30px 15px;
-            }
-            
-            .apps-container {
+            .app-links-detailed {
                 flex-direction: column;
-                align-items: center;
-            }
-            
-            .app-card {
-                width: 100%;
-                max-width: 350px;
             }
             
             .cta-buttons {
@@ -535,192 +433,226 @@
                 align-items: center;
             }
             
-            .dropdown-content {
-                left: auto;
-                right: 0;
+            .developer-links {
+                flex-direction: column;
+                align-items: center;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="header-content">
-            <a href="index.html" class="logo">
-                <span class="logo-icon">📄</span>
-                <span>ResumePro</span>
-            </a>
-            
-            <div class="nav-container">
-                <button class="hamburger" aria-label="Toggle navigation">☰</button>
-                <ul class="nav-menu">
-                    <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link">
-                            Templates
-                            <span class="dropdown-icon">▼</span>
-                        </a>
-                        <div class="dropdown-content">
-                            <a href="resume-templates.html" class="dropdown-item">Resume Templates</a>
-                            <a href="portfolio-templates.html" class="dropdown-item">Portfolio Templates</a>
-                        </div>
-                    </li>
-                    
-                    <!-- NEW: My Apps Menu Item -->
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link">
-                            My Apps
-                            <span class="dropdown-icon">▼</span>
-                        </a>
-                        <div class="dropdown-content">
-                            <a href="android-apps.html" class="dropdown-item">Android Applications</a>
-                            <a href="web-apps.html" class="dropdown-item">Web Applications</a>
-                            <a href="https://family-connection-tools.pages.dev/" 
-                               target="_blank" 
-                               class="dropdown-item">Family Tools ↗</a>
-                        </div>
-                    </li>
-                    
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link">
-                            Blog
-                            <span class="dropdown-icon">▼</span>
-                        </a>
-                        <div class="dropdown-content">
-                            <a href="portfolio-best-practices.html" class="dropdown-item">Portfolio Best Practices</a>
-                            <a href="portfolio-maintenance.html" class="dropdown-item">Portfolio Maintenance</a>
-                            <a href="online-job-sites.html" class="dropdown-item">Legit Online Job Sites</a>
-                            <a href="email-marketing" class="dropdown-item">Unlocking Email Marketing Success</a>
-                            <a href="mobile-optimization.html" class="dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
-                            <a href="email-list-failure.html" class="dropdown-item">Why Your Email List Might Be Failing</a> 
-                            <a href="email-builder-previews.html" class="dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
-                            <a href="why-less-is-more.html" class="dropdown-item">The Power of Focused Email Design</a>
-                        </div>
-                    </li>
-                    <li class="nav-item"><a href="klaviyo-analytics.html" class="nav-link">Klaviyo Analytics</a></li>
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link">
-                            Productivity Tools
-                            <span class="dropdown-icon">▼</span>
-                        </a>
-                        <div class="dropdown-content">
-                            <a href="email-builder" class="dropdown-item">Email Builder</a>
-                            <a href="https://resumepro.pages.dev/enhanced-todo" class="dropdown-item">Enhanced To-Do & Notes</a>
-                        </div>
-                    </li>
-                    <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-                    <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-                </ul>
-            </div>
-        </div>
-    </header>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder">
+        <noscript>Please enable JavaScript to view the navigation menu.</noscript>
+    </div>
     
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>Professional Digital Templates</h1>
-            <p>Create stunning resumes and portfolios that get you noticed. No coding required - just customize and launch.</p>
-            
-            <div class="template-types">
-                <div class="template-card">
-                    <div class="template-icon">📝</div>
-                    <h3>Resume Templates</h3>
-                    <p>Modern, responsive designs that showcase your career journey beautifully on any device.</p>
-                    <a href="resume-templates.html" class="cta-button">Browse Resumes</a>
+    <!-- Android Apps Hero Section -->
+    <section class="android-hero">
+        <div class="android-icon">🤖</div>
+        <h1>Android Applications</h1>
+        <p>Building mobile applications focused on productivity, utility, and enhancing everyday experiences. Currently developing for Android platform with modern development practices.</p>
+        <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
+            <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">Java/Kotlin</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">Material Design</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">Android Studio</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">Google Play</span>
+        </div>
+    </section>
+    
+    <!-- Apps Showcase Section -->
+    <section class="apps-showcase">
+        <div class="section-title">
+            <h2>Featured Android Applications</h2>
+            <p>Currently in development and preparing for Google Play Store release</p>
+        </div>
+        
+        <!-- VoiceRide App -->
+        <div class="app-grid">
+            <div class="app-card-detailed">
+                <div class="app-header-detailed">
+                    <div class="app-icon-large">🚗</div>
+                    <div class="app-title-section">
+                        <h2>VoiceRide Driving Assistant</h2>
+                        <p>Voice-controlled navigation for safer driving</p>
+                        <span class="app-status-badge">Coming Soon to Play Store</span>
+                    </div>
                 </div>
                 
-                <div class="template-card">
-                    <div class="template-icon">🎨</div>
-                    <h3>Portfolio Templates</h3>
-                    <p>Showcase your work with professional portfolios that highlight your best projects.</p>
-                    <a href="portfolio-templates.html" class="cta-button">Browse Portfolios</a>
+                <div class="app-body-detailed">
+                    <p class="app-description-detailed">
+                        VoiceRide is designed to make driving safer and more convenient by allowing complete hands-free control. 
+                        The app responds to voice commands for navigation, music control, calls, and other driving-related tasks, 
+                        minimizing distractions and enhancing road safety.
+                    </p>
+                    
+                    <div class="features-section">
+                        <h3>Key Features</h3>
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <strong>Voice Navigation</strong>
+                                <p>Get turn-by-turn directions using voice commands</p>
+                            </div>
+                            <div class="feature-item">
+                                <strong>Hands-Free Control</strong>
+                                <p>Control music, calls, and apps without touching your phone</p>
+                            </div>
+                            <div class="feature-item">
+                                <strong>Safety Alerts</strong>
+                                <p>Get notifications about road conditions and speed limits</p>
+                            </div>
+                            <div class="feature-item">
+                                <strong>Quick Commands</strong>
+                                <p>Pre-set commands for common driving scenarios</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tech-stack-section">
+                        <h3>Technology Stack</h3>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Android</span>
+                            <span class="tech-tag">Java/Kotlin</span>
+                            <span class="tech-tag">Google Maps API</span>
+                            <span class="tech-tag">Voice Recognition</span>
+                            <span class="tech-tag">Text-to-Speech</span>
+                            <span class="tech-tag">Material Design</span>
+                            <span class="tech-tag">Room Database</span>
+                            <span class="tech-tag">Firebase</span>
+                        </div>
+                    </div>
+                    
+                    <div class="app-links-detailed">
+                        <a href="#" class="cta-button play-store-btn" style="opacity: 0.9; cursor: pointer;">
+                            ⏳ Coming Soon
+                        </a>
+                        <a href="https://voiceride.pages.dev/privacy_policy" 
+                           target="_blank" 
+                           class="cta-button privacy-btn">
+                            📄 Privacy Policy
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notes & Reminder App -->
+            <div class="app-card-detailed">
+                <div class="app-header-detailed" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);">
+                    <div class="app-icon-large">📝</div>
+                    <div class="app-title-section">
+                        <h2>Notes & Reminder App</h2>
+                        <p>Simple yet powerful productivity tool</p>
+                        <span class="app-status-badge">In Development</span>
+                    </div>
+                </div>
+                
+                <div class="app-body-detailed">
+                    <p class="app-description-detailed">
+                        A clean, intuitive notes and reminder application designed to help users stay organized. 
+                        Create detailed notes, set reminders with notifications, categorize tasks, and manage daily 
+                        productivity with an easy-to-use interface and reliable local storage.
+                    </p>
+                    
+                    <div class="features-section">
+                        <h3>Key Features</h3>
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <strong>Rich Text Notes</strong>
+                                <p>Create formatted notes with categories and tags</p>
+                            </div>
+                            <div class="feature-item">
+                                <strong>Smart Reminders</strong>
+                                <p>Schedule notifications with repeat options</p>
+                            </div>
+                            <div class="feature-item">
+                                <strong>Organize & Search</strong>
+                                <p>Categorize notes and find them instantly</p>
+                            </div>
+                            <div class="feature-item">
+                                <strong>Quick Capture</strong>
+                                <p>Fast note creation widget for homescreen</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tech-stack-section">
+                        <h3>Technology Stack</h3>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Android</span>
+                            <span class="tech-tag">Kotlin</span>
+                            <span class="tech-tag">Room Database</span>
+                            <span class="tech-tag">Material Design</span>
+                            <span class="tech-tag">WorkManager</span>
+                            <span class="tech-tag">Notifications</span>
+                            <span class="tech-tag">MVVM Architecture</span>
+                            <span class="tech-tag">LiveData</span>
+                        </div>
+                    </div>
+                    
+                    <div class="app-links-detailed">
+                        <a href="#" class="cta-button" style="background: #666; cursor: not-allowed;">
+                            🚧 In Development
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
     
-    <!-- NEW: Android Apps Section -->
-    <section class="mobile-apps-section">
-        <h2>🚀 My Android Applications</h2>
-        <p>Developing mobile apps for Android platform. Focused on productivity, utility, and creating helpful tools for everyday use.</p>
-        
-        <div class="apps-container">
-            <div class="app-card">
-                <div class="app-icon">🚗</div>
-                <h3>VoiceRide Driving Assistant</h3>
-                <p class="app-description">Voice-controlled navigation and driving assistant for safer hands-free experience. Responds to voice commands for navigation, music control, and calls.</p>
-                <div class="app-links">
-                    <a href="https://voiceride.pages.dev/privacy_policy" target="_blank">Privacy Policy</a>
-                    <span style="color: #1a73e8; font-weight: 500;">Coming Soon</span>
-                </div>
+    <!-- Development Updates Section -->
+    <section class="updates-section">
+        <div class="updates-container">
+            <div class="section-title">
+                <h2>Development Updates</h2>
+                <p>Latest progress and milestones in Android app development</p>
             </div>
             
-            <div class="app-card">
-                <div class="app-icon">📝</div>
-                <h3>Notes & Reminder App</h3>
-                <p class="app-description">Productivity application for managing tasks, notes, and reminders. Clean interface with local storage and notification scheduling.</p>
-                <div class="app-links">
-                    <span style="color: #666; font-style: italic;">In Development</span>
+            <div class="updates-timeline">
+                <div class="update-item">
+                    <div class="update-date">Current Focus - December 2023</div>
+                    <p>Preparing both apps for Google Play Store submission. Finalizing store listing requirements, creating screenshots and promotional materials, completing privacy policy compliance, and conducting final testing phases.</p>
+                </div>
+                
+                <div class="update-item">
+                    <div class="update-date">Completed - November 2023</div>
+                    <p>Successfully registered as a Google Play Developer. Account verification completed and ready for first app publication. Completed core development of VoiceRide app with voice recognition features.</p>
+                </div>
+                
+                <div class="update-item">
+                    <div class="update-date">In Progress - October 2023</div>
+                    <p>Developing Notes & Reminder app with Room database implementation. Working on notification scheduling system and intuitive UI/UX design following Material Design guidelines.</p>
                 </div>
             </div>
         </div>
-        
-        <a href="android-apps.html" class="view-apps-btn">View All Android Apps →</a>
     </section>
     
-    <!-- Features Section -->
-    <section class="features">
-        <div class="section-title">
-            <h2>Why Choose Our Templates?</h2>
-            <p>Everything you need to create a powerful online presence</p>
-        </div>
-        
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">🚀</div>
-                <h3>Easy Customization</h3>
-                <p>Change colors, fonts, and layouts with simple edits to the CSS file - no coding experience needed.</p>
-            </div>
+    <!-- Developer Info Section -->
+    <section class="developer-info">
+        <div class="developer-container">
+            <h2>About the Developer</h2>
+            <p>
+                Building useful applications across web and mobile platforms with a focus on clean design, 
+                reliable functionality, and solving real-world problems. Passionate about creating tools that 
+                enhance productivity and improve everyday experiences.
+            </p>
+            <p>
+                Currently developing Android applications while maintaining several web projects including 
+                ResumePro templates, productivity tools, and real-time communication applications.
+            </p>
             
-            <div class="feature-card">
-                <div class="feature-icon">📱</div>
-                <h3>Fully Responsive</h3>
-                <p>Looks perfect on all devices from desktop to mobile without any extra work.</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">⚡</div>
-                <h3>Fast Loading</h3>
-                <p>Optimized for performance so your content loads quickly for recruiters and clients.</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">🎨</div>
-                <h3>Modern Designs</h3>
-                <p>Professionally designed templates that follow current trends while remaining timeless.</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">🔧</div>
-                <h3>Easy Hosting</h3>
-                <p>Works with GitHub Pages, Netlify, and other free hosting options with minimal setup.</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">📚</div>
-                <h3>Detailed Guides</h3>
-                <p>Step-by-step instructions included with every template for easy setup.</p>
+            <div class="developer-links">
+                <a href="index.html" class="cta-button">Visit ResumePro</a>
+                <a href="contact.html" class="cta-button secondary-button">Contact</a>
             </div>
         </div>
     </section>
     
     <!-- CTA Section -->
-    <section class="cta-section">
-        <h2>Ready to Build Your Online Presence?</h2>
-        <p>Join thousands of professionals who've transformed their job search with our templates.</p>
+    <section class="cta-section-android">
+        <h2>Interested in My Apps?</h2>
+        <p>Check out my web applications and other projects, or get in touch for app-related inquiries.</p>
         <div class="cta-buttons">
-            <a href="resume-templates.html" class="cta-button">Browse Resume Templates</a>
-            <a href="portfolio-templates.html" class="cta-button secondary-button">Browse Portfolio Templates</a>
+            <a href="web-apps.html" class="cta-button">View Web Applications</a>
+            <a href="contact.html" class="cta-button secondary-button">Contact Me</a>
         </div>
     </section>
     
@@ -729,70 +661,75 @@
         <div class="footer-content">
             <div class="footer-column">
                 <h3>ResumePro</h3>
-                <p>Professional digital templates to showcase your career and work.</p>
+                <p>Professional digital templates and developer projects.</p>
             </div>
             
             <div class="footer-column">
-                <h3>Templates</h3>
+                <h3>Projects</h3>
                 <ul class="footer-links">
-                    <li><a href="resume-templates">Resume Templates</a></li>
-                    <li><a href="portfolio-templates">Portfolio Templates</a></li>
-                    <li><a href="#">All Templates</a></li>
+                    <li><a href="android-apps.html">Android Applications</a></li>
+                    <li><a href="web-apps.html">Web Applications</a></li>
+                    <li><a href="https://family-connection-tools.pages.dev/" target="_blank">Family Tools Suite</a></li>
                 </ul>
             </div>
             
             <div class="footer-column">
                 <h3>Resources</h3>
                 <ul class="footer-links">
-                    <li><a href="help#editing">How to Edit</a></li>
-                    <li><a href="help#hosting">Hosting Guide</a></li>
-                    <li><a href="help#tips">Tips & Examples</a></li>
+                    <li><a href="resume-templates.html">Resume Templates</a></li>
+                    <li><a href="portfolio-templates.html">Portfolio Templates</a></li>
+                    <li><a href="blog.html">Blog Articles</a></li>
                 </ul>
             </div>
             
             <div class="footer-column">
-                <h3>Company</h3>
+                <h3>Connect</h3>
                 <ul class="footer-links">
-                    <li><a href="about">About Us</a></li>
-                    <li><a href="contact">Contact</a></li>
-                    <li><a href="privacy">Privacy Policy</a></li>
-                    <li><a href="terms">Terms of Service</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
                 </ul>
             </div>
         </div>
         
         <div class="copyright">
-            <p>&copy; 2023 ResumePro. All rights reserved.</p>
+            <p>&copy; 2023 ResumePro Developer. All rights reserved. Android is a trademark of Google LLC.</p>
         </div>
     </footer>
 
     <script>
-        // Hamburger menu toggle
-        document.querySelector('.hamburger').addEventListener('click', () => {
-            document.querySelector('.nav-menu').classList.toggle('active');
-        });
-
-        // Toggle dropdown on mobile
-        document.querySelectorAll('.dropdown .nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                // Prevent default link behavior
-                e.preventDefault();
-                // Toggle active class on parent dropdown
-                const dropdown = link.closest('.dropdown');
-                dropdown.classList.toggle('active');
-            });
-        });
-
-        // Close menu when clicking a non-dropdown nav link or dropdown item
-        document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
-            link.addEventListener('click', () => {
-                document.querySelector('.nav-menu').classList.remove('active');
-                // Remove active class from all dropdowns
-                document.querySelectorAll('.dropdown').forEach(dropdown => {
-                    dropdown.classList.remove('active');
+        // Load header dynamically
+        fetch('header.html')
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to load header');
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+                
+                // Re-attach event listeners for hamburger menu and dropdowns
+                document.querySelector('.hamburger').addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.toggle('active');
                 });
-            });
-        });
+
+                document.querySelectorAll('.dropdown .nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const dropdown = link.closest('.dropdown');
+                        dropdown.classList.toggle('active');
+                    });
+                });
+
+                document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
+                    link.addEventListener('click', () => {
+                        document.querySelector('.nav-menu').classList.remove('active');
+                        document.querySelectorAll('.dropdown').forEach(dropdown => {
+                            dropdown.classList.remove('active');
+                        });
+                    });
+                });
+            })
+            .catch(error => console.error('Error loading header:', error));
     </script>
     <script src="clean-urls.js"></script>
 </body>

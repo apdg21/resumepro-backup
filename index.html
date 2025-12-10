@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -150,6 +149,7 @@
         .nav-menu.active {
             display: flex;
         }
+        
         .cta-button {
             display: inline-block;
             background-color: var(--primary);
@@ -166,10 +166,140 @@
             transform: translateY(-2px);
         }
         
+        /* NEW: Android Apps Announcement Section */
+        .announcement-section {
+            margin: 40px 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border-radius: 12px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .announcement-section::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        
+        .announcement-section::after {
+            content: "";
+            position: absolute;
+            bottom: -30%;
+            left: -30%;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        
+        .announcement-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .announcement-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .announcement-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .announcement-section p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 25px;
+            line-height: 1.6;
+        }
+        
+        .android-features {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 25px 0;
+        }
+        
+        .android-feature {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+        }
+        
+        .announcement-button {
+            display: inline-block;
+            background: white;
+            color: #1e3c72;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            border: 2px solid white;
+        }
+        
+        .announcement-button:hover {
+            background: transparent;
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .announcement-apps {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .announcement-app {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            min-width: 200px;
+            text-align: left;
+        }
+        
+        .app-icon-sm {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .app-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .app-status {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        
         /* Hero Section */
         .hero {
             text-align: center;
-            padding: 8rem 0;
+            padding: 8rem 0 5rem;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         }
         
@@ -361,7 +491,7 @@
         }
         
         @media (max-width: 768px) {
-             .header-content {
+            .header-content {
                 flex-direction: row;
                 padding: 1rem;
                 align-items: center;
@@ -420,6 +550,29 @@
                 font-size: 0.95rem;
             }
             
+            .announcement-section {
+                padding: 30px 20px;
+                margin: 30px 15px;
+            }
+            
+            .announcement-section h2 {
+                font-size: 1.8rem;
+            }
+            
+            .announcement-section p {
+                font-size: 1rem;
+            }
+            
+            .announcement-apps {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .announcement-app {
+                width: 100%;
+                max-width: 300px;
+            }
+            
             .hero h1 {
                 font-size: 2.2rem;
             }
@@ -442,10 +595,11 @@
     </style>
 </head>
 <body>
-    <!-- Header Placeholder -->
+    <!-- Header will be loaded dynamically -->
     <div id="header-placeholder">
         <noscript>Please enable JavaScript to view the navigation menu.</noscript>
     </div>
+    
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
@@ -467,6 +621,41 @@
                     <a href="portfolio-templates.html" class="cta-button">Browse Portfolios</a>
                 </div>
             </div>
+        </div>
+    </section>
+    
+    <!-- NEW: Android Apps Announcement Section -->
+    <section class="announcement-section">
+        <div class="announcement-content">
+            <span class="announcement-badge">🚀 NEW ANNOUNCEMENT</span>
+            <h2>Now Developing Android Applications!</h2>
+            <p>Expanding beyond web development, I'm now creating mobile applications for Android platform. 
+               Building productivity tools and utility apps with modern Android development practices and Material Design.</p>
+            
+            <div class="android-features">
+                <span class="android-feature">🤖 Android Development</span>
+                <span class="android-feature">📱 Mobile-First Design</span>
+                <span class="android-feature">🚀 Coming to Play Store</span>
+                <span class="android-feature">🎯 Productivity Focus</span>
+            </div>
+            
+            <div class="announcement-apps">
+                <div class="announcement-app">
+                    <div class="app-icon-sm">🚗</div>
+                    <div class="app-name">VoiceRide Driving Assistant</div>
+                    <div class="app-status">Voice-controlled navigation app</div>
+                </div>
+                
+                <div class="announcement-app">
+                    <div class="app-icon-sm">📝</div>
+                    <div class="app-name">Notes & Reminder App</div>
+                    <div class="app-status">Productivity task management</div>
+                </div>
+            </div>
+            
+            <a href="https://resumepro.pages.dev/android-applications" class="announcement-button">
+                View Android Applications →
+            </a>
         </div>
     </section>
     
@@ -567,34 +756,7 @@
             <p>&copy; 2023 ResumePro. All rights reserved.</p>
         </div>
     </footer>
-<script>
-        // Hamburger menu toggle
-        document.querySelector('.hamburger').addEventListener('click', () => {
-            document.querySelector('.nav-menu').classList.toggle('active');
-        });
 
-        // Toggle dropdown on mobile
-        document.querySelectorAll('.dropdown .nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                // Prevent default link behavior
-                e.preventDefault();
-                // Toggle active class on parent dropdown
-                const dropdown = link.closest('.dropdown');
-                dropdown.classList.toggle('active');
-            });
-        });
-
-        // Close menu when clicking a non-dropdown nav link or dropdown item
-        document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
-            link.addEventListener('click', () => {
-                document.querySelector('.nav-menu').classList.remove('active');
-                // Remove active class from all dropdowns
-                document.querySelectorAll('.dropdown').forEach(dropdown => {
-                    dropdown.classList.remove('active');
-                });
-            });
-        });
-    </script>
     <script>
         // Load header dynamically
         fetch('header.html')
@@ -629,6 +791,6 @@
             })
             .catch(error => console.error('Error loading header:', error));
     </script>
-  <script src="clean-urls.js"></script>
+    <script src="clean-urls.js"></script>
 </body>
 </html>

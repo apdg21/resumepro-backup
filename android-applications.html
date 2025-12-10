@@ -697,8 +697,8 @@
         </div>
     </footer>
 
+      <!-- Existing header fetch script (replace with your actual script or file) -->
     <script>
-        // Load header dynamically
         fetch('header.html')
             .then(response => {
                 if (!response.ok) throw new Error('Failed to load header');
@@ -706,12 +706,12 @@
             })
             .then(data => {
                 document.getElementById('header-placeholder').innerHTML = data;
-                
-                // Re-attach event listeners for hamburger menu and dropdowns
-                document.querySelector('.hamburger').addEventListener('click', () => {
-                    document.querySelector('.nav-menu').classList.toggle('active');
-                });
-
+                const hamburger = document.querySelector('.hamburger');
+                if (hamburger) {
+                    hamburger.addEventListener('click', () => {
+                        document.querySelector('.nav-menu').classList.toggle('active');
+                    });
+                }
                 document.querySelectorAll('.dropdown .nav-link').forEach(link => {
                     link.addEventListener('click', (e) => {
                         e.preventDefault();
@@ -719,7 +719,6 @@
                         dropdown.classList.toggle('active');
                     });
                 });
-
                 document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
                     link.addEventListener('click', () => {
                         document.querySelector('.nav-menu').classList.remove('active');

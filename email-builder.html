@@ -11,6 +11,126 @@
         body {
             font-family: 'Inter', Arial, Helvetica, sans-serif;
         }
+          header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 1.5em;
+        }
+        
+        .nav-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-item {
+            position: relative;
+            margin-left: 1.5rem;
+        }
+        
+        .nav-link {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 1;
+            top: 100%;
+            left: 0;
+            padding: 0.5rem 0;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .dropdown-item {
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            display: block;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: var(--primary);
+        }
+        
+        .dropdown-icon {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .dropdown:hover .dropdown-icon {
+            transform: rotate(180deg);
+        }
+        
+        /* Hamburger Menu Styles */
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--dark);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .nav-menu.active {
+            display: flex;
+        }
+
         .section-item {
             cursor: pointer;
             transition: all 0.2s;
@@ -81,6 +201,70 @@
                 max-width: 100% !important;
                 padding: 10px 0 !important;
             }
+              .header-content {
+                flex-direction: row;
+                padding: 1rem;
+                align-items: center;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .nav-container {
+                width: auto;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                padding: 1rem;
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .nav-item {
+                margin-left: 0;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .nav-link {
+                padding: 0.5rem 0;
+                font-size: 1rem;
+            }
+            
+            .dropdown-content {
+                display: none;
+                position: static;
+                width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+                background-color: #f8f9fa;
+                padding-left: 1rem;
+            }
+            
+            .dropdown.active .dropdown-content {
+                display: block;
+            }
+            
+            .dropdown-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.95rem;
+            }
+
         }
         .message-box {
             transition: opacity 0.3s;
@@ -123,11 +307,11 @@
     </style>
 </head>
 <body class="bg-gray-50">
-    <div class="container mx-auto p-4 max-w-7xl">
-        <header class="mb-8 text-center">
-            <h1 class="text-3xl font-bold text-gray-800 mb-2" style="color: #3a86ff;"><span class="logo-icon">📄</span><a href="index.html">ResumePro Email Builder</a></h1>
-            <p class="text-gray-600">Create responsive email templates with ease</p>
-        </header>
+     <div id="header-placeholder">
+        <noscript>Please enable JavaScript to view the navigation menu.</noscript>
+    </div
+
+    <div class="container mx-auto p-4 max-w-7xl">   
         
         <div class="flex flex-col lg:flex-row gap-6">
             <!-- Left Panel: Section Management -->
@@ -1885,5 +2069,68 @@
             }
         }
     </script>
+     <script>
+        // Hamburger menu toggle
+        document.querySelector('.hamburger').addEventListener('click', () => {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+
+        // Toggle dropdown on mobile
+        document.querySelectorAll('.dropdown .nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                // Prevent default link behavior
+                e.preventDefault();
+                // Toggle active class on parent dropdown
+                const dropdown = link.closest('.dropdown');
+                dropdown.classList.toggle('active');
+            });
+        });
+
+        // Close menu when clicking a non-dropdown nav link or dropdown item
+        document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-menu').classList.remove('active');
+                // Remove active class from all dropdowns
+                document.querySelectorAll('.dropdown').forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
+            });
+        });
+    </script>
+    <script>
+        // Load header dynamically
+        fetch('header.html')
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to load header');
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+                
+                // Re-attach event listeners for hamburger menu and dropdowns
+                document.querySelector('.hamburger').addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.toggle('active');
+                });
+
+                document.querySelectorAll('.dropdown .nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const dropdown = link.closest('.dropdown');
+                        dropdown.classList.toggle('active');
+                    });
+                });
+
+                document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
+                    link.addEventListener('click', () => {
+                        document.querySelector('.nav-menu').classList.remove('active');
+                        document.querySelectorAll('.dropdown').forEach(dropdown => {
+                            dropdown.classList.remove('active');
+                        });
+                    });
+                });
+            })
+            .catch(error => console.error('Error loading header:', error));
+    </script>
+
 </body>
 </html>

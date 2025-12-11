@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced To-Do & Notes with Alarm</title>
+    <title>Enhanced To-Do & Notes with Alarm | ResumePro Tools</title>
     <style>
         :root {
             --primary-color: #6200ea;
@@ -30,19 +30,122 @@
             background-color: var(--background-color);
             color: #333;
             line-height: 1.6;
-            padding: 20px;
+            padding: 0;
         }
         
-        .app-container {
-            max-width: 1000px;
+        /* ResumePro Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        
+        .header-content {
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #3a86ff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 1.5em;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+        
+        .nav-item {
+            position: relative;
+        }
+        
+        .nav-link {
+            color: #2b2d42;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link:hover {
+            color: #3a86ff;
+        }
+        
+        .back-to-resumepro {
+            background-color: #3a86ff;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-resumepro:hover {
+            background-color: #2667cc;
+            transform: translateY(-1px);
+        }
+        
+        /* Storage Notice */
+        .storage-notice {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px 20px;
+            margin: 20px auto;
+            max-width: 1200px;
+            border-radius: 4px;
+            animation: slideDown 0.5s ease;
+        }
+        
+        .storage-notice p {
+            margin: 0;
+            color: #856404;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* App Container */
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto 40px;
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
         
-        header {
+        .app-header {
             text-align: center;
             padding: 25px 20px;
             background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
@@ -102,6 +205,18 @@
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                padding: 1rem;
+            }
+            
+            .nav-menu {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
             }
         }
         
@@ -346,6 +461,56 @@
             align-items: center;
         }
         
+        /* ResumePro Footer */
+        footer {
+            background-color: #2b2d42;
+            color: white;
+            padding: 3rem 1rem 1.5rem;
+            margin-top: 40px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #adb5bd;
+            font-size: 0.9rem;
+            max-width: 1200px;
+            margin: 2rem auto 0;
+        }
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -376,6 +541,38 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
+    <!-- ResumePro Header -->
+    <header>
+        <div class="header-content">
+            <a href="https://resumepro.pages.dev" class="logo">
+                <span class="logo-icon">📄</span>
+                <span>ResumePro</span>
+            </a>
+            
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="https://resumepro.pages.dev" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="https://resumepro.pages.dev/android-applications.html" class="nav-link">Android Apps</a></li>
+                <li class="nav-item"><a href="https://resumepro.pages.dev/web-apps.html" class="nav-link">Web Apps</a></li>
+                <li class="nav-item"><a href="https://resumepro.pages.dev#templates" class="nav-link">Templates</a></li>
+                <li class="nav-item"><a href="https://resumepro.pages.dev#tools" class="nav-link">Tools</a></li>
+            </ul>
+            
+            <a href="https://resumepro.pages.dev" class="back-to-resumepro">
+                ← Back to ResumePro
+            </a>
+        </div>
+    </header>
+
+    <!-- Storage Notice -->
+    <div class="storage-notice">
+        <p>
+            <i class="material-icons">info</i>
+            <strong>Note:</strong> This web app stores all data locally in your browser. 
+            Your notes and tasks will persist between visits, but clearing browser data will delete them.
+            This is a client-side demo application.
+        </p>
+    </div>
+
     <div class="notification" id="notification"></div>
     
     <!-- Sound controls -->
@@ -386,11 +583,12 @@
         <input type="range" min="0" max="1" step="0.1" value="0.7" class="volume-slider" id="volumeSlider">
     </div>
     
+    <!-- Main App -->
     <div class="app-container">
-        <header>
+        <div class="app-header">
             <h1>Enhanced To-Do & Notes</h1>
             <p class="app-description">Organize your tasks and notes with reminders and alarm sounds</p>
-        </header>
+        </div>
         
         <div class="tabs">
             <button class="tab active" onclick="showTab('tasks')">Tasks</button>
@@ -493,6 +691,47 @@
             </div>
         </div>
     </div>
+    
+    <!-- ResumePro Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>ResumePro</h3>
+                <p>Professional digital templates and developer projects.</p>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Projects</h3>
+                <ul class="footer-links">
+                    <li><a href="https://resumepro.pages.dev/android-applications.html">Android Applications</a></li>
+                    <li><a href="https://resumepro.pages.dev/web-apps.html">Web Applications</a></li>
+                    <li><a href="https://family-connection-tools.pages.dev/" target="_blank">Family Tools Suite</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="https://resumepro.pages.dev/resume-templates.html">Resume Templates</a></li>
+                    <li><a href="https://resumepro.pages.dev/portfolio-templates.html">Portfolio Templates</a></li>
+                    <li><a href="https://resumepro.pages.dev/blog.html">Blog Articles</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Connect</h3>
+                <ul class="footer-links">
+                    <li><a href="https://resumepro.pages.dev/about.html">About</a></li>
+                    <li><a href="https://resumepro.pages.dev/contact.html">Contact</a></li>
+                    <li><a href="https://resumepro.pages.dev/privacy.html">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2023 ResumePro Developer. All rights reserved. Enhanced To-Do & Notes is a client-side web application.</p>
+        </div>
+    </footer>
 
     <script>
         // App state
@@ -602,7 +841,7 @@
             
             // Fallback to HTML5 audio with base64 encoded sound
             try {
-                const audio = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbVtfdJivrJBhNjVgodDbq2EcBStztvLJfjUADF2h2/LDciwACVOW0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay极简的警报声，适合提醒功能");
+                const audio = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbVtfdJivrJBhNjVgodDbq2EcBStztvLJfjUADF2h2/LDciwACVOW0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay极简的警报声，适合提醒功能");
                 audio.volume = alarmVolume;
                 audio.play().catch(error => {
                     console.error('HTML5 audio error:', error);
@@ -717,6 +956,7 @@
 
             const task = {
                 id: Date.now(),
+                title: taskText,
                 text: taskText,
                 status: taskStatus.value,
                 created: new Date().toISOString(),

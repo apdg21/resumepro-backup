@@ -34,11 +34,12 @@
         }
         
         /* ResumePro Header Styles */
+        /* Header Styles */
         header {
             background-color: white;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             padding: 1rem 0;
-            position: sticky;
+            position: fixed;
             top: 0;
             z-index: 100;
             width: 100%;
@@ -56,7 +57,7 @@
         .logo {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #3a86ff;
+            color: var(--primary);
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -67,18 +68,23 @@
             font-size: 1.5em;
         }
         
+        .nav-container {
+            display: flex;
+            align-items: center;
+        }
+        
         .nav-menu {
             display: flex;
             list-style: none;
-            gap: 1.5rem;
         }
         
         .nav-item {
             position: relative;
+            margin-left: 1.5rem;
         }
         
         .nav-link {
-            color: #2b2d42;
+            color: var(--dark);
             text-decoration: none;
             font-weight: 600;
             transition: color 0.3s ease;
@@ -87,22 +93,66 @@
         }
         
         .nav-link:hover {
-            color: #3a86ff;
+            color: var(--primary);
         }
         
-        .back-to-resumepro {
-            background-color: #3a86ff;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 1;
+            top: 100%;
+            left: 0;
+            padding: 0.5rem 0;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .dropdown-item {
+            padding: 0.8rem 1.5rem;
             text-decoration: none;
-            font-weight: 600;
+            display: block;
+            color: var(--dark);
             transition: all 0.3s ease;
         }
         
-        .back-to-resumepro:hover {
-            background-color: #2667cc;
-            transform: translateY(-1px);
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: var(--primary);
+        }
+        
+        .dropdown-icon {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .dropdown:hover .dropdown-icon {
+            transform: rotate(180deg);
+        }
+        
+        /* Hamburger Menu Styles */
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--dark);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .nav-menu.active {
+            display: flex;
         }
         
         /* Storage Notice */
@@ -537,31 +587,81 @@
             -webkit-font-smoothing: antialiased;
             vertical-align: middle;
         }
+      @media (max-width: 768px) {
+            .header-content {
+                flex-direction: row;
+                padding: 1rem;
+                align-items: center;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .nav-container {
+                width: auto;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                padding: 1rem;
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .nav-item {
+                margin-left: 0;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .nav-link {
+                padding: 0.5rem 0;
+                font-size: 1rem;
+            }
+            
+            .dropdown-content {
+                display: none;
+                position: static;
+                width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+                background-color: #f8f9fa;
+                padding-left: 1rem;
+            }
+            
+            .dropdown.active .dropdown-content {
+                display: block;
+            }
+            
+            .dropdown-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.95rem;
+            }
+            }
     </style>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
     <!-- ResumePro Header -->
-    <header>
-        <div class="header-content">
-            <a href="https://resumepro.pages.dev" class="logo">
-                <span class="logo-icon">📄</span>
-                <span>ResumePro</span>
-            </a>
-            
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="https://resumepro.pages.dev" class="nav-link">Home</a></li>
-                <li class="nav-item"><a href="https://resumepro.pages.dev/android-applications.html" class="nav-link">Android Apps</a></li>
-                <li class="nav-item"><a href="https://resumepro.pages.dev/web-apps.html" class="nav-link">Web Apps</a></li>
-                <li class="nav-item"><a href="https://resumepro.pages.dev#templates" class="nav-link">Templates</a></li>
-                <li class="nav-item"><a href="https://resumepro.pages.dev#tools" class="nav-link">Tools</a></li>
-            </ul>
-            
-            <a href="https://resumepro.pages.dev" class="back-to-resumepro">
-                ← Back to ResumePro
-            </a>
-        </div>
-    </header>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder">
+        <noscript>Please enable JavaScript to view the navigation menu.</noscript>
+    </div>
+
 
     <!-- Storage Notice -->
     <div class="storage-notice">
@@ -1205,5 +1305,68 @@
         // Initialize the app when DOM is loaded
         document.addEventListener('DOMContentLoaded', init);
     </script>
+    <script>
+        // Hamburger menu toggle
+        document.querySelector('.hamburger').addEventListener('click', () => {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+
+        // Toggle dropdown on mobile
+        document.querySelectorAll('.dropdown .nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                // Prevent default link behavior
+                e.preventDefault();
+                // Toggle active class on parent dropdown
+                const dropdown = link.closest('.dropdown');
+                dropdown.classList.toggle('active');
+            });
+        });
+
+        // Close menu when clicking a non-dropdown nav link or dropdown item
+        document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-menu').classList.remove('active');
+                // Remove active class from all dropdowns
+                document.querySelectorAll('.dropdown').forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
+            });
+        });
+    </script>
+    <script>
+        // Load header dynamically
+        fetch('header.html')
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to load header');
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+                
+                // Re-attach event listeners for hamburger menu and dropdowns
+                document.querySelector('.hamburger').addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.toggle('active');
+                });
+
+                document.querySelectorAll('.dropdown .nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const dropdown = link.closest('.dropdown');
+                        dropdown.classList.toggle('active');
+                    });
+                });
+
+                document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
+                    link.addEventListener('click', () => {
+                        document.querySelector('.nav-menu').classList.remove('active');
+                        document.querySelectorAll('.dropdown').forEach(dropdown => {
+                            dropdown.classList.remove('active');
+                        });
+                    });
+                });
+            })
+            .catch(error => console.error('Error loading header:', error));
+    </script>
+
 </body>
 </html>

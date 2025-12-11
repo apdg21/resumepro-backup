@@ -3,11 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced To-Do & Notes</title>
-    <meta name="theme-color" content="#6200ea">
-    <meta name="description" content="A to-do list and notes app with labels, dates, reminders, and calendar view.">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="icon.png">
+    <title>Enhanced To-Do & Notes with Alarm</title>
     <style>
         :root {
             --primary-color: #6200ea;
@@ -25,43 +21,76 @@
         
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
         
         body {
-            font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--background-color);
             color: #333;
             line-height: 1.6;
+            padding: 20px;
         }
         
         .app-container {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
         
         header {
             text-align: center;
-            margin-bottom: 30px;
-            padding: 20px 0;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 25px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
         }
         
         h1 {
-            color: var(--primary-color);
-            margin: 0;
-            font-size: 28px;
-            font-weight: 600;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
         }
         
         .app-description {
-            color: var(--text-secondary);
-            margin: 8px 0 0;
             font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .tabs {
+            display: flex;
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 16px;
+            text-align: center;
+            background: white;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+        
+        .tab-content.active {
+            display: block;
         }
         
         .main-content {
@@ -110,11 +139,6 @@
             margin-bottom: 15px;
         }
         
-        .input-row .input-group {
-            flex: 1;
-            margin-bottom: 0;
-        }
-        
         input, select, textarea {
             width: 100%;
             padding: 12px 15px;
@@ -150,10 +174,6 @@
             justify-content: center;
         }
         
-        button i {
-            margin-right: 8px;
-        }
-        
         button:hover {
             background-color: var(--primary-dark);
             transform: translateY(-1px);
@@ -167,24 +187,13 @@
             background-color: var(--error-color);
         }
         
-        .btn-delete:hover {
-            background-color: #8a0c2a;
-        }
-        
         .btn-reminder {
             background-color: #ff9800;
         }
         
-        .btn-reminder:hover {
-            background-color: #f57c00;
-        }
-        
-        .btn-filter {
+        .btn-test-sound {
             background-color: #4caf50;
-        }
-        
-        .btn-filter:hover {
-            background-color: #3d8b40;
+            margin-top: 10px;
         }
         
         .items-list {
@@ -251,30 +260,6 @@
             font-weight: 500;
         }
         
-        .reminder-form {
-            display: flex;
-            gap: 10px;
-            margin: 15px 0;
-        }
-        
-        .reminder-form input {
-            flex: 1;
-        }
-        
-        .reminder-form button {
-            width: auto;
-        }
-        
-        .reminder-item {
-            background-color: #fff8e1;
-            border-left: 3px solid #ff9800;
-        }
-        
-        .calendar-item {
-            background-color: #e8f5e9;
-            border-left: 3px solid #4caf50;
-        }
-        
         .notification {
             position: fixed;
             top: 20px;
@@ -311,24 +296,42 @@
             font-size: 15px;
         }
         
-        .calendar-container {
-            margin-top: 20px;
-        }
-        
-        .calendar-header {
+        .sound-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 50px;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 999;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            gap: 10px;
         }
         
-        .calendar-title {
-            font-size: 16px;
-            font-weight: 500;
+        .sound-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
             color: var(--primary-color);
+            padding: 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
-        .explanation-box {
+        .sound-toggle:hover {
+            background-color: #f0e6ff;
+        }
+        
+        .volume-slider {
+            width: 80px;
+            margin: 0 5px;
+        }
+        
+        .sound-test-panel {
             background-color: #e8f5e9;
             border-left: 4px solid #4caf50;
             padding: 15px;
@@ -336,93 +339,11 @@
             margin: 20px 0;
         }
         
-        .explanation-box h3 {
+        .sound-test-panel h3 {
             margin-top: 0;
             color: #2e7d32;
-        }
-        
-        /* Modal styles for reminder setting */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-content {
-            background-color: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-            width: 90%;
-            max-width: 450px;
-        }
-        
-        .modal-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .modal-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-        
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-secondary);
-        }
-        
-        .reminder-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .reminder-option {
-            padding: 15px;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .reminder-option:hover {
-            border-color: var(--primary-color);
-            background-color: #f5f0ff;
-        }
-        
-        .reminder-option.selected {
-            border-color: var(--primary-color);
-            background-color: #f0e6ff;
-        }
-        
-        .reminder-option i {
-            font-size: 24px;
-            margin-bottom: 8px;
-            color: var(--primary-color);
-        }
-        
-        .custom-reminder {
-            margin-top: 20px;
-        }
-        
-        .custom-reminder.hidden {
-            display: none;
         }
         
         @keyframes fadeIn {
@@ -435,7 +356,6 @@
             to { transform: translateX(0); opacity: 1; }
         }
         
-        /* Material Icons */
         .material-icons {
             font-family: 'Material Icons';
             font-weight: normal;
@@ -452,359 +372,346 @@
             -webkit-font-smoothing: antialiased;
             vertical-align: middle;
         }
-        
-        /* Tabs */
-        .tabs {
-            display: flex;
-            margin-bottom: 20px;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .tab {
-            flex: 1;
-            padding: 16px;
-            text-align: center;
-            background: white;
-            border: none;
-            border-bottom: 3px solid transparent;
-            cursor: pointer;
-            font-weight: 500;
-            color: var(--text-secondary);
-            transition: all 0.3s;
-        }
-        
-        .tab.active {
-            color: var(--primary-color);
-            border-bottom: 3px solid var(--primary-color);
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .date-range-info {
-            background-color: #e3f2fd;
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            font-size: 14px;
-        }
     </style>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
     <div class="notification" id="notification"></div>
     
-    <!-- Reminder Modal -->
-    <div class="modal" id="reminderModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Set Reminder</h2>
-                <button class="close-modal" onclick="closeModal()">&times;</button>
-            </div>
-            <div class="reminder-options">
-                <div class="reminder-option" onclick="selectReminderOption('later-today')">
-                    <i class="material-icons">schedule</i>
-                    <div>Later Today</div>
-                    <small id="later-today-time">Today, 6:00 PM</small>
-                </div>
-                <div class="reminder-option" onclick="selectReminderOption('tomorrow')">
-                    <i class="material-icons">wb_sunny</i>
-                    <div>Tomorrow</div>
-                    <small id="tomorrow-time">Tomorrow, 9:00 AM</small>
-                </div>
-                <div class="reminder-option" onclick="selectReminderOption('next-week')">
-                    <i class="material-icons">event</i>
-                    <div>Next Week</div>
-                    <small id="next-week-time">Next Monday, 9:00 AM</small>
-                </div>
-                <div class="reminder-option" onclick="selectReminderOption('custom')">
-                    <i class="material-icons">edit_calendar</i>
-                    <div>Custom</div>
-                    <small>Select date & time</small>
-                </div>
-            </div>
-            <div class="custom-reminder hidden" id="customReminder">
-                <div class="input-group">
-                    <label for="customReminderDate">Date:</label>
-                    <input type="date" id="customReminderDate">
-                </div>
-                <div class="input-group">
-                    <label for="customReminderTime">Time:</label>
-                    <input type="time" id="customReminderTime">
-                </div>
-            </div>
-            <button onclick="setReminder()" style="width: 100%;">
-                <i class="material-icons">notifications</i> Set Reminder
-            </button>
-        </div>
+    <!-- Sound controls -->
+    <div class="sound-controls">
+        <button class="sound-toggle" id="muteToggle" title="Toggle sound">
+            <i class="material-icons" id="volumeIcon">volume_up</i>
+        </button>
+        <input type="range" min="0" max="1" step="0.1" value="0.7" class="volume-slider" id="volumeSlider">
     </div>
     
     <div class="app-container">
         <header>
             <h1>Enhanced To-Do & Notes</h1>
-            <p class="app-description">Organize your tasks and notes with reminders and calendar view</p>
+            <p class="app-description">Organize your tasks and notes with reminders and alarm sounds</p>
         </header>
         
         <div class="tabs">
             <button class="tab active" onclick="showTab('tasks')">Tasks</button>
             <button class="tab" onclick="showTab('notes')">Notes</button>
             <button class="tab" onclick="showTab('reminders')">Reminders</button>
-            <button class="tab" onclick="showTab('calendar')">Calendar</button>
         </div>
         
-        <div class="main-content">
-            <div class="left-column">
-                <div class="tab-content active" id="tasks-tab">
-                    <div class="section">
-                        <h2 class="section-title"><i class="material-icons">checklist</i> Add New Task</h2>
+        <div class="tab-content active" id="tasks-tab">
+            <div class="main-content">
+                <div class="section">
+                    <h2 class="section-title"><i class="material-icons">add_task</i> Add New Task</h2>
+                    <div class="input-group">
+                        <input type="text" id="taskInput" placeholder="What do you need to do?">
+                    </div>
+                    <div class="input-group">
+                        <select id="taskStatus">
+                            <option value="To Do">To Do</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Finished">Finished</option>
+                        </select>
+                    </div>
+                    <div class="input-row">
                         <div class="input-group">
-                            <input type="text" id="taskInput" placeholder="What do you need to do?">
+                            <input type="datetime-local" id="taskReminder">
                         </div>
                         <div class="input-group">
-                            <select id="taskStatus">
-                                <option value="To Do">To Do</option>
-                                <option value="In Process">In Process</option>
-                                <option value="Finished">Finished</option>
-                            </select>
-                        </div>
-                        <div class="reminder-form">
-                            <input type="datetime-local" id="taskReminder" style="display: none;">
-                            <button class="btn-reminder" onclick="openReminderModal('task')">
+                            <button class="btn-reminder" onclick="setReminder('task')">
                                 <i class="material-icons">notifications</i> Set Reminder
                             </button>
                         </div>
-                        <button onclick="addTask()">
-                            <i class="material-icons">add</i> Add Task
-                        </button>
                     </div>
-                    
-                    <div class="section">
-                        <h2 class="section-title"><i class="material-icons">format_list_bulleted</i> My Tasks</h2>
-                        <ul class="items-list" id="taskList"></ul>
-                        <div id="taskEmptyState" class="empty-state">
-                            <i class="material-icons">check_box</i>
-                            <p>No tasks yet. Add a task to get started!</p>
-                        </div>
-                    </div>
+                    <button onclick="addTask()">
+                        <i class="material-icons">add</i> Add Task
+                    </button>
                 </div>
                 
-                <div class="tab-content" id="notes-tab">
-                    <div class="section">
-                        <h2 class="section-title"><i class="material-icons">note_add</i> Add New Note</h2>
-                        <div class="input-group">
-                            <input type="text" id="noteTitle" placeholder="Note title">
-                        </div>
-                        <div class="input-group">
-                            <textarea id="noteContent" placeholder="Write your note here..."></textarea>
-                        </div>
-                        <div class="reminder-form">
-                            <input type="datetime-local" id="noteReminder" style="display: none;">
-                            <button class="btn-reminder" onclick="openReminderModal('note')">
-                                <i class="material-icons">notifications</i> Set Reminder
-                            </button>
-                        </div>
-                        <button onclick="addNote()">
-                            <i class="material-icons">add</i> Add Note
-                        </button>
-                    </div>
-                    
-                    <div class="section">
-                        <h2 class="section-title"><i class="material-icons">notes</i> My Notes</h2>
-                        <ul class="items-list" id="noteList"></ul>
-                        <div id="noteEmptyState" class="empty-state">
-                            <i class="material-icons">note</i>
-                            <p>No notes yet. Add a note to get started!</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="tab-content" id="reminders-tab">
-                    <div class="explanation-box">
-                        <h3><i class="material-icons">info</i> How Reminders Work</h3>
-                        <p>Reminders are set for specific tasks or notes and will trigger a notification at the scheduled time. The notification will appear even if the app is closed (as long as the browser is running).</p>
-                        <p>To delete a reminder, click the delete button next to it in the list below. You can also edit reminders directly from tasks or notes.</p>
-                    </div>
-                    
-                    <div class="section">
-                        <h2 class="section-title"><i class="material-icons">notifications</i> Upcoming Reminders</h2>
-                        <ul class="items-list" id="remindersList"></ul>
-                        <div id="reminderEmptyState" class="empty-state">
-                            <i class="material-icons">notifications_off</i>
-                            <p>No reminders set. Add reminders to your tasks or notes!</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="tab-content" id="calendar-tab">
-                    <div class="section">
-                        <h2 class="section-title"><i class="material-icons">calendar_today</i> View by Date</h2>
-                        
-                        <div class="input-row">
-                            <div class="input-group">
-                                <label for="startDate">From Date:</label>
-                                <input type="date" id="startDate">
-                            </div>
-                            <div class="input-group">
-                                <label for="endDate">To Date:</label>
-                                <input type="date" id="endDate">
-                            </div>
-                        </div>
-                        
-                        <button class="btn-filter" onclick="filterByDateRange()">
-                            <i class="material-icons">filter_list</i> Filter by Date Range
-                        </button>
-                        
-                        <div id="dateRangeInfo" class="date-range-info" style="display: none;">
-                            Showing items from <span id="startDateDisplay"></span> to <span id="endDateDisplay"></span>
-                        </div>
-                        
-                        <ul class="items-list" id="calendarList"></ul>
-                        <div id="calendarEmptyState" class="empty-state">
-                            <i class="material-icons">event_available</i>
-                            <p>No items for selected date range.</p>
-                        </div>
+                <div class="section">
+                    <h2 class="section-title"><i class="material-icons">format_list_bulleted</i> My Tasks</h2>
+                    <ul class="items-list" id="taskList"></ul>
+                    <div id="taskEmptyState" class="empty-state">
+                        <i class="material-icons">check_box</i>
+                        <p>No tasks yet. Add a task to get started!</p>
                     </div>
                 </div>
             </div>
-            
-            <div class="right-column">
+        </div>
+        
+        <div class="tab-content" id="notes-tab">
+            <div class="main-content">
                 <div class="section">
-                    <h2 class="section-title"><i class="material-icons">today</i> Today's Overview</h2>
-                    <div id="todayStats">
-                        <p>Loading your daily overview...</p>
-                    </div>
-                </div>
-                
-                <div class="section">
-                    <h2 class="section-title"><i class="material-icons">insights</i> Quick Stats</h2>
-                    <div id="quickStats">
-                        <p>Your statistics will appear here</p>
-                    </div>
-                </div>
-                
-                <div class="section">
-                    <h2 class="section-title"><i class="material-icons">event</i> Quick Date Filter</h2>
+                    <h2 class="section-title"><i class="material-icons">note_add</i> Add New Note</h2>
                     <div class="input-group">
-                        <label for="quickDate">View items for a specific date:</label>
-                        <input type="date" id="quickDate">
+                        <input type="text" id="noteTitle" placeholder="Note title">
                     </div>
-                    <button onclick="filterBySingleDate()">
-                        <i class="material-icons">search</i> View Items
+                    <div class="input-group">
+                        <textarea id="noteContent" placeholder="Write your note here..."></textarea>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <input type="datetime-local" id="noteReminder">
+                        </div>
+                        <div class="input-group">
+                            <button class="btn-reminder" onclick="setReminder('note')">
+                                <i class="material-icons">notifications</i> Set Reminder
+                            </button>
+                        </div>
+                    </div>
+                    <button onclick="addNote()">
+                        <i class="material-icons">add</i> Add Note
                     </button>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title"><i class="material-icons">notes</i> My Notes</h2>
+                    <ul class="items-list" id="noteList"></ul>
+                    <div id="noteEmptyState" class="empty-state">
+                        <i class="material-icons">note</i>
+                        <p>No notes yet. Add a note to get started!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="reminders-tab">
+            <div class="sound-test-panel">
+                <h3><i class="material-icons">volume_up</i> Sound Test</h3>
+                <p>Test if your alarm sound is working properly. If you can't hear the test sound, check your browser's audio settings.</p>
+                <button class="btn-test-sound" onclick="testAlarmSound()">
+                    <i class="material-icons">play_arrow</i> Test Alarm Sound
+                </button>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title"><i class="material-icons">notifications</i> Upcoming Reminders</h2>
+                <ul class="items-list" id="remindersList"></ul>
+                <div id="reminderEmptyState" class="empty-state">
+                    <i class="material-icons">notifications_off</i>
+                    <p>No reminders set. Add reminders to your tasks or notes!</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let currentTab = 'tasks';
-        let reminders = JSON.parse(localStorage.getItem('reminders') || '[]');
-        let reminderTimeouts = {};
-        let currentReminderType = '';
-        let selectedReminderOption = '';
-
-        // Load data on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            loadTasks();
-            loadNotes();
-            loadReminders();
-            showTab('tasks');
-            setDefaultDates();
-            checkReminders();
-            checkEmptyStates();
-            updateStats();
-            calculateDefaultReminderTimes();
-        });
-
-        // Calculate default times for reminder options
-        function calculateDefaultReminderTimes() {
-            const now = new Date();
+        // App state
+        let todos = JSON.parse(localStorage.getItem('todos')) || [];
+        let notes = JSON.parse(localStorage.getItem('notes')) || [];
+        let reminders = JSON.parse(localStorage.getItem('reminders')) || [];
+        let isSoundEnabled = true;
+        let alarmVolume = 0.7;
+        let audioContext = null;
+        
+        // Initialize the app
+        function init() {
+            renderTodos();
+            renderNotes();
+            renderReminders();
+            setupSoundControls();
+            startReminderChecker();
             
-            // Later today (6:00 PM)
-            const laterToday = new Date();
-            laterToday.setHours(18, 0, 0, 0);
-            if (laterToday < now) {
-                laterToday.setDate(laterToday.getDate() + 1);
-            }
-            document.getElementById('later-today-time').textContent = formatTime(laterToday);
-            
-            // Tomorrow (9:00 AM)
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            tomorrow.setHours(9, 0, 0, 0);
-            document.getElementById('tomorrow-time').textContent = formatTime(tomorrow);
-            
-            // Next week (next Monday, 9:00 AM)
-            const nextWeek = new Date();
-            nextWeek.setDate(nextWeek.getDate() + (7 - nextWeek.getDay() + 1) % 7 || 7);
-            nextWeek.setHours(9, 0, 0, 0);
-            document.getElementById('next-week-time').textContent = formatTime(nextWeek);
-        }
-
-        function formatTime(date) {
-            const today = new Date();
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            
-            if (date.toDateString() === today.toDateString()) {
-                return `Today, ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
-            } else if (date.toDateString() === tomorrow.toDateString()) {
-                return `Tomorrow, ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
-            } else {
-                return `${date.toLocaleDateString([], {weekday: 'long'})}, ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
-            }
-        }
-
-        function showTab(tabName) {
-            currentTab = tabName;
-            // Update tabs
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            event.currentTarget.classList.add('active');
-            document.getElementById(tabName + '-tab').classList.add('active');
-            
-            if (tabName === 'reminders') {
-                displayUpcomingReminders();
-            } else if (tabName === 'calendar') {
-                filterByDateRange();
-            }
-            
-            checkEmptyStates();
-            updateStats();
-        }
-
-        function setDefaultDates() {
-            const today = new Date();
-            const oneWeekAgo = new Date();
-            oneWeekAgo.setDate(today.getDate() - 7);
-            
-            document.getElementById('startDate').value = formatDate(oneWeekAgo);
-            document.getElementById('endDate').value = formatDate(today);
-            document.getElementById('quickDate').value = formatDate(today);
+            // Check if there are any reminders that should have already triggered
+            checkPastReminders();
         }
         
-        function formatDate(date) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
+        // Set up sound controls
+        function setupSoundControls() {
+            const volumeSlider = document.getElementById('volumeSlider');
+            const muteToggle = document.getElementById('muteToggle');
+            const volumeIcon = document.getElementById('volumeIcon');
+            
+            // Set initial volume
+            alarmVolume = parseFloat(localStorage.getItem('alarmVolume')) || 0.7;
+            isSoundEnabled = localStorage.getItem('isSoundEnabled') !== 'false';
+            
+            volumeSlider.value = alarmVolume;
+            volumeIcon.textContent = isSoundEnabled ? 'volume_up' : 'volume_off';
+            
+            // Volume slider event
+            volumeSlider.addEventListener('input', function() {
+                alarmVolume = parseFloat(this.value);
+                localStorage.setItem('alarmVolume', alarmVolume);
+                
+                // Update mute state based on volume
+                if (alarmVolume === 0) {
+                    isSoundEnabled = false;
+                    volumeIcon.textContent = 'volume_off';
+                    localStorage.setItem('isSoundEnabled', 'false');
+                } else {
+                    isSoundEnabled = true;
+                    volumeIcon.textContent = 'volume_up';
+                    localStorage.setItem('isSoundEnabled', 'true');
+                }
+            });
+            
+            // Mute toggle event
+            muteToggle.addEventListener('click', function() {
+                isSoundEnabled = !isSoundEnabled;
+                localStorage.setItem('isSoundEnabled', isSoundEnabled.toString());
+                
+                if (isSoundEnabled) {
+                    volumeIcon.textContent = 'volume_up';
+                    volumeSlider.value = alarmVolume;
+                } else {
+                    volumeIcon.textContent = 'volume_off';
+                    volumeSlider.value = 0;
+                }
+            });
         }
-
+        
+        // Create alarm sound using Web Audio API
+        function createAlarmSound() {
+            try {
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
+                oscillator.frequency.setValueAtTime(1046.5, audioContext.currentTime + 0.1);
+                oscillator.frequency.setValueAtTime(1318.5, audioContext.currentTime + 0.2);
+                
+                gainNode.gain.setValueAtTime(alarmVolume, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 1.5);
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 1.5);
+                
+                return true;
+            } catch (error) {
+                console.error('Web Audio API error:', error);
+                return false;
+            }
+        }
+        
+        // Play alarm sound with multiple fallbacks
+        function playAlarmSound() {
+            if (!isSoundEnabled) return;
+            
+            // Try Web Audio API first
+            if (createAlarmSound()) {
+                return;
+            }
+            
+            // Fallback to HTML5 audio with base64 encoded sound
+            try {
+                const audio = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbVtfdJivrJBhNjVgodDbq2EcBStztvLJfjUADF2h2/LDciwACVOW0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay极简的警报声，适合提醒功能");
+                audio.volume = alarmVolume;
+                audio.play().catch(error => {
+                    console.error('HTML5 audio error:', error);
+                    // Final fallback - use browser's speech synthesis
+                    speakAlarm();
+                });
+            } catch (error) {
+                console.error('Audio fallback error:', error);
+                // Final fallback - use browser's speech synthesis
+                speakAlarm();
+            }
+        }
+        
+        // Final fallback - use speech synthesis
+        function speakAlarm() {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance('Reminder! Check your tasks!');
+                utterance.volume = alarmVolume;
+                speechSynthesis.speak(utterance);
+            }
+        }
+        
+        // Test the alarm sound
+        function testAlarmSound() {
+            showNotification('Testing alarm sound...');
+            playAlarmSound();
+        }
+        
+        // Check for reminders that should have triggered
+        function checkPastReminders() {
+            const now = new Date();
+            
+            todos.forEach(todo => {
+                if (todo.reminder && new Date(todo.reminder) < now && !todo.reminderTriggered) {
+                    // This reminder should have already triggered
+                    showNotification(`Reminder: ${todo.title}`, 'error');
+                    playAlarmSound();
+                    todo.reminderTriggered = true;
+                }
+            });
+            
+            saveTodos();
+        }
+        
+        // Start the reminder checker interval
+        function startReminderChecker() {
+            setInterval(() => {
+                const now = new Date();
+                
+                todos.forEach(todo => {
+                    if (todo.reminder && !todo.reminderTriggered) {
+                        const reminderTime = new Date(todo.reminder);
+                        
+                        if (reminderTime <= now) {
+                            // Trigger the reminder
+                            showNotification(`Reminder: ${todo.title}`, 'error');
+                            playAlarmSound();
+                            todo.reminderTriggered = true;
+                            saveTodos();
+                        }
+                    }
+                });
+            }, 5000); // Check every 5 seconds
+        }
+        
+        // Show a specific tab
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            // Update active tab button
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            event.currentTarget.classList.add('active');
+            
+            if (tabName === 'reminders') {
+                renderReminders();
+            }
+        }
+        
+        // Set a reminder
+        function setReminder(type) {
+            const reminderInput = document.getElementById(`${type}Reminder`);
+            const reminderValue = reminderInput.value;
+            
+            if (!reminderValue) {
+                showNotification('Please select a date and time for the reminder', 'error');
+                return;
+            }
+            
+            showNotification('Reminder set successfully!');
+        }
+        
+        // Add a new task
         function addTask() {
             const taskInput = document.getElementById('taskInput');
             const taskStatus = document.getElementById('taskStatus');
+            const taskReminder = document.getElementById('taskReminder');
             const taskText = taskInput.value.trim();
+            
             if (taskText === '') {
-                showNotification('Please enter a task!', true);
+                showNotification('Please enter a task!', 'error');
                 return;
             }
 
@@ -812,42 +719,31 @@
                 id: Date.now(),
                 text: taskText,
                 status: taskStatus.value,
-                created: new Date().toISOString().split('T')[0],
-                reminder: document.getElementById('taskReminder').dataset.tempReminder || null
+                created: new Date().toISOString(),
+                reminder: taskReminder.value || null,
+                reminderTriggered: false
             };
 
-            const taskList = document.getElementById('taskList');
-            const li = createListItem(task, 'task');
-            taskList.appendChild(li);
+            todos.push(task);
+            saveTodos();
+            renderTodos();
+            
             taskInput.value = '';
+            taskReminder.value = '';
             
-            // Save reminder if set
-            if (task.reminder) {
-                reminders.push({
-                    id: task.id,
-                    type: 'task',
-                    title: task.text,
-                    datetime: task.reminder
-                });
-                saveReminders();
-                setReminderTimeout(task.id, task.reminder, task.text);
-                delete document.getElementById('taskReminder').dataset.tempReminder;
-            }
-            
-            saveTasks();
-            checkEmptyStates();
-            updateStats();
             showNotification('Task added successfully!');
         }
-
+        
+        // Add a new note
         function addNote() {
             const noteTitle = document.getElementById('noteTitle');
             const noteContent = document.getElementById('noteContent');
+            const noteReminder = document.getElementById('noteReminder');
             const noteTitleText = noteTitle.value.trim();
             const noteContentText = noteContent.value.trim();
             
             if (noteTitleText === '' || noteContentText === '') {
-                showNotification('Please enter both title and content for your note!', true);
+                showNotification('Please enter both title and content for your note!', 'error');
                 return;
             }
 
@@ -855,481 +751,141 @@
                 id: Date.now(),
                 title: noteTitleText,
                 content: noteContentText,
-                created: new Date().toISOString().split('T')[0],
-                reminder: document.getElementById('noteReminder').dataset.tempReminder || null
+                created: new Date().toISOString(),
+                reminder: noteReminder.value || null,
+                reminderTriggered: false
             };
 
-            const noteList = document.getElementById('noteList');
-            const li = createListItem(note, 'note');
-            noteList.appendChild(li);
+            notes.push(note);
+            saveNotes();
+            renderNotes();
+            
             noteTitle.value = '';
             noteContent.value = '';
+            noteReminder.value = '';
             
-            // Save reminder if set
-            if (note.reminder) {
-                reminders.push({
-                    id: note.id,
+            showNotification('Note added successfully!');
+        }
+        
+        // Render todos
+        function renderTodos() {
+            const taskList = document.getElementById('taskList');
+            const emptyState = document.getElementById('taskEmptyState');
+            
+            if (todos.length === 0) {
+                emptyState.style.display = 'block';
+                taskList.innerHTML = '';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            taskList.innerHTML = '';
+            
+            todos.forEach(todo => {
+                const li = document.createElement('li');
+                li.className = 'item';
+                if (todo.reminder && !todo.reminderTriggered) {
+                    li.classList.add('reminder-item');
+                }
+                
+                li.innerHTML = `
+                    <div class="item-content">
+                        <div class="item-text">
+                            <h3 class="item-title">${todo.text}</h3>
+                            <div class="item-details">
+                                <span>Status: ${todo.status}</span>
+                                <span>Created: ${formatDate(todo.created)}</span>
+                                ${todo.reminder ? `<span class="reminder-badge">Reminder: ${formatDateTime(todo.reminder)}</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="item-action-btn btn-delete" onclick="deleteTodo(${todo.id})">
+                                <i class="material-icons">delete</i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                taskList.appendChild(li);
+            });
+        }
+        
+        // Render notes
+        function renderNotes() {
+            const noteList = document.getElementById('noteList');
+            const emptyState = document.getElementById('noteEmptyState');
+            
+            if (notes.length === 0) {
+                emptyState.style.display = 'block';
+                noteList.innerHTML = '';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            noteList.innerHTML = '';
+            
+            notes.forEach(note => {
+                const li = document.createElement('li');
+                li.className = 'item';
+                if (note.reminder && !note.reminderTriggered) {
+                    li.classList.add('reminder-item');
+                }
+                
+                li.innerHTML = `
+                    <div class="item-content">
+                        <div class="item-text">
+                            <h3 class="item-title">${note.title}</h3>
+                            <div class="item-details">
+                                <span>Created: ${formatDate(note.created)}</span>
+                                ${note.reminder ? `<span class="reminder-badge">Reminder: ${formatDateTime(note.reminder)}</span>` : ''}
+                            </div>
+                            <p>${note.content}</p>
+                        </div>
+                        <div class="item-actions">
+                            <button class="item-action-btn btn-delete" onclick="deleteNote(${note.id})">
+                                <i class="material-icons">delete</i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                noteList.appendChild(li);
+            });
+        }
+        
+        // Render reminders
+        function renderReminders() {
+            const remindersList = document.getElementById('remindersList');
+            const emptyState = document.getElementById('reminderEmptyState');
+            
+            const allReminders = [
+                ...todos.filter(todo => todo.reminder && !todo.reminderTriggered).map(todo => ({
+                    type: 'task',
+                    title: todo.text,
+                    datetime: todo.reminder
+                })),
+                ...notes.filter(note => note.reminder && !note.reminderTriggered).map(note => ({
                     type: 'note',
                     title: note.title,
                     datetime: note.reminder
-                });
-                saveReminders();
-                setReminderTimeout(note.id, note.reminder, note.title);
-                delete document.getElementById('noteReminder').dataset.tempReminder;
-            }
+                }))
+            ];
             
-            saveNotes();
-            checkEmptyStates();
-            updateStats();
-            showNotification('Note added successfully!');
-        }
-
-        function openReminderModal(type) {
-            currentReminderType = type;
-            selectedReminderOption = '';
-            document.querySelectorAll('.reminder-option').forEach(opt => opt.classList.remove('selected'));
-            document.getElementById('customReminder').classList.add('hidden');
-            document.getElementById('reminderModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('reminderModal').style.display = 'none';
-        }
-
-        function selectReminderOption(option) {
-            selectedReminderOption = option;
-            document.querySelectorAll('.reminder-option').forEach(opt => opt.classList.remove('selected'));
-            event.currentTarget.classList.add('selected');
-            
-            if (option === 'custom') {
-                document.getElementById('customReminder').classList.remove('hidden');
-                
-                // Set default values for custom reminder
-                const now = new Date();
-                const tomorrow = new Date();
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                
-                document.getElementById('customReminderDate').value = formatDate(tomorrow);
-                document.getElementById('customReminderTime').value = '09:00';
-            } else {
-                document.getElementById('customReminder').classList.add('hidden');
-            }
-        }
-
-        function setReminder() {
-            if (!selectedReminderOption) {
-                showNotification('Please select a reminder option!', true);
+            if (allReminders.length === 0) {
+                emptyState.style.display = 'block';
+                remindersList.innerHTML = '';
                 return;
             }
             
-            let reminderDateTime;
-            
-            switch(selectedReminderOption) {
-                case 'later-today':
-                    const laterToday = new Date();
-                    laterToday.setHours(18, 0, 0, 0);
-                    if (laterToday < new Date()) {
-                        laterToday.setDate(laterToday.getDate() + 1);
-                    }
-                    reminderDateTime = laterToday.toISOString().slice(0, 16);
-                    break;
-                    
-                case 'tomorrow':
-                    const tomorrow = new Date();
-                    tomorrow.setDate(tomorrow.getDate() + 1);
-                    tomorrow.setHours(9, 0, 0, 0);
-                    reminderDateTime = tomorrow.toISOString().slice(0, 16);
-                    break;
-                    
-                case 'next-week':
-                    const nextWeek = new Date();
-                    nextWeek.setDate(nextWeek.getDate() + (7 - nextWeek.getDay() + 1) % 7 || 7);
-                    nextWeek.setHours(9, 0, 0, 0);
-                    reminderDateTime = nextWeek.toISOString().slice(0, 16);
-                    break;
-                    
-                case 'custom':
-                    const date = document.getElementById('customReminderDate').value;
-                    const time = document.getElementById('customReminderTime').value;
-                    if (!date || !time) {
-                        showNotification('Please select both date and time for custom reminder!', true);
-                        return;
-                    }
-                    reminderDateTime = `${date}T${time}`;
-                    break;
-            }
-            
-            // Store the reminder temporarily until the item is created
-            document.getElementById(currentReminderType + 'Reminder').dataset.tempReminder = reminderDateTime;
-            closeModal();
-            
-            showNotification('Reminder set! It will be saved when you add the ' + currentReminderType);
-        }
-
-        function createListItem(item, type) {
-            const li = document.createElement('li');
-            li.className = 'item';
-            if (item.reminder && new Date(item.reminder) > new Date()) {
-                li.classList.add('reminder-item');
-            }
-            
-            const itemContent = document.createElement('div');
-            itemContent.className = 'item-content';
-            
-            const itemText = document.createElement('div');
-            itemText.className = 'item-text';
-            
-            if (type === 'task') {
-                itemText.innerHTML = `
-                    <h3 class="item-title">${item.text}</h3>
-                    <div class="item-details">
-                        <span>Status: ${item.status}</span>
-                        <span>Created: ${item.created}</span>
-                        ${item.reminder ? '<span class="reminder-badge">Reminder Set</span>' : ''}
-                    </div>
-                `;
-            } else {
-                itemText.innerHTML = `
-                    <h3 class="item-title">${item.title}</h3>
-                    <div class="item-details">
-                        <span>Created: ${item.created}</span>
-                        ${item.reminder ? '<span class="reminder-badge">Reminder Set</span>' : ''}
-                    </div>
-                    <p>${item.content}</p>
-                `;
-            }
-            
-            const itemActions = document.createElement('div');
-            itemActions.className = 'item-actions';
-            
-            // Add reminder button
-            const reminderBtn = document.createElement('button');
-            reminderBtn.className = 'item-action-btn btn-reminder';
-            reminderBtn.innerHTML = `<i class="material-icons">${item.reminder ? 'notifications_active' : 'notifications'}</i>`;
-            reminderBtn.title = item.reminder ? 'Edit Reminder' : 'Add Reminder';
-            reminderBtn.onclick = () => {
-                openEditReminderModal(item, type, li, reminderBtn);
-            };
-            
-            // Delete button
-            const deleteBtn = document.createElement('button');
-            deleteBtn.className = 'item-action-btn btn-delete';
-            deleteBtn.innerHTML = '<i class="material-icons">delete</i>';
-            deleteBtn.title = 'Delete';
-            deleteBtn.onclick = () => {
-                // Remove any associated reminders
-                if (item.reminder) {
-                    removeReminder(item.id, type);
-                }
-                
-                li.remove();
-                type === 'task' ? saveTasks() : saveNotes();
-                filterByDateRange();
-                checkEmptyStates();
-                updateStats();
-            };
-            
-            if (type === 'task') {
-                const statusSelect = document.createElement('select');
-                statusSelect.className = 'item-action-btn';
-                statusSelect.style.padding = '6px';
-                ['To Do', 'In Process', 'Finished'].forEach(status => {
-                    const option = document.createElement('option');
-                    option.value = status;
-                    option.textContent = status;
-                    option.selected = status === item.status;
-                    statusSelect.appendChild(option);
-                });
-                statusSelect.onchange = () => {
-                    item.status = statusSelect.value;
-                    saveTasks();
-                    filterByDateRange();
-                    updateStats();
-                };
-                itemActions.appendChild(statusSelect);
-            }
-            
-            itemActions.appendChild(reminderBtn);
-            itemActions.appendChild(deleteBtn);
-            
-            itemContent.appendChild(itemText);
-            itemContent.appendChild(itemActions);
-            
-            li.appendChild(itemContent);
-            return li;
-        }
-
-        function openEditReminderModal(item, type, li, reminderBtn) {
-            currentReminderType = type;
-            selectedReminderOption = 'custom';
-            
-            // Pre-fill custom values if there's an existing reminder
-            if (item.reminder) {
-                const reminderDate = new Date(item.reminder);
-                document.getElementById('customReminderDate').value = formatDate(reminderDate);
-                document.getElementById('customReminderTime').value = reminderDate.toTimeString().slice(0, 5);
-            } else {
-                // Set default values
-                const tomorrow = new Date();
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                document.getElementById('customReminderDate').value = formatDate(tomorrow);
-                document.getElementById('customReminderTime').value = '09:00';
-            }
-            
-            document.querySelectorAll('.reminder-option').forEach(opt => opt.classList.remove('selected'));
-            document.querySelector('.reminder-option[onclick="selectReminderOption(\'custom\')"]').classList.add('selected');
-            document.getElementById('customReminder').classList.remove('hidden');
-            
-            // Store reference to the item being edited
-            document.getElementById('reminderModal').dataset.editingItemId = item.id;
-            document.getElementById('reminderModal').dataset.listItem = li;
-            document.getElementById('reminderModal').dataset.reminderBtn = reminderBtn;
-            
-            document.getElementById('reminderModal').style.display = 'flex';
-        }
-
-        function removeReminder(id, type, li = null, reminderBtn = null) {
-            // Remove from reminders array
-            reminders = reminders.filter(r => r.id !== id);
-            saveReminders();
-            
-            // Clear timeout
-            clearTimeout(reminderTimeouts[id]);
-            delete reminderTimeouts[id];
-            
-            // Update UI if elements provided
-            if (li && reminderBtn) {
-                // Update the specific item
-                type === 'task' ? saveTasks() : saveNotes();
-                li.classList.remove('reminder-item');
-                reminderBtn.innerHTML = '<i class="material-icons">notifications</i>';
-                reminderBtn.title = 'Add Reminder';
-                
-                // Remove the reminder badge
-                const badge = li.querySelector('.reminder-badge');
-                if (badge) badge.remove();
-            }
-            
-            showNotification('Reminder removed!');
-        }
-
-        function saveTasks() {
-            const taskList = document.getElementById('taskList');
-            const tasks = [];
-            
-            for (let li of taskList.children) {
-                const text = li.querySelector('.item-title').textContent;
-                const status = li.querySelector('select').value;
-                const created = li.querySelector('.item-details span:nth-child(2)').textContent.replace('Created: ', '');
-                const hasReminder = li.querySelector('.reminder-badge') !== null;
-                
-                let reminder = null;
-                let id = Date.now();
-                
-                if (hasReminder) {
-                    // Find the reminder in our reminders array
-                    const reminderObj = reminders.find(r => r.type === 'task' && r.title === text);
-                    if (reminderObj) {
-                        reminder = reminderObj.datetime;
-                        id = reminderObj.id;
-                    }
-                }
-                
-                tasks.push({ id, text, status, created, reminder });
-            }
-            
-            localStorage.setItem('tasks', JSON.stringify(tasks));
-        }
-
-        function saveNotes() {
-            const noteList = document.getElementById('noteList');
-            const notes = [];
-            
-            for (let li of noteList.children) {
-                const title = li.querySelector('.item-title').textContent;
-                const content = li.querySelector('p').textContent;
-                const created = li.querySelector('.item-details span').textContent.replace('Created: ', '');
-                const hasReminder = li.querySelector('.reminder-badge') !== null;
-                
-                let reminder = null;
-                let id = Date.now();
-                
-                if (hasReminder) {
-                    // Find the reminder in our reminders array
-                    const reminderObj = reminders.find(r => r.type === 'note' && r.title === title);
-                    if (reminderObj) {
-                        reminder = reminderObj.datetime;
-                        id = reminderObj.id;
-                    }
-                }
-                
-                notes.push({ id, title, content, created, reminder });
-            }
-            
-            localStorage.setItem('notes', JSON.stringify(notes));
-        }
-
-        function loadTasks() {
-            const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-            const taskList = document.getElementById('taskList');
-            taskList.innerHTML = '';
-            tasks.forEach(task => {
-                taskList.appendChild(createListItem(task, 'task'));
-            });
-            checkEmptyStates();
-        }
-
-        function loadNotes() {
-            const notes = JSON.parse(localStorage.getItem('notes') || '[]');
-            const noteList = document.getElementById('noteList');
-            noteList.innerHTML = '';
-            notes.forEach(note => {
-                noteList.appendChild(createListItem(note, 'note'));
-            });
-            checkEmptyStates();
-        }
-
-        function saveReminders() {
-            localStorage.setItem('reminders', JSON.stringify(reminders));
-        }
-
-        function loadReminders() {
-            reminders = JSON.parse(localStorage.getItem('reminders') || '[]');
-            // Set timeouts for all reminders
-            reminders.forEach(reminder => {
-                setReminderTimeout(reminder.id, reminder.datetime, reminder.title);
-            });
-        }
-
-        function setReminderTimeout(id, datetime, title) {
-            // Clear existing timeout if any
-            if (reminderTimeouts[id]) {
-                clearTimeout(reminderTimeouts[id]);
-            }
-            
-            const now = new Date();
-            const reminderTime = new Date(datetime);
-            const timeUntilReminder = reminderTime - now;
-            
-            if (timeUntilReminder > 0) {
-                reminderTimeouts[id] = setTimeout(() => {
-                    showNotification(`Reminder: ${title}`, false);
-                    // Remove the reminder after triggering
-                    reminders = reminders.filter(r => r.id !== id);
-                    saveReminders();
-                    
-                    // Update the UI to remove reminder badge
-                    const items = document.querySelectorAll('.item');
-                    items.forEach(item => {
-                        const itemTitle = item.querySelector('.item-title').textContent;
-                        if (itemTitle === title) {
-                            item.classList.remove('reminder-item');
-                            const badge = item.querySelector('.reminder-badge');
-                            if (badge) badge.remove();
-                            const reminderBtn = item.querySelector('.btn-reminder');
-                            if (reminderBtn) {
-                                reminderBtn.innerHTML = '<i class="material-icons">notifications</i>';
-                                reminderBtn.title = 'Add Reminder';
-                            }
-                        }
-                    });
-                    
-                    displayUpcomingReminders();
-                    checkEmptyStates();
-                }, timeUntilReminder);
-            }
-        }
-
-        function checkReminders() {
-            const now = new Date();
-            reminders.forEach(reminder => {
-                const reminderTime = new Date(reminder.datetime);
-                if (reminderTime < now) {
-                    // Remove expired reminders
-                    reminders = reminders.filter(r => r.id !== reminder.id);
-                }
-            });
-            saveReminders();
-        }
-
-        function displayUpcomingReminders() {
-            const remindersList = document.getElementById('remindersList');
+            emptyState.style.display = 'none';
             remindersList.innerHTML = '';
             
-            if (reminders.length === 0) {
-                document.getElementById('reminderEmptyState').style.display = 'block';
-                return;
-            }
+            // Sort by date
+            allReminders.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
             
-            document.getElementById('reminderEmptyState').style.display = 'none';
-            
-            // Sort reminders by date
-            const sortedReminders = [...reminders].sort((a, b) => 
-                new Date(a.datetime) - new Date(b.datetime)
-            );
-            
-            sortedReminders.forEach(reminder => {
+            allReminders.forEach(reminder => {
                 const li = document.createElement('li');
                 li.className = 'item reminder-item';
-                
-                const deleteBtn = document.createElement('button');
-                deleteBtn.className = 'item-action-btn btn-delete';
-                deleteBtn.innerHTML = '<i class="material-icons">delete</i>';
-                deleteBtn.title = 'Delete Reminder';
-                deleteBtn.onclick = () => {
-                    // Find the associated task or note
-                    let itemElement = null;
-                    if (reminder.type === 'task') {
-                        const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-                        const task = tasks.find(t => t.id === reminder.id);
-                        if (task) {
-                            task.reminder = null;
-                            localStorage.setItem('tasks', JSON.stringify(tasks));
-                            
-                            // Update UI
-                            const taskItems = document.querySelectorAll('#taskList .item');
-                            taskItems.forEach(item => {
-                                if (item.querySelector('.item-title').textContent === reminder.title) {
-                                    item.classList.remove('reminder-item');
-                                    const badge = item.querySelector('.reminder-badge');
-                                    if (badge) badge.remove();
-                                    const reminderBtn = item.querySelector('.btn-reminder');
-                                    if (reminderBtn) {
-                                        reminderBtn.innerHTML = '<i class="material-icons">notifications</i>';
-                                        reminderBtn.title = 'Add Reminder';
-                                    }
-                                }
-                            });
-                        }
-                    } else {
-                        const notes = JSON.parse(localStorage.getItem('notes') || '[]');
-                        const note = notes.find(n => n.id === reminder.id);
-                        if (note) {
-                            note.reminder = null;
-                            localStorage.setItem('notes', JSON.stringify(notes));
-                            
-                            // Update UI
-                            const noteItems = document.querySelectorAll('#noteList .item');
-                            noteItems.forEach(item => {
-                                if (item.querySelector('.item-title').textContent === reminder.title) {
-                                    item.classList.remove('reminder-item');
-                                    const badge = item.querySelector('.reminder-badge');
-                                    if (badge) badge.remove();
-                                    const reminderBtn = item.querySelector('.btn-reminder');
-                                    if (reminderBtn) {
-                                        reminderBtn.innerHTML = '<i class="material-icons">notifications</i>';
-                                        reminderBtn.title = 'Add Reminder';
-                                    }
-                                }
-                            });
-                        }
-                    }
-                    
-                    // Remove the reminder
-                    removeReminder(reminder.id);
-                    li.remove();
-                    checkEmptyStates();
-                };
                 
                 li.innerHTML = `
                     <div class="item-content">
@@ -1337,187 +893,77 @@
                             <h3 class="item-title">${reminder.title}</h3>
                             <div class="item-details">
                                 <span>Type: ${reminder.type}</span>
-                                <span>Due: ${new Date(reminder.datetime).toLocaleString()}</span>
+                                <span>Due: ${formatDateTime(reminder.datetime)}</span>
                             </div>
-                        </div>
-                        <div class="item-actions">
                         </div>
                     </div>
                 `;
                 
-                li.querySelector('.item-actions').appendChild(deleteBtn);
                 remindersList.appendChild(li);
             });
         }
-
-        function filterByDateRange() {
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
-            
-            if (!startDate || !endDate) {
-                showNotification('Please select both start and end dates!', true);
-                return;
-            }
-            
-            if (new Date(startDate) > new Date(endDate)) {
-                showNotification('Start date must be before end date!', true);
-                return;
-            }
-            
-            const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-            const notes = JSON.parse(localStorage.getItem('notes') || '[]');
-            const calendarList = document.getElementById('calendarList');
-            calendarList.innerHTML = '';
-
-            // Show date range info
-            document.getElementById('dateRangeInfo').style.display = 'block';
-            document.getElementById('startDateDisplay').textContent = formatDisplayDate(startDate);
-            document.getElementById('endDateDisplay').textContent = formatDisplayDate(endDate);
-
-            const filteredTasks = tasks.filter(task => {
-                const taskDate = new Date(task.created);
-                return taskDate >= new Date(startDate) && taskDate <= new Date(endDate);
-            });
-            
-            const filteredNotes = notes.filter(note => {
-                const noteDate = new Date(note.created);
-                return noteDate >= new Date(startDate) && noteDate <= new Date(endDate);
-            });
-
-            if (filteredTasks.length === 0 && filteredNotes.length === 0) {
-                document.getElementById('calendarEmptyState').style.display = 'block';
-                return;
-            }
-            
-            document.getElementById('calendarEmptyState').style.display = 'none';
-
-            // Sort items by date
-            const allItems = [...filteredTasks.map(t => ({...t, type: 'task'})), ...filteredNotes.map(n => ({...n, type: 'note'}))];
-            allItems.sort((a, b) => new Date(a.created) - new Date(b.created));
-
-            allItems.forEach(item => {
-                const li = document.createElement('li');
-                li.className = 'item calendar-item';
-                
-                if (item.type === 'task') {
-                    li.innerHTML = `
-                        <div class="item-content">
-                            <div class="item-text">
-                                <h3 class="item-title">${item.text}</h3>
-                                <div class="item-details">
-                                    <span>Task • ${item.status}</span>
-                                    <span>Created: ${item.created}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    li.innerHTML = `
-                        <div class="item-content">
-                            <div class="item-text">
-                                <h3 class="item-title">${item.title}</h3>
-                                <div class="item-details">
-                                    <span>Note</span>
-                                    <span>Created: ${item.created}</span>
-                                </div>
-                                <p>${item.content.substring(0, 100)}${item.content.length > 100 ? '...' : ''}</p>
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                calendarList.appendChild(li);
-            });
+        
+        // Delete a todo
+        function deleteTodo(id) {
+            todos = todos.filter(todo => todo.id !== id);
+            saveTodos();
+            renderTodos();
+            showNotification('Task deleted');
         }
         
-        function filterBySingleDate() {
-            const date = document.getElementById('quickDate').value;
-            
-            if (!date) {
-                showNotification('Please select a date!', true);
-                return;
-            }
-            
-            document.getElementById('startDate').value = date;
-            document.getElementById('endDate').value = date;
-            
-            filterByDateRange();
+        // Delete a note
+        function deleteNote(id) {
+            notes = notes.filter(note => note.id !== id);
+            saveNotes();
+            renderNotes();
+            showNotification('Note deleted');
         }
         
-        function formatDisplayDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+        // Save todos to localStorage
+        function saveTodos() {
+            localStorage.setItem('todos', JSON.stringify(todos));
         }
-
-        function checkEmptyStates() {
-            // Check tasks
-            if (document.getElementById('taskList').children.length === 0) {
-                document.getElementById('taskEmptyState').style.display = 'block';
-            } else {
-                document.getElementById('taskEmptyState').style.display = 'none';
-            }
-            
-            // Check notes
-            if (document.getElementById('noteList').children.length === 0) {
-                document.getElementById('noteEmptyState').style.display = 'block';
-            } else {
-                document.getElementById('noteEmptyState').style.display = 'none';
-            }
-            
-            // Check calendar
-            if (document.getElementById('calendarList').children.length === 0) {
-                document.getElementById('calendarEmptyState').style.display = 'block';
-            } else {
-                document.getElementById('calendarEmptyState').style.display = 'none';
-            }
+        
+        // Save notes to localStorage
+        function saveNotes() {
+            localStorage.setItem('notes', JSON.stringify(notes));
         }
-
-        function updateStats() {
-            const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-            const notes = JSON.parse(localStorage.getItem('notes') || '[]');
-            
-            const today = new Date().toISOString().split('T')[0];
-            const todayTasks = tasks.filter(task => task.created === today);
-            const todayNotes = notes.filter(note => note.created === today);
-            
-            // Update today's overview
-            document.getElementById('todayStats').innerHTML = `
-                <p><strong>Today's Progress:</strong></p>
-                <p>Tasks: ${todayTasks.length} created today</p>
-                <p>Notes: ${todayNotes.length} created today</p>
-            `;
-            
-            // Update quick stats
-            const completedTasks = tasks.filter(task => task.status === 'Finished').length;
-            const pendingTasks = tasks.filter(task => task.status !== 'Finished').length;
-            
-            document.getElementById('quickStats').innerHTML = `
-                <p><strong>Overall Statistics:</strong></p>
-                <p>Total Tasks: ${tasks.length}</p>
-                <p>Completed: ${completedTasks}</p>
-                <p>Pending: ${pendingTasks}</p>
-                <p>Total Notes: ${notes.length}</p>
-                <p>Active Reminders: ${reminders.length}</p>
-            `;
-        }
-
-        function showNotification(message, isError = false) {
+        
+        // Show notification
+        function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
             notification.textContent = message;
-            notification.className = isError ? 'notification error' : 'notification';
+            notification.className = 'notification';
+            if (type === 'error') {
+                notification.classList.add('error');
+            }
             notification.style.display = 'block';
             
             setTimeout(() => {
                 notification.style.display = 'none';
             }, 3000);
         }
-
-        // Service Worker for PWA
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-                .then(reg => console.log('Service Worker registered'))
-                .catch(err => console.log('Service Worker registration failed:', err));
+        
+        // Format date
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
         }
+        
+        // Format date and time
+        function formatDateTime(dateTime) {
+            const options = { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit', 
+                minute: '2-digit'
+            };
+            return new Date(dateTime).toLocaleDateString(undefined, options);
+        }
+        
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>

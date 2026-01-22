@@ -1,0 +1,113 @@
+<header>
+    <div class="header-content">
+        <a href="/" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+        
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation">☰</button>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                
+                <!-- REMOVE dropdown class and use data-dropdown instead -->
+                <li class="nav-item" data-dropdown>
+                    <a href="#" class="nav-link">
+                        Templates
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/resume-templates/" class="dropdown-item">Resume Templates</a>
+                        <a href="/portfolio-templates/" class="dropdown-item">Portfolio Templates</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item" data-dropdown>
+                    <a href="#" class="nav-link">
+                        My Apps
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/android-applications/" class="dropdown-item">Android Applications</a>
+                        <a href="/family-connection-tools/" class="dropdown-item">Web Applications</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item" data-dropdown>
+                    <a href="#" class="nav-link">
+                        Blog
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/blog/portfolio-best-practices/" class="dropdown-item">Portfolio Best Practices</a>
+                        <a href="/blog/portfolio-maintenance/" class="dropdown-item">Portfolio Maintenance</a>
+                        <a href="/blog/online-job-sites/" class="dropdown-item">Legit Online Job Sites</a>
+                        <a href="/blog/email-marketing" class="dropdown-item">Unlocking Email Marketing Success</a>
+                        <a href="/blog/mobile-optimization/" class="dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
+                        <a href="/blog/email-list-failure/" class="dropdown-item">Why Your Email List Might Be Failing</a> 
+                        <a href="/blog/email-builder-previews/" class="dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
+                        <a href="/blog/why-less-is-more/" class="dropdown-item">The Power of Focused Email Design</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item"><a href="/klaviyo-analytics/" class="nav-link">Klaviyo Analytics</a></li>
+                
+                <li class="nav-item" data-dropdown>
+                    <a href="#" class="nav-link">
+                        Productivity Tools
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/email-builder/" class="dropdown-item">Email Builder</a>
+                        <a href="/todo-notes/" class="dropdown-item">Enhanced To-Do & Notes</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item"><a href="/about/" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="/contact/" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<script>
+    // SIMPLE mobile menu only - no dropdown handling
+    document.addEventListener('DOMContentLoaded', function() {
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        // Only handle hamburger menu toggle
+        hamburger.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            document.body.classList.toggle('menu-open');
+        });
+        
+        // Close menu when clicking a link (mobile only)
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
+                link.addEventListener('click', function() {
+                    navMenu.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                });
+            });
+        }
+        
+        // Close menu when clicking outside (mobile only)
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768 && 
+                !e.target.closest('.nav-container') && 
+                navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                document.body.classList.remove('menu-open');
+            }
+        });
+        
+        // Reset on window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                navMenu.classList.remove('active');
+                document.body.classList.remove('menu-open');
+            }
+        });
+    });
+</script>

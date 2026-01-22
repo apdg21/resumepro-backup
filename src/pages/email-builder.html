@@ -1,0 +1,126 @@
+---
+layout: layouts/email-builder.html
+title: Email Template Builder | ResumePro
+description: Build responsive email templates with drag-and-drop sections. Create beautiful emails without coding.
+permalink: /email-builder/
+---
+
+<div class="container mx-auto p-4 max-w-7xl">   
+    <div class="flex flex-col lg:flex-row gap-6" style="margin-top: 130px;">
+        <!-- Left Panel: Section Management -->
+        <div class="w-full lg:w-1/4 bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+            <h2 class="text-lg font-semibold mb-4 text-gray-700 flex items-center">
+                <i class="fas fa-layer-group mr-2 text-blue-500"></i> Sections
+            </h2>
+            <div class="mb-5">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Add New Section</label>
+                <select id="section-type-select" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" aria-label="Select section type">
+                    <option value="" disabled selected>Choose a section type</option>
+                    <option value="header">Header</option>
+                    <option value="title-only">Title Only</option>
+                    <option value="text-only">Text Only</option>
+                    <option value="title-text">Title & Text</option>
+                    <option value="text-image">Text & Image</option>
+                    <option value="hero">Hero</option>
+                    <option value="image-only">Image Only</option>
+                    <option value="single-column-blocks">Single Column Blocks</option>
+                    <option value="two-column-blocks">Two Column Blocks</option>
+                    <option value="three-column-blocks">Three Column Blocks</option>
+                    <option value="divider">Divider</option>
+                    <option value="custom-html">Custom HTML</option>
+                </select>
+                <button onclick="addSection()" class="mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg transition flex items-center justify-center" aria-label="Add section">
+                    <i class="fas fa-plus mr-2"></i> Add Section
+                </button>
+            </div>
+            
+            <div class="mb-4">
+                <h3 class="text-sm font-medium text-gray-700 mb-2">Your Sections</h3>
+                <div id="section-list-container" class="space-y-2"></div>
+            </div>
+            
+            <button onclick="removeSection()" class="w-full bg-red-100 hover:bg-red-200 text-red-700 p-3 rounded-lg transition flex items-center justify-center" aria-label="Remove selected section">
+                <i class="fas fa-trash-alt mr-2"></i> Remove Selected Section
+            </button>
+        </div>
+
+        <!-- Center Panel: Preview -->
+        <div class="w-full lg:w-2/4 bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+                <h2 class="text-lg font-semibold text-gray-700 flex items-center">
+                    <i class="fas fa-eye mr-2 text-blue-500"></i> Preview
+                </h2>
+                <div class="flex items-center gap-2">
+                    <div class="flex items-center">
+                        <label class="text-sm text-gray-700 mr-2">Width:</label>
+                        <input id="canvas-width" type="number" value="600" min="300" max="800" class="w-20 p-2 border rounded-lg text-sm" aria-label="Canvas width in pixels">
+                        <span class="ml-1 text-sm text-gray-600">px</span>
+                    </div>
+                    <button id="preview-toggle" onclick="togglePreview()" class="bg-gray-100 hover:bg-gray-200 p-2 rounded-lg text-sm transition flex items-center" aria-label="Toggle mobile/desktop preview">
+                        <i class="fas fa-mobile-alt mr-1"></i> Mobile View
+                    </button>
+                </div>
+            </div>
+            
+            <div class="relative bg-gray-100 p-4 rounded-lg border border-gray-200">
+                <iframe id="preview-frame" title="Email Preview"></iframe>
+            </div>
+            
+            <div class="mt-4 flex justify-center gap-3">
+                <button onclick="copyCode()" class="template-action-btn bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center text-sm">
+                    <i class="fas fa-copy mr-1"></i> Copy HTML
+                </button>
+                <button onclick="saveToFile()" class="template-action-btn bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center text-sm">
+                    <i class="fas fa-download mr-1"></i> Export
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Panel: Properties -->
+        <div class="w-full lg:w-1/4 bg-white p-5 rounded-xl shadow-sm border border-gray-200 hidden" id="properties-panel">
+            <h2 class="text-lg font-semibold mb-4 text-gray-700 flex items-center">
+                <i class="fas fa-sliders-h mr-2 text-blue-500"></i> Properties
+            </h2>
+            <div id="property-inputs" class="overflow-y-auto max-h-[calc(100vh-200px)]"></div>
+        </div>
+    </div>
+
+    <!-- HTML Input and Output -->
+    <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+            <h2 class="text-lg font-semibold mb-3 text-gray-700 flex items-center">
+                <i class="fas fa-code mr-2 text-blue-500"></i> Load HTML
+            </h2>
+            <p class="text-sm text-gray-600 mb-3">Paste existing HTML to import sections</p>
+            <textarea id="load-html-input" class="w-full p-3 border rounded-lg mb-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" rows="6" placeholder="Paste HTML here to load sections" aria-label="Paste HTML to load"></textarea>
+            <button onclick="loadHtml()" class="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg transition flex items-center justify-center" aria-label="Load HTML">
+                <i class="fas fa-upload mr-2"></i> Load HTML
+            </button>
+        </div>
+        
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+            <h2 class="text-lg font-semibold mb-3 text-gray-700 flex items-center">
+                <i class="fas fa-code mr-2 text-blue-500"></i> Generated HTML
+            </h2>
+            <div class="relative">
+                <textarea id="code-output" class="w-full p-3 border rounded-lg font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" rows="10" readonly aria-label="Generated HTML output"></textarea>
+                <button onclick="copyCode()" class="absolute top-2 right-2 bg-gray-700 hover:bg-gray-800 text-white p-2 rounded" title="Copy code">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Box -->
+    <div id="message-box" class="mt-4 p-4 hidden rounded-lg border font-medium message-box" role="alert"></div>
+
+    <!-- Undo/Redo Buttons -->
+    <div class="mt-6 flex justify-center gap-3">
+        <button id="undo-button" onclick="undo()" class="bg-gray-200 hover:bg-gray-300 p-3 rounded-lg transition flex items-center disabled:opacity-50 disabled:cursor-not-allowed" disabled aria-label="Undo">
+            <i class="fas fa-undo mr-2"></i> Undo
+        </button>
+        <button id="redo-button" onclick="redo()" class="bg-gray-200 hover:bg-gray-300 p-3 rounded-lg transition flex items-center disabled:opacity-50 disabled:cursor-not-allowed" disabled aria-label="Redo">
+            <i class="fas fa-redo mr-2"></i> Redo
+        </button>
+    </div>
+</div>

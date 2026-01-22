@@ -2,6 +2,9 @@ module.exports = function(eleventyConfig) {
   // Passthrough copies - ensure assets are copied
   eleventyConfig.addPassthroughCopy("src/assets");
   
+  // Important for GitHub Pages: Copy .nojekyll file
+  eleventyConfig.addPassthroughCopy(".nojekyll");
+  
   // Blog collection
   eleventyConfig.addCollection("blog", function(collection) {
     return collection.getFilteredByGlob("src/blog/*.html").sort((a, b) => {
@@ -23,11 +26,19 @@ module.exports = function(eleventyConfig) {
   });
   
   return {
+    // Template engines
+    htmlTemplateEngine: "liquid",
+    markdownTemplateEngine: "liquid",
+    
+    // Directory structure
     dir: {
       input: "src",
       output: "public",
       includes: "_includes",
       data: "_data"
-    }
+    },
+    
+    // Optional: Add path prefix if using project pages
+    // pathPrefix: "/resumepro-backup/"
   };
 };

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Digital Templates | ResumePro</title>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Google Analytics GA4 -->
+<!-- Add your G-XXXXXXXXXX code here when ready -->
+<!-- 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
+-->
+</head>
+<body>
+    <header>
+    <div class="header-content">
+        <a href="/" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+        
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation">☰</button>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                
+                <!-- REMOVE dropdown class and use data-dropdown instead -->
+                <li class="nav-item" data-dropdown>
+                    <a href="#" class="nav-link">
+                        Templates
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/resume-templates/" class="dropdown-item">Resume Templates</a>
+                        <a href="/portfolio-templates/" class="dropdown-item">Portfolio Templates</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item" data-dropdown>
+                    <a href="#" class="nav-link">
+                        My Apps
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/android-applications/" class="dropdown-item">Android Applications</a>
+                        <a href="/family-connection-tools/" class="dropdown-item">Web Applications</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item" data-dropdown>
+                    <a href="#" class="nav-link">
+                        Blog
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/blog/portfolio-best-practices/" class="dropdown-item">Portfolio Best Practices</a>
+                        <a href="/blog/portfolio-maintenance/" class="dropdown-item">Portfolio Maintenance</a>
+                        <a href="/blog/online-job-sites/" class="dropdown-item">Legit Online Job Sites</a>
+                        <a href="/blog/email-marketing" class="dropdown-item">Unlocking Email Marketing Success</a>
+                        <a href="/blog/mobile-optimization/" class="dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
+                        <a href="/blog/email-list-failure/" class="dropdown-item">Why Your Email List Might Be Failing</a> 
+                        <a href="/blog/email-builder-previews/" class="dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
+                        <a href="/blog/why-less-is-more/" class="dropdown-item">The Power of Focused Email Design</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item"><a href="/klaviyo-analytics/" class="nav-link">Klaviyo Analytics</a></li>
+                
+                <li class="nav-item" data-dropdown>
+                    <a href="#" class="nav-link">
+                        Productivity Tools
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/email-builder/" class="dropdown-item">Email Builder</a>
+                        <a href="/todo-notes/" class="dropdown-item">Enhanced To-Do & Notes</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item"><a href="/about/" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="/contact/" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<script>
+    // SIMPLE mobile menu only - no dropdown handling
+    document.addEventListener('DOMContentLoaded', function() {
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        // Only handle hamburger menu toggle
+        hamburger.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            document.body.classList.toggle('menu-open');
+        });
+        
+        // Close menu when clicking a link (mobile only)
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
+                link.addEventListener('click', function() {
+                    navMenu.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                });
+            });
+        }
+        
+        // Close menu when clicking outside (mobile only)
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768 && 
+                !e.target.closest('.nav-container') && 
+                navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                document.body.classList.remove('menu-open');
+            }
+        });
+        
+        // Reset on window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                navMenu.classList.remove('active');
+                document.body.classList.remove('menu-open');
+            }
+        });
+    });
+</script>
+    
+    <main>
+        
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <h1>Professional Digital Templates</h1>
+        <p>Create stunning resumes and portfolios that get you noticed. No coding required - just customize and launch.</p>
+        
+        <div class="template-types">
+            <div class="template-card">
+                <div class="template-icon">📝</div>
+                <h3>Resume Templates</h3>
+                <p>Modern, responsive designs that showcase your career journey beautifully on any device.</p>
+                <a href="/resume-templates/" class="cta-button">Browse Resumes</a>
+            </div>
+            
+            <div class="template-card">
+                <div class="template-icon">🎨</div>
+                <h3>Portfolio Templates</h3>
+                <p>Showcase your work with professional portfolios that highlight your best projects.</p>
+                <a href="/portfolio-templates/" class="cta-button">Browse Portfolios</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- NEW: Android Apps Announcement Section -->
+<section class="announcement-section">
+    <div class="announcement-content">
+        <span class="announcement-badge">🚀 NEW ANNOUNCEMENT</span>
+        <h2>Now Developing Android Applications!</h2>
+        <p>Expanding beyond web development, I'm now creating mobile applications for Android platform. 
+           Building productivity tools and utility apps with modern Android development practices and Material Design.</p>
+        
+        <div class="android-features">
+            <span class="android-feature">🤖 Android Development</span>
+            <span class="android-feature">📱 Mobile-First Design</span>
+            <span class="android-feature">🚀 Coming to Play Store</span>
+            <span class="android-feature">🎯 Productivity Focus</span>
+        </div>
+        
+        <div class="announcement-apps">
+            <div class="announcement-app">
+                <div class="app-icon-sm">🚗</div>
+                <div class="app-name">VoiceRide Driving Assistant</div>
+                <div class="app-status">Voice-controlled navigation app</div>
+            </div>
+            
+            <div class="announcement-app">
+                <div class="app-icon-sm">📝</div>
+                <div class="app-name">Notes & Reminder App</div>
+                <div class="app-status">Productivity task management</div>
+            </div>
+        </div>
+        
+        <a href="/android-applications/" class="announcement-button">
+            View Android Applications →
+        </a>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="section-title">
+        <h2>Why Choose Our Templates?</h2>
+        <p>Everything you need to create a powerful online presence</p>
+    </div>
+    
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🚀</div>
+            <h3>Easy Customization</h3>
+            <p>Change colors, fonts, and layouts with simple edits to the CSS file - no coding experience needed.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">📱</div>
+            <h3>Fully Responsive</h3>
+            <p>Looks perfect on all devices from desktop to mobile without any extra work.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Fast Loading</h3>
+            <p>Optimized for performance so your content loads quickly for recruiters and clients.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">🎨</div>
+            <h3>Modern Designs</h3>
+            <p>Professionally designed templates that follow current trends while remaining timeless.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">🔧</div>
+            <h3>Easy Hosting</h3>
+            <p>Works with GitHub Pages, Netlify, and other free hosting options with minimal setup.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">📚</div>
+            <h3>Detailed Guides</h3>
+            <p>Step-by-step instructions included with every template for easy setup.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <h2>Ready to Build Your Online Presence?</h2>
+    <p>Join thousands of professionals who've transformed their job search with our templates.</p>
+    <div class="cta-buttons">
+        <a href="/resume-templates/" class="cta-button">Browse Resume Templates</a>
+        <a href="/portfolio-templates/" class="cta-button secondary-button">Browse Portfolio Templates</a>
+    </div>
+</section>
+    </main>
+    
+    <footer>
+    <div class="footer-content">
+        <div class="footer-column">
+            <h3>ResumePro</h3>
+            <p>Professional digital templates to showcase your career and work.</p>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Templates</h3>
+            <ul class="footer-links">
+                <li><a href="/resume-templates/">Resume Templates</a></li>
+                <li><a href="/portfolio-templates/">Portfolio Templates</a></li>
+                <li><a href="/templates/">All Templates</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Resources</h3>
+            <ul class="footer-links">
+                <li><a href="/help/#editing">How to Edit</a></li>
+                <li><a href="/help/#hosting">Hosting Guide</a></li>
+                <li><a href="/help/#tips">Tips & Examples</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Company</h3>
+            <ul class="footer-links">
+                <li><a href="/about/">About Us</a></li>
+                <li><a href="/contact/">Contact</a></li>
+                <li><a href="/privacy/">Privacy Policy</a></li>
+                <li><a href="/terms/">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="copyright">
+        <p>&copy; 2026 ResumePro. All rights reserved.</p>
+    </div>
+</footer>
+    
+    <script src="/assets/js/clean-urls.js"></script>
+    
+    
+</body>
+</html>

@@ -3860,6 +3860,7 @@ body.family-connection-tools .web-apps-disclaimer {
             border-bottom: 1px solid var(--border-color);
             color: var(--primary-color);
             display: flex;
+            flex-direction: column;
             align-items: center;
         }
         

@@ -1,0 +1,2043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Template Builder | ResumePro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Include shared CSS -->
+    <style>
+        /* Email Template Builder Specific Styles */
+.section-item {
+    cursor: pointer;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+}
+.section-item:hover {
+    background-color: #f8fafc;
+    border-left-color: #3b82f6;
+}
+.section-item.active {
+    background-color: #eff6ff;
+    border-left-color: #2563eb;
+}
+.draggable-handle {
+    cursor: move;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+.section-item:hover .draggable-handle {
+    opacity: 1;
+}
+.column {
+    vertical-align: top;
+}
+#preview-frame {
+    width: 100%;
+    min-height: 100vh;
+    border: 1px solid #e2e8f0;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+.property-group {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+.property-group summary {
+    padding: 0.75rem;
+    background-color: #f8fafc;
+    cursor: pointer;
+    font-weight: 600;
+    border-bottom: 1px solid #e2e8f0;
+}
+.property-group .content {
+    padding: 0.75rem;
+}
+.color-preview {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: middle;
+    border: 1px solid #e2e8f0;
+}
+.template-action-btn {
+    transition: all 0.2s;
+}
+.template-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+.message-box {
+    transition: opacity 0.3s;
+}
+.property-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.25rem;
+}
+.property-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+}
+.property-select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    background-color: white;
+}
+.property-checkbox {
+    margin-right: 0.5rem;
+}
+.column-width-slider {
+    width: 100%;
+    margin: 0.5rem 0;
+}
+.column-width-value {
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-top: 0.25rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .column {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 10px 0 !important;
+    }
+}
+    </style>
+</head>
+<body class="bg-gray-50">
+    <header>
+    <div class="header-content">
+        <a href="/" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+        
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation">☰</button>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                
+                <!-- REMOVE dropdown class and use data-dropdown instead -->
+                <li class="nav-item" data-dropdown>
+                    <a href="#" class="nav-link">
+                        Templates
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/resume-templates/" class="dropdown-item">Resume Templates</a>
+                        <a href="/portfolio-templates/" class="dropdown-item">Portfolio Templates</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item" data-dropdown>
+                    <a href="#" class="nav-link">
+                        My Apps
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/android-applications/" class="dropdown-item">Android Applications</a>
+                        <a href="/family-connection-tools/" class="dropdown-item">Web Applications</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item" data-dropdown>
+                    <a href="#" class="nav-link">
+                        Blog
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/blog/portfolio-best-practices/" class="dropdown-item">Portfolio Best Practices</a>
+                        <a href="/blog/portfolio-maintenance/" class="dropdown-item">Portfolio Maintenance</a>
+                        <a href="/blog/online-job-sites/" class="dropdown-item">Legit Online Job Sites</a>
+                        <a href="/blog/email-marketing" class="dropdown-item">Unlocking Email Marketing Success</a>
+                        <a href="/blog/mobile-optimization/" class="dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
+                        <a href="/blog/email-list-failure/" class="dropdown-item">Why Your Email List Might Be Failing</a> 
+                        <a href="/blog/email-builder-previews/" class="dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
+                        <a href="/blog/why-less-is-more/" class="dropdown-item">The Power of Focused Email Design</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item"><a href="/klaviyo-analytics/" class="nav-link">Klaviyo Analytics</a></li>
+                
+                <li class="nav-item" data-dropdown>
+                    <a href="#" class="nav-link">
+                        Productivity Tools
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/email-builder/" class="dropdown-item">Email Builder</a>
+                        <a href="/todo-notes/" class="dropdown-item">Enhanced To-Do & Notes</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item"><a href="/about/" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="/contact/" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<script>
+    // SIMPLE mobile menu only - no dropdown handling
+    document.addEventListener('DOMContentLoaded', function() {
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        // Only handle hamburger menu toggle
+        hamburger.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            document.body.classList.toggle('menu-open');
+        });
+        
+        // Close menu when clicking a link (mobile only)
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
+                link.addEventListener('click', function() {
+                    navMenu.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                });
+            });
+        }
+        
+        // Close menu when clicking outside (mobile only)
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768 && 
+                !e.target.closest('.nav-container') && 
+                navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                document.body.classList.remove('menu-open');
+            }
+        });
+        
+        // Reset on window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                navMenu.classList.remove('active');
+                document.body.classList.remove('menu-open');
+            }
+        });
+    });
+</script>
+
+    
+<div class="container mx-auto p-4 max-w-7xl">   
+    <div class="flex flex-col lg:flex-row gap-6" style="margin-top: 130px;">
+        <!-- Left Panel: Section Management -->
+        <div class="w-full lg:w-1/4 bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+            <h2 class="text-lg font-semibold mb-4 text-gray-700 flex items-center">
+                <i class="fas fa-layer-group mr-2 text-blue-500"></i> Sections
+            </h2>
+            <div class="mb-5">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Add New Section</label>
+                <select id="section-type-select" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" aria-label="Select section type">
+                    <option value="" disabled selected>Choose a section type</option>
+                    <option value="header">Header</option>
+                    <option value="title-only">Title Only</option>
+                    <option value="text-only">Text Only</option>
+                    <option value="title-text">Title & Text</option>
+                    <option value="text-image">Text & Image</option>
+                    <option value="hero">Hero</option>
+                    <option value="image-only">Image Only</option>
+                    <option value="single-column-blocks">Single Column Blocks</option>
+                    <option value="two-column-blocks">Two Column Blocks</option>
+                    <option value="three-column-blocks">Three Column Blocks</option>
+                    <option value="divider">Divider</option>
+                    <option value="custom-html">Custom HTML</option>
+                </select>
+                <button onclick="addSection()" class="mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg transition flex items-center justify-center" aria-label="Add section">
+                    <i class="fas fa-plus mr-2"></i> Add Section
+                </button>
+            </div>
+            
+            <div class="mb-4">
+                <h3 class="text-sm font-medium text-gray-700 mb-2">Your Sections</h3>
+                <div id="section-list-container" class="space-y-2"></div>
+            </div>
+            
+            <button onclick="removeSection()" class="w-full bg-red-100 hover:bg-red-200 text-red-700 p-3 rounded-lg transition flex items-center justify-center" aria-label="Remove selected section">
+                <i class="fas fa-trash-alt mr-2"></i> Remove Selected Section
+            </button>
+        </div>
+
+        <!-- Center Panel: Preview -->
+        <div class="w-full lg:w-2/4 bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+                <h2 class="text-lg font-semibold text-gray-700 flex items-center">
+                    <i class="fas fa-eye mr-2 text-blue-500"></i> Preview
+                </h2>
+                <div class="flex items-center gap-2">
+                    <div class="flex items-center">
+                        <label class="text-sm text-gray-700 mr-2">Width:</label>
+                        <input id="canvas-width" type="number" value="600" min="300" max="800" class="w-20 p-2 border rounded-lg text-sm" aria-label="Canvas width in pixels">
+                        <span class="ml-1 text-sm text-gray-600">px</span>
+                    </div>
+                    <button id="preview-toggle" onclick="togglePreview()" class="bg-gray-100 hover:bg-gray-200 p-2 rounded-lg text-sm transition flex items-center" aria-label="Toggle mobile/desktop preview">
+                        <i class="fas fa-mobile-alt mr-1"></i> Mobile View
+                    </button>
+                </div>
+            </div>
+            
+            <div class="relative bg-gray-100 p-4 rounded-lg border border-gray-200">
+                <iframe id="preview-frame" title="Email Preview"></iframe>
+            </div>
+            
+            <div class="mt-4 flex justify-center gap-3">
+                <button onclick="copyCode()" class="template-action-btn bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center text-sm">
+                    <i class="fas fa-copy mr-1"></i> Copy HTML
+                </button>
+                <button onclick="saveToFile()" class="template-action-btn bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center text-sm">
+                    <i class="fas fa-download mr-1"></i> Export
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Panel: Properties -->
+        <div class="w-full lg:w-1/4 bg-white p-5 rounded-xl shadow-sm border border-gray-200 hidden" id="properties-panel">
+            <h2 class="text-lg font-semibold mb-4 text-gray-700 flex items-center">
+                <i class="fas fa-sliders-h mr-2 text-blue-500"></i> Properties
+            </h2>
+            <div id="property-inputs" class="overflow-y-auto max-h-[calc(100vh-200px)]"></div>
+        </div>
+    </div>
+
+    <!-- HTML Input and Output -->
+    <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+            <h2 class="text-lg font-semibold mb-3 text-gray-700 flex items-center">
+                <i class="fas fa-code mr-2 text-blue-500"></i> Load HTML
+            </h2>
+            <p class="text-sm text-gray-600 mb-3">Paste existing HTML to import sections</p>
+            <textarea id="load-html-input" class="w-full p-3 border rounded-lg mb-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" rows="6" placeholder="Paste HTML here to load sections" aria-label="Paste HTML to load"></textarea>
+            <button onclick="loadHtml()" class="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg transition flex items-center justify-center" aria-label="Load HTML">
+                <i class="fas fa-upload mr-2"></i> Load HTML
+            </button>
+        </div>
+        
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+            <h2 class="text-lg font-semibold mb-3 text-gray-700 flex items-center">
+                <i class="fas fa-code mr-2 text-blue-500"></i> Generated HTML
+            </h2>
+            <div class="relative">
+                <textarea id="code-output" class="w-full p-3 border rounded-lg font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" rows="10" readonly aria-label="Generated HTML output"></textarea>
+                <button onclick="copyCode()" class="absolute top-2 right-2 bg-gray-700 hover:bg-gray-800 text-white p-2 rounded" title="Copy code">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Box -->
+    <div id="message-box" class="mt-4 p-4 hidden rounded-lg border font-medium message-box" role="alert"></div>
+
+    <!-- Undo/Redo Buttons -->
+    <div class="mt-6 flex justify-center gap-3">
+        <button id="undo-button" onclick="undo()" class="bg-gray-200 hover:bg-gray-300 p-3 rounded-lg transition flex items-center disabled:opacity-50 disabled:cursor-not-allowed" disabled aria-label="Undo">
+            <i class="fas fa-undo mr-2"></i> Undo
+        </button>
+        <button id="redo-button" onclick="redo()" class="bg-gray-200 hover:bg-gray-300 p-3 rounded-lg transition flex items-center disabled:opacity-50 disabled:cursor-not-allowed" disabled aria-label="Redo">
+            <i class="fas fa-redo mr-2"></i> Redo
+        </button>
+    </div>
+</div>
+
+    <footer>
+    <div class="footer-content">
+        <div class="footer-column">
+            <h3>ResumePro</h3>
+            <p>Professional digital templates to showcase your career and work.</p>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Templates</h3>
+            <ul class="footer-links">
+                <li><a href="/resume-templates/">Resume Templates</a></li>
+                <li><a href="/portfolio-templates/">Portfolio Templates</a></li>
+                <li><a href="/templates/">All Templates</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Resources</h3>
+            <ul class="footer-links">
+                <li><a href="/help/#editing">How to Edit</a></li>
+                <li><a href="/help/#hosting">Hosting Guide</a></li>
+                <li><a href="/help/#tips">Tips & Examples</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Company</h3>
+            <ul class="footer-links">
+                <li><a href="/about/">About Us</a></li>
+                <li><a href="/contact/">Contact</a></li>
+                <li><a href="/privacy/">Privacy Policy</a></li>
+                <li><a href="/terms/">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="copyright">
+        <p>&copy; 2026 ResumePro. All rights reserved.</p>
+    </div>
+</footer>
+    
+    <script>
+        let sections = [];
+let activeSectionIndex = null;
+let canvasWidth = 600;
+let isMobilePreview = false;
+let history = [];
+let historyIndex = -1;
+const maxHistory = 20;
+
+const previewFrame = document.getElementById('preview-frame');
+const propertiesPanel = document.getElementById('properties-panel');
+const propertyInputs = document.getElementById('property-inputs');
+const codeOutput = document.getElementById('code-output');
+const sectionListContainer = document.getElementById('section-list-container');
+const sectionTypeSelect = document.getElementById('section-type-select');
+const messageBox = document.getElementById('message-box');
+const canvasWidthInput = document.getElementById('canvas-width');
+const previewToggleButton = document.getElementById('preview-toggle');
+const undoButton = document.getElementById('undo-button');
+const redoButton = document.getElementById('redo-button');
+const loadHtmlInput = document.getElementById('load-html-input');
+
+const fontOptions = [
+    {value: 'Arial, Helvetica, sans-serif', label: 'Arial'},
+    {value: '"Times New Roman", Times, serif', label: 'Times New Roman'},
+    {value: '"Georgia", serif', label: 'Georgia'},
+    {value: '"Verdana", Geneva, sans-serif', label: 'Verdana'},
+    {value: '"Helvetica", Arial, sans-serif', label: 'Helvetica'},
+    {value: '"Courier New", Courier, monospace', label: 'Courier New'}
+];
+
+// Initialize the preview iframe
+function initPreviewFrame() {
+    const doc = previewFrame.contentWindow.document;
+    doc.open();
+    doc.write('<!DOCTYPE html><html><head><style>body { margin: 0; padding: 10px; }</style></head><body><p>Preview will appear here</p></body></html>');
+    doc.close();
+}
+
+// Initialize on page load
+window.onload = function() {
+    initPreviewFrame();
+    updateSectionList();
+};
+
+canvasWidthInput.oninput = (e) => {
+    const value = parseInt(e.target.value);
+    if (value >= 300 && value <= 800) {
+        canvasWidth = value;
+        saveHistory();
+        updatePreview();
+    } else {
+        showMessage('Canvas width must be between 300 and 800 pixels.', 'error');
+        canvasWidthInput.value = canvasWidth;
+    }
+};
+
+function showMessage(message, type = 'info') {
+    messageBox.textContent = message;
+    messageBox.classList.remove('hidden', 'bg-green-100', 'bg-red-100', 'bg-blue-100', 'border-green-300', 'border-red-300', 'border-blue-300');
+    if (type === 'success') {
+        messageBox.classList.add('bg-green-100', 'border-green-300');
+    } else if (type === 'error') {
+        messageBox.classList.add('bg-red-100', 'border-red-300');
+    } else {
+        messageBox.classList.add('bg-blue-100', 'border-blue-300');
+    }
+    setTimeout(() => {
+        messageBox.classList.add('hidden');
+    }, 5000);
+}
+
+function sanitizeHtml(html) {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    const scripts = div.getElementsByTagName('script');
+    while (scripts.length) scripts[0].parentNode.removeChild(scripts[0]);
+    ['onerror', 'onload', 'onclick', 'onmouseover'].forEach(attr => {
+        const elements = div.querySelectorAll(`[${attr}]`);
+        elements.forEach(el => el.removeAttribute(attr));
+    });
+    return div.innerHTML;
+}
+
+function validateHtml(html) {
+    if (!html || html.trim() === '') {
+        return '<p>Please enter valid HTML content</p>';
+    }
+    try {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        if (!doc.body.children.length) {
+            return '<p>Invalid HTML content</p>';
+        }
+        return html;
+    } catch (error) {
+        console.error('Invalid HTML:', error);
+        return '<p>Invalid HTML content</p>';
+    }
+}
+
+function escapeHtml(str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function getBackgroundStyle(content) {
+    if (content.backgroundType === 'image' && content.backgroundImage) {
+        return `background-image: url(${content.backgroundImage}); background-size: cover; background-position: center;`;
+    } else if (content.backgroundType === 'gradient' && content.backgroundGradient) {
+        return `background: ${content.backgroundGradient};`;
+    }
+    return `background-color: ${content.backgroundColor};`;
+}
+
+function generateCommonStyles(content) {
+    try {
+        const backgroundStyle = getBackgroundStyle(content);
+        const borderStyle = content.borderStyle === 'none' ? 
+            `border: none;` : 
+            `border: ${content.borderWidth} ${content.borderStyle} ${content.borderColor};`;
+        const borderRadiusStyle = `border-radius: ${content.borderRadius};`;
+        const paddingStyle = `padding-top: ${content.paddingTop}; padding-bottom: ${content.paddingBottom}; padding-left: ${content.paddingLeft}; padding-right: ${content.paddingRight};`;
+        const marginStyle = `margin-top: ${content.marginTop}; margin-bottom: ${content.marginBottom}; margin-left: ${content.marginLeft}; margin-right: ${content.marginRight};`;
+        return {
+            tableStyle: `width: 100%; max-width: ${isMobilePreview ? 320 : canvasWidth}px; min-width: 0; ${backgroundStyle} ${borderStyle} ${borderRadiusStyle} ${marginStyle}`,
+            paddingStyle
+        };
+    } catch (error) {
+        console.error('Error generating common styles:', error);
+        return { tableStyle: '', paddingStyle: '' };
+    }
+}
+
+function saveHistory() {
+    try {
+        history = history.slice(0, historyIndex + 1);
+        history.push({
+            sections: JSON.parse(JSON.stringify(sections)),
+            activeSectionIndex: activeSectionIndex,
+            canvasWidth: canvasWidth
+        });
+        if (history.length > maxHistory) {
+            history.shift();
+        }
+        historyIndex = history.length - 1;
+        updateHistoryButtons();
+    } catch (error) {
+        console.error('Error saving history:', error);
+        showMessage('Error saving history: ' + error.message, 'error');
+    }
+}
+
+function undo() {
+    try {
+        if (historyIndex > 0) {
+            historyIndex--;
+            const state = history[historyIndex];
+            sections = JSON.parse(JSON.stringify(state.sections));
+            activeSectionIndex = state.activeSectionIndex;
+            canvasWidth = state.canvasWidth;
+            canvasWidthInput.value = canvasWidth;
+            updateSectionList();
+            showProperties();
+            updatePreview();
+            showMessage('Undo successful', 'success');
+        }
+    } catch (error) {
+        console.error('Error undoing action:', error);
+        showMessage('Error undoing action: ' + error.message, 'error');
+    }
+}
+
+function redo() {
+    try {
+        if (historyIndex < history.length - 1) {
+            historyIndex++;
+            const state = history[historyIndex];
+            sections = JSON.parse(JSON.stringify(state.sections));
+            activeSectionIndex = state.activeSectionIndex;
+            canvasWidth = state.canvasWidth;
+            canvasWidthInput.value = canvasWidth;
+            updateSectionList();
+            showProperties();
+            updatePreview();
+            updateHistoryButtons();
+            showMessage('Redo successful', 'success');
+        }
+    } catch (error) {
+        console.error('Error redoing action:', error);
+        showMessage('Error redoing action: ' + error.message, 'error');
+    }
+}
+
+function updateHistoryButtons() {
+    undoButton.disabled = historyIndex <= 0;
+    redoButton.disabled = historyIndex >= history.length - 1;
+}
+
+function togglePreview() {
+    try {
+        isMobilePreview = !isMobilePreview;
+        previewToggleButton.innerHTML = isMobilePreview ? 
+            '<i class="fas fa-desktop mr-1"></i> Desktop View' : 
+            '<i class="fas fa-mobile-alt mr-1"></i> Mobile View';
+        updatePreview();
+        showMessage(isMobilePreview ? 'Switched to mobile preview' : 'Switched to desktop preview', 'success');
+    } catch (error) {
+        console.error('Error toggling preview:', error);
+        showMessage('Error toggling preview: ' + error.message, 'error');
+    }
+}
+
+function extractStyles(element, defaultStyles = {}) {
+    try {
+        const styles = {};
+        const computedStyles = element.style || {};
+        Object.assign(styles, defaultStyles);
+
+        styles.fontFamily = computedStyles.fontFamily || defaultStyles.fontFamily || 'Arial, Helvetica, sans-serif';
+        styles.backgroundColor = computedStyles.backgroundColor || defaultStyles.backgroundColor || '#ffffff';
+        styles.borderWidth = computedStyles.borderWidth || defaultStyles.borderWidth || '0px';
+        styles.borderColor = computedStyles.borderColor || defaultStyles.borderColor || '#000000';
+        styles.borderStyle = computedStyles.borderStyle || defaultStyles.borderStyle || 'solid';
+        styles.borderRadius = computedStyles.borderRadius || defaultStyles.borderRadius || '0px';
+        styles.paddingTop = computedStyles.paddingTop || defaultStyles.paddingTop || '20px';
+        styles.paddingBottom = computedStyles.paddingBottom || defaultStyles.paddingBottom || '20px';
+        styles.paddingLeft = computedStyles.paddingLeft || defaultStyles.paddingLeft || '20px';
+        styles.paddingRight = computedStyles.paddingRight || defaultStyles.paddingRight || '20px';
+        styles.marginTop = computedStyles.marginTop || defaultStyles.marginTop || '0px';
+        styles.marginBottom = computedStyles.marginBottom || defaultStyles.marginBottom || '0px';
+        styles.marginLeft = computedStyles.marginLeft || defaultStyles.marginLeft || '0px';
+        styles.marginRight = computedStyles.marginRight || defaultStyles.marginRight || '0px';
+        styles.textAlign = computedStyles.textAlign || defaultStyles.textAlign || 'center';
+
+        if (computedStyles.backgroundImage && computedStyles.backgroundImage !== 'none') {
+            styles.backgroundType = 'image';
+            styles.backgroundImage = computedStyles.backgroundImage.replace(/url\(['"]?([^'"]+)['"]?\)/, '$1');
+        } else if (computedStyles.background && computedStyles.background.includes('gradient')) {
+            styles.backgroundType = 'gradient';
+            styles.backgroundGradient = computedStyles.background;
+        } else {
+            styles.backgroundType = 'color';
+        }
+
+        return styles;
+    } catch (error) {
+        console.error('Error extracting styles:', error);
+        return defaultStyles;
+    }
+}
+
+function detectSectionType(element) {
+    try {
+        const textContent = (element.textContent || '').trim().replace(/\s+/g, ' ');
+        const hasH1 = element.querySelector('h1,h2,h3');
+        const hasP = element.querySelector('p');
+        const hasImg = element.querySelector('img');
+        const hasA = element.querySelector('a:not([href*="#"])');
+        const tdCount = element.querySelectorAll('td').length;
+        const isSingleCellTable = element.tagName.toLowerCase() === 'table' && tdCount === 1;
+
+        if (isSingleCellTable && hasH1 && !hasP && !hasImg) {
+            return {
+                type: 'title-only',
+                content: {
+                    title: hasH1.textContent.trim() || 'Your Title Here',
+                    fontSizeTitle: hasH1.style.fontSize || '24px',
+                    lineHeightTitle: hasH1.style.lineHeight || '1.2',
+                    textColorTitle: hasH1.style.color || '#000000',
+                    textAlign: hasH1.style.textAlign || element.style.textAlign || 'center'
+                }
+            };
+        } else if (isSingleCellTable && hasP && !hasH1 && !hasImg) {
+            return {
+                type: 'text-only',
+                content: {
+                    text: hasP.textContent.trim() || 'This is a paragraph of text.',
+                    fontSizeText: hasP.style.fontSize || '16px',
+                    lineHeightText: hasP.style.lineHeight || '1.5',
+                    textColorText: hasP.style.color || '#333333',
+                    textAlign: hasP.style.textAlign || element.style.textAlign || 'center'
+                }
+            };
+        } else if (hasH1 && hasP && !hasImg && isSingleCellTable) {
+            return {
+                type: 'title-text',
+                content: {
+                    title: hasH1.textContent.trim() || 'Your Title Here',
+                    text: hasP.textContent.trim() || 'This is a paragraph of text.',
+                    fontSizeTitle: hasH1.style.fontSize || '24px',
+                    fontSizeText: hasP.style.fontSize || '16px',
+                    lineHeightTitle: hasH1.style.lineHeight || '1.2',
+                    lineHeightText: hasP.style.lineHeight || '1.5',
+                    textColorTitle: hasH1.style.color || '#000000',
+                    textColorText: hasP.style.color || '#333333',
+                    textAlign: hasH1.style.textAlign || hasP.style.textAlign || element.style.textAlign || 'center'
+                }
+            };
+        } else if (hasImg && !hasH1 && !hasP && isSingleCellTable) {
+            const type = element.closest('table')?.parentElement?.closest('table') ? 'image-only' : 'header';
+            return {
+                type,
+                content: {
+                    image: hasImg.src || 'https://placehold.co/600x150/000000/FFFFFF?text=Placeholder',
+                    altText: hasImg.alt || (type === 'header' ? 'Company Logo' : 'Full Width Image'),
+                    link: hasA?.href || '#',
+                    align: hasImg.style.textAlign || element.style.textAlign || 'center',
+                    imageWidth: hasImg.style.width || (type === 'header' ? '100%' : '100%'),
+                    borderWidth: hasImg.style.borderWidth || '0px',
+                    borderColor: hasImg.style.borderColor || '#000000',
+                    borderStyle: hasImg.style.borderStyle || 'solid',
+                    borderRadius: hasImg.style.borderRadius || '0px'
+                }
+            };
+        } else if (hasImg && (hasP || hasH1) && tdCount >= 2) {
+            const textTd = Array.from(element.querySelectorAll('td')).find(td => td.querySelector('p,h1,h2,h3'));
+            const imgTd = Array.from(element.querySelectorAll('td')).find(td => td.querySelector('img'));
+            if (textTd && imgTd) {
+                const textFirst = Array.from(element.querySelectorAll('td')).indexOf(textTd) < Array.from(element.querySelectorAll('td')).indexOf(imgTd);
+                return {
+                    type: 'text-image',
+                    content: {
+                        image: hasImg.src || 'https://placehold.co/250x250/F3F4F6/6B7280?text=Image',
+                        altText: hasImg.alt || 'Content Image',
+                        text: (textTd.textContent || '').trim() || 'This is some text next to an image.',
+                        fontSize: textTd.style.fontSize || '16px',
+                        lineHeight: textTd.style.lineHeight || '1.5',
+                        textColor: textTd.style.color || '#333333',
+                        textAlign: textTd.style.textAlign || 'left',
+                        direction: textFirst ? 'text-left' : 'text-right',
+                        showButton: !!hasA,
+                        buttonText: hasA?.textContent.trim() || 'Click Me',
+                        buttonLink: hasA?.href || '#',
+                        buttonBackground: hasA?.style.backgroundColor || '#007bff',
+                        buttonColor: hasA?.style.color || '#ffffff',
+                        buttonFontSize: hasA?.style.fontSize || '16px',
+                        buttonPadding: hasA?.style.padding || '10px 20px',
+                        buttonBorderRadius: hasA?.style.borderRadius || '4px'
+                    }
+                };
+            }
+        } else if (element.querySelector('hr')) {
+            const hr = element.querySelector('hr');
+            return {
+                type: 'divider',
+                content: {
+                    height: hr.style.height || hr.style.borderTopWidth || '1px',
+                    color: hr.style.backgroundColor || hr.style.borderTopColor || '#cccccc',
+                    style: hr.style.borderTopStyle || 'solid',
+                    align: hr.style.textAlign || element.style.textAlign || 'center',
+                    width: hr.style.width || '100%'
+                }
+            };
+        }
+
+        return {
+            type: 'custom-html',
+            content: {
+                html: sanitizeHtml(element.outerHTML || '<p>Unknown content</p>')
+            }
+        };
+    } catch (error) {
+        console.error('Error detecting section type:', error);
+        return {
+            type: 'custom-html',
+            content: { html: sanitizeHtml(element.outerHTML || '<p>Error parsing content</p>') }
+        };
+    }
+}
+
+function loadHtml() {
+    try {
+        const htmlContent = loadHtmlInput.value.trim();
+        if (!htmlContent) {
+            showMessage('Please paste valid HTML code.', 'error');
+            return;
+        }
+
+        sections = [];
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(sanitizeHtml(htmlContent), 'text/html');
+        
+        // Look for tables or divs that could be sections
+        const potentialSections = Array.from(doc.querySelectorAll('table, div.section, [class*="section"]'));
+        
+        if (potentialSections.length === 0) {
+            // If no sections found, treat the entire body as one section
+            const section = detectSectionType(doc.body);
+            const defaultStyles = getDefaultContent('custom-html');
+            section.content = { ...defaultStyles, ...section.content, ...extractStyles(doc.body, defaultStyles) };
+            section.id = Date.now();
+            sections.push(section);
+        } else {
+            potentialSections.forEach((element, index) => {
+                const section = detectSectionType(element);
+                const defaultStyles = getDefaultContent(section.type);
+                section.content = {
+                    ...defaultStyles,
+                    ...extractStyles(element, defaultStyles),
+                    ...section.content
+                };
+                section.id = Date.now() + index;
+                sections.push(section);
+            });
+        }
+
+        if (sections.length === 0) {
+            sections.push({
+                id: Date.now(),
+                type: 'custom-html',
+                content: {
+                    ...getDefaultContent('custom-html'),
+                    html: sanitizeHtml(htmlContent)
+                }
+            });
+        }
+
+        activeSectionIndex = sections.length > 0 ? 0 : null;
+        saveHistory();
+        updateSectionList();
+        showProperties();
+        updatePreview();
+        showMessage(`HTML loaded successfully! Loaded ${sections.length} section(s).`, 'success');
+        loadHtmlInput.value = '';
+    } catch (error) {
+        console.error('Error loading HTML:', error);
+        showMessage('Error loading HTML: ' + error.message, 'error');
+    }
+}
+
+function addSection() {
+    try {
+        const type = sectionTypeSelect.value;
+        if (!type) {
+            showMessage('Error: No section type selected', 'error');
+            return;
+        }
+        const newSection = {
+            id: Date.now(),
+            type: type,
+            content: getDefaultContent(type)
+        };
+        sections.push(newSection);
+        activeSectionIndex = sections.length - 1;
+        saveHistory();
+        updateSectionList();
+        showProperties();
+        updatePreview();
+        showMessage(`Added ${type.replace(/-/g, ' ')} section`, 'success');
+    } catch (error) {
+        console.error('Error adding section:', error);
+        showMessage('Error adding section: ' + error.message, 'error');
+    }
+}
+
+function getDefaultContent(type) {
+    try {
+        const commonStyles = {
+            backgroundType: 'color',
+            backgroundColor: '#ffffff',
+            backgroundImage: '',
+            backgroundGradient: 'linear-gradient(to right, #ffffff, #ffffff)',
+            borderWidth: '0px',
+            borderColor: '#000000',
+            borderStyle: 'solid',
+            borderRadius: '0px',
+            paddingTop: '20px',
+            paddingBottom: '20px',
+            paddingLeft: '20px',
+            paddingRight: '20px',
+            marginTop: '0px',
+            marginBottom: '0px',
+            marginLeft: '0px',
+            marginRight: '0px',
+            fontFamily: 'Arial, Helvetica, sans-serif',
+            textAlign: 'center'
+        };
+        switch (type) {
+            case 'header':
+                return {
+                    ...commonStyles,
+                    image: 'https://placehold.co/600x150/000000/FFFFFF?text=Logo',
+                    altText: 'Company Logo',
+                    link: '#',
+                    align: 'center',
+                    imageWidth: '100%'
+                };
+            case 'title-only':
+                return {
+                    ...commonStyles,
+                    title: 'Your Title Here',
+                    fontSizeTitle: '24px',
+                    lineHeightTitle: '1.2',
+                    textColorTitle: '#000000',
+                    textAlign: 'center'
+                };
+            case 'text-only':
+                return {
+                    ...commonStyles,
+                    text: 'This is a paragraph of text. You can edit this.',
+                    fontSizeText: '16px',
+                    lineHeightText: '1.5',
+                    textColorText: '#333333',
+                    textAlign: 'center'
+                };
+            case 'title-text':
+                return {
+                    ...commonStyles,
+                    title: 'Your Title Here',
+                    text: 'This is a paragraph of text. You can edit this.',
+                    fontSizeTitle: '24px',
+                    fontSizeText: '16px',
+                    lineHeightTitle: '1.2',
+                    lineHeightText: '1.5',
+                    textColorTitle: '#000000',
+                    textColorText: '#333333',
+                    textAlign: 'center'
+                };
+            case 'text-image':
+                return {
+                    ...commonStyles,
+                    image: 'https://placehold.co/250x250/F3F4F6/6B7280?text=Image',
+                    altText: 'Content Image',
+                    text: 'This is some text next to an image.',
+                    fontSize: '16px',
+                    lineHeight: '1.5',
+                    textColor: '#333333',
+                    textAlign: 'left',
+                    direction: 'text-left',
+                    textWidth: 50,
+                    imageWidth: 50,
+                    showButton: false,
+                    buttonText: 'Click Me',
+                    buttonLink: '#',
+                    buttonBackground: '#007bff',
+                    buttonColor: '#ffffff',
+                    buttonFontSize: '16px',
+                    buttonPadding: '10px 20px',
+                    buttonBorderRadius: '4px'
+                };
+            case 'hero':
+                return {
+                    ...commonStyles,
+                    backgroundType: 'image',
+                    backgroundImage: 'https://placehold.co/600x300/EEEEEE/808080?text=Hero',
+                    overlayTitle: 'Hero Title',
+                    overlayText: 'Hero description text.',
+                    overlayTextColor: '#ffffff',
+                    overlayAlign: 'center',
+                    showOverlayButton: true,
+                    overlayButtonText: 'Learn More',
+                    overlayButtonLink: '#',
+                    overlayButtonBackground: '#ffffff',
+                    overlayButtonColor: '#000000',
+                    overlayButtonAlign: 'center',
+                    overlayButtonWidth: 'auto',
+                    overlayButtonFontSize: '16px',
+                    overlayButtonBorderWidth: '0px',
+                    overlayButtonBorderStyle: 'solid',
+                    overlayButtonBorderColor: '#000000',
+                    lineHeightTitle: '1.2',
+                    lineHeightText: '1.5'
+                };
+            case 'image-only':
+                return {
+                    ...commonStyles,
+                    image: 'https://placehold.co/600x300/EEEEEE/808080?text=Image',
+                    altText: 'Full Width Image',
+                    link: '#',
+                    borderWidth: '0px',
+                    borderColor: '#000000',
+                    borderStyle: 'solid',
+                    borderRadius: '0px'
+                };
+            case 'single-column-blocks':
+                return {
+                    ...commonStyles,
+                    blocks: getDefaultBlocks(),
+                    order: ['image', 'title', 'text', 'button'],
+                    visible: {image: true, title: true, text: true, button: true}
+                };
+            case 'two-column-blocks':
+                return {
+                    ...commonStyles,
+                    columns: [
+                        { blocks: getDefaultBlocks() },
+                        { blocks: getDefaultBlocks() }
+                    ]
+                };
+            case 'three-column-blocks':
+                return {
+                    ...commonStyles,
+                    columns: [
+                        { blocks: getDefaultBlocks() },
+                        { blocks: getDefaultBlocks() },
+                        { blocks: getDefaultBlocks() }
+                    ]
+                };
+            case 'divider':
+                return {
+                    ...commonStyles,
+                    height: '1px',
+                    color: '#cccccc',
+                    style: 'solid',
+                    align: 'center',
+                    width: '100%'
+                };
+            case 'custom-html':
+                return {
+                    ...commonStyles,
+                    html: '<p>Your custom HTML here</p>'
+                };
+            default:
+                throw new Error(`Unknown section type: ${type}`);
+        }
+    } catch (error) {
+        console.error('Error in getDefaultContent:', error);
+        throw new Error('Failed to initialize section content: ' + error.message);
+    }
+}
+
+function getDefaultBlocks() {
+    try {
+        return {
+            image: {url: 'https://placehold.co/200x200/EEEEEE/808080?text=Image', altText: 'Block Image', link: '#', align: 'center'},
+            title: {text: 'Title', fontSize: '20px', color: '#000000', align: 'center', lineHeight: '1.2', fontFamily: 'Arial, Helvetica, sans-serif'},
+            text: {text: 'Description text.', fontSize: '14px', color: '#333333', align: 'center', lineHeight: '1.5', fontFamily: 'Arial, Helvetica, sans-serif'},
+            button: {text: 'Button', link: '#', background: '#007bff', color: '#ffffff', fontSize: '16px', align: 'center', padding: '10px 20px', borderRadius: '4px', showButton: true}
+        };
+    } catch (error) {
+        console.error('Error in getDefaultBlocks:', error);
+        throw new Error('Failed to initialize default blocks: ' + error.message);
+    }
+}
+
+function removeSection() {
+    try {
+        if (activeSectionIndex !== null && confirm('Are you sure you want to remove this section?')) {
+            sections.splice(activeSectionIndex, 1);
+            activeSectionIndex = null;
+            saveHistory();
+            updateSectionList();
+            showProperties();
+            updatePreview();
+            showMessage('Section removed', 'success');
+        }
+    } catch (error) {
+        console.error('Error removing section:', error);
+        showMessage('Error removing section: ' + error.message, 'error');
+    }
+}
+
+function updateSectionList() {
+    try {
+        sectionListContainer.innerHTML = '';
+        if (sections.length === 0) {
+            sectionListContainer.innerHTML = '<div class="text-center text-gray-400 p-4">Add a section to get started</div>';
+        } else {
+            sections.forEach((section, index) => {
+                const sectionName = section.type.replace(/-/g, ' ').split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+                const sectionItem = document.createElement('div');
+                sectionItem.classList.add('section-item', 'p-3', 'rounded-lg', 'flex', 'items-center', 'justify-between');
+                sectionItem.draggable = true;
+                sectionItem.setAttribute('tabindex', '0');
+                sectionItem.setAttribute('aria-label', `Section ${sectionName}, click to edit or drag to reorder`);
+                if (index === activeSectionIndex) {
+                    sectionItem.classList.add('active');
+                    sectionItem.setAttribute('aria-selected', 'true');
+                } else {
+                    sectionItem.setAttribute('aria-selected', 'false');
+                }
+                sectionItem.innerHTML = `
+                    <span class="font-medium text-gray-700">${sectionName}</span>
+                    <span class="draggable-handle text-gray-400">☰</span>
+                `;
+                sectionItem.ondragstart = (e) => {
+                    e.dataTransfer.setData('text/plain', index);
+                };
+                sectionItem.ondragover = (e) => e.preventDefault();
+                sectionItem.ondrop = (e) => {
+                    e.preventDefault();
+                    const draggedIndex = parseInt(e.dataTransfer.getData('text/plain'));
+                    const dropIndex = index;
+                    if (draggedIndex !== dropIndex) {
+                        const [draggedSection] = sections.splice(draggedIndex, 1);
+                        sections.splice(dropIndex, 0, draggedSection);
+                        activeSectionIndex = dropIndex;
+                        saveHistory();
+                        updateSectionList();
+                        updatePreview();
+                        showProperties();
+                    }
+                };
+                sectionItem.onclick = () => {
+                    activeSectionIndex = index;
+                    showProperties();
+                    updateSectionList();
+                    updatePreview();
+                };
+                sectionItem.onkeydown = (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        activeSectionIndex = index;
+                        showProperties();
+                        updateSectionList();
+                        updatePreview();
+                    }
+                };
+                sectionListContainer.appendChild(sectionItem);
+            });
+        }
+    } catch (error) {
+        console.error('Error updating section list:', error);
+        showMessage('Error updating section list: ' + error.message, 'error');
+    }
+}
+
+function showProperties() {
+    try {
+        if (activeSectionIndex === null) {
+            propertiesPanel.classList.add('hidden');
+            return;
+        }
+
+        propertiesPanel.classList.remove('hidden');
+        propertyInputs.innerHTML = '';
+        const section = sections[activeSectionIndex];
+        const content = section.content;
+
+        const commonDetails = document.createElement('details');
+        commonDetails.classList.add('mb-2');
+        commonDetails.open = true;
+        const commonSummary = document.createElement('summary');
+        commonSummary.textContent = 'Common Styles';
+        commonSummary.classList.add('font-medium', 'cursor-pointer');
+        commonDetails.appendChild(commonSummary);
+        const commonContainer = document.createElement('div');
+        commonContainer.classList.add('p-2');
+        commonDetails.appendChild(commonContainer);
+        propertyInputs.appendChild(commonDetails);
+
+        function createInput(label, key, type = 'text', defaultValue = '', options = null, target = content, container = propertyInputs) {
+            const div = document.createElement('div');
+            div.classList.add('mb-3');
+            
+            const labelEl = document.createElement('label');
+            labelEl.textContent = label;
+            labelEl.classList.add('property-label');
+            
+            let inputEl;
+            if (type === 'textarea') {
+                inputEl = document.createElement('textarea');
+                inputEl.rows = 4;
+                inputEl.classList.add('property-input');
+            } else if (type === 'select') {
+                inputEl = document.createElement('select');
+                inputEl.classList.add('property-select');
+                options.forEach(opt => {
+                    const optionEl = document.createElement('option');
+                    optionEl.value = opt.value;
+                    optionEl.textContent = opt.label;
+                    if (target[key] === opt.value) optionEl.selected = true;
+                    inputEl.appendChild(optionEl);
+                });
+            } else if (type === 'color') {
+                inputEl = document.createElement('input');
+                inputEl.type = 'color';
+                inputEl.classList.add('property-input', 'h-10');
+            } else if (type === 'checkbox') {
+                inputEl = document.createElement('input');
+                inputEl.type = 'checkbox';
+                inputEl.classList.add('property-checkbox');
+                inputEl.checked = target[key] || false;
+            } else if (type === 'range') {
+                inputEl = document.createElement('input');
+                inputEl.type = 'range';
+                inputEl.min = options?.min || 0;
+                inputEl.max = options?.max || 100;
+                inputEl.step = options?.step || 1;
+                inputEl.classList.add('column-width-slider');
+                
+                const valueDisplay = document.createElement('div');
+                valueDisplay.classList.add('column-width-value');
+                valueDisplay.textContent = `${target[key] || defaultValue}%`;
+                
+                inputEl.addEventListener('input', (e) => {
+                    target[key] = e.target.value;
+                    valueDisplay.textContent = `${e.target.value}%`;
+                    saveHistory();
+                    updatePreview();
+                });
+                
+                div.appendChild(labelEl);
+                div.appendChild(inputEl);
+                div.appendChild(valueDisplay);
+                container.appendChild(div);
+                return;
+            } else {
+                inputEl = document.createElement('input');
+                inputEl.type = type;
+                inputEl.classList.add('property-input');
+            }
+            
+            if (type !== 'checkbox') {
+                inputEl.value = target[key] !== undefined ? target[key] : defaultValue;
+            }
+            
+            inputEl.setAttribute('aria-label', label);
+            
+            inputEl.addEventListener('input', (e) => {
+                let value = e.target.value;
+                if (key === 'html') {
+                    value = validateHtml(value);
+                }
+                if (['paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', 'marginTop', 'marginBottom', 'marginLeft', 'marginRight', 'fontSize', 'fontSizeTitle', 'fontSizeText', 'borderWidth', 'borderRadius', 'imageWidth', 'overlayButtonWidth', 'overlayButtonFontSize', 'overlayButtonBorderWidth', 'height', 'width', 'buttonPadding', 'buttonBorderRadius'].includes(key)) {
+                    value = value.match(/^\d+$/) ? `${value}px` : value;
+                } else if (['lineHeight', 'lineHeightTitle', 'lineHeightText'].includes(key)) {
+                    const numValue = parseFloat(value);
+                    if (!isNaN(numValue) && numValue >= 0.8 && numValue <= 2.0) {
+                        value = numValue.toString();
+                    } else {
+                        value = defaultValue;
+                        showMessage(`Invalid ${label}. Use a value between 0.8 and 2.0.`, 'error');
+                    }
+                }
+                
+                if (type === 'checkbox') {
+                    target[key] = e.target.checked;
+                } else {
+                    target[key] = value;
+                }
+                
+                saveHistory();
+                updatePreview();
+            });
+            
+            if (type !== 'range') {
+                div.appendChild(labelEl);
+                div.appendChild(inputEl);
+                container.appendChild(div);
+            }
+        }
+
+        function createCheckbox(label, key, container = propertyInputs) {
+            const div = document.createElement('div');
+            div.classList.add('mb-3', 'flex', 'items-center');
+            
+            const inputEl = document.createElement('input');
+            inputEl.type = 'checkbox';
+            inputEl.id = key;
+            inputEl.checked = content[key];
+            inputEl.classList.add('property-checkbox');
+            
+            inputEl.addEventListener('change', (e) => {
+                content[key] = e.target.checked;
+                saveHistory();
+                showProperties();
+                updatePreview();
+            });
+            
+            const labelEl = document.createElement('label');
+            labelEl.textContent = label;
+            labelEl.htmlFor = key;
+            labelEl.classList.add('property-label', 'mb-0');
+            
+            div.appendChild(inputEl);
+            div.appendChild(labelEl);
+            container.appendChild(div);
+        }
+
+        function addBlockProperties(blocksObj, mode, container = propertyInputs) {
+            if (mode === 'single') {
+                const orderSelect = document.createElement('select');
+                orderSelect.multiple = true;
+                orderSelect.classList.add('property-select');
+                orderSelect.setAttribute('aria-label', 'Block Order');
+                ['image', 'title', 'text', 'button'].forEach(blockType => {
+                    const opt = document.createElement('option');
+                    opt.value = blockType;
+                    opt.textContent = blockType.charAt(0).toUpperCase() + blockType.slice(1);
+                    opt.selected = blocksObj.order.includes(blockType);
+                    orderSelect.appendChild(opt);
+                });
+                orderSelect.addEventListener('change', () => {
+                    blocksObj.order = Array.from(orderSelect.selectedOptions).map(opt => opt.value);
+                    saveHistory();
+                    updatePreview();
+                });
+                
+                const orderDiv = document.createElement('div');
+                orderDiv.classList.add('mb-3');
+                
+                const orderLabel = document.createElement('label');
+                    orderLabel.textContent = 'Block Order (multi-select and drag to reorder)';
+                    orderLabel.classList.add('property-label');
+                    
+                    orderDiv.appendChild(orderLabel);
+                    orderDiv.appendChild(orderSelect);
+                    container.appendChild(orderDiv);
+
+                    ['image', 'title', 'text', 'button'].forEach(blockType => {
+                        const visDiv = document.createElement('div');
+                        visDiv.classList.add('mb-3', 'flex', 'items-center');
+                        
+                        const visInput = document.createElement('input');
+                        visInput.type = 'checkbox';
+                        visInput.id = `visible-${blockType}`;
+                        visInput.checked = blocksObj.visible[blockType];
+                        visInput.classList.add('property-checkbox');
+                        
+                        visInput.addEventListener('change', (e) => {
+                            blocksObj.visible[blockType] = e.target.checked;
+                            saveHistory();
+                            updatePreview();
+                        });
+                        
+                        const visLabel = document.createElement('label');
+                        visLabel.textContent = `Show ${blockType.charAt(0).toUpperCase() + blockType.slice(1)}`;
+                        visLabel.htmlFor = `visible-${blockType}`;
+                        visLabel.classList.add('property-label', 'mb-0');
+                        
+                        visDiv.appendChild(visInput);
+                        visDiv.appendChild(visLabel);
+                        container.appendChild(visDiv);
+                    });
+                }
+
+                const blockTypes = ['image', 'title', 'text', 'button'];
+                blockTypes.forEach(blockType => {
+                    const block = blocksObj.blocks[blockType];
+                    const blockDetails = document.createElement('details');
+                    blockDetails.classList.add('mb-2');
+                    blockDetails.open = true;
+                    
+                    const blockSummary = document.createElement('summary');
+                    blockSummary.textContent = `${blockType.charAt(0).toUpperCase() + blockType.slice(1)} Block`;
+                    blockSummary.classList.add('font-medium', 'cursor-pointer');
+                    
+                    blockDetails.appendChild(blockSummary);
+                    
+                    const blockContainer = document.createElement('div');
+                    blockContainer.classList.add('p-2');
+                    blockDetails.appendChild(blockContainer);
+                    
+                    container.appendChild(blockDetails);
+
+                    if (blockType === 'image') {
+                        createInput('Image URL', 'url', 'text', '', null, block, blockContainer);
+                        createInput('Alt Text', 'altText', 'text', 'Block Image', null, block, blockContainer);
+                        createInput('Link URL', 'link', 'text', '#', null, block, blockContainer);
+                        createInput('Align', 'align', 'select', 'center', [
+                            {value: 'left', label: 'Left'},
+                            {value: 'center', label: 'Center'},
+                            {value: 'right', label: 'Right'}
+                        ], block, blockContainer);
+                    } else if (blockType === 'title' || blockType === 'text') {
+                        createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, block, blockContainer);
+                        createInput(blockType === 'title' ? 'Title Text' : 'Text', 'text', blockType === 'text' ? 'textarea' : 'text', '', null, block, blockContainer);
+                        createInput('Font Size', 'fontSize', 'text', blockType === 'title' ? '20px' : '14px', null, block, blockContainer);
+                        createInput('Line Height', 'lineHeight', 'text', blockType === 'title' ? '1.2' : '1.5', null, block, blockContainer);
+                        createInput('Color', 'color', 'color', blockType === 'title' ? '#000000' : '#333333', null, block, blockContainer);
+                        createInput('Align', 'align', 'select', 'center', [
+                            {value: 'left', label: 'Left'},
+                            {value: 'center', label: 'Center'},
+                            {value: 'right', label: 'Right'}
+                        ], block, blockContainer);
+                    } else if (blockType === 'button') {
+                        createCheckbox('Show Button', 'showButton', blockContainer);
+                        if (block.showButton) {
+                            createInput('Button Text', 'text', 'text', 'Button', null, block, blockContainer);
+                            createInput('Button Link', 'link', 'text', '#', null, block, blockContainer);
+                            createInput('Background Color', 'background', 'color', '#007bff', null, block, blockContainer);
+                            createInput('Text Color', 'color', 'color', '#ffffff', null, block, blockContainer);
+                            createInput('Font Size', 'fontSize', 'text', '16px', null, block, blockContainer);
+                            createInput('Padding', 'padding', 'text', '10px 20px', null, block, blockContainer);
+                            createInput('Border Radius', 'borderRadius', 'text', '4px', null, block, blockContainer);
+                            createInput('Align', 'align', 'select', 'center', [
+                                {value: 'left', label: 'Left'},
+                                {value: 'center', label: 'Center'},
+                                {value: 'right', label: 'Right'}
+                            ], block, blockContainer);
+                        }
+                    }
+                });
+            }
+
+            createInput('Background Type', 'backgroundType', 'select', 'color', [
+                {value: 'color', label: 'Color'},
+                {value: 'image', label: 'Image'},
+                {value: 'gradient', label: 'Gradient'}
+            ], content, commonContainer);
+            
+            if (content.backgroundType === 'color') {
+                createInput('Background Color', 'backgroundColor', 'color', '#ffffff', null, content, commonContainer);
+            } else if (content.backgroundType === 'image') {
+                createInput('Background Image URL', 'backgroundImage', 'text', '', null, content, commonContainer);
+            } else if (content.backgroundType === 'gradient') {
+                createInput('Background Gradient', 'backgroundGradient', 'text', 'linear-gradient(to right, #ffffff, #ffffff)', null, content, commonContainer);
+            }
+            
+            createInput('Border Width', 'borderWidth', 'text', '0px', null, content, commonContainer);
+            createInput('Border Color', 'borderColor', 'color', '#000000', null, content, commonContainer);
+            createInput('Border Style', 'borderStyle', 'select', 'solid', [
+                {value: 'solid', label: 'Solid'},
+                {value: 'dashed', label: 'Dashed'},
+                {value: 'dotted', label: 'Dotted'},
+                {value: 'none', label: 'None'}
+            ], content, commonContainer);
+            createInput('Border Radius', 'borderRadius', 'text', '0px', null, content, commonContainer);
+            createInput('Padding Top', 'paddingTop', 'text', '20px', null, content, commonContainer);
+            createInput('Padding Bottom', 'paddingBottom', 'text', '20px', null, content, commonContainer);
+            createInput('Padding Left', 'paddingLeft', 'text', '20px', null, content, commonContainer);
+            createInput('Padding Right', 'paddingRight', 'text', '20px', null, content, commonContainer);
+            createInput('Margin Top', 'marginTop', 'text', '0px', null, content, commonContainer);
+            createInput('Margin Bottom', 'marginBottom', 'text', '0px', null, content, commonContainer);
+            createInput('Margin Left', 'marginLeft', 'text', '0px', null, content, commonContainer);
+            createInput('Margin Right', 'marginRight', 'text', '0px', null, content, commonContainer);
+
+            const specificDetails = document.createElement('details');
+            specificDetails.classList.add('mb-2');
+            specificDetails.open = true;
+            
+            const specificSummary = document.createElement('summary');
+            specificSummary.textContent = 'Section-Specific Properties';
+            specificSummary.classList.add('font-medium', 'cursor-pointer');
+            
+            specificDetails.appendChild(specificSummary);
+            
+            const specificContainer = document.createElement('div');
+            specificContainer.classList.add('p-2');
+            specificDetails.appendChild(specificContainer);
+            
+            propertyInputs.appendChild(specificDetails);
+
+            switch (section.type) {
+                case 'header':
+                    createInput('Image URL', 'image', 'text', '', null, content, specificContainer);
+                    createInput('Alt Text', 'altText', 'text', 'Company Logo', null, content, specificContainer);
+                    createInput('Link URL', 'link', 'text', '#', null, content, specificContainer);
+                    createInput('Align', 'align', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    createInput('Image Width (px)', 'imageWidth', 'text', '100%', null, content, specificContainer);
+                    break;
+                case 'title-only':
+                    createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
+                    createInput('Title', 'title', 'text', 'Your Title Here', null, content, specificContainer);
+                    createInput('Title Font Size', 'fontSizeTitle', 'text', '24px', null, content, specificContainer);
+                    createInput('Title Line Height', 'lineHeightTitle', 'text', '1.2', null, content, specificContainer);
+                    createInput('Title Color', 'textColorTitle', 'color', '#000000', null, content, specificContainer);
+                    createInput('Text Align', 'textAlign', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    break;
+                case 'text-only':
+                    createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
+                    createInput('Text', 'text', 'textarea', 'This is a paragraph of text.', null, content, specificContainer);
+                    createInput('Text Font Size', 'fontSizeText', 'text', '16px', null, content, specificContainer);
+                    createInput('Text Line Height', 'lineHeightText', 'text', '1.5', null, content, specificContainer);
+                    createInput('Text Color', 'textColorText', 'color', '#333333', null, content, specificContainer);
+                    createInput('Text Align', 'textAlign', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    break;
+                case 'title-text':
+                    createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
+                    createInput('Title', 'title', 'text', 'Your Title Here', null, content, specificContainer);
+                    createInput('Text', 'text', 'textarea', 'This is a paragraph of text.', null, content, specificContainer);
+                    createInput('Title Font Size', 'fontSizeTitle', 'text', '24px', null, content, specificContainer);
+                    createInput('Title Line Height', 'lineHeightTitle', 'text', '1.2', null, content, specificContainer);
+                    createInput('Text Font Size', 'fontSizeText', 'text', '16px', null, content, specificContainer);
+                    createInput('Text Line Height', 'lineHeightText', 'text', '1.5', null, content, specificContainer);
+                    createInput('Title Color', 'textColorTitle', 'color', '#000000', null, content, specificContainer);
+                    createInput('Text Color', 'textColorText', 'color', '#333333', null, content, specificContainer);
+                    createInput('Text Align', 'textAlign', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    break;
+                case 'text-image':
+                    createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
+                    createInput('Image URL', 'image', 'text', '', null, content, specificContainer);
+                    createInput('Alt Text', 'altText', 'text', 'Content Image', null, content, specificContainer);
+                    createInput('Text', 'text', 'textarea', 'This is some text next to an image.', null, content, specificContainer);
+                    createInput('Text Font Size', 'fontSize', 'text', '16px', null, content, specificContainer);
+                    createInput('Text Line Height', 'lineHeight', 'text', '1.5', null, content, specificContainer);
+                    createInput('Text Color', 'textColor', 'color', '#333333', null, content, specificContainer);
+                    createInput('Text Align', 'textAlign', 'select', 'left', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    createInput('Direction', 'direction', 'select', 'text-left', [
+                        {value: 'text-left', label: 'Text Left, Image Right'},
+                        {value: 'text-right', label: 'Text Right, Image Left'}
+                    ], content, specificContainer);
+                    
+                    createInput('Text Column Width', 'textWidth', 'range', '50', {min: 10, max: 90, step: 5}, content, specificContainer);
+                    createInput('Image Column Width', 'imageWidth', 'range', '50', {min: 10, max: 90, step: 5}, content, specificContainer);
+                    
+                    createCheckbox('Show Button', 'showButton', specificContainer);
+                    if (content.showButton) {
+                        createInput('Button Text', 'buttonText', 'text', 'Click Me', null, content, specificContainer);
+                        createInput('Button Link', 'buttonLink', 'text', '#', null, content, specificContainer);
+                        createInput('Button Background', 'buttonBackground', 'color', '#007bff', null, content, specificContainer);
+                        createInput('Button Color', 'buttonColor', 'color', '#ffffff', null, content, specificContainer);
+                        createInput('Button Font Size', 'buttonFontSize', 'text', '16px', null, content, specificContainer);
+                        createInput('Button Padding', 'buttonPadding', 'text', '10px 20px', null, content, specificContainer);
+                        createInput('Button Border Radius', 'buttonBorderRadius', 'text', '4px', null, content, specificContainer);
+                    }
+                    break;
+                case 'hero':
+                    createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
+                    if (content.backgroundType === 'image') {
+                        createInput('Background Image URL', 'backgroundImage', 'text', '', null, content, specificContainer);
+                    }
+                    createInput('Overlay Title', 'overlayTitle', 'text', 'Hero Title', null, content, specificContainer);
+                    createInput('Overlay Text', 'overlayText', 'textarea', 'Hero description text.', null, content, specificContainer);
+                    createInput('Overlay Title Line Height', 'lineHeightTitle', 'text', '1.2', null, content, specificContainer);
+                    createInput('Overlay Text Line Height', 'lineHeightText', 'text', '1.5', null, content, specificContainer);
+                    createInput('Overlay Text Color', 'overlayTextColor', 'color', '#ffffff', null, content, specificContainer);
+                    createInput('Overlay Align', 'overlayAlign', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    createCheckbox('Show Overlay Button', 'showOverlayButton', specificContainer);
+                    if (content.showOverlayButton) {
+                        createInput('Overlay Button Text', 'overlayButtonText', 'text', 'Learn More', null, content, specificContainer);
+                        createInput('Overlay Button Link', 'overlayButtonLink', 'text', '#', null, content, specificContainer);
+                        createInput('Overlay Button Background', 'overlayButtonBackground', 'color', '#ffffff', null, content, specificContainer);
+                        createInput('Overlay Button Color', 'overlayButtonColor', 'color', '#000000', null, content, specificContainer);
+                        createInput('Overlay Button Align', 'overlayButtonAlign', 'select', 'center', [
+                            {value: 'left', label: 'Left'},
+                            {value: 'center', label: 'Center'},
+                            {value: 'right', label: 'Right'}
+                        ], content, specificContainer);
+                        createInput('Overlay Button Width (px)', 'overlayButtonWidth', 'text', 'auto', null, content, specificContainer);
+                        createInput('Overlay Button Font Size', 'overlayButtonFontSize', 'text', '16px', null, content, specificContainer);
+                        createInput('Overlay Button Border Width', 'overlayButtonBorderWidth', 'text', '0px', null, content, specificContainer);
+                        createInput('Overlay Button Border Color', 'overlayButtonBorderColor', 'color', '#000000', null, content, specificContainer);
+                        createInput('Overlay Button Border Style', 'overlayButtonBorderStyle', 'select', 'solid', [
+                            {value: 'solid', label: 'Solid'},
+                            {value: 'dashed', label: 'Dashed'},
+                            {value: 'dotted', label: 'Dotted'},
+                            {value: 'none', label: 'None'}
+                        ], content, specificContainer);
+                    }
+                    break;
+                case 'image-only':
+                    createInput('Image URL', 'image', 'text', '', null, content, specificContainer);
+                    createInput('Alt Text', 'altText', 'text', 'Full Width Image', null, content, specificContainer);
+                    createInput('Link URL', 'link', 'text', '#', null, content, specificContainer);
+                    createInput('Border Width', 'borderWidth', 'text', '0px', null, content, specificContainer);
+                    createInput('Border Color', 'borderColor', 'color', '#000000', null, content, specificContainer);
+                    createInput('Border Style', 'borderStyle', 'select', 'solid', [
+                        {value: 'solid', label: 'Solid'},
+                        {value: 'dashed', label: 'Dashed'},
+                        {value: 'dotted', label: 'Dotted'},
+                        {value: 'none', label: 'None'}
+                    ], content, specificContainer);
+                    createInput('Border Radius', 'borderRadius', 'text', '0px', null, content, specificContainer);
+                    break;
+                case 'single-column-blocks':
+                    addBlockProperties(content, 'single', specificContainer);
+                    break;
+                case 'two-column-blocks':
+                    content.columns.forEach((col, colIndex) => {
+                        const colDetails = document.createElement('details');
+                        colDetails.classList.add('mb-2');
+                        colDetails.open = true;
+                        
+                        const colSummary = document.createElement('summary');
+                        colSummary.textContent = `Column ${colIndex + 1}`;
+                        colSummary.classList.add('font-medium', 'cursor-pointer');
+                        
+                        colDetails.appendChild(colSummary);
+                        
+                        const colContainer = document.createElement('div');
+                        colContainer.classList.add('p-2');
+                        colDetails.appendChild(colContainer);
+                        
+                        specificContainer.appendChild(colDetails);
+                        addBlockProperties(col, 'multi', colContainer);
+                    });
+                    break;
+                case 'three-column-blocks':
+                    content.columns.forEach((col, colIndex) => {
+                        const colDetails = document.createElement('details');
+                        colDetails.classList.add('mb-2');
+                        colDetails.open = true;
+                        
+                        const colSummary = document.createElement('summary');
+                        colSummary.textContent = `Column ${colIndex + 1}`;
+                        colSummary.classList.add('font-medium', 'cursor-pointer');
+                        
+                        colDetails.appendChild(colSummary);
+                        
+                        const colContainer = document.createElement('div');
+                        colContainer.classList.add('p-2');
+                        colDetails.appendChild(colContainer);
+                        
+                        specificContainer.appendChild(colDetails);
+                        addBlockProperties(col, 'multi', colContainer);
+                    });
+                    break;
+                case 'divider':
+                    createInput('Height (px)', 'height', 'text', '1px', null, content, specificContainer);
+                    createInput('Color', 'color', 'color', '#cccccc', null, content, specificContainer);
+                    createInput('Style', 'style', 'select', 'solid', [
+                        {value: 'solid', label: 'Solid'},
+                        {value: 'dashed', label: 'Dashed'},
+                        {value: 'dotted', label: 'Dotted'}
+                    ], content, specificContainer);
+                    createInput('Align', 'align', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    createInput('Width (%)', 'width', 'text', '100%', null, content, specificContainer);
+                    break;
+                case 'custom-html':
+                    createInput('Custom HTML', 'html', 'textarea', '<p>Your custom HTML here</p>', null, content, specificContainer);
+                    break;
+            }
+        } catch (error) {
+            console.error('Error showing properties:', error);
+            showMessage('Error showing properties: ' + error.message, 'error');
+        }
+    }
+
+    function generateSectionHtml(section) {
+        try {
+            const content = section.content;
+            const { tableStyle, paddingStyle } = generateCommonStyles(content);
+            const fontStyle = content.fontFamily ? `font-family: ${content.fontFamily};` : '';
+
+            switch (section.type) {
+                case 'header':
+                    return `
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                            <tr>
+                                <td align="${content.align}" style="${paddingStyle}">
+                                    <a href="${content.link}" target="_blank">
+                                        <img src="${content.image}" alt="${escapeHtml(content.altText || 'Header')}" style="display: block; width: ${content.imageWidth}; max-width: 100%; height: auto; border-radius: ${content.borderRadius};" />
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    `;
+                case 'title-only':
+                    return `
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                            <tr>
+                                <td align="${content.textAlign}" style="${paddingStyle} ${fontStyle}">
+                                    <h1 style="font-size: ${content.fontSizeTitle}; line-height: ${content.lineHeightTitle}; color: ${content.textColorTitle}; margin: 0; text-align: ${content.textAlign};">${escapeHtml(content.title)}</h1>
+                                </td>
+                            </tr>
+                        </table>
+                    `;
+                case 'text-only':
+                    return `
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                            <tr>
+                                <td align="${content.textAlign}" style="${paddingStyle} ${fontStyle}">
+                                    <p style="font-size: ${content.fontSizeText}; line-height: ${content.lineHeightText}; color: ${content.textColorText}; margin: 0; text-align: ${content.textAlign};">${escapeHtml(content.text)}</p>
+                                </td>
+                            </tr>
+                        </table>
+                    `;
+                case 'title-text':
+                    return `
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                            <tr>
+                                <td align="${content.textAlign}" style="${paddingStyle} ${fontStyle}">
+                                    <h1 style="font-size: ${content.fontSizeTitle}; line-height: ${content.lineHeightTitle}; color: ${content.textColorTitle}; margin: 0; text-align: ${content.textAlign};">${escapeHtml(content.title)}</h1>
+                                    <p style="font-size: ${content.fontSizeText}; line-height: ${content.lineHeightText}; color: ${content.textColorText}; margin-top: 10px; text-align: ${content.textAlign};">${escapeHtml(content.text)}</p>
+                                </td>
+                            </tr>
+                        </table>
+                    `;
+                case 'text-image':
+                    const textWidth = content.textWidth || 50;
+                    const imageWidth = content.imageWidth || 50;
+                    const textContent = `
+                        <div style="font-size: ${content.fontSize}; line-height: ${content.lineHeight}; color: ${content.textColor}; text-align: ${content.textAlign}; margin: 0; ${fontStyle}">
+                            ${escapeHtml(content.text)}
+                            ${content.showButton ? `
+                                <table cellpadding="0" cellspacing="0" border="0" style="margin-top: 15px;">
+                                    <tr>
+                                        <td style="background-color: ${content.buttonBackground}; border-radius: ${content.buttonBorderRadius};">
+                                            <a href="${content.buttonLink}" target="_blank" style="font-size: ${content.buttonFontSize}; color: ${content.buttonColor}; padding: ${content.buttonPadding}; display: inline-block; text-decoration: none;">${escapeHtml(content.buttonText)}</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            ` : ''}
+                        </div>
+                    `;
+                    const imageContent = `
+                        <img src="${content.image}" alt="${escapeHtml(content.altText || 'Image')}" style="display: block; width: 100%; max-width: 100%; height: auto;" />
+                    `;
+                    const leftContent = content.direction === 'text-left' ? textContent : imageContent;
+                    const rightContent = content.direction === 'text-left' ? imageContent : textContent;
+                    const leftWidth = content.direction === 'text-left' ? textWidth : imageWidth;
+                    const rightWidth = content.direction === 'text-left' ? imageWidth : textWidth;
+
+                    return `
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                            <tr>
+                                <td style="${paddingStyle}">
+                                    <table cellpadding="0" cellspacing="0" border="0" width="100%" role="presentation">
+                                        <tr>
+                                            <td class="column" style="width: ${leftWidth}%; vertical-align: top; padding: 0 10px;" width="${leftWidth}%">
+                                                ${leftContent}
+                                            </td>
+                                            <td class="column" style="width: ${rightWidth}%; vertical-align: top; padding: 0 10px;" width="${rightWidth}%">
+                                                ${rightContent}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    `;
+                case 'hero':
+                    const buttonHtml = content.showOverlayButton ? `
+                        <table cellpadding="0" cellspacing="0" border="0" align="${content.overlayButtonAlign}" style="margin-top: 20px; width: ${content.overlayButtonWidth};">
+                            <tr>
+                                <td style="background-color: ${content.overlayButtonBackground}; border: ${content.overlayButtonBorderWidth} ${content.overlayButtonBorderStyle} ${content.overlayButtonBorderColor}; border-radius: 4px;">
+                                    <a href="${content.overlayButtonLink}" target="_blank" style="font-size: ${content.overlayButtonFontSize}; color: ${content.overlayButtonColor}; padding: 12px 24px; display: block; text-decoration: none; text-align: center;">${escapeHtml(content.overlayButtonText)}</a>
+                                </td>
+                            </tr>
+                        </table>
+                    ` : '';
+                    return `
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle} background-image: url(${content.backgroundImage}); background-size: cover; background-position: center;" role="presentation">
+                            <tr>
+                                <td style="${paddingStyle} text-align: ${content.overlayAlign}; color: ${content.overlayTextColor}; ${fontStyle}">
+                                    <h1 style="font-size: 32px; line-height: ${content.lineHeightTitle}; margin: 0;">${escapeHtml(content.overlayTitle)}</h1>
+                                    <p style="font-size: 18px; line-height: ${content.lineHeightText}; margin-top: 10px;">${escapeHtml(content.overlayText)}</p>
+                                    ${buttonHtml}
+                                </td>
+                            </tr>
+                        </table>
+                    `;
+                case 'image-only':
+                    return `
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                            <tr>
+                                <td style="${paddingStyle}">
+                                    <a href="${content.link}" target="_blank">
+                                        <img src="${content.image}" alt="${escapeHtml(content.altText || 'Image')}" style="display: block; width: 100%; max-width: 100%; height: auto; border: ${content.borderWidth} ${content.borderStyle} ${content.borderColor}; border-radius: ${content.borderRadius};" />
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    `;
+                case 'single-column-blocks':
+                    const blocksHtml = content.order.filter(type => content.visible[type]).map(type => generateBlockHtml(content.blocks[type], type)).join('');
+                    return `
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                            <tr>
+                                <td style="${paddingStyle}">
+                                    ${blocksHtml}
+                                </td>
+                            </tr>
+                        </table>
+                    `;
+                case 'two-column-blocks':
+                    return generateMultiColumnHtml(content, 2);
+                case 'three-column-blocks':
+                    return generateMultiColumnHtml(content, 3);
+                case 'divider':
+                    return `
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                            <tr>
+                                <td style="${paddingStyle} text-align: ${content.align};">
+                                    <hr style="border: none; height: ${content.height}; width: ${content.width}; background-color: ${content.color}; border-top: ${content.height} ${content.style} ${content.color}; margin: 0 auto;" />
+                                </td>
+                            </tr>
+                        </table>
+                    `;
+                case 'custom-html':
+                    return `
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                            <tr>
+                                <td style="${paddingStyle} font-family: ${content.fontFamily}; font-size: 16px; line-height: 1.5; max-width: 100%;">
+                                    ${sanitizeHtml(content.html)}
+                                </td>
+                            </tr>
+                        </table>
+                    `;
+                default:
+                    return `<div>Unsupported section type: ${section.type}</div>`;
+            }
+        } catch (error) {
+            console.error('Error generating section HTML:', error);
+            return `<div>Error rendering section ${section.type}: ${error.message}</div>`;
+        }
+    }
+
+    function generateBlockHtml(block, type) {
+        try {
+            const fontStyle = block.fontFamily ? `font-family: ${block.fontFamily};` : '';
+            switch (type) {
+                case 'image':
+                    return `
+                        <table cellpadding="0" cellspacing="0" border="0" width="100%" align="${block.align}" style="margin-bottom: 10px;">
+                            <tr>
+                                <td align="${block.align}">
+                                    <a href="${block.link}" target="_blank">
+                                        <img src="${block.url}" alt="${escapeHtml(block.altText || 'Image')}" style="display: block; width: 100%; max-width: 100%; height: auto;" />
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    `;
+                case 'title':
+                    return `
+                        <table cellpadding="0" cellspacing="0" border="0" width="100%" align="${block.align}" style="margin-bottom: 10px;">
+                            <tr>
+                                <td align="${block.align}" style="${fontStyle}">
+                                    <h2 style="font-size: ${block.fontSize}; line-height: ${block.lineHeight}; color: ${block.color}; margin: 0; text-align: ${block.align};">${escapeHtml(block.text)}</h2>
+                                </td>
+                            </tr>
+                        </table>
+                    `;
+                case 'text':
+                    return `
+                        <table cellpadding="0" cellspacing="0" border="0" width="100%" align="${block.align}" style="margin-bottom: 10px;">
+                            <tr>
+                                <td align="${block.align}" style="${fontStyle}">
+                                    <p style="font-size: ${block.fontSize}; line-height: ${block.lineHeight}; color: ${block.color}; margin: 0; text-align: ${block.align};">${escapeHtml(block.text)}</p>
+                                </td>
+                            </tr>
+                        </table>
+                    `;
+                case 'button':
+                    if (!block.showButton) return '';
+                    return `
+                        <table cellpadding="0" cellspacing="0" border="0" width="100%" align="${block.align}" style="margin-bottom: 10px;">
+                            <tr>
+                                <td align="${block.align}">
+                                    <table cellpadding="0" cellspacing="0" border="0" align="${block.align}">
+                                        <tr>
+                                            <td style="background-color: ${block.background}; border-radius: ${block.borderRadius};">
+                                                <a href="${block.link}" target="_blank" style="font-size: ${block.fontSize}; color: ${block.color}; padding: ${block.padding}; display: inline-block; text-decoration: none;">${escapeHtml(block.text)}</a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    `;
+            }
+        } catch (error) {
+            console.error('Error generating block HTML:', error);
+            return `<div>Error rendering block ${type}: ${error.message}</div>`;
+        }
+    }
+
+    function generateMultiColumnHtml(content, columnCount) {
+        try {
+            const columnWidth = Math.floor(100 / columnCount);
+            const { tableStyle, paddingStyle } = generateCommonStyles(content);
+            const columnsHtml = content.columns.map(col => {
+                const blocksHtml = col.blocks.order ? col.blocks.order.filter(type => col.blocks.visible[type]).map(type => generateBlockHtml(col.blocks[type], type)).join('') : Object.keys(col.blocks).map(type => generateBlockHtml(col.blocks[type], type)).join('');
+                return `
+                    <td class="column" style="width: ${columnWidth}%; vertical-align: top; padding: 0 10px;" width="${columnWidth}%">
+                        ${blocksHtml}
+                    </td>
+                `;
+            }).join('');
+
+            return `
+                <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                    <tr>
+                        <td style="${paddingStyle}">
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%" role="presentation">
+                                <tr>
+                                    ${columnsHtml}
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            `;
+        } catch (error) {
+            console.error('Error generating multi-column HTML:', error);
+            return `<div>Error rendering multi-column section: ${error.message}</div>`;
+        }
+    }
+
+    function generateEmailHtml() {
+        try {
+            const sectionsHtml = sections.map(generateSectionHtml).join('');
+            const fullHtml = `
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Template</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        table {
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+        td {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border: 0;
+        }
+        a {
+            text-decoration: none;
+        }
+        .container {
+            width: 100%;
+            max-width: ${isMobilePreview ? 320 : canvasWidth}px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        .column {
+            vertical-align: top;
+        }
+        .custom-html-content {
+            max-width: 100%;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+        .custom-html-content img {
+            max-width: 100% !important;
+            height: auto !important;
+        }
+        .custom-html-content p, .custom-html-content div, .custom-html-content span {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        @media only screen and (max-width: 480px) {
+            .container {
+                width: 100% !important;
+                max-width: 320px !important;
+                min-width: 0 !important;
+            }
+            .column {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 10px 0 !important;
+            }
+            img {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
+    </style>
+</head>
+
+<body style="margin: 0; padding: 0; background-color: #f6f6f6;">
+    <center style="width: 100%; background-color: #f6f6f6;">
+        <table class="container" cellpadding="0" cellspacing="0" border="0" align="center" style="width: 100%; max-width: ${canvasWidth}px; min-width: 0; background-color: #ffffff;" role="presentation">
+            ${sectionsHtml}
+        </table>
+    </center>
+</body>
+</html>
+            `;
+            return fullHtml;
+        } catch (error) {
+            console.error('Error generating email HTML:', error);
+            return `<div>Error generating email: ${error.message}</div>`;
+        }
+    }
+
+    function updatePreview() {
+        try {
+            const doc = previewFrame.contentWindow.document;
+            doc.open();
+            doc.write(generateEmailHtml());
+            doc.close();
+            codeOutput.value = generateEmailHtml();
+
+            // Adjust iframe width for mobile preview
+            previewFrame.style.maxWidth = isMobilePreview ? '320px' : `${canvasWidth}px`;
+        } catch (error) {
+            console.error('Error updating preview:', error);
+            showMessage('Error updating preview: ' + error.message);
+        }
+    }
+
+    function copyCode() {
+        try {
+            codeOutput.select();
+            document.execCommand('copy');
+            showMessage('HTML code copied to clipboard!', 'success');
+        } catch (error) {
+            console.error('Error copying code:', error);
+            showMessage('Error copying code: ' + error.message, 'error');
+        }
+    }
+
+    function saveToFile() {
+        try {
+            const htmlContent = generateEmailHtml();
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'email-template.html';
+            a.click();
+            URL.revokeObjectURL(url);
+            showMessage('Template saved as email-template.html!', 'success');
+        } catch (error) {
+            console.error('Error saving to file:', error);
+            showMessage('Error saving to file: ' + error.message, 'error');
+        }
+    }
+    </script>
+</body>
+</html>

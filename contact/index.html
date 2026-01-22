@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Digital Templates | ResumePro</title>
+    <title>Contact Us | ResumePro | ResumePro</title>
     <link rel="stylesheet" href="/assets/css/styles.css">
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -139,120 +139,146 @@
     
     <main>
         
-<!-- Hero Section -->
-<section class="hero">
-    <div class="container">
-        <h1>Professional Digital Templates</h1>
-        <p>Create stunning resumes and portfolios that get you noticed. No coding required - just customize and launch.</p>
+<div class="contact-page">
+    <div class="contact-container">
+        <div class="contact-header">
+            <h1>Contact Us</h1>
+            <p>Have questions or need support? Reach out to our team and we'll get back to you as soon as possible.</p>
+        </div>
         
-        <div class="template-types">
-            <div class="template-card">
-                <div class="template-icon">📝</div>
-                <h3>Resume Templates</h3>
-                <p>Modern, responsive designs that showcase your career journey beautifully on any device.</p>
-                <a href="/resume-templates/" class="cta-button">Browse Resumes</a>
+        <div class="contact-grid">
+            <div class="contact-info">
+                <h2>Get in Touch</h2>
+                
+                <div class="contact-method">
+                    <div class="contact-icon">✉️</div>
+                    <div class="contact-details">
+                        <h3>Email</h3>
+                        <a href="mailto:reload.adolf2023@gmail.com">support@resumepro.com</a>
+                    </div>
+                </div>
+                
+                <div class="contact-method">
+                    <div class="contact-icon">🌐</div>
+                    <div class="contact-details">
+                        <h3>Website</h3>
+                        <a href="https://resumepro.pages.dev/">www.resumepro.pages.dev</a>
+                    </div>
+                </div>
+                
+                <div class="contact-method">
+                    <div class="contact-icon">🕒</div>
+                    <div class="contact-details">
+                        <h3>Hours</h3>
+                        <p>Monday - Friday: 9am - 5pm EST</p>
+                    </div>
+                </div>
             </div>
             
-            <div class="template-card">
-                <div class="template-icon">🎨</div>
-                <h3>Portfolio Templates</h3>
-                <p>Showcase your work with professional portfolios that highlight your best projects.</p>
-                <a href="/portfolio-templates/" class="cta-button">Browse Portfolios</a>
+            <div class="contact-form">
+                <h2>Send Us a Message</h2>
+                <form id="contactForm" action="https://formsubmit.co/reload.adolf2023@gmail.com" method="POST">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_next" value="https://resumepro.pages.dev/thank-you">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" class="form-control" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Send Message</button>
+                    
+                    <div id="statusMessage" class="status-message"></div>
+                </form>
             </div>
         </div>
     </div>
-</section>
+</div>
 
-<!-- NEW: Android Apps Announcement Section -->
-<section class="announcement-section">
-    <div class="announcement-content">
-        <span class="announcement-badge">🚀 NEW ANNOUNCEMENT</span>
-        <h2>Now Developing Android Applications!</h2>
-        <p>Expanding beyond web development, I'm now creating mobile applications for Android platform. 
-           Building productivity tools and utility apps with modern Android development practices and Material Design.</p>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const contactForm = document.getElementById('contactForm');
+        const statusMessage = document.getElementById('statusMessage');
         
-        <div class="android-features">
-            <span class="android-feature">🤖 Android Development</span>
-            <span class="android-feature">📱 Mobile-First Design</span>
-            <span class="android-feature">🚀 Coming to Play Store</span>
-            <span class="android-feature">🎯 Productivity Focus</span>
-        </div>
-        
-        <div class="announcement-apps">
-            <div class="announcement-app">
-                <div class="app-icon-sm">🚗</div>
-                <div class="app-name">VoiceRide Driving Assistant</div>
-                <div class="app-status">Voice-controlled navigation app</div>
-            </div>
-            
-            <div class="announcement-app">
-                <div class="app-icon-sm">📝</div>
-                <div class="app-name">Notes & Reminder App</div>
-                <div class="app-status">Productivity task management</div>
-            </div>
-        </div>
-        
-        <a href="/android-applications/" class="announcement-button">
-            View Android Applications →
-        </a>
-    </div>
-</section>
-
-<!-- Features Section -->
-<section class="features">
-    <div class="section-title">
-        <h2>Why Choose Our Templates?</h2>
-        <p>Everything you need to create a powerful online presence</p>
-    </div>
-    
-    <div class="features-grid">
-        <div class="feature-card">
-            <div class="feature-icon">🚀</div>
-            <h3>Easy Customization</h3>
-            <p>Change colors, fonts, and layouts with simple edits to the CSS file - no coding experience needed.</p>
-        </div>
-        
-        <div class="feature-card">
-            <div class="feature-icon">📱</div>
-            <h3>Fully Responsive</h3>
-            <p>Looks perfect on all devices from desktop to mobile without any extra work.</p>
-        </div>
-        
-        <div class="feature-card">
-            <div class="feature-icon">⚡</div>
-            <h3>Fast Loading</h3>
-            <p>Optimized for performance so your content loads quickly for recruiters and clients.</p>
-        </div>
-        
-        <div class="feature-card">
-            <div class="feature-icon">🎨</div>
-            <h3>Modern Designs</h3>
-            <p>Professionally designed templates that follow current trends while remaining timeless.</p>
-        </div>
-        
-        <div class="feature-card">
-            <div class="feature-icon">🔧</div>
-            <h3>Easy Hosting</h3>
-            <p>Works with GitHub Pages, Netlify, and other free hosting options with minimal setup.</p>
-        </div>
-        
-        <div class="feature-card">
-            <div class="feature-icon">📚</div>
-            <h3>Detailed Guides</h3>
-            <p>Step-by-step instructions included with every template for easy setup.</p>
-        </div>
-    </div>
-</section>
-
-<!-- CTA Section -->
-<section class="cta-section">
-    <h2>Ready to Build Your Online Presence?</h2>
-    <p>Join thousands of professionals who've transformed their job search with our templates.</p>
-    <div class="cta-buttons">
-        <a href="/resume-templates/" class="cta-button">Browse Resume Templates</a>
-        <a href="/portfolio-templates/" class="cta-button secondary-button">Browse Portfolio Templates</a>
-    </div>
-</section>
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Simple client-side validation
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const subject = document.getElementById('subject').value.trim();
+                const message = document.getElementById('message').value.trim();
+                
+                if (!name || !email || !subject || !message) {
+                    statusMessage.textContent = 'Please fill in all fields.';
+                    statusMessage.className = 'status-message error';
+                    statusMessage.style.display = 'block';
+                    return;
+                }
+                
+                // Validate email format
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    statusMessage.textContent = 'Please enter a valid email address.';
+                    statusMessage.className = 'status-message error';
+                    statusMessage.style.display = 'block';
+                    return;
+                }
+                
+                statusMessage.textContent = 'Sending your message...';
+                statusMessage.className = 'status-message';
+                statusMessage.style.display = 'block';
+                
+                const formData = new FormData(contactForm);
+                
+                fetch('https://formsubmit.co/ajax/reload.adolf2023@gmail.com', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success === 'true') {
+                        statusMessage.textContent = 'Message sent successfully! We\'ll get back to you soon.';
+                        statusMessage.className = 'status-message success';
+                        contactForm.reset();
+                        
+                        // Clear success message after 5 seconds
+                        setTimeout(() => {
+                            statusMessage.style.display = 'none';
+                        }, 5000);
+                    } else {
+                        throw new Error('Submission failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Form submission error:', error);
+                    statusMessage.textContent = 'There was an error sending your message. Please try again or email us directly.';
+                    statusMessage.className = 'status-message error';
+                    
+                    // Clear error message after 5 seconds
+                    setTimeout(() => {
+                        statusMessage.style.display = 'none';
+                    }, 5000);
+                });
+            });
+        }
+    });
+</script>
     </main>
     
     <footer>

@@ -35,8 +35,8 @@ header {
     padding: 1rem 0;
     position: fixed;
     top: 0;
-    z-index: 10000;
     width: 100%;
+    z-index: 1000;
 }
 
 .header-content {
@@ -73,7 +73,6 @@ header {
 }
 
 .nav-item {
-    position: relative;
     margin-left: 1.5rem;
 }
 
@@ -90,7 +89,7 @@ header {
     color: var(--primary);
 }
 
-/* Dropdown Styles */
+/* Dropdown Styles - BASE */
 .dropdown-parent {
     position: relative;
 }
@@ -102,7 +101,7 @@ header {
     min-width: 200px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     border-radius: 8px;
-    z-index: 10001;
+    z-index: 1001;
     top: 100%;
     left: 0;
     padding: 0.5rem 0;
@@ -137,11 +136,7 @@ header {
     padding: 0.5rem;
 }
 
-.nav-menu.active {
-    display: flex;
-}
-
-/* DESKTOP: Hover dropdowns */
+/* DESKTOP STYLES - Hover dropdowns */
 @media (min-width: 769px) {
     .dropdown-parent:hover .dropdown-content {
         display: block;
@@ -153,7 +148,7 @@ header {
     }
 }
 
-/* MOBILE: Click dropdowns */
+/* MOBILE STYLES - Click dropdowns */
 @media (max-width: 768px) {
     .header-content {
         flex-direction: row;
@@ -183,7 +178,7 @@ header {
         background-color: white;
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         padding: 1rem;
-        z-index: 9999;
+        z-index: 1000;
     }
     
     .nav-menu.active {
@@ -214,11 +209,14 @@ header {
         border-radius: 0;
         background-color: #f8f9fa;
         padding-left: 1.5rem;
-        animation: none;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
     }
     
     .dropdown-parent.dropdown-open .dropdown-content {
         display: block !important;
+        max-height: 500px;
     }
     
     .dropdown-parent.dropdown-open .dropdown-icon {

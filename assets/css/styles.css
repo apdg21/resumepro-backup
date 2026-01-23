@@ -1130,46 +1130,69 @@ header {
 
 /* Mobile styles */
 @media (max-width: 768px) {
-    .hamburger {
-        display: block;
-    }
-    
-    .nav-menu {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: white;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        padding: 1rem;
-        z-index: 9999;
-    }
-    
-    .nav-menu.active {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    /* Mobile dropdowns - simplified */
-    .dropdown-content {
-        display: none;
-        padding-left: 1.5rem;
-        background: #f8f9fa;
-    }
-    
-    /* Show dropdowns when parent has active class */
-    [data-dropdown].active .dropdown-content {
-        display: block;
-    }
-    
-    /* Make dropdown arrows clickable on mobile */
-    .nav-link {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-}
+    .header-content {
+                flex-direction: row;
+                padding: 1rem;
+                align-items: center;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .nav-container {
+                width: auto;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                padding: 1rem;
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .nav-item {
+                margin-left: 0;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .nav-link {
+                padding: 0.5rem 0;
+                font-size: 1rem;
+            }
+            
+            .dropdown-content {
+                position: static;
+                width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+                background-color: #f8f9fa;
+                padding-left: 1rem;
+            }
+            
+            .dropdown-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.95rem;
+            }
+            .dropdown-content {
+                left: auto;
+                right: 0;
+            }
+        }
 
 /* Add body class when modal is open */
 body.modal-open {

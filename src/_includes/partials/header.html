@@ -10,7 +10,6 @@
             <ul class="nav-menu">
                 <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
                 
-                <!-- REMOVE dropdown class and use data-dropdown instead -->
                 <li class="nav-item" data-dropdown>
                     <a href="#" class="nav-link">
                         Templates
@@ -69,45 +68,3 @@
         </div>
     </div>
 </header>
-
-<script>
-    // SIMPLE mobile menu only - no dropdown handling
-    document.addEventListener('DOMContentLoaded', function() {
-        const hamburger = document.querySelector('.hamburger');
-        const navMenu = document.querySelector('.nav-menu');
-        
-        // Only handle hamburger menu toggle
-        hamburger.addEventListener('click', function() {
-            navMenu.classList.toggle('active');
-            document.body.classList.toggle('menu-open');
-        });
-        
-        // Close menu when clicking a link (mobile only)
-        if (window.innerWidth <= 768) {
-            document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
-                link.addEventListener('click', function() {
-                    navMenu.classList.remove('active');
-                    document.body.classList.remove('menu-open');
-                });
-            });
-        }
-        
-        // Close menu when clicking outside (mobile only)
-        document.addEventListener('click', function(e) {
-            if (window.innerWidth <= 768 && 
-                !e.target.closest('.nav-container') && 
-                navMenu.classList.contains('active')) {
-                navMenu.classList.remove('active');
-                document.body.classList.remove('menu-open');
-            }
-        });
-        
-        // Reset on window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                navMenu.classList.remove('active');
-                document.body.classList.remove('menu-open');
-            }
-        });
-    });
-</script>

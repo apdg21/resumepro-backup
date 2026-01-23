@@ -35,7 +35,7 @@ header {
     padding: 1rem 0;
     position: fixed;
     top: 0;
-    z-index: 10000; /* Very high z-index to stay above everything */
+    z-index: 10000;
     width: 100%;
 }
 
@@ -90,7 +90,7 @@ header {
     color: var(--primary);
 }
 
-/* Dropdown Styles - DESKTOP */
+/* Dropdown Styles */
 .dropdown-parent {
     position: relative;
 }
@@ -102,7 +102,7 @@ header {
     min-width: 200px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     border-radius: 8px;
-    z-index: 10001; /* Higher than header */
+    z-index: 10001;
     top: 100%;
     left: 0;
     padding: 0.5rem 0;
@@ -141,6 +141,105 @@ header {
     display: flex;
 }
 
+/* DESKTOP: Hover dropdowns */
+@media (min-width: 769px) {
+    .dropdown-parent:hover .dropdown-content {
+        display: block;
+        animation: fadeIn 0.2s ease;
+    }
+    
+    .dropdown-parent:hover .dropdown-icon {
+        transform: rotate(180deg);
+    }
+}
+
+/* MOBILE: Click dropdowns */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: row;
+        padding: 1rem;
+        align-items: center;
+    }
+    
+    .logo {
+        font-size: 1.5rem;
+    }
+    
+    .nav-container {
+        width: auto;
+    }
+    
+    .hamburger {
+        display: block;
+    }
+    
+    .nav-menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        padding: 1rem;
+        z-index: 9999;
+    }
+    
+    .nav-menu.active {
+        display: flex;
+    }
+    
+    .nav-item {
+        margin-left: 0;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .nav-link {
+        padding: 0.5rem 0;
+        font-size: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+    
+    /* Mobile dropdowns */
+    .dropdown-content {
+        display: none !important;
+        position: static;
+        width: 100%;
+        box-shadow: none;
+        border-radius: 0;
+        background-color: #f8f9fa;
+        padding-left: 1.5rem;
+        animation: none;
+    }
+    
+    .dropdown-parent.dropdown-open .dropdown-content {
+        display: block !important;
+    }
+    
+    .dropdown-parent.dropdown-open .dropdown-icon {
+        transform: rotate(180deg);
+    }
+    
+    .dropdown-item {
+        padding: 0.8rem 1rem;
+        font-size: 0.95rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .dropdown-item:last-child {
+        border-bottom: none;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 /* ============ HOMEPAGE STYLES ============ */
 
 /* Hero Section */

@@ -75,30 +75,42 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded - initializing navigation');
+        
         const hamburger = document.querySelector('.hamburger');
         const navMenu = document.querySelector('.nav-menu');
         
         // Hamburger menu toggle (mobile only)
-        hamburger.addEventListener('click', function(e) {
-            e.stopPropagation();
-            navMenu.classList.toggle('active');
-        });
+        if (hamburger) {
+            hamburger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                console.log('Hamburger clicked, toggling menu');
+                navMenu.classList.toggle('active');
+            });
+        }
         
         // Dropdown toggle - works on BOTH desktop and mobile
-        document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+        const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+        console.log('Found', dropdownToggles.length, 'dropdown toggles');
+        
+        dropdownToggles.forEach(toggle => {
             toggle.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
+                console.log('Dropdown toggle clicked');
                 
                 const parent = this.closest('.dropdown-parent');
+                console.log('Parent element:', parent);
                 
                 // Toggle this dropdown
                 parent.classList.toggle('open');
+                console.log('Toggled open class, parent now has classes:', parent.className);
                 
-                // Close other dropdowns (good UX)
+                // Close other dropdowns
                 document.querySelectorAll('.dropdown-parent').forEach(item => {
-                    if (item !== parent) {
+                    if (item !== parent && item.classList.contains('open')) {
                         item.classList.remove('open');
+                        console.log('Closed other dropdown');
                     }
                 });
             });
@@ -107,10 +119,22 @@
         // Close everything when clicking outside
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.nav-container')) {
-                navMenu.classList.remove('active');
-                document.querySelectorAll('.dropdown-parent').forEach(item => {
-                    item.classList.remove('open');
-                });
+                console.log('Clicked outside nav, closing everything');
+                
+                // Close mobile menu
+                if (navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    console.log('Closed mobile menu');
+                }
+                
+                // Close all dropdowns
+                const openDropdowns = document.querySelectorAll('.dropdown-parent.open');
+                if (openDropdowns.length > 0) {
+                    console.log('Closing', openDropdowns.length, 'open dropdowns');
+                    openDropdowns.forEach(item => {
+                        item.classList.remove('open');
+                    });
+                }
             }
         });
         
@@ -119,6 +143,7 @@
             document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
                 link.addEventListener('click', function(e) {
                     if (!this.classList.contains('dropdown-toggle')) {
+                        console.log('Mobile link clicked, closing menu');
                         navMenu.classList.remove('active');
                         document.querySelectorAll('.dropdown-parent').forEach(item => {
                             item.classList.remove('open');
@@ -134,5 +159,10 @@
                 navMenu.classList.remove('active');
             }
         });
+        
+        // Log initial state
+        console.log('Navigation initialized successfully');
+        console.log('Window width:', window.innerWidth);
+        console.log('Is mobile?', window.innerWidth <= 768);
     });
 </script>

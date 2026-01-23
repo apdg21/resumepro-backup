@@ -90,7 +90,11 @@ header {
     color: var(--primary);
 }
 
-/* DROPDOWN STYLES - DESKTOP (hover) */
+/* Dropdown Styles */
+.dropdown-parent {
+    position: relative;
+}
+
 .dropdown-content {
     display: none;
     position: absolute;
@@ -123,7 +127,18 @@ header {
     transition: transform 0.3s;
 }
 
-/* DESKTOP: Show on hover */
+/* Hamburger Menu - SINGLE DEFINITION */
+.hamburger {
+    display: none;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: var(--dark);
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+/* DESKTOP: Hover dropdowns */
 @media (min-width: 769px) {
     .dropdown-parent:hover .dropdown-content {
         display: block;
@@ -137,12 +152,7 @@ header {
 /* MOBILE STYLES */
 @media (max-width: 768px) {
     .hamburger {
-        display: block;
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-        color: var(--dark);
+        display: block; /* Show hamburger only on mobile */
     }
     
     .nav-menu {
@@ -172,7 +182,7 @@ header {
         justify-content: space-between;
     }
     
-    /* MOBILE DROPDOWNS */
+    /* Mobile dropdowns */
     .dropdown-content {
         position: static;
         display: none;
@@ -184,7 +194,7 @@ header {
         margin-top: 5px;
     }
     
-    /* Show dropdown when parent has .open class (added by JS) */
+    /* Show dropdown when parent has .open class */
     .dropdown-parent.open .dropdown-content {
         display: block;
     }
@@ -201,7 +211,9 @@ header {
     .dropdown-item:last-child {
         border-bottom: none;
     }
-}/* ============ HOMEPAGE STYLES ============ */
+}
+
+/* ============ HOMEPAGE STYLES ============ */
 
 /* Hero Section */
 .hero {

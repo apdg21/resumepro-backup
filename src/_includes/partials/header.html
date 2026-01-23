@@ -73,125 +73,108 @@
     </div>
 </header>
 
-
 <script>
-// CLEAN HEADER SCRIPT - Works on BOTH desktop and mobile
-(function() {
-    'use strict';
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Header initialization started');
     
-    function initHeader() {
-        console.log('🔄 Header initialization started...');
-        
-        const hamburger = document.querySelector('.hamburger');
-        const navMenu = document.querySelector('.nav-menu');
-        
-        if (!hamburger || !navMenu) {
-            console.error('❌ Header elements not found');
-            return;
-        }
-        
-        console.log('✅ Found header elements');
-        
-        // ===== 1. MOBILE MENU TOGGLE =====
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    const dropdownItems = document.querySelectorAll('[data-dropdown]');
+    
+    // Mobile menu toggle
+    if (hamburger) {
         hamburger.addEventListener('click', function(e) {
             e.stopPropagation();
-            
-            console.log('📱 Hamburger clicked (mobile only)');
-            
-            // Toggle mobile menu
+            console.log('Hamburger clicked');
             navMenu.classList.toggle('active');
             document.body.classList.toggle('menu-open');
             
-            // Close all dropdowns when toggling mobile menu
-            document.querySelectorAll('[data-dropdown]').forEach(item => {
-                item.removeAttribute('data-dropdown-active');
+            // Close all dropdowns when toggling menu
+            dropdownItems.forEach(item => {
+                item.setAttribute('data-dropdown-active', 'false');
             });
         });
-        
-        // ===== 2. DROPDOWN FUNCTIONALITY =====
-        const dropdownItems = document.querySelectorAll('[data-dropdown]');
-        
-        dropdownItems.forEach(item => {
-            const trigger = item.querySelector('.nav-link');
-            
-            if (trigger) {
-                trigger.addEventListener('click', function(e) {
-                    // ON MOBILE ONLY: prevent default to open dropdown
-                    if (window.innerWidth <= 768) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        
-                        console.log('📱 Mobile dropdown clicked');
-                        
-                        const isActive = item.hasAttribute('data-dropdown-active');
-                        
-                        // Close other dropdowns
-                        dropdownItems.forEach(other => {
-                            if (other !== item) {
-                                other.removeAttribute('data-dropdown-active');
-                            }
-                        });
-                        
-                        // Toggle this dropdown
-                        if (isActive) {
-                            item.removeAttribute('data-dropdown-active');
-                        } else {
-                            item.setAttribute('data-dropdown-active', 'true');
-                        }
-                    }
-                    // ON DESKTOP: allow normal navigation, hover will handle dropdown
-                });
-            }
-        });
-        
-        // ===== 3. CLOSE DROPDOWNS WHEN CLICKING OUTSIDE (DESKTOP) =====
-        document.addEventListener('click', function(e) {
-            // Only on desktop
-            if (window.innerWidth > 768) {
-                if (!e.target.closest('[data-dropdown]')) {
-                    dropdownItems.forEach(item => {
-                        item.removeAttribute('data-dropdown-active');
-                    });
-                }
-            }
-        });
-        
-        // ===== 4. CLOSE MOBILE MENU WHEN CLICKING A LINK =====
-        document.querySelectorAll('.nav-link[href], .dropdown-item').forEach(link => {
-            link.addEventListener('click', function() {
-                if (window.innerWidth <= 768 && !this.querySelector('.dropdown-icon')) {
-                    navMenu.classList.remove('active');
-                    document.body.classList.remove('menu-open');
-                    dropdownItems.forEach(item => {
-                        item.removeAttribute('data-dropdown-active');
-                    });
-                }
-            });
-        });
-        
-        // ===== 5. RESET ON WINDOW RESIZE =====
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                // Close mobile menu
-                navMenu.classList.remove('active');
-                document.body.classList.remove('menu-open');
-                
-                // Close all dropdowns
-                dropdownItems.forEach(item => {
-                    item.removeAttribute('data-dropdown-active');
-                });
-            }
-        });
-        
-        console.log('✅ Header initialization complete');
-        console.log('📏 Window width:', window.innerWidth);
     }
     
-    // Initialize
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initHeader);
-    } else {
-        initHeader();
-    }
-})();
+    // Dropdown functionality for all screen sizes
+    dropdownItems.forEach(item => {
+        const trigger = item.querySelector('.nav-link');
+        
+        if (trigger) {
+            trigger.addEventListener('click', function(e) {
+                // On mobile, prevent default to allow dropdown to open
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                }
+                e.stopPropagation();
+                
+                const isActive = item.getAttribute('data-dropdown-active') === 'true';
+                
+                // Close all other dropdowns
+                dropdownItems.forEach(otherItem => {
+                    if (otherItem !== item) {
+                        otherItem.setAttribute('data-dropdown-active', 'false');
+                    }
+                });
+                
+                // Toggle current dropdown
+                if (isActive) {
+                    item.setAttribute('data-dropdown-active', 'false');
+                } else {
+                    item.setAttribute('data-dropdown-active', 'true');
+                }
+                
+                console.log('Dropdown toggled:', item.getAttribute('data-dropdown-active'));
+            });
+        }
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.nav-container')) {
+            // Close mobile menu
+            if (navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                document.body.classList.remove('menu-open');
+            }
+            
+            // Close all dropdowns
+            dropdownItems.forEach(item => {
+                item.setAttribute('data-dropdown-active', 'false');
+            });
+        }
+    });
+    
+    // Close mobile menu when clicking a non-dropdown link
+    document.querySelectorAll('.nav-link[href]:not([href="#"]), .dropdown-item').forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                navMenu.classList.remove('active');
+                document.body.classList.remove('menu-open');
+                dropdownItems.forEach(item => {
+                    item.setAttribute('data-dropdown-active', 'false');
+                });
+            }
+        });
+    });
+    
+    // Reset on window resize
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            if (window.innerWidth > 768) {
+                navMenu.classList.remove('active');
+                document.body.classList.remove('menu-open');
+                dropdownItems.forEach(item => {
+                    item.setAttribute('data-dropdown-active', 'false');
+                });
+            }
+        }, 250);
+    });
+    
+    console.log('Header initialization complete');
+    console.log('Window width:', window.innerWidth);
+    console.log('Is mobile?', window.innerWidth <= 768);
+});
 </script>

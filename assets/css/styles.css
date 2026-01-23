@@ -4157,53 +4157,6 @@ body.family-connection-tools .web-apps-disclaimer {
     background: red;
 }
 
-/* Mobile dropdown styles */
-@media (max-width: 768px) {
-    .dropdown-parent {
-        position: relative;
-    }
-    
-    .dropdown-content {
-        display: none;
-        position: static;
-        background: transparent;
-        box-shadow: none;
-        padding-left: 20px;
-        border-left: 2px solid rgba(255,255,255,0.2);
-        margin-top: 10px;
-    }
-    
-    .dropdown-parent.dropdown-open .dropdown-content {
-        display: block;
-        animation: slideDown 0.3s ease;
-    }
-    
-    .dropdown-parent.dropdown-open .dropdown-icon {
-        transform: rotate(180deg);
-    }
-    
-    .dropdown-item {
-        padding: 10px 0;
-        color: rgba(255,255,255,0.8);
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    
-    .dropdown-item:last-child {
-        border-bottom: none;
-    }
-    
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-}
-
 /* Desktop hover dropdown */
 @media (min-width: 769px) {
     .dropdown-parent {
@@ -4259,4 +4212,4 @@ body.family-connection-tools .web-apps-disclaimer {
     font-size: 0.7em;
     transition: transform 0.3s ease;
 }
-      
+

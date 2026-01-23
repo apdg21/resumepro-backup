@@ -10,9 +10,9 @@
             <ul class="nav-menu">
                 <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
                 
-                <!-- REMOVE dropdown class and use data-dropdown instead -->
-                <li class="nav-item" data-dropdown>
-                    <a href="#" class="nav-link">
+                <!-- Templates Dropdown -->
+                <li class="nav-item dropdown-parent">
+                    <a href="#" class="nav-link dropdown-toggle">
                         Templates
                         <span class="dropdown-icon">▼</span>
                     </a>
@@ -22,8 +22,9 @@
                     </div>
                 </li>
                 
-                <li class="nav-item" data-dropdown>
-                    <a href="#" class="nav-link">
+                <!-- My Apps Dropdown -->
+                <li class="nav-item dropdown-parent">
+                    <a href="#" class="nav-link dropdown-toggle">
                         My Apps
                         <span class="dropdown-icon">▼</span>
                     </a>
@@ -33,8 +34,9 @@
                     </div>
                 </li>
                 
-                <li class="nav-item" data-dropdown>
-                    <a href="#" class="nav-link">
+                <!-- Blog Dropdown -->
+                <li class="nav-item dropdown-parent">
+                    <a href="#" class="nav-link dropdown-toggle">
                         Blog
                         <span class="dropdown-icon">▼</span>
                     </a>
@@ -52,8 +54,9 @@
                 
                 <li class="nav-item"><a href="/klaviyo-analytics/" class="nav-link">Klaviyo Analytics</a></li>
                 
-                <li class="nav-item" data-dropdown>
-                    <a href="#" class="nav-link">
+                <!-- Productivity Tools Dropdown -->
+                <li class="nav-item dropdown-parent">
+                    <a href="#" class="nav-link dropdown-toggle">
                         Productivity Tools
                         <span class="dropdown-icon">▼</span>
                     </a>
@@ -71,42 +74,87 @@
 </header>
 
 <script>
-    // SIMPLE mobile menu only - no dropdown handling
     document.addEventListener('DOMContentLoaded', function() {
         const hamburger = document.querySelector('.hamburger');
         const navMenu = document.querySelector('.nav-menu');
+        const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
         
-        // Only handle hamburger menu toggle
-        hamburger.addEventListener('click', function() {
+        // Hamburger menu toggle
+        hamburger.addEventListener('click', function(e) {
+            e.stopPropagation();
             navMenu.classList.toggle('active');
             document.body.classList.toggle('menu-open');
+        });
+        
+        // Dropdown toggle for mobile
+        dropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if (window.innerWidth <= 768) {
+                    // Mobile: Toggle dropdown
+                    const parent = this.closest('.dropdown-parent');
+                    const isActive = parent.classList.contains('dropdown-open');
+                    
+                    // Close all other dropdowns
+                    document.querySelectorAll('.dropdown-parent').forEach(item => {
+                        item.classList.remove('dropdown-open');
+                    });
+                    
+                    // Toggle this dropdown
+                    if (!isActive) {
+                        parent.classList.add('dropdown-open');
+                    }
+                } else {
+                    // Desktop: Just follow the link behavior (prevent default already handled)
+                    // Allow normal hover behavior
+                }
+            });
+        });
+        
+        // Close dropdowns when clicking outside (mobile only)
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                if (!e.target.closest('.nav-container')) {
+                    // Clicked outside nav - close everything
+                    navMenu.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                    document.querySelectorAll('.dropdown-parent').forEach(item => {
+                        item.classList.remove('dropdown-open');
+                    });
+                } else if (!e.target.closest('.dropdown-parent') && !e.target.closest('.hamburger')) {
+                    // Clicked inside nav but not on dropdown - close only dropdowns
+                    document.querySelectorAll('.dropdown-parent').forEach(item => {
+                        item.classList.remove('dropdown-open');
+                    });
+                }
+            }
         });
         
         // Close menu when clicking a link (mobile only)
         if (window.innerWidth <= 768) {
             document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
-                link.addEventListener('click', function() {
-                    navMenu.classList.remove('active');
-                    document.body.classList.remove('menu-open');
+                link.addEventListener('click', function(e) {
+                    if (!this.classList.contains('dropdown-toggle')) {
+                        navMenu.classList.remove('active');
+                        document.body.classList.remove('menu-open');
+                        document.querySelectorAll('.dropdown-parent').forEach(item => {
+                            item.classList.remove('dropdown-open');
+                        });
+                    }
                 });
             });
         }
-        
-        // Close menu when clicking outside (mobile only)
-        document.addEventListener('click', function(e) {
-            if (window.innerWidth <= 768 && 
-                !e.target.closest('.nav-container') && 
-                navMenu.classList.contains('active')) {
-                navMenu.classList.remove('active');
-                document.body.classList.remove('menu-open');
-            }
-        });
         
         // Reset on window resize
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 navMenu.classList.remove('active');
                 document.body.classList.remove('menu-open');
+                document.querySelectorAll('.dropdown-parent').forEach(item => {
+                    item.classList.remove('dropdown-open');
+                });
             }
         });
     });

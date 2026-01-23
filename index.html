@@ -12,71 +12,72 @@
 
 </head>
 <body>
-    <header class="site-header">
-    <div class="header-wrapper">
-        <a href="/" class="header-logo">
-            <span class="logo-symbol">📄</span>
+    <!-- FIXED HEADER - Using the correct class names -->
+    <header>
+    <div class="header-content">
+        <a href="/" class="logo">
+            <span class="logo-icon">📄</span>
             <span>ResumePro</span>
         </a>
         
-        <div class="header-navigation">
-            <button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
-            <ul class="main-nav">
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation">☰</button>
+            <ul class="nav-menu">
                 <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
                 
                 <!-- Templates Dropdown -->
-                <li class="nav-dropdown">
-                    <a href="#" class="nav-link dropdown-trigger">
+                <li class="nav-item" data-dropdown>
+                    <a href="#" class="nav-link">
                         Templates
-                        <span class="arrow">▼</span>
+                        <span class="dropdown-icon">▼</span>
                     </a>
-                    <div class="dropdown-menu">
-                        <a href="/resume-templates/" class="dropdown-option">Resume Templates</a>
-                        <a href="/portfolio-templates/" class="dropdown-option">Portfolio Templates</a>
+                    <div class="dropdown-content">
+                        <a href="/resume-templates/" class="dropdown-item">Resume Templates</a>
+                        <a href="/portfolio-templates/" class="dropdown-item">Portfolio Templates</a>
                     </div>
                 </li>
                 
                 <!-- My Apps Dropdown -->
-                <li class="nav-dropdown">
-                    <a href="#" class="nav-link dropdown-trigger">
+                <li class="nav-item" data-dropdown>
+                    <a href="#" class="nav-link">
                         My Apps
-                        <span class="arrow">▼</span>
+                        <span class="dropdown-icon">▼</span>
                     </a>
-                    <div class="dropdown-menu">
-                        <a href="/android-applications/" class="dropdown-option">Android Applications</a>
-                        <a href="/family-connection-tools/" class="dropdown-option">Web Applications</a>
+                    <div class="dropdown-content">
+                        <a href="/android-applications/" class="dropdown-item">Android Applications</a>
+                        <a href="/family-connection-tools/" class="dropdown-item">Web Applications</a>
                     </div>
                 </li>
                 
                 <!-- Blog Dropdown -->
-                <li class="nav-dropdown">
-                    <a href="#" class="nav-link dropdown-trigger">
+                <li class="nav-item" data-dropdown>
+                    <a href="#" class="nav-link">
                         Blog
-                        <span class="arrow">▼</span>
+                        <span class="dropdown-icon">▼</span>
                     </a>
                     <div class="dropdown-menu">
-                        <a href="/blog/portfolio-best-practices/" class="dropdown-option">Portfolio Best Practices</a>
-                        <a href="/blog/portfolio-maintenance/" class="dropdown-option">Portfolio Maintenance</a>
-                        <a href="/blog/online-job-sites/" class="dropdown-option">Legit Online Job Sites</a>
-                        <a href="/blog/email-marketing" class="dropdown-option">Unlocking Email Marketing Success</a>
-                        <a href="/blog/mobile-optimization/" class="dropdown-option">Why 'Looking the Same' Isn't Mobile Optimized</a>
-                        <a href="/blog/email-list-failure/" class="dropdown-option">Why Your Email List Might Be Failing</a> 
-                        <a href="/blog/email-builder-previews/" class="dropdown-option">Why Email Builder Previews Can't Be Trusted</a>
-                        <a href="/blog/why-less-is-more/" class="dropdown-option">The Power of Focused Email Design</a>
+                        <a href="/blog/portfolio-best-practices/" class="dropdown-item">Portfolio Best Practices</a>
+                        <a href="/blog/portfolio-maintenance/" class="dropdown-item">Portfolio Maintenance</a>
+                        <a href="/blog/online-job-sites/" class="dropdown-item">Legit Online Job Sites</a>
+                        <a href="/blog/email-marketing" class="dropdown-item">Unlocking Email Marketing Success</a>
+                        <a href="/blog/mobile-optimization/" class="dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
+                        <a href="/blog/email-list-failure/" class="dropdown-item">Why Your Email List Might Be Failing</a> 
+                        <a href="/blog/email-builder-previews/" class="dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
+                        <a href="/blog/why-less-is-more/" class="dropdown-item">The Power of Focused Email Design</a>
                     </div>
                 </li>
                 
                 <li class="nav-item"><a href="/klaviyo-analytics/" class="nav-link">Klaviyo Analytics</a></li>
                 
                 <!-- Productivity Tools Dropdown -->
-                <li class="nav-dropdown">
-                    <a href="#" class="nav-link dropdown-trigger">
+                <li class="nav-item" data-dropdown>
+                    <a href="#" class="nav-link">
                         Productivity Tools
-                        <span class="arrow">▼</span>
+                        <span class="dropdown-icon">▼</span>
                     </a>
-                    <div class="dropdown-menu">
-                        <a href="/email-builder/" class="dropdown-option">Email Builder</a>
-                        <a href="/todo-notes/" class="dropdown-option">Enhanced To-Do & Notes</a>
+                    <div class="dropdown-content">
+                        <a href="/email-builder/" class="dropdown-item">Email Builder</a>
+                        <a href="/todo-notes/" class="dropdown-item">Enhanced To-Do & Notes</a>
                     </div>
                 </li>
                 
@@ -87,73 +88,110 @@
     </div>
 </header>
 
+<!-- UPDATED JAVASCRIPT - Works with the HTML structure above -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Header script loaded');
+    console.log('Header initialization started');
     
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
     const dropdownItems = document.querySelectorAll('[data-dropdown]');
     
-    // Mobile menu toggle only
+    // Mobile menu toggle
     if (hamburger) {
         hamburger.addEventListener('click', function(e) {
             e.stopPropagation();
-            console.log('Mobile menu toggled');
+            console.log('Hamburger clicked');
             navMenu.classList.toggle('active');
             document.body.classList.toggle('menu-open');
+            
+            // Close all dropdowns when toggling menu
+            dropdownItems.forEach(item => {
+                item.setAttribute('data-dropdown-active', 'false');
+            });
         });
     }
     
-    // Only add dropdown functionality on mobile
-    if (window.innerWidth <= 768) {
-        dropdownItems.forEach(item => {
-            const trigger = item.querySelector('.nav-link');
-            
-            if (trigger) {
-                trigger.addEventListener('click', function(e) {
+    // Dropdown functionality for all screen sizes
+    dropdownItems.forEach(item => {
+        const trigger = item.querySelector('.nav-link');
+        
+        if (trigger) {
+            trigger.addEventListener('click', function(e) {
+                // On mobile, prevent default to allow dropdown to open
+                if (window.innerWidth <= 768) {
                     e.preventDefault();
-                    e.stopPropagation();
-                    
-                    const isActive = item.getAttribute('data-dropdown-active') === 'true';
-                    
-                    // Close other dropdowns
-                    dropdownItems.forEach(otherItem => {
-                        if (otherItem !== item) {
-                            otherItem.setAttribute('data-dropdown-active', 'false');
-                        }
-                    });
-                    
-                    // Toggle current dropdown
-                    item.setAttribute('data-dropdown-active', !isActive ? 'true' : 'false');
+                }
+                e.stopPropagation();
+                
+                const isActive = item.getAttribute('data-dropdown-active') === 'true';
+                
+                // Close all other dropdowns
+                dropdownItems.forEach(otherItem => {
+                    if (otherItem !== item) {
+                        otherItem.setAttribute('data-dropdown-active', 'false');
+                    }
+                });
+                
+                // Toggle current dropdown
+                if (isActive) {
+                    item.setAttribute('data-dropdown-active', 'false');
+                } else {
+                    item.setAttribute('data-dropdown-active', 'true');
+                }
+                
+                console.log('Dropdown toggled:', item.getAttribute('data-dropdown-active'));
+            });
+        }
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.nav-container')) {
+            // Close mobile menu
+            if (navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                document.body.classList.remove('menu-open');
+            }
+            
+            // Close all dropdowns
+            dropdownItems.forEach(item => {
+                item.setAttribute('data-dropdown-active', 'false');
+            });
+        }
+    });
+    
+    // Close mobile menu when clicking a non-dropdown link
+    document.querySelectorAll('.nav-link[href]:not([href="#"]), .dropdown-item').forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                navMenu.classList.remove('active');
+                document.body.classList.remove('menu-open');
+                dropdownItems.forEach(item => {
+                    item.setAttribute('data-dropdown-active', 'false');
                 });
             }
         });
-    }
-    
-    // Close menu when clicking outside (mobile only)
-    document.addEventListener('click', function(e) {
-        if (window.innerWidth <= 768 && !e.target.closest('.nav-container')) {
-            navMenu.classList.remove('active');
-            document.body.classList.remove('menu-open');
-            dropdownItems.forEach(item => {
-                item.setAttribute('data-dropdown-active', 'false');
-            });
-        }
     });
     
     // Reset on window resize
+    let resizeTimer;
     window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
-            navMenu.classList.remove('active');
-            document.body.classList.remove('menu-open');
-            dropdownItems.forEach(item => {
-                item.setAttribute('data-dropdown-active', 'false');
-            });
-        }
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            if (window.innerWidth > 768) {
+                navMenu.classList.remove('active');
+                document.body.classList.remove('menu-open');
+                dropdownItems.forEach(item => {
+                    item.setAttribute('data-dropdown-active', 'false');
+                });
+            }
+        }, 250);
     });
     
+    console.log('Header initialization complete');
     console.log('Window width:', window.innerWidth);
+    console.log('Is mobile?', window.innerWidth <= 768);
 });
 </script>
 

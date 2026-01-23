@@ -1,4 +1,4 @@
-<header>
+    <header>
     <div class="header-content">
         <a href="/" class="logo">
             <span class="logo-icon">📄</span>
@@ -10,6 +10,7 @@
             <ul class="nav-menu">
                 <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
                 
+                <!-- Templates Dropdown -->
                 <li class="nav-item" data-dropdown>
                     <a href="#" class="nav-link">
                         Templates
@@ -21,6 +22,7 @@
                     </div>
                 </li>
                 
+                <!-- My Apps Dropdown -->
                 <li class="nav-item" data-dropdown>
                     <a href="#" class="nav-link">
                         My Apps
@@ -32,25 +34,27 @@
                     </div>
                 </li>
                 
-                <li class="nav-item" data-dropdown>
-                    <a href="#" class="nav-link">
-                        Blog
-                        <span class="dropdown-icon">▼</span>
-                    </a>
-                    <div class="dropdown-content">
-                        <a href="/blog/portfolio-best-practices/" class="dropdown-item">Portfolio Best Practices</a>
-                        <a href="/blog/portfolio-maintenance/" class="dropdown-item">Portfolio Maintenance</a>
-                        <a href="/blog/online-job-sites/" class="dropdown-item">Legit Online Job Sites</a>
-                        <a href="/blog/email-marketing" class="dropdown-item">Unlocking Email Marketing Success</a>
-                        <a href="/blog/mobile-optimization/" class="dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
-                        <a href="/blog/email-list-failure/" class="dropdown-item">Why Your Email List Might Be Failing</a> 
-                        <a href="/blog/email-builder-previews/" class="dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
-                        <a href="/blog/why-less-is-more/" class="dropdown-item">The Power of Focused Email Design</a>
-                    </div>
-                </li>
+               <!-- Blog Dropdown - FIXED -->
+<li class="nav-item" data-dropdown>
+    <a href="#" class="nav-link">
+        Blog
+        <span class="dropdown-icon">▼</span>
+    </a>
+    <div class="dropdown-content">  <!-- CHANGED from dropdown-menu to dropdown-content -->
+        <a href="/blog/portfolio-best-practices/" class="dropdown-item">Portfolio Best Practices</a>
+        <a href="/blog/portfolio-maintenance/" class="dropdown-item">Portfolio Maintenance</a>
+        <a href="/blog/online-job-sites/" class="dropdown-item">Legit Online Job Sites</a>
+        <a href="/blog/email-marketing" class="dropdown-item">Unlocking Email Marketing Success</a>
+        <a href="/blog/mobile-optimization/" class="dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
+        <a href="/blog/email-list-failure/" class="dropdown-item">Why Your Email List Might Be Failing</a> 
+        <a href="/blog/email-builder-previews/" class="dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
+        <a href="/blog/why-less-is-more/" class="dropdown-item">The Power of Focused Email Design</a>
+    </div>
+</li>
                 
                 <li class="nav-item"><a href="/klaviyo-analytics/" class="nav-link">Klaviyo Analytics</a></li>
                 
+                <!-- Productivity Tools Dropdown -->
                 <li class="nav-item" data-dropdown>
                     <a href="#" class="nav-link">
                         Productivity Tools
@@ -69,6 +73,7 @@
     </div>
 </header>
 
+<!-- UPDATED JAVASCRIPT - Works with the HTML structure above -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Header initialization started');

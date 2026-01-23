@@ -35,8 +35,8 @@ header {
     padding: 1rem 0;
     position: fixed;
     top: 0;
-    z-index: 10000; /* Very high z-index to stay above everything */
     width: 100%;
+    z-index: 1000;
 }
 
 .header-content {
@@ -73,7 +73,6 @@ header {
 }
 
 .nav-item {
-    position: relative;
     margin-left: 1.5rem;
 }
 
@@ -90,7 +89,11 @@ header {
     color: var(--primary);
 }
 
-/* Dropdown Styles */
+/* Dropdown Styles - BASE */
+.dropdown-parent {
+    position: relative;
+}
+
 .dropdown-content {
     display: none;
     position: absolute;
@@ -98,7 +101,7 @@ header {
     min-width: 200px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     border-radius: 8px;
-    z-index: 10001; /* Higher than header */
+    z-index: 1001;
     top: 100%;
     left: 0;
     padding: 0.5rem 0;
@@ -133,10 +136,108 @@ header {
     padding: 0.5rem;
 }
 
-.nav-menu.active {
-    display: flex;
+/* DESKTOP STYLES - Hover dropdowns */
+@media (min-width: 769px) {
+    .dropdown-parent:hover .dropdown-content {
+        display: block;
+        animation: fadeIn 0.2s ease;
+    }
+    
+    .dropdown-parent:hover .dropdown-icon {
+        transform: rotate(180deg);
+    }
 }
 
+/* MOBILE STYLES - Click dropdowns */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: row;
+        padding: 1rem;
+        align-items: center;
+    }
+    
+    .logo {
+        font-size: 1.5rem;
+    }
+    
+    .nav-container {
+        width: auto;
+    }
+    
+    .hamburger {
+        display: block;
+    }
+    
+    .nav-menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        padding: 1rem;
+        z-index: 1000;
+    }
+    
+    .nav-menu.active {
+        display: flex;
+    }
+    
+    .nav-item {
+        margin-left: 0;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .nav-link {
+        padding: 0.5rem 0;
+        font-size: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+    
+    /* Mobile dropdowns */
+    .dropdown-content {
+        display: none !important;
+        position: static;
+        width: 100%;
+        box-shadow: none;
+        border-radius: 0;
+        background-color: #f8f9fa;
+        padding-left: 1.5rem;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+    
+    .dropdown-parent.dropdown-open .dropdown-content {
+        display: block !important;
+        max-height: 500px;
+    }
+    
+    .dropdown-parent.dropdown-open .dropdown-icon {
+        transform: rotate(180deg);
+    }
+    
+    .dropdown-item {
+        padding: 0.8rem 1rem;
+        font-size: 0.95rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .dropdown-item:last-child {
+        border-bottom: none;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 /* ============ HOMEPAGE STYLES ============ */
 
 /* Hero Section */
@@ -902,87 +1003,10 @@ footer {
     font-size: 0.9rem;
 }
 
-/* ============ RESPONSIVE DESIGN ============ */
+
+/* ============ MOBILE STYLES ============ */
 @media (max-width: 768px) {
-    /* Header */
-    .header-content {
-        flex-direction: row;
-        padding: 1rem;
-        align-items: center;
-    }
-    
-    .logo {
-        font-size: 1.5rem;
-    }
-    
-    .nav-container {
-        width: auto;
-    }
-    
-    .hamburger {
-        display: block;
-    }
-    
-    .nav-menu {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background-color: white;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        padding: 1rem;
-        z-index: 9999;
-    }
-    
-    .nav-menu.active {
-        display: flex;
-    }
-    
-    .nav-item {
-        margin-left: 0;
-        width: 100%;
-        margin-bottom: 0.5rem;
-    }
-    
-    .nav-link {
-        padding: 0.5rem 0;
-        font-size: 1rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    /* Mobile dropdowns */
-    .dropdown-content {
-        display: none !important;
-        position: static;
-        width: 100%;
-        box-shadow: none;
-        border-radius: 0;
-        background-color: #f8f9fa;
-        padding-left: 1.5rem;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-    }
-    
-    .dropdown-parent.dropdown-open .dropdown-content {
-        display: block !important;
-        max-height: 500px;
-    }
-    
-    .dropdown-parent.dropdown-open .dropdown-icon {
-        transform: rotate(180deg);
-    }
-    
-    .dropdown-item {
-        padding: 0.5rem 1rem;
-        font-size: 0.95rem;
-    }
-    
-    /* Homepage */
+       /* Homepage */
     .announcement-section {
         padding: 30px 20px;
         margin: 30px 15px;
@@ -1092,18 +1116,6 @@ footer {
     }
 }
 
-/* Desktop dropdowns - PURE CSS */
-@media (min-width: 769px) {
-    .dropdown-parent:hover .dropdown-content {
-        display: block;
-        animation: fadeIn 0.2s ease;
-    }
-    
-    .dropdown-parent:hover .dropdown-icon {
-        transform: rotate(180deg);
-    }
-}
-
 /* Add body class when modal is open */
 body.modal-open {
     overflow: hidden;
@@ -1116,11 +1128,6 @@ body.modal-open header {
 body.modal-open header .logo,
 body.modal-open header .hamburger {
     pointer-events: auto; /* But keep logo and hamburger clickable */
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
 }
 
 /* CSS-only FAQ */
@@ -4024,22 +4031,3 @@ body.family-connection-tools .web-apps-disclaimer {
             -webkit-font-smoothing: antialiased;
             vertical-align: middle;
         }
-
-        button {
-    padding: 12px 20px;
-    background-color: blue;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.3s, transform 0.2s;
-    font-size: 15px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-delete {
-    background: red;
-}

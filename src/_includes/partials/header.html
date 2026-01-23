@@ -87,32 +87,32 @@
         });
         
         // Dropdown toggle for mobile
-dropdownToggles.forEach(toggle => {
-    toggle.addEventListener('click', function(e) {
-        if (window.innerWidth <= 768) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const parent = this.closest('.dropdown-parent');
-            const isActive = parent.classList.contains('dropdown-open');
-            
-            // Close all other dropdowns
-            document.querySelectorAll('.dropdown-parent').forEach(item => {
-                if (item !== parent) {
-                    item.classList.remove('dropdown-open');
+        dropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const parent = this.closest('.dropdown-parent');
+                    const isActive = parent.classList.contains('dropdown-open');
+                    
+                    // Close all other dropdowns
+                    document.querySelectorAll('.dropdown-parent').forEach(item => {
+                        if (item !== parent) {
+                            item.classList.remove('dropdown-open');
+                        }
+                    });
+                    
+                    // Toggle this dropdown
+                    if (isActive) {
+                        parent.classList.remove('dropdown-open');
+                    } else {
+                        parent.classList.add('dropdown-open');
+                    }
                 }
+                // On desktop, let the hover CSS handle it - don't prevent default
             });
-            
-            // Toggle this dropdown
-            if (isActive) {
-                parent.classList.remove('dropdown-open');
-            } else {
-                parent.classList.add('dropdown-open');
-            }
-        }
-        // On desktop, let the hover CSS handle it
-    });
-});
+        });
         
         // Close dropdowns when clicking outside (mobile only)
         document.addEventListener('click', function(e) {

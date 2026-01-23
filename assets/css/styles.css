@@ -919,68 +919,68 @@ footer {
 @media (max-width: 768px) {
     /* Header */
     .header-content {
-        flex-direction: row;
-        padding: 1rem;
-        align-items: center;
-    }
-    
-    .logo {
-        font-size: 1.5rem;
-    }
-    
-    .nav-container {
-        width: auto;
-    }
-    
-    .hamburger {
-        display: block;
-    }
-    
-    .nav-menu {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background-color: white;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        padding: 1rem;
-    }
-    
-    .nav-menu.active {
-        display: flex;
-    }
-    
-    .nav-item {
-        margin-left: 0;
-        width: 100%;
-        margin-bottom: 0.5rem;
-    }
-    
-    .nav-link {
-        padding: 0.5rem 0;
-        font-size: 1rem;
-    }
-    
-    .dropdown-content {
-        display: none;
-        position: static;
-        width: 100%;
-        box-shadow: none;
-        border-radius: 0;
-        background-color: #f8f9fa;
-        padding-left: 1rem;
-    }
-    
-    .dropdown.active .dropdown-content {
-        display: block;
-    }
-    
-    .dropdown-item {
-        padding: 0.5rem 1rem;
-        font-size: 0.95rem;
-    }
+                flex-direction: row;
+                padding: 1rem;
+                align-items: center;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .nav-container {
+                width: auto;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                padding: 1rem;
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .nav-item {
+                margin-left: 0;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .nav-link {
+                padding: 0.5rem 0;
+                font-size: 1rem;
+            }
+            
+            .dropdown-content {
+                position: static;
+                width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+                background-color: #f8f9fa;
+                padding-left: 1rem;
+            }
+            
+            .dropdown-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.95rem;
+            }
+     .dropdown-content {
+                left: auto;
+                right: 0;
+            }
+         
     
     /* Homepage */
     .announcement-section {

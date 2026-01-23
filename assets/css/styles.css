@@ -422,6 +422,21 @@ header {
     }
 }
 
+/* ============ RESET DROPDOWNS ON PAGE LOAD ============ */
+/* This ensures no dropdowns are open when page loads */
+[data-dropdown] {
+    data-dropdown-active: false !important;
+}
+
+[data-dropdown] .dropdown-content {
+    display: none !important;
+}
+
+/* Only show when explicitly activated */
+[data-dropdown][data-dropdown-active="true"] .dropdown-content {
+    display: block !important;
+}
+
 
 /* ============ HOMEPAGE STYLES ============ */
 

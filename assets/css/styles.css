@@ -103,9 +103,12 @@ header {
     box-shadow: 0 10px 30px rgba(0,0,0,0.12);
     border-radius: 8px;
     padding: 10px 0;
-    top: calc(100% + 4px); /* Small gap to prevent accidental close */
+    top: 100%; /* Position below the parent */
     left: 0;
     z-index: 1001;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .dropdown-item {
@@ -141,6 +144,8 @@ header {
 /* This works for BOTH desktop and mobile */
 .dropdown-parent.open .dropdown-content {
     display: block;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .dropdown-parent.open .dropdown-icon {
@@ -193,7 +198,19 @@ header {
         background-color: #f8f9fa;
         padding-left: 1.5rem;
         margin-top: 5px;
-        top: 0;
+        transform: none;
+        transition: none;
+        opacity: 1;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+    }
+    
+    /* Show dropdown content when parent has .open class */
+    .dropdown-parent.open .dropdown-content {
+        display: block;
+        max-height: 500px; /* Adjust based on your content */
+        margin-top: 5px;
     }
     
     .dropdown-item {
@@ -204,6 +221,39 @@ header {
     .dropdown-item:last-child {
         border-bottom: none;
     }
+    
+    /* Hide dropdown icon animation on mobile */
+    .dropdown-parent.open .dropdown-icon {
+        transform: rotate(180deg);
+    }
+}
+
+/* ===== DESKTOP HOVER EFFECTS ===== */
+@media (min-width: 769px) {
+    /* Optional: Add hover effect for desktop */
+    .dropdown-parent:hover .dropdown-content {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .dropdown-parent:hover .dropdown-icon {
+        transform: rotate(180deg);
+    }
+}
+
+/* Add body class when modal is open */
+body.modal-open {
+    overflow: hidden;
+}
+
+body.modal-open header {
+    pointer-events: none; /* Prevent header interactions when modal is open */
+}
+
+body.modal-open header .logo,
+body.modal-open header .hamburger {
+    pointer-events: auto; /* But keep logo and hamburger clickable */
 }
 
 

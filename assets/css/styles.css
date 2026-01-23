@@ -74,6 +74,7 @@ header {
 
 .nav-item {
     margin-left: 1.5rem;
+    position: relative;
 }
 
 .nav-link {
@@ -89,58 +90,43 @@ header {
     color: var(--primary);
 }
 
-/* Dropdown Styles - BASE */
-.dropdown-parent {
-    position: relative;
-}
-
+/* DROPDOWN STYLES - DESKTOP (hover) */
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: white;
+    background: white;
     min-width: 200px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     border-radius: 8px;
-    z-index: 1001;
+    padding: 10px 0;
     top: 100%;
     left: 0;
-    padding: 0.5rem 0;
+    z-index: 1000;
 }
 
 .dropdown-item {
-    padding: 0.8rem 1.5rem;
-    text-decoration: none;
     display: block;
-    color: var(--dark);
-    transition: all 0.3s ease;
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: background 0.2s;
 }
 
 .dropdown-item:hover {
-    background-color: #f8f9fa;
+    background: #f5f5f5;
     color: var(--primary);
 }
 
 .dropdown-icon {
     margin-left: 5px;
-    transition: transform 0.3s ease;
+    font-size: 0.8em;
+    transition: transform 0.3s;
 }
 
-/* Hamburger Menu */
-.hamburger {
-    display: none;
-    font-size: 1.5rem;
-    background: none;
-    border: none;
-    color: var(--dark);
-    cursor: pointer;
-    padding: 0.5rem;
-}
-
-/* DESKTOP STYLES - Hover dropdowns */
+/* DESKTOP: Show on hover */
 @media (min-width: 769px) {
     .dropdown-parent:hover .dropdown-content {
         display: block;
-        animation: fadeIn 0.2s ease;
     }
     
     .dropdown-parent:hover .dropdown-icon {
@@ -148,37 +134,27 @@ header {
     }
 }
 
-/* MOBILE STYLES - Click dropdowns */
+/* MOBILE STYLES */
 @media (max-width: 768px) {
-    .header-content {
-        flex-direction: row;
-        padding: 1rem;
-        align-items: center;
-    }
-    
-    .logo {
-        font-size: 1.5rem;
-    }
-    
-    .nav-container {
-        width: auto;
-    }
-    
     .hamburger {
         display: block;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--dark);
     }
     
     .nav-menu {
         display: none;
-        flex-direction: column;
         position: absolute;
         top: 100%;
         left: 0;
         width: 100%;
-        background-color: white;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        background: white;
+        flex-direction: column;
         padding: 1rem;
-        z-index: 1000;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     
     .nav-menu.active {
@@ -186,59 +162,46 @@ header {
     }
     
     .nav-item {
-        margin-left: 0;
+        margin: 0;
         width: 100%;
-        margin-bottom: 0.5rem;
     }
     
     .nav-link {
-        padding: 0.5rem 0;
-        font-size: 1rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        padding: 10px 0;
         width: 100%;
+        justify-content: space-between;
     }
     
-    /* Mobile dropdowns */
+    /* MOBILE DROPDOWNS */
     .dropdown-content {
-        display: none !important;
         position: static;
-        width: 100%;
+        display: none;
+        background: #f8f9fa;
         box-shadow: none;
         border-radius: 0;
-        background-color: #f8f9fa;
-        padding-left: 1.5rem;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
+        padding-left: 20px;
+        border-left: 2px solid #e9ecef;
+        margin-top: 5px;
     }
     
-    .dropdown-parent.dropdown-open .dropdown-content {
-        display: block !important;
-        max-height: 500px;
+    /* Show dropdown when parent has .open class (added by JS) */
+    .dropdown-parent.open .dropdown-content {
+        display: block;
     }
     
-    .dropdown-parent.dropdown-open .dropdown-icon {
+    .dropdown-parent.open .dropdown-icon {
         transform: rotate(180deg);
     }
     
     .dropdown-item {
-        padding: 0.8rem 1rem;
-        font-size: 0.95rem;
+        padding: 8px 0;
         border-bottom: 1px solid #e9ecef;
     }
     
     .dropdown-item:last-child {
         border-bottom: none;
     }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-/* ============ HOMEPAGE STYLES ============ */
+}/* ============ HOMEPAGE STYLES ============ */
 
 /* Hero Section */
 .hero {

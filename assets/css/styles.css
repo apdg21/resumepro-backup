@@ -35,7 +35,7 @@ header {
     padding: 1rem 0;
     position: fixed;
     top: 0;
-    z-index: 10000; /* Very high z-index to stay above everything */
+    z-index: 100;
     width: 100%;
 }
 
@@ -91,6 +91,11 @@ header {
 }
 
 /* Dropdown Styles */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
 .dropdown-content {
     display: none;
     position: absolute;
@@ -98,10 +103,14 @@ header {
     min-width: 200px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     border-radius: 8px;
-    z-index: 10001; /* Higher than header */
+    z-index: 1;
     top: 100%;
     left: 0;
     padding: 0.5rem 0;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
 }
 
 .dropdown-item {
@@ -120,6 +129,10 @@ header {
 .dropdown-icon {
     margin-left: 5px;
     transition: transform 0.3s ease;
+}
+
+.dropdown:hover .dropdown-icon {
+    transform: rotate(180deg);
 }
 
 /* Hamburger Menu */
@@ -933,7 +946,6 @@ footer {
         background-color: white;
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         padding: 1rem;
-        z-index: 9999;
     }
     
     .nav-menu.active {
@@ -949,32 +961,20 @@ footer {
     .nav-link {
         padding: 0.5rem 0;
         font-size: 1rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
     }
     
-    /* Mobile dropdowns */
     .dropdown-content {
-        display: none !important;
+        display: none;
         position: static;
         width: 100%;
         box-shadow: none;
         border-radius: 0;
         background-color: #f8f9fa;
-        padding-left: 1.5rem;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
+        padding-left: 1rem;
     }
     
-    .dropdown-parent.dropdown-open .dropdown-content {
-        display: block !important;
-        max-height: 500px;
-    }
-    
-    .dropdown-parent.dropdown-open .dropdown-icon {
-        transform: rotate(180deg);
+    .dropdown.active .dropdown-content {
+        display: block;
     }
     
     .dropdown-item {
@@ -1091,16 +1091,83 @@ footer {
         font-size: 0.9rem;
     }
 }
+/* IMPORTANT: Add this to prevent interference */
+header {
+    z-index: 10000 !important; /* Very high z-index to stay above everything */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
 
 /* Desktop dropdowns - PURE CSS */
 @media (min-width: 769px) {
-    .dropdown-parent:hover .dropdown-content {
+    /* Use :hover for dropdowns */
+    [data-dropdown]:hover .dropdown-content {
         display: block;
         animation: fadeIn 0.2s ease;
     }
     
-    .dropdown-parent:hover .dropdown-icon {
-        transform: rotate(180deg);
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background: white;
+        min-width: 200px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        z-index: 10001; /* Higher than header */
+        top: 100%;
+        left: 0;
+        padding: 0.5rem 0;
+    }
+    
+    /* Fix for dropdowns staying open when modal is open */
+    body.modal-open [data-dropdown]:hover .dropdown-content,
+    body.menu-open [data-dropdown]:hover .dropdown-content {
+        display: none !important;
+    }
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+    }
+    
+    .nav-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: white;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        padding: 1rem;
+        z-index: 9999;
+    }
+    
+    .nav-menu.active {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Mobile dropdowns - simplified */
+    .dropdown-content {
+        display: none;
+        padding-left: 1.5rem;
+        background: #f8f9fa;
+    }
+    
+    /* Show dropdowns when parent has active class */
+    [data-dropdown].active .dropdown-content {
+        display: block;
+    }
+    
+    /* Make dropdown arrows clickable on mobile */
+    .nav-link {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 }
 
@@ -1122,7 +1189,6 @@ body.modal-open header .hamburger {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
 }
-
 /* CSS-only FAQ */
 .faq-answer {
     display: none;
@@ -1325,7 +1391,6 @@ body.modal-open header .hamburger {
     margin: 0 auto 2rem;
     opacity: 0.9;
 }
-
 /* Show 3 columns on larger screens */
 @media (min-width: 992px) {
     .resume-template-grid {
@@ -1763,6 +1828,31 @@ body.modal-open header .hamburger {
         grid-template-columns: 1fr; /* One column for features on mobile */
     }
 }
+
+/* REMOVED the multi-column media queries since we want one column always */
+/* Delete or comment out these sections: */
+
+/*
+@media (min-width: 769px) and (max-width: 1024px) {
+    .app-grid {
+        grid-template-columns: repeat(2, 1fr);  <-- DELETE THIS
+    }
+    
+    .features-grid-android {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1025px) {
+    .app-grid {
+        grid-template-columns: repeat(2, 1fr);  <-- DELETE THIS
+    }
+    
+    .features-grid-android {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+*/
 
 /* ADD INSTEAD: For larger screens, keep one column but adjust spacing */
 @media (min-width: 769px) {
@@ -3811,7 +3901,7 @@ body.family-connection-tools .web-apps-disclaimer {
         
         button {
             padding: 12px 20px;
-            background-color: blue;
+            background-color: var(--primary-color);
             color: white;
             border: none;
             border-radius: 8px;
@@ -3834,7 +3924,7 @@ body.family-connection-tools .web-apps-disclaimer {
         }
         
         .btn-delete {
-            background: red;
+            background-color: var(--error-color);
         }
         
         .btn-reminder {
@@ -4043,3 +4133,107 @@ body.family-connection-tools .web-apps-disclaimer {
 .btn-delete {
     background: red;
 }
+
+/* Mobile dropdown styles */
+@media (max-width: 768px) {
+    .dropdown-parent {
+        position: relative;
+    }
+    
+    .dropdown-content {
+        display: none;
+        position: static;
+        background: transparent;
+        box-shadow: none;
+        padding-left: 20px;
+        border-left: 2px solid rgba(255,255,255,0.2);
+        margin-top: 10px;
+    }
+    
+    .dropdown-parent.dropdown-open .dropdown-content {
+        display: block;
+        animation: slideDown 0.3s ease;
+    }
+    
+    .dropdown-parent.dropdown-open .dropdown-icon {
+        transform: rotate(180deg);
+    }
+    
+    .dropdown-item {
+        padding: 10px 0;
+        color: rgba(255,255,255,0.8);
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .dropdown-item:last-child {
+        border-bottom: none;
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+/* Desktop hover dropdown */
+@media (min-width: 769px) {
+    .dropdown-parent {
+        position: relative;
+    }
+    
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background: white;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        padding: 10px 0;
+        min-width: 200px;
+        top: 100%;
+        left: 0;
+        z-index: 1000;
+    }
+    
+    .dropdown-parent:hover .dropdown-content {
+        display: block;
+        animation: fadeIn 0.2s ease;
+    }
+    
+    .dropdown-item {
+        display: block;
+        padding: 10px 20px;
+        color: #333;
+        text-decoration: none;
+        transition: background 0.2s;
+    }
+    
+    .dropdown-item:hover {
+        background: #f5f5f5;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-5px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+/* Dropdown icon animation */
+.dropdown-icon {
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 0.7em;
+    transition: transform 0.3s ease;
+}
+      

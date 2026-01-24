@@ -2,7 +2,12 @@
   "name": "resumepro",
   "scripts": {
     "build": "eleventy",
-    "dev": "eleventy --serve"
+    "dev": "eleventy --serve",
+    "clean": "rm -rf public .cache",
+    "clean:dev": "npm run clean && npm run dev",
+    "clean:build": "npm run clean && npm run build",
+    "preview": "npm run clean:build && npx serve public/",
+    "deploy": "npm run clean:build && git add public/ && git commit -m 'Deploy update' && git push origin main"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1"

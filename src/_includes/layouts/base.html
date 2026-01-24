@@ -3,32 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }} | ResumePro</title>
+    <title>{% if title %}{{ title }} | ResumePro{% else %}ResumePro | Professional Digital Templates{% endif %}</title>
     <link rel="stylesheet" href="{{ '/assets/css/styles.css' | url }}">
-    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="{{ '/assets/favicon.svg' | url }}" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-     <img src="{{ '/assets/images/photo.jpg' | url }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Meta Description -->
+    <meta name="description" content="{% if description %}{{ description }}{% else %}Professional digital templates for resumes and portfolios. No coding required.{% endif %}">
+    
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="{% if title %}{{ title }} | ResumePro{% else %}ResumePro | Professional Digital Templates{% endif %}">
+    <meta property="og:description" content="{% if description %}{{ description }}{% else %}Create stunning resumes and portfolios that get you noticed.{% endif %}">
+    <meta property="og:image" content="{{ '/assets/images/og-image.jpg' | url }}">
+    <meta property="og:url" content="{{ site.url | default('https://resumepro.pages.dev') }}{{ page.url | url }}">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
     
     {% include "partials/analytics.html" %}
+    
+    {% if styles %}{{ styles }}{% endif %}
 </head>
 <body>
     {% include "partials/header.html" %}
     
-    <main>
-        {{ content }}
+    <main id="main-content">
+        {{ content | safe }}
     </main>
     
     {% include "partials/footer.html" %}
     
-    <script src="{{ '/assets/js/script.js' | url }}"></script>
-    <script src="/assets/js/clean-urls.js"></script>
-    <script src="/assets/js/header.js" defer></script>
+    <!-- Main Script -->
+    <script src="{{ '/assets/js/script.js' | url }}" defer></script>
+    
+    <!-- Optional Scripts -->
+    <script src="{{ '/assets/js/clean-urls.js' | url }}" defer></script>
+    <script src="{{ '/assets/js/header.js' | url }}" defer></script>
+    
+    <!-- Page-specific Scripts -->
     {% if page.url == '/portfolio-templates/' %}
-    <script src="/assets/js/portfolio-templates.js"></script>
+    <script src="{{ '/assets/js/portfolio-templates.js' | url }}" defer></script>
     {% endif %}
+    
     {% if page.url == '/resume-templates/' %}
-    <script src="/assets/js/resume-templates.js"></script>
+    <script src="{{ '/assets/js/resume-templates.js' | url }}" defer></script>
     {% endif %}
+    
+    <!-- Custom Scripts Block -->
+    {% if scripts %}{{ scripts }}{% endif %}
 </body>
 </html>

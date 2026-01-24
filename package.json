@@ -1,15 +1,128 @@
-{
-  "name": "resumepro",
-  "scripts": {
-    "build": "eleventy",
-    "dev": "eleventy --serve",
-    "clean": "rm -rf public .cache",
-    "clean:dev": "npm run clean && npm run dev",
-    "clean:build": "npm run clean && npm run build",
-    "preview": "npm run clean:build && npx serve public/",
-    "deploy": "npm run clean:build && git add public/ && git commit -m 'Deploy update' && git push origin main"
-  },
-  "devDependencies": {
-    "@11ty/eleventy": "^2.0.1"
+const fs = require('fs');
+const path = require('path');
+const https = require('https');
+const { execSync } = require('child_process');
+
+// Colors for console output
+const colors = {
+  reset: '\x1b[0m',
+  red: '\x1b[31m',
+  green: '\x1b[32m',
+  yellow: '\x1b[33m',
+  blue: '\x1b[34m',
+  cyan: '\x1b[36m'
+};
+
+function color(text, colorName) {
+  return colors[colorName] + text + colors.reset;
+}
+
+async function fetchUrl(url) {
+  return new Promise((resolve, reject) => {
+    https.get(url, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => resolve(data));
+    }).on('error', reject);
+  });
+}
+
+function getFileSize(content) {
+  return Buffer.byteLength(content, 'utf8');
+}
+
+function getLineCount(content) {
+  return content.split('\n').length;
+}
+
+function getTitle(content) {
+  const match = content.match(/<title>([^<]*)<\/title>/i);
+  return match ? match[1] : 'No title found';
+}
+
+async function compare() {
+  console.log(color('\n🔍 COMPARING LOCAL VS LIVE', 'cyan'));
+  console.log(color('='.repeat(50), 'cyan'));
+  
+  const liveUrl = 'https://resumepro.pages.dev';
+  const localPort = 3000;
+  const localUrl = `http://localhost:${localPort}`;
+  
+  try {
+    // Start local server
+    console.log(color('\n🚀 Starting local server...', 'blue'));
+    const serverProcess = execSync(`npx serve public/ -p ${localPort} &`, { 
+      stdio: 'pipe',
+      shell: true 
+    });
+    
+    // Wait for server to start
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Fetch both pages
+    console.log(color('\n📥 Fetching pages...', 'blue'));
+    const [liveContent, localContent] = await Promise.all([
+      fetchUrl(liveUrl),
+      fetchUrl(localUrl)
+    ]);
+    
+    // Kill local server
+    execSync(`pkill -f "serve.*${localPort}"`, { stdio: 'ignore' });
+    
+    // Compare metrics
+    console.log(color('\n📊 COMPARISON RESULTS:', 'yellow'));
+    console.log(color('─'.repeat(40), 'yellow'));
+    
+    console.log(`🌐 ${color('Live Site', 'green')}:`);
+    console.log(`   Title: ${color(getTitle(liveContent), 'green')}`);
+    console.log(`   Size: ${color((getFileSize(liveContent) / 1024).toFixed(2) + ' KB', 'green')}`);
+    console.log(`   Lines: ${color(getLineCount(liveContent).toString(), 'green')}`);
+    
+    console.log(`\n💻 ${color('Local Build', 'blue')}:`);
+    console.log(`   Title: ${color(getTitle(localContent), 'blue')}`);
+    console.log(`   Size: ${color((getFileSize(localContent) / 1024).toFixed(2) + ' KB', 'blue')}`);
+    console.log(`   Lines: ${color(getLineCount(localContent).toString(), 'blue')}`);
+    
+    // Calculate differences
+    const sizeDiff = Math.abs(getFileSize(liveContent) - getFileSize(localContent));
+    const lineDiff = Math.abs(getLineCount(liveContent) - getLineCount(localContent));
+    
+    console.log(color('\n⚖️  DIFFERENCES:', 'yellow'));
+    console.log(color('─'.repeat(40), 'yellow'));
+    
+    console.log(`Size difference: ${color(sizeDiff + ' bytes', sizeDiff > 1000 ? 'red' : 'green')}`);
+    console.log(`Line difference: ${color(lineDiff.toString(), lineDiff > 10 ? 'red' : 'green')}`);
+    
+    if (getTitle(liveContent) !== getTitle(localContent)) {
+      console.log(color('\n⚠️  WARNING: Titles are different!', 'red'));
+    }
+    
+    if (sizeDiff > 5000 || lineDiff > 50) {
+      console.log(color('\n❌ SIGNIFICANT DIFFERENCES DETECTED!', 'red'));
+      console.log(color('Consider running: npm run deploy:force', 'yellow'));
+    } else {
+      console.log(color('\n✅ Pages are similar', 'green'));
+    }
+    
+    // Show snippet comparison
+    console.log(color('\n📝 FIRST 100 CHARACTERS:', 'cyan'));
+    console.log(color('─'.repeat(40), 'cyan'));
+    console.log(color('Live: ', 'green') + liveContent.substring(0, 100).replace(/\n/g, ' ') + '...');
+    console.log(color('Local:', 'blue') + localContent.substring(0, 100).replace(/\n/g, ' ') + '...');
+    
+  } catch (error) {
+    console.error(color('\n❌ Error:', 'red'), error.message);
+    
+    // Ensure local server is killed
+    try {
+      execSync(`pkill -f serve`, { stdio: 'ignore' });
+    } catch (e) {}
   }
 }
+
+// Run if called directly
+if (require.main === module) {
+  compare().catch(console.error);
+}
+
+module.exports = { compare };

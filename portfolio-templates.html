@@ -749,6 +749,75 @@
     </style>
 </head>
 <body>
+<header>
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+        
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation">☰</button>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Templates
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="resume-templates.html" class="dropdown-item">Resume Templates</a>
+                        <a href="portfolio-templates.html" class="dropdown-item">Portfolio Templates</a>
+                    </div>
+                </li>
+                
+                <!-- NEW: My Apps Menu Item -->
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        My Apps
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="android-applications.html" class="dropdown-item">Android Applications</a>
+                        <a href="family-connection-tools.html" class="dropdown-item">Web Applications</a>
+                      </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Blog
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="portfolio-best-practices.html" class="dropdown-item">Portfolio Best Practices</a>
+                        <a href="portfolio-maintenance.html" class="dropdown-item">Portfolio Maintenance</a>
+                        <a href="online-job-sites.html" class="dropdown-item">Legit Online Job Sites</a>
+                        <a href="email-marketing" class="dropdown-item">Unlocking Email Marketing Success</a>
+                        <a href="mobile-optimization.html" class="dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
+                        <a href="email-list-failure.html" class="dropdown-item">Why Your Email List Might Be Failing</a> 
+                        <a href="email-builder-previews.html" class="dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
+                        <a href="why-less-is-more.html" class="dropdown-item">The Power of Focused Email Design</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="klaviyo-analytics.html" class="nav-link">Klaviyo Analytics</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Productivity Tools
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="email-builder" class="dropdown-item">Email Builder</a>
+                        <a href="https://resumepro.pages.dev/enhanced-todo" class="dropdown-item">Enhanced To-Do & Notes</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+
     <!-- Header Placeholder -->
     <div id="header-placeholder">
         <noscript>Please enable JavaScript to view the navigation menu.</noscript>
@@ -1182,222 +1251,48 @@
         </div>
     </div>
     
-    <script>
-        // FAQ toggle functionality
-        document.querySelectorAll('.faq-question').forEach(question => {
-            question.addEventListener('click', () => {
-                const item = question.parentElement;
-                item.classList.toggle('active');
-                
-                // Close other open FAQs
-                document.querySelectorAll('.faq-item').forEach(otherItem => {
-                    if (otherItem !== item && otherItem.classList.contains('active')) {
-                        otherItem.classList.remove('active');
-                    }
-                });
-            });
-        });
-        
-        // Pagination functionality
-        function showPage(pageNum) {
-            // Hide all pages
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            
-            // Show selected page
-            document.getElementById('page' + pageNum).classList.add('active');
-            
-            // Update active button
-            document.querySelectorAll('.page-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            // Scroll to templates section
-            document.getElementById('templates').scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        // Modal functionality with fullscreen toggle
-        const modal = document.getElementById('previewModal');
-        const modalContent = document.getElementById('modalContent');
-        const modalIframe = document.querySelector('.modal-iframe');
-        const viewBtns = document.querySelectorAll('.view-btn');
-        const closeModal = document.querySelector('.close-modal');
-        const previewBtns = document.querySelectorAll('.preview-btn');
-        const fullscreenToggle = document.getElementById('fullscreenToggle');
-        let isFullscreen = false;
-
-        // Open modal when preview button is clicked
-        previewBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const url = btn.getAttribute('data-url');
-                modalIframe.src = url;
-                modal.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-                
-                // Reset to normal view when opening
-                modalContent.classList.remove('fullscreen');
-                isFullscreen = false;
-                updateFullscreenIcon();
-                
-                // On mobile, default to mobile view
-                if (window.innerWidth <= 768) {
-                    setView('mobile');
-                } else {
-                    setView('desktop');
-                }
-            });
-        });
-        
-        // Close modal
-        closeModal.addEventListener('click', () => {
-            closeModalHandler();
-        });
-        
-        // Close modal when clicking outside
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModalHandler();
-            }
-        });
-        
-        // View toggle functionality
-        viewBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const view = btn.getAttribute('data-view');
-                setView(view);
-                
-                // Update active button
-                viewBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-        
-        // Fullscreen toggle functionality
-        fullscreenToggle.addEventListener('click', () => {
-            isFullscreen = !isFullscreen;
-            modalContent.classList.toggle('fullscreen', isFullscreen);
-            updateFullscreenIcon();
-        });
-        
-        function setView(view) {
-            const iframeContainer = document.querySelector('.modal-iframe-container');
-            const iframe = document.querySelector('.modal-iframe');
-            
-            iframeContainer.className = 'modal-iframe-container';
-            iframe.className = 'modal-iframe';
-            
-            if (view === 'mobile') {
-                iframeContainer.classList.add('mobile-view');
-                iframe.classList.add('mobile-view');
-            } else {
-                iframeContainer.classList.add('desktop-view');
-                iframe.classList.add('desktop-view');
-            }
-        }
-        
-        function updateFullscreenIcon() {
-            const icon = fullscreenToggle.querySelector('svg');
-            if (isFullscreen) {
-                icon.innerHTML = `
-                    <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
-                `;
-                fullscreenToggle.setAttribute('title', 'Exit Fullscreen');
-            } else {
-                icon.innerHTML = `
-                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-                `;
-                fullscreenToggle.setAttribute('title', 'Enter Fullscreen');
-            }
-        }
-        
-        function closeModalHandler() {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            // Reset to normal view when closing
-            modalContent.classList.remove('fullscreen');
-            isFullscreen = false;
-            updateFullscreenIcon();
-        }
-        
-        // Handle ESC key to exit fullscreen or close modal
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                if (isFullscreen) {
-                    isFullscreen = false;
-                    modalContent.classList.remove('fullscreen');
-                    updateFullscreenIcon();
-                } else if (modal.style.display === 'flex') {
-                    closeModalHandler();
-                }
-            }
-        });
-    </script>
-<script>
-        // Hamburger menu toggle
-        document.querySelector('.hamburger').addEventListener('click', () => {
-            document.querySelector('.nav-menu').classList.toggle('active');
-        });
-
-        // Toggle dropdown on mobile
-        document.querySelectorAll('.dropdown .nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                // Prevent default link behavior
-                e.preventDefault();
-                // Toggle active class on parent dropdown
-                const dropdown = link.closest('.dropdown');
-                dropdown.classList.toggle('active');
-            });
-        });
-
-        // Close menu when clicking a non-dropdown nav link or dropdown item
-        document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
-            link.addEventListener('click', () => {
-                document.querySelector('.nav-menu').classList.remove('active');
-                // Remove active class from all dropdowns
-                document.querySelectorAll('.dropdown').forEach(dropdown => {
-                    dropdown.classList.remove('active');
-                });
-            });
-        });
-    </script>
-    <script>
-        // Load header dynamically
-        fetch('header.html')
-            .then(response => {
-                if (!response.ok) throw new Error('Failed to load header');
-                return response.text();
-            })
-            .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
-                
-                // Re-attach event listeners for hamburger menu and dropdowns
-                document.querySelector('.hamburger').addEventListener('click', () => {
-                    document.querySelector('.nav-menu').classList.toggle('active');
-                });
-
-                document.querySelectorAll('.dropdown .nav-link').forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const dropdown = link.closest('.dropdown');
-                        dropdown.classList.toggle('active');
-                    });
-                });
-
-                document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
-                    link.addEventListener('click', () => {
-                        document.querySelector('.nav-menu').classList.remove('active');
-                        document.querySelectorAll('.dropdown').forEach(dropdown => {
-                            dropdown.classList.remove('active');
-                        });
-                    });
-                });
-            })
-            .catch(error => console.error('Error loading header:', error));
-    </script>
+    
 
 <script src="clean-urls.js"></script>
+
+    <script>
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            if (hamburger) {
+                hamburger.addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.toggle('active');
+                });
+            }
+            
+            // Toggle dropdown on mobile
+            document.querySelectorAll('.dropdown .nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const dropdown = link.closest('.dropdown');
+                    dropdown.classList.toggle('active');
+                });
+            });
+            
+            // Close menu when clicking a non-dropdown nav link or dropdown item
+            document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
+                link.addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.remove('active');
+                    document.querySelectorAll('.dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                });
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.dropdown') && !e.target.closest('.hamburger')) {
+                    document.querySelectorAll('.dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | ResumePro</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">    
+    <style>
+        :root {
+            --primary: #3a86ff;
+            --primary-dark: #2667cc;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 1.5em;
+        }
+        
+        .nav-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-item {
+            position: relative;
+            margin-left: 1.5rem;
+        }
+        
+        .nav-link {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 1;
+            top: 100%;
+            left: 0;
+            padding: 0.5rem 0;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .dropdown-item {
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            display: block;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: var(--primary);
+        }
+        
+        .dropdown-icon {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .dropdown:hover .dropdown-icon {
+            transform: rotate(180deg);
+        }
+
+        /* About Us Content Styling */
+        .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .hero-section {
+            text-align: center;
+            padding: 8rem 0;
+        }
+        
+        .hero-section h1 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        
+        .hero-section p {
+            color: var(--gray);
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        .mission-section {
+            background-color: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 3rem;
+        }
+        
+        .success-section {
+            margin-bottom: 3rem;
+        }
+        
+        .success-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .success-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .success-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .success-info h3 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .success-info p {
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+        
+        .success-quote {
+            font-style: italic;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .values-section {
+            background-color: #f8f9fa;
+            padding: 3rem;
+            border-radius: 8px;
+            margin-bottom: 3rem;
+        }
+        
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .value-card {
+            text-align: center;
+            padding: 1.5rem;
+        }
+        
+        .value-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .contact-cta {
+            text-align: center;
+            padding: 3rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-radius: 8px;
+        }
+        
+        .contact-cta h2 {
+            margin-bottom: 1rem;
+        }
+        
+        .contact-cta p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: white;
+            color: var(--primary);
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background-color: var(--light);
+            transform: translateY(-2px);
+        }
+        
+        /* Footer Styles */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: row;
+                padding: 1rem;
+                align-items: center;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .nav-container {
+                width: auto;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                padding: 1rem;
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .nav-item {
+                margin-left: 0;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .nav-link {
+                padding: 0.5rem 0;
+                font-size: 1rem;
+            }
+            
+            .dropdown-content {
+                display: none;
+                position: static;
+                width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+                background-color: #f8f9fa;
+                padding-left: 1rem;
+            }
+            
+            .dropdown.active .dropdown-content {
+                display: block;
+            }
+            
+            .dropdown-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.95rem;
+            }
+            
+            .about-container {
+                padding: 1rem;
+            }
+            
+            .hero-section {
+                padding: 2rem 0;
+            }
+            
+            .hero-section h1 {
+                font-size: 1.8rem;
+                margin-top: 100px;
+            }
+            
+            .hero-section p {
+                font-size: 1rem;
+            }
+            
+            .mission-section,
+            .values-section,
+            .success-section {
+                padding: 1.5rem;
+            }
+            
+            .contact-cta {
+                padding: 1.5rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .footer-column h3 {
+                font-size: 1.1rem;
+            }
+            
+            .footer-links a {
+                font-size: 0.9rem;
+            }
+            
+            .copyright {
+                font-size: 0.85rem;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+        
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation">☰</button>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Templates
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="resume-templates.html" class="dropdown-item">Resume Templates</a>
+                        <a href="portfolio-templates.html" class="dropdown-item">Portfolio Templates</a>
+                    </div>
+                </li>
+                
+                <!-- NEW: My Apps Menu Item -->
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        My Apps
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="android-applications.html" class="dropdown-item">Android Applications</a>
+                        <a href="family-connection-tools.html" class="dropdown-item">Web Applications</a>
+                      </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Blog
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="portfolio-best-practices.html" class="dropdown-item">Portfolio Best Practices</a>
+                        <a href="portfolio-maintenance.html" class="dropdown-item">Portfolio Maintenance</a>
+                        <a href="online-job-sites.html" class="dropdown-item">Legit Online Job Sites</a>
+                        <a href="email-marketing" class="dropdown-item">Unlocking Email Marketing Success</a>
+                        <a href="mobile-optimization.html" class="dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
+                        <a href="email-list-failure.html" class="dropdown-item">Why Your Email List Might Be Failing</a> 
+                        <a href="email-builder-previews.html" class="dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
+                        <a href="why-less-is-more.html" class="dropdown-item">The Power of Focused Email Design</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="klaviyo-analytics.html" class="nav-link">Klaviyo Analytics</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Productivity Tools
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="email-builder" class="dropdown-item">Email Builder</a>
+                        <a href="https://resumepro.pages.dev/enhanced-todo" class="dropdown-item">Enhanced To-Do & Notes</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+
+    <!-- Header Placeholder -->
+    <div id="header-placeholder">
+        <noscript>Please enable JavaScript to view the navigation menu.</noscript>
+    </div>
+    
+    <div class="about-container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1>About ResumePro</h1>
+            <p>We're revolutionizing how professionals showcase their careers with beautiful, modern digital resumes.</p>
+        </section>
+        
+        <!-- Mission Section -->
+        <section class="mission-section">
+            <h2>Our Mission</h2>
+            <p>At ResumePro, we believe everyone deserves a resume that truly represents their professional journey. Traditional PDF resumes are static and outdated - we're changing that with responsive, data-driven templates that work across all devices.</p>
+            <p>Founded in 2023, our team of designers and developers have created the easiest way to build a professional online presence without needing to code.</p>
+        </section>
+
+        <!-- About Me Section -->
+        <section class="mission-section">
+            <h2>About Me</h2>
+            <p>Hello! I am an Email Marketing Specialist/Strategist dedicated to helping businesses enhance their marketing efforts through effective email campaigns. With a passion for crafting compelling content and a keen understanding of analytics, I create strategies that drive engagement and conversions.</p>
+            <p>For more about my work and projects, feel free to check my portfolio: <a href="https://apdg21.github.io/email-marketing/portfolio1128.html" target="_blank">My Portfolio</a> and learn more about ResumePro at <a href="https://resumepro.pages.dev/" target="_blank">ResumePro</a>.</p>
+        </section>
+        
+        <!-- User Success Stories Section -->
+        <section class="success-section">
+            <h2>User Success Stories</h2>
+            <p>Our users have transformed their careers with ResumePro's templates. Here’s what they’re saying.</p>
+            <div class="success-grid">
+                <div class="success-card">
+                    <div class="success-info">
+                        <p class="success-quote">"Using ResumePro's Sleek template, I landed three interviews in a week!"</p>
+                        <h3>Marketing Professional</h3>
+                        <p>Increased interview callbacks by 30% with a modern portfolio.</p>
+                    </div>
+                </div>
+                
+                <div class="success-card">
+                    <div class="success-info">
+                        <p class="success-quote">"The Executive template helped me showcase my leadership experience clearly."</p>
+                        <h3>Senior Manager</h3>
+                        <p>Secured a C-level role with a polished digital resume.</p>
+                    </div>
+                </div>
+                
+                <div class="success-card">
+                    <div class="success-info">
+                        <p class="success-quote">"ResumePro’s templates made my portfolio stand out to freelance clients."</p>
+                        <h3>Graphic Designer</h3>
+                        <p>Boosted client inquiries by 25% with an interactive resume.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Values Section -->
+        <section class="values-section">
+            <h2>Our Core Values</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">✨</div>
+                    <h3>Quality</h3>
+                    <p>Pixel-perfect designs that impress recruiters.</p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-icon">⚡</div>
+                    <h3>Simplicity</h3>
+                    <p>No coding required - just focus on your content.</p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-icon">🌍</div>
+                    <h3>Accessibility</h3>
+                    <p>Templates that work for everyone, everywhere.</p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-icon">❤️</div>
+                    <h3>Support</h3>
+                    <p>We're here to help you succeed.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CTA Section -->
+        <section class="contact-cta">
+            <h2>Ready to Transform Your Resume?</h2>
+            <p>Join thousands of professionals who've upgraded their job search with ResumePro.</p>
+            <a href="index.html#templates" class="cta-button">Browse Templates</a>
+        </section>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>ResumePro</h3>
+                    <p>Professional digital resume templates designed to help you stand out and land your dream job.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Templates</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html#templates">Timeless</a></li>
+                        <li><a href="index.html#templates">Sleek</a></li>
+                        <li><a href="index.html#templates">Executive</a></li>
+                        <li><a href="index.html#templates">All Templates</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://apdg21.github.io/resumepro/help#editing">How to Edit</a></li>
+                        <li><a href="https://apdg21.github.io/resumepro/help#hosting">Hosting Guide</a></li>
+                        <li><a href="https://apdg21.github.io/resumepro/help#tips">Resume Tips</a></li>
+                        <li><a href="https://apdg21.github.io/resumepro/guide">GUIDE</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="clean-urls.js"></script>
+
+    <script>
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            if (hamburger) {
+                hamburger.addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.toggle('active');
+                });
+            }
+            
+            // Toggle dropdown on mobile
+            document.querySelectorAll('.dropdown .nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const dropdown = link.closest('.dropdown');
+                    dropdown.classList.toggle('active');
+                });
+            });
+            
+            // Close menu when clicking a non-dropdown nav link or dropdown item
+            document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
+                link.addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.remove('active');
+                    document.querySelectorAll('.dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                });
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.dropdown') && !e.target.closest('.hamburger')) {
+                    document.querySelectorAll('.dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Digital Resume Templates | Stand Out in Your Job Search</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <style>
+        :root {
+            --primary: #3a86ff;
+            --primary-dark: #2667cc;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 10px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 1.5em;
+        }
+        
+        .nav-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-item {
+            position: relative;
+            margin-left: 1.5rem;
+        }
+        
+        .nav-link {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 1;
+            top: 100%;
+            left: 0;
+            padding: 0.5rem 0;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .dropdown-item {
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            display: block;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: var(--primary);
+        }
+        
+        .dropdown-icon {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .dropdown:hover .dropdown-icon {
+            transform: rotate(180deg);
+        }
+        
+        /* Hamburger Menu Styles */
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--dark);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .nav-menu.active {
+            display: flex;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 0rem;
+        }
+        
+        
+        .hero {
+            text-align: center;
+            padding: 8rem 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .feature {
+            background-color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .templates {
+            padding: 3rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .template-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .template-image {
+            position: relative;
+            height: 500px; /* Fixed height for consistency */
+            overflow: hidden;
+            pointer-events: none;
+            background-color: #f5f5f5; /* Light background for empty space */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+        }
+        
+        .template-image iframe {
+            width: 100%;
+            height: 100%; /* Make iframe taller than container */
+            border: none;
+            transform: scale(1); /* Scale down to fit */
+            transform-origin: top center; /* Scale from top center */
+            pointer-events: none;
+        }
+        
+        .template-info {
+            padding: 1.5rem;
+        }
+        
+        .template-info h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+        
+        .template-info p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .template-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+        
+        .btn {
+            padding: 0.6rem 1rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background-color: transparent;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-solid {
+            background-color: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-solid:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        /* Pagination Styles */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 3rem;
+            gap: 0.5rem;
+        }
+        
+        .page-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background-color: #e9ecef;
+            color: var(--dark);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .page-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .page-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: grid;
+        }
+        
+        .benefits {
+            padding: 3rem 0;
+            background-color: white;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .benefit-card {
+            text-align: center;
+            padding: 1.5rem;
+        }
+        
+        .benefit-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .benefit-card h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .benefit-card p {
+            color: var(--gray);
+        }
+        
+        .testimonials {
+            padding: 3rem 0;
+            background-color: #f8f9fa;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .testimonial-card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+        }
+        
+        .testimonial-role {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .faq {
+            padding: 3rem 0;
+        }
+        
+        .faq-item {
+            margin-bottom: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            color: var(--gray);
+            display: none;
+        }
+        
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+        
+        .faq-toggle {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-item.active .faq-toggle {
+            transform: rotate(45deg);
+        }
+        
+        .cta-section {
+            padding: 4rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-section p {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding: 10px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+        
+        /* Updated Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }  
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            width: 90%;
+            height: 80%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-content.fullscreen {
+            width: 100%;
+            height: 100%;
+            max-width: none;
+            border-radius: 0;
+        }
+        
+        .modal-header {
+            padding: 1rem;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .modal-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .modal-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .modal-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .view-options {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            padding: 0.5rem 1rem;
+        }
+        
+        .view-btn {
+            padding: 0.5rem 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray);
+            border-bottom: 2px solid transparent;
+        }
+        
+        .view-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        
+        .modal-iframe-container {
+            flex: 1;
+            overflow: auto;
+            position: relative;
+        }
+        
+        .modal-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .desktop-view .modal-iframe {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .mobile-view .modal-iframe {
+            width: 375px;
+            height: 667px;
+            margin: 0 auto;
+            display: block;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        @media (max-width: 768px) {
+            /* [Previous responsive styles remain the same] */
+            
+            .modal-content {
+                width: 100%;
+                height: 100%;
+                border-radius: 0;
+            }
+                        
+            .view-options {
+                display: none;
+            }
+            
+            .mobile-view .modal-iframe {
+                width: 100%;
+                height: 100%;
+                border: none;
+                border-radius: 0;
+            }
+             .header-content {
+                flex-direction: row;
+                padding: 1rem;
+                align-items: center;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .nav-container {
+                width: auto;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                padding: 1rem;
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .nav-item {
+                margin-left: 0;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .nav-link {
+                padding: 0.5rem 0;
+                font-size: 1rem;
+            }
+            
+            .dropdown-content {
+                display: none;
+                position: static;
+                width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+                background-color: #f8f9fa;
+                padding-left: 1rem;
+            }
+            
+            .dropdown.active .dropdown-content {
+                display: block;
+            }
+            
+            .dropdown-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.95rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .template-types {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+        
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation">☰</button>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Templates
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="resume-templates.html" class="dropdown-item">Resume Templates</a>
+                        <a href="portfolio-templates.html" class="dropdown-item">Portfolio Templates</a>
+                    </div>
+                </li>
+                
+                <!-- NEW: My Apps Menu Item -->
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        My Apps
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="android-applications.html" class="dropdown-item">Android Applications</a>
+                        <a href="family-connection-tools.html" class="dropdown-item">Web Applications</a>
+                      </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Blog
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="portfolio-best-practices.html" class="dropdown-item">Portfolio Best Practices</a>
+                        <a href="portfolio-maintenance.html" class="dropdown-item">Portfolio Maintenance</a>
+                        <a href="online-job-sites.html" class="dropdown-item">Legit Online Job Sites</a>
+                        <a href="email-marketing" class="dropdown-item">Unlocking Email Marketing Success</a>
+                        <a href="mobile-optimization.html" class="dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
+                        <a href="email-list-failure.html" class="dropdown-item">Why Your Email List Might Be Failing</a> 
+                        <a href="email-builder-previews.html" class="dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
+                        <a href="why-less-is-more.html" class="dropdown-item">The Power of Focused Email Design</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="klaviyo-analytics.html" class="nav-link">Klaviyo Analytics</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Productivity Tools
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="email-builder" class="dropdown-item">Email Builder</a>
+                        <a href="https://resumepro.pages.dev/enhanced-todo" class="dropdown-item">Enhanced To-Do & Notes</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+
+     <!-- Header Placeholder -->
+    <div id="header-placeholder">
+        <noscript>Please enable JavaScript to view the navigation menu.</noscript>
+    </div>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Stand Out with a Digital Resume That Works For You</h1>
+            <p>Editable, professional, modern resume templates that require no coding. Impress employers with your online presence.</p>
+            
+            <div class="features">
+                <span class="feature">✅ Fully Editable</span>
+                <span class="feature">✅ Mobile Friendly</span>
+                <span class="feature">✅ No Coding Needed</span>
+                <span class="feature">✅ One-Time Purchase</span>
+            </div>
+        </div>
+    </section>
+    
+    <section class="templates" id="templates">
+        <div class="container">
+            <div class="section-title">
+                <h2>Premium Resume Templates</h2>
+                <p>Choose from our collection of professionally designed templates that showcase your skills and experience beautifully.</p>
+            </div>
+            
+            <!-- Page 1 -->
+            <div class="template-grid page active" id="page1">
+                <!-- Template 1 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe class="thumbs" src="https://apdg21.github.io/editableresume/style1/" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info">
+                        <h3>Timeless</h3>
+                        <p>A clean, single-column layout with a classic font and minimalistic design, perfect for traditional roles like law or academia.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style1/">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-timeless" target="_blank" class="btn btn-solid">Buy Now ($12)</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 2 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe src="https://apdg21.github.io/editableresume/style2/" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info">
+                        <h3>Sleek</h3>
+                        <p>Features modern typography and a streamlined two-column format, ideal for tech professionals or startups.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style2/">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-sleek" target="_blank" class="btn btn-solid">Buy Now ($12)</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 3 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe src="https://apdg21.github.io/editableresume/style3/" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info">
+                        <h3>Executive</h3>
+                        <p>A formal, structured design with bold section headers and a professional tone, suited for corporate or leadership positions.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style3/">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-executive" target="_blank" class="btn btn-solid">Buy Now ($14)</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 4 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe src="https://apdg21.github.io/editableresume/style4/" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info">
+                        <h3>Vivid</h3>
+                        <p>Incorporates colorful accents and creative icons, great for designers or marketers aiming to showcase personality.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style4/">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-vivid" target="_blank" class="btn btn-solid">Buy Now ($16)</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 5 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe src="https://apdg21.github.io/editableresume/style5/" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info"> 
+                        <h3>Pure</h3>
+                        <p>A minimalist, distraction-free template with a monochromatic palette, versatile for any industry.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style5/">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-pure" target="_blank" class="btn btn-solid">Buy Now ($12)</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 6 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe src="https://apdg21.github.io/editableresume/style6/" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info">
+                        <h3>Refined</h3>
+                        <p>Elegant with subtle design elements like thin lines and sophisticated fonts, ideal for high-end or executive roles.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style6/">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-refined" target="_blank" class="btn btn-solid">Buy Now ($14)</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page 2 -->
+            <div class="template-grid page" id="page2">
+                <!-- Template 7 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe src="https://apdg21.github.io/editableresume/style7/" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info">
+                        <h3>Dynamic</h3>
+                        <p>Bold typography and contrasting colors create a striking look, perfect for competitive fields like sales or media.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style7/">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-dynamic" target="_blank" class="btn btn-solid">Buy Now ($12)</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 8 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe src="https://apdg21.github.io/editableresume/style8/" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info">
+                        <h3>SkillFocus</h3>
+                        <p>Prioritizes skills and achievements in a functional layout, ideal for career changers or those with non-linear work histories.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style8/">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-skillfocus" target="_blank" class="btn btn-solid">Buy Now ($14)</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 9 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe src="https://apdg21.github.io/editableresume/style9/" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info">
+                        <h3>Corporate</h3>
+                        <p>A polished, organized design with a focus on clarity, tailored for business or finance professionals.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style9/">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-corporate" target="_blank" class="btn btn-solid">Buy Now ($12)</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 10 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe src="https://apdg21.github.io/editableresume/style10/" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info">
+                        <h3>Trendy</h3>
+                        <p>Combines stylish fonts and a modern layout with creative flair, suited for fashion or creative industry roles.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableresume/style10/">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-trendy" target="_blank" class="btn btn-solid">Buy Now ($12)</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pagination Controls -->
+            <div class="pagination">
+                <button class="page-btn active" onclick="showPage(1)">1</button>
+                <button class="page-btn" onclick="showPage(2)">2</button>
+            </div>
+        </div>
+    </section>
+    
+    <section class="benefits">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Choose a Digital Resume?</h2>
+                <p>Traditional resumes are outdated. Here's how a digital resume gives you the competitive edge.</p>
+            </div>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">🚀</div>
+                    <h3>Instant First Impression</h3>
+                    <p>Recruiters spend just 7 seconds scanning a resume. Make those seconds count with a stunning digital presentation.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">📱</div>
+                    <h3>Mobile Optimized</h3>
+                    <p>Looks perfect on any device - phone, tablet or desktop. No more awkward PDF zooming.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">🔗</div>
+                    <h3>One Simple Link</h3>
+                    <p>Share your entire resume with just one URL in your email signature, LinkedIn, or job applications.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">⚡</div>
+                    <h3>Always Updated</h3>
+                    <p>Update your information instantly without resending files to everyone in your network.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Success Stories</h2>
+                <p>Don't just take our word for it. Here's what our customers say.</p>
+            </div>
+            
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"I landed 3 interviews in the first week after switching to a digital resume. The hiring managers all commented on how professional it looked."</p>
+                    <p class="testimonial-author">Sarah K.</p>
+                    <p class="testimonial-role">Marketing Director</p>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"As a freelance designer, my digital resume has become my portfolio landing page. I've gotten more client inquiries since using this template."</p>
+                    <p class="testimonial-author">Michael T.</p>
+                    <p class="testimonial-role">UX Designer</p>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The easy customization meant I could set this up in an evening. My new employer said my resume stood out from hundreds of applicants."</p>
+                    <p class="testimonial-author">David R.</p>
+                    <p class="testimonial-role">Software Engineer</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="faq">
+        <div class="container">
+            <div class="section-title">
+                <h2>Frequently Asked Questions</h2>
+                <p>Everything you need to know about our digital resume templates.</p>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Do I need coding skills to use these templates?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>No coding skills required! Our templates come with simple editable files where you just replace the placeholder text with your information. The templates handle all the design and layout automatically.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How do I host my digital resume?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>We provide detailed instructions for free hosting options like GitHub Pages and Netlify. You can also host on any standard web hosting service. No special server requirements needed.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+    <div class="faq-question">
+        <span>Can I customize the colors and fonts?</span>
+        <span class="faq-toggle">+</span>
+    </div>
+    <div class="faq-answer">
+        <p>Absolutely! You can personalize your resume by editing the <code>style.css</code> file included with your template. Simply:</p>
+        <ol>
+            <li>Open <code>style.css</code> in any text editor</li>
+            <li>Modify the color variables (like <code>--primary-color</code>) and font properties</li>
+            <li>Save your changes and refresh your resume page</li>
+        </ol>
+        <p>For advanced customization, you can edit any CSS rules in the file. No coding experience is needed for basic changes - just follow the clear comments we've included.</p>
+        <p><strong>Example customization:</strong></p>
+        <pre>/* ======== Customize These Values ======== */
+:root {
+  --primary-color: #3a86ff;  /* Change main accent color */
+  --text-color: #2b2d42;     /* Change text color */
+  --font-main: 'Segoe UI', sans-serif; /* Change font */
+}</pre>
+        <p>All templates include detailed instructions in the <code>Template_Guide.markdown</code> file for common customizations.</p>
+    </div>
+</div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What's included in the download?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>You'll receive a ZIP file containing all HTML, CSS, and JavaScript files needed, plus a simple data file to edit your information, detailed setup instructions, and bonus tips for optimizing your digital resume.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Is this a subscription or one-time payment?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>All our templates are one-time purchases with lifetime access. You'll also receive free updates to the template you purchased for one year.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Transform Your Resume?</h2>
+            <p>Join thousands of professionals who've upgraded their job search with a stunning digital resume. One simple template can make all the difference.</p>
+            <a href="#templates" class="cta-button" style="background-color: white; color: #764ba2;">Browse Templates</a>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>ResumePro</h3>
+                    <p>Professional digital resume templates designed to help you stand out and land your dream job.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Templates</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Timeless</a></li>
+                        <li><a href="#">Sleek</a></li>
+                        <li><a href="#">Executive</a></li>
+                        <li><a href="#">All Templates</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://apdg21.github.io/resumepro/help#editing">How to Edit</a></li>
+                        <li><a href="https://apdg21.github.io/resumepro/help#hosting">Hosting Guide</a></li>
+                        <li><a href="https://apdg21.github.io/resumepro/help#tips">Resume Tips</a></li>
+                        <li><a href="https://apdg21.github.io/resumepro/guide">GUIDE</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+     <!-- Modal for template preview -->
+    <div class="modal" id="previewModal">
+        <div class="modal-content" id="modalContent">
+            <div class="modal-header">
+                <div class="modal-title">Template Preview</div>
+                <div class="modal-actions">
+                    <button class="modal-btn" id="fullscreenToggle" title="Toggle Fullscreen">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                        </svg>
+                    </button>
+                    <button class="modal-btn close-modal" title="Close">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="view-options">
+                <button class="view-btn active" data-view="desktop">Desktop View</button>
+                <button class="view-btn" data-view="mobile">Mobile View</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-iframe-container">
+                    <iframe class="modal-iframe desktop-view" frameborder="0"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+<script src="clean-urls.js"></script>
+
+    <script>
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            if (hamburger) {
+                hamburger.addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.toggle('active');
+                });
+            }
+            
+            // Toggle dropdown on mobile
+            document.querySelectorAll('.dropdown .nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const dropdown = link.closest('.dropdown');
+                    dropdown.classList.toggle('active');
+                });
+            });
+            
+            // Close menu when clicking a non-dropdown nav link or dropdown item
+            document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
+                link.addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.remove('active');
+                    document.querySelectorAll('.dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                });
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.dropdown') && !e.target.closest('.hamburger')) {
+                    document.querySelectorAll('.dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

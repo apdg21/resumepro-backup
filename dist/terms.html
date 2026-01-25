@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service | ResumePro</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">	
+    <style>
+        :root {
+            --primary: #3a86ff;
+            --primary-dark: #2667cc;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+         /* Enhanced Header with Dropdown */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 1.5em;
+        }
+        
+        .nav-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin-right: 2rem;
+        }
+        
+        .nav-item {
+            position: relative;
+            margin-left: 1.5rem;
+        }
+        
+        .nav-link {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 1;
+            top: 100%;
+            left: 0;
+            padding: 0.5rem 0;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .dropdown-item {
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            display: block;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: var(--primary);
+        }
+        
+        .dropdown-icon {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .dropdown:hover .dropdown-icon {
+            transform: rotate(180deg);
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Terms Content */
+        .terms-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .terms-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .terms-header h1 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        
+        .terms-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+        
+        .terms-content {
+            background-color: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .terms-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .terms-section h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .terms-section p, 
+        .terms-section ul {
+            margin-bottom: 1rem;
+            color: var(--dark);
+            line-height: 1.7;
+        }
+        
+        .terms-section ul {
+            padding-left: 2rem;
+        }
+        
+        .terms-section li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .effective-date {
+            font-style: italic;
+            color: var(--gray);
+            margin-top: 3rem;
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+        }
+	footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 10rem 1.5rem;;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding: 10px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 1rem;
+            }
+            
+            .terms-container {
+                padding: 1rem;
+            }
+            
+            .terms-content {
+                padding: 1.5rem;
+            }
+            
+            .terms-header h1 {
+                font-size: 2rem;
+            }
+	    footer {         
+            padding: 1rem 0 1.5rem !important;
+        }
+           .header-content {
+                flex-direction: column;
+                padding: 0rem;
+            }
+            
+            .logo {
+                margin-bottom: 1rem;
+            }
+            
+            .nav-container {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .nav-menu {
+                margin-right: 0;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .template-types {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .dropdown-content {
+                left: auto;
+                right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+        
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation">☰</button>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Templates
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="resume-templates.html" class="dropdown-item">Resume Templates</a>
+                        <a href="portfolio-templates.html" class="dropdown-item">Portfolio Templates</a>
+                    </div>
+                </li>
+                
+                <!-- NEW: My Apps Menu Item -->
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        My Apps
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="android-applications.html" class="dropdown-item">Android Applications</a>
+                        <a href="family-connection-tools.html" class="dropdown-item">Web Applications</a>
+                      </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Blog
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="portfolio-best-practices.html" class="dropdown-item">Portfolio Best Practices</a>
+                        <a href="portfolio-maintenance.html" class="dropdown-item">Portfolio Maintenance</a>
+                        <a href="online-job-sites.html" class="dropdown-item">Legit Online Job Sites</a>
+                        <a href="email-marketing" class="dropdown-item">Unlocking Email Marketing Success</a>
+                        <a href="mobile-optimization.html" class="dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
+                        <a href="email-list-failure.html" class="dropdown-item">Why Your Email List Might Be Failing</a> 
+                        <a href="email-builder-previews.html" class="dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
+                        <a href="why-less-is-more.html" class="dropdown-item">The Power of Focused Email Design</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="klaviyo-analytics.html" class="nav-link">Klaviyo Analytics</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Productivity Tools
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="email-builder" class="dropdown-item">Email Builder</a>
+                        <a href="https://resumepro.pages.dev/enhanced-todo" class="dropdown-item">Enhanced To-Do & Notes</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+
+    <!-- Enhanced Header with Dropdown -->
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">📄</span>
+                <span>ResumePro</span>
+            </a>
+            
+            <div class="nav-container">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link">
+                            Templates
+                            <span class="dropdown-icon">▼</span>
+                        </a>
+                        <div class="dropdown-content">
+                            <a href="resume-templates.html" class="dropdown-item">Resume Templates</a>
+                            <a href="portfolio-templates.html" class="dropdown-item">Portfolio Templates</a>
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+                
+                
+            </div>
+        </div>
+    </header>
+    
+    <div class="terms-container">
+        <div class="terms-header">
+            <h1>Terms of Service</h1>
+            <p>Last updated: June 10, 2024</p>
+        </div>
+        
+        <div class="terms-content">
+            <div class="terms-section">
+                <h2>1. Acceptance of Terms</h2>
+                <p>By accessing or using ResumePro's website and digital products, you agree to be bound by these Terms of Service. If you disagree with any part of the terms, you may not access our services.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>2. License Grant</h2>
+                <p>Upon purchase, ResumePro grants you a non-exclusive, non-transferable license to:</p>
+                <ul>
+                    <li>Use the template for personal or client projects</li>
+                    <li>Modify the template to suit your needs</li>
+                    <li>Host the template on your own website or hosting service</li>
+                </ul>
+                <p>You may not resell, redistribute, or license the template to others.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>3. Payments & Refunds</h2>
+                <p>All template purchases are subject to the following conditions:</p>
+                <ul>
+                    <li>Payments are processed through secure third-party providers</li>
+                    <li>Due to the digital nature of our products, we offer no refunds</li>
+                    <li>Prices are subject to change without notice</li>
+                </ul>
+            </div>
+            
+            <div class="terms-section">
+                <h2>4. User Responsibilities</h2>
+                <p>You agree to:</p>
+                <ul>
+                    <li>Provide accurate information when making purchases</li>
+                    <li>Not use our templates for illegal or unethical purposes</li>
+                    <li>Not reverse engineer or attempt to extract source code</li>
+                </ul>
+            </div>
+            
+            <div class="terms-section">
+                <h2>5. Intellectual Property</h2>
+                <p>All templates and related materials are the intellectual property of ResumePro. The purchase grants you usage rights but does not transfer ownership.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>6. Limitation of Liability</h2>
+                <p>ResumePro shall not be liable for any indirect, incidental, special, consequential or punitive damages resulting from:</p>
+                <ul>
+                    <li>Use or inability to use our products</li>
+                    <li>Unauthorized access to your data</li>
+                    <li>Any errors or omissions in the templates</li>
+                </ul>
+            </div>
+            
+            <div class="terms-section">
+                <h2>7. Modifications to Terms</h2>
+                <p>We reserve the right to modify these terms at any time. Continued use of our services after changes constitutes acceptance of the new terms.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>8. Governing Law</h2>
+                <p>These Terms shall be governed by the laws of the State of Delaware without regard to its conflict of law provisions.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>9. Contact Information</h2>
+                <p>For questions about these Terms, please contact us at:</p>
+                <p>Email: legal@resumepro.com</p>
+            </div>
+            
+            <div class="effective-date">
+                <p>These Terms of Service are effective as of June 10, 2024.</p>
+            </div>
+        </div>
+    </div>
+<footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>ResumePro</h3>
+                    <p>Professional digital resume templates designed to help you stand out and land your dream job.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Templates</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html#templates">Timeless</a></li>
+                        <li><a href="index.html#templates">Sleek</a></li>
+                        <li><a href="index.html#templates">Executive</a></li>
+                        <li><a href="index.html#templates">All Templates</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://apdg21.github.io/resumepro/help#editing">How to Edit</a></li>
+                        <li><a href="https://apdg21.github.io/resumepro/help#hosting">Hosting Guide</a></li>
+                        <li><a href="https://apdg21.github.io/resumepro/help#tips">Resume Tips</a></li>
+                        <li><a href="https://apdg21.github.io/resumepro/guide">GUIDE</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            if (hamburger) {
+                hamburger.addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.toggle('active');
+                });
+            }
+            
+            // Toggle dropdown on mobile
+            document.querySelectorAll('.dropdown .nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const dropdown = link.closest('.dropdown');
+                    dropdown.classList.toggle('active');
+                });
+            });
+            
+            // Close menu when clicking a non-dropdown nav link or dropdown item
+            document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
+                link.addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.remove('active');
+                    document.querySelectorAll('.dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                });
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.dropdown') && !e.target.closest('.hamburger')) {
+                    document.querySelectorAll('.dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

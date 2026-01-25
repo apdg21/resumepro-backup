@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Resume Template Guide | ResumePro</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml"> 	
+    <style>
+        :root {
+            --primary-color: #3a86ff;
+            --secondary-color: #2b2d42;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gray-color: #6c757d;
+            --success-color: #28a745;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+        
+        /* Enhanced Header with Dropdown */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 1.5em;
+        }
+        
+        .nav-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin-right: 2rem;
+        }
+        
+        .nav-item {
+            position: relative;
+            margin-left: 1.5rem;
+        }
+        
+        .nav-link {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 1;
+            top: 100%;
+            left: 0;
+            padding: 0.5rem 0;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .dropdown-item {
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            display: block;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: var(--primary);
+        }
+        
+        .dropdown-icon {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .dropdown:hover .dropdown-icon {
+            transform: rotate(180deg);
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Guide Content Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            
+            margin: 0 auto;
+            padding: 0px;
+            background-color: #f5f5f7;
+        }
+        .content-wrapper {
+           max-width: 1200px;
+           margin: 0 auto;
+           padding: 20px;
+        }
+        
+        .guide-header {
+            text-align: center;
+            margin: 2rem 0 3rem;
+            padding-bottom: 20px;
+        }
+        
+        .guide-header h1 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .guide-header p {
+            color: var(--gray-color);
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        h3 {
+            color: var(--secondary-color);
+            margin-top: 25px;
+        }
+        
+        .feature-list {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        .steps {
+            counter-reset: step-counter;
+        }
+        
+        .step {
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 25px;
+        }
+        
+        .step:before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background-color: var(--primary-color);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .note {
+            background-color: #e7f5ff;
+            padding: 15px;
+            border-left: 4px solid var(--primary-color);
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .warning {
+            background-color: #fff3bf;
+            padding: 15px;
+            border-left: 4px solid #ffd43b;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .file-structure {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-family: monospace;
+            line-height: 1.8;
+        }
+        
+        .tip-box {
+            background-color: #ebfbee;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+        
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        ul, ol {
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+	footer {
+            background: #2b2d42;
+            color: white;
+            padding: 3rem 10rem 1.5rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding: 10px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            color: white;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 1rem;
+            }
+            
+            body {
+                padding: 0px;
+            }
+            
+            .guide-header h1 {
+                font-size: 2rem;
+            }
+            
+            .guide-header p {
+                font-size: 1rem;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+	footer {         
+            padding: 1rem 0 1.5rem !important;
+        }
+          .header-content {
+                flex-direction: column;
+                padding: 0rem;
+            }
+            
+            .logo {
+                margin-bottom: 1rem;
+            }
+            
+            .nav-container {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .nav-menu {
+                margin-right: 0;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .template-types {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .dropdown-content {
+                left: auto;
+                right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+        
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation">☰</button>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Templates
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="resume-templates.html" class="dropdown-item">Resume Templates</a>
+                        <a href="portfolio-templates.html" class="dropdown-item">Portfolio Templates</a>
+                    </div>
+                </li>
+                
+                <!-- NEW: My Apps Menu Item -->
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        My Apps
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="android-applications.html" class="dropdown-item">Android Applications</a>
+                        <a href="family-connection-tools.html" class="dropdown-item">Web Applications</a>
+                      </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Blog
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="portfolio-best-practices.html" class="dropdown-item">Portfolio Best Practices</a>
+                        <a href="portfolio-maintenance.html" class="dropdown-item">Portfolio Maintenance</a>
+                        <a href="online-job-sites.html" class="dropdown-item">Legit Online Job Sites</a>
+                        <a href="email-marketing" class="dropdown-item">Unlocking Email Marketing Success</a>
+                        <a href="mobile-optimization.html" class="dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
+                        <a href="email-list-failure.html" class="dropdown-item">Why Your Email List Might Be Failing</a> 
+                        <a href="email-builder-previews.html" class="dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
+                        <a href="why-less-is-more.html" class="dropdown-item">The Power of Focused Email Design</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="klaviyo-analytics.html" class="nav-link">Klaviyo Analytics</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Productivity Tools
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="email-builder" class="dropdown-item">Email Builder</a>
+                        <a href="https://resumepro.pages.dev/enhanced-todo" class="dropdown-item">Enhanced To-Do & Notes</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+
+     <!-- Enhanced Header with Dropdown -->
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">📄</span>
+                <span>ResumePro</span>
+            </a>
+            
+            <div class="nav-container">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link">
+                            Templates
+                            <span class="dropdown-icon">▼</span>
+                        </a>
+                        <div class="dropdown-content">
+                            <a href="resume-templates.html" class="dropdown-item">Resume Templates</a>
+                            <a href="portfolio-templates.html" class="dropdown-item">Portfolio Templates</a>
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+                
+                
+            </div>
+        </div>
+    </header>
+    
+    <div class="content-wrapper">
+        <div class="section">
+            <div class="guide-header">
+                <h1>Modern Resume Template Guide</h1>
+                <p>Create a sleek, professional resume with this modern, one-page scrolling template.</p>
+            </div>
+        </div>
+        
+    <div class="section">
+        <p>This guide walks you through the process of customizing your resume using the provided template files, from editing your data to previewing and deploying your resume.</p>
+    </div>
+    
+    <div class="section">
+        <h2><span class="emoji">💡</span> Features</h2>
+        <div class="feature-list">
+            <ul>
+                <li><strong>Modern Design</strong>: Clean, one-page scrolling layout with a professional look.</li>
+                <li><strong>Fully Responsive</strong>: Adapts seamlessly to desktops, tablets, and mobile devices using HTML and CSS.</li>
+                <li><strong>Data-Driven</strong>: All content is loaded dynamically from a <code>data.json</code> file.</li>
+                <li><strong>Easy Deployment</strong>: Host your resume on platforms like Netlify or GitHub Pages with minimal setup.</li>
+                <li><strong>Editable</strong>: Use the included <code>form.html</code> to easily input and update your resume data.</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2><span class="emoji">🛠</span> How to Create Your Resume</h2>
+        <p>Follow these steps to build and customize your resume using the template:</p>
+        
+        <div class="steps">
+            <div class="step">
+                <h3>Receive and Organize Files</h3>
+                <ul>
+                    <li>Upon receiving the template, unzip the folder if necessary. You'll find files including <code>index.html</code>, <code>form.html</code>, <code>data.json</code>, <code>style.css</code>, <code>main.js</code>, and an <code>assets</code> folder with <code>profile.jpg</code>.</li>
+                    <li>Create a dedicated folder on your computer to store these files (e.g., <code>MyResume</code>).</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <h3>Backup the Original <code>data.json</code></h3>
+                <ul>
+                    <li>Before making changes, create a backup of the <code>data.json</code> file to preserve the sample data as a reference.</li>
+                    <li>Copy <code>data.json</code> and save it as <code>data-backup.json</code> in the same folder or another safe location.</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <h3>Open the Resume Builder Form</h3>
+                <ul>
+                    <li>Open <code>form.html</code> in a web browser (e.g., Chrome, Firefox). This file provides a user-friendly interface to input your resume data.</li>
+                    <li>The form includes sections for personal information, skills, experience, education, languages, projects, and social links.</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <h3>Load Existing <code>data.json</code> as a Guide</h3>
+                <ul>
+                    <li>In the form, click the <strong>"Load Existing Data"</strong> button at the bottom.</li>
+                    <li>Select the original <code>data.json</code> file from the template folder. This loads the sample data into the form, serving as a guide for the expected format.</li>
+                    <li>Review the sample data to understand how to structure your information.</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <h3>Input Your Data</h3>
+                <ul>
+                    <li>Replace the sample data with your own information in each section of the form:
+                        <ul>
+                            <li><strong>Personal Information</strong>: Enter your name, job title, email, phone, and location.</li>
+                            <li><strong>About You</strong>: Write a brief professional summary.</li>
+                            <li><strong>Skills</strong>: Add skills and set proficiency levels using the sliders.</li>
+                            <li><strong>Work Experience</strong>: Include job positions, companies, dates, and responsibilities.</li>
+                            <li><strong>Education</strong>: List degrees, institutions, locations, and years.</li>
+                            <li><strong>Languages</strong>: Add languages and proficiency levels.</li>
+                            <li><strong>Projects</strong>: Describe projects with names, descriptions, and optional URLs.</li>
+                            <li><strong>Social Links</strong>: Select platforms (GitHub, LinkedIn, Facebook, Twitter, Instagram) and add profile URLs.</li>
+                        </ul>
+                    </li>
+                    <li>Use the <strong>"Add"</strong> buttons to include additional entries for skills, experience, etc., and the <strong>"Remove"</strong> buttons to delete unwanted entries.</li>
+                    <li>Ensure all required fields (marked with <code>required</code>) are filled to avoid errors when saving.</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <h3>Save Your Data</h3>
+                <ul>
+                    <li>Once you've entered all your information, click the <strong>"Generate Resume"</strong> button at the bottom of the form.</li>
+                    <li>The form will validate your input and prompt you to download a new <code>data.json</code> file.</li>
+                    <li>Save this file in the template folder, replacing the original <code>data.json</code> (your backup ensures the sample data is safe).</li>
+                    <li>If you encounter validation errors (e.g., missing required fields or no skills added), correct them and try again.</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <h3>Preview Your Resume</h3>
+                <ul>
+                    <li>Open <code>index.html</code> in a web browser to view your resume.</li>
+                    <li>You'll be prompted to select a <code>data.json</code> file. Choose the <code>data.json</code> you just saved from the form.</li>
+                    <li>The resume will load with your data, styled according to the template's modern design. Verify that all information displays correctly.</li>
+                    <li>Replace <code>assets/profile.jpg</code> with your own photo (keep the filename as <code>profile.jpg</code>) to personalize the resume further.</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <h3>Edit Your Resume (Optional)</h3>
+                <ul>
+                    <li>If you need to make changes, reopen <code>form.html</code> in your browser.</li>
+                    <li>Click <strong>"Load Existing Data"</strong> and select your saved <code>data.json</code> file to load your current resume data.</li>
+                    <li>Update the necessary fields, then click <strong>"Generate Resume"</strong> to save a new <code>data.json</code>.</li>
+                    <li>Repeat the preview process by opening <code>index.html</code> and selecting the updated <code>data.json</code>.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2><span class="emoji">🚀</span> Deployment Tips</h2>
+        <p>Share your resume online by hosting it on a web platform:</p>
+        
+        <h3>Netlify</h3>
+        <ul>
+            <li>Sign up at <a href="https://www.netlify.com/" target="_blank">Netlify</a>.</li>
+            <li>Use the "Netlify Drop" feature to drag and drop your template folder, or connect your GitHub repository.</li>
+            <li>Netlify will provide a public URL (e.g., <code>your-resume.netlify.app</code>) to share your resume.</li>
+        </ul>
+        
+        <h3>GitHub Pages</h3>
+        <ul>
+            <li>Create a GitHub repository and push your template folder to it.</li>
+            <li>Enable GitHub Pages in the repository settings, selecting the main branch and the root folder.</li>
+            <li>Access your resume at <code>https://yourusername.github.io/your-repo-name</code>.</li>
+        </ul>
+        
+        <h3>Other Hosting</h3>
+        <ul>
+            <li>Upload the entire folder to any web host supporting static files (e.g., Vercel, Firebase Hosting).</li>
+            <li>Ensure <code>index.html</code> is set as the default entry point.</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <h2><span class="emoji">🧠</span> Customization Notes</h2>
+        <ul>
+            <li><strong>Styling</strong>: Modify <code>style.css</code> to tweak colors, fonts, or layout. For example, change the <code>--primary-color</code> variable to alter the theme.</li>
+            <li><strong>Content</strong>: The <code>main.js</code> file controls how <code>data.json</code> data is loaded into <code>index.html</code>. Advanced users can edit <code>main.js</code> to adjust the display logic.</li>
+            <li><strong>Profile Photo</strong>: Ensure your <code>profile.jpg</code> is optimized (e.g., 200x200 pixels, &lt;500KB) for fast loading.</li>
+            <li><strong>Browser Compatibility</strong>: Test <code>index.html</code> and <code>form.html</code> in multiple browsers (Chrome, Firefox, Safari) to ensure consistency.</li>
+            <li><strong>Data Format</strong>: The <code>data.json</code> file must match the structure expected by the template. Use <code>form.html</code> to generate it to avoid errors.</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <h2><span class="emoji">🔧</span> Troubleshooting</h2>
+        <ul>
+            <li><strong>Resume Not Loading</strong>: Ensure you selected the correct <code>data.json</code> file in <code>index.html</code>. Verify the JSON structure by loading it in <code>form.html</code>.</li>
+            <li><strong>Form Validation Errors</strong>: Check that all required fields are filled and at least one skill is added before generating <code>data.json</code>.</li>
+            <li><strong>Display Issues</strong>: Clear your browser cache or try a different browser if the resume doesn't render correctly.</li>
+            <li><strong>Deployment Errors</strong>: Confirm all files, including the <code>assets</code> folder, are uploaded to your hosting platform.</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <h2><span class="emoji">📦</span> Files Overview</h2>
+        <div class="file-structure">
+            <div>📁 MyResume/</div>
+            <div>├── 📄 index.html <span class="gray-text"># The main resume page</span></div>
+            <div>├── 📄 form.html <span class="gray-text"># The resume builder form</span></div>
+            <div>├── 📄 data.json <span class="gray-text"># Stores your resume data</span></div>
+            <div>├── 📄 style.css <span class="gray-text"># Visual styling</span></div>
+            <div>├── 📄 main.js <span class="gray-text"># Loads data into index.html</span></div>
+            <div>├── 📄 form.js <span class="gray-text"># Form functionality</span></div>
+            <div>└── 📁 assets/</div>
+            <div>    └── 📄 profile.jpg <span class="gray-text"># Your profile photo</span></div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2><span class="emoji">🌟</span> Additional Tips</h2>
+        <div class="tip-box">
+            <ul>
+                <li><strong>Keep Data Concise</strong>: Use short, impactful descriptions to fit the one-page design.</li>
+                <li><strong>Regular Backups</strong>: Save versions of <code>data.json</code> (e.g., <code>data-2025-07-10.json</code>) before major edits.</li>
+                <li><strong>Shareable Links</strong>: After deploying, share your resume URL on job applications or social media.</li>
+                <li><strong>Print Version</strong>: Open <code>index.html</code>, select your <code>data.json</code>, and use the browser's print function (Ctrl+P) to save as a PDF for physical copies.</li>
+            </ul>
+        </div>
+    
+        <p>This template makes it easy to create, edit, and share a professional resume. Enjoy building your standout resume!</p>
+    </div>
+</div>
+<footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>ResumePro</h3>
+                    <p>Professional digital resume templates designed to help you stand out and land your dream job.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Templates</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html#templates">Timeless</a></li>
+                        <li><a href="index.html#templates">Sleek</a></li>
+                        <li><a href="index.html#templates">Executive</a></li>
+                        <li><a href="index.html#templates">All Templates</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://apdg21.github.io/resumepro/help#editing">How to Edit</a></li>
+                        <li><a href="https://apdg21.github.io/resumepro/help#hosting">Hosting Guide</a></li>
+                        <li><a href="https://apdg21.github.io/resumepro/help#tips">Resume Tips</a></li>
+                        <li><a href="https://apdg21.github.io/resumepro/guide">GUIDE</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            if (hamburger) {
+                hamburger.addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.toggle('active');
+                });
+            }
+            
+            // Toggle dropdown on mobile
+            document.querySelectorAll('.dropdown .nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const dropdown = link.closest('.dropdown');
+                    dropdown.classList.toggle('active');
+                });
+            });
+            
+            // Close menu when clicking a non-dropdown nav link or dropdown item
+            document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
+                link.addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.remove('active');
+                    document.querySelectorAll('.dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                });
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.dropdown') && !e.target.closest('.hamburger')) {
+                    document.querySelectorAll('.dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

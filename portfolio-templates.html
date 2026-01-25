@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Portfolio Templates | Showcase Your Work Professionally</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <style>
+        :root {
+            --primary: #3a86ff;
+            --primary-dark: #2667cc;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 10px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 1.5em;
+        }
+        
+        .nav-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-item {
+            position: relative;
+            margin-left: 1.5rem;
+        }
+        
+        .nav-link {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 1;
+            top: 100%;
+            left: 0;
+            padding: 0.5rem 0;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .dropdown-item {
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            display: block;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: var(--primary);
+        }
+        
+        .dropdown-icon {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .dropdown:hover .dropdown-icon {
+            transform: rotate(180deg);
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: white;
+            color: var(--primary);
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background-color: var(--light);
+            transform: translateY(-2px);
+        }
+        
+        /* Hamburger Menu Styles */
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--dark);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .nav-menu.active {
+            display: flex;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 0rem;
+        }
+         
+        .hero {
+            text-align: center;
+            padding: 8rem 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .feature {
+            background-color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .templates {
+            padding: 3rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .template-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .template-image {
+            position: relative;
+            height: 500px; /* Fixed height for consistency */
+            overflow: hidden;
+            pointer-events: none;
+            background-color: #f5f5f5; /* Light background for empty space */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+        }
+        
+        .template-image iframe {
+            width: 100%;
+            height: 100%; /* Make iframe taller than container */
+            border: none;
+            transform: scale(1); /* Scale down to fit */
+            transform-origin: top center; /* Scale from top center */
+            pointer-events: none;
+        }
+        
+        .template-info {
+            padding: 1.5rem;
+        }
+        
+        .template-info h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+        
+        .template-info p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .template-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+        
+        .btn {
+            padding: 0.6rem 1rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background-color: transparent;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-solid {
+            background-color: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-solid:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        /* Pagination Styles */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 3rem;
+            gap: 0.5rem;
+        }
+        
+        .page-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background-color: #e9ecef;
+            color: var(--dark);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .page-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .page-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: grid;
+        }
+        
+        .benefits {
+            padding: 3rem 0;
+            background-color: white;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .benefit-card {
+            text-align: center;
+            padding: 1.5rem;
+        }
+        
+        .benefit-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .benefit-card h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .benefit-card p {
+            color: var(--gray);
+        }
+        
+        .testimonials {
+            padding: 3rem 0;
+            background-color: #f8f9fa;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .testimonial-card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+        }
+        
+        .testimonial-role {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .faq {
+            padding: 3rem 0;
+        }
+        
+        .faq-item {
+            margin-bottom: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            color: var(--gray);
+            display: none;
+        }
+        
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+        
+        .faq-toggle {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-item.active .faq-toggle {
+            transform: rotate(45deg);
+        }
+        
+        .cta-section {
+            padding: 4rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-section p {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding: 10px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+        
+        /* Updated Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }  
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            width: 90%;
+            height: 80%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-content.fullscreen {
+            width: 100%;
+            height: 100%;
+            max-width: none;
+            border-radius: 0;
+        }
+        
+        .modal-header {
+            padding: 1rem;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .modal-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .modal-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .modal-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .view-options {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            padding: 0.5rem 1rem;
+        }
+        
+        .view-btn {
+            padding: 0.5rem 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray);
+            border-bottom: 2px solid transparent;
+        }
+        
+        .view-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        
+        .modal-iframe-container {
+            flex: 1;
+            overflow: auto;
+            position: relative;
+        }
+        
+        .modal-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .desktop-view .modal-iframe {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .mobile-view .modal-iframe {
+            width: 375px;
+            height: 667px;
+            margin: 0 auto;
+            display: block;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        @media (max-width: 768px) {
+            /* [Previous responsive styles remain the same] */
+            
+            .modal-content {
+                width: 100%;
+                height: 100%;
+                border-radius: 0;
+            }
+            
+            .view-options {
+                display: none;
+            }
+            
+            .mobile-view .modal-iframe {
+                width: 100%;
+                height: 100%;
+                border: none;
+                border-radius: 0;
+            }
+        
+            .header-content {
+                flex-direction: row;
+                padding: 1rem;
+                align-items: center;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .nav-container {
+                width: auto;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                padding: 1rem;
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .nav-item {
+                margin-left: 0;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .nav-link {
+                padding: 0.5rem 0;
+                font-size: 1rem;
+            }
+            
+            .dropdown-content {
+                display: none;
+                position: static;
+                width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+                background-color: #f8f9fa;
+                padding-left: 1rem;
+            }
+            
+            .dropdown.active .dropdown-content {
+                display: block;
+            }
+            
+            .dropdown-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.95rem;
+            }
+
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .template-types {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+        
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation">☰</button>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Templates
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="resume-templates.html" class="dropdown-item">Resume Templates</a>
+                        <a href="portfolio-templates.html" class="dropdown-item">Portfolio Templates</a>
+                    </div>
+                </li>
+                
+                <!-- NEW: My Apps Menu Item -->
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        My Apps
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="android-applications.html" class="dropdown-item">Android Applications</a>
+                        <a href="family-connection-tools.html" class="dropdown-item">Web Applications</a>
+                      </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Blog
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="portfolio-best-practices.html" class="dropdown-item">Portfolio Best Practices</a>
+                        <a href="portfolio-maintenance.html" class="dropdown-item">Portfolio Maintenance</a>
+                        <a href="online-job-sites.html" class="dropdown-item">Legit Online Job Sites</a>
+                        <a href="email-marketing" class="dropdown-item">Unlocking Email Marketing Success</a>
+                        <a href="mobile-optimization.html" class="dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
+                        <a href="email-list-failure.html" class="dropdown-item">Why Your Email List Might Be Failing</a> 
+                        <a href="email-builder-previews.html" class="dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
+                        <a href="why-less-is-more.html" class="dropdown-item">The Power of Focused Email Design</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="klaviyo-analytics.html" class="nav-link">Klaviyo Analytics</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Productivity Tools
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="email-builder" class="dropdown-item">Email Builder</a>
+                        <a href="https://resumepro.pages.dev/enhanced-todo" class="dropdown-item">Enhanced To-Do & Notes</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+
+    <!-- Header Placeholder -->
+    <div id="header-placeholder">
+        <noscript>Please enable JavaScript to view the navigation menu.</noscript>
+    </div>
+
+    
+    <section class="hero">
+        <div class="container">
+            <h1>Showcase Your Work With a Stunning Portfolio</h1>
+            <p>Professional, responsive portfolio templates designed to highlight your projects and skills. No coding required.</p>
+            
+            <div class="features">
+                <span class="feature">✅ Fully Customizable</span>
+                <span class="feature">✅ Project Galleries</span>
+                <span class="feature">✅ Mobile Optimized</span>
+                <span class="feature">✅ One-Time Purchase</span>
+            </div>
+        </div>
+    </section>
+    
+    <section class="templates" id="templates">
+        <div class="container">
+            <div class="section-title">
+                <h2>Premium Portfolio Templates</h2>
+                <p>Choose from our collection of professionally designed templates to showcase your work in the best light.</p>
+            </div>
+            
+            <!-- Page 1 -->
+            <div class="template-grid page active" id="page1">
+                <!-- Template 1 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe class="thumbs" src="https://apdg21.github.io/editableportfolio/style1/" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info">
+                        <h3>Modern Minimalist Portfolio</h3>
+                        <p>This template features a clean, straightforward design with clear, sectioned areas for "About," "Work," "Testimonials," and "Contact." It's ideal for a professional looking for an organized and easily navigable showcase.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style1">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/modern-minimalist-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 2 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe src="https://apdg21.github.io/editableportfolio/style2" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info">
+                        <h3>Simple Profile Portfolio</h3>
+                        <p>A clean and functional template designed for showcasing a profile with an "About" section and direct "Contact Me" options. Its minimalist layout is perfect for quick content population.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style2">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/simple-profile-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 3 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe src="https://apdg21.github.io/editableportfolio/style3" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info">
+                        <h3>Clean & Focused Portfolio</h3>
+                        <p>This template offers a minimalist and professional look with simple navigation and clear sections for featured work, an "About Me" page, testimonials, and contact information. It's designed for easy content management.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style3">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/clean-and-focused-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 4 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe src="https://apdg21.github.io/editableportfolio/style4" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info">
+                        <h3>Dynamic Showcase Portfolio</h3>
+                        <p>A streamlined and professional template with clear navigation, dedicated sections for showcasing projects, an "About" section, testimonials, and a contact form. It's designed for easy customization to highlight creative work.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style4">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/dynamic-showcase-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 5 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe src="https://apdg21.github.io/editableportfolio/style5" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info"> 
+                        <h3>Structured Layout Portfolio</h3>
+                        <p>This clean and straightforward template provides a clear navigation menu and dedicated sections for displaying work, an "About Me" page, testimonials, and contact details. It prioritizes organized content presentation for easy deployment.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style5">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/structured-layout-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 6 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe src="https://apdg21.github.io/editableportfolio/style6" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info">
+                        <h3>Photography Portfolio</h3>
+                        <p>A clean and professional template perfect for photographers, featuring standard sections for work, "About," testimonials, and contact. It includes filters for different photography genres and is user-friendly for no-code customization.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style6">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/photography-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page 2 -->
+            <div class="template-grid page" id="page2">
+                <!-- Template 7 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe src="https://apdg21.github.io/editableportfolio/style7" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info">
+                        <h3>Modern Grid Portfolio</h3>
+                        <p>This template presents a clean, well-structured layout with easily navigable sections for showcasing work samples, personal details, client testimonials, and contact information. Its design supports easy content updates.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style7">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/modern-grid-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 8 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe src="https://apdg21.github.io/editableportfolio/style8" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info">
+                        <h3>Elegant Gallery Portfolio</h3>
+                        <p>This template offers an elegant and user-friendly design, ideal for visually driven content. It features prominent calls to action, clear navigation for different sections, and dedicated areas for collections and testimonials, making it easy to set up without coding.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style8">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/elegant-gallery-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 9 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe src="https://apdg21.github.io/editableportfolio/style9" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info">
+                        <h3>Professional & Interactive Portfolio</h3>
+                        <p>This template features a clear, modular structure with standard navigation and sections for published work, an "About Me" page, testimonials, and contact information. It also includes modern interactive elements like a dark mode toggle, suitable for no-code platforms.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style9">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/personal-and-interactive-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 10 -->
+                <div class="template-card">
+                    <div class="template-image">
+                        <iframe src="https://apdg21.github.io/editableportfolio/style10" loading="lazy" scrolling="no"></iframe>
+                    </div>
+                    <div class="template-info">
+                        <h3>Minimalist & Adaptable Portfolio</h3>
+                        <p>A streamlined and simple template with clear headings and a standard navigation structure. Its minimalist design and placeholders indicate it's a ready-to-use template for quick content population without any coding expertise.</p>
+                        <div class="template-actions">
+                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style10">Live Preview</a>
+                            <a href="https://dolfean.gumroad.com/l/minimalist-and-adaptable-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pagination Controls -->
+            <div class="pagination">
+                <button class="page-btn active" onclick="showPage(1)">1</button>
+                <button class="page-btn" onclick="showPage(2)">2</button>
+            </div>
+        </div>
+    </section>
+    
+    <section class="benefits">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Choose a Professional Portfolio?</h2>
+                <p>Stand out from the competition with a digital portfolio that showcases your work effectively.</p>
+            </div>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎯</div>
+                    <h3>First Impressions Matter</h3>
+                    <p>Clients and employers judge your work within seconds. A professional portfolio makes those seconds count.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">📊</div>
+                    <h3>Showcase Your Process</h3>
+                    <p>Display not just final products but your creative process with case studies and project breakdowns.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">🌐</div>
+                    <h3>Global Reach</h3>
+                    <p>Your online portfolio works for you 24/7, accessible to potential clients worldwide.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">💼</div>
+                    <h3>Professional Credibility</h3>
+                    <p>A custom portfolio domain establishes you as a serious professional in your field.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Success Stories</h2>
+                <p>Don't just take our word for it. Here's what our customers say.</p>
+            </div>
+            
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"I landed my dream job at a top design agency within a month of launching my new portfolio. The hiring manager specifically mentioned how my portfolio stood out."</p>
+                    <p class="testimonial-author">Jessica L.</p>
+                    <p class="testimonial-role">Graphic Designer</p>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"My client inquiries tripled after switching to a professional portfolio. The project showcase templates make it easy to highlight my best work."</p>
+                    <p class="testimonial-author">Marcus T.</p>
+                    <p class="testimonial-role">Photographer</p>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"As a freelance developer, my portfolio has become my most powerful marketing tool. The clean, professional design builds trust with potential clients."</p>
+                    <p class="testimonial-author">David R.</p>
+                    <p class="testimonial-role">Web Developer</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="faq">
+        <div class="container">
+            <div class="section-title">
+                <h2>Frequently Asked Questions</h2>
+                <p>Everything you need to know about our portfolio templates.</p>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Do I need coding skills to use these templates?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>No coding skills required! Our templates come with simple editable files where you just replace the placeholder content with your information. The templates handle all the design and layout automatically.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How do I add my projects to the portfolio?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Each template includes detailed instructions for adding projects. Typically you'll:</p>
+                    <ol>
+                        <li>Add your project images to the assets folder</li>
+                        <li>Edit the projects.json file (or similar) with your project details</li>
+                        <li>Optionally write case studies in the provided markdown files</li>
+                    </ol>
+                    <p>No technical knowledge is needed - just follow the step-by-step guide included with your template.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can I customize the colors and fonts?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Absolutely! You can personalize your portfolio by editing the <code>style.css</code> file included with your template. Simply:</p>
+                    <ol>
+                        <li>Open <code>style.css</code> in any text editor</li>
+                        <li>Modify the color variables (like <code>--primary-color</code>) and font properties</li>
+                        <li>Save your changes and refresh your portfolio page</li>
+                    </ol>
+                    <p>For advanced customization, you can edit any CSS rules in the file. No coding experience is needed for basic changes - just follow the clear comments we've included.</p>
+                    <p><strong>Example customization:</strong></p>
+                    <pre>/* ======== Customize These Values ======== */
+:root {
+  --primary-color: #3a86ff;  /* Change main accent color */
+  --text-color: #2b2d42;     /* Change text color */
+  --font-main: 'Segoe UI', sans-serif; /* Change font */
+}</pre>
+                    <p>All templates include detailed instructions in the <code>Template_Guide.markdown</code> file for common customizations.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What's included in the download?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>You'll receive a ZIP file containing:</p>
+                    <ul>
+                        <li>All HTML, CSS, and JavaScript files</li>
+                        <li>Project template files</li>
+                        <li>Image placeholder assets</li>
+                        <li>Detailed setup instructions</li>
+                        <li>Customization guide</li>
+                        <li>Tips for optimizing your portfolio</li>
+                        <li>Free updates for one year</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How do I host my portfolio?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>We provide detailed instructions for free hosting options like:</p>
+                    <ul>
+                        <li>GitHub Pages (simple and free)</li>
+                        <li>Netlify (with continuous deployment)</li>
+                        <li>Vercel (great performance)</li>
+                    </ul>
+                    <p>You can also host on any standard web hosting service. No special server requirements needed - these are static websites that work anywhere.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Showcase Your Work Professionally?</h2>
+            <p>Join thousands of creatives who've transformed their online presence with our premium portfolio templates.</p>
+            <a href="#templates" class="cta-button" style="background-color: white; color: #764ba2;">Browse Templates</a>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>ResumePro</h3>
+                    <p>Professional templates designed to showcase your work and attract clients.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Templates</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Creative Showcase</a></li>
+                        <li><a href="#">Minimal Professional</a></li>
+                        <li><a href="#">Photography Focus</a></li>
+                        <li><a href="#">All Templates</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="help.html#edit">How to Edit</a></li>
+                        <li><a href="help.html#hosting">Hosting Guide</a></li>
+                        <li><a href="help.html#tips">Portfolio Tips</a></li>
+                        <li><a href="guide.html">Getting Started</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+     <!-- Modal for template preview -->
+    <div class="modal" id="previewModal">
+        <div class="modal-content" id="modalContent">
+            <div class="modal-header">
+                <div class="modal-title">Template Preview</div>
+                <div class="modal-actions">
+                    <button class="modal-btn" id="fullscreenToggle" title="Toggle Fullscreen">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                        </svg>
+                    </button>
+                    <button class="modal-btn close-modal" title="Close">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="view-options">
+                <button class="view-btn active" data-view="desktop">Desktop View</button>
+                <button class="view-btn" data-view="mobile">Mobile View</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-iframe-container">
+                    <iframe class="modal-iframe desktop-view" frameborder="0"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+
+<script src="clean-urls.js"></script>
+
+    <script>
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            if (hamburger) {
+                hamburger.addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.toggle('active');
+                });
+            }
+            
+            // Toggle dropdown on mobile
+            document.querySelectorAll('.dropdown .nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const dropdown = link.closest('.dropdown');
+                    dropdown.classList.toggle('active');
+                });
+            });
+            
+            // Close menu when clicking a non-dropdown nav link or dropdown item
+            document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
+                link.addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.remove('active');
+                    document.querySelectorAll('.dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                });
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.dropdown') && !e.target.closest('.hamburger')) {
+                    document.querySelectorAll('.dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

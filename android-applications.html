@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Android Applications | ResumePro Developer</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <style>
+        :root {
+            --primary: #3a86ff;
+            --primary-dark: #2667cc;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --android-green: #3ddc84;
+            --android-dark: #0f9d58;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f7;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        /* Android Apps Hero Section */
+        .android-hero {
+            background: linear-gradient(135deg, #0f9d58 0%, #1e8e3e 100%);
+            color: white;
+            text-align: center;
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+        }
+
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 1.5em;
+        }
+        
+        .nav-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-item {
+            position: relative;
+            margin-left: 1.5rem;
+        }
+        
+        .nav-link {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 1;
+            top: 100%;
+            left: 0;
+            padding: 0.5rem 0;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .dropdown-item {
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            display: block;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: var(--primary);
+        }
+        
+        .dropdown-icon {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .dropdown:hover .dropdown-icon {
+            transform: rotate(180deg);
+        }
+        
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--dark);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .nav-menu.active {
+            display: flex;
+        }
+
+        
+        .android-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .android-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            padding: 20px;
+        }
+        
+        .android-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* App Showcase Section */
+        .apps-showcase {
+            padding: 4rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .app-card-detailed {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+        
+        .app-card-detailed:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        
+        .app-header-detailed {
+            background: linear-gradient(135deg, #3a86ff 0%, #2667cc 100%);
+            color: white;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .app-icon-large {
+            font-size: 3.5rem;
+            background: rgba(255,255,255,0.1);
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .app-title-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .app-status-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .app-body-detailed {
+            padding: 2rem;
+        }
+        
+        .app-description-detailed {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+        
+        .features-section h3,
+        .tech-stack-section h3 {
+            color: var(--dark);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.3rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .feature-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .feature-item strong {
+            color: var(--dark);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        
+        .feature-item p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 1rem 0;
+        }
+        
+        .tech-tag {
+            background: #e3f2fd;
+            color: #0d47a1;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .app-links-detailed {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+            flex-wrap: wrap;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .play-store-btn {
+            background: var(--android-green);
+            color: #000;
+        }
+        
+        .privacy-btn {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .privacy-btn:hover {
+            background: #f0f8ff;
+        }
+        
+        /* Development Updates Section */
+        .updates-section {
+            padding: 4rem 1rem;
+            background-color: #f8f9fa;
+            margin-top: 2rem;
+        }
+        
+        .updates-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        
+        .section-title p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .updates-timeline {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .update-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--android-green);
+            position: relative;
+        }
+        
+        .update-date {
+            color: var(--android-dark);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .update-date::before {
+            content: "📅";
+            font-size: 1.1rem;
+        }
+        
+        /* Developer Info Section */
+        .developer-info {
+            padding: 4rem 1rem;
+            text-align: center;
+            background: white;
+        }
+        
+        .developer-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .developer-info h2 {
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+        
+        .developer-info p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .developer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .secondary-button {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .secondary-button:hover {
+            background-color: #f8f9fa;
+        }
+        
+        /* CTA Section */
+        .cta-section-android {
+            padding: 5rem 1rem;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .cta-section-android h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-section-android p {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        /* Footer Styles */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 1rem 1.5rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #adb5bd;
+            font-size: 0.9rem;
+            max-width: 1200px;
+            margin: 2rem auto 0;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+
+            .header-content {
+                flex-direction: row;
+                padding: 1rem;
+                align-items: center;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .nav-container {
+                width: auto;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                padding: 1rem;
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .nav-item {
+                margin-left: 0;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .nav-link {
+                padding: 0.5rem 0;
+                font-size: 1rem;
+            }
+            
+            .dropdown-content {
+                display: none;
+                position: static;
+                width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+                background-color: #f8f9fa;
+                padding-left: 1rem;
+            }
+            
+            .dropdown.active .dropdown-content {
+                display: block;
+            }
+            
+            .dropdown-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.95rem;
+            }
+            
+            .android-hero {
+                padding: 7rem 1rem 3rem;
+            }
+            
+            .android-hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .android-hero p {
+                font-size: 1rem;
+                padding: 0;
+            }
+            
+            .app-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .app-header-detailed {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .app-links-detailed {
+                flex-direction: column;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .developer-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+        
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation">☰</button>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Templates
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="resume-templates.html" class="dropdown-item">Resume Templates</a>
+                        <a href="portfolio-templates.html" class="dropdown-item">Portfolio Templates</a>
+                    </div>
+                </li>
+                
+                <!-- NEW: My Apps Menu Item -->
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        My Apps
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="android-applications.html" class="dropdown-item">Android Applications</a>
+                        <a href="family-connection-tools.html" class="dropdown-item">Web Applications</a>
+                      </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Blog
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="portfolio-best-practices.html" class="dropdown-item">Portfolio Best Practices</a>
+                        <a href="portfolio-maintenance.html" class="dropdown-item">Portfolio Maintenance</a>
+                        <a href="online-job-sites.html" class="dropdown-item">Legit Online Job Sites</a>
+                        <a href="email-marketing" class="dropdown-item">Unlocking Email Marketing Success</a>
+                        <a href="mobile-optimization.html" class="dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
+                        <a href="email-list-failure.html" class="dropdown-item">Why Your Email List Might Be Failing</a> 
+                        <a href="email-builder-previews.html" class="dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
+                        <a href="why-less-is-more.html" class="dropdown-item">The Power of Focused Email Design</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="klaviyo-analytics.html" class="nav-link">Klaviyo Analytics</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Productivity Tools
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="email-builder" class="dropdown-item">Email Builder</a>
+                        <a href="https://resumepro.pages.dev/enhanced-todo" class="dropdown-item">Enhanced To-Do & Notes</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+
+    <!-- Header will be loaded dynamically -->
+    
+    <div id="header-placeholder">
+        <noscript>Please enable JavaScript to view the navigation menu.</noscript>
+    </div>
+    <main class="container">
+    <!-- Android Apps Hero Section -->
+    <!-- Update the android-hero section description -->
+<section class="android-hero">
+    <div class="android-icon">🤖</div>
+    <h1>Android Applications</h1>
+    <p><strong>Voice-First Development:</strong> Building mobile applications with voice as the primary input method. 
+       Specialized in creating apps where you don't need to type - just speak to get things done!</p>
+    
+    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
+        <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">🎤 Voice Recognition</span>
+        <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">📝 No-Typing Notes</span>
+        <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">⏰ Smart Reminders</span>
+        <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">🗄️ Local Storage</span>
+    </div>
+</section>
+    
+    <!-- Apps Showcase Section -->
+    <section class="apps-showcase">
+        <div class="section-title">
+            <h2>Featured Android Applications</h2>
+            <p>Voice-powered apps with proven implementation - ready for Play Store deployment</p>
+        </div>
+        
+        <!-- VoiceRide App -->
+        <div class="app-grid">
+            <!-- Replace the existing app cards section in android-applications.html with this: -->
+
+<!-- VoiceRide App (unchanged) -->
+<div class="app-card-detailed">
+    <!-- REPLACE the entire VoiceRide app card in android-applications.html with this: -->
+
+<div class="app-card-detailed">
+    <div class="app-header-detailed" style="background: linear-gradient(135deg, #2196F3 0%, #0D47A1 100%);">
+        <div class="app-icon-large">🚗🎤</div>
+        <div class="app-title-section">
+            <h2>VoiceRide Driving Assistant</h2>
+            <p>Complete hands-free voice control for driving & mobile tasks</p>
+            <span class="app-status-badge">✅ Fully Functional</span>
+        </div>
+    </div>
+    
+    <div class="app-body-detailed">
+        <p class="app-description-detailed">
+            <strong>Core Innovation:</strong> No touch required while driving! VoiceRide processes natural language commands 
+            to control apps, navigation, media, and device functions. The app uses advanced intent handling and 
+            Text-to-Speech feedback to create a completely hands-free mobile experience.
+        </p>
+        
+        <div class="features-section">
+            <h3>🎯 Implemented Voice Commands</h3>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <strong>📱 App Launcher</strong>
+                    <p>Voice open any installed app: "Open Facebook", "Launch YouTube", "Start Spotify"</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🗺️ Navigation</strong>
+                    <p>Voice navigation: "Navigate to [destination]", "Directions to [place]"</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🎵 Media Control</strong>
+                    <p>Volume control: "Volume up", "Volume down", "Max volume", "Mute"</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🔧 Device Functions</strong>
+                    <p>"Open camera", "Open settings", "Open phone", "Calculator", "Clock"</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🌐 Web Search</strong>
+                    <p>Voice search: "Search [query]", integrated with browser</p>
+                </div>
+                <div class="feature-item">
+                    <strong>⏰ Time & Date</strong>
+                    <p>"What time is it?", "What's the date today?"</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="features-section">
+            <h3>✅ Supported Apps (From Your Code)</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 15px;">
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Facebook</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">WhatsApp</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Instagram</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">YouTube</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Spotify</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Google Maps</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Chrome</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Gmail</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Netflix</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Disney+</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Telegram</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Twitter/X</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Shopee</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Lazada</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Gojek</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Grab</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">PUBG Mobile</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Free Fire</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">COD Mobile</span>
+                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">+30 more apps</span>
+            </div>
+        </div>
+        
+        <div class="tech-stack-section">
+            <h3>🔧 Technology Implementation</h3>
+            <div class="tech-stack">
+                <span class="tech-tag">Android Service</span>
+                <span class="tech-tag">TextToSpeech API</span>
+                <span class="tech-tag">SpeechRecognizer</span>
+                <span class="tech-tag">AudioManager</span>
+                <span class="tech-tag">PackageManager</span>
+                <span class="tech-tag">Intent System</span>
+                <span class="tech-tag">BroadcastReceiver</span>
+                <span class="tech-tag">Natural Language Processing</span>
+                <span class="tech-tag">App Discovery</span>
+                <span class="tech-tag">Error Handling</span>
+                <span class="tech-tag">Locale Support</span>
+                <span class="tech-tag">Kotlin Coroutines</span>
+            </div>
+        </div>
+        
+        <div class="features-section">
+            <h3>🛡️ Safety & Design Features</h3>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <strong>✅ Safe Commands Only</strong>
+                    <p>Excluded dangerous commands (power off, lock screen, restart)</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🔊 Voice Feedback</strong>
+                    <p>Real-time voice confirmation for every action</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🌍 Multi-Language</strong>
+                    <p>Locale-based TextToSpeech with fallback handling</p>
+                </div>
+                <div class="feature-item">
+                    <strong>⚡ Background Service</strong>
+                    <p>Runs as foreground service for reliability</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🎯 Smart App Detection</strong>
+                    <p>Multiple fallback strategies for app launching</p>
+                </div>
+                <div class="feature-item">
+                    <strong>📝 Logging System</strong>
+                    <p>Comprehensive logging for debugging</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="app-links-detailed">
+            <a href="#" class="cta-button play-store-btn" style="cursor: pointer; background: #2196F3;">
+                📱 APK Available for Testing
+            </a>
+            <a href="https://voiceride.pages.dev/privacy_policy" 
+               target="_blank" 
+               class="cta-button privacy-btn">
+                📄 Privacy Policy
+            </a>
+            <span style="color: #666; font-size: 0.9rem; margin-left: 10px;">
+                Ready for Play Store submission
+            </span>
+        </div>
+        
+        <div style="background: #F5F5F5; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #4CAF50;">
+            <p style="margin: 0; font-size: 0.95rem; color: #333;">
+                <strong>🎤 Voice Command Examples:</strong> 
+                "Open Google Maps", "Navigate to nearest gas station", "Volume up", 
+                "What time is it?", "Search restaurants nearby", "Open Spotify", 
+                "Launch YouTube", "Open camera"
+            </p>
+        </div>
+    </div>
+</div>
+<!-- UPDATED: Notes & Reminder App with actual implemented features -->
+<div class="app-card-detailed">
+    <div class="app-header-detailed" style="background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);">
+        <div class="app-icon-large">📝</div>
+        <div class="app-title-section">
+            <h2>Notes & Reminder App</h2>
+            <p>Voice-powered notes with smart reminders</p>
+            <span class="app-status-badge">✅ Fully Implemented</span>
+        </div>
+    </div>
+    
+    <div class="app-body-detailed">
+        <p class="app-description-detailed">
+            <strong>Special Feature:</strong> Voice-first note creation - no typing required! 
+            A fully functional productivity app that lets you create notes and reminders using voice commands. 
+            Speak to create notes, set reminders hands-free, and manage tasks with smart notifications.
+        </p>
+        
+        <div class="features-section">
+            <h3>✅ Implemented Features</h3>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <strong>🎤 Voice-to-Text Notes</strong>
+                    <p>Create notes by speaking - no typing required</p>
+                </div>
+                <div class="feature-item">
+                    <strong>⏰ Smart Reminders</strong>
+                    <p>Set reminders with Android AlarmManager</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🗂️ Local Database</strong>
+                    <p>Room database for offline storage</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🔔 Custom Notifications</strong>
+                    <p>Notification channels with priority settings</p>
+                </div>
+                <div class="feature-item">
+                    <strong>↔️ Swipe to Delete</strong>
+                    <p>Intuitive swipe gestures with undo option</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🎨 Material Design</strong>
+                    <p>Modern UI with dark/light theme support</p>
+                </div>
+                <div class="feature-item">
+                    <strong>📋 Category Organization</strong>
+                    <p>Organize notes by categories and tags</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🔍 Search & Filter</strong>
+                    <p>Quick search through all notes</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tech-stack-section">
+            <h3>Technology Stack (Used in Code)</h3>
+            <div class="tech-stack">
+                <span class="tech-tag">Kotlin</span>
+                <span class="tech-tag">Android Jetpack</span>
+                <span class="tech-tag">Room Database</span>
+                <span class="tech-tag">ViewModel</span>
+                <span class="tech-tag">LiveData</span>
+                <span class="tech-tag">AlarmManager</span>
+                <span class="tech-tag">WorkManager</span>
+                <span class="tech-tag">RecyclerView</span>
+                <span class="tech-tag">Material Components</span>
+                <span class="tech-tag">Notifications API</span>
+                <span class="tech-tag">ViewBinding</span>
+                <span class="tech-tag">Swipe Gestures</span>
+            </div>
+        </div>
+        
+        <div class="features-section">
+            <h3>🎯 Core Functionalities (From Your Code)</h3>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <strong>MainActivity</strong>
+                    <p>• Swipe-to-delete with undo<br>• Toolbar with menu options<br>• FAB for quick note creation</p>
+                </div>
+                <div class="feature-item">
+                    <strong>Database Layer</strong>
+                    <p>• Room entities with relations<br>• DAO with CRUD operations<br>• Type converters for dates</p>
+                </div>
+                <div class="feature-item">
+                    <strong>Reminder System</strong>
+                    <p>• AlarmManager scheduling<br>• PendingIntent broadcasts<br>• Notification channels</p>
+                </div>
+                <div class="feature-item">
+                    <strong>UI Components</strong>
+                    <p>• Create/Edit/View activities<br>• RecyclerView with adapters<br>• Custom swipe animations</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="app-links-detailed">
+            <a href="#" class="cta-button" style="background: #4CAF50; cursor: pointer;">
+                ✅ Ready for Play Store
+            </a>
+            <span style="color: #666; font-size: 0.9rem; margin-left: 10px;">
+                APK available for testing
+            </span>
+        </div>
+    </div>
+</div>
+        </div>
+    </section>
+    
+    <!-- Development Updates Section -->
+    <section class="updates-section">
+        <div class="updates-container">
+            <div class="section-title">
+                <h2>Development Updates</h2>
+                <p>Latest progress and milestones in Android app development</p>
+            </div>
+            
+            <div class="updates-timeline">
+                <div class="update-item">
+                    <div class="update-date">Current Focus - December 2025</div>
+                    <p>Preparing both apps for Google Play Store submission. Finalizing store listing requirements, creating screenshots and promotional materials, completing privacy policy compliance, and conducting final testing phases.</p>
+                </div>
+                
+                <div class="update-item">
+                    <div class="update-date">Completed - November 2025</div>
+                    <p>Completed core development of VoiceRide app with voice recognition features.</p>
+                </div>
+                
+                <div class="update-item">
+                    <div class="update-date">In Progress - October 2025</div>
+                    <p>Developing Notes & Reminder app with Room database implementation. Working on notification scheduling system and intuitive UI/UX design following Material Design guidelines.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Developer Info Section -->
+    <section class="developer-info">
+        <div class="developer-container">
+            <h2>About the Developer</h2>
+            <p>
+                Building useful applications across web and mobile platforms with a focus on clean design, 
+                reliable functionality, and solving real-world problems. Passionate about creating tools that 
+                enhance productivity and improve everyday experiences.
+            </p>
+            <p>
+                Currently developing Android applications while maintaining several web projects including 
+                ResumePro templates, productivity tools, and real-time communication applications.
+            </p>
+            
+            <div class="developer-links">
+                <a href="index.html" class="cta-button">Visit ResumePro</a>
+                <a href="contact.html" class="cta-button secondary-button">Contact</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta-section-android">
+        <h2>Interested in My Apps?</h2>
+        <p>Check out my web applications and other projects, or get in touch for app-related inquiries.</p>
+        <div class="cta-buttons">
+            <a href="https://family-connection-tools.pages.dev/" class="cta-button">View Web Applications</a>
+            <a href="contact.html" class="cta-button secondary-button">Contact Me</a>
+        </div>
+    </section>
+    </main>    
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>ResumePro</h3>
+                <p>Professional digital templates and developer projects.</p>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Projects</h3>
+                <ul class="footer-links">
+                    <li><a href="android-apps.html">Android Applications</a></li>
+                    <li><a href="web-apps.html">Web Applications</a></li>
+                    <li><a href="https://family-connection-tools.pages.dev/" target="_blank">Family Tools Suite</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="resume-templates.html">Resume Templates</a></li>
+                    <li><a href="portfolio-templates.html">Portfolio Templates</a></li>
+                    <li><a href="blog.html">Blog Articles</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Connect</h3>
+                <ul class="footer-links">
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2023 Adolf de Guzman. Android is a trademark of Google LLC.</p>
+        </div>
+    </footer>
+
+      <!-- Existing header fetch script (replace with your actual script or file) -->
+    
+    <script src="clean-urls.js"></script>
+
+    <script>
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            if (hamburger) {
+                hamburger.addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.toggle('active');
+                });
+            }
+            
+            // Toggle dropdown on mobile
+            document.querySelectorAll('.dropdown .nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const dropdown = link.closest('.dropdown');
+                    dropdown.classList.toggle('active');
+                });
+            });
+            
+            // Close menu when clicking a non-dropdown nav link or dropdown item
+            document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
+                link.addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.remove('active');
+                    document.querySelectorAll('.dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                });
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.dropdown') && !e.target.closest('.hamburger')) {
+                    document.querySelectorAll('.dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

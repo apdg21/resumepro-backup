@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced To-Do & Notes with Alarm | ResumePro Tools</title>
+    <style>
+        :root {
+            --primary-color: #6200ea;
+            --primary-dark: #3700b3;
+            --secondary-color: #03dac6;
+            --error-color: #b00020;
+            --surface-color: #ffffff;
+            --background-color: #f5f7f9;
+            --on-primary: #ffffff;
+            --on-surface: #000000;
+            --on-error: #ffffff;
+            --border-color: #e0e0e0;
+            --text-secondary: #5f6368;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: #333;
+            line-height: 1.6;
+            padding: 0;
+        }
+        
+        /* ResumePro Header Styles */
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #3a86ff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 1.5em;
+        }
+        
+        .nav-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-item {
+            position: relative;
+            margin-left: 1.5rem;
+        }
+        
+        .nav-link {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 1;
+            top: 100%;
+            left: 0;
+            padding: 0.5rem 0;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .dropdown-item {
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            display: block;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: var(--primary);
+        }
+        
+        .dropdown-icon {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .dropdown:hover .dropdown-icon {
+            transform: rotate(180deg);
+        }
+        
+        /* Hamburger Menu Styles */
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--dark);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .nav-menu.active {
+            display: flex;
+        }
+        
+        /* Storage Notice */
+        .storage-notice {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px 20px;
+            margin: 130px 0 10px auto;
+            max-width: 1200px;
+            border-radius: 4px;
+            animation: slideDown 0.5s ease;
+        }
+        
+        .storage-notice p {
+            margin: 0;
+            color: #856404;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* App Container */
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .app-header {
+            text-align: center;
+            padding: 25px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+        }
+        
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .app-description {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .tabs {
+            display: flex;
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 16px;
+            text-align: center;
+            background: white;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                padding: 1rem;
+            }
+            
+            .nav-menu {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+        }
+        
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(98, 0, 234, 0.1);
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        button {
+            padding: 12px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s, transform 0.2s;
+            font-size: 15px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .btn-delete {
+            background-color: var(--error-color);
+        }
+        
+        .btn-reminder {
+            background-color: #ff9800;
+        }
+        
+        .btn-test-sound {
+            background-color: #4caf50;
+            margin-top: 10px;
+        }
+        
+        .items-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .item {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            animation: fadeIn 0.3s;
+        }
+        
+        .item:last-child {
+            border-bottom: none;
+        }
+        
+        .item-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .item-text {
+            flex: 1;
+            margin-right: 15px;
+        }
+        
+        .item-title {
+            font-weight: 500;
+            margin: 0 0 5px;
+        }
+        
+        .item-details {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+        
+        .item-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .item-action-btn {
+            padding: 6px 10px;
+            font-size: 13px;
+            border-radius: 6px;
+        }
+        
+        .reminder-badge {
+            background-color: #ff9800;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            margin-left: 8px;
+            font-weight: 500;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4caf50;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: none;
+            animation: slideIn 0.3s;
+            max-width: 350px;
+        }
+        
+        .notification.error {
+            background-color: var(--error-color);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #9aa0a6;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        
+        .empty-state p {
+            margin: 0;
+            font-size: 15px;
+        }
+        
+        .sound-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 50px;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sound-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--primary-color);
+            padding: 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .sound-toggle:hover {
+            background-color: #f0e6ff;
+        }
+        
+        .volume-slider {
+            width: 80px;
+            margin: 0 5px;
+        }
+        
+        .sound-test-panel {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .sound-test-panel h3 {
+            margin-top: 0;
+            color: #2e7d32;
+            display: flex;
+            align-items: center;
+        }
+        
+        /* ResumePro Footer */
+        footer {
+            background-color: #2b2d42;
+            color: white;
+            padding: 3rem 1rem 1.5rem;
+            margin-top: 40px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #adb5bd;
+            font-size: 0.9rem;
+            max-width: 1200px;
+            margin: 2rem auto 0;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+            vertical-align: middle;
+        }
+      @media (max-width: 768px) {
+            .header-content {
+                flex-direction: row;
+                padding: 1rem;
+                align-items: center;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .nav-container {
+                width: auto;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                padding: 1rem;
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .nav-item {
+                margin-left: 0;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .nav-link {
+                padding: 0.5rem 0;
+                font-size: 1rem;
+            }
+            
+            .dropdown-content {
+                display: none;
+                position: static;
+                width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+                background-color: #f8f9fa;
+                padding-left: 1rem;
+            }
+            
+            .dropdown.active .dropdown-content {
+                display: block;
+            }
+            
+            .dropdown-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.95rem;
+            }
+            }
+    </style>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <!-- ResumePro Header -->
+    <!-- Header Placeholder -->
+    <div id="header-placeholder">
+        <noscript>Please enable JavaScript to view the navigation menu.</noscript>
+    </div>
+
+
+    <!-- Storage Notice -->
+    <div class="storage-notice">
+        <p>
+            <i class="material-icons">info</i>
+            <strong>Note:</strong> This web app stores all data locally in your browser. 
+            Your notes and tasks will persist between visits, but clearing browser data will delete them.
+            This is a client-side demo application.
+        </p>
+    </div>
+
+    <div class="notification" id="notification"></div>
+    
+    <!-- Sound controls -->
+    <div class="sound-controls">
+        <button class="sound-toggle" id="muteToggle" title="Toggle sound">
+            <i class="material-icons" id="volumeIcon">volume_up</i>
+        </button>
+        <input type="range" min="0" max="1" step="0.1" value="0.7" class="volume-slider" id="volumeSlider">
+    </div>
+    
+    <!-- Main App -->
+    <div class="app-container">
+        <div class="app-header">
+            <h1>Enhanced To-Do & Notes</h1>
+            <p class="app-description">Organize your tasks and notes with reminders and alarm sounds</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('tasks')">Tasks</button>
+            <button class="tab" onclick="showTab('notes')">Notes</button>
+            <button class="tab" onclick="showTab('reminders')">Reminders</button>
+        </div>
+        
+        <div class="tab-content active" id="tasks-tab">
+            <div class="main-content">
+                <div class="section">
+                    <h2 class="section-title"><i class="material-icons">add_task</i> Add New Task</h2>
+                    <div class="input-group">
+                        <input type="text" id="taskInput" placeholder="What do you need to do?">
+                    </div>
+                    <div class="input-group">
+                        <select id="taskStatus">
+                            <option value="To Do">To Do</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Finished">Finished</option>
+                        </select>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <input type="datetime-local" id="taskReminder">
+                        </div>
+                        <div class="input-group">
+                            <button class="btn-reminder" onclick="setReminder('task')">
+                                <i class="material-icons">notifications</i> Set Reminder
+                            </button>
+                        </div>
+                    </div>
+                    <button onclick="addTask()">
+                        <i class="material-icons">add</i> Add Task
+                    </button>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title"><i class="material-icons">format_list_bulleted</i> My Tasks</h2>
+                    <ul class="items-list" id="taskList"></ul>
+                    <div id="taskEmptyState" class="empty-state">
+                        <i class="material-icons">check_box</i>
+                        <p>No tasks yet. Add a task to get started!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="notes-tab">
+            <div class="main-content">
+                <div class="section">
+                    <h2 class="section-title"><i class="material-icons">note_add</i> Add New Note</h2>
+                    <div class="input-group">
+                        <input type="text" id="noteTitle" placeholder="Note title">
+                    </div>
+                    <div class="input-group">
+                        <textarea id="noteContent" placeholder="Write your note here..."></textarea>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <input type="datetime-local" id="noteReminder">
+                        </div>
+                        <div class="input-group">
+                            <button class="btn-reminder" onclick="setReminder('note')">
+                                <i class="material-icons">notifications</i> Set Reminder
+                            </button>
+                        </div>
+                    </div>
+                    <button onclick="addNote()">
+                        <i class="material-icons">add</i> Add Note
+                    </button>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title"><i class="material-icons">notes</i> My Notes</h2>
+                    <ul class="items-list" id="noteList"></ul>
+                    <div id="noteEmptyState" class="empty-state">
+                        <i class="material-icons">note</i>
+                        <p>No notes yet. Add a note to get started!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="reminders-tab">
+            <div class="sound-test-panel">
+                <h3><i class="material-icons">volume_up</i> Sound Test</h3>
+                <p>Test if your alarm sound is working properly. If you can't hear the test sound, check your browser's audio settings.</p>
+                <button class="btn-test-sound" onclick="testAlarmSound()">
+                    <i class="material-icons">play_arrow</i> Test Alarm Sound
+                </button>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title"><i class="material-icons">notifications</i> Upcoming Reminders</h2>
+                <ul class="items-list" id="remindersList"></ul>
+                <div id="reminderEmptyState" class="empty-state">
+                    <i class="material-icons">notifications_off</i>
+                    <p>No reminders set. Add reminders to your tasks or notes!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ResumePro Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>ResumePro</h3>
+                <p>Professional digital templates and developer projects.</p>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Projects</h3>
+                <ul class="footer-links">
+                    <li><a href="https://resumepro.pages.dev/android-applications.html">Android Applications</a></li>
+                    <li><a href="https://resumepro.pages.dev/web-apps.html">Web Applications</a></li>
+                    <li><a href="https://family-connection-tools.pages.dev/" target="_blank">Family Tools Suite</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="https://resumepro.pages.dev/resume-templates.html">Resume Templates</a></li>
+                    <li><a href="https://resumepro.pages.dev/portfolio-templates.html">Portfolio Templates</a></li>
+                    <li><a href="https://resumepro.pages.dev/blog.html">Blog Articles</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Connect</h3>
+                <ul class="footer-links">
+                    <li><a href="https://resumepro.pages.dev/about.html">About</a></li>
+                    <li><a href="https://resumepro.pages.dev/contact.html">Contact</a></li>
+                    <li><a href="https://resumepro.pages.dev/privacy.html">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2023 Adolf de Guzman. All rights reserved. Enhanced To-Do & Notes is a client-side web application.</p>
+        </div>
+    </footer>
+
+    <script>
+        // App state
+        let todos = JSON.parse(localStorage.getItem('todos')) || [];
+        let notes = JSON.parse(localStorage.getItem('notes')) || [];
+        let reminders = JSON.parse(localStorage.getItem('reminders')) || [];
+        let isSoundEnabled = true;
+        let alarmVolume = 0.7;
+        let audioContext = null;
+        
+        // Initialize the app
+        function init() {
+            renderTodos();
+            renderNotes();
+            renderReminders();
+            setupSoundControls();
+            startReminderChecker();
+            
+            // Check if there are any reminders that should have already triggered
+            checkPastReminders();
+        }
+        
+        // Set up sound controls
+        function setupSoundControls() {
+            const volumeSlider = document.getElementById('volumeSlider');
+            const muteToggle = document.getElementById('muteToggle');
+            const volumeIcon = document.getElementById('volumeIcon');
+            
+            // Set initial volume
+            alarmVolume = parseFloat(localStorage.getItem('alarmVolume')) || 0.7;
+            isSoundEnabled = localStorage.getItem('isSoundEnabled') !== 'false';
+            
+            volumeSlider.value = alarmVolume;
+            volumeIcon.textContent = isSoundEnabled ? 'volume_up' : 'volume_off';
+            
+            // Volume slider event
+            volumeSlider.addEventListener('input', function() {
+                alarmVolume = parseFloat(this.value);
+                localStorage.setItem('alarmVolume', alarmVolume);
+                
+                // Update mute state based on volume
+                if (alarmVolume === 0) {
+                    isSoundEnabled = false;
+                    volumeIcon.textContent = 'volume_off';
+                    localStorage.setItem('isSoundEnabled', 'false');
+                } else {
+                    isSoundEnabled = true;
+                    volumeIcon.textContent = 'volume_up';
+                    localStorage.setItem('isSoundEnabled', 'true');
+                }
+            });
+            
+            // Mute toggle event
+            muteToggle.addEventListener('click', function() {
+                isSoundEnabled = !isSoundEnabled;
+                localStorage.setItem('isSoundEnabled', isSoundEnabled.toString());
+                
+                if (isSoundEnabled) {
+                    volumeIcon.textContent = 'volume_up';
+                    volumeSlider.value = alarmVolume;
+                } else {
+                    volumeIcon.textContent = 'volume_off';
+                    volumeSlider.value = 0;
+                }
+            });
+        }
+        
+        // Create alarm sound using Web Audio API
+        function createAlarmSound() {
+            try {
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
+                oscillator.frequency.setValueAtTime(1046.5, audioContext.currentTime + 0.1);
+                oscillator.frequency.setValueAtTime(1318.5, audioContext.currentTime + 0.2);
+                
+                gainNode.gain.setValueAtTime(alarmVolume, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 1.5);
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 1.5);
+                
+                return true;
+            } catch (error) {
+                console.error('Web Audio API error:', error);
+                return false;
+            }
+        }
+        
+        // Play alarm sound with multiple fallbacks
+        function playAlarmSound() {
+            if (!isSoundEnabled) return;
+            
+            // Try Web Audio API first
+            if (createAlarmSound()) {
+                return;
+            }
+            
+            // Fallback to HTML5 audio with base64 encoded sound
+            try {
+                const audio = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbVtfdJivrJBhNjVgodDbq2EcBStztvLJfjUADF2h2/LDciwACVOW0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay0AClKU0+vAay极简的警报声，适合提醒功能");
+                audio.volume = alarmVolume;
+                audio.play().catch(error => {
+                    console.error('HTML5 audio error:', error);
+                    // Final fallback - use browser's speech synthesis
+                    speakAlarm();
+                });
+            } catch (error) {
+                console.error('Audio fallback error:', error);
+                // Final fallback - use browser's speech synthesis
+                speakAlarm();
+            }
+        }
+        
+        // Final fallback - use speech synthesis
+        function speakAlarm() {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance('Reminder! Check your tasks!');
+                utterance.volume = alarmVolume;
+                speechSynthesis.speak(utterance);
+            }
+        }
+        
+        // Test the alarm sound
+        function testAlarmSound() {
+            showNotification('Testing alarm sound...');
+            playAlarmSound();
+        }
+        
+        // Check for reminders that should have triggered
+        function checkPastReminders() {
+            const now = new Date();
+            
+            todos.forEach(todo => {
+                if (todo.reminder && new Date(todo.reminder) < now && !todo.reminderTriggered) {
+                    // This reminder should have already triggered
+                    showNotification(`Reminder: ${todo.title}`, 'error');
+                    playAlarmSound();
+                    todo.reminderTriggered = true;
+                }
+            });
+            
+            saveTodos();
+        }
+        
+        // Start the reminder checker interval
+        function startReminderChecker() {
+            setInterval(() => {
+                const now = new Date();
+                
+                todos.forEach(todo => {
+                    if (todo.reminder && !todo.reminderTriggered) {
+                        const reminderTime = new Date(todo.reminder);
+                        
+                        if (reminderTime <= now) {
+                            // Trigger the reminder
+                            showNotification(`Reminder: ${todo.title}`, 'error');
+                            playAlarmSound();
+                            todo.reminderTriggered = true;
+                            saveTodos();
+                        }
+                    }
+                });
+            }, 5000); // Check every 5 seconds
+        }
+        
+        // Show a specific tab
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            // Update active tab button
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            event.currentTarget.classList.add('active');
+            
+            if (tabName === 'reminders') {
+                renderReminders();
+            }
+        }
+        
+        // Set a reminder
+        function setReminder(type) {
+            const reminderInput = document.getElementById(`${type}Reminder`);
+            const reminderValue = reminderInput.value;
+            
+            if (!reminderValue) {
+                showNotification('Please select a date and time for the reminder', 'error');
+                return;
+            }
+            
+            showNotification('Reminder set successfully!');
+        }
+        
+        // Add a new task
+        function addTask() {
+            const taskInput = document.getElementById('taskInput');
+            const taskStatus = document.getElementById('taskStatus');
+            const taskReminder = document.getElementById('taskReminder');
+            const taskText = taskInput.value.trim();
+            
+            if (taskText === '') {
+                showNotification('Please enter a task!', 'error');
+                return;
+            }
+
+            const task = {
+                id: Date.now(),
+                title: taskText,
+                text: taskText,
+                status: taskStatus.value,
+                created: new Date().toISOString(),
+                reminder: taskReminder.value || null,
+                reminderTriggered: false
+            };
+
+            todos.push(task);
+            saveTodos();
+            renderTodos();
+            
+            taskInput.value = '';
+            taskReminder.value = '';
+            
+            showNotification('Task added successfully!');
+        }
+        
+        // Add a new note
+        function addNote() {
+            const noteTitle = document.getElementById('noteTitle');
+            const noteContent = document.getElementById('noteContent');
+            const noteReminder = document.getElementById('noteReminder');
+            const noteTitleText = noteTitle.value.trim();
+            const noteContentText = noteContent.value.trim();
+            
+            if (noteTitleText === '' || noteContentText === '') {
+                showNotification('Please enter both title and content for your note!', 'error');
+                return;
+            }
+
+            const note = {
+                id: Date.now(),
+                title: noteTitleText,
+                content: noteContentText,
+                created: new Date().toISOString(),
+                reminder: noteReminder.value || null,
+                reminderTriggered: false
+            };
+
+            notes.push(note);
+            saveNotes();
+            renderNotes();
+            
+            noteTitle.value = '';
+            noteContent.value = '';
+            noteReminder.value = '';
+            
+            showNotification('Note added successfully!');
+        }
+        
+        // Render todos
+        function renderTodos() {
+            const taskList = document.getElementById('taskList');
+            const emptyState = document.getElementById('taskEmptyState');
+            
+            if (todos.length === 0) {
+                emptyState.style.display = 'block';
+                taskList.innerHTML = '';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            taskList.innerHTML = '';
+            
+            todos.forEach(todo => {
+                const li = document.createElement('li');
+                li.className = 'item';
+                if (todo.reminder && !todo.reminderTriggered) {
+                    li.classList.add('reminder-item');
+                }
+                
+                li.innerHTML = `
+                    <div class="item-content">
+                        <div class="item-text">
+                            <h3 class="item-title">${todo.text}</h3>
+                            <div class="item-details">
+                                <span>Status: ${todo.status}</span>
+                                <span>Created: ${formatDate(todo.created)}</span>
+                                ${todo.reminder ? `<span class="reminder-badge">Reminder: ${formatDateTime(todo.reminder)}</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="item-action-btn btn-delete" onclick="deleteTodo(${todo.id})">
+                                <i class="material-icons">delete</i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                taskList.appendChild(li);
+            });
+        }
+        
+        // Render notes
+        function renderNotes() {
+            const noteList = document.getElementById('noteList');
+            const emptyState = document.getElementById('noteEmptyState');
+            
+            if (notes.length === 0) {
+                emptyState.style.display = 'block';
+                noteList.innerHTML = '';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            noteList.innerHTML = '';
+            
+            notes.forEach(note => {
+                const li = document.createElement('li');
+                li.className = 'item';
+                if (note.reminder && !note.reminderTriggered) {
+                    li.classList.add('reminder-item');
+                }
+                
+                li.innerHTML = `
+                    <div class="item-content">
+                        <div class="item-text">
+                            <h3 class="item-title">${note.title}</h3>
+                            <div class="item-details">
+                                <span>Created: ${formatDate(note.created)}</span>
+                                ${note.reminder ? `<span class="reminder-badge">Reminder: ${formatDateTime(note.reminder)}</span>` : ''}
+                            </div>
+                            <p>${note.content}</p>
+                        </div>
+                        <div class="item-actions">
+                            <button class="item-action-btn btn-delete" onclick="deleteNote(${note.id})">
+                                <i class="material-icons">delete</i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                noteList.appendChild(li);
+            });
+        }
+        
+        // Render reminders
+        function renderReminders() {
+            const remindersList = document.getElementById('remindersList');
+            const emptyState = document.getElementById('reminderEmptyState');
+            
+            const allReminders = [
+                ...todos.filter(todo => todo.reminder && !todo.reminderTriggered).map(todo => ({
+                    type: 'task',
+                    title: todo.text,
+                    datetime: todo.reminder
+                })),
+                ...notes.filter(note => note.reminder && !note.reminderTriggered).map(note => ({
+                    type: 'note',
+                    title: note.title,
+                    datetime: note.reminder
+                }))
+            ];
+            
+            if (allReminders.length === 0) {
+                emptyState.style.display = 'block';
+                remindersList.innerHTML = '';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            remindersList.innerHTML = '';
+            
+            // Sort by date
+            allReminders.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
+            
+            allReminders.forEach(reminder => {
+                const li = document.createElement('li');
+                li.className = 'item reminder-item';
+                
+                li.innerHTML = `
+                    <div class="item-content">
+                        <div class="item-text">
+                            <h3 class="item-title">${reminder.title}</h3>
+                            <div class="item-details">
+                                <span>Type: ${reminder.type}</span>
+                                <span>Due: ${formatDateTime(reminder.datetime)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                remindersList.appendChild(li);
+            });
+        }
+        
+        // Delete a todo
+        function deleteTodo(id) {
+            todos = todos.filter(todo => todo.id !== id);
+            saveTodos();
+            renderTodos();
+            showNotification('Task deleted');
+        }
+        
+        // Delete a note
+        function deleteNote(id) {
+            notes = notes.filter(note => note.id !== id);
+            saveNotes();
+            renderNotes();
+            showNotification('Note deleted');
+        }
+        
+        // Save todos to localStorage
+        function saveTodos() {
+            localStorage.setItem('todos', JSON.stringify(todos));
+        }
+        
+        // Save notes to localStorage
+        function saveNotes() {
+            localStorage.setItem('notes', JSON.stringify(notes));
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification';
+            if (type === 'error') {
+                notification.classList.add('error');
+            }
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Format date
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+        
+        // Format date and time
+        function formatDateTime(dateTime) {
+            const options = { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit', 
+                minute: '2-digit'
+            };
+            return new Date(dateTime).toLocaleDateString(undefined, options);
+        }
+        
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+    <script>
+        // Hamburger menu toggle
+        document.querySelector('.hamburger').addEventListener('click', () => {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+
+        // Toggle dropdown on mobile
+        document.querySelectorAll('.dropdown .nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                // Prevent default link behavior
+                e.preventDefault();
+                // Toggle active class on parent dropdown
+                const dropdown = link.closest('.dropdown');
+                dropdown.classList.toggle('active');
+            });
+        });
+
+        // Close menu when clicking a non-dropdown nav link or dropdown item
+        document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-menu').classList.remove('active');
+                // Remove active class from all dropdowns
+                document.querySelectorAll('.dropdown').forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
+            });
+        });
+    </script>
+    <script>
+        // Load header dynamically
+        fetch('header.html')
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to load header');
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+                
+                // Re-attach event listeners for hamburger menu and dropdowns
+                document.querySelector('.hamburger').addEventListener('click', () => {
+                    document.querySelector('.nav-menu').classList.toggle('active');
+                });
+
+                document.querySelectorAll('.dropdown .nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const dropdown = link.closest('.dropdown');
+                        dropdown.classList.toggle('active');
+                    });
+                });
+
+                document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
+                    link.addEventListener('click', () => {
+                        document.querySelector('.nav-menu').classList.remove('active');
+                        document.querySelectorAll('.dropdown').forEach(dropdown => {
+                            dropdown.classList.remove('active');
+                        });
+                    });
+                });
+            })
+            .catch(error => console.error('Error loading header:', error));
+    </script>
+
+</body>
+</html>

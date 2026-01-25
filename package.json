@@ -1,5 +1,4 @@
 {
-  "name": "resumepro",
   "scripts": {
     "build": "eleventy",
     "dev": "eleventy --serve",
@@ -7,9 +6,11 @@
     "clean:dev": "npm run clean && npm run dev",
     "clean:build": "npm run clean && npm run build",
     "preview": "npm run clean:build && npx serve public/",
-    "deploy": "npm run clean:build && git add public/ && git commit -m 'Deploy update' && git push origin main"
+    
+    "deploy": "npm run clean:build && npx gh-pages -d public"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^2.0.1"
+    "@11ty/eleventy": "^2.0.1",
+    "gh-pages": "^6.0.0"
   }
 }

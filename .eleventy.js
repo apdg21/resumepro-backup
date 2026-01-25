@@ -24,7 +24,8 @@ module.exports = function(eleventyConfig) {
     dir: {
       input: "src",
       output: "public",
-      includes: "_includes",
+      includes: "_includes",  // This is correct
+      layouts: "_includes/layouts",  // ADD THIS LINE!
       data: "_data"
     },
     htmlTemplateEngine: "liquid",

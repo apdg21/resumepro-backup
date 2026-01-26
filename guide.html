@@ -18,14 +18,12 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-          }
-        
-        /* Enhanced Header with Dropdown */
+          }/* Header Styles */
         header {
             background-color: white;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 1.5rem 0;
-            position: sticky;
+            padding: 1rem 0;
+            position: fixed;
             top: 0;
             z-index: 100;
             width: 100%;
@@ -34,7 +32,7 @@
         .header-content {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 0 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -62,7 +60,6 @@
         .nav-menu {
             display: flex;
             list-style: none;
-            margin-right: 2rem;
         }
         
         .nav-item {
@@ -127,6 +124,21 @@
             transform: rotate(180deg);
         }
         
+        /* Hamburger Menu Styles */
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--dark);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .nav-menu.active {
+            display: flex;
+        }
+        
         .cta-button {
             display: inline-block;
             background-color: var(--primary);
@@ -163,6 +175,7 @@
             text-align: center;
             margin: 2rem 0 3rem;
             padding-bottom: 20px;
+            margin-top: 100px;
         }
         
         .guide-header h1 {
@@ -352,20 +365,68 @@
         
         @media (max-width: 768px) {
             .header-content {
-                padding: 0 1rem;
+                flex-direction: row;
+                padding: 1rem;
+                align-items: center;
             }
             
-            body {
-                padding: 0px;
+            .logo {
+                font-size: 1.5rem;
             }
             
-            .guide-header h1 {
-                font-size: 2rem;
+            .nav-container {
+                width: auto;
             }
             
-            .guide-header p {
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                padding: 1rem;
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .nav-item {
+                margin-left: 0;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .nav-link {
+                padding: 0.5rem 0;
                 font-size: 1rem;
             }
+            
+            .dropdown-content {
+                position: static;
+                width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+                background-color: #f8f9fa;
+                padding-left: 1rem;
+            }
+            
+            .dropdown-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.95rem;
+            }
+             .dropdown-content {
+                left: auto;
+                right: 0;
+            }
+
             
             .section {
                 padding: 15px;
@@ -373,43 +434,7 @@
 	footer {         
             padding: 1rem 0 1.5rem !important;
         }
-          .header-content {
-                flex-direction: column;
-                padding: 0rem;
-            }
-            
-            .logo {
-                margin-bottom: 1rem;
-            }
-            
-            .nav-container {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .nav-menu {
-                margin-right: 0;
-            }
-            
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            
-            .template-types {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .dropdown-content {
-                left: auto;
-                right: 0;
-            }
-        }
+          }
     </style>
 </head>
 <body>
@@ -482,7 +507,7 @@
 </header>
 
 
-   
+    
     <div class="content-wrapper">
         <div class="section">
             <div class="guide-header">

@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumePro Help Center</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">	
+    <style>
+        :root {
+            --primary: #3a86ff;
+            --primary-dark: #2667cc;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --warning: #ffc107;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f7;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+         /* Enhanced Header with Dropdown */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 1.5em;
+        }
+        
+        .nav-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin-right: 2rem;
+        }
+        
+        .nav-item {
+            position: relative;
+            margin-left: 1.5rem;
+        }
+        
+        .nav-link {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 1;
+            top: 100%;
+            left: 0;
+            padding: 0.5rem 0;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .dropdown-item {
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            display: block;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: var(--primary);
+        }
+        
+        .dropdown-icon {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .dropdown:hover .dropdown-icon {
+            transform: rotate(180deg);
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Help Center Content */
+        .help-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title h1 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        
+        .page-title p {
+            color: var(--gray);
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .help-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .help-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .help-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-icon {
+            background-color: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            font-size: 2rem;
+            text-align: center;
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+        }
+        
+        .card-content h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .card-content p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .faq-section {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 3rem;
+        }
+        
+        .faq-section h2 {
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .faq-item {
+            margin-bottom: 1.5rem;
+        }
+        
+        .faq-question {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .faq-answer {
+            color: var(--gray);
+            padding-left: 1rem;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .contact-cta {
+            text-align: center;
+            padding: 3rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-radius: 8px;
+        }
+        
+        .contact-cta h2 {
+            margin-bottom: 1rem;
+        }
+        
+        .contact-cta p {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 10rem 1.5rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding: 10px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 1rem;
+            }
+            
+            .help-container {
+                padding: 0 1rem;
+            }
+            
+            .page-title h1 {
+                font-size: 2rem;
+            }
+            
+            .page-title p {
+                font-size: 1rem;
+            }
+		
+         footer {         
+            padding: 1rem 0 1.5rem !important;
+        }
+           .header-content {
+                flex-direction: column;
+                padding: 0rem;
+            }
+            
+            .logo {
+                margin-bottom: 1rem;
+            }
+            
+            .nav-container {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .nav-menu {
+                margin-right: 0;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .template-types {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .dropdown-content {
+                left: auto;
+                right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+     <!-- Enhanced Header with Dropdown -->
+    <header>
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+        
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation">☰</button>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Templates
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="resume-templates.html" class="dropdown-item">Resume Templates</a>
+                        <a href="portfolio-templates.html" class="dropdown-item">Portfolio Templates</a>
+                    </div>
+                </li>
+                
+                <!-- NEW: My Apps Menu Item -->
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        My Apps
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="android-applications.html" class="dropdown-item">Android Applications</a>
+                        <a href="family-connection-tools.html" class="dropdown-item">Web Applications</a>
+                      </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Blog
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="portfolio-best-practices.html" class="dropdown-item">Portfolio Best Practices</a>
+                        <a href="portfolio-maintenance.html" class="dropdown-item">Portfolio Maintenance</a>
+                        <a href="online-job-sites.html" class="dropdown-item">Legit Online Job Sites</a>
+                        <a href="email-marketing" class="dropdown-item">Unlocking Email Marketing Success</a>
+                        <a href="mobile-optimization.html" class="dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
+                        <a href="email-list-failure.html" class="dropdown-item">Why Your Email List Might Be Failing</a> 
+                        <a href="email-builder-previews.html" class="dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
+                        <a href="why-less-is-more.html" class="dropdown-item">The Power of Focused Email Design</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="klaviyo-analytics.html" class="nav-link">Klaviyo Analytics</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        Productivity Tools
+                        <span class="dropdown-icon">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="email-builder" class="dropdown-item">Email Builder</a>
+                        <a href="https://resumepro.pages.dev/enhanced-todo" class="dropdown-item">Enhanced To-Do & Notes</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+    
+    <div class="help-container">
+        <div class="page-title">
+            <h1>ResumePro Help Center</h1>
+            <p>Everything you need to create, customize, and deploy your professional digital resume</p>
+        </div>
+        
+        <div class="help-grid">
+            <div class="help-card">
+                <div class="card-icon">✏️</div>
+                <div class="card-content">
+                    <h3>Editing Your Resume</h3>
+                    <p>Learn how to customize your resume template with our easy-to-use form builder or by directly editing the JSON file.</p>
+                    <a href="#editing" class="btn">View Editing Guide</a>
+                </div>
+            </div>
+            
+            <div class="help-card">
+                <div class="card-icon">🌐</div>
+                <div class="card-content">
+                    <h3>Hosting Guide</h3>
+                    <p>Step-by-step instructions for deploying your resume to Netlify, GitHub Pages, and other hosting platforms.</p>
+                    <a href="#hosting" class="btn">View Hosting Options</a>
+                </div>
+            </div>
+            
+            <div class="help-card">
+                <div class="card-icon">💡</div>
+                <div class="card-content">
+                    <h3>Resume Tips</h3>
+                    <p>Professional advice for creating content that stands out to employers and recruiters.</p>
+                    <a href="#tips" class="btn">View Expert Tips</a>
+                </div>
+            </div>
+        </div>
+        
+       <div class="faq-section" id="editing">
+            <h2>✏️ Editing Your Resume</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">How do I edit my resume content?</div>
+                <div class="faq-answer">
+                    <p>Use the included <code>form.html</code> file to easily update your resume information through a user-friendly interface. The form will generate a properly formatted <code>data.json</code> file for you.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Can I edit the resume directly in the JSON file?</div>
+                <div class="faq-answer">
+                    <p>Yes! Advanced users can edit the <code>data.json</code> file directly. Make sure to maintain the proper JSON structure and validate your changes using <a href="https://jsonlint.com/" target="_blank">JSONLint</a>.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">How do I change the profile photo?</div>
+                <div class="faq-answer">
+                    <p>Replace the <code>assets/profile.jpg</code> file with your own photo (200x200 pixels recommended). Keep the filename exactly the same.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Can I customize the colors and fonts?</div>
+                <div class="faq-answer">
+                    <p>Absolutely! Edit the CSS variables in <code>style.css</code> to change the color scheme. Modify the font-family properties to use your preferred fonts.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="faq-section" id="hosting">
+            <h2>🌐 Hosting Guide</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">How do I host my resume on Netlify?</div>
+                <div class="faq-answer">
+                    <ol>
+                        <li>Sign up for a free account at <a href="https://www.netlify.com/" target="_blank">Netlify.com</a></li>
+                        <li>Drag and drop your entire resume folder into the Netlify Drop zone</li>
+                        <li>Your resume will be instantly available at a URL like: your-site.netlify.app</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">How do I use GitHub Pages?</div>
+                <div class="faq-answer">
+                    <ol>
+                        <li>Create a new GitHub repository</li>
+                        <li>Upload all your resume files to the repository</li>
+                        <li>Go to Settings > Pages and enable GitHub Pages for the main branch</li>
+                        <li>Your resume will be available at: username.github.io/repository-name</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Can I use my own domain?</div>
+                <div class="faq-answer">
+                    <p>Yes! Both Netlify and GitHub Pages allow you to connect a custom domain. You'll need to:</p>
+                    <ol>
+                        <li>Purchase a domain from a registrar (Namecheap, Google Domains, etc.)</li>
+                        <li>Follow the platform-specific instructions for DNS configuration</li>
+                        <li>Set up SSL for secure HTTPS connections</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <div class="faq-section" id="tips">
+            <h2>💡 Resume Tips</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">What makes a great digital resume?</div>
+                <div class="faq-answer">
+                    <ul>
+                        <li><strong>Concise content</strong> - Keep descriptions brief but impactful</li>
+                        <li><strong>Clear hierarchy</strong> - Make important information stand out</li>
+                        <li><strong>Mobile-friendly</strong> - Test on different devices</li>
+                        <li><strong>Fast loading</strong> - Optimize images and assets</li>
+                        <li><strong>Professional appearance</strong> - Use consistent styling</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">How should I write my work experience?</div>
+                <div class="faq-answer">
+                    <ul>
+                        <li>Start with action verbs (Developed, Led, Implemented)</li>
+                        <li>Focus on achievements rather than duties</li>
+                        <li>Use numbers when possible ("Increased sales by 30%")</li>
+                        <li>Keep each bullet point to 1-2 lines</li>
+                        <li>Tailor to the job you're applying for</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">What skills should I include?</div>
+                <div class="faq-answer">
+                    <ul>
+                        <li>Technical skills relevant to your field</li>
+                        <li>Soft skills (Communication, Leadership)</li>
+                        <li>Tools and software proficiency</li>
+                        <li>Languages spoken</li>
+                        <li>Order by relevance to the position</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="contact-cta">
+            <h2>Need More Help?</h2>
+            <p>Can't find what you're looking for? Our support team is ready to assist you with any questions about your resume template.</p>
+            <a href="mailto:support@resumepro.com" class="btn btn-outline">Contact Support</a>
+        </div>
+    </div>
+ <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>ResumePro</h3>
+                    <p>Professional digital resume templates designed to help you stand out and land your dream job.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Templates</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html#templates">Timeless</a></li>
+                        <li><a href="index.html#templates">Sleek</a></li>
+                        <li><a href="index.html#templates">Executive</a></li>
+                        <li><a href="index.html#templates">All Templates</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://apdg21.github.io/resumepro/help#editing">How to Edit</a></li>
+                        <li><a href="https://apdg21.github.io/resumepro/help#hosting">Hosting Guide</a></li>
+                        <li><a href="https://apdg21.github.io/resumepro/help#tips">Resume Tips</a></li>
+                        <li><a href="https://apdg21.github.io/resumepro/guide">GUIDE</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

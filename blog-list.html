@@ -1,0 +1,60 @@
+---
+layout: layouts/base.html
+---
+
+<div class="blog-list-container">
+    <div class="blog-list-header">
+        <h1>{{ title }}</h1>
+        {% if description %}
+        <p>{{ description }}</p>
+        {% endif %}
+    </div>
+    
+    {% if collections.blog and collections.blog.length > 0 %}
+    <div class="blog-grid">
+        {% for post in collections.blog %}
+        <article class="blog-card">
+            {% if post.data.featuredImage %}
+            <div class="blog-card-image">
+                <img src="{{ post.data.featuredImage }}" alt="{{ post.data.title }}" loading="lazy">
+            </div>
+            {% endif %}
+            
+            <div class="blog-card-content">
+                <div class="blog-card-meta">
+                    <time datetime="{{ post.date | isoDate }}">{{ post.date | formatDate }}</time>
+                    <span>•</span>
+                    <span>{{ post.data.readTime | default: 5 }} min read</span>
+                </div>
+                
+                <h2 class="blog-card-title">
+                    <a href="{{ post.url }}">{{ post.data.title }}</a>
+                </h2>
+                
+                {% if post.data.excerpt %}
+                <p class="blog-card-excerpt">{{ post.data.excerpt }}</p>
+                {% elsif post.data.description %}
+                <p class="blog-card-excerpt">{{ post.data.description }}</p>
+                {% endif %}
+                
+                {% if post.data.tags %}
+                <div class="blog-card-tags">
+                    {% for tag in post.data.tags limit: 3 %}
+                    <span class="blog-card-tag">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <a href="{{ post.url }}" class="blog-card-link">
+                    Read More <span>→</span>
+                </a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-blog-posts">
+        <p>No blog posts yet. Check back soon!</p>
+    </div>
+    {% endif %}
+</div>

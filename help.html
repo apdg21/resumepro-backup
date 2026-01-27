@@ -330,7 +330,62 @@
         
         @media (max-width: 768px) {
             .header-content {
-                padding: 0 1rem;
+                flex-direction: row;
+                padding: 1rem;
+                align-items: center;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .nav-container {
+                width: auto;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                padding: 1rem;
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .nav-item {
+                margin-left: 0;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .nav-link {
+                padding: 0.5rem 0;
+                font-size: 1rem;
+            }
+            
+            .dropdown-content {
+                position: static;
+                width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+                background-color: #f8f9fa;
+                padding-left: 1rem;
+            }
+            
+            .dropdown-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.95rem;
             }
             
             .help-container {
@@ -348,23 +403,7 @@
          footer {         
             padding: 1rem 0 1.5rem !important;
         }
-           .header-content {
-                flex-direction: column;
-                padding: 0rem;
-            }
-            
-            .logo {
-                margin-bottom: 1rem;
-            }
-            
-            .nav-container {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .nav-menu {
-                margin-right: 0;
-            }
+          
             
             .hero h1 {
                 font-size: 2.2rem;
@@ -379,12 +418,11 @@
                 flex-direction: column;
                 align-items: center;
             }
-            
-            .dropdown-content {
+			 .dropdown-content {
                 left: auto;
                 right: 0;
-            }
-        }
+            }            
+             }
     </style>
 </head>
 <body>

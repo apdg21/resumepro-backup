@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Notes & Reminders</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eaeaea;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .last-updated {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            color: #3498db;
+            margin: 30px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+            font-size: 22px;
+        }
+        
+        h3 {
+            color: #2c3e50;
+            margin: 20px 0 10px 0;
+            font-size: 18px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .highlight {
+            background-color: #fffde7;
+            padding: 15px;
+            border-left: 4px solid #ffd54f;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .contact-box {
+            background-color: #e8f4fc;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            h2 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Privacy Policy for Notes & Reminders</h1>
+            <div class="last-updated">
+                Last updated: <span id="current-date">December 24, 2024</span>
+            </div>
+            <p>Thank you for using Notes & Reminders. We are committed to protecting your privacy.</p>
+        </header>
+
+        <main>
+            <section>
+                <h2>1. Information We Collect</h2>
+                
+                <h3>Local Storage:</h3>
+                <ul>
+                    <li>Your notes and reminders are stored <strong>ONLY on your device</strong></li>
+                    <li>We use Android's Room database for storage</li>
+                    <li><strong>No data is sent to any external servers</strong></li>
+                </ul>
+                
+                <h3>Voice Recognition:</h3>
+                <ul>
+                    <li>When using voice input, speech is processed by <strong>Google's speech recognition service</strong></li>
+                    <li>We do <strong>NOT store or have access</strong> to your voice recordings</li>
+                    <li>Voice processing follows <strong>Google's privacy policy</strong></li>
+                </ul>
+                
+                <h3>Permissions:</h3>
+                <ul>
+                    <li><strong>Microphone</strong>: Only for voice input features (optional)</li>
+                    <li><strong>Notifications</strong>: To show reminders</li>
+                    <li><strong>Alarm</strong>: To schedule reminders</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>2. How We Use Your Information</h2>
+                <p>We use your information <strong>ONLY</strong> to:</p>
+                <ul>
+                    <li>Store your notes on your device</li>
+                    <li>Set reminders based on your instructions</li>
+                    <li>Convert speech to text for voice input</li>
+                    <li>Display notifications for reminders</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>3. Data Storage & Security</h2>
+                <ul>
+                    <li>All data is stored <strong>locally on your device</strong></li>
+                    <li><strong>No data is transmitted</strong> to external servers</li>
+                    <li>Data is protected by <strong>Android's app sandbox</strong></li>
+                    <li>You can delete all data by <strong>uninstalling the app</strong></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>4. Third-Party Services</h2>
+                
+                <h3>Google Speech-to-Text:</h3>
+                <ul>
+                    <li>Used for voice recognition</li>
+                    <li>Google's privacy policy applies: <a href="https://policies.google.com/privacy" target="_blank">https://policies.google.com/privacy</a></li>
+                </ul>
+                
+                <h3>Android System:</h3>
+                <ul>
+                    <li>Uses Android's notification system</li>
+                    <li>Uses Android's alarm scheduler</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>5. Your Rights</h2>
+                <p>You have <strong>full control</strong> over your data:</p>
+                <ul>
+                    <li>View all notes in the app</li>
+                    <li>Edit or delete any note</li>
+                    <li>Clear all data by uninstalling</li>
+                    <li><strong>No account required, no data collection</strong></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>6. Children's Privacy</h2>
+                <p>This app is safe for all ages:</p>
+                <ul>
+                    <li>No personal information collected</li>
+                    <li>No registration required</li>
+                    <li>No inappropriate content</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>7. Microphone Permission (RECORD_AUDIO)</h2>
+                <div class="highlight">
+                    <p><strong>Important:</strong> This app requests microphone permission <strong>ONLY</strong> for:</p>
+                    <ul>
+                        <li>Voice-to-text functionality</li>
+                        <li>When you explicitly tap the microphone button</li>
+                        <li>Voice is processed by Google's secure services</li>
+                        <li><strong>NOT stored or uploaded</strong> to any servers</li>
+                    </ul>
+                    <p>You can use <strong>all other features</strong> without granting microphone permission.</p>
+                </div>
+            </section>
+
+            <section>
+                <h2>8. Changes to This Policy</h2>
+                <p>We may update this policy occasionally. Continued use of the app after changes means you accept the updated policy.</p>
+            </section>
+
+            <section>
+                <h2>9. Contact Us</h2>
+                <div class="contact-box">
+                    <p>If you have questions about this Privacy Policy:</p>
+                    <p><strong>Email:</strong> privacy@notesreminder.app</p>
+                    <p><strong>In-app:</strong> Help section → Privacy Policy</p>
+                </div>
+                <p>This app is designed with privacy in mind - your notes belong to you, not to us.</p>
+            </section>
+        </main>
+
+        <footer>
+            <p>Notes & Reminders App</p>
+            <p>© 2024. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Auto-update date
+        const date = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = date.toLocaleDateString('en-US', options);
+    </script>
+</body>
+</html>

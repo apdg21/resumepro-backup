@@ -8,6 +8,7 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="footer.css">
+    <link rel="stylesheet" href="header.css">
     <style>
         :root {
             --primary: #3a86ff;
@@ -20,124 +21,7 @@
         body {
             font-family: 'Inter', Arial, Helvetica, sans-serif;
         }
-          header {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 1rem 0;
-            position: fixed;
-            top: 0;
-            z-index: 100;
-            width: 100%;
-        }
-        
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #3a86ff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo-icon {
-            margin-right: 10px;
-            font-size: 1.5em;
-        }
-        
-        .nav-container {
-            display: flex;
-            align-items: center;
-        }
-        
-        .nav-menu {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-item {
-            position: relative;
-            margin-left: 1.5rem;
-        }
-        
-        .nav-link {
-            color: var(--dark);
-            text-decoration: none;
-            transition: color 0.3s ease;
-            display: flex;
-            align-items: center;
-        }
-        
-        .nav-link:hover {
-            color: var(--primary);
-        }
-        
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: white;
-            min-width: 200px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            z-index: 1;
-            top: 100%;
-            left: 0;
-            padding: 0.5rem 0;
-        }
-        
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-        
-        .dropdown-item {
-            padding: 0.8rem 1.5rem;
-            text-decoration: none;
-            display: block;
-            color: var(--dark);
-            transition: all 0.3s ease;
-        }
-        
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-            color: var(--primary);
-        }
-        
-        .dropdown-icon {
-            margin-left: 5px;
-            transition: transform 0.3s ease;
-        }
-        
-        .dropdown:hover .dropdown-icon {
-            transform: rotate(180deg);
-        }
-        
-        /* Hamburger Menu Styles */
-        .hamburger {
-            display: none;
-            font-size: 1.5rem;
-            background: none;
-            border: none;
-            color: var(--dark);
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-        
-        .nav-menu.active {
-            display: flex;
-        }
+          
 
         .section-item {
             cursor: pointer;
@@ -209,70 +93,7 @@
                 max-width: 100% !important;
                 padding: 10px 0 !important;
             }
-              .header-content {
-                flex-direction: row;
-                padding: 1rem;
-                align-items: center;
-            }
-            
-            .logo {
-                font-size: 1.5rem;
-            }
-            
-            .nav-container {
-                width: auto;
-            }
-            
-            .hamburger {
-                display: block;
-            }
-            
-            .nav-menu {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background-color: white;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-                padding: 1rem;
-            }
-            
-            .nav-menu.active {
-                display: flex;
-            }
-            
-            .nav-item {
-                margin-left: 0;
-                width: 100%;
-                margin-bottom: 0.5rem;
-            }
-            
-            .nav-link {
-                padding: 0.5rem 0;
-                font-size: 1rem;
-            }
-            
-            .dropdown-content {
-                display: none;
-                position: static;
-                width: 100%;
-                box-shadow: none;
-                border-radius: 0;
-                background-color: #f8f9fa;
-                padding-left: 1rem;
-            }
-            
-            .dropdown.active .dropdown-content {
-                display: block;
-            }
-            
-            .dropdown-item {
-                padding: 0.5rem 1rem;
-                font-size: 0.95rem;
-            }
-
+             
         }
         .message-box {
             transition: opacity 0.3s;
@@ -312,9 +133,12 @@
             font-weight: 500;
             margin-top: 0.25rem;
         }
+       .nav-link {
+           font-weight: normal !important;
+       }
     </style>
 </head>
-<body class="bg-gray-50">
+<body>
      <header>
     <div class="header-content">
         <a href="index.html" class="logo">
@@ -372,8 +196,8 @@
                         <span class="dropdown-icon">▼</span>
                     </a>
                     <div class="dropdown-content">
-                        <a href="email-builder.html" class="dropdown-item">Email Builder</a>
-                        <a href="enhanced-todo.html" class="dropdown-item">Enhanced To-Do & Notes</a>
+                        <a href="email-builder" class="dropdown-item">Email Builder</a>
+                        <a href="https://resumepro.pages.dev/enhanced-todo" class="dropdown-item">Enhanced To-Do & Notes</a>
                     </div>
                 </li>
                 <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
@@ -383,6 +207,7 @@
     </div>
 </header>
 
+<script src="header.js"></script>
 
     <div class="container mx-auto p-4 max-w-7xl">   
         
@@ -2142,68 +1967,7 @@
             }
         }
     </script>
-     <script>
-        // Hamburger menu toggle
-        document.querySelector('.hamburger').addEventListener('click', () => {
-            document.querySelector('.nav-menu').classList.toggle('active');
-        });
-
-        // Toggle dropdown on mobile
-        document.querySelectorAll('.dropdown .nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                // Prevent default link behavior
-                e.preventDefault();
-                // Toggle active class on parent dropdown
-                const dropdown = link.closest('.dropdown');
-                dropdown.classList.toggle('active');
-            });
-        });
-
-        // Close menu when clicking a non-dropdown nav link or dropdown item
-        document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
-            link.addEventListener('click', () => {
-                document.querySelector('.nav-menu').classList.remove('active');
-                // Remove active class from all dropdowns
-                document.querySelectorAll('.dropdown').forEach(dropdown => {
-                    dropdown.classList.remove('active');
-                });
-            });
-        });
-    </script>
-    <script>
-        // Load header dynamically
-        fetch('header.html')
-            .then(response => {
-                if (!response.ok) throw new Error('Failed to load header');
-                return response.text();
-            })
-            .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
-                
-                // Re-attach event listeners for hamburger menu and dropdowns
-                document.querySelector('.hamburger').addEventListener('click', () => {
-                    document.querySelector('.nav-menu').classList.toggle('active');
-                });
-
-                document.querySelectorAll('.dropdown .nav-link').forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const dropdown = link.closest('.dropdown');
-                        dropdown.classList.toggle('active');
-                    });
-                });
-
-                document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
-                    link.addEventListener('click', () => {
-                        document.querySelector('.nav-menu').classList.remove('active');
-                        document.querySelectorAll('.dropdown').forEach(dropdown => {
-                            dropdown.classList.remove('active');
-                        });
-                    });
-                });
-            })
-            .catch(error => console.error('Error loading header:', error));
-    </script>
+     
 
 <footer>
     <div class="footer-content">

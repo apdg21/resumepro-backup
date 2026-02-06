@@ -30,17 +30,155 @@
             line-height: 1.6;
         }
         
+        /* Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        .fade-in-delay {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease 0.3s forwards;
+        }
+        
+        .fade-in-delay-2 {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease 0.6s forwards;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .float-animation-delay {
+            animation: float 6s ease-in-out 2s infinite;
+        }
+        
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: slideInLeft 0.8s ease forwards;
+        }
+        
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            animation: slideInRight 0.8s ease forwards;
+        }
+        
+        .scale-up {
+            transform: scale(0.95);
+            opacity: 0;
+            animation: scaleUp 0.8s ease forwards;
+        }
+        
+        .rotate-3d {
+            animation: rotate3d 20s linear infinite;
+        }
+        
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+        
+        /* Animation Keyframes */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes scaleUp {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes rotate3d {
+            0% {
+                transform: perspective(1000px) rotateY(0deg);
+            }
+            100% {
+                transform: perspective(1000px) rotateY(360deg);
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
         
         /* NEW: Android Apps Announcement Section */
         .announcement-section {
             margin: 0px 0;
             padding: 40px;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(-45deg, #1e3c72, #2a5298, #3b5998, #667eea);
+            background-size: 400% 400%;
             color: white;
             border-radius: 12px;
             text-align: center;
             position: relative;
             overflow: hidden;
+            animation: gradientShift 15s ease infinite;
         }
         
         .announcement-section::before {
@@ -52,6 +190,7 @@
             height: 200px;
             background: rgba(255,255,255,0.1);
             border-radius: 50%;
+            animation: rotate3d 30s linear infinite;
         }
         
         .announcement-section::after {
@@ -63,6 +202,7 @@
             height: 150px;
             background: rgba(255,255,255,0.05);
             border-radius: 50%;
+            animation: rotate3d 25s linear infinite reverse;
         }
         
         .announcement-content {
@@ -79,6 +219,7 @@
             font-size: 0.9rem;
             margin-bottom: 20px;
             font-weight: 500;
+            animation: pulse 2s infinite 1s;
         }
         
         .announcement-section h2 {
@@ -108,6 +249,12 @@
             border-radius: 25px;
             font-size: 0.9rem;
             backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        
+        .android-feature:hover {
+            transform: translateY(-5px) scale(1.05);
+            background: rgba(255,255,255,0.2);
         }
         
         .announcement-button {
@@ -121,12 +268,14 @@
             margin-top: 20px;
             transition: all 0.3s ease;
             border: 2px solid white;
+            animation: bounce 3s infinite;
         }
         
         .announcement-button:hover {
             background: transparent;
             color: white;
-            transform: translateY(-3px);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
         
         .announcement-apps {
@@ -144,11 +293,22 @@
             backdrop-filter: blur(5px);
             min-width: 200px;
             text-align: center;
+            transition: all 0.4s ease;
+        }
+        
+        .announcement-app:hover {
+            transform: translateY(-10px) rotateX(10deg);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
         
         .app-icon-sm {
             font-size: 2rem;
             margin-bottom: 10px;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .announcement-app:nth-child(2) .app-icon-sm {
+            animation-delay: 1s;
         }
         
         .app-name {
@@ -166,6 +326,21 @@
             text-align: center;
             padding: 8rem 0 5rem;
             background: linear-gradient(135deg, #E3F2FD 0%, #F5F7FA 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(58, 134, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(102, 126, 234, 0.1) 0%, transparent 50%);
+            animation: gradientShift 20s ease infinite;
+            background-size: 400% 400%;
         }
         
         .hero h1 {
@@ -195,17 +370,40 @@
             padding: 2rem;
             width: 280px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .template-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            transition: left 0.5s ease;
         }
         
         .template-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(58, 134, 255, 0.15);
+        }
+        
+        .template-card:hover::before {
+            left: 100%;
         }
         
         .template-icon {
             font-size: 2.5rem;
             color: var(--primary);
             margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .template-card:nth-child(2) .template-icon {
+            animation-delay: 0.5s;
         }
         
         .template-card h3 {
@@ -223,6 +421,19 @@
         .features {
             padding: 5rem 0;
             background-color: white;
+            position: relative;
+        }
+        
+        .features::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(58, 134, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(102, 126, 234, 0.05) 0%, transparent 20%);
         }
         
         .section-title {
@@ -256,12 +467,44 @@
             border-radius: 8px;
             padding: 2rem;
             text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(58, 134, 255, 0.1);
+        }
+        
+        .feature-card::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), #667eea);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover::after {
+            transform: scaleX(1);
         }
         
         .feature-icon {
             font-size: 2rem;
             color: var(--primary);
             margin-bottom: 1rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: rotate(360deg) scale(1.2);
         }
         
         .feature-card h3 {
@@ -277,25 +520,96 @@
         .cta-section {
             padding: 5rem 0;
             text-align: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(-45deg, #667eea, #764ba2, #9b59b6, #8e44ad);
+            background-size: 400% 400%;
             color: white;
+            position: relative;
+            overflow: hidden;
+            animation: gradientShift 10s ease infinite;
+        }
+        
+        .cta-section::before {
+            content: "";
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 10s ease-in-out infinite;
+        }
+        
+        .cta-section::after {
+            content: "";
+            position: absolute;
+            bottom: -100px;
+            right: -100px;
+            width: 250px;
+            height: 250px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite reverse;
         }
         
         .cta-section h2 {
             font-size: 2.2rem;
             margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
         }
         
         .cta-section p {
             max-width: 600px;
             margin: 0 auto 2rem;
             opacity: 0.9;
+            position: relative;
+            z-index: 1;
         }
         
         .cta-buttons {
             display: flex;
             justify-content: center;
             gap: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
         
         .secondary-button {
@@ -307,6 +621,17 @@
             background-color: #f8f9fa;
         }
         
+        /* Scroll Animation Trigger */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
         
         @media (max-width: 768px) {
             .announcement-section {
@@ -345,7 +670,7 @@
                 flex-direction: column;
                 align-items: center;
             }
-            }
+        }
     </style>
 </head>
 <body>
@@ -421,18 +746,18 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>Professional Digital Templates</h1>
-            <p>Create stunning resumes and portfolios that get you noticed. No coding required - just customize and launch.</p>
+            <h1 class="fade-in">Professional Digital Templates</h1>
+            <p class="fade-in-delay">Create stunning resumes and portfolios that get you noticed. No coding required - just customize and launch.</p>
             
             <div class="template-types">
-                <div class="template-card">
+                <div class="template-card fade-in">
                     <div class="template-icon">📝</div>
                     <h3>Resume Templates</h3>
                     <p>Modern, responsive designs that showcase your career journey beautifully on any device.</p>
                     <a href="resume-templates.html" class="cta-button">Browse Resumes</a>
                 </div>
                 
-                <div class="template-card">
+                <div class="template-card fade-in-delay-2">
                     <div class="template-icon">🎨</div>
                     <h3>Portfolio Templates</h3>
                     <p>Showcase your work with professional portfolios that highlight your best projects.</p>
@@ -443,7 +768,7 @@
     </section>
     
     <!-- NEW: Android Apps Announcement Section -->
-    <section class="announcement-section">
+    <section class="announcement-section animate-on-scroll">
         <div class="announcement-content">
             <span class="announcement-badge">🚀 NEW ANNOUNCEMENT</span>
             <h2>Now Developing Android Applications!</h2>
@@ -452,19 +777,19 @@
             
             <div class="android-features">
                 <span class="android-feature">🤖 Android Development</span>
-                <span class="android-feature">📱 Mobile-First Design</span>
-                <span class="android-feature">🚀 Coming to Play Store</span>
+                <span class="android-feature slide-in-left">📱 Mobile-First Design</span>
+                <span class="android-feature slide-in-right">🚀 Coming to Play Store</span>
                 <span class="android-feature">🎯 Productivity Focus</span>
             </div>
             
             <div class="announcement-apps">
-                <div class="announcement-app">
+                <div class="announcement-app scale-up">
                     <div class="app-icon-sm">🚗</div>
                     <div class="app-name">VoiceRide Driving Assistant</div>
                     <div class="app-status">Voice-controlled navigation app</div>
                 </div>
                 
-                <div class="announcement-app">
+                <div class="announcement-app scale-up" style="animation-delay: 0.2s">
                     <div class="app-icon-sm">📝</div>
                     <div class="app-name">Notes & Reminder App</div>
                     <div class="app-status">Productivity task management</div>
@@ -480,42 +805,42 @@
     <!-- Features Section -->
     <section class="features">
         <div class="section-title">
-            <h2>Why Choose Our Templates?</h2>
-            <p>Everything you need to create a powerful online presence</p>
+            <h2 class="fade-in">Why Choose Our Templates?</h2>
+            <p class="fade-in-delay">Everything you need to create a powerful online presence</p>
         </div>
         
         <div class="features-grid">
-            <div class="feature-card">
+            <div class="feature-card animate-on-scroll">
                 <div class="feature-icon">🚀</div>
                 <h3>Easy Customization</h3>
                 <p>Change colors, fonts, and layouts with simple edits to the CSS file - no coding experience needed.</p>
             </div>
             
-            <div class="feature-card">
+            <div class="feature-card animate-on-scroll" style="transition-delay: 0.1s">
                 <div class="feature-icon">📱</div>
                 <h3>Fully Responsive</h3>
                 <p>Looks perfect on all devices from desktop to mobile without any extra work.</p>
             </div>
             
-            <div class="feature-card">
+            <div class="feature-card animate-on-scroll" style="transition-delay: 0.2s">
                 <div class="feature-icon">⚡</div>
                 <h3>Fast Loading</h3>
                 <p>Optimized for performance so your content loads quickly for recruiters and clients.</p>
             </div>
             
-            <div class="feature-card">
+            <div class="feature-card animate-on-scroll" style="transition-delay: 0.3s">
                 <div class="feature-icon">🎨</div>
                 <h3>Modern Designs</h3>
                 <p>Professionally designed templates that follow current trends while remaining timeless.</p>
             </div>
             
-            <div class="feature-card">
+            <div class="feature-card animate-on-scroll" style="transition-delay: 0.4s">
                 <div class="feature-icon">🔧</div>
                 <h3>Easy Hosting</h3>
                 <p>Works with GitHub Pages, Netlify, and other free hosting options with minimal setup.</p>
             </div>
             
-            <div class="feature-card">
+            <div class="feature-card animate-on-scroll" style="transition-delay: 0.5s">
                 <div class="feature-icon">📚</div>
                 <h3>Detailed Guides</h3>
                 <p>Step-by-step instructions included with every template for easy setup.</p>
@@ -524,7 +849,7 @@
     </section>
     
     <!-- CTA Section -->
-    <section class="cta-section">
+    <section class="cta-section animate-on-scroll">
         <h2>Ready to Build Your Online Presence?</h2>
         <p>Join thousands of professionals who've transformed their job search with our templates.</p>
         <div class="cta-buttons">
@@ -575,6 +900,74 @@
     </div>
 </footer>
 
+    <script>
+        // Scroll Animation Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        // Observe all elements with animate-on-scroll class
+        document.querySelectorAll('.animate-on-scroll').forEach((el) => {
+            observer.observe(el);
+        });
+
+        // Button ripple effect
+        document.querySelectorAll('.cta-button, .announcement-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    border-radius: 50%;
+                    background: rgba(255,255,255,0.6);
+                    transform: scale(0);
+                    animation: ripple-animation 0.6s linear;
+                    width: ${size}px;
+                    height: ${size}px;
+                    top: ${y}px;
+                    left: ${x}px;
+                `;
+                
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Add ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Floating effect for template icons
+        document.querySelectorAll('.template-icon').forEach((icon, index) => {
+            icon.style.animationDelay = `${index * 0.5}s`;
+        });
+
+        // Add hover sound effect (optional)
+        document.querySelectorAll('.template-card, .feature-card, .announcement-app').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            });
+        });
+    </script>
     
     <script src="clean-urls.js"></script>
     <script src="header.js"></script>

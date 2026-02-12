@@ -224,9 +224,5 @@ header {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 
 }
-.dropdown-content {
-    max-height: none !important;
-    height: auto !important;
-    overflow: visible !important;
-    display: block !important;  /* Force it to show */
-}
+
+

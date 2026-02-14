@@ -1,9 +1,9 @@
 // Header JavaScript - Mobile menu and dropdown functionality
 document.addEventListener('DOMContentLoaded', function() {
     const hamburger = document.querySelector('.hamburger');
-    const navMenu = document.querySelector('.nav-menu');
-    const navLinks = document.querySelectorAll('.nav-link');
-    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    const navMenu = document.querySelector('.header-nav-menu');
+    const navLinks = document.querySelectorAll('.header-nav-link');
+    const dropdownItems = document.querySelectorAll('.header-dropdown-item');
     
     // Mobile menu toggle
     if (hamburger) {
@@ -19,16 +19,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Toggle dropdown on mobile when clicking dropdown link
-    document.querySelectorAll('.dropdown .nav-link').forEach(link => {
+    document.querySelectorAll('.header-dropdown > .header-nav-link').forEach(link => {
         link.addEventListener('click', (e) => {
             if (window.innerWidth <= 768) {
                 e.preventDefault();
                 e.stopPropagation();
-                const dropdown = link.closest('.dropdown');
+                const dropdown = link.closest('.header-dropdown');
                 dropdown.classList.toggle('active');
                 
                 // Rotate dropdown icon
-                const dropdownIcon = link.querySelector('.dropdown-icon');
+                const dropdownIcon = link.querySelector('.header-dropdown-icon');
                 if (dropdownIcon) {
                     if (dropdown.classList.contains('active')) {
                         dropdownIcon.style.transform = 'rotate(180deg)';
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Close menu when clicking a non-dropdown nav link
-    document.querySelectorAll('.nav-item:not(.dropdown) .nav-link').forEach(link => {
+    document.querySelectorAll('.header-nav-item:not(.header-dropdown) .header-nav-link').forEach(link => {
         link.addEventListener('click', () => {
             if (window.innerWidth <= 768) {
                 navMenu.classList.remove('active');
@@ -58,12 +58,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 hamburger.textContent = '☰';
                 
                 // Reset all dropdowns
-                document.querySelectorAll('.dropdown').forEach(dropdown => {
+                document.querySelectorAll('.header-dropdown').forEach(dropdown => {
                     dropdown.classList.remove('active');
                 });
                 
                 // Reset dropdown icons
-                document.querySelectorAll('.dropdown-icon').forEach(icon => {
+                document.querySelectorAll('.header-dropdown-icon').forEach(icon => {
                     icon.style.transform = 'rotate(0deg)';
                 });
             }
@@ -73,13 +73,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Close dropdowns when clicking outside on mobile
     document.addEventListener('click', (e) => {
         if (window.innerWidth <= 768) {
-            if (!e.target.closest('.dropdown') && !e.target.closest('.hamburger')) {
-                document.querySelectorAll('.dropdown').forEach(dropdown => {
+            if (!e.target.closest('.header-dropdown') && !e.target.closest('.hamburger')) {
+                document.querySelectorAll('.header-dropdown').forEach(dropdown => {
                     dropdown.classList.remove('active');
                 });
                 
                 // Reset dropdown icons
-                document.querySelectorAll('.dropdown-icon').forEach(icon => {
+                document.querySelectorAll('.header-dropdown-icon').forEach(icon => {
                     icon.style.transform = 'rotate(0deg)';
                 });
             }
@@ -94,12 +94,12 @@ document.addEventListener('DOMContentLoaded', function() {
             hamburger.textContent = '☰';
             
             // Reset dropdowns
-            document.querySelectorAll('.dropdown').forEach(dropdown => {
+            document.querySelectorAll('.header-dropdown').forEach(dropdown => {
                 dropdown.classList.remove('active');
             });
             
             // Reset dropdown icons
-            document.querySelectorAll('.dropdown-icon').forEach(icon => {
+            document.querySelectorAll('.header-dropdown-icon').forEach(icon => {
                 icon.style.transform = '';
             });
         }
@@ -144,9 +144,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 link.classList.add('active');
                 
                 // Also highlight parent dropdown if this is a dropdown item
-                const parentDropdown = link.closest('.dropdown');
+                const parentDropdown = link.closest('.header-dropdown');
                 if (parentDropdown) {
-                    const dropdownLink = parentDropdown.querySelector('.nav-link');
+                    const dropdownLink = parentDropdown.querySelector('.header-nav-link');
                     if (dropdownLink) {
                         dropdownLink.classList.add('active');
                     }

@@ -37,17 +37,17 @@ header {
     align-items: center;
 }
 
-.nav-menu {
+.header-nav-menu {
     display: flex;
     list-style: none;
 }
 
-.nav-item {
+.header-nav-item {
     position: relative;
     margin-left: 1.5rem;
 }
 
-.nav-link {
+.header-nav-link {
     color: var(--dark);
     text-decoration: none;
     font-weight: 600;
@@ -56,16 +56,16 @@ header {
     align-items: center;
 }
 
-.nav-link:hover {
+.header-nav-link:hover {
     color: var(--primary);
 }
 
-.dropdown {
+.header-dropdown {
     position: relative;
     display: inline-block;
 }
 
-.dropdown-content {
+.header-dropdown-content {
     display: none;
     position: absolute;
     background-color: white;
@@ -78,11 +78,11 @@ header {
     padding: 0.5rem 0;
 }
 
-.dropdown:hover .dropdown-content {
+.header-dropdown:hover .header-dropdown-content {
     display: block;
 }
 
-.dropdown-item {
+.header-dropdown-item {
     padding: 0.8rem 1.5rem;
     text-decoration: none;
     display: block;
@@ -90,17 +90,17 @@ header {
     transition: all 0.3s ease;
 }
 
-.dropdown-item:hover {
+.header-dropdown-item:hover {
     background-color: #f8f9fa;
     color: var(--primary);
 }
 
-.dropdown-icon {
+.header-dropdown-icon {
     margin-left: 5px;
     transition: transform 0.3s ease;
 }
 
-.dropdown:hover .dropdown-icon {
+.header-dropdown:hover .header-dropdown-icon {
     transform: rotate(180deg);
 }
 
@@ -115,7 +115,7 @@ header {
     padding: 0.5rem;
 }
 
-.nav-menu.active {
+.header-nav-menu.active {
     display: flex;
 }
 
@@ -155,7 +155,7 @@ header {
         display: block;
     }
     
-    .nav-menu {
+    .header-nav-menu {
         display: none;
         flex-direction: column;
         position: absolute;
@@ -167,22 +167,22 @@ header {
         padding: 1rem;
     }
     
-    .nav-menu.active {
+    .header-nav-menu.active {
         display: flex;
     }
     
-    .nav-item {
+    .header-nav-item {
         margin-left: 0;
         width: 100%;
         margin-bottom: 0.5rem;
     }
     
-    .nav-link {
+    .header-nav-link {
         padding: 0.5rem 0;
         font-size: 1rem;
     }
     
-    .dropdown-content {
+    .header-dropdown-content {
         position: static;
         width: 100%;
         box-shadow: none;
@@ -191,24 +191,24 @@ header {
         padding-left: 1rem;
     }
     
-    .dropdown-item {
+    .header-dropdown-item {
         padding: 0.5rem 1rem;
         font-size: 0.95rem;
     }
     
-    .dropdown-content {
+    .header-dropdown-content {
         left: auto;
         right: 0;
     }
 }
 
 /* Active state for navigation items */
-.nav-link.active {
+.header-nav-link.active {
     color: var(--primary);
     position: relative;
 }
 
-.nav-link.active::after {
+.header-nav-link.active::after {
     content: '';
     position: absolute;
     bottom: -5px;

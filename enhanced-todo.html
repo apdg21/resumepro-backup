@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enhanced To-Do & Notes with Alarm | ResumePro Tools</title>
-    <style>
+	<link rel="stylesheet" href="header.css">
+     <style>
         :root {
             --primary-color: #6200ea;
-            --primary-dark: #3700b3;
+            --primary-dark: #2667cc;
             --secondary-color: #03dac6;
             --error-color: #b00020;
             --surface-color: #ffffff;
@@ -33,127 +34,6 @@
             padding: 0;
         }
         
-        /* ResumePro Header Styles */
-        /* Header Styles */
-        header {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 1rem 0;
-            position: fixed;
-            top: 0;
-            z-index: 100;
-            width: 100%;
-        }
-        
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #3a86ff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo-icon {
-            margin-right: 10px;
-            font-size: 1.5em;
-        }
-        
-        .nav-container {
-            display: flex;
-            align-items: center;
-        }
-        
-        .nav-menu {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-item {
-            position: relative;
-            margin-left: 1.5rem;
-        }
-        
-        .nav-link {
-            color: var(--dark);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-            display: flex;
-            align-items: center;
-        }
-        
-        .nav-link:hover {
-            color: var(--primary);
-        }
-        
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: white;
-            min-width: 200px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            z-index: 1;
-            top: 100%;
-            left: 0;
-            padding: 0.5rem 0;
-        }
-        
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-        
-        .dropdown-item {
-            padding: 0.8rem 1.5rem;
-            text-decoration: none;
-            display: block;
-            color: var(--dark);
-            transition: all 0.3s ease;
-        }
-        
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-            color: var(--primary);
-        }
-        
-        .dropdown-icon {
-            margin-left: 5px;
-            transition: transform 0.3s ease;
-        }
-        
-        .dropdown:hover .dropdown-icon {
-            transform: rotate(180deg);
-        }
-        
-        /* Hamburger Menu Styles */
-        .hamburger {
-            display: none;
-            font-size: 1.5rem;
-            background: none;
-            border: none;
-            color: var(--dark);
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-        
-        .nav-menu.active {
-            display: flex;
-        }
         
         /* Storage Notice */
         .storage-notice {
@@ -257,17 +137,6 @@
                 grid-template-columns: 1fr;
             }
             
-            .header-content {
-                flex-direction: column;
-                gap: 15px;
-                padding: 1rem;
-            }
-            
-            .nav-menu {
-                flex-direction: column;
-                align-items: center;
-                gap: 1rem;
-            }
         }
         
         .section {
@@ -511,7 +380,36 @@
             align-items: center;
         }
         
-        /* ResumePro Footer */
+       
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+            vertical-align: middle;
+        }
+      
+	    /* ResumePro Footer */
         footer {
             background-color: #2b2d42;
             color: white;
@@ -560,183 +458,78 @@
             max-width: 1200px;
             margin: 2rem auto 0;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateX(100px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        .material-icons {
-            font-family: 'Material Icons';
-            font-weight: normal;
-            font-style: normal;
-            font-size: 24px;
-            line-height: 1;
-            letter-spacing: normal;
-            text-transform: none;
-            display: inline-block;
-            white-space: nowrap;
-            word-wrap: normal;
-            direction: ltr;
-            -webkit-font-feature-settings: 'liga';
-            -webkit-font-smoothing: antialiased;
-            vertical-align: middle;
-        }
-      @media (max-width: 768px) {
-            .header-content {
-                flex-direction: row;
-                padding: 1rem;
-                align-items: center;
-            }
-            
-            .logo {
-                font-size: 1.5rem;
-            }
-            
-            .nav-container {
-                width: auto;
-            }
-            
-            .hamburger {
-                display: block;
-            }
-            
-            .nav-menu {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background-color: white;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-                padding: 1rem;
-            }
-            
-            .nav-menu.active {
-                display: flex;
-            }
-            
-            .nav-item {
-                margin-left: 0;
-                width: 100%;
-                margin-bottom: 0.5rem;
-            }
-            
-            .nav-link {
-                padding: 0.5rem 0;
-                font-size: 1rem;
-            }
-            
-            .dropdown-content {
-                display: none;
-                position: static;
-                width: 100%;
-                box-shadow: none;
-                border-radius: 0;
-                background-color: #f8f9fa;
-                padding-left: 1rem;
-            }
-            
-            .dropdown.active .dropdown-content {
-                display: block;
-            }
-            
-            .dropdown-item {
-                padding: 0.5rem 1rem;
-                font-size: 0.95rem;
-            }
-            }
     </style>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
    <header>
     <div class="header-content">
-        <a href="/" class="logo">
+        <a href="index.html" class="logo">
             <span class="logo-icon">📄</span>
             <span>ResumePro</span>
         </a>
         
         <div class="nav-container">
             <button class="hamburger" aria-label="Toggle navigation">☰</button>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
-                
-                <!-- Templates Dropdown -->
-                <li class="nav-item dropdown-parent">
-                    <a href="#" class="nav-link dropdown-toggle">
+            <ul class="header-nav-menu">
+                <li class="header-nav-item"><a href="index.html" class="header-nav-link">Home</a></li>
+                <li class="header-nav-item header-dropdown">
+                    <a href="#" class="header-nav-link">
                         Templates
-                        <span class="dropdown-icon">▼</span>
+                        <span class="header-dropdown-icon">▼</span>
                     </a>
-                    <div class="dropdown-content">
-                        <a href="/resume-templates/" class="dropdown-item">Resume Templates</a>
-                        <a href="/portfolio-templates/" class="dropdown-item">Portfolio Templates</a>
+                    <div class="header-dropdown-content">
+                        <a href="resume-templates.html" class="header-dropdown-item">Resume Templates</a>
+                        <a href="portfolio-templates.html" class="header-dropdown-item">Portfolio Templates</a>
                     </div>
                 </li>
                 
-                <!-- My Apps Dropdown -->
-                <li class="nav-item dropdown-parent">
-                    <a href="#" class="nav-link dropdown-toggle">
+                <!-- NEW: My Apps Menu Item -->
+                <li class="header-nav-item header-dropdown">
+                    <a href="#" class="header-nav-link">
                         My Apps
-                        <span class="dropdown-icon">▼</span>
+                        <span class="header-dropdown-icon">▼</span>
                     </a>
-                    <div class="dropdown-content">
-                        <a href="/android-applications/" class="dropdown-item">Android Applications</a>
-                        <a href="/family-connection-tools/" class="dropdown-item">Web Applications</a>
-                    </div>
+                    <div class="header-dropdown-content">
+                        <a href="android-applications.html" class="header-dropdown-item">Android Applications</a>
+                        <a href="family-connection-tools.html" class="header-dropdown-item">Web Applications</a>
+                      </div>
                 </li>
                 
-                <!-- Blog Dropdown -->
-                <li class="nav-item dropdown-parent">
-                    <a href="#" class="nav-link dropdown-toggle">
+                <li class="header-nav-item header-dropdown">
+                    <a href="#" class="header-nav-link">
                         Blog
-                        <span class="dropdown-icon">▼</span>
+                        <span class="header-dropdown-icon">▼</span>
                     </a>
-                    <div class="dropdown-content">
-                        <a href="/portfolio-best-practices/" class="dropdown-item">Portfolio Best Practices</a>
-                        <a href="/portfolio-maintenance/" class="dropdown-item">Portfolio Maintenance</a>
-                        <a href="/online-job-sites/" class="dropdown-item">Legit Online Job Sites</a>
-                        <a href="/email-marketing" class="dropdown-item">Unlocking Email Marketing Success</a>
-                        <a href="/mobile-optimization/" class="dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
-                        <a href="/email-list-failure/" class="dropdown-item">Why Your Email List Might Be Failing</a> 
-                        <a href="/email-builder-previews/" class="dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
-                        <a href="/why-less-is-more/" class="dropdown-item">The Power of Focused Email Design</a>
+                    <div class="header-dropdown-content">
+                        <a href="portfolio-best-practices.html" class="header-dropdown-item">Portfolio Best Practices</a>
+                        <a href="portfolio-maintenance.html" class="header-dropdown-item">Portfolio Maintenance</a>
+                        <a href="online-job-sites.html" class="header-dropdown-item">Legit Online Job Sites</a>
+                        <a href="email-marketing.html" class="header-dropdown-item">Unlocking Email Marketing Success</a>
+                        <a href="mobile-optimization.html" class="header-dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
+                        <a href="email-list-failure.html" class="header-dropdown-item">Why Your Email List Might Be Failing</a> 
+                        <a href="email-builder-previews.html" class="header-dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
+                        <a href="why-less-is-more.html" class="header-dropdown-item">The Power of Focused Email Design</a>
                     </div>
                 </li>
-                
-                <li class="nav-item"><a href="/klaviyo-analytics/" class="nav-link">Klaviyo Analytics</a></li>
-                
-                <!-- Productivity Tools Dropdown -->
-                <li class="nav-item dropdown-parent">
-                    <a href="#" class="nav-link dropdown-toggle">
+                <li class="header-nav-item"><a href="klaviyo-analytics.html" class="header-nav-link">Klaviyo Analytics</a></li>
+                <li class="header-nav-item header-dropdown">
+                    <a href="#" class="header-nav-link">
                         Productivity Tools
-                        <span class="dropdown-icon">▼</span>
+                        <span class="header-dropdown-icon">▼</span>
                     </a>
-                    <div class="dropdown-content">
-                        <a href="/email-builder/" class="dropdown-item">Email Builder</a>
-                        <a href="/todo-notes/" class="dropdown-item">Enhanced To-Do & Notes</a>
-                        <a href="/klaviyo-tool/" class="dropdown-item">Klaviyo Analytics Tool</a>
+                    <div class="header-dropdown-content">
+                        <a href="email-builder.html" class="header-dropdown-item">Email Builder</a>
+                        <a href="enhanced-todo.html" class="header-dropdown-item">Enhanced To-Do & Notes</a>
+                        <a href="klaviyo-tool.html" class="header-dropdown-item">Klaviyo Tool</a>
                     </div>
                 </li>
-                
-                <li class="nav-item"><a href="/about/" class="nav-link">About</a></li>
-                <li class="nav-item"><a href="/contact/" class="nav-link">Contact</a></li>
+                <li class="header-nav-item"><a href="about.html" class="header-nav-link">About</a></li>
+                <li class="header-nav-item"><a href="contact.html" class="header-nav-link">Contact</a></li>
             </ul>
         </div>
     </div>
 </header>
-
-
-
-
-
-
 
 
 
@@ -1383,68 +1176,8 @@
         // Initialize the app when DOM is loaded
         document.addEventListener('DOMContentLoaded', init);
     </script>
-    <script>
-        // Hamburger menu toggle
-        document.querySelector('.hamburger').addEventListener('click', () => {
-            document.querySelector('.nav-menu').classList.toggle('active');
-        });
-
-        // Toggle dropdown on mobile
-        document.querySelectorAll('.dropdown .nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                // Prevent default link behavior
-                e.preventDefault();
-                // Toggle active class on parent dropdown
-                const dropdown = link.closest('.dropdown');
-                dropdown.classList.toggle('active');
-            });
-        });
-
-        // Close menu when clicking a non-dropdown nav link or dropdown item
-        document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
-            link.addEventListener('click', () => {
-                document.querySelector('.nav-menu').classList.remove('active');
-                // Remove active class from all dropdowns
-                document.querySelectorAll('.dropdown').forEach(dropdown => {
-                    dropdown.classList.remove('active');
-                });
-            });
-        });
-    </script>
-    <script>
-        // Load header dynamically
-        fetch('header.html')
-            .then(response => {
-                if (!response.ok) throw new Error('Failed to load header');
-                return response.text();
-            })
-            .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
-                
-                // Re-attach event listeners for hamburger menu and dropdowns
-                document.querySelector('.hamburger').addEventListener('click', () => {
-                    document.querySelector('.nav-menu').classList.toggle('active');
-                });
-
-                document.querySelectorAll('.dropdown .nav-link').forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const dropdown = link.closest('.dropdown');
-                        dropdown.classList.toggle('active');
-                    });
-                });
-
-                document.querySelectorAll('.nav-item:not(.dropdown) .nav-link, .dropdown-item').forEach(link => {
-                    link.addEventListener('click', () => {
-                        document.querySelector('.nav-menu').classList.remove('active');
-                        document.querySelectorAll('.dropdown').forEach(dropdown => {
-                            dropdown.classList.remove('active');
-                        });
-                    });
-                });
-            })
-            .catch(error => console.error('Error loading header:', error));
-    </script>
+    
+    <script src="header.js"></script>
 
 </body>
 </html>

@@ -397,7 +397,7 @@
 <body>
 <header>
     <div class="header-content">
-        <a href="index.html" class="logo">
+        <a href="/" class="logo">
             <span class="logo-icon">📄</span>
             <span>ResumePro</span>
         </a>
@@ -405,63 +405,76 @@
         <div class="nav-container">
             <button class="hamburger" aria-label="Toggle navigation">☰</button>
             <ul class="nav-menu">
-                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link">
+                <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                
+                <!-- Templates Dropdown -->
+                <li class="nav-item dropdown-parent">
+                    <a href="#" class="nav-link dropdown-toggle">
                         Templates
                         <span class="dropdown-icon">▼</span>
                     </a>
                     <div class="dropdown-content">
-                        <a href="resume-templates.html" class="dropdown-item">Resume Templates</a>
-                        <a href="portfolio-templates.html" class="dropdown-item">Portfolio Templates</a>
+                        <a href="/resume-templates/" class="dropdown-item">Resume Templates</a>
+                        <a href="/portfolio-templates/" class="dropdown-item">Portfolio Templates</a>
                     </div>
                 </li>
                 
-                <!-- NEW: My Apps Menu Item -->
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link">
+                <!-- My Apps Dropdown -->
+                <li class="nav-item dropdown-parent">
+                    <a href="#" class="nav-link dropdown-toggle">
                         My Apps
                         <span class="dropdown-icon">▼</span>
                     </a>
                     <div class="dropdown-content">
-                        <a href="android-applications.html" class="dropdown-item">Android Applications</a>
-                        <a href="family-connection-tools.html" class="dropdown-item">Web Applications</a>
-                      </div>
+                        <a href="/android-applications/" class="dropdown-item">Android Applications</a>
+                        <a href="/family-connection-tools/" class="dropdown-item">Web Applications</a>
+                    </div>
                 </li>
                 
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link">
+                <!-- Blog Dropdown -->
+                <li class="nav-item dropdown-parent">
+                    <a href="#" class="nav-link dropdown-toggle">
                         Blog
                         <span class="dropdown-icon">▼</span>
                     </a>
                     <div class="dropdown-content">
-                        <a href="portfolio-best-practices.html" class="dropdown-item">Portfolio Best Practices</a>
-                        <a href="portfolio-maintenance.html" class="dropdown-item">Portfolio Maintenance</a>
-                        <a href="online-job-sites.html" class="dropdown-item">Legit Online Job Sites</a>
-                        <a href="email-marketing" class="dropdown-item">Unlocking Email Marketing Success</a>
-                        <a href="mobile-optimization.html" class="dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
-                        <a href="email-list-failure.html" class="dropdown-item">Why Your Email List Might Be Failing</a> 
-                        <a href="email-builder-previews.html" class="dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
-                        <a href="why-less-is-more.html" class="dropdown-item">The Power of Focused Email Design</a>
+                        <a href="/portfolio-best-practices/" class="dropdown-item">Portfolio Best Practices</a>
+                        <a href="/portfolio-maintenance/" class="dropdown-item">Portfolio Maintenance</a>
+                        <a href="/online-job-sites/" class="dropdown-item">Legit Online Job Sites</a>
+                        <a href="/email-marketing" class="dropdown-item">Unlocking Email Marketing Success</a>
+                        <a href="/mobile-optimization/" class="dropdown-item">Why 'Looking the Same' Isn't Mobile Optimized</a>
+                        <a href="/email-list-failure/" class="dropdown-item">Why Your Email List Might Be Failing</a> 
+                        <a href="/email-builder-previews/" class="dropdown-item">Why Email Builder Previews Can't Be Trusted</a>
+                        <a href="/why-less-is-more/" class="dropdown-item">The Power of Focused Email Design</a>
                     </div>
                 </li>
-                <li class="nav-item"><a href="klaviyo-analytics.html" class="nav-link">Klaviyo Analytics</a></li>
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link">
+                
+                <li class="nav-item"><a href="/klaviyo-analytics/" class="nav-link">Klaviyo Analytics</a></li>
+                
+                <!-- Productivity Tools Dropdown -->
+                <li class="nav-item dropdown-parent">
+                    <a href="#" class="nav-link dropdown-toggle">
                         Productivity Tools
                         <span class="dropdown-icon">▼</span>
                     </a>
                     <div class="dropdown-content">
-                        <a href="email-builder" class="dropdown-item">Email Builder</a>
-                        <a href="https://resumepro.pages.dev/enhanced-todo" class="dropdown-item">Enhanced To-Do & Notes</a>
+                        <a href="/email-builder/" class="dropdown-item">Email Builder</a>
+                        <a href="/todo-notes/" class="dropdown-item">Enhanced To-Do & Notes</a>
+                        <a href="/klaviyo-tool/" class="dropdown-item">Klaviyo Analytics Tool</a>
                     </div>
                 </li>
-                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+                
+                <li class="nav-item"><a href="/about/" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="/contact/" class="nav-link">Contact</a></li>
             </ul>
         </div>
     </div>
 </header>
+
+
+
+
+
 
 
      <!-- Header Placeholder -->
@@ -548,48 +561,45 @@
 
     <!-- Footer -->
     <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>ResumePro</h3>
-                    <p>Professional templates designed to showcase your work and attract clients.</p>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Templates</h3>
-                    <ul class="footer-links">
-                        <li><a href="resume-templates.html">Resume Templates</a></li>
-                        <li><a href="portfolio-templates.html">Portfolio Templates</a></li>
-                        <li><a href="#">All Templates</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Resources</h3>
-                    <ul class="footer-links">
-                        <li><a href="blog.html">Blog</a></li>
-                        <li><a href="help.html">Help Center</a></li>
-                        <li><a href="tutorials.html">Tutorials</a></li>
-                        <li><a href="guide.html">Getting Started</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Company</h3>
-                    <ul class="footer-links">
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                        <li><a href="privacy.html">Privacy Policy</a></li>
-                        <li><a href="terms.html">Terms of Service</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="copyright">
-                <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
-            </div>
+    <div class="footer-content">
+        <div class="footer-column">
+            <h3>ResumePro</h3>
+            <p>Professional digital templates to showcase your career and work.</p>
         </div>
-    </footer>
+        
+        <div class="footer-column">
+            <h3>Templates</h3>
+            <ul class="footer-links">
+                <li><a href="resume-templates.html">Resume Templates</a></li>
+                <li><a href="portfolio-templates.html">Portfolio Templates</a></li>
+                <li><a href="#">All Templates</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Resources</h3>
+            <ul class="footer-links">
+                <li><a href="help.html#editing">How to Edit</a></li>
+                <li><a href="help.html#hosting">Hosting Guide</a></li>
+                <li><a href="help.html#tips">Tips & Examples</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Company</h3>
+            <ul class="footer-links">
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="copyright">
+        <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
+    </div>
+</footer>
     
 <script src="clean-urls.js"></script>
 

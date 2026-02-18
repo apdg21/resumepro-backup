@@ -2,295 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Klaviyo Dashboard — Final</title>
+  <title>Klaviyo Analytics Dashboard</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <!-- CSS -->
+  
+  <!-- External CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="footer.css" />
-  <link rel="stylesheet" href="header.css" />
+  <link rel="stylesheet" href="header.css">
+  <link rel="stylesheet" href="footer.css">
+  
+  <!-- Local CSS -->
+  <link rel="stylesheet" href="klaviyo-tool.css" />
+  
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
-  <style>
-    :root {
-      --primary-color: #6c5ce7;
-      --secondary-color: #a29bfe;
-      --accent-color: #fd79a8;
-      --light-bg: #f8f9fa;
-      --dark-text: #2d3436;
-      --light-text: #636e72;
-    }
-	* {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-    
-    body {
-      padding: 0px;
-      background-color: #f5f6fa;
-      color: var(--dark-text);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    
-    .dashboard-header {
-      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-      color: white;
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 25px;
-      box-shadow: 0 4px 20px rgba(108, 92, 231, 0.15);
-      margin-top: 100px;
-    }
-    
-    .card {
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-      margin-bottom: 20px;
-      transition: transform 0.3s ease;
-    }
-    
-    .card:hover {
-      transform: translateY(-5px);
-    }
-    
-    .card-header {
-      background-color: white;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-      font-weight: 600;
-      border-radius: 10px 10px 0 0 !important;
-    }
-    
-    .nav-tabs {
-      border-bottom: 2px solid #dee2e6;
-    }
-    
-    .nav-tabs .nav-link {
-      color: var(--light-text);
-      border: none;
-      padding: 12px 20px;
-      font-weight: 500;
-      border-radius: 8px 8px 0 0;
-      margin-right: 5px;
-    }
-    
-    .nav-tabs .nav-link:hover {
-      border-color: transparent;
-      color: var(--primary-color);
-    }
-    
-    .nav-tabs .nav-link.active {
-      color: var(--primary-color);
-      background-color: transparent;
-      border-bottom: 3px solid var(--primary-color);
-      font-weight: 600;
-    }
-    
-    .tab-content {
-      background-color: white;
-      padding: 20px;
-      border-radius: 0 0 10px 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    }
-    
-    .chart-wrap {
-      height: 300px;
-      margin-bottom: 20px;
-    }
-    
-    .loading {
-      display: none;
-      padding: 10px 15px;
-      border-radius: 5px;
-    }
-    
-    .table-responsive {
-      margin-top: 15px;
-    }
-    
-    table.dataTable {
-      width: 100% !important;
-      border-collapse: collapse !important;
-    }
-    
-    .dataTables_wrapper .dataTables_paginate .paginate_button {
-      padding: 5px 10px;
-      border-radius: 4px;
-      margin: 0 2px;
-    }
-    
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-      background: var(--primary-color) !important;
-      color: white !important;
-      border: none;
-    }
-    
-    .export-btn {
-      margin-bottom: 15px;
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 6px;
-      transition: all 0.3s ease;
-    }
-    
-    .export-btn:hover {
-      background-color: #5649d1;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(108, 92, 231, 0.3);
-    }
-    
-    .form-control, .form-control-file {
-      border-radius: 6px;
-      padding: 10px 15px;
-      border: 1px solid #e0e0e0;
-    }
-    
-    .btn-primary {
-      background-color: var(--primary-color);
-      border-color: var(--primary-color);
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-weight: 500;
-    }
-    
-    .btn-primary:hover {
-      background-color: #5649d1;
-      border-color: #5649d1;
-    }
-    
-    .alert-warning {
-      background-color: #fff3cd;
-      color: #856404;
-      border-color: #ffeeba;
-    }
-    
-    /* Mobile responsiveness */
-    @media (max-width: 768px) {
-      body {
-        padding: 10px;
-      }
-      
-      .dashboard-header {
-        padding: 15px;
-      }
-      
-      .nav-tabs .nav-link {
-        padding: 8px 12px;
-        font-size: 14px;
-      }
-      
-      .tab-content {
-        padding: 15px;
-      }
-      
-      .chart-wrap {
-        height: 250px;
-      }
-      
-      .form-row .form-group {
-        margin-bottom: 10px;
-      }
-      
-      .export-btn {
-        padding: 6px 12px;
-        font-size: 14px;
-      }
-    }
-    
-    @media (max-width: 576px) {
-      .nav-tabs {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-        padding-bottom: 5px;
-      }
-      
-      .nav-tabs .nav-item {
-        display: inline-block;
-        float: none;
-      }
-      
-      .dashboard-header h1 {
-        font-size: 24px;
-      }
-      
-      .chart-wrap {
-        height: 200px;
-      }
-    }
-    
-    /* Custom scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    
-    ::-webkit-scrollbar-track {
-      background: #f1f1f1;
-    }
-    
-    ::-webkit-scrollbar-thumb {
-      background: var(--secondary-color);
-      border-radius: 10px;
-    }
-    
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--primary-color);
-    }
-    
-    /* Loading spinner */
-    .spinner {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255,255,255,.3);
-      border-radius: 50%;
-      border-top-color: white;
-      animation: spin 1s ease-in-out infinite;
-      margin-right: 10px;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    /* Help modal styling */
-    .help-step {
-      border-left: 4px solid var(--primary-color);
-      padding-left: 1rem;
-      margin: 1.5rem 0;
-      background-color: #f8f9ff;
-      border-radius: 0 8px 8px 0;
-      padding: 1rem;
-    }
-    .sample-link {
-      background-color: #e8f0fe;
-      border-radius: 40px;
-      padding: 8px 18px;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 500;
-      color: var(--primary-color);
-      border: 1px dashed var(--primary-color);
-      transition: all 0.2s;
-    }
-    .sample-link:hover {
-      background-color: var(--primary-color);
-      color: white;
-      text-decoration: none;
-    }
-    .modal-wide {
-      max-width: 700px;
-    }
-  </style>
 </head>
 <body>
-
 <header>
     <div class="header-content">
         <a href="index.html" class="logo">
@@ -359,7 +86,38 @@
         </div>
     </div>
 </header>
-<!-- Help Modal -->
+<!-- Scroll-Triggered Trial Banner (Mini FAB Style) -->
+<div class="trial-mini-banner" id="trialBanner" onclick="showFullTrialModal()">
+  <i class="fas fa-gift"></i>
+  <span class="countdown" id="countdown">7 days</span>
+  <i class="fas fa-chevron-up ml-1"></i>
+</div>
+
+<!-- Trial Offer Modal -->
+<div class="modal fade" id="trialOfferModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background: linear-gradient(135deg, #fd79a8, #6c5ce7); color: white;">
+        <h5 class="modal-title"><i class="fas fa-gift mr-2"></i>Limited Time Offer!</h5>
+        <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <i class="fas fa-crown fa-4x mb-3" style="color: #6c5ce7;"></i>
+        <h3>🎉 Full Access Unlocked!</h3>
+        <p class="lead">All premium features (Monthly, Trends, Growth, Seasonal) are now working for a limited time!</p>
+        <div class="alert alert-warning">
+          <strong id="modalCountdown">7 days remaining</strong>
+        </div>
+        <p>After this trial, these features will be available in our Windows desktop app.</p>
+        <button class="btn btn-primary btn-lg" onclick="downloadInstaller()">
+          <i class="fas fa-download mr-2"></i> Download Windows App
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ORIGINAL COMPREHENSIVE HELP MODAL (with Google Drive sample link) -->
 <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-wide">
     <div class="modal-content">
@@ -387,8 +145,8 @@
         <div class="help-step">
           <h6><span class="badge badge-primary mr-2">2</span> Download sample CSV (optional)</h6>
           <p>If you want to test the dashboard first, click the button below to download a sample Klaviyo export file:</p>
-          <a id="sampleCsvLink" href="#" class="sample-link" download="klaviyo_sample_data.csv">
-            <i class="fas fa-download"></i> Download Sample CSV (from Google Drive)
+          <a href="https://docs.google.com/spreadsheets/d/1NsSs9EdZWcaYBWoA_Mrg3CNJCgH0-Q_LP9Q5rmI0fco/edit?usp=sharing" target="_blank" class="sample-link">
+            <i class="fas fa-download"></i> Download Sample CSV (Google Drive)
           </a>
           <p class="mt-2 small text-muted">Once downloaded, use "Upload Klaviyo CSV" to select the file.</p>
         </div>
@@ -423,39 +181,42 @@
     </div>
   </div>
 </div>
-
 <div class="container-fluid">
-  <!-- header inside dashboard-header, includes help button with new modal trigger -->
+  
   <div class="dashboard-header">
     <div class="row align-items-center">
       <div class="col-md-8">
         <h1><i class="fas fa-chart-line mr-2"></i>Klaviyo Analytics Dashboard</h1>
-        <p class="mb-0">Comprehensive email campaign performance metrics</p>
+        <p class="mb-0">✨ Premium features unlocked for 7 days ✨</p>
       </div>
       <div class="col-md-4 text-md-right">
-        <button class="btn btn-light" data-toggle="modal" data-target="#helpModal" title="Help">
-          <i class="fas fa-question-circle"></i>
+        <button class="btn btn-light mr-2" data-toggle="modal" data-target="#helpModal">
+          <i class="fas fa-question-circle"></i> Help
+        </button>
+        <button class="btn btn-light" onclick="downloadInstaller()">
+          <i class="fas fa-download"></i> Get Desktop App
         </button>
       </div>
     </div>
   </div>
 
+  <!-- Upload Section -->
   <div class="card">
     <div class="card-body">
       <div class="form-row align-items-end">
         <div class="form-group col-md-4">
-          <label for="csvUpload" class="font-weight-bold"><i class="fas fa-file-upload mr-2"></i>Upload Klaviyo CSV</label>
+          <label><i class="fas fa-file-upload mr-2"></i>Upload Klaviyo CSV</label>
           <div class="custom-file">
             <input type="file" class="custom-file-input" id="csvUpload" accept=".csv">
             <label class="custom-file-label" for="csvUpload">Choose file...</label>
           </div>
         </div>
         <div class="form-group col-md-2">
-          <label for="startDate" class="font-weight-bold"><i class="far fa-calendar-alt mr-2"></i>Start Date</label>
+          <label><i class="far fa-calendar-alt mr-2"></i>Start Date</label>
           <input id="startDate" type="date" class="form-control" />
         </div>
         <div class="form-group col-md-2">
-          <label for="endDate" class="font-weight-bold"><i class="far fa-calendar-alt mr-2"></i>End Date</label>
+          <label><i class="far fa-calendar-alt mr-2"></i>End Date</label>
           <input id="endDate" type="date" class="form-control" />
         </div>
         <div class="form-group col-md-2">
@@ -465,120 +226,90 @@
         </div>
         <div class="form-group col-md-2">
           <div id="loadingIndicator" class="alert alert-warning loading mb-0">
-            <div class="spinner"></div>
-            <span>Processing data...</span>
+            <div class="spinner"></div> Processing...
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Tabs Navigation -->
   <div class="card">
     <div class="card-body p-0">
       <ul class="nav nav-tabs" id="mainTabs" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link active" id="daily-tab" data-toggle="tab" href="#daily" role="tab">
-            <i class="fas fa-calendar-day mr-2"></i>Daily
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="weekly-tab" data-toggle="tab" href="#weekly" role="tab">
-            <i class="fas fa-calendar-week mr-2"></i>Weekly
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab">
-            <i class="fas fa-calendar mr-2"></i>Monthly
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="trend-tab" data-toggle="tab" href="#trend" role="tab">
-            <i class="fas fa-chart-line mr-2"></i>Trends
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="growth-tab" data-toggle="tab" href="#growth" role="tab">
-            <i class="fas fa-rocket mr-2"></i>Growth
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="seasonal-tab" data-toggle="tab" href="#seasonal" role="tab">
-            <i class="fas fa-calendar-check mr-2"></i>Seasonal
-          </a>
-        </li>
+        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#daily"><i class="fas fa-calendar-day mr-2"></i>Daily</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#weekly"><i class="fas fa-calendar-week mr-2"></i>Weekly</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#monthly"><i class="fas fa-calendar mr-2"></i>Monthly <span class="badge badge-warning ml-1">NEW</span></a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#trend"><i class="fas fa-chart-line mr-2"></i>Trends <span class="badge badge-warning ml-1">NEW</span></a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#growth"><i class="fas fa-rocket mr-2"></i>Growth <span class="badge badge-warning ml-1">NEW</span></a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#seasonal"><i class="fas fa-calendar-check mr-2"></i>Seasonal <span class="badge badge-warning ml-1">NEW</span></a></li>
       </ul>
 
+      <!-- Tab Content -->
       <div class="tab-content p-3">
-        <div class="tab-pane fade show active" id="daily" role="tabpanel">
-          <button class="btn export-btn" id="exportDailyBtn">
-            <i class="fas fa-download mr-2"></i>Export Daily Data
-          </button>
+        <!-- Daily Tab -->
+        <div class="tab-pane fade show active" id="daily">
+          <button class="btn export-btn" id="exportDailyBtn"><i class="fas fa-download mr-2"></i>Export Daily Data</button>
           <div id="dailyTable" class="table-responsive"></div>
         </div>
 
-        <div class="tab-pane fade" id="weekly" role="tabpanel">
-          <button class="btn export-btn" id="exportWeeklyBtn">
-            <i class="fas fa-download mr-2"></i>Export Weekly Data
-          </button>
+        <!-- Weekly Tab -->
+        <div class="tab-pane fade" id="weekly">
+          <button class="btn export-btn" id="exportWeeklyBtn"><i class="fas fa-download mr-2"></i>Export Weekly Data</button>
           <div id="weeklyTable" class="table-responsive"></div>
         </div>
 
-        <div class="tab-pane fade" id="monthly" role="tabpanel">
-          <button class="btn export-btn" id="exportMonthlyBtn">
-            <i class="fas fa-download mr-2"></i>Export Monthly Data
-          </button>
+        <!-- Monthly Tab -->
+        <div class="tab-pane fade" id="monthly">
+          <button class="btn export-btn" id="exportMonthlyBtn"><i class="fas fa-download mr-2"></i>Export Monthly Data</button>
           <div id="monthlyTable" class="table-responsive"></div>
         </div>
 
-        <div class="tab-pane fade" id="trend" role="tabpanel">
+        <!-- Trends Tab -->
+        <div class="tab-pane fade" id="trend">
           <div class="row">
             <div class="col-lg-6">
-              <div class="chart-wrap">
-                <canvas id="trendChart"></canvas>
-              </div>
-              <button class="btn export-btn" id="exportTrendBtn">
-                <i class="fas fa-download mr-2"></i>Export Trend Data
-              </button>
+              <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
+              <button class="btn export-btn" id="exportTrendBtn"><i class="fas fa-download mr-2"></i>Export Trend Data</button>
             </div>
-            <div class="col-lg-6">
-              <div class="table-responsive" id="trendTable"></div>
-            </div>
+            <div class="col-lg-6"><div id="trendTable" class="table-responsive"></div></div>
           </div>
         </div>
 
-        <div class="tab-pane fade" id="growth" role="tabpanel">
+        <!-- Growth Tab -->
+        <div class="tab-pane fade" id="growth">
           <div class="row">
             <div class="col-lg-6">
-              <div class="chart-wrap">
-                <canvas id="growthChart"></canvas>
-              </div>
-              <button class="btn export-btn" id="exportGrowthBtn">
-                <i class="fas fa-download mr-2"></i>Export Growth Data
-              </button>
+              <div class="chart-wrap"><canvas id="growthChart"></canvas></div>
+              <button class="btn export-btn" id="exportGrowthBtn"><i class="fas fa-download mr-2"></i>Export Growth Data</button>
             </div>
-            <div class="col-lg-6">
-              <div class="table-responsive" id="growthTable"></div>
-            </div>
+            <div class="col-lg-6"><div id="growthTable" class="table-responsive"></div></div>
           </div>
         </div>
 
-        <div class="tab-pane fade" id="seasonal" role="tabpanel">
+        <!-- Seasonal Tab -->
+        <div class="tab-pane fade" id="seasonal">
           <div class="row">
             <div class="col-lg-6">
-              <div class="chart-wrap">
-                <canvas id="seasonalChart"></canvas>
-              </div>
-              <button class="btn export-btn" id="exportSeasonalBtn">
-                <i class="fas fa-download mr-2"></i>Export Seasonal Data
-              </button>
+              <div class="chart-wrap"><canvas id="seasonalChart"></canvas></div>
+              <button class="btn export-btn" id="exportSeasonalBtn"><i class="fas fa-download mr-2"></i>Export Seasonal Data</button>
             </div>
-            <div class="col-lg-6">
-              <div class="table-responsive" id="seasonalTable"></div>
-            </div>
+            <div class="col-lg-6"><div id="seasonalTable" class="table-responsive"></div></div>
           </div>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Installer Promotion Card -->
+  <div class="installer-card">
+    <i class="fas fa-crown fa-3x mb-3"></i>
+    <h3>Love the full access? Get the Windows App!</h3>
+    <p>After 7 days, advanced features will be available only in the desktop version.</p>
+    <button class="installer-btn" onclick="downloadInstaller()">
+      <i class="fas fa-download mr-2"></i>Download Windows App (Free)
+    </button>
+    <p class="mt-3 small opacity-8">✓ All features permanently ✓ Faster processing ✓ No browser limits</p>
   </div>
 </div>
 
@@ -623,521 +354,17 @@
     </div>
 </footer>
 
-<!-- JS libs (CDNs) -->
+<!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+
+<!-- Local JavaScript -->
+<script src="klaviyo-tool.js"></script>
 <script src="header.js"></script>
-<!-- no external header/footer to keep standalone, but we include mock for completeness -->
-<script>
-  (function(){
-    // ---------- helpers (same as original, plus sample download injection) ----------
-    function safeParseFloat(v){ const n = parseFloat(v); return isNaN(n)?0:n; }
-    function parsePercentage(value) {
-      if (value === '' || value == null) return 0;
-      if (typeof value === 'string' && value.trim().endsWith('%')) {
-        return parseFloat(value.replace('%','').trim())/100 || 0;
-      }
-      return parseFloat(value) || 0;
-    }
-
-    // Robust Send Time parser - returns Date or null
-    function parseSendTime(value) {
-      if (!value) return null;
-      if (value instanceof Date && !isNaN(value)) return value;
-      let s = String(value).trim();
-      let dt = new Date(s);
-      if (!isNaN(dt)) return dt;
-      dt = new Date(s.replace(/-/g,'/'));
-      if (!isNaN(dt)) return dt;
-      const m = s.match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})(.*)/);
-      if (m) {
-        const mm = m[1].padStart(2,'0'), dd = m[2].padStart(2,'0'), yy = m[3];
-        const tail = m[4] ? m[4].trim() : '';
-        const candidate = `${yy}-${mm}-${dd} ${tail}`;
-        dt = new Date(candidate);
-        if (!isNaN(dt)) return dt;
-      }
-      const cleaned = s.replace(/\(.+?\)/g,'').replace(/GMT.*$/,'').trim();
-      dt = new Date(cleaned);
-      if (!isNaN(dt)) return dt;
-      return null;
-    }
-
-    function isValidDate(d){ return d instanceof Date && !isNaN(d); }
-
-    function formatDateLong(d){
-      const dt = (d && !(d instanceof Date)) ? parseSendTime(d) : d;
-      if (!isValidDate(dt)) return '';
-      return dt.toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });
-    }
-
-    function formatDateISO(d){
-      const dt = (d && !(d instanceof Date)) ? parseSendTime(d) : d;
-      if (!isValidDate(dt)) return '';
-      return dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0') + '-' + String(dt.getDate()).padStart(2,'0');
-    }
-
-    function formatMonthKey(d){
-      const dt = (d && !(d instanceof Date)) ? parseSendTime(d) : d;
-      if (!isValidDate(dt)) return '';
-      return dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0');
-    }
-
-    function getWeekStartDate(date){
-      const d = new Date(date);
-      const day = d.getDay();
-      const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-      const start = new Date(d);
-      start.setDate(diff);
-      start.setHours(0,0,0,0);
-      return start;
-    }
-    function formatWeekDisplay(date){
-      const s = getWeekStartDate(date);
-      const e = new Date(s);
-      e.setDate(s.getDate()+6);
-      return formatDateLong(s) + ' - ' + formatDateLong(e);
-    }
-
-    function formatNumberInt(n){
-      if (n === null || n === undefined || isNaN(n)) return '0';
-      return Intl.NumberFormat('en-US', { maximumFractionDigits:0 }).format(Math.round(n));
-    }
-    function formatMoney(n){
-      if (n === null || n === undefined || isNaN(n)) return '0.00';
-      return Intl.NumberFormat('en-US', { minimumFractionDigits:2, maximumFractionDigits:2 }).format(n);
-    }
-
-    // ---------- state ----------
-    let rawData = [];
-    const outputs = { daily: null, weekly: null, monthly: null, trend: null, growth: null, seasonal: null };
-    let trendChart = null, growthChart = null, seasonalChart = null;
-
-    // ---------- UI wiring ----------
-    const fileInput = document.getElementById('csvUpload');
-    const loadingIndicator = document.getElementById('loadingIndicator');
-    const filterButton = document.getElementById('filterButton');
-
-    fileInput.addEventListener('change', function(e) {
-      const fileName = e.target.files[0] ? e.target.files[0].name : "Choose file...";
-      const label = e.target.nextElementSibling;
-      label.textContent = fileName;
-      label.classList.add('text-truncate');
-    });
-
-    // export buttons
-    document.getElementById('exportDailyBtn').addEventListener('click', ()=> downloadCSV(outputs.daily, 'daily_tracking.csv'));
-    document.getElementById('exportWeeklyBtn').addEventListener('click', ()=> downloadCSV(outputs.weekly, 'weekly_tracking.csv'));
-    document.getElementById('exportMonthlyBtn').addEventListener('click', ()=> downloadCSV(outputs.monthly, 'monthly_tracking.csv'));
-    document.getElementById('exportTrendBtn').addEventListener('click', ()=> downloadCSV(outputs.trend, 'trend_analysis.csv'));
-    document.getElementById('exportGrowthBtn').addEventListener('click', ()=> downloadCSV(outputs.growth, 'growth_insights.csv'));
-    document.getElementById('exportSeasonalBtn').addEventListener('click', ()=> downloadCSV(outputs.seasonal, 'seasonal_patterns.csv'));
-
-    fileInput.addEventListener('change', handleFile);
-    filterButton.addEventListener('click', runAll);
-
-    // Tooltips
-    $(function () { $('[data-toggle="tooltip"]').tooltip(); });
-
-    // --- sample CSV download from Google Drive (via proxy / direct link not possible, so we embed a downloadable dummy with same columns) ---
-    // Actually we can't directly download from drive without CORS; so we create a sample CSV in code and offer as download
-    function generateSampleCSVAndDownload() {
-      const sampleRows = [
-        ['Campaign Name','Send Time','Subject','Total Recipients','Unique Opens','Unique Clicks','Revenue','Open Rate','Click Rate','Placed Order Rate','Send Weekday','List'],
-        ['Welcome Series','2025-01-15 10:30','Welcome to our club','12500','6800','2100','45200.50','54.4%','16.8%','8.2%','Wednesday','New Subscribers'],
-        ['Flash Sale','2025-01-18 14:15','Limited time offer','22000','11200','4200','88750.00','50.9%','19.1%','12.5%','Saturday','All Customers'],
-        ['Product Launch','2025-02-02 09:00','New arrivals','18700','10100','3900','123400.75','54.0%','20.9%','14.1%','Sunday','Engaged Users'],
-        ['Holiday Special','2025-02-14 08:45','Valentine deals','9200','5300','1700','28900.30','57.6%','18.5%','9.7%','Friday','Holiday Shoppers'],
-        ['Feedback Request','2025-03-10 11:20','How did we do?','5600','3100','620','0.00','55.4%','11.1%','0.0%','Monday','Recent Buyers'],
-        ['Newsletter March','2025-03-25 12:00','March updates','15000','7100','1800','3400.90','47.3%','12.0%','1.2%','Tuesday','Subscribers'],
-        ['Spring Sale','2025-04-03 16:00','Spring into savings','19800','10500','4100','112300.00','53.0%','20.7%','13.9%','Thursday','All Customers'],
-        ['VIP Event','2025-04-20 19:30','Exclusive preview','3200','2100','980','56780.00','65.6%','30.6%','21.9%','Sunday','VIP'],
-      ];
-      const csvContent = sampleRows.map(row => row.map(cell => {
-        if (typeof cell === 'string' && (cell.includes(',') || cell.includes('"'))) return `"${cell.replace(/"/g,'""')}"`;
-        return cell;
-      }).join(',')).join('\n');
-      const blob = new Blob([csvContent], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'klaviyo_sample_data.csv';
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 150);
-    }
-
-    // Attach sample download to the link in help modal (replace original href)
-    document.getElementById('sampleCsvLink').addEventListener('click', function(e) {
-      e.preventDefault();
-      generateSampleCSVAndDownload();
-    });
-
-    // handle file & run all
-    function handleFile(e){
-      const file = e.target.files && e.target.files[0];
-      if (!file) return;
-      loadingIndicator.style.display = 'flex';
-      loadingIndicator.style.alignItems = 'center';
-      Papa.parse(file, {
-        header: true,
-        skipEmptyLines: true,
-        complete: function(results){
-          loadingIndicator.style.display = 'none';
-          if (results.errors && results.errors.length) {
-            console.error('CSV parse errors', results.errors);
-            alert('CSV parse error: ' + results.errors[0].message);
-            return;
-          }
-          rawData = results.data;
-          runAll();
-        },
-        error: function(err){
-          loadingIndicator.style.display = 'none';
-          console.error(err);
-          alert('CSV parse error: ' + err.message);
-        }
-      });
-    }
-
-    function runAll(){
-      if (!rawData || rawData.length === 0) {
-        alert('Please upload a Klaviyo CSV first.');
-        return;
-      }
-      const startVal = document.getElementById('startDate').value;
-      const endVal = document.getElementById('endDate').value;
-      const start = startVal ? new Date(startVal) : null;
-      const end = endVal ? new Date(endVal) : null;
-
-      const filtered = rawData.filter(r => {
-        const dt = parseSendTime(r['Send Time']);
-        if (!isValidDate(dt)) return false;
-        if (start && dt < start) return false;
-        if (end && dt > end) return false;
-        return true;
-      });
-
-      if (filtered.length === 0) {
-        alert('No data matches selected date range or Send Time values could not be parsed.');
-        clearAll();
-        return;
-      }
-
-      buildDailyWeeklyMonthly(filtered);
-      buildTrend(filtered);
-      buildGrowth(filtered);
-      buildSeasonal(filtered);
-    }
-
-    function clearAll(){
-      ['dailyTable','weeklyTable','monthlyTable','trendTable','growthTable','seasonalTable'].forEach(id=>{
-        const el = document.getElementById(id);
-        if (el) el.innerHTML = '<div class="alert alert-info">No data available. Please upload a CSV file.</div>';
-      });
-      if (trendChart) { trendChart.destroy(); trendChart = null; }
-      if (growthChart) { growthChart.destroy(); growthChart = null; }
-      if (seasonalChart) { seasonalChart.destroy(); seasonalChart = null; }
-    }
-
-    // ---------- build functions (identical to original, omitted for brevity but fully functional) ----------
-    // For space, they are included but I keep them as they are from original code – trust that they are intact.
-    // Since the original script (from provided file) continues here with all the buildDailyWeeklyMonthly etc.
-    // I will just copy the remaining original functions verbatim. 
-    // The following code is the original implementation; it is complete and unmodified (except safe integration).
-    // (I have included the full original script after this point.)
-
-    // buildDailyWeeklyMonthly, buildTrend, buildGrowth, buildSeasonal, renderTable, downloadCSV, etc.
-    // (Original code from line ~294 onward, but to keep this answer concise I ensure they are present.
-    // For final delivery, the entire original script is kept. I'll just indicate the rest is unchanged.
-    
-    // ----- ORIGINAL FUNCTIONS (copied) -----
-    function buildDailyWeeklyMonthly(rows){
-      const daily = {};   
-      const weekly = {};  
-      const monthly = {}; 
-
-      rows.forEach(r => {
-        const dt = parseSendTime(r['Send Time']);
-        if (!isValidDate(dt)) return;
-        const dateISO = formatDateISO(dt);
-        const dateDisplay = formatDateLong(dt);
-        const weekKey = formatWeekKey(dt);
-        const weekDisplay = formatWeekDisplay(dt);
-        const monthKey = formatMonthKey(dt);
-        const monthDisplay = dt.toLocaleDateString('en-US', { month:'long', year:'numeric' });
-
-        const campaignName = r['Campaign Name'] || 'Unknown';
-        const subject = r['Subject'] || '';
-        const sendDays = r['Send Weekday'] || '';
-        const listSegment = r['List'] || '';
-
-        const revenue = safeParseFloat(r['Revenue']);
-        const openRate = parsePercentage(r['Open Rate']);
-        const clickRate = parsePercentage(r['Click Rate']);
-        const convRate = parsePercentage(r['Placed Order Rate']);
-
-        const recipients = safeParseFloat(r['Total Recipients']);
-        const uniqueOpens = safeParseFloat(r['Unique Opens']);
-        const uniqueClicks = safeParseFloat(r['Unique Clicks']);
-
-        // DAILY
-        if (!daily[dateISO]) daily[dateISO] = { display: dateDisplay, sendTime: formatTimeFromRow(r['Send Time']), campaigns: {} };
-        if (!daily[dateISO].campaigns[campaignName]) daily[dateISO].campaigns[campaignName] = { subject, count:0, openRateSum:0, clickRateSum:0, convRateSum:0, revenueSum:0, sendDays, listSegment };
-        const dc = daily[dateISO].campaigns[campaignName];
-        dc.count++;
-        dc.openRateSum += openRate;
-        dc.clickRateSum += clickRate;
-        dc.convRateSum += convRate;
-        dc.revenueSum += revenue;
-
-        // WEEKLY
-        if (!weekly[weekKey]) weekly[weekKey] = { display: weekDisplay, revenueSum:0, recipientsSum:0, opensSum:0, clicksSum:0, count:0 };
-        weekly[weekKey].revenueSum += revenue;
-        weekly[weekKey].recipientsSum += recipients;
-        weekly[weekKey].opensSum += uniqueOpens;
-        weekly[weekKey].clicksSum += uniqueClicks;
-        weekly[weekKey].count++;
-
-        // MONTHLY
-        if (!monthly[monthKey]) monthly[monthKey] = { display: monthDisplay, revenueSum:0, recipientsSum:0, opensSum:0, clicksSum:0, count:0 };
-        monthly[monthKey].revenueSum += revenue;
-        monthly[monthKey].recipientsSum += recipients;
-        monthly[monthKey].opensSum += uniqueOpens;
-        monthly[monthKey].clicksSum += uniqueClicks;
-        monthly[monthKey].count++;
-      });
-
-      // Build Daily output
-      const dailyOutput = [['Date Sent','Campaign Name','Subject','Open Rate','Click Rate','Conversion Rate','Send Time','Send Days','List / Segment','Revenue']];
-      Object.keys(daily).sort().forEach(dateISO=>{
-        const info = daily[dateISO];
-        Object.keys(info.campaigns).forEach(cn=>{
-          const c = info.campaigns[cn];
-          const avgOpen = c.count ? (c.openRateSum / c.count) * 100 : 0;
-          const avgClick = c.count ? (c.clickRateSum / c.count) * 100 : 0;
-          const avgConv = c.count ? (c.convRateSum / c.count) * 100 : 0;
-          dailyOutput.push([
-            info.display,
-            cn,
-            c.subject || '',
-            avgOpen.toFixed(2) + '%',
-            avgClick.toFixed(2) + '%',
-            avgConv.toFixed(2) + '%',
-            info.sendTime || '',
-            c.sendDays || '',
-            c.listSegment || '',
-            formatMoney(c.revenueSum)
-          ]);
-        });
-      });
-      outputs.daily = dailyOutput;
-      renderTable('dailyTable', dailyOutput);
-
-      // Build Weekly output
-      const weeklyOutput = [['Week','Total Revenue','Total Recipients','Total Opens','Total Clicks']];
-      Object.keys(weekly).sort().forEach(weekKey=>{
-        const w = weekly[weekKey];
-        weeklyOutput.push([ w.display, formatMoney(w.revenueSum), formatNumberInt(w.recipientsSum), formatNumberInt(w.opensSum), formatNumberInt(w.clicksSum) ]);
-      });
-      outputs.weekly = weeklyOutput;
-      renderTable('weeklyTable', weeklyOutput);
-
-      // Build Monthly output
-      const monthlyOutput = [['Month','Total Revenue','Total Recipients','Total Opens','Total Clicks']];
-      Object.keys(monthly).sort().forEach(monthKey=>{
-        const m = monthly[monthKey];
-        monthlyOutput.push([ m.display, formatMoney(m.revenueSum), formatNumberInt(m.recipientsSum), formatNumberInt(m.opensSum), formatNumberInt(m.clicksSum) ]);
-      });
-      outputs.monthly = monthlyOutput;
-      renderTable('monthlyTable', monthlyOutput);
-    }
-
-    function formatWeekKey(d){
-      const ws = getWeekStartDate(d);
-      return ws.getFullYear() + '-' + String(ws.getMonth()+1).padStart(2,'0') + '-' + String(ws.getDate()).padStart(2,'0');
-    }
-    function formatTimeFromRow(raw){
-      const dt = parseSendTime(raw);
-      if (!isValidDate(dt)) return '';
-      return dt.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' });
-    }
-
-    function buildTrend(rows){
-      const trend = {};
-      rows.forEach(r=>{
-        const dt = parseSendTime(r['Send Time']);
-        if (!isValidDate(dt)) return;
-        const ym = dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0');
-        const revenue = safeParseFloat(r['Revenue']);
-        const recipients = safeParseFloat(r['Total Recipients']);
-        const opens = safeParseFloat(r['Unique Opens']);
-        const clicks = safeParseFloat(r['Unique Clicks']);
-        if (!trend[ym]) trend[ym] = { revenueSum:0, recipientsSum:0, opensSum:0, clicksSum:0, count:0 };
-        trend[ym].revenueSum += revenue;
-        trend[ym].recipientsSum += recipients;
-        trend[ym].opensSum += opens;
-        trend[ym].clicksSum += clicks;
-        trend[ym].count++;
-      });
-
-      const months = Object.keys(trend).sort();
-      const trendOutput = [['Month','Total Revenue','Average Recipients','Average Opens','Average Clicks']];
-      months.forEach(m=>{
-        const t = trend[m];
-        const c = t.count || 1;
-        trendOutput.push([ m, formatMoney(t.revenueSum), formatNumberInt(Math.round(t.recipientsSum / c)), formatNumberInt(Math.round(t.opensSum / c)), formatNumberInt(Math.round(t.clicksSum / c)) ]);
-      });
-      outputs.trend = trendOutput;
-      renderTable('trendTable', trendOutput);
-
-      const labels = months;
-      const data = months.map(m => parseFloat(trend[m].revenueSum.toFixed(2)));
-      if (trendChart) { trendChart.destroy(); trendChart = null; }
-      const ctx = document.getElementById('trendChart').getContext('2d');
-      trendChart = new Chart(ctx, {
-        type: 'line',
-        data: { labels, datasets: [{ label:'Total Revenue', data, borderColor:'#6c5ce7', backgroundColor:'rgba(108, 92, 231, 0.1)', borderWidth:2, tension:0.3, fill:true }] },
-        options: { responsive:true, maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: (ctx) => 'Revenue: $' + ctx.raw.toFixed(2) } } }, scales:{ y:{ beginAtZero:true, title:{ display:true, text:'Revenue ($)' }, ticks: { callback: v => '$' + v } }, x:{ title:{ display:true, text:'Month' } } } }
-      });
-    }
-
-    function buildGrowth(rows){
-      const growth = {};
-      rows.forEach(r=>{
-        const name = (r['Campaign Name'] || '(Unnamed)').toString();
-        const revenue = safeParseFloat(r['Revenue']);
-        const recipients = safeParseFloat(r['Total Recipients']);
-        if (!growth[name]) growth[name] = { revenueSum:0, recipientsSum:0, count:0 };
-        growth[name].revenueSum += revenue;
-        growth[name].recipientsSum += recipients;
-        growth[name].count++;
-      });
-
-      const sorted = Object.keys(growth).sort((a,b)=> growth[b].revenueSum - growth[a].revenueSum);
-      const growthOutput = [['Campaign Name','Total Revenue','Average Recipients']];
-      sorted.forEach(name=>{
-        const g = growth[name];
-        growthOutput.push([ name, formatMoney(g.revenueSum), formatNumberInt(Math.round(g.recipientsSum / (g.count || 1))) ]);
-      });
-      outputs.growth = growthOutput;
-      renderTable('growthTable', growthOutput);
-
-      const top = sorted.slice(0,10);
-      const labels = top;
-      const data = top.map(n => growth[n].revenueSum);
-      if (growthChart) { growthChart.destroy(); growthChart = null; }
-      const ctx = document.getElementById('growthChart').getContext('2d');
-      growthChart = new Chart(ctx, {
-        type: 'bar',
-        data: { labels, datasets: [{ label:'Total Revenue', data, backgroundColor:'rgba(108, 92, 231, 0.7)', borderColor: '#6c5ce7', borderWidth:1 }] },
-        options: { responsive:true, maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: (ctx) => 'Revenue: $' + ctx.raw.toFixed(2) } } }, scales:{ y:{ beginAtZero:true, title:{ display:true, text:'Revenue ($)' }, ticks: { callback: v => '$' + v } }, x:{ title:{ display:true, text:'Campaign' } } }, indexAxis: 'y' }
-      });
-    }
-
-    function buildSeasonal(rows){
-      const weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-      const weekdayAgg = {};
-      const monthlyAgg = {};
-      rows.forEach(r=>{
-        const dt = parseSendTime(r['Send Time']);
-        if (!isValidDate(dt)) return;
-        const wd = dt.toLocaleDateString('en-US', { weekday:'long' });
-        const mn = dt.toLocaleDateString('en-US', { month:'long' });
-        const revenue = safeParseFloat(r['Revenue']);
-        if (!weekdayAgg[wd]) weekdayAgg[wd] = { sum:0, count:0 };
-        weekdayAgg[wd].sum += revenue; weekdayAgg[wd].count++;
-        if (!monthlyAgg[mn]) monthlyAgg[mn] = { sum:0, count:0 };
-        monthlyAgg[mn].sum += revenue; monthlyAgg[mn].count++;
-      });
-
-      const seasonalOutput = [['Day of Week','Average Revenue']];
-      weekdays.forEach(d=>{
-        const o = weekdayAgg[d];
-        seasonalOutput.push([ d, formatMoney(o ? (o.sum / o.count) : 0) ]);
-      });
-      outputs.seasonal = seasonalOutput;
-      renderTable('seasonalTable', seasonalOutput);
-
-      const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-      const labels = monthNames;
-      const data = monthNames.map(m => monthlyAgg && monthlyAgg[m] ? parseFloat((monthlyAgg[m].sum / monthlyAgg[m].count).toFixed(2)) : 0);
-      
-      if (seasonalChart) { seasonalChart.destroy(); seasonalChart = null; }
-      const ctx = document.getElementById('seasonalChart').getContext('2d');
-      seasonalChart = new Chart(ctx, {
-        type: 'bar',
-        data: { labels, datasets: [{ label:'Average Revenue', data, backgroundColor: monthNames.map((m,i)=> i%2===0?'rgba(108, 92, 231, 0.7)':'rgba(253, 121, 168, 0.7)'), borderColor: monthNames.map((m,i)=> i%2===0?'#6c5ce7':'#fd79a8'), borderWidth:1 }] },
-        options: { responsive:true, maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: (ctx) => 'Avg. Revenue: $' + ctx.raw.toFixed(2) } } }, scales:{ y:{ beginAtZero:true, title:{ display:true, text:'Revenue ($)' }, ticks: { callback: v => '$' + v } }, x:{ title:{ display:true, text:'Month' } } } }
-      });
-    }
-
-    function renderTable(containerId, arr2d) {
-      const container = document.getElementById(containerId);
-      if (!container) return;
-      if (!Array.isArray(arr2d) || arr2d.length < 1) {
-        container.innerHTML = '<div class="alert alert-info">No data available.</div>';
-        return;
-      }
-      let html = '<table class="table table-bordered table-striped display"><thead><tr>';
-      arr2d[0].forEach(h => html += `<th>${h}</th>`);
-      html += '</tr></thead><tbody>';
-      for (let i=1;i<arr2d.length;i++) {
-        html += '<tr>';
-        arr2d[i].forEach(cell => {
-          if (typeof cell === 'string' && cell.startsWith('$')) {
-            html += `<td class="font-weight-bold text-success">${cell}</td>`;
-          } else if (typeof cell === 'string' && cell.endsWith('%')) {
-            const value = parseFloat(cell);
-            let colorClass = '';
-            if (value > 50) colorClass = 'text-success';
-            else if (value > 20) colorClass = 'text-primary';
-            else colorClass = 'text-warning';
-            html += `<td class="${colorClass}">${cell}</td>`;
-          } else {
-            html += `<td>${cell}</td>`;
-          }
-        });
-        html += '</tr>';
-      }
-      html += '</tbody></table>';
-      container.innerHTML = html;
-
-      const $tbl = $(container).find('table');
-      if ($.fn.DataTable.isDataTable($tbl)) $tbl.DataTable().destroy();
-      $tbl.DataTable({ 
-        paging: true, searching: true, ordering: true, order: [], lengthMenu: [10, 25, 50, 100],
-        responsive: true, dom: '<"top"lf>rt<"bottom"ip>',
-        language: { search: "_INPUT_", searchPlaceholder: "Search...", lengthMenu: "Show _MENU_ entries",
-          info: "Showing _START_ to _END_ of _TOTAL_ entries", infoEmpty: "Showing 0 to 0 of 0 entries",
-          infoFiltered: "(filtered from _MAX_ total entries)", paginate: { first: "First", last: "Last", next: "Next", previous: "Previous" }
-        }
-      });
-    }
-
-    function downloadCSV(arr2d, filename){
-      if (!arr2d || !Array.isArray(arr2d) || arr2d.length===0){ alert('No data to export'); return; }
-      const rows = arr2d.map(r => r.map(cell => {
-        if (cell === null || cell === undefined) return '';
-        const s = String(cell).replace(/"/g,'""');
-        return /[",\n]/.test(s) ? `"${s}"` : s;
-      }).join(','));
-      const csv = rows.join('\n');
-      const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename || 'export.csv';
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); }, 150);
-    }
-
-  })();
-</script>
+<script src="footer.js"></script>
 </body>
 </html>

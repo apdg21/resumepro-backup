@@ -351,46 +351,6 @@
     </form>
 </div>
 
-<script>
-document.getElementById('contactForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const form = this;
-    const formData = new FormData(form);
-    const submitBtn = form.querySelector('.submit-btn');
-    const originalText = submitBtn.textContent;
-    const statusDiv = document.getElementById('statusMessage');
-    
-    // Add required FormSubmit data
-    formData.append('_captcha', 'false');
-    formData.append('_subject', 'New Contact Form Submission from ResumePro');
-    
-    submitBtn.textContent = 'Sending...';
-    submitBtn.disabled = true;
-    statusDiv.style.display = 'none';
-    
-    fetch('https://formsubmit.co/ajax/reload.adolf2023@gmail.com', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-        // Always redirect to thank you
-        window.location.href = 'https://resumepro.pages.dev/thank-you.html';
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        // Show error but still give option to continue
-        statusDiv.className = 'status-message error';
-        statusDiv.innerHTML = 'There was an error. <a href="https://resumepro.pages.dev/thank-you.html">Click here</a> to continue.';
-        statusDiv.style.display = 'block';
-        
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-    });
-});
-</script>
 <footer>
     <div class="footer-content">
         <div class="footer-column">
@@ -433,8 +393,51 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
 
 </footer>
 
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const form = this;
+    const formData = new FormData(form);
+    const submitBtn = form.querySelector('.submit-btn');
+    const originalText = submitBtn.textContent;
+    const statusDiv = document.getElementById('statusMessage');
+    
+    // Add required FormSubmit data
+    formData.append('_captcha', 'false');
+    formData.append('_subject', 'New Contact Form Submission from ResumePro');
+    
+    submitBtn.textContent = 'Sending...';
+    submitBtn.disabled = true;
+    statusDiv.style.display = 'none';
+    
+    fetch('https://formsubmit.co/ajax/reload.adolf2023@gmail.com', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        // Always redirect to thank you
+        window.location.href = 'https://resumepro.pages.dev/thank-you.html';
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Show error but still give option to continue
+        statusDiv.className = 'status-message error';
+        statusDiv.innerHTML = 'There was an error. <a href="https://resumepro.pages.dev/thank-you.html">Click here</a> to continue.';
+        statusDiv.style.display = 'block';
+        
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    });
+});
+</script>
+			
+
 <script src="clean-urls.js"></script>
 <script src="header.js"></script>   
 </body>
 </html>
+
 

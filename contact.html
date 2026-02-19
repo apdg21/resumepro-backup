@@ -321,37 +321,76 @@
             </div>
             
             <div class="contact-form">
-                <h2>Send Us a Message</h2>
-                <form id="contactForm" action="https://formsubmit.co/reload.adolf2023@gmail.com" method="POST">
-                    <input type="hidden" name="_captcha" value="false">
-                    <input type="hidden" name="_next" value="https://resumepro.pages.dev/thank-you.html">
-                    <div class="form-group">
-                        <label for="name">Your Name</label>
-                        <input type="text" id="name" name="name" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="subject">Subject</label>
-                        <input type="text" id="subject" name="subject" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" class="form-control" required></textarea>
-                    </div>
-                    
-                    <button type="submit" class="submit-btn">Send Message</button>
-                    
-                    <div id="statusMessage" class="status-message"></div>
-                </form>
-            </div>
+    <h2>Send Us a Message</h2>
+    <form id="contactForm">
+        <!-- No action attribute - we'll handle with AJAX -->
+        
+        <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" class="form-control" required>
         </div>
-    </main>
+        
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" class="form-control" required></textarea>
+        </div>
+        
+        <button type="submit" class="submit-btn">Send Message</button>
+        
+        <div id="statusMessage" class="status-message"></div>
+    </form>
+</div>
+
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const form = this;
+    const formData = new FormData(form);
+    const submitBtn = form.querySelector('.submit-btn');
+    const originalText = submitBtn.textContent;
+    const statusDiv = document.getElementById('statusMessage');
+    
+    // Add required FormSubmit data
+    formData.append('_captcha', 'false');
+    formData.append('_subject', 'New Contact Form Submission from ResumePro');
+    
+    submitBtn.textContent = 'Sending...';
+    submitBtn.disabled = true;
+    statusDiv.style.display = 'none';
+    
+    fetch('https://formsubmit.co/ajax/reload.adolf2023@gmail.com', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        // Always redirect to thank you
+        window.location.href = 'https://resumepro.pages.dev/thank-you.html';
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Show error but still give option to continue
+        statusDiv.className = 'status-message error';
+        statusDiv.innerHTML = 'There was an error. <a href="https://resumepro.pages.dev/thank-you.html">Click here</a> to continue.';
+        statusDiv.style.display = 'block';
+        
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    });
+});
+</script>
 <footer>
     <div class="footer-content">
         <div class="footer-column">
@@ -398,3 +437,4 @@
 <script src="header.js"></script>   
 </body>
 </html>
+

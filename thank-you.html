@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Thank You - Klaviyo Analytics</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  
+  <!-- External CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="header.css">
+  <link rel="stylesheet" href="footer.css">
+  
+  <style>
+    :root {
+      --primary-color: #6c5ce7;
+      --secondary-color: #a29bfe;
+      --accent-color: #fd79a8;
+      --success-color: #00b894;
+      --dark-text: #2d3436;
+      --light-text: #636e72;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f5f6fa 0%, #ffffff 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .thank-you-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      margin-top: 60px;
+      margin-bottom: 60px;
+    }
+    
+    .thank-you-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(108, 92, 231, 0.2);
+      max-width: 600px;
+      width: 100%;
+      padding: 50px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      animation: slideUp 0.6s ease-out;
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .thank-you-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--success-color));
+    }
+    
+    .success-icon {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, var(--success-color), #55efc4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 30px;
+      animation: pulse 2s infinite;
+      box-shadow: 0 10px 30px rgba(0, 184, 148, 0.3);
+    }
+    
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 10px 30px rgba(0, 184, 148, 0.3);
+      }
+      50% {
+        box-shadow: 0 20px 50px rgba(0, 184, 148, 0.5);
+      }
+      100% {
+        box-shadow: 0 10px 30px rgba(0, 184, 148, 0.3);
+      }
+    }
+    
+    .success-icon i {
+      font-size: 48px;
+      color: white;
+    }
+    
+    .thank-you-title {
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .thank-you-message {
+      font-size: 18px;
+      color: var(--light-text);
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+    
+    .response-time {
+      background: #f8f9ff;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 35px;
+      border: 1px solid rgba(108, 92, 231, 0.1);
+    }
+    
+    .response-time h4 {
+      color: var(--primary-color);
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+    
+    .response-time p {
+      color: var(--light-text);
+      margin: 0;
+      font-size: 16px;
+    }
+    
+    .response-time i {
+      color: var(--success-color);
+      margin-right: 10px;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      border: none;
+      padding: 14px 30px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.3s;
+      box-shadow: 0 10px 20px rgba(108, 92, 231, 0.2);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(108, 92, 231, 0.3);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 12px 30px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+    
+    .btn-outline:hover {
+      background: var(--primary-color);
+      color: white;
+      transform: translateY(-3px);
+    }
+    
+    .social-share {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid #eee;
+    }
+    
+    .social-share p {
+      color: var(--light-text);
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+    
+    .social-icons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+    
+    .social-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+    
+    .social-icon:hover {
+      transform: translateY(-5px) rotate(360deg);
+    }
+    
+    .social-icon.twitter { background: #1DA1F2; }
+    .social-icon.facebook { background: #4267B2; }
+    .social-icon.linkedin { background: #0077b5; }
+    .social-icon.email { background: var(--primary-color); }
+    
+    .auto-redirect {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #b2bec3;
+    }
+    
+    .auto-redirect a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .auto-redirect a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Confetti animation */
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--accent-color);
+      opacity: 0;
+      animation: confetti 5s ease-in-out infinite;
+    }
+    
+    @keyframes confetti {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 576px) {
+      .thank-you-card {
+        padding: 40px 20px;
+      }
+      
+      .thank-you-title {
+        font-size: 32px;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .btn-primary, .btn-outline {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+<!-- header.html (if you have one) -->
+
+<div class="thank-you-container">
+  <div class="thank-you-card">
+    <!-- Confetti effect (optional) -->
+    <div class="confetti" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="confetti" style="left: 30%; background: var(--primary-color); animation-delay: 0.5s;"></div>
+    <div class="confetti" style="left: 50%; background: var(--success-color); animation-delay: 1s;"></div>
+    <div class="confetti" style="left: 70%; background: var(--accent-color); animation-delay: 1.5s;"></div>
+    <div class="confetti" style="left: 90%; background: var(--secondary-color); animation-delay: 2s;"></div>
+    
+    <!-- Success Icon -->
+    <div class="success-icon">
+      <i class="fas fa-check"></i>
+    </div>
+    
+    <!-- Thank You Title -->
+    <h1 class="thank-you-title">Thank You!</h1>
+    
+    <!-- Main Message -->
+    <p class="thank-you-message">
+      We've received your message and will get back to you within 24 hours.
+    </p>
+    
+    <!-- Response Time Info -->
+    <div class="response-time">
+      <h4>
+        <i class="fas fa-clock mr-2"></i>
+        What happens next?
+      </h4>
+      <p>
+        <i class="fas fa-check-circle"></i> We'll review your inquiry<br>
+        <i class="fas fa-check-circle"></i> A team member will be assigned to your case<br>
+        <i class="fas fa-check-circle"></i> You'll receive a response via email<br>
+      </p>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <a href="klaviyo-tool.html" class="btn-primary btn">
+        <i class="fas fa-chart-line mr-2"></i>
+        Return to Homepage
+      </a>
+      <a href="index.html" class="btn-outline btn">
+        <i class="fas fa-home mr-2"></i>
+        Go to Homepage
+      </a>
+    </div>
+    
+    <!-- Social Share (Optional) -->
+    <div class="social-share">
+      <p>Share Klaviyo Analytics with others:</p>
+      <div class="social-icons">
+        <a href="#" class="social-icon twitter" onclick="shareOnTwitter()">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" class="social-icon facebook" onclick="shareOnFacebook()">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="#" class="social-icon linkedin" onclick="shareOnLinkedIn()">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+        <a href="#" class="social-icon email" onclick="shareByEmail()">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </div>
+    </div>
+    
+    <!-- Auto Redirect Info -->
+    <div class="auto-redirect">
+      <p>
+        You'll be automatically redirected to the homepage in <span id="countdown">10</span> seconds.
+        <br>
+        <a href="index.html">Click here if you're not redirected</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- footer.html (if you have one) -->
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+(function() {
+  // ========== AUTO REDIRECT COUNTDOWN ==========
+  let seconds = 10;
+  const countdownEl = document.getElementById('countdown');
+  
+  const interval = setInterval(function() {
+    seconds--;
+    if (countdownEl) {
+      countdownEl.textContent = seconds;
+    }
+    
+    if (seconds <= 0) {
+      clearInterval(interval);
+      window.location.href = 'index.html';
+    }
+  }, 1000);
+  
+  // ========== SOCIAL SHARE FUNCTIONS ==========
+  window.shareOnTwitter = function(e) {
+    if (e) e.preventDefault();
+    const url = encodeURIComponent(window.location.origin + '/index.html');
+    const text = encodeURIComponent('Check out this amazing Klaviyo Analytics Dashboard!');
+    window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
+  };
+  
+  window.shareOnFacebook = function(e) {
+    if (e) e.preventDefault();
+    const url = encodeURIComponent(window.location.origin + '/index.html');
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+  };
+  
+  window.shareOnLinkedIn = function(e) {
+    if (e) e.preventDefault();
+    const url = encodeURIComponent(window.location.origin + '/index.html');
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+  };
+  
+  window.shareByEmail = function(e) {
+    if (e) e.preventDefault();
+    const subject = encodeURIComponent('Check out Klaviyo Analytics Dashboard');
+    const body = encodeURIComponent('I found this amazing tool for analyzing Klaviyo campaigns. Check it out: ' + window.location.origin + '/index.html');
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  };
+  
+  // ========== SAVE FORM DATA TO LOCALSTORAGE (OPTIONAL) ==========
+  // This shows what was submitted (if coming from contact form)
+  function displaySubmittedData() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const name = urlParams.get('name');
+    const email = urlParams.get('email');
+    
+    if (name || email) {
+      console.log('Form submitted by:', name, email);
+      // You could display this in the thank you message if desired
+    }
+  }
+  
+  displaySubmittedData();
+  
+  // ========== ADD CONFETTI ANIMATION (OPTIONAL) ==========
+  function createConfetti() {
+    const colors = ['#6c5ce7', '#fd79a8', '#00b894', '#fdcb6e', '#e17055'];
+    for (let i = 0; i < 50; i++) {
+      setTimeout(() => {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animation = `confetti ${Math.random() * 3 + 2}s ease-in-out infinite`;
+        confetti.style.animationDelay = Math.random() * 2 + 's';
+        document.body.appendChild(confetti);
+        
+        // Remove after animation
+        setTimeout(() => {
+          confetti.remove();
+        }, 5000);
+      }, i * 100);
+    }
+  }
+  
+  // Uncomment to add confetti burst on page load
+  // createConfetti();
+  
+})();
+</script>
+
+<!-- Optional: Track conversion in Google Analytics -->
+<script>
+  // Google Analytics conversion tracking (if you have GA)
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'conversion', {
+      'send_to': 'YOUR_CONVERSION_ID',
+      'event_category': 'contact',
+      'event_label': 'form_submission',
+      'value': 1
+    });
+  }
+  
+  // Facebook Pixel tracking (if you have FB Pixel)
+  if (typeof fbq !== 'undefined') {
+    fbq('track', 'Lead');
+  }
+</script>
+
+</body>
+</html>

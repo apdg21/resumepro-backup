@@ -148,30 +148,68 @@
   });
 
   // ========== COUNTDOWN TIMER ==========
-  function updateCountdown() {
-    const countdownEl = document.getElementById('countdown');
-    const modalCountdown = document.getElementById('modalCountdown');
-    if (!countdownEl) return;
-    
-    const now = new Date();
-    const endDate = new Date();
-    endDate.setDate(now.getDate() + 7);
-    
-    const diffTime = endDate - now;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    let countdownText;
-    if (diffDays > 0) {
-      countdownText = `${diffDays} day${diffDays > 1 ? 's' : ''}`;
+function updateCountdown() {
+  const countdownEl = document.getElementById('countdown');
+  const modalCountdown = document.getElementById('modalCountdown');
+  if (!countdownEl) return;
+  
+  const now = new Date();
+  
+  // Set end date to 7 days from now at 11:59:59 PM
+  const endDate = new Date();
+  endDate.setDate(now.getDate() + 7);
+  endDate.setHours(23, 59, 59, 999);
+  
+  const diffTime = endDate - now;
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  const diffHours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const diffMinutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+  
+  let countdownText;
+  if (diffDays > 0) {
+    if (diffDays === 1 && diffHours === 0) {
+      countdownText = `1 day`;
+    } else if (diffDays > 1) {
+      countdownText = `${diffDays} days`;
     } else {
-      countdownText = 'Last day!';
+      countdownText = `${diffDays} day`;
     }
-    
-    countdownEl.textContent = countdownText;
-    if (modalCountdown) modalCountdown.textContent = countdownText + ' remaining';
+  } else if (diffHours > 0) {
+    countdownText = `${diffHours} hour${diffHours > 1 ? 's' : ''}`;
+  } else if (diffMinutes > 0) {
+    countdownText = `${diffMinutes} minute${diffMinutes > 1 ? 's' : ''}`;
+  } else {
+    countdownText = 'Last day!';
   }
+  
+  // For banner - show simpler format
+  const bannerText = diffDays > 0 ? `${diffDays} day${diffDays > 1 ? 's' : ''}` : 'Last day!';
+  countdownEl.textContent = bannerText;
+  
+  // For modal - show more detailed format
+  if (modalCountdown) {
+    if (diffDays > 0) {
+      modalCountdown.textContent = `${diffDays} day${diffDays > 1 ? 's' : ''} ${diffHours} hour${diffHours !== 1 ? 's' : ''} remaining`;
+    } else if (diffHours > 0) {
+      modalCountdown.textContent = `${diffHours} hour${diffHours > 1 ? 's' : ''} ${diffMinutes} minute${diffMinutes !== 1 ? 's' : ''} remaining`;
+    } else {
+      modalCountdown.textContent = 'Last day!';
+    }
+  }
+  
+  console.log('Countdown updated:', { diffDays, diffHours, diffMinutes, bannerText });
+}
+
+// Initialize countdown
+updateCountdown();
+
+// Update every minute instead of every hour for more accuracy
+setInterval(updateCountdown, 1000 * 60);
+
+// Also update when modal is shown
+$('#trialOfferModal').on('show.bs.modal', function() {
   updateCountdown();
-  setInterval(updateCountdown, 1000 * 60 * 60);
+});
 
   // ========== DATA PROCESSING ==========
   function handleFile(e) {
@@ -549,5 +587,6 @@
     console.log('Installer download clicked at', new Date().toISOString());
     // In production: window.location.href = 'KlaviyoAnalytics_Setup.exe';
   };
+
 
 })();

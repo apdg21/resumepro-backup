@@ -79,6 +79,13 @@
   let rawData = [];
   const outputs = { daily: null, weekly: null, monthly: null, trend: null, growth: null, seasonal: null };
   let trendChart = null, growthChart = null, seasonalChart = null;
+  
+  // Trial state
+  let isTrialExpired = false;
+  const TRIAL_START = new Date(2026, 1, 19, 12, 0, 0); // Feb 19, 2026 at 12:00 PM
+  const TRIAL_END = new Date(TRIAL_START);
+  TRIAL_END.setDate(TRIAL_START.getDate() + 7);
+  TRIAL_END.setHours(23, 59, 59, 999); // Feb 26, 2026 at 11:59:59 PM
 
   // ========== UI ELEMENTS ==========
   const fileInput = document.getElementById('csvUpload');
@@ -93,22 +100,80 @@
     });
   }
 
-  // Export buttons
+  // Export buttons with trial check
   document.getElementById('exportDailyBtn')?.addEventListener('click', () => downloadCSV(outputs.daily, 'daily_data.csv'));
   document.getElementById('exportWeeklyBtn')?.addEventListener('click', () => downloadCSV(outputs.weekly, 'weekly_data.csv'));
-  document.getElementById('exportMonthlyBtn')?.addEventListener('click', () => downloadCSV(outputs.monthly, 'monthly_data.csv'));
-  document.getElementById('exportTrendBtn')?.addEventListener('click', () => downloadCSV(outputs.trend, 'trend_data.csv'));
-  document.getElementById('exportGrowthBtn')?.addEventListener('click', () => downloadCSV(outputs.growth, 'growth_data.csv'));
-  document.getElementById('exportSeasonalBtn')?.addEventListener('click', () => downloadCSV(outputs.seasonal, 'seasonal_data.csv'));
+  
+  // Premium export buttons with trial check
+  document.getElementById('exportMonthlyBtn')?.addEventListener('click', () => {
+    if (isTrialExpired) {
+      showUpgradeMessage('Monthly data');
+      return;
+    }
+    downloadCSV(outputs.monthly, 'monthly_data.csv');
+  });
+  
+  document.getElementById('exportTrendBtn')?.addEventListener('click', () => {
+    if (isTrialExpired) {
+      showUpgradeMessage('Trend data');
+      return;
+    }
+    downloadCSV(outputs.trend, 'trend_data.csv');
+  });
+  
+  document.getElementById('exportGrowthBtn')?.addEventListener('click', () => {
+    if (isTrialExpired) {
+      showUpgradeMessage('Growth data');
+      return;
+    }
+    downloadCSV(outputs.growth, 'growth_data.csv');
+  });
+  
+  document.getElementById('exportSeasonalBtn')?.addEventListener('click', () => {
+    if (isTrialExpired) {
+      showUpgradeMessage('Seasonal data');
+      return;
+    }
+    downloadCSV(outputs.seasonal, 'seasonal_data.csv');
+  });
 
   if (fileInput) fileInput.addEventListener('change', handleFile);
   if (filterButton) filterButton.addEventListener('click', runAll);
 
+  // ========== UPGRADE MESSAGING ==========
+  function showUpgradeMessage(feature) {
+    const toast = document.createElement('div');
+    toast.className = 'alert alert-warning upgrade-toast';
+    toast.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10000;
+      animation: slideIn 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      border-left: 4px solid #fd79a8;
+    `;
+    toast.innerHTML = `
+      <div class="d-flex align-items-center">
+        <i class="fas fa-crown text-warning mr-3 fa-2x"></i>
+        <div>
+          <strong>Trial Expired</strong>
+          <p class="mb-0">${feature} is now available in the desktop app. <a href="#" onclick="downloadInstaller(); return false;" class="alert-link">Download now</a> for full access.</p>
+        </div>
+        <button type="button" class="close ml-3" onclick="this.parentElement.parentElement.remove()">&times;</button>
+      </div>
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 5000);
+  }
+
   // ========== SCROLL-TRIGGERED BANNER ==========
   let bannerShown = false;
-  const scrollThreshold = 300; // Show after scrolling 300px
+  const scrollThreshold = 300;
 
   function checkScroll() {
+    if (isTrialExpired) return;
+    
     const trialBanner = document.getElementById('trialBanner');
     if (!trialBanner) return;
     
@@ -117,27 +182,23 @@
     if (scrollPosition > scrollThreshold && !bannerShown) {
       trialBanner.classList.add('visible');
       bannerShown = true;
-      console.log('Trial banner shown at scroll position:', scrollPosition);
     }
   }
 
-  // Show full trial modal when mini banner is clicked
   window.showFullTrialModal = function() {
-    $('#trialOfferModal').modal('show');
-    
-    // Update modal countdown
-    const countdownEl = document.getElementById('countdown');
-    const modalCountdown = document.getElementById('modalCountdown');
-    if (countdownEl && modalCountdown) {
-      modalCountdown.textContent = countdownEl.textContent;
+    if (isTrialExpired) {
+      $('#upgradeModal').modal('show');
+      return;
     }
+    $('#trialOfferModal').modal('show');
+    updateCountdown();
   }
 
-  // Add scroll listener
   window.addEventListener('scroll', checkScroll);
 
-  // Also show banner if user is about to leave (exit intent)
   document.addEventListener('mouseleave', function(e) {
+    if (isTrialExpired) return;
+    
     if (e.clientY < 0 && !bannerShown) {
       const trialBanner = document.getElementById('trialBanner');
       if (trialBanner) {
@@ -147,69 +208,201 @@
     }
   });
 
-  // ========== COUNTDOWN TIMER ==========
-function updateCountdown() {
-  const countdownEl = document.getElementById('countdown');
-  const modalCountdown = document.getElementById('modalCountdown');
-  if (!countdownEl) return;
-  
-  const now = new Date();
-  
-  // Set end date to 7 days from now at 11:59:59 PM
-  const endDate = new Date();
-  endDate.setDate(now.getDate() + 7);
-  endDate.setHours(23, 59, 59, 999);
-  
-  const diffTime = endDate - now;
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  const diffHours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const diffMinutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
-  
-  let countdownText;
-  if (diffDays > 0) {
-    if (diffDays === 1 && diffHours === 0) {
-      countdownText = `1 day`;
-    } else if (diffDays > 1) {
-      countdownText = `${diffDays} days`;
-    } else {
-      countdownText = `${diffDays} day`;
+  // ========== COUNTDOWN TIMER WITH EXPIRATION ==========
+  function updateCountdown() {
+    const countdownEl = document.getElementById('countdown');
+    const modalCountdown = document.getElementById('modalCountdown');
+    const startDateDisplay = document.getElementById('startDateDisplay');
+    const endDateDisplay = document.getElementById('endDateDisplay');
+    const timeRemaining = document.getElementById('timeRemaining');
+    const trialBanner = document.getElementById('trialBanner');
+    
+    if (!countdownEl) return;
+    
+    const now = new Date();
+    
+    // Update date displays
+    if (startDateDisplay) {
+      startDateDisplay.textContent = TRIAL_START.toLocaleDateString('en-US', { 
+        month: 'long', day: 'numeric', year: 'numeric' 
+      });
     }
-  } else if (diffHours > 0) {
-    countdownText = `${diffHours} hour${diffHours > 1 ? 's' : ''}`;
-  } else if (diffMinutes > 0) {
-    countdownText = `${diffMinutes} minute${diffMinutes > 1 ? 's' : ''}`;
-  } else {
-    countdownText = 'Last day!';
-  }
-  
-  // For banner - show simpler format
-  const bannerText = diffDays > 0 ? `${diffDays} day${diffDays > 1 ? 's' : ''}` : 'Last day!';
-  countdownEl.textContent = bannerText;
-  
-  // For modal - show more detailed format
-  if (modalCountdown) {
+    
+    if (endDateDisplay) {
+      endDateDisplay.textContent = TRIAL_END.toLocaleDateString('en-US', { 
+        month: 'long', day: 'numeric', year: 'numeric' 
+      });
+    }
+    
+    const diffTime = TRIAL_END - now;
+    
+    // Check if trial has expired
+    if (diffTime <= 0) {
+      if (!isTrialExpired) {
+        isTrialExpired = true;
+        handleTrialExpiration();
+      }
+      
+      countdownEl.innerHTML = '<span class="text-danger">Expired</span>';
+      
+      if (modalCountdown) {
+        modalCountdown.innerHTML = '<span class="text-danger">Trial ended on ' + TRIAL_END.toLocaleDateString() + '</span>';
+      }
+      
+      if (timeRemaining) {
+        timeRemaining.textContent = 'Trial expired';
+      }
+      
+      if (trialBanner) {
+        trialBanner.classList.remove('visible');
+      }
+      
+      const progressBar = document.getElementById('trialProgress');
+      if (progressBar) {
+        progressBar.style.width = '0%';
+        progressBar.className = 'progress-bar bg-secondary';
+      }
+      
+      return;
+    }
+    
+    // Trial still active
+    isTrialExpired = false;
+    
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const diffHours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const diffMinutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+    
+    // Calculate percentage of trial completed
+    const totalDuration = 7 * 24 * 60 * 60 * 1000;
+    const elapsed = now - TRIAL_START;
+    const percentRemaining = Math.max(0, Math.min(100, 100 - (elapsed / totalDuration * 100)));
+    
+    // Update progress bar
+    const progressBar = document.getElementById('trialProgress');
+    if (progressBar) {
+      progressBar.style.width = percentRemaining + '%';
+      
+      if (percentRemaining < 20) {
+        progressBar.className = 'progress-bar bg-danger';
+      } else if (percentRemaining < 50) {
+        progressBar.className = 'progress-bar bg-warning';
+      } else {
+        progressBar.className = 'progress-bar bg-success';
+      }
+    }
+    
+    // Update time remaining text
+    if (timeRemaining) {
+      if (diffDays > 0) {
+        timeRemaining.textContent = `${diffDays} day${diffDays > 1 ? 's' : ''} left`;
+      } else if (diffHours > 0) {
+        timeRemaining.textContent = `${diffHours}h ${diffMinutes}m left`;
+      } else {
+        timeRemaining.textContent = `${diffMinutes}m left`;
+      }
+    }
+    
+    // Format banner text
+    let bannerText;
     if (diffDays > 0) {
-      modalCountdown.textContent = `${diffDays} day${diffDays > 1 ? 's' : ''} ${diffHours} hour${diffHours !== 1 ? 's' : ''} remaining`;
+      bannerText = `${diffDays} day${diffDays > 1 ? 's' : ''}`;
     } else if (diffHours > 0) {
-      modalCountdown.textContent = `${diffHours} hour${diffHours > 1 ? 's' : ''} ${diffMinutes} minute${diffMinutes !== 1 ? 's' : ''} remaining`;
+      bannerText = `${diffHours}h ${diffMinutes}m`;
     } else {
-      modalCountdown.textContent = 'Last day!';
+      bannerText = `${diffMinutes}m`;
+    }
+    
+    if (diffDays === 0) {
+      countdownEl.innerHTML = `<span class="text-warning font-weight-bold">${bannerText}</span>`;
+    } else {
+      countdownEl.textContent = bannerText;
+    }
+    
+    // Format modal text
+    if (modalCountdown) {
+      let modalText;
+      if (diffDays > 0) {
+        modalText = `${diffDays} day${diffDays > 1 ? 's' : ''} ${diffHours} hour${diffHours !== 1 ? 's' : ''} remaining`;
+      } else if (diffHours > 0) {
+        modalText = `${diffHours} hour${diffHours > 1 ? 's' : ''} ${diffMinutes} minute${diffMinutes !== 1 ? 's' : ''} remaining`;
+      } else {
+        modalText = `${diffMinutes} minute${diffMinutes > 1 ? 's' : ''} remaining`;
+      }
+      
+      const endDateStr = TRIAL_END.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      modalCountdown.innerHTML = `${modalText} <small class="text-muted">(ends ${endDateStr})</small>`;
     }
   }
-  
-  console.log('Countdown updated:', { diffDays, diffHours, diffMinutes, bannerText });
-}
 
-// Initialize countdown
-updateCountdown();
+  function handleTrialExpiration() {
+    console.log('Trial expired at', new Date().toISOString());
+    
+    // Update premium tabs
+    const premiumTabContents = ['monthly', 'trend', 'growth', 'seasonal'];
+    
+    premiumTabContents.forEach(tabId => {
+      const tabPane = document.getElementById(tabId);
+      if (tabPane) {
+        tabPane.innerHTML = `
+          <div class="text-center py-5">
+            <i class="fas fa-crown fa-4x mb-3" style="color: #fd79a8;"></i>
+            <h3>Premium Feature</h3>
+            <p class="lead">This feature is now available in the desktop app.</p>
+            <button class="btn btn-primary btn-lg" onclick="downloadInstaller()">
+              <i class="fas fa-download mr-2"></i> Download Windows App
+            </button>
+            <p class="mt-3 text-muted small">Get unlimited access to all features permanently.</p>
+          </div>
+        `;
+      }
+    });
+    
+    // Hide premium tab badges
+    document.querySelectorAll('.nav-link .badge').forEach(badge => {
+      badge.style.display = 'none';
+    });
+    
+    // Add Upgrade badges to premium tabs
+    document.querySelectorAll('[href="#monthly"], [href="#trend"], [href="#growth"], [href="#seasonal"]').forEach(tab => {
+      const parent = tab.parentElement;
+      const upgradeBadge = document.createElement('span');
+      upgradeBadge.className = 'badge badge-warning ml-1';
+      upgradeBadge.textContent = 'Upgrade';
+      tab.appendChild(upgradeBadge);
+    });
+    
+    // Update premium export buttons
+    ['exportMonthlyBtn', 'exportTrendBtn', 'exportGrowthBtn', 'exportSeasonalBtn'].forEach(btnId => {
+      const btn = document.getElementById(btnId);
+      if (btn) {
+        btn.classList.remove('export-btn', 'btn-primary');
+        btn.classList.add('btn-secondary');
+        btn.innerHTML = '<i class="fas fa-lock mr-2"></i> Upgrade to Export';
+      }
+    });
+    
+    // Clear premium charts
+    if (trendChart) { trendChart.destroy(); trendChart = null; }
+    if (growthChart) { growthChart.destroy(); growthChart = null; }
+    if (seasonalChart) { seasonalChart.destroy(); seasonalChart = null; }
+    
+    // Show upgrade modal after 30 seconds
+    setTimeout(() => {
+      if (document.visibilityState === 'visible' && !sessionStorage.getItem('upgradeModalShown')) {
+        $('#upgradeModal').modal('show');
+        sessionStorage.setItem('upgradeModalShown', 'true');
+      }
+    }, 30000);
+  }
 
-// Update every minute instead of every hour for more accuracy
-setInterval(updateCountdown, 1000 * 60);
-
-// Also update when modal is shown
-$('#trialOfferModal').on('show.bs.modal', function() {
+  // Initialize countdown
   updateCountdown();
-});
+  setInterval(updateCountdown, 1000 * 60);
+
+  $('#trialOfferModal').on('show.bs.modal', function() {
+    updateCountdown();
+  });
 
   // ========== DATA PROCESSING ==========
   function handleFile(e) {
@@ -261,10 +454,39 @@ $('#trialOfferModal').on('show.bs.modal', function() {
       return;
     }
 
+    // Build all features but premium ones will be hidden if trial expired
     buildDailyWeeklyMonthly(filtered);
-    buildTrend(filtered);
-    buildGrowth(filtered);
-    buildSeasonal(filtered);
+    
+    if (!isTrialExpired) {
+      buildTrend(filtered);
+      buildGrowth(filtered);
+      buildSeasonal(filtered);
+    } else {
+      showPremiumUpgradeMessages();
+    }
+  }
+
+  function showPremiumUpgradeMessages() {
+    const premiumTables = ['trendTable', 'growthTable', 'seasonalTable'];
+    premiumTables.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.innerHTML = `
+          <div class="alert alert-warning text-center">
+            <i class="fas fa-crown mr-2"></i>
+            <strong>Premium Feature</strong> - Available in desktop app
+            <button class="btn btn-sm btn-primary ml-2" onclick="downloadInstaller()">
+              <i class="fas fa-download"></i> Download
+            </button>
+          </div>
+        `;
+      }
+    });
+    
+    // Clear charts
+    if (trendChart) { trendChart.destroy(); trendChart = null; }
+    if (growthChart) { growthChart.destroy(); growthChart = null; }
+    if (seasonalChart) { seasonalChart.destroy(); seasonalChart = null; }
   }
 
   function clearAll() {
@@ -306,9 +528,24 @@ $('#trialOfferModal').on('show.bs.modal', function() {
       const uniqueClicks = safeParseFloat(r['Unique Clicks']);
       
       // Daily
-      if (!daily[dateISO]) daily[dateISO] = { display: dateDisplay, sendTime: formatTimeFromRow(r['Send Time']), campaigns: {} };
+      if (!daily[dateISO]) {
+        daily[dateISO] = { 
+          display: dateDisplay, 
+          sendTime: formatTimeFromRow(r['Send Time']), 
+          campaigns: {} 
+        };
+      }
       if (!daily[dateISO].campaigns[campaignName]) {
-        daily[dateISO].campaigns[campaignName] = { subject, count: 0, openRateSum: 0, clickRateSum: 0, convRateSum: 0, revenueSum: 0, sendDays, listSegment };
+        daily[dateISO].campaigns[campaignName] = { 
+          subject, 
+          count: 0, 
+          openRateSum: 0, 
+          clickRateSum: 0, 
+          convRateSum: 0, 
+          revenueSum: 0, 
+          sendDays, 
+          listSegment 
+        };
       }
       const dc = daily[dateISO].campaigns[campaignName];
       dc.count++;
@@ -318,7 +555,16 @@ $('#trialOfferModal').on('show.bs.modal', function() {
       dc.revenueSum += revenue;
       
       // Weekly
-      if (!weekly[weekKey]) weekly[weekKey] = { display: weekDisplay, revenueSum: 0, recipientsSum: 0, opensSum: 0, clicksSum: 0, count: 0 };
+      if (!weekly[weekKey]) {
+        weekly[weekKey] = { 
+          display: weekDisplay, 
+          revenueSum: 0, 
+          recipientsSum: 0, 
+          opensSum: 0, 
+          clicksSum: 0, 
+          count: 0 
+        };
+      }
       weekly[weekKey].revenueSum += revenue;
       weekly[weekKey].recipientsSum += recipients;
       weekly[weekKey].opensSum += uniqueOpens;
@@ -326,7 +572,16 @@ $('#trialOfferModal').on('show.bs.modal', function() {
       weekly[weekKey].count++;
       
       // Monthly
-      if (!monthly[monthKey]) monthly[monthKey] = { display: monthDisplay, revenueSum: 0, recipientsSum: 0, opensSum: 0, clicksSum: 0, count: 0 };
+      if (!monthly[monthKey]) {
+        monthly[monthKey] = { 
+          display: monthDisplay, 
+          revenueSum: 0, 
+          recipientsSum: 0, 
+          opensSum: 0, 
+          clicksSum: 0, 
+          count: 0 
+        };
+      }
       monthly[monthKey].revenueSum += revenue;
       monthly[monthKey].recipientsSum += recipients;
       monthly[monthKey].opensSum += uniqueOpens;
@@ -361,22 +616,53 @@ $('#trialOfferModal').on('show.bs.modal', function() {
     const weeklyOutput = [['Week', 'Total Revenue', 'Total Recipients', 'Total Opens', 'Total Clicks']];
     Object.keys(weekly).sort().forEach(weekKey => {
       const w = weekly[weekKey];
-      weeklyOutput.push([w.display, formatMoney(w.revenueSum), formatNumberInt(w.recipientsSum), formatNumberInt(w.opensSum), formatNumberInt(w.clicksSum)]);
+      weeklyOutput.push([
+        w.display, 
+        formatMoney(w.revenueSum), 
+        formatNumberInt(w.recipientsSum), 
+        formatNumberInt(w.opensSum), 
+        formatNumberInt(w.clicksSum)
+      ]);
     });
     outputs.weekly = weeklyOutput;
     renderTable('weeklyTable', weeklyOutput);
     
-    // Monthly output
+    // Monthly output (store for potential use)
     const monthlyOutput = [['Month', 'Total Revenue', 'Total Recipients', 'Total Opens', 'Total Clicks']];
     Object.keys(monthly).sort().forEach(monthKey => {
       const m = monthly[monthKey];
-      monthlyOutput.push([m.display, formatMoney(m.revenueSum), formatNumberInt(m.recipientsSum), formatNumberInt(m.opensSum), formatNumberInt(m.clicksSum)]);
+      monthlyOutput.push([
+        m.display, 
+        formatMoney(m.revenueSum), 
+        formatNumberInt(m.recipientsSum), 
+        formatNumberInt(m.opensSum), 
+        formatNumberInt(m.clicksSum)
+      ]);
     });
     outputs.monthly = monthlyOutput;
-    renderTable('monthlyTable', monthlyOutput);
+    
+    // Only render monthly table if trial not expired
+    if (!isTrialExpired) {
+      renderTable('monthlyTable', monthlyOutput);
+    } else {
+      const monthlyTable = document.getElementById('monthlyTable');
+      if (monthlyTable) {
+        monthlyTable.innerHTML = `
+          <div class="alert alert-warning text-center">
+            <i class="fas fa-crown mr-2"></i>
+            <strong>Monthly data available in desktop app</strong>
+            <button class="btn btn-sm btn-primary ml-2" onclick="downloadInstaller()">
+              <i class="fas fa-download"></i> Download
+            </button>
+          </div>
+        `;
+      }
+    }
   }
 
   function buildTrend(rows) {
+    if (isTrialExpired) return;
+    
     const trend = {};
     rows.forEach(r => {
       const dt = parseSendTime(r['Send Time']);
@@ -418,13 +704,31 @@ $('#trialOfferModal').on('show.bs.modal', function() {
         options: { 
           responsive: true, 
           maintainAspectRatio: false,
-          scales: { y: { beginAtZero: true, ticks: { callback: v => '$' + v } } }
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return 'Revenue: $' + context.raw.toFixed(2);
+                }
+              }
+            }
+          },
+          scales: { 
+            y: { 
+              beginAtZero: true, 
+              ticks: { 
+                callback: function(v) { return '$' + v; } 
+              } 
+            } 
+          }
         }
       });
     }
   }
 
   function buildGrowth(rows) {
+    if (isTrialExpired) return;
+    
     const growth = {};
     rows.forEach(r => {
       const name = r['Campaign Name'] || 'Unknown';
@@ -456,20 +760,38 @@ $('#trialOfferModal').on('show.bs.modal', function() {
           datasets: [{ 
             label: 'Total Revenue', 
             data, 
-            backgroundColor: 'rgba(108, 92, 231, 0.7)'
+            backgroundColor: 'rgba(108, 92, 231, 0.7)',
+            borderRadius: 6
           }] 
         },
         options: { 
           responsive: true, 
           maintainAspectRatio: false,
           indexAxis: 'y',
-          scales: { x: { ticks: { callback: v => '$' + v } } }
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return 'Revenue: $' + context.raw.toFixed(2);
+                }
+              }
+            }
+          },
+          scales: { 
+            x: { 
+              ticks: { 
+                callback: function(v) { return '$' + v; } 
+              } 
+            } 
+          }
         }
       });
     }
   }
 
   function buildSeasonal(rows) {
+    if (isTrialExpired) return;
+    
     const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const weekdayAgg = {};
     
@@ -504,13 +826,30 @@ $('#trialOfferModal').on('show.bs.modal', function() {
           datasets: [{ 
             label: 'Average Revenue', 
             data, 
-            backgroundColor: 'rgba(253, 121, 168, 0.7)'
+            backgroundColor: 'rgba(253, 121, 168, 0.7)',
+            borderRadius: 6
           }] 
         },
         options: { 
           responsive: true, 
           maintainAspectRatio: false,
-          scales: { y: { beginAtZero: true, ticks: { callback: v => '$' + v } } }
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return 'Avg Revenue: $' + context.raw.toFixed(2);
+                }
+              }
+            }
+          },
+          scales: { 
+            y: { 
+              beginAtZero: true, 
+              ticks: { 
+                callback: function(v) { return '$' + v; } 
+              } 
+            } 
+          }
         }
       });
     }
@@ -556,13 +895,17 @@ $('#trialOfferModal').on('show.bs.modal', function() {
       searching: true, 
       ordering: true, 
       lengthMenu: [10, 25, 50, 100],
-      responsive: true
+      responsive: true,
+      destroy: true
     });
   }
 
   // ========== CSV DOWNLOAD ==========
   function downloadCSV(arr2d, filename) {
-    if (!arr2d || arr2d.length === 0) { alert('No data to export'); return; }
+    if (!arr2d || arr2d.length === 0) { 
+      alert('No data to export'); 
+      return; 
+    }
     
     const rows = arr2d.map(r => r.map(cell => {
       if (cell === null || cell === undefined) return '';
@@ -578,15 +921,44 @@ $('#trialOfferModal').on('show.bs.modal', function() {
     a.download = filename || 'export.csv';
     document.body.appendChild(a);
     a.click();
-    setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 150);
+    setTimeout(() => { 
+      document.body.removeChild(a); 
+      URL.revokeObjectURL(url); 
+    }, 150);
   }
 
   // ========== INSTALLER DOWNLOAD ==========
   window.downloadInstaller = function() {
+    // In production: window.location.href = 'KlaviyoAnalytics_Setup.exe';
     alert('🚀 Windows App download started!\n\nIn production, this would download: KlaviyoAnalytics_Setup.exe');
     console.log('Installer download clicked at', new Date().toISOString());
-    // In production: window.location.href = 'KlaviyoAnalytics_Setup.exe';
+    
+    // Track download event (for analytics)
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'download_click', {
+        'event_category': 'installer',
+        'event_label': 'Windows App'
+      });
+    }
   };
 
+  // ========== INITIALIZATION ==========
+  // Check trial status on load
+  updateCountdown();
+  
+  // Add CSS for toast animations if not present
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .upgrade-toast {
+      animation: slideIn 0.3s ease;
+    }
+  `;
+  document.head.appendChild(style);
 
+  console.log('Klaviyo Analytics Dashboard initialized');
+  console.log('Trial period:', TRIAL_START.toLocaleDateString(), '-', TRIAL_END.toLocaleDateString());
 })();

@@ -9,11 +9,11 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="header.css">
-  <link rel="stylesheet" href="footer.css">
   
   <!-- Local CSS -->
   <link rel="stylesheet" href="klaviyo-tool.css" />
+  <link rel="stylesheet" href="header.css" />
+  <link rel="stylesheet" href="footer.css" />
   
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 </head>
@@ -105,20 +105,89 @@
         <i class="fas fa-crown fa-4x mb-3" style="color: #6c5ce7;"></i>
         <h3>🎉 Full Access Unlocked!</h3>
         <p class="lead">All premium features (Monthly, Trends, Growth, Seasonal) are now working for a limited time!</p>
-        <div class="alert alert-warning">
-          <strong id="modalCountdown">7 days remaining</strong>
+        
+        <!-- Trial Period Display -->
+        <div class="trial-info bg-light p-3 rounded mb-3">
+          <div class="row text-left">
+            <div class="col-6">
+              <small class="text-muted">Started:</small>
+              <div><strong id="startDateDisplay">Feb 19, 2026</strong></div>
+            </div>
+            <div class="col-6">
+              <small class="text-muted">Ends:</small>
+              <div><strong id="endDateDisplay">Feb 26, 2026</strong></div>
+            </div>
+          </div>
+          
+          <!-- Progress Bar -->
+          <div class="mt-2">
+            <div class="d-flex justify-content-between small">
+              <span>Trial Progress</span>
+              <span id="timeRemaining">7 days left</span>
+            </div>
+            <div class="progress mt-1" style="height: 8px;">
+              <div id="trialProgress" class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
+            </div>
+          </div>
         </div>
-        <p>After this trial, these features will be available in our Windows desktop app.</p>
-        <a href="https://dolfean.gumroad.com/l/klaviyo-analytic-dashboard">
-        <button class="btn btn-primary btn-lg">
-          <i class="fas fa-download mr-2"></i> Download Windows App
-        </button></a>
+        
+        <div class="alert alert-warning">
+          <strong id="modalCountdown">7 days remaining (ends Feb 26)</strong>
+        </div>
+        <p>After this trial, these features will be available in our desktop app.</p>
+        <a href="https://dolfean.gumroad.com/l/klaviyo-analytic-dashboard" target="_blank" class="btn btn-primary btn-lg">
+          <i class="fas fa-shopping-cart mr-2"></i> Get Desktop App
+        </a>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ORIGINAL COMPREHENSIVE HELP MODAL (with Google Drive sample link) -->
+<!-- Upgrade Modal (shown after trial expires) -->
+<div class="modal fade" id="upgradeModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background: linear-gradient(135deg, #6c5ce7, #fd79a8); color: white;">
+        <h5 class="modal-title"><i class="fas fa-crown mr-2"></i>Trial Ended - Upgrade Available</h5>
+        <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <i class="fas fa-rocket fa-4x mb-3" style="color: #6c5ce7;"></i>
+        <h3>🚀 Continue Your Analytics Journey!</h3>
+        <p class="lead">Your 7-day trial of premium features has ended.</p>
+        
+        <div class="card bg-light mb-4">
+          <div class="card-body">
+            <h5 class="text-primary">Get the Desktop App for:</h5>
+            <div class="row mt-3">
+              <div class="col-6">
+                <i class="fas fa-check-circle text-success"></i> Monthly Trends
+              </div>
+              <div class="col-6">
+                <i class="fas fa-check-circle text-success"></i> Growth Analysis
+              </div>
+              <div class="col-6">
+                <i class="fas fa-check-circle text-success"></i> Seasonal Patterns
+              </div>
+              <div class="col-6">
+                <i class="fas fa-check-circle text-success"></i> Advanced Charts
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <a href="https://dolfean.gumroad.com/l/klaviyo-analytic-dashboard" target="_blank" class="btn btn-primary btn-lg">
+          <i class="fas fa-shopping-cart mr-2"></i> Get Desktop App
+        </a>
+        <p class="mt-2 text-muted small">
+          <i class="fas fa-clock"></i> One-time purchase • All features unlocked • No subscriptions
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Help Modal (with Google Drive sample link) -->
 <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-wide">
     <div class="modal-content">
@@ -182,6 +251,7 @@
     </div>
   </div>
 </div>
+
 <div class="container-fluid">
   
   <div class="dashboard-header">
@@ -194,10 +264,9 @@
         <button class="btn btn-light mr-2" data-toggle="modal" data-target="#helpModal">
           <i class="fas fa-question-circle"></i> Help
         </button>
-        <a href="https://resumepro.pages.dev/klaviyo-analytics">
-        <button class="btn btn-light">
-          <i class="fas fa-download"></i> Get Desktop App
-        </button></a>
+        <a href="https://dolfean.gumroad.com/l/klaviyo-analytic-dashboard" target="_blank" class="btn btn-light">
+          <i class="fas fa-shopping-cart"></i> Get Desktop App
+        </a>
       </div>
     </div>
   </div>
@@ -241,10 +310,10 @@
       <ul class="nav nav-tabs" id="mainTabs" role="tablist">
         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#daily"><i class="fas fa-calendar-day mr-2"></i>Daily</a></li>
         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#weekly"><i class="fas fa-calendar-week mr-2"></i>Weekly</a></li>
-        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#monthly"><i class="fas fa-calendar mr-2"></i>Monthly <span class="badge badge-warning ml-1">NEW</span></a></li>
-        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#trend"><i class="fas fa-chart-line mr-2"></i>Trends <span class="badge badge-warning ml-1">NEW</span></a></li>
-        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#growth"><i class="fas fa-rocket mr-2"></i>Growth <span class="badge badge-warning ml-1">NEW</span></a></li>
-        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#seasonal"><i class="fas fa-calendar-check mr-2"></i>Seasonal <span class="badge badge-warning ml-1">NEW</span></a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#monthly"><i class="fas fa-calendar mr-2"></i>Monthly <span class="badge badge-warning ml-1">TRIAL</span></a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#trend"><i class="fas fa-chart-line mr-2"></i>Trends <span class="badge badge-warning ml-1">TRIAL</span></a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#growth"><i class="fas fa-rocket mr-2"></i>Growth <span class="badge badge-warning ml-1">TRIAL</span></a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#seasonal"><i class="fas fa-calendar-check mr-2"></i>Seasonal <span class="badge badge-warning ml-1">TRIAL</span></a></li>
       </ul>
 
       <!-- Tab Content -->
@@ -303,15 +372,14 @@
     </div>
   </div>
 
-  <!-- Installer Promotion Card -->
+  <!-- Purchase Card -->
   <div class="installer-card">
     <i class="fas fa-crown fa-3x mb-3"></i>
-    <h3>Love the full access? Get the Windows App!</h3>
+    <h3>Love the full access? Get the Desktop App!</h3>
     <p>After 7 days, advanced features will be available only in the desktop version.</p>
-    <a href="https://resumepro.pages.dev/klaviyo-analytics">
-    <button class="installer-btn">
-      <i class="fas fa-download mr-2"></i>Download Windows App
-    </button></a>
+    <a href="https://dolfean.gumroad.com/l/klaviyo-analytic-dashboard" target="_blank" class="installer-btn">
+      <i class="fas fa-shopping-cart mr-2"></i>Get Desktop App
+    </a>
     <p class="mt-3 small opacity-8">✓ All features permanently ✓ Faster processing ✓ No browser limits</p>
   </div>
 </div>
@@ -368,9 +436,5 @@
 <!-- Local JavaScript -->
 <script src="klaviyo-tool.js"></script>
 <script src="header.js"></script>
-<script src="footer.js"></script>
 </body>
-
 </html>
-
-

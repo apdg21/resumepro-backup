@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-W52LYHBGZY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-W52LYHBGZY');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Premium Portfolio Templates | Showcase Your Work Professionally</title>
@@ -26,6 +17,7 @@
             --light: #f8f9fa;
             --gray: #6c757d;
             --success: #28a745;
+			--messenger: #0084ff;
         }
         
         * {
@@ -536,6 +528,99 @@
                 align-items: center;
             }
             }
+			/* Messenger Floating Chat Button */
+.messenger-help {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.help-badge {
+    background-color: white;
+    color: var(--dark);
+    padding: 12px 24px;
+    border-radius: 50px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    font-size: 1rem;
+    font-weight: 500;
+    max-width: 260px;
+    text-align: center;
+    border-left: 5px solid var(--messenger);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.5s ease forwards 1s;
+}
+
+.help-badge span {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--gray);
+    margin-top: 4px;
+}
+
+.messenger-btn {
+    background-color: var(--messenger);
+    color: white;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(0,132,255,0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+}
+
+.messenger-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 28px rgba(0,132,255,0.6);
+}
+
+.messenger-btn svg {
+    width: 38px;
+    height: 38px;
+    fill: white;
+}
+
+@keyframes slideUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Badge highlight for non-tech users */
+.highlight-nontech {
+    background-color: #fff3cd;
+    border-left-color: #ffc107;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .messenger-help {
+        bottom: 20px;
+        right: 20px;
+    }
+    .help-badge {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+        max-width: 220px;
+    }
+    .messenger-btn {
+        width: 55px;
+        height: 55px;
+    }
+    .messenger-btn svg {
+        width: 32px;
+        height: 32px;
+    }
+}
     </style>
 </head>
 <body>
@@ -1001,7 +1086,6 @@
     <div class="copyright">
         <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
     </div>
-
 </footer>
     
      <!-- Modal for template preview -->
@@ -1033,6 +1117,19 @@
                 </div>
             </div>
         </div>
+    </div>
+	
+	<!-- === FACEBOOK MESSENGER CHAT BUTTON (non-tech support) === -->
+    <div class="messenger-help">
+        <div class="help-badge">
+            ⚡ No tech skills? No problem!
+            <span>We can set it up for you — just chat with us.</span>
+        </div>
+        <a href="https://m.me/61578437432961" target="_blank" class="messenger-btn" title="Chat with us on Messenger for setup help">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2C6.5 2 2 6.14 2 11.25c0 2.84 1.35 5.38 3.48 7.07.12.1.19.26.18.42l-.27 1.96c-.05.39.33.69.7.51l2.19-1.07c.13-.06.28-.08.42-.06.67.15 1.36.23 2.08.23 5.5 0 10-4.14 10-9.25C22 6.14 17.5 2 12 2zm0 13.5c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm2-4.5c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-4 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
+            </svg>
+        </a>
     </div>
 
     <script>

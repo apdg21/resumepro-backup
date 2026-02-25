@@ -1,0 +1,67 @@
+{
+  "blogs": [
+    {
+      "title": "Beyond Revenue: How to Measure True Email Marketing Success",
+      "url": "true-email-success.html",
+      "date": "2026-02-25",
+      "excerpt": "Revenue isn't everything. Learn to balance trust metrics like subscriber growth, engagement, and deliverability for lasting email success.",
+      "image": "assets/blog/email-trust-metrics.jpg"
+    },
+    {
+      "title": "Why Less Is More: The Power of Focused Email Design in eCommerce",
+      "url": "why-less-is-more.html",
+      "date": "2025-09-20",
+      "excerpt": "Cluttered emails kill conversions. Discover how minimal, focused email design can dramatically improve your click-through rates.",
+      "image": "assets/blog/focused-email-design.jpg"
+    },
+    {
+      "title": "Why Email Builder Previews Can't Be Trusted — And What You Should Do Instead",
+      "url": "email-builder-previews.html",
+      "date": "2025-09-10",
+      "excerpt": "Email builders show you one thing, but subscribers see another. Learn why previews deceive and how to test properly.",
+      "image": "assets/blog/email-rendering.jpg"
+    },
+    {
+      "title": "Why Your Email List Might Be Failing—And How to Fix It at the Source",
+      "url": "email-list-failure.html",
+      "date": "2025-09-03",
+      "excerpt": "Before your first welcome email is sent, there's one critical piece that determines your success: the signup form. Fix it before it ruins your deliverability.",
+      "image": "assets/blog/email-list-failure.jpg"
+    },
+    {
+      "title": "Why 'Looking the Same' Isn't Mobile Optimized",
+      "url": "mobile-optimization.html",
+      "date": "2025-08-22",
+      "excerpt": "True mobile optimization isn't about keeping the same design—it's about adapting the experience for smaller screens and touch interaction.",
+      "image": "assets/blog/mobile-optimization.jpg"
+    },
+    {
+      "title": "Unlocking Email Marketing Success: A Multi-Faceted Approach",
+      "url": "email-marketing.html",
+      "date": "2025-08-13",
+      "excerpt": "Discover proven email marketing strategies that go beyond basic newsletters and actually drive engagement and conversions.",
+      "image": "assets/blog/email-marketing.jpg"
+    },
+    {
+      "title": "Legit Online Job Sites: Where to Find Genuine Opportunities",
+      "url": "online-job-sites.html",
+      "date": "2025-08-07",
+      "excerpt": "Not all job boards are created equal. We've vetted the platforms that actually deliver legitimate opportunities.",
+      "image": "assets/blog/remote-work.jpg"
+    },
+    {
+      "title": "Portfolio Maintenance: Stay Relevant, Stay Impactful",
+      "url": "portfolio-maintenance.html",
+      "date": "2025-08-05",
+      "excerpt": "A neglected portfolio can hurt your chances. Simple strategies to keep your portfolio updated and relevant year-round.",
+      "image": "assets/blog/portfolio-maintenance.jpg"
+    },
+    {
+      "title": "Portfolio Best Practices: Elevate Your Presence with Storytelling & Smart Showcases",
+      "url": "portfolio-best-practices.html",
+      "date": "2023-06-15",
+      "excerpt": "Your portfolio is your digital handshake. Learn the essential elements that make hiring managers take notice.",
+      "image": "assets/blog/portfolio-best-practices.jpg"
+    }
+  ]
+}

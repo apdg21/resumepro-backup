@@ -1,60 +1,358 @@
----
-layout: layouts/base.html
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Posts - ResumePro</title>
+	<link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="footer.css">
+    <style>
+	     :root {
+            --primary: #3a86ff;
+            --primary-dark: #2667cc;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        /* Additional styles for blog cards with images */
+        .blog-list-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
 
-<div class="blog-list-container">
-    <div class="blog-list-header">
-        <h1>{{ title }}</h1>
-        {% if description %}
-        <p>{{ description }}</p>
-        {% endif %}
+        .blog-list-container h1 {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5em;
+            color: #333;
+			margin-top: 100px;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .blog-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .blog-card h2 {
+            margin: 20px 20px 10px;
+            font-size: 1.4em;
+            line-height: 1.3;
+        }
+
+        .blog-card h2 a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .blog-card h2 a:hover {
+            color: #007bff;
+        }
+
+        .blog-meta {
+            margin: 0 20px 10px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .blog-date {
+            display: inline-block;
+            background: #f5f5f5;
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+
+        .blog-excerpt {
+            margin: 0 20px 20px;
+            color: #555;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .read-more {
+            display: inline-block;
+            margin: 0 20px 20px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .read-more:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        .error {
+            text-align: center;
+            color: #dc3545;
+            padding: 40px;
+            font-size: 1.2em;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+            padding: 40px;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .blog-list-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+        
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation">☰</button>
+            <ul class="header-nav-menu">
+                <li class="header-nav-item"><a href="index.html" class="header-nav-link">Home</a></li>
+                <li class="header-nav-item header-dropdown">
+                    <a href="#" class="header-nav-link">
+                        Templates
+                        <span class="header-dropdown-icon">▼</span>
+                    </a>
+                    <div class="header-dropdown-content">
+                        <a href="resume-templates.html" class="header-dropdown-item">Resume Templates</a>
+                        <a href="portfolio-templates.html" class="header-dropdown-item">Portfolio Templates</a>
+                    </div>
+                </li>
+                
+                <!-- My Apps Menu Item -->
+                <li class="header-nav-item header-dropdown">
+                    <a href="#" class="header-nav-link">
+                        My Apps
+                        <span class="header-dropdown-icon">▼</span>
+                    </a>
+                    <div class="header-dropdown-content">
+                        <a href="android-applications.html" class="header-dropdown-item">Android Applications</a>
+                        <a href="family-connection-tools.html" class="header-dropdown-item">Web Applications</a>
+                      </div>
+                </li>
+                
+                <!-- UPDATED: Blog link now points to blog-list.html -->
+                <li class="header-nav-item"><a href="blog-list.html" class="header-nav-link">Blog</a></li>
+                
+                <li class="header-nav-item"><a href="klaviyo-analytics.html" class="header-nav-link">Klaviyo Analytics</a></li>
+                <li class="header-nav-item header-dropdown">
+                    <a href="#" class="header-nav-link">
+                        Productivity Tools
+                        <span class="header-dropdown-icon">▼</span>
+                    </a>
+                    <div class="header-dropdown-content">
+                        <a href="email-builder.html" class="header-dropdown-item">Email Builder</a>
+                        <a href="enhanced-todo.html" class="header-dropdown-item">Enhanced To-Do & Notes</a>
+                        <a href="klaviyo-tool.html" class="header-dropdown-item">Klaviyo Tool</a>
+                    </div>
+                </li>
+                <li class="header-nav-item"><a href="about.html" class="header-nav-link">About</a></li>
+                <li class="header-nav-item"><a href="contact.html" class="header-nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+    
+    <main class="blog-list-container">
+        <h1>Latest Blog Posts</h1>
+        <div class="blog-grid" id="blog-posts">
+            <div class="loading">Loading blog posts...</div>
+        </div>
+    </main>
+
+    <footer>
+    <div class="footer-content">
+        <div class="footer-column">
+            <h3>ResumePro</h3>
+            <p>Professional digital templates to showcase your career and work.</p>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Templates</h3>
+            <ul class="footer-links">
+                <li><a href="resume-templates.html">Resume Templates</a></li>
+                <li><a href="portfolio-templates.html">Portfolio Templates</a></li>
+                <li><a href="#">All Templates</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Resources</h3>
+            <ul class="footer-links">
+                <li><a href="help.html#editing">How to Edit</a></li>
+                <li><a href="help.html#hosting">Hosting Guide</a></li>
+                <li><a href="help.html#tips">Tips & Examples</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Company</h3>
+            <ul class="footer-links">
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
     </div>
     
-    {% if collections.blog and collections.blog.length > 0 %}
-    <div class="blog-grid">
-        {% for post in collections.blog %}
-        <article class="blog-card">
-            {% if post.data.featuredImage %}
-            <div class="blog-card-image">
-                <img src="{{ post.data.featuredImage }}" alt="{{ post.data.title }}" loading="lazy">
-            </div>
-            {% endif %}
+    <div class="copyright">
+        <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
+    </div>
+</footer>
+
+    <script src="header.js"></script>
+    
+    <script>
+        // Fetch and display blog posts with better error handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const blogContainer = document.getElementById('blog-posts');
             
-            <div class="blog-card-content">
-                <div class="blog-card-meta">
-                    <time datetime="{{ post.date | isoDate }}">{{ post.date | formatDate }}</time>
-                    <span>•</span>
-                    <span>{{ post.data.readTime | default: 5 }} min read</span>
-                </div>
+            // Try multiple possible paths for index.json
+            const jsonPaths = [
+                'index.json',           // Same directory
+                './index.json',          // Same directory (explicit)
+                '/index.json'            // Root relative
+            ];
+            
+            let attempts = 0;
+            
+            function tryFetch(pathIndex) {
+                if (pathIndex >= jsonPaths.length) {
+                    // All paths failed
+                    console.error('All JSON paths failed');
+                    blogContainer.innerHTML = `
+                        <div class="error">
+                            <h3>Sorry, unable to load blog posts at this time.</h3>
+                            <p>Please try again later or check back soon.</p>
+                            <small style="color: #999; display: block; margin-top: 20px;">
+                                Debug info: Tried loading from: ${jsonPaths.join(', ')}
+                            </small>
+                        </div>
+                    `;
+                    return;
+                }
                 
-                <h2 class="blog-card-title">
-                    <a href="{{ post.url }}">{{ post.data.title }}</a>
-                </h2>
+                const jsonPath = jsonPaths[pathIndex];
+                console.log(`Attempting to load from: ${jsonPath}`);
                 
-                {% if post.data.excerpt %}
-                <p class="blog-card-excerpt">{{ post.data.excerpt }}</p>
-                {% elsif post.data.description %}
-                <p class="blog-card-excerpt">{{ post.data.description }}</p>
-                {% endif %}
-                
-                {% if post.data.tags %}
-                <div class="blog-card-tags">
-                    {% for tag in post.data.tags limit: 3 %}
-                    <span class="blog-card-tag">{{ tag }}</span>
-                    {% endfor %}
-                </div>
-                {% endif %}
-                
-                <a href="{{ post.url }}" class="blog-card-link">
-                    Read More <span>→</span>
-                </a>
-            </div>
-        </article>
-        {% endfor %}
-    </div>
-    {% else %}
-    <div class="no-blog-posts">
-        <p>No blog posts yet. Check back soon!</p>
-    </div>
-    {% endif %}
-</div>
+                fetch(jsonPath)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Successfully loaded JSON:', data);
+                        
+                        if (!data.blogs || !Array.isArray(data.blogs)) {
+                            throw new Error('Invalid JSON structure: blogs array not found');
+                        }
+                        
+                        if (data.blogs.length === 0) {
+                            blogContainer.innerHTML = '<div class="error">No blog posts found.</div>';
+                            return;
+                        }
+                        
+                        // Sort blogs by date (newest first)
+                        data.blogs.sort((a, b) => new Date(b.date) - new Date(a.date));
+                        
+                        // Clear loading message
+                        blogContainer.innerHTML = '';
+                        
+                        data.blogs.forEach(blog => {
+                            const blogCard = document.createElement('article');
+                            blogCard.className = 'blog-card';
+                            
+                            // Format date nicely
+                            const formattedDate = new Date(blog.date).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            });
+                            
+                            // Build the blog card HTML with image
+                            let imageHtml = '';
+                            if (blog.image) {
+                                // Ensure image path is correct
+                                let imagePath = blog.image;
+                                // If image path starts with assets/, keep it as is (should work from root)
+                                imageHtml = `<img src="${imagePath}" alt="${blog.title}" class="blog-image" loading="lazy" onerror="this.style.display='none'">`;
+                            }
+                            
+                            blogCard.innerHTML = `
+                                ${imageHtml}
+                                <h2><a href="blogs/${blog.url}">${blog.title}</a></h2>
+                                <div class="blog-meta">
+                                    <span class="blog-date">${formattedDate}</span>
+                                </div>
+                                <p class="blog-excerpt">${blog.excerpt || ''}</p>
+                                <a href="blogs/${blog.url}" class="read-more">Read More →</a>
+                            `;
+                            blogContainer.appendChild(blogCard);
+                        });
+                    })
+                    .catch(error => {
+                        console.error(`Error loading from ${jsonPath}:`, error);
+                        attempts++;
+                        // Try next path
+                        tryFetch(pathIndex + 1);
+                    });
+            }
+            
+            // Start trying paths
+            tryFetch(0);
+        });
+    </script>
+</body>
+</html>

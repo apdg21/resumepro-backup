@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+	<link rel="stylesheet" href="../header.css">
+    <link rel="stylesheet" href="../footer.css">
+    <title>Portfolio Maintenance | ResumePro Blog</title>
+    <style>
+        :root {
+            --primary: #3a86ff;
+            --primary-dark: #2667cc;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        
+        
+        /* Blog Content Styles */
+        .blog-container {
+            max-width: 800px;
+            margin: 8rem auto;
+            padding: 0 2rem;
+        }
+        
+        .blog-header1 {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .blog-meta {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+        
+        .blog-image {
+            width: 100%;
+            height: 400px;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            object-fit: fill;
+        }
+        
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+        }
+        
+        .blog-content {
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .blog-content h2 {
+            font-size: 1.8rem;
+            margin: 2.5rem 0 1.5rem;
+            color: var(--primary);
+        }
+        
+        .blog-content h3 {
+            font-size: 1.4rem;
+            margin: 2rem 0 1rem;
+            color: var(--dark);
+        }
+        
+        .blog-content p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .blog-content ul, .blog-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+        
+        .blog-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .tip-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        /* Footer Styles */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+
+       
+            /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            
+            
+            .blog-title {
+                font-size: 1.8rem;
+            }
+            
+            .blog-meta {
+                font-size: 0.9rem;
+            }
+            
+            .blog-image {
+                height: 200px;
+            }
+            
+            .blog-content {
+                font-size: 1rem;
+            }
+            
+            .blog-content h2 {
+                font-size: 1.5rem;
+            }
+            
+            .blog-content h3 {
+                font-size: 1.2rem;
+            }
+            
+            .tip-box {
+                padding: 1rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .footer-column h3 {
+                font-size: 1.1rem;
+            }
+            
+            .footer-links a {
+                font-size: 0.9rem;
+            }
+            
+            .copyright {
+                font-size: 0.85rem;
+            }
+        }
+
+       
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-content">
+        <a href="../index.html" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+        
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation">☰</button>
+            <ul class="header-nav-menu">
+                <li class="header-nav-item"><a href="../index.html" class="header-nav-link">Home</a></li>
+                <li class="header-nav-item header-dropdown">
+                    <a href="#" class="header-nav-link">
+                        Templates
+                        <span class="header-dropdown-icon">▼</span>
+                    </a>
+                    <div class="header-dropdown-content">
+                        <a href="../resume-templates.html" class="header-dropdown-item">Resume Templates</a>
+                        <a href="../portfolio-templates.html" class="header-dropdown-item">Portfolio Templates</a>
+                    </div>
+                </li>
+                
+                <!-- My Apps Menu Item -->
+                <li class="header-nav-item header-dropdown">
+                    <a href="#" class="header-nav-link">
+                        My Apps
+                        <span class="header-dropdown-icon">▼</span>
+                    </a>
+                    <div class="header-dropdown-content">
+                        <a href="../android-applications.html" class="header-dropdown-item">Android Applications</a>
+                        <a href="../family-connection-tools.html" class="header-dropdown-item">Web Applications</a>
+                      </div>
+                </li>
+                
+                <!-- UPDATED: Blog link now points to blog-list.html -->
+                <li class="header-nav-item"><a href="../blog-list.html" class="header-nav-link">Blog</a></li>
+                
+                <li class="header-nav-item"><a href="../klaviyo-analytics.html" class="header-nav-link">Klaviyo Analytics</a></li>
+                <li class="header-nav-item header-dropdown">
+                    <a href="#" class="header-nav-link">
+                        Productivity Tools
+                        <span class="header-dropdown-icon">▼</span>
+                    </a>
+                    <div class="header-dropdown-content">
+                        <a href="../email-builder.html" class="header-dropdown-item">Email Builder</a>
+                        <a href="../enhanced-todo.html" class="header-dropdown-item">Enhanced To-Do & Notes</a>
+                        <a href="../klaviyo-tool.html" class="header-dropdown-item">Klaviyo Tool</a>
+                    </div>
+                </li>
+                <li class="header-nav-item"><a href="../about.html" class="header-nav-link">About</a></li>
+                <li class="header-nav-item"><a href="../contact.html" class="header-nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+  <!-- Header Placeholder -->
+    <div id="header-placeholder">
+        <noscript>Please enable JavaScript to view the navigation menu.</noscript>
+    </div>
+    <!-- Blog Content -->
+    <main class="blog-container">
+        <div class="blog-header">
+            <h1 class="blog-title">Portfolio Maintenance: Stay Relevant, Stay Impactful</h1>
+            <div class="blog-meta">Posted on August 5, 2025 | 5 min read</div>
+            
+            <!-- Featured Image Placeholder -->
+            <div class="blog-image">
+                <img src="https://triskellsoftware.com/wp-content/uploads/2023/04/strategic-portfolio-management-process-2-768x474.png" alt="Portfolio maintenance strategies">
+                <div style="display: none;">Featured image showing portfolio maintenance strategies</div>
+            </div>
+        </div>
+        
+        <article class="blog-content">
+            <p>A portfolio isn’t just a launchpad—it’s a living system. Whether you're evolving your personal brand or responding to fast-shifting audience preferences, continuous care makes the difference between a static resume and a dynamic showcase. Here's how to keep your portfolio sharp and measurable.</p>
+            
+            <h2>📅 Keeping Your Portfolio Up-to-Date</h2>
+            <p>Outdated portfolios don’t reflect growth—and that’s a missed opportunity. Regular updates don’t have to be exhausting. They just need to be strategic.</p>
+            
+            <div class="tip-box">
+                <h3>🛠️ Tactics to Keep It Fresh:</h3>
+                <ul>
+                    <li><strong>Set a maintenance cadence:</strong> Add it to your calendar—monthly or quarterly check-ins to revise copy, refresh visuals, or add new wins.</li>
+                    <li><strong>Build modular, JSON-editable sections:</strong> Your offline-first system makes updates frictionless. Lean on those editable fields to swap in new content fast.</li>
+                    <li><strong>Highlight evolving strengths:</strong> Just delivered a complex, multi-touch campaign or unlocked better browser handling? Showcase it.</li>
+                    <li><strong>Swap outdated projects:</strong> Replace work that no longer reflects your level. No need to hide early pieces—just reposition them as part of your growth arc.</li>
+                    <li><strong>Update your About page with intention:</strong> Have your goals or passions shifted? Let your digital “voice” evolve with you.</li>
+                </ul>
+            </div>
+            
+            <div class="blog-image">
+                <img src="../assets/blog/portfolio-update-example.jpg" alt="Example of an updated portfolio section">
+                <div style="display: none;">Example of a modular portfolio update interface</div>
+            </div>
+            
+            <h2>📊 Measuring Portfolio Success</h2>
+            <p>If you’re not tracking, you’re guessing. Smart metrics help you understand which sections work—and which need more soul.</p>
+            
+            <div class="tip-box">
+                <h3>🔍 Metrics That Matter:</h3>
+                <ul>
+                    <li><strong>Traffic and Click Behaviors:</strong> Use analytics tools to track page views, bounce rates, and time on page. Insight: If visitors spend more time on your UX showcase than your marketing campaigns, lean into that strength—or improve storytelling for the other.</li>
+                    <li><strong>Engagement Patterns:</strong> Are users downloading templates? Sharing sample projects? Interacting with offline-editable demos? Every action is a signal.</li>
+                    <li><strong>Conversion Goals:</strong> Define what success looks like: Email inquiries, newsletter signups, freelance leads. Then watch the funnel.</li>
+                    <li><strong>Heatmaps or User Flow Reports:</strong> For deeper UX intel, tools like Hotjar or Fathom (if privacy matters) can show where users click, scroll, and stall.</li>
+                    <li><strong>Feedback Loops:</strong> Include a soft CTA like “Was this helpful?” or invite collaborators to comment. Real human input > algorithms alone.</li>
+                </ul>
+            </div>
+            
+            <div class="blog-image">
+                <img src="../assets/blog/portfolio-metrics-example.jpg" alt="Example of portfolio analytics dashboard">
+                <div style="display: none;">Example of a portfolio analytics dashboard</div>
+            </div>
+            
+            <h2>⚙️ Tip for Tech-Led Portfolio Pros</h2>
+            <p>If you're running local previews or JSON-driven systems, integrate lightweight usage tracking—even if it's offline. You can log event-based interactions (like “preview clicked” or “section expanded”) and sync when back online. It’s user-empowered data for intentional growth.</p>
+            
+            <p>Your portfolio shouldn’t just be up-to-date—it should be insightful, adaptive, and aligned with what you’re trying to achieve. Think of it as your most honest mirror and most persuasive partner.</p>
+            
+            <div class="blog-image">
+                <img src="../assets/blog/tracking-workflow.jpg" alt="Example of a tracking workflow">
+                <div style="display: none;">Example of a JSON-driven tracking interface</div>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+    <div class="footer-content">
+        <div class="footer-column">
+            <h3>ResumePro</h3>
+            <p>Professional digital templates to showcase your career and work.</p>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Templates</h3>
+            <ul class="footer-links">
+                <li><a href="../resume-templates.html">Resume Templates</a></li>
+                <li><a href="../portfolio-templates.html">Portfolio Templates</a></li>
+                <li><a href="#">All Templates</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Resources</h3>
+            <ul class="footer-links">
+                <li><a href="help.html#editing">How to Edit</a></li>
+                <li><a href="help.html#hosting">Hosting Guide</a></li>
+                <li><a href="help.html#tips">Tips & Examples</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Company</h3>
+            <ul class="footer-links">
+                <li><a href="../about.html">About Us</a></li>
+                <li><a href="../contact.html">Contact</a></li>
+                <li><a href="../privacy.html">Privacy Policy</a></li>
+                <li><a href="../terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="copyright">
+        <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
+    </div>
+</footer>
+    
+<script src="../header.js"></script>
+
+    </body>
+</html>

@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="footer.css">
+	<link rel="stylesheet" href="footer.css">
     <link rel="stylesheet" href="header.css">
     <style>
         :root {
@@ -32,26 +32,38 @@
             line-height: 1.6;
         }
           
-
-        .section-item {
+        .section-item, .container-item {
             cursor: pointer;
             transition: all 0.2s;
             border-left: 3px solid transparent;
         }
-        .section-item:hover {
+        .section-item:hover, .container-item:hover {
             background-color: #f8fafc;
             border-left-color: #3b82f6;
         }
-        .section-item.active {
+        .section-item.active, .container-item.active {
             background-color: #eff6ff;
             border-left-color: #2563eb;
+        }
+        .container-item {
+            margin-left: -8px;
+            padding-left: 8px;
+            border-left: 3px solid #9ca3af;
+        }
+        .container-item.active {
+            border-left-color: #2563eb;
+        }
+        .container-nested {
+            margin-left: 16px;
+            border-left: 2px dashed #cbd5e1;
+            padding-left: 8px;
         }
         .draggable-handle {
             cursor: move;
             opacity: 0.5;
             transition: opacity 0.2s;
         }
-        .section-item:hover .draggable-handle {
+        .section-item:hover .draggable-handle, .container-item:hover .draggable-handle {
             opacity: 1;
         }
         .column {
@@ -103,7 +115,6 @@
                 max-width: 100% !important;
                 padding: 10px 0 !important;
             }
-             
         }
         .message-box {
             transition: opacity 0.3s;
@@ -143,13 +154,59 @@
             font-weight: 500;
             margin-top: 0.25rem;
         }
-       .nav-link {
+        .nav-link {
            font-weight: 500 !important;
-       }
+        }
+        .container-highlight {
+            border: 2px dashed #9ca3af;
+            margin: 5px 0;
+            padding: 5px;
+            position: relative;
+        }
+        .container-highlight::before {
+            content: 'Container';
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: #9ca3af;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            z-index: 10;
+        }
+        .nav-item {
+            padding: 8px 12px;
+            background-color: #f3f4f6;
+            border-radius: 4px;
+            margin: 0 5px;
+        }
+        .block-order-select {
+            height: 100px;
+        }
+        .block-order-select option {
+            padding: 4px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+        .badge-blue {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        .badge-purple {
+            background-color: #ede9fe;
+            color: #5b21b6;
+        }
     </style>
 </head>
 <body>
-     <header>
+<header>
     <div class="header-content">
         <a href="index.html" class="logo">
             <span class="logo-icon">📄</span>
@@ -206,20 +263,23 @@
 </header>
 
 <script src="header.js"></script>
-
     <div class="container mx-auto p-4 max-w-7xl">   
         
-        <div class="flex flex-col lg:flex-row gap-6" style="margin-top: 130px;">
+        <div class="flex flex-col lg:flex-row gap-6" style="margin-top: 20px;">
             <!-- Left Panel: Section Management -->
             <div class="w-full lg:w-1/4 bg-white p-5 rounded-xl shadow-sm border border-gray-200">
                 <h2 class="text-lg font-semibold mb-4 text-gray-700 flex items-center">
-                    <i class="fas fa-layer-group mr-2 text-blue-500"></i> Sections
+                    <i class="fas fa-layer-group mr-2 text-blue-500"></i> Sections & Containers
                 </h2>
+                
                 <div class="mb-5">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Add New Section</label>
                     <select id="section-type-select" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" aria-label="Select section type">
                         <option value="" disabled selected>Choose a section type</option>
-                        <option value="header">Header</option>
+                        <option value="header-text">Header (Text Based)</option>
+                        <option value="header-image">Header (Image Based)</option>
+                        <option value="navigation">Navigation Menu</option>
+                        <option value="button-only">Button Only</option>
                         <option value="title-only">Title Only</option>
                         <option value="text-only">Text Only</option>
                         <option value="title-text">Title & Text</option>
@@ -230,21 +290,33 @@
                         <option value="two-column-blocks">Two Column Blocks</option>
                         <option value="three-column-blocks">Three Column Blocks</option>
                         <option value="divider">Divider</option>
+                        <option value="container">Container (Nested)</option>
                         <option value="custom-html">Custom HTML</option>
                     </select>
-                    <button onclick="addSection()" class="mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg transition flex items-center justify-center" aria-label="Add section">
-                        <i class="fas fa-plus mr-2"></i> Add Section
-                    </button>
+                    
+                    <div class="flex gap-2 mt-3">
+                        <button onclick="addSection()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg transition flex items-center justify-center" aria-label="Add section">
+                            <i class="fas fa-plus mr-2"></i> Add
+                        </button>
+                        <button onclick="addContainer()" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-lg transition flex items-center justify-center" aria-label="Add container">
+                            <i class="fas fa-cubes mr-2"></i> Add Container
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="mb-4">
-                    <h3 class="text-sm font-medium text-gray-700 mb-2">Your Sections</h3>
-                    <div id="section-list-container" class="space-y-2"></div>
+                    <h3 class="text-sm font-medium text-gray-700 mb-2">Your Structure</h3>
+                    <div id="section-list-container" class="space-y-2 max-h-[400px] overflow-y-auto"></div>
                 </div>
                 
-                <button onclick="removeSection()" class="w-full bg-red-100 hover:bg-red-200 text-red-700 p-3 rounded-lg transition flex items-center justify-center" aria-label="Remove selected section">
-                    <i class="fas fa-trash-alt mr-2"></i> Remove Selected Section
-                </button>
+                <div class="flex gap-2">
+                    <button onclick="removeSelected()" class="flex-1 bg-red-100 hover:bg-red-200 text-red-700 p-3 rounded-lg transition flex items-center justify-center" aria-label="Remove selected item">
+                        <i class="fas fa-trash-alt mr-2"></i> Remove
+                    </button>
+                    <button onclick="moveToContainer()" class="flex-1 bg-green-100 hover:bg-green-200 text-green-700 p-3 rounded-lg transition flex items-center justify-center" aria-label="Move to container">
+                        <i class="fas fa-arrow-right mr-2"></i> To Container
+                    </button>
+                </div>
             </div>
 
             <!-- Center Panel: Preview -->
@@ -327,10 +399,53 @@
             </button>
         </div>
     </div>
+	
+	<footer>
+    <div class="footer-content">
+        <div class="footer-column">
+            <h3>ResumePro</h3>
+            <p>Professional digital templates to showcase your career and work.</p>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Templates</h3>
+            <ul class="footer-links">
+                <li><a href="resume-templates.html">Resume Templates</a></li>
+                <li><a href="portfolio-templates.html">Portfolio Templates</a></li>
+                <li><a href="#">All Templates</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Resources</h3>
+            <ul class="footer-links">
+                <li><a href="help.html#editing">How to Edit</a></li>
+                <li><a href="help.html#hosting">Hosting Guide</a></li>
+                <li><a href="help.html#tips">Tips & Examples</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Company</h3>
+            <ul class="footer-links">
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="copyright">
+        <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
+    </div>
+</footer>
 
     <script>
-        let sections = [];
-        let activeSectionIndex = null;
+        // Data structure: supports nested containers
+        let structure = [];
+        let activePath = null; // Array of indices to track nested selection
+        let activeType = null; // 'section', 'container'
         let canvasWidth = 600;
         let isMobilePreview = false;
         let history = [];
@@ -370,7 +485,7 @@
         // Initialize on page load
         window.onload = function() {
             initPreviewFrame();
-            updateSectionList();
+            updateStructureList();
         };
 
         canvasWidthInput.oninput = (e) => {
@@ -412,23 +527,6 @@
             return div.innerHTML;
         }
 
-        function validateHtml(html) {
-            if (!html || html.trim() === '') {
-                return '<p>Please enter valid HTML content</p>';
-            }
-            try {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                if (!doc.body.children.length) {
-                    return '<p>Invalid HTML content</p>';
-                }
-                return html;
-            } catch (error) {
-                console.error('Invalid HTML:', error);
-                return '<p>Invalid HTML content</p>';
-            }
-        }
-
         function escapeHtml(str) {
             return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
@@ -465,8 +563,9 @@
             try {
                 history = history.slice(0, historyIndex + 1);
                 history.push({
-                    sections: JSON.parse(JSON.stringify(sections)),
-                    activeSectionIndex: activeSectionIndex,
+                    structure: JSON.parse(JSON.stringify(structure)),
+                    activePath: activePath ? [...activePath] : null,
+                    activeType: activeType,
                     canvasWidth: canvasWidth
                 });
                 if (history.length > maxHistory) {
@@ -485,11 +584,12 @@
                 if (historyIndex > 0) {
                     historyIndex--;
                     const state = history[historyIndex];
-                    sections = JSON.parse(JSON.stringify(state.sections));
-                    activeSectionIndex = state.activeSectionIndex;
+                    structure = JSON.parse(JSON.stringify(state.structure));
+                    activePath = state.activePath ? [...state.activePath] : null;
+                    activeType = state.activeType;
                     canvasWidth = state.canvasWidth;
                     canvasWidthInput.value = canvasWidth;
-                    updateSectionList();
+                    updateStructureList();
                     showProperties();
                     updatePreview();
                     showMessage('Undo successful', 'success');
@@ -505,11 +605,12 @@
                 if (historyIndex < history.length - 1) {
                     historyIndex++;
                     const state = history[historyIndex];
-                    sections = JSON.parse(JSON.stringify(state.sections));
-                    activeSectionIndex = state.activeSectionIndex;
+                    structure = JSON.parse(JSON.stringify(state.structure));
+                    activePath = state.activePath ? [...state.activePath] : null;
+                    activeType = state.activeType;
                     canvasWidth = state.canvasWidth;
                     canvasWidthInput.value = canvasWidth;
-                    updateSectionList();
+                    updateStructureList();
                     showProperties();
                     updatePreview();
                     updateHistoryButtons();
@@ -540,222 +641,86 @@
             }
         }
 
-        function extractStyles(element, defaultStyles = {}) {
+        function addContainer() {
             try {
-                const styles = {};
-                const computedStyles = element.style || {};
-                Object.assign(styles, defaultStyles);
-
-                styles.fontFamily = computedStyles.fontFamily || defaultStyles.fontFamily || 'Arial, Helvetica, sans-serif';
-                styles.backgroundColor = computedStyles.backgroundColor || defaultStyles.backgroundColor || '#ffffff';
-                styles.borderWidth = computedStyles.borderWidth || defaultStyles.borderWidth || '0px';
-                styles.borderColor = computedStyles.borderColor || defaultStyles.borderColor || '#000000';
-                styles.borderStyle = computedStyles.borderStyle || defaultStyles.borderStyle || 'solid';
-                styles.borderRadius = computedStyles.borderRadius || defaultStyles.borderRadius || '0px';
-                styles.paddingTop = computedStyles.paddingTop || defaultStyles.paddingTop || '20px';
-                styles.paddingBottom = computedStyles.paddingBottom || defaultStyles.paddingBottom || '20px';
-                styles.paddingLeft = computedStyles.paddingLeft || defaultStyles.paddingLeft || '20px';
-                styles.paddingRight = computedStyles.paddingRight || defaultStyles.paddingRight || '20px';
-                styles.marginTop = computedStyles.marginTop || defaultStyles.marginTop || '0px';
-                styles.marginBottom = computedStyles.marginBottom || defaultStyles.marginBottom || '0px';
-                styles.marginLeft = computedStyles.marginLeft || defaultStyles.marginLeft || '0px';
-                styles.marginRight = computedStyles.marginRight || defaultStyles.marginRight || '0px';
-                styles.textAlign = computedStyles.textAlign || defaultStyles.textAlign || 'center';
-
-                if (computedStyles.backgroundImage && computedStyles.backgroundImage !== 'none') {
-                    styles.backgroundType = 'image';
-                    styles.backgroundImage = computedStyles.backgroundImage.replace(/url\(['"]?([^'"]+)['"]?\)/, '$1');
-                } else if (computedStyles.background && computedStyles.background.includes('gradient')) {
-                    styles.backgroundType = 'gradient';
-                    styles.backgroundGradient = computedStyles.background;
-                } else {
-                    styles.backgroundType = 'color';
-                }
-
-                return styles;
-            } catch (error) {
-                console.error('Error extracting styles:', error);
-                return defaultStyles;
-            }
-        }
-
-        function detectSectionType(element) {
-            try {
-                const textContent = (element.textContent || '').trim().replace(/\s+/g, ' ');
-                const hasH1 = element.querySelector('h1,h2,h3');
-                const hasP = element.querySelector('p');
-                const hasImg = element.querySelector('img');
-                const hasA = element.querySelector('a:not([href*="#"])');
-                const tdCount = element.querySelectorAll('td').length;
-                const isSingleCellTable = element.tagName.toLowerCase() === 'table' && tdCount === 1;
-
-                if (isSingleCellTable && hasH1 && !hasP && !hasImg) {
-                    return {
-                        type: 'title-only',
-                        content: {
-                            title: hasH1.textContent.trim() || 'Your Title Here',
-                            fontSizeTitle: hasH1.style.fontSize || '24px',
-                            lineHeightTitle: hasH1.style.lineHeight || '1.2',
-                            textColorTitle: hasH1.style.color || '#000000',
-                            textAlign: hasH1.style.textAlign || element.style.textAlign || 'center'
-                        }
-                    };
-                } else if (isSingleCellTable && hasP && !hasH1 && !hasImg) {
-                    return {
-                        type: 'text-only',
-                        content: {
-                            text: hasP.textContent.trim() || 'This is a paragraph of text.',
-                            fontSizeText: hasP.style.fontSize || '16px',
-                            lineHeightText: hasP.style.lineHeight || '1.5',
-                            textColorText: hasP.style.color || '#333333',
-                            textAlign: hasP.style.textAlign || element.style.textAlign || 'center'
-                        }
-                    };
-                } else if (hasH1 && hasP && !hasImg && isSingleCellTable) {
-                    return {
-                        type: 'title-text',
-                        content: {
-                            title: hasH1.textContent.trim() || 'Your Title Here',
-                            text: hasP.textContent.trim() || 'This is a paragraph of text.',
-                            fontSizeTitle: hasH1.style.fontSize || '24px',
-                            fontSizeText: hasP.style.fontSize || '16px',
-                            lineHeightTitle: hasH1.style.lineHeight || '1.2',
-                            lineHeightText: hasP.style.lineHeight || '1.5',
-                            textColorTitle: hasH1.style.color || '#000000',
-                            textColorText: hasP.style.color || '#333333',
-                            textAlign: hasH1.style.textAlign || hasP.style.textAlign || element.style.textAlign || 'center'
-                        }
-                    };
-                } else if (hasImg && !hasH1 && !hasP && isSingleCellTable) {
-                    const type = element.closest('table')?.parentElement?.closest('table') ? 'image-only' : 'header';
-                    return {
-                        type,
-                        content: {
-                            image: hasImg.src || 'https://placehold.co/600x150/000000/FFFFFF?text=Placeholder',
-                            altText: hasImg.alt || (type === 'header' ? 'Company Logo' : 'Full Width Image'),
-                            link: hasA?.href || '#',
-                            align: hasImg.style.textAlign || element.style.textAlign || 'center',
-                            imageWidth: hasImg.style.width || (type === 'header' ? '100%' : '100%'),
-                            borderWidth: hasImg.style.borderWidth || '0px',
-                            borderColor: hasImg.style.borderColor || '#000000',
-                            borderStyle: hasImg.style.borderStyle || 'solid',
-                            borderRadius: hasImg.style.borderRadius || '0px'
-                        }
-                    };
-                } else if (hasImg && (hasP || hasH1) && tdCount >= 2) {
-                    const textTd = Array.from(element.querySelectorAll('td')).find(td => td.querySelector('p,h1,h2,h3'));
-                    const imgTd = Array.from(element.querySelectorAll('td')).find(td => td.querySelector('img'));
-                    if (textTd && imgTd) {
-                        const textFirst = Array.from(element.querySelectorAll('td')).indexOf(textTd) < Array.from(element.querySelectorAll('td')).indexOf(imgTd);
-                        return {
-                            type: 'text-image',
-                            content: {
-                                image: hasImg.src || 'https://placehold.co/250x250/F3F4F6/6B7280?text=Image',
-                                altText: hasImg.alt || 'Content Image',
-                                text: (textTd.textContent || '').trim() || 'This is some text next to an image.',
-                                fontSize: textTd.style.fontSize || '16px',
-                                lineHeight: textTd.style.lineHeight || '1.5',
-                                textColor: textTd.style.color || '#333333',
-                                textAlign: textTd.style.textAlign || 'left',
-                                direction: textFirst ? 'text-left' : 'text-right',
-                                showButton: !!hasA,
-                                buttonText: hasA?.textContent.trim() || 'Click Me',
-                                buttonLink: hasA?.href || '#',
-                                buttonBackground: hasA?.style.backgroundColor || '#007bff',
-                                buttonColor: hasA?.style.color || '#ffffff',
-                                buttonFontSize: hasA?.style.fontSize || '16px',
-                                buttonPadding: hasA?.style.padding || '10px 20px',
-                                buttonBorderRadius: hasA?.style.borderRadius || '4px'
-                            }
-                        };
-                    }
-                } else if (element.querySelector('hr')) {
-                    const hr = element.querySelector('hr');
-                    return {
-                        type: 'divider',
-                        content: {
-                            height: hr.style.height || hr.style.borderTopWidth || '1px',
-                            color: hr.style.backgroundColor || hr.style.borderTopColor || '#cccccc',
-                            style: hr.style.borderTopStyle || 'solid',
-                            align: hr.style.textAlign || element.style.textAlign || 'center',
-                            width: hr.style.width || '100%'
-                        }
-                    };
-                }
-
-                return {
-                    type: 'custom-html',
-                    content: {
-                        html: sanitizeHtml(element.outerHTML || '<p>Unknown content</p>')
-                    }
+                const newContainer = {
+                    id: Date.now() + Math.random(),
+                    type: 'container',
+                    name: `Container ${getContainerCount() + 1}`,
+                    content: getDefaultContainerContent(),
+                    items: [] // Can contain sections or other containers
                 };
-            } catch (error) {
-                console.error('Error detecting section type:', error);
-                return {
-                    type: 'custom-html',
-                    content: { html: sanitizeHtml(element.outerHTML || '<p>Error parsing content</p>') }
-                };
-            }
-        }
-
-        function loadHtml() {
-            try {
-                const htmlContent = loadHtmlInput.value.trim();
-                if (!htmlContent) {
-                    showMessage('Please paste valid HTML code.', 'error');
-                    return;
-                }
-
-                sections = [];
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(sanitizeHtml(htmlContent), 'text/html');
                 
-                // Look for tables or divs that could be sections
-                const potentialSections = Array.from(doc.querySelectorAll('table, div.section, [class*="section"]'));
-                
-                if (potentialSections.length === 0) {
-                    // If no sections found, treat the entire body as one section
-                    const section = detectSectionType(doc.body);
-                    const defaultStyles = getDefaultContent('custom-html');
-                    section.content = { ...defaultStyles, ...section.content, ...extractStyles(doc.body, defaultStyles) };
-                    section.id = Date.now();
-                    sections.push(section);
+                if (activePath && activePath.length > 0) {
+                    const parent = getItemByPath(activePath);
+                    if (parent && parent.type === 'container') {
+                        // Add nested container to selected container
+                        if (!parent.items) parent.items = [];
+                        parent.items.push(newContainer);
+                        activePath = [...activePath, 'items', parent.items.length - 1];
+                        activeType = 'container';
+                    } else {
+                        // Add to root
+                        structure.push(newContainer);
+                        activePath = [structure.length - 1];
+                        activeType = 'container';
+                    }
                 } else {
-                    potentialSections.forEach((element, index) => {
-                        const section = detectSectionType(element);
-                        const defaultStyles = getDefaultContent(section.type);
-                        section.content = {
-                            ...defaultStyles,
-                            ...extractStyles(element, defaultStyles),
-                            ...section.content
-                        };
-                        section.id = Date.now() + index;
-                        sections.push(section);
-                    });
+                    // No selection, add to root
+                    structure.push(newContainer);
+                    activePath = [structure.length - 1];
+                    activeType = 'container';
                 }
-
-                if (sections.length === 0) {
-                    sections.push({
-                        id: Date.now(),
-                        type: 'custom-html',
-                        content: {
-                            ...getDefaultContent('custom-html'),
-                            html: sanitizeHtml(htmlContent)
-                        }
-                    });
-                }
-
-                activeSectionIndex = sections.length > 0 ? 0 : null;
+                
                 saveHistory();
-                updateSectionList();
+                updateStructureList();
                 showProperties();
                 updatePreview();
-                showMessage(`HTML loaded successfully! Loaded ${sections.length} section(s).`, 'success');
-                loadHtmlInput.value = '';
+                showMessage('Added new container', 'success');
             } catch (error) {
-                console.error('Error loading HTML:', error);
-                showMessage('Error loading HTML: ' + error.message, 'error');
+                console.error('Error adding container:', error);
+                showMessage('Error adding container: ' + error.message, 'error');
             }
+        }
+
+        function getContainerCount() {
+            let count = 0;
+            function countContainers(items) {
+                items.forEach(item => {
+                    if (item.type === 'container') {
+                        count++;
+                        if (item.items) {
+                            countContainers(item.items);
+                        }
+                    }
+                });
+            }
+            countContainers(structure);
+            return count;
+        }
+
+        function getDefaultContainerContent() {
+            return {
+                name: 'Container',
+                backgroundType: 'color',
+                backgroundColor: '#ffffff',
+                backgroundImage: '',
+                backgroundGradient: 'linear-gradient(to right, #ffffff, #ffffff)',
+                borderWidth: '0px',
+                borderColor: '#000000',
+                borderStyle: 'solid',
+                borderRadius: '0px',
+                paddingTop: '20px',
+                paddingBottom: '20px',
+                paddingLeft: '20px',
+                paddingRight: '20px',
+                marginTop: '0px',
+                marginBottom: '0px',
+                marginLeft: '0px',
+                marginRight: '0px',
+                containerClass: 'email-container',
+                containerId: ''
+            };
         }
 
         function addSection() {
@@ -765,15 +730,43 @@
                     showMessage('Error: No section type selected', 'error');
                     return;
                 }
+                
+                if (type === 'container') {
+                    addContainer();
+                    return;
+                }
+                
                 const newSection = {
-                    id: Date.now(),
+                    id: Date.now() + Math.random(),
                     type: type,
                     content: getDefaultContent(type)
                 };
-                sections.push(newSection);
-                activeSectionIndex = sections.length - 1;
+                
+                // Check if we have an active container selected
+                if (activePath && activePath.length > 0) {
+                    const parent = getItemByPath(activePath);
+                    if (parent && parent.type === 'container') {
+                        // Add to selected container
+                        if (!parent.items) parent.items = [];
+                        parent.items.push(newSection);
+                        // Update active path to point to the new section
+                        activePath = [...activePath, 'items', parent.items.length - 1];
+                        activeType = 'section';
+                    } else {
+                        // Add to root
+                        structure.push(newSection);
+                        activePath = [structure.length - 1];
+                        activeType = 'section';
+                    }
+                } else {
+                    // No selection, add to root
+                    structure.push(newSection);
+                    activePath = [structure.length - 1];
+                    activeType = 'section';
+                }
+                
                 saveHistory();
-                updateSectionList();
+                updateStructureList();
                 showProperties();
                 updatePreview();
                 showMessage(`Added ${type.replace(/-/g, ' ')} section`, 'success');
@@ -781,6 +774,15 @@
                 console.error('Error adding section:', error);
                 showMessage('Error adding section: ' + error.message, 'error');
             }
+        }
+
+        function getDefaultBlocks() {
+            return {
+                image: {url: 'https://placehold.co/200x200/EEEEEE/808080?text=Image', altText: 'Block Image', link: '#', align: 'center'},
+                title: {text: 'Title', fontSize: '20px', color: '#000000', align: 'center', lineHeight: '1.2', fontFamily: 'Arial, Helvetica, sans-serif'},
+                text: {text: 'Description text.', fontSize: '14px', color: '#333333', align: 'center', lineHeight: '1.5', fontFamily: 'Arial, Helvetica, sans-serif'},
+                button: {text: 'Button', link: '#', background: '#007bff', color: '#ffffff', fontSize: '16px', align: 'center', padding: '10px 20px', borderRadius: '4px', showButton: true}
+            };
         }
 
         function getDefaultContent(type) {
@@ -805,16 +807,71 @@
                     fontFamily: 'Arial, Helvetica, sans-serif',
                     textAlign: 'center'
                 };
+
                 switch (type) {
-                    case 'header':
+                    case 'header-text':
                         return {
                             ...commonStyles,
-                            image: 'https://placehold.co/600x150/000000/FFFFFF?text=Logo',
+                            title: 'Company Name',
+                            fontSizeTitle: '24px',
+                            lineHeightTitle: '1.2',
+                            textColorTitle: '#000000',
+                            textAlign: 'center',
+                            showSubtitle: false,
+                            subtitle: 'Tagline here',
+                            subtitleFontSize: '14px',
+                            subtitleColor: '#666666'
+                        };
+                        
+                    case 'header-image':
+                        return {
+                            ...commonStyles,
+                            imageUrl: 'https://placehold.co/600x200/3a86ff/ffffff?text=Company+Logo',
                             altText: 'Company Logo',
                             link: '#',
-                            align: 'center',
-                            imageWidth: '100%'
+                            imageAlign: 'center',
+                            imageWidth: '100%',
+                            maxWidth: '600px'
                         };
+                        
+                    case 'navigation':
+                        return {
+                            ...commonStyles,
+                            menuItems: [
+                                { text: 'Home', link: '#', active: true },
+                                { text: 'Products', link: '#', active: false },
+                                { text: 'Services', link: '#', active: false },
+                                { text: 'Contact', link: '#', active: false }
+                            ],
+                            alignment: 'center',
+                            itemSpacing: '20px',
+                            fontFamily: 'Arial, Helvetica, sans-serif',
+                            fontSize: '16px',
+                            textColor: '#333333',
+                            activeColor: '#3a86ff',
+                            backgroundColor: 'transparent',
+                            itemPadding: '10px 15px',
+                            itemBorderRadius: '4px',
+                            layout: 'horizontal'
+                        };
+                        
+                    case 'button-only':
+                        return {
+                            ...commonStyles,
+                            buttonText: 'Click Me',
+                            buttonLink: '#',
+                            buttonBackground: '#007bff',
+                            buttonColor: '#ffffff',
+                            buttonFontSize: '16px',
+                            buttonPadding: '12px 24px',
+                            buttonBorderRadius: '4px',
+                            buttonAlign: 'center',
+                            buttonWidth: 'auto',
+                            buttonBorderWidth: '0px',
+                            buttonBorderColor: '#000000',
+                            buttonBorderStyle: 'solid'
+                        };
+                        
                     case 'title-only':
                         return {
                             ...commonStyles,
@@ -824,6 +881,7 @@
                             textColorTitle: '#000000',
                             textAlign: 'center'
                         };
+                        
                     case 'text-only':
                         return {
                             ...commonStyles,
@@ -833,6 +891,7 @@
                             textColorText: '#333333',
                             textAlign: 'center'
                         };
+                        
                     case 'title-text':
                         return {
                             ...commonStyles,
@@ -846,35 +905,41 @@
                             textColorText: '#333333',
                             textAlign: 'center'
                         };
+                        
                     case 'text-image':
                         return {
                             ...commonStyles,
-                            image: 'https://placehold.co/250x250/F3F4F6/6B7280?text=Image',
+                            imageUrl: 'https://placehold.co/300x200/3a86ff/ffffff?text=Image',
                             altText: 'Content Image',
-                            text: 'This is some text next to an image.',
+                            text: 'This is some text next to an image. You can edit this content.',
                             fontSize: '16px',
                             lineHeight: '1.5',
                             textColor: '#333333',
                             textAlign: 'left',
-                            direction: 'text-left',
-                            textWidth: 50,
-                            imageWidth: 50,
+                            imagePosition: 'left', // 'left' or 'right'
+                            imageWidth: '50%',
+                            textWidth: '50%',
+                            verticalAlign: 'middle',
                             showButton: false,
-                            buttonText: 'Click Me',
+                            buttonText: 'Learn More',
                             buttonLink: '#',
                             buttonBackground: '#007bff',
                             buttonColor: '#ffffff',
-                            buttonFontSize: '16px',
-                            buttonPadding: '10px 20px',
-                            buttonBorderRadius: '4px'
+                            buttonFontSize: '14px',
+                            buttonPadding: '8px 16px',
+                            buttonBorderRadius: '4px',
+                            buttonAlign: 'left'
                         };
+                        
                     case 'hero':
                         return {
                             ...commonStyles,
                             backgroundType: 'image',
-                            backgroundImage: 'https://placehold.co/600x300/EEEEEE/808080?text=Hero',
+                            backgroundImage: 'https://placehold.co/600x400/1a1a1a/ffffff?text=Hero+Background',
+                            backgroundColor: '#1a1a1a',
+                            overlayColor: 'rgba(0,0,0,0.5)',
                             overlayTitle: 'Hero Title',
-                            overlayText: 'Hero description text.',
+                            overlayText: 'Hero description text goes here. You can edit this content.',
                             overlayTextColor: '#ffffff',
                             overlayAlign: 'center',
                             showOverlayButton: true,
@@ -885,47 +950,86 @@
                             overlayButtonAlign: 'center',
                             overlayButtonWidth: 'auto',
                             overlayButtonFontSize: '16px',
+                            overlayButtonPadding: '12px 24px',
+                            overlayButtonBorderRadius: '4px',
                             overlayButtonBorderWidth: '0px',
                             overlayButtonBorderStyle: 'solid',
                             overlayButtonBorderColor: '#000000',
+                            titleFontSize: '36px',
+                            textFontSize: '18px',
                             lineHeightTitle: '1.2',
                             lineHeightText: '1.5'
                         };
+                        
                     case 'image-only':
                         return {
                             ...commonStyles,
-                            image: 'https://placehold.co/600x300/EEEEEE/808080?text=Image',
+                            imageUrl: 'https://placehold.co/600x300/3a86ff/ffffff?text=Full+Width+Image',
                             altText: 'Full Width Image',
                             link: '#',
-                            borderWidth: '0px',
-                            borderColor: '#000000',
-                            borderStyle: 'solid',
-                            borderRadius: '0px'
+                            imageAlign: 'center',
+                            imageWidth: '100%',
+                            maxWidth: '600px',
+                            caption: '',
+                            captionColor: '#666666',
+                            captionFontSize: '14px'
                         };
+                        
                     case 'single-column-blocks':
                         return {
                             ...commonStyles,
                             blocks: getDefaultBlocks(),
                             order: ['image', 'title', 'text', 'button'],
-                            visible: {image: true, title: true, text: true, button: true}
+                            visible: {image: true, title: true, text: true, button: true},
+                            blockSpacing: '20px',
+                            blockAlign: 'center'
                         };
+                        
                     case 'two-column-blocks':
                         return {
                             ...commonStyles,
                             columns: [
-                                { blocks: getDefaultBlocks() },
-                                { blocks: getDefaultBlocks() }
-                            ]
+                                { 
+                                    blocks: JSON.parse(JSON.stringify(getDefaultBlocks())),
+                                    visible: {image: true, title: true, text: true, button: true},
+                                    order: ['image', 'title', 'text', 'button']
+                                },
+                                { 
+                                    blocks: JSON.parse(JSON.stringify(getDefaultBlocks())),
+                                    visible: {image: true, title: true, text: true, button: true},
+                                    order: ['image', 'title', 'text', 'button']
+                                }
+                            ],
+                            columnGap: '20px',
+                            columnWidth: '50%',
+                            equalHeight: true
                         };
+                        
                     case 'three-column-blocks':
                         return {
                             ...commonStyles,
                             columns: [
-                                { blocks: getDefaultBlocks() },
-                                { blocks: getDefaultBlocks() },
-                                { blocks: getDefaultBlocks() }
-                            ]
+                                { 
+                                    blocks: JSON.parse(JSON.stringify(getDefaultBlocks())),
+                                    visible: {image: true, title: true, text: true, button: true},
+                                    order: ['image', 'title', 'text', 'button']
+                                },
+                                { 
+                                    blocks: JSON.parse(JSON.stringify(getDefaultBlocks())),
+                                    visible: {image: true, title: true, text: true, button: true},
+                                    order: ['image', 'title', 'text', 'button']
+                                },
+                                { 
+                                    blocks: JSON.parse(JSON.stringify(getDefaultBlocks())),
+                                    visible: {image: true, title: true, text: true, button: true},
+                                    order: ['image', 'title', 'text', 'button']
+                                }
+                            ],
+                            columnGap: '20px',
+                            columnWidth: '33.33%',
+                            equalHeight: true
                         };
+                        
                     case 'divider':
                         return {
                             ...commonStyles,
@@ -935,11 +1039,13 @@
                             align: 'center',
                             width: '100%'
                         };
+                        
                     case 'custom-html':
                         return {
                             ...commonStyles,
                             html: '<p>Your custom HTML here</p>'
                         };
+                        
                     default:
                         throw new Error(`Unknown section type: ${type}`);
                 }
@@ -949,620 +1055,664 @@
             }
         }
 
-        function getDefaultBlocks() {
-            try {
-                return {
-                    image: {url: 'https://placehold.co/200x200/EEEEEE/808080?text=Image', altText: 'Block Image', link: '#', align: 'center'},
-                    title: {text: 'Title', fontSize: '20px', color: '#000000', align: 'center', lineHeight: '1.2', fontFamily: 'Arial, Helvetica, sans-serif'},
-                    text: {text: 'Description text.', fontSize: '14px', color: '#333333', align: 'center', lineHeight: '1.5', fontFamily: 'Arial, Helvetica, sans-serif'},
-                    button: {text: 'Button', link: '#', background: '#007bff', color: '#ffffff', fontSize: '16px', align: 'center', padding: '10px 20px', borderRadius: '4px', showButton: true}
-                };
-            } catch (error) {
-                console.error('Error in getDefaultBlocks:', error);
-                throw new Error('Failed to initialize default blocks: ' + error.message);
+        function getItemByPath(path) {
+            if (!path || path.length === 0) return null;
+            
+            let current = structure;
+            let item = null;
+            
+            for (let i = 0; i < path.length; i++) {
+                const index = path[i];
+                
+                if (index === 'items') {
+                    if (item && item.items) {
+                        current = item.items;
+                    } else {
+                        return null;
+                    }
+                } else if (typeof index === 'number') {
+                    if (Array.isArray(current) && index < current.length) {
+                        item = current[index];
+                    } else {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
             }
+            
+            return item;
         }
 
-        function removeSection() {
+        function removeItemByPath(path) {
+            if (!path || path.length === 0) return false;
+            
+            let current = structure;
+            let parent = null;
+            let lastIndex = path[path.length - 1];
+            
+            for (let i = 0; i < path.length - 1; i++) {
+                const index = path[i];
+                if (index === 'items') {
+                    if (parent && parent.items) {
+                        current = parent.items;
+                    } else {
+                        return false;
+                    }
+                } else if (typeof index === 'number') {
+                    if (Array.isArray(current) && index < current.length) {
+                        parent = current[index];
+                        if (parent.items) {
+                            current = parent.items;
+                        } else {
+                            current = [];
+                        }
+                    } else {
+                        return false;
+                    }
+                }
+            }
+            
+            if (typeof lastIndex === 'number' && Array.isArray(current) && lastIndex < current.length) {
+                current.splice(lastIndex, 1);
+                return true;
+            }
+            
+            return false;
+        }
+
+        function removeSelected() {
             try {
-                if (activeSectionIndex !== null && confirm('Are you sure you want to remove this section?')) {
-                    sections.splice(activeSectionIndex, 1);
-                    activeSectionIndex = null;
+                if (!activePath || activePath.length === 0) {
+                    showMessage('No item selected to remove', 'error');
+                    return;
+                }
+                
+                if (confirm('Are you sure you want to remove this item?')) {
+                    removeItemByPath(activePath);
+                    activePath = null;
+                    activeType = null;
                     saveHistory();
-                    updateSectionList();
+                    updateStructureList();
                     showProperties();
                     updatePreview();
-                    showMessage('Section removed', 'success');
+                    showMessage('Item removed', 'success');
                 }
             } catch (error) {
-                console.error('Error removing section:', error);
-                showMessage('Error removing section: ' + error.message, 'error');
+                console.error('Error removing item:', error);
+                showMessage('Error removing item: ' + error.message, 'error');
             }
         }
 
-        function updateSectionList() {
+        function moveToContainer() {
+            if (!activePath || activePath.length === 0) {
+                showMessage('Please select a section to move', 'error');
+                return;
+            }
+
+            // Find first container in root
+            let containerIndex = -1;
+            for (let i = 0; i < structure.length; i++) {
+                if (structure[i].type === 'container') {
+                    containerIndex = i;
+                    break;
+                }
+            }
+
+            if (containerIndex === -1) {
+                showMessage('No container found. Please add a container first.', 'error');
+                return;
+            }
+
+            // Get the section
+            const section = getItemByPath(activePath);
+            if (!section) return;
+
+            // Remove from current location
+            removeItemByPath(activePath);
+            
+            // Add to first container
+            structure[containerIndex].items.push(section);
+            
+            activePath = [containerIndex, 'items', structure[containerIndex].items.length - 1];
+            activeType = 'section';
+            
+            saveHistory();
+            updateStructureList();
+            showProperties();
+            updatePreview();
+            showMessage('Section moved to container', 'success');
+        }
+
+        function updateStructureList() {
             try {
                 sectionListContainer.innerHTML = '';
-                if (sections.length === 0) {
-                    sectionListContainer.innerHTML = '<div class="text-center text-gray-400 p-4">Add a section to get started</div>';
+                if (structure.length === 0) {
+                    sectionListContainer.innerHTML = '<div class="text-center text-gray-400 p-4">Add a section or container to get started</div>';
                 } else {
-                    sections.forEach((section, index) => {
-                        const sectionName = section.type.replace(/-/g, ' ').split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
-                        const sectionItem = document.createElement('div');
-                        sectionItem.classList.add('section-item', 'p-3', 'rounded-lg', 'flex', 'items-center', 'justify-between');
-                        sectionItem.draggable = true;
-                        sectionItem.setAttribute('tabindex', '0');
-                        sectionItem.setAttribute('aria-label', `Section ${sectionName}, click to edit or drag to reorder`);
-                        if (index === activeSectionIndex) {
-                            sectionItem.classList.add('active');
-                            sectionItem.setAttribute('aria-selected', 'true');
-                        } else {
-                            sectionItem.setAttribute('aria-selected', 'false');
-                        }
-                        sectionItem.innerHTML = `
-                            <span class="font-medium text-gray-700">${sectionName}</span>
-                            <span class="draggable-handle text-gray-400">☰</span>
-                        `;
-                        sectionItem.ondragstart = (e) => {
-                            e.dataTransfer.setData('text/plain', index);
-                        };
-                        sectionItem.ondragover = (e) => e.preventDefault();
-                        sectionItem.ondrop = (e) => {
-                            e.preventDefault();
-                            const draggedIndex = parseInt(e.dataTransfer.getData('text/plain'));
-                            const dropIndex = index;
-                            if (draggedIndex !== dropIndex) {
-                                const [draggedSection] = sections.splice(draggedIndex, 1);
-                                sections.splice(dropIndex, 0, draggedSection);
-                                activeSectionIndex = dropIndex;
-                                saveHistory();
-                                updateSectionList();
-                                updatePreview();
-                                showProperties();
-                            }
-                        };
-                        sectionItem.onclick = () => {
-                            activeSectionIndex = index;
-                            showProperties();
-                            updateSectionList();
-                            updatePreview();
-                        };
-                        sectionItem.onkeydown = (e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                                e.preventDefault();
-                                activeSectionIndex = index;
-                                showProperties();
-                                updateSectionList();
-                                updatePreview();
-                            }
-                        };
-                        sectionListContainer.appendChild(sectionItem);
-                    });
+                    renderItems(structure, [], sectionListContainer, 0);
                 }
             } catch (error) {
-                console.error('Error updating section list:', error);
-                showMessage('Error updating section list: ' + error.message, 'error');
+                console.error('Error updating structure list:', error);
+                showMessage('Error updating structure list: ' + error.message, 'error');
+            }
+        }
+
+        function renderItems(items, path, container, depth = 0) {
+            items.forEach((item, index) => {
+                const currentPath = [...path, index];
+                
+                if (item.type === 'container') {
+                    renderContainerItem(item, currentPath, container, depth);
+                } else {
+                    renderSectionItem(item, currentPath, container, depth);
+                }
+            });
+        }
+
+        function renderContainerItem(container, path, containerEl, depth) {
+            const div = document.createElement('div');
+            div.classList.add('container-item', 'p-2', 'rounded-lg', 'mb-2', 'bg-purple-50');
+            if (depth > 0) div.classList.add('container-nested');
+            div.draggable = true;
+            div.setAttribute('tabindex', '0');
+            
+            const isActive = activePath && activePath.length === path.length && 
+                            activePath.every((val, i) => val === path[i]) && 
+                            activeType === 'container';
+            
+            if (isActive) {
+                div.classList.add('active');
+                div.setAttribute('aria-selected', 'true');
+            }
+            
+            div.innerHTML = `
+                <div class="flex items-center justify-between mb-1">
+                    <span class="font-semibold text-purple-700 flex items-center">
+                        <i class="fas fa-cubes mr-1 text-sm"></i> ${container.name || 'Container'}
+                        <span class="badge badge-purple">${countItems(container)} items</span>
+                    </span>
+                    <span class="draggable-handle text-gray-400 text-sm">☰</span>
+                </div>
+            `;
+            
+            // Render nested items
+            if (container.items && container.items.length > 0) {
+                const nestedDiv = document.createElement('div');
+                nestedDiv.classList.add('ml-4', 'mt-2', 'space-y-1');
+                renderItems(container.items, [...path, 'items'], nestedDiv, depth + 1);
+                div.appendChild(nestedDiv);
+            } else {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.classList.add('ml-4', 'mt-1', 'text-xs', 'text-gray-400', 'italic');
+                emptyDiv.textContent = 'Empty container';
+                div.appendChild(emptyDiv);
+            }
+            
+            div.ondragstart = (e) => {
+                e.dataTransfer.setData('text/plain', JSON.stringify({type: 'container', path: path}));
+            };
+            div.ondragover = (e) => e.preventDefault();
+            div.ondrop = (e) => {
+                e.preventDefault();
+                try {
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                    handleDrop(data, path);
+                } catch (error) {
+                    console.error('Error handling drop:', error);
+                }
+            };
+            
+            div.onclick = () => {
+                activePath = path;
+                activeType = 'container';
+                updateStructureList();
+                showProperties();
+            };
+            
+            containerEl.appendChild(div);
+        }
+
+        function renderSectionItem(section, path, containerEl, depth) {
+            const div = document.createElement('div');
+            div.classList.add('section-item', 'p-2', 'rounded-lg', 'flex', 'items-center', 'justify-between', 'bg-white', 'mb-1');
+            if (depth > 0) div.style.marginLeft = '20px';
+            div.draggable = true;
+            div.setAttribute('tabindex', '0');
+            
+            const sectionName = section.type.replace(/-/g, ' ').split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+            
+            const isActive = activePath && activePath.length === path.length && 
+                            activePath.every((val, i) => val === path[i]) && 
+                            activeType === 'section';
+            
+            if (isActive) {
+                div.classList.add('active');
+                div.setAttribute('aria-selected', 'true');
+            }
+            
+            div.innerHTML = `
+                <span class="font-medium text-gray-700 flex items-center">
+                    <i class="fas fa-file-alt mr-1 text-xs text-gray-500"></i> ${sectionName}
+                </span>
+                <span class="draggable-handle text-gray-400">☰</span>
+            `;
+            
+            div.ondragstart = (e) => {
+                e.dataTransfer.setData('text/plain', JSON.stringify({type: 'section', path: path}));
+            };
+            div.ondragover = (e) => e.preventDefault();
+            div.ondrop = (e) => {
+                e.preventDefault();
+                try {
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                    handleDrop(data, path);
+                } catch (error) {
+                    console.error('Error handling drop:', error);
+                }
+            };
+            
+            div.onclick = () => {
+                activePath = path;
+                activeType = 'section';
+                updateStructureList();
+                showProperties();
+            };
+            
+            containerEl.appendChild(div);
+        }
+
+        function countItems(container) {
+            if (!container.items) return 0;
+            let count = container.items.length;
+            container.items.forEach(item => {
+                if (item.type === 'container' && item.items) {
+                    count += countItems(item);
+                }
+            });
+            return count;
+        }
+
+        function handleDrop(source, targetPath) {
+            try {
+                // Remove from source
+                const sourceItem = getItemByPath(source.path);
+                if (!sourceItem) return;
+                
+                removeItemByPath(source.path);
+                
+                // Get target parent
+                const targetParent = getItemByPath(targetPath);
+                
+                if (targetParent && targetParent.type === 'container') {
+                    // Add to target container
+                    if (!targetParent.items) targetParent.items = [];
+                    targetParent.items.push(sourceItem);
+                } else {
+                    // Add to root at target position
+                    const targetParentPath = targetPath.slice(0, -1);
+                    const targetIndex = targetPath[targetPath.length - 1];
+                    const parentArray = targetParentPath.length === 0 ? structure : getItemByPath(targetParentPath)?.items;
+                    
+                    if (parentArray && Array.isArray(parentArray)) {
+                        parentArray.splice(targetIndex, 0, sourceItem);
+                    } else {
+                        structure.push(sourceItem);
+                    }
+                }
+                
+                saveHistory();
+                updateStructureList();
+                updatePreview();
+                showMessage('Item moved successfully', 'success');
+            } catch (error) {
+                console.error('Error handling drop:', error);
+                showMessage('Error moving item: ' + error.message, 'error');
             }
         }
 
         function showProperties() {
             try {
-                if (activeSectionIndex === null) {
+                if (!activePath || activePath.length === 0) {
+                    propertiesPanel.classList.add('hidden');
+                    return;
+                }
+
+                const item = getItemByPath(activePath);
+                if (!item) {
                     propertiesPanel.classList.add('hidden');
                     return;
                 }
 
                 propertiesPanel.classList.remove('hidden');
                 propertyInputs.innerHTML = '';
-                const section = sections[activeSectionIndex];
-                const content = section.content;
-
-                const commonDetails = document.createElement('details');
-                commonDetails.classList.add('mb-2');
-                commonDetails.open = true;
-                const commonSummary = document.createElement('summary');
-                commonSummary.textContent = 'Common Styles';
-                commonSummary.classList.add('font-medium', 'cursor-pointer');
-                commonDetails.appendChild(commonSummary);
-                const commonContainer = document.createElement('div');
-                commonContainer.classList.add('p-2');
-                commonDetails.appendChild(commonContainer);
-                propertyInputs.appendChild(commonDetails);
-
-                function createInput(label, key, type = 'text', defaultValue = '', options = null, target = content, container = propertyInputs) {
-                    const div = document.createElement('div');
-                    div.classList.add('mb-3');
-                    
-                    const labelEl = document.createElement('label');
-                    labelEl.textContent = label;
-                    labelEl.classList.add('property-label');
-                    
-                    let inputEl;
-                    if (type === 'textarea') {
-                        inputEl = document.createElement('textarea');
-                        inputEl.rows = 4;
-                        inputEl.classList.add('property-input');
-                    } else if (type === 'select') {
-                        inputEl = document.createElement('select');
-                        inputEl.classList.add('property-select');
-                        options.forEach(opt => {
-                            const optionEl = document.createElement('option');
-                            optionEl.value = opt.value;
-                            optionEl.textContent = opt.label;
-                            if (target[key] === opt.value) optionEl.selected = true;
-                            inputEl.appendChild(optionEl);
-                        });
-                    } else if (type === 'color') {
-                        inputEl = document.createElement('input');
-                        inputEl.type = 'color';
-                        inputEl.classList.add('property-input', 'h-10');
-                    } else if (type === 'checkbox') {
-                        inputEl = document.createElement('input');
-                        inputEl.type = 'checkbox';
-                        inputEl.classList.add('property-checkbox');
-                        inputEl.checked = target[key] || false;
-                    } else if (type === 'range') {
-                        inputEl = document.createElement('input');
-                        inputEl.type = 'range';
-                        inputEl.min = options?.min || 0;
-                        inputEl.max = options?.max || 100;
-                        inputEl.step = options?.step || 1;
-                        inputEl.classList.add('column-width-slider');
-                        
-                        const valueDisplay = document.createElement('div');
-                        valueDisplay.classList.add('column-width-value');
-                        valueDisplay.textContent = `${target[key] || defaultValue}%`;
-                        
-                        inputEl.addEventListener('input', (e) => {
-                            target[key] = e.target.value;
-                            valueDisplay.textContent = `${e.target.value}%`;
-                            saveHistory();
-                            updatePreview();
-                        });
-                        
-                        div.appendChild(labelEl);
-                        div.appendChild(inputEl);
-                        div.appendChild(valueDisplay);
-                        container.appendChild(div);
-                        return;
-                    } else {
-                        inputEl = document.createElement('input');
-                        inputEl.type = type;
-                        inputEl.classList.add('property-input');
-                    }
-                    
-                    if (type !== 'checkbox') {
-                        inputEl.value = target[key] !== undefined ? target[key] : defaultValue;
-                    }
-                    
-                    inputEl.setAttribute('aria-label', label);
-                    
-                    inputEl.addEventListener('input', (e) => {
-                        let value = e.target.value;
-                        if (key === 'html') {
-                            value = validateHtml(value);
-                        }
-                        if (['paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', 'marginTop', 'marginBottom', 'marginLeft', 'marginRight', 'fontSize', 'fontSizeTitle', 'fontSizeText', 'borderWidth', 'borderRadius', 'imageWidth', 'overlayButtonWidth', 'overlayButtonFontSize', 'overlayButtonBorderWidth', 'height', 'width', 'buttonPadding', 'buttonBorderRadius'].includes(key)) {
-                            value = value.match(/^\d+$/) ? `${value}px` : value;
-                        } else if (['lineHeight', 'lineHeightTitle', 'lineHeightText'].includes(key)) {
-                            const numValue = parseFloat(value);
-                            if (!isNaN(numValue) && numValue >= 0.8 && numValue <= 2.0) {
-                                value = numValue.toString();
-                            } else {
-                                value = defaultValue;
-                                showMessage(`Invalid ${label}. Use a value between 0.8 and 2.0.`, 'error');
-                            }
-                        }
-                        
-                        if (type === 'checkbox') {
-                            target[key] = e.target.checked;
-                        } else {
-                            target[key] = value;
-                        }
-                        
-                        saveHistory();
-                        updatePreview();
-                    });
-                    
-                    if (type !== 'range') {
-                        div.appendChild(labelEl);
-                        div.appendChild(inputEl);
-                        container.appendChild(div);
-                    }
-                }
-
-                function createCheckbox(label, key, container = propertyInputs) {
-                    const div = document.createElement('div');
-                    div.classList.add('mb-3', 'flex', 'items-center');
-                    
-                    const inputEl = document.createElement('input');
-                    inputEl.type = 'checkbox';
-                    inputEl.id = key;
-                    inputEl.checked = content[key];
-                    inputEl.classList.add('property-checkbox');
-                    
-                    inputEl.addEventListener('change', (e) => {
-                        content[key] = e.target.checked;
-                        saveHistory();
-                        showProperties();
-                        updatePreview();
-                    });
-                    
-                    const labelEl = document.createElement('label');
-                    labelEl.textContent = label;
-                    labelEl.htmlFor = key;
-                    labelEl.classList.add('property-label', 'mb-0');
-                    
-                    div.appendChild(inputEl);
-                    div.appendChild(labelEl);
-                    container.appendChild(div);
-                }
-
-                function addBlockProperties(blocksObj, mode, container = propertyInputs) {
-                    if (mode === 'single') {
-                        const orderSelect = document.createElement('select');
-                        orderSelect.multiple = true;
-                        orderSelect.classList.add('property-select');
-                        orderSelect.setAttribute('aria-label', 'Block Order');
-                        ['image', 'title', 'text', 'button'].forEach(blockType => {
-                            const opt = document.createElement('option');
-                            opt.value = blockType;
-                            opt.textContent = blockType.charAt(0).toUpperCase() + blockType.slice(1);
-                            opt.selected = blocksObj.order.includes(blockType);
-                            orderSelect.appendChild(opt);
-                        });
-                        orderSelect.addEventListener('change', () => {
-                            blocksObj.order = Array.from(orderSelect.selectedOptions).map(opt => opt.value);
-                            saveHistory();
-                            updatePreview();
-                        });
-                        
-                        const orderDiv = document.createElement('div');
-                        orderDiv.classList.add('mb-3');
-                        
-                        const orderLabel = document.createElement('label');
-                        orderLabel.textContent = 'Block Order (multi-select and drag to reorder)';
-                        orderLabel.classList.add('property-label');
-                        
-                        orderDiv.appendChild(orderLabel);
-                        orderDiv.appendChild(orderSelect);
-                        container.appendChild(orderDiv);
-
-                        ['image', 'title', 'text', 'button'].forEach(blockType => {
-                            const visDiv = document.createElement('div');
-                            visDiv.classList.add('mb-3', 'flex', 'items-center');
-                            
-                            const visInput = document.createElement('input');
-                            visInput.type = 'checkbox';
-                            visInput.id = `visible-${blockType}`;
-                            visInput.checked = blocksObj.visible[blockType];
-                            visInput.classList.add('property-checkbox');
-                            
-                            visInput.addEventListener('change', (e) => {
-                                blocksObj.visible[blockType] = e.target.checked;
-                                saveHistory();
-                                updatePreview();
-                            });
-                            
-                            const visLabel = document.createElement('label');
-                            visLabel.textContent = `Show ${blockType.charAt(0).toUpperCase() + blockType.slice(1)}`;
-                            visLabel.htmlFor = `visible-${blockType}`;
-                            visLabel.classList.add('property-label', 'mb-0');
-                            
-                            visDiv.appendChild(visInput);
-                            visDiv.appendChild(visLabel);
-                            container.appendChild(visDiv);
-                        });
-                    }
-
-                    const blockTypes = ['image', 'title', 'text', 'button'];
-                    blockTypes.forEach(blockType => {
-                        const block = blocksObj.blocks[blockType];
-                        const blockDetails = document.createElement('details');
-                        blockDetails.classList.add('mb-2');
-                        blockDetails.open = true;
-                        
-                        const blockSummary = document.createElement('summary');
-                        blockSummary.textContent = `${blockType.charAt(0).toUpperCase() + blockType.slice(1)} Block`;
-                        blockSummary.classList.add('font-medium', 'cursor-pointer');
-                        
-                        blockDetails.appendChild(blockSummary);
-                        
-                        const blockContainer = document.createElement('div');
-                        blockContainer.classList.add('p-2');
-                        blockDetails.appendChild(blockContainer);
-                        
-                        container.appendChild(blockDetails);
-
-                        if (blockType === 'image') {
-                            createInput('Image URL', 'url', 'text', '', null, block, blockContainer);
-                            createInput('Alt Text', 'altText', 'text', 'Block Image', null, block, blockContainer);
-                            createInput('Link URL', 'link', 'text', '#', null, block, blockContainer);
-                            createInput('Align', 'align', 'select', 'center', [
-                                {value: 'left', label: 'Left'},
-                                {value: 'center', label: 'Center'},
-                                {value: 'right', label: 'Right'}
-                            ], block, blockContainer);
-                        } else if (blockType === 'title' || blockType === 'text') {
-                            createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, block, blockContainer);
-                            createInput(blockType === 'title' ? 'Title Text' : 'Text', 'text', blockType === 'text' ? 'textarea' : 'text', '', null, block, blockContainer);
-                            createInput('Font Size', 'fontSize', 'text', blockType === 'title' ? '20px' : '14px', null, block, blockContainer);
-                            createInput('Line Height', 'lineHeight', 'text', blockType === 'title' ? '1.2' : '1.5', null, block, blockContainer);
-                            createInput('Color', 'color', 'color', blockType === 'title' ? '#000000' : '#333333', null, block, blockContainer);
-                            createInput('Align', 'align', 'select', 'center', [
-                                {value: 'left', label: 'Left'},
-                                {value: 'center', label: 'Center'},
-                                {value: 'right', label: 'Right'}
-                            ], block, blockContainer);
-                        } else if (blockType === 'button') {
-                            createCheckbox('Show Button', 'showButton', blockContainer);
-                            if (block.showButton) {
-                                createInput('Button Text', 'text', 'text', 'Button', null, block, blockContainer);
-                                createInput('Button Link', 'link', 'text', '#', null, block, blockContainer);
-                                createInput('Background Color', 'background', 'color', '#007bff', null, block, blockContainer);
-                                createInput('Text Color', 'color', 'color', '#ffffff', null, block, blockContainer);
-                                createInput('Font Size', 'fontSize', 'text', '16px', null, block, blockContainer);
-                                createInput('Padding', 'padding', 'text', '10px 20px', null, block, blockContainer);
-                                createInput('Border Radius', 'borderRadius', 'text', '4px', null, block, blockContainer);
-                                createInput('Align', 'align', 'select', 'center', [
-                                    {value: 'left', label: 'Left'},
-                                    {value: 'center', label: 'Center'},
-                                    {value: 'right', label: 'Right'}
-                                ], block, blockContainer);
-                            }
-                        }
-                    });
-                }
-
-                createInput('Background Type', 'backgroundType', 'select', 'color', [
-                    {value: 'color', label: 'Color'},
-                    {value: 'image', label: 'Image'},
-                    {value: 'gradient', label: 'Gradient'}
-                ], content, commonContainer);
                 
-                if (content.backgroundType === 'color') {
-                    createInput('Background Color', 'backgroundColor', 'color', '#ffffff', null, content, commonContainer);
-                } else if (content.backgroundType === 'image') {
-                    createInput('Background Image URL', 'backgroundImage', 'text', '', null, content, commonContainer);
-                } else if (content.backgroundType === 'gradient') {
-                    createInput('Background Gradient', 'backgroundGradient', 'text', 'linear-gradient(to right, #ffffff, #ffffff)', null, content, commonContainer);
-                }
-                
-                createInput('Border Width', 'borderWidth', 'text', '0px', null, content, commonContainer);
-                createInput('Border Color', 'borderColor', 'color', '#000000', null, content, commonContainer);
-                createInput('Border Style', 'borderStyle', 'select', 'solid', [
-                    {value: 'solid', label: 'Solid'},
-                    {value: 'dashed', label: 'Dashed'},
-                    {value: 'dotted', label: 'Dotted'},
-                    {value: 'none', label: 'None'}
-                ], content, commonContainer);
-                createInput('Border Radius', 'borderRadius', 'text', '0px', null, content, commonContainer);
-                createInput('Padding Top', 'paddingTop', 'text', '20px', null, content, commonContainer);
-                createInput('Padding Bottom', 'paddingBottom', 'text', '20px', null, content, commonContainer);
-                createInput('Padding Left', 'paddingLeft', 'text', '20px', null, content, commonContainer);
-                createInput('Padding Right', 'paddingRight', 'text', '20px', null, content, commonContainer);
-                createInput('Margin Top', 'marginTop', 'text', '0px', null, content, commonContainer);
-                createInput('Margin Bottom', 'marginBottom', 'text', '0px', null, content, commonContainer);
-                createInput('Margin Left', 'marginLeft', 'text', '0px', null, content, commonContainer);
-                createInput('Margin Right', 'marginRight', 'text', '0px', null, content, commonContainer);
-
-                const specificDetails = document.createElement('details');
-                specificDetails.classList.add('mb-2');
-                specificDetails.open = true;
-                
-                const specificSummary = document.createElement('summary');
-                specificSummary.textContent = 'Section-Specific Properties';
-                specificSummary.classList.add('font-medium', 'cursor-pointer');
-                
-                specificDetails.appendChild(specificSummary);
-                
-                const specificContainer = document.createElement('div');
-                specificContainer.classList.add('p-2');
-                specificDetails.appendChild(specificContainer);
-                
-                propertyInputs.appendChild(specificDetails);
-
-                switch (section.type) {
-                    case 'header':
-                        createInput('Image URL', 'image', 'text', '', null, content, specificContainer);
-                        createInput('Alt Text', 'altText', 'text', 'Company Logo', null, content, specificContainer);
-                        createInput('Link URL', 'link', 'text', '#', null, content, specificContainer);
-                        createInput('Align', 'align', 'select', 'center', [
-                            {value: 'left', label: 'Left'},
-                            {value: 'center', label: 'Center'},
-                            {value: 'right', label: 'Right'}
-                        ], content, specificContainer);
-                        createInput('Image Width (px)', 'imageWidth', 'text', '100%', null, content, specificContainer);
-                        break;
-                    case 'title-only':
-                        createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
-                        createInput('Title', 'title', 'text', 'Your Title Here', null, content, specificContainer);
-                        createInput('Title Font Size', 'fontSizeTitle', 'text', '24px', null, content, specificContainer);
-                        createInput('Title Line Height', 'lineHeightTitle', 'text', '1.2', null, content, specificContainer);
-                        createInput('Title Color', 'textColorTitle', 'color', '#000000', null, content, specificContainer);
-                        createInput('Text Align', 'textAlign', 'select', 'center', [
-                            {value: 'left', label: 'Left'},
-                            {value: 'center', label: 'Center'},
-                            {value: 'right', label: 'Right'}
-                        ], content, specificContainer);
-                        break;
-                    case 'text-only':
-                        createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
-                        createInput('Text', 'text', 'textarea', 'This is a paragraph of text.', null, content, specificContainer);
-                        createInput('Text Font Size', 'fontSizeText', 'text', '16px', null, content, specificContainer);
-                        createInput('Text Line Height', 'lineHeightText', 'text', '1.5', null, content, specificContainer);
-                        createInput('Text Color', 'textColorText', 'color', '#333333', null, content, specificContainer);
-                        createInput('Text Align', 'textAlign', 'select', 'center', [
-                            {value: 'left', label: 'Left'},
-                            {value: 'center', label: 'Center'},
-                            {value: 'right', label: 'Right'}
-                        ], content, specificContainer);
-                        break;
-                    case 'title-text':
-                        createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
-                        createInput('Title', 'title', 'text', 'Your Title Here', null, content, specificContainer);
-                        createInput('Text', 'text', 'textarea', 'This is a paragraph of text.', null, content, specificContainer);
-                        createInput('Title Font Size', 'fontSizeTitle', 'text', '24px', null, content, specificContainer);
-                        createInput('Title Line Height', 'lineHeightTitle', 'text', '1.2', null, content, specificContainer);
-                        createInput('Text Font Size', 'fontSizeText', 'text', '16px', null, content, specificContainer);
-                        createInput('Text Line Height', 'lineHeightText', 'text', '1.5', null, content, specificContainer);
-                        createInput('Title Color', 'textColorTitle', 'color', '#000000', null, content, specificContainer);
-                        createInput('Text Color', 'textColorText', 'color', '#333333', null, content, specificContainer);
-                        createInput('Text Align', 'textAlign', 'select', 'center', [
-                            {value: 'left', label: 'Left'},
-                            {value: 'center', label: 'Center'},
-                            {value: 'right', label: 'Right'}
-                        ], content, specificContainer);
-                        break;
-                    case 'text-image':
-                        createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
-                        createInput('Image URL', 'image', 'text', '', null, content, specificContainer);
-                        createInput('Alt Text', 'altText', 'text', 'Content Image', null, content, specificContainer);
-                        createInput('Text', 'text', 'textarea', 'This is some text next to an image.', null, content, specificContainer);
-                        createInput('Text Font Size', 'fontSize', 'text', '16px', null, content, specificContainer);
-                        createInput('Text Line Height', 'lineHeight', 'text', '1.5', null, content, specificContainer);
-                        createInput('Text Color', 'textColor', 'color', '#333333', null, content, specificContainer);
-                        createInput('Text Align', 'textAlign', 'select', 'left', [
-                            {value: 'left', label: 'Left'},
-                            {value: 'center', label: 'Center'},
-                            {value: 'right', label: 'Right'}
-                        ], content, specificContainer);
-                        createInput('Direction', 'direction', 'select', 'text-left', [
-                            {value: 'text-left', label: 'Text Left, Image Right'},
-                            {value: 'text-right', label: 'Text Right, Image Left'}
-                        ], content, specificContainer);
-                        
-                        createInput('Text Column Width', 'textWidth', 'range', '50', {min: 10, max: 90, step: 5}, content, specificContainer);
-                        createInput('Image Column Width', 'imageWidth', 'range', '50', {min: 10, max: 90, step: 5}, content, specificContainer);
-                        
-                        createCheckbox('Show Button', 'showButton', specificContainer);
-                        if (content.showButton) {
-                            createInput('Button Text', 'buttonText', 'text', 'Click Me', null, content, specificContainer);
-                            createInput('Button Link', 'buttonLink', 'text', '#', null, content, specificContainer);
-                            createInput('Button Background', 'buttonBackground', 'color', '#007bff', null, content, specificContainer);
-                            createInput('Button Color', 'buttonColor', 'color', '#ffffff', null, content, specificContainer);
-                            createInput('Button Font Size', 'buttonFontSize', 'text', '16px', null, content, specificContainer);
-                            createInput('Button Padding', 'buttonPadding', 'text', '10px 20px', null, content, specificContainer);
-                            createInput('Button Border Radius', 'buttonBorderRadius', 'text', '4px', null, content, specificContainer);
-                        }
-                        break;
-                    case 'hero':
-                        createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
-                        if (content.backgroundType === 'image') {
-                            createInput('Background Image URL', 'backgroundImage', 'text', '', null, content, specificContainer);
-                        }
-                        createInput('Overlay Title', 'overlayTitle', 'text', 'Hero Title', null, content, specificContainer);
-                        createInput('Overlay Text', 'overlayText', 'textarea', 'Hero description text.', null, content, specificContainer);
-                        createInput('Overlay Title Line Height', 'lineHeightTitle', 'text', '1.2', null, content, specificContainer);
-                        createInput('Overlay Text Line Height', 'lineHeightText', 'text', '1.5', null, content, specificContainer);
-                        createInput('Overlay Text Color', 'overlayTextColor', 'color', '#ffffff', null, content, specificContainer);
-                        createInput('Overlay Align', 'overlayAlign', 'select', 'center', [
-                            {value: 'left', label: 'Left'},
-                            {value: 'center', label: 'Center'},
-                            {value: 'right', label: 'Right'}
-                        ], content, specificContainer);
-                        createCheckbox('Show Overlay Button', 'showOverlayButton', specificContainer);
-                        if (content.showOverlayButton) {
-                            createInput('Overlay Button Text', 'overlayButtonText', 'text', 'Learn More', null, content, specificContainer);
-                            createInput('Overlay Button Link', 'overlayButtonLink', 'text', '#', null, content, specificContainer);
-                            createInput('Overlay Button Background', 'overlayButtonBackground', 'color', '#ffffff', null, content, specificContainer);
-                            createInput('Overlay Button Color', 'overlayButtonColor', 'color', '#000000', null, content, specificContainer);
-                            createInput('Overlay Button Align', 'overlayButtonAlign', 'select', 'center', [
-                                {value: 'left', label: 'Left'},
-                                {value: 'center', label: 'Center'},
-                                {value: 'right', label: 'Right'}
-                            ], content, specificContainer);
-                            createInput('Overlay Button Width (px)', 'overlayButtonWidth', 'text', 'auto', null, content, specificContainer);
-                            createInput('Overlay Button Font Size', 'overlayButtonFontSize', 'text', '16px', null, content, specificContainer);
-                            createInput('Overlay Button Border Width', 'overlayButtonBorderWidth', 'text', '0px', null, content, specificContainer);
-                            createInput('Overlay Button Border Color', 'overlayButtonBorderColor', 'color', '#000000', null, content, specificContainer);
-                            createInput('Overlay Button Border Style', 'overlayButtonBorderStyle', 'select', 'solid', [
-                                {value: 'solid', label: 'Solid'},
-                                {value: 'dashed', label: 'Dashed'},
-                                {value: 'dotted', label: 'Dotted'},
-                                {value: 'none', label: 'None'}
-                            ], content, specificContainer);
-                        }
-                        break;
-                    case 'image-only':
-                        createInput('Image URL', 'image', 'text', '', null, content, specificContainer);
-                        createInput('Alt Text', 'altText', 'text', 'Full Width Image', null, content, specificContainer);
-                        createInput('Link URL', 'link', 'text', '#', null, content, specificContainer);
-                        createInput('Border Width', 'borderWidth', 'text', '0px', null, content, specificContainer);
-                        createInput('Border Color', 'borderColor', 'color', '#000000', null, content, specificContainer);
-                        createInput('Border Style', 'borderStyle', 'select', 'solid', [
-                            {value: 'solid', label: 'Solid'},
-                            {value: 'dashed', label: 'Dashed'},
-                            {value: 'dotted', label: 'Dotted'},
-                            {value: 'none', label: 'None'}
-                        ], content, specificContainer);
-                        createInput('Border Radius', 'borderRadius', 'text', '0px', null, content, specificContainer);
-                        break;
-                    case 'single-column-blocks':
-                        addBlockProperties(content, 'single', specificContainer);
-                        break;
-                    case 'two-column-blocks':
-                        content.columns.forEach((col, colIndex) => {
-                            const colDetails = document.createElement('details');
-                            colDetails.classList.add('mb-2');
-                            colDetails.open = true;
-                            
-                            const colSummary = document.createElement('summary');
-                            colSummary.textContent = `Column ${colIndex + 1}`;
-                            colSummary.classList.add('font-medium', 'cursor-pointer');
-                            
-                            colDetails.appendChild(colSummary);
-                            
-                            const colContainer = document.createElement('div');
-                            colContainer.classList.add('p-2');
-                            colDetails.appendChild(colContainer);
-                            
-                            specificContainer.appendChild(colDetails);
-                            addBlockProperties(col, 'multi', colContainer);
-                        });
-                        break;
-                    case 'three-column-blocks':
-                        content.columns.forEach((col, colIndex) => {
-                            const colDetails = document.createElement('details');
-                            colDetails.classList.add('mb-2');
-                            colDetails.open = true;
-                            
-                            const colSummary = document.createElement('summary');
-                            colSummary.textContent = `Column ${colIndex + 1}`;
-                            colSummary.classList.add('font-medium', 'cursor-pointer');
-                            
-                            colDetails.appendChild(colSummary);
-                            
-                            const colContainer = document.createElement('div');
-                            colContainer.classList.add('p-2');
-                            colDetails.appendChild(colContainer);
-                            
-                            specificContainer.appendChild(colDetails);
-                            addBlockProperties(col, 'multi', colContainer);
-                        });
-                        break;
-                    case 'divider':
-                        createInput('Height (px)', 'height', 'text', '1px', null, content, specificContainer);
-                        createInput('Color', 'color', 'color', '#cccccc', null, content, specificContainer);
-                        createInput('Style', 'style', 'select', 'solid', [
-                            {value: 'solid', label: 'Solid'},
-                            {value: 'dashed', label: 'Dashed'},
-                            {value: 'dotted', label: 'Dotted'}
-                        ], content, specificContainer);
-                        createInput('Align', 'align', 'select', 'center', [
-                            {value: 'left', label: 'Left'},
-                            {value: 'center', label: 'Center'},
-                            {value: 'right', label: 'Right'}
-                        ], content, specificContainer);
-                        createInput('Width (%)', 'width', 'text', '100%', null, content, specificContainer);
-                        break;
-                    case 'custom-html':
-                        createInput('Custom HTML', 'html', 'textarea', '<p>Your custom HTML here</p>', null, content, specificContainer);
-                        break;
+                if (item.type === 'container') {
+                    showContainerProperties(item);
+                } else {
+                    showSectionProperties(item);
                 }
             } catch (error) {
                 console.error('Error showing properties:', error);
                 showMessage('Error showing properties: ' + error.message, 'error');
+            }
+        }
+
+        function createInput(label, key, type = 'text', defaultValue = '', options = null, target = null, container = null) {
+            if (!target || !container) return;
+            
+            const div = document.createElement('div');
+            div.classList.add('mb-3');
+            
+            const labelEl = document.createElement('label');
+            labelEl.textContent = label;
+            labelEl.classList.add('property-label');
+            
+            let inputEl;
+            if (type === 'textarea') {
+                inputEl = document.createElement('textarea');
+                inputEl.rows = 4;
+                inputEl.classList.add('property-input');
+            } else if (type === 'select') {
+                inputEl = document.createElement('select');
+                inputEl.classList.add('property-select');
+                if (options) {
+                    options.forEach(opt => {
+                        const optionEl = document.createElement('option');
+                        optionEl.value = opt.value;
+                        optionEl.textContent = opt.label;
+                        if (target[key] === opt.value) optionEl.selected = true;
+                        inputEl.appendChild(optionEl);
+                    });
+                }
+            } else if (type === 'color') {
+                inputEl = document.createElement('input');
+                inputEl.type = 'color';
+                inputEl.classList.add('property-input', 'h-10');
+            } else if (type === 'checkbox') {
+                inputEl = document.createElement('input');
+                inputEl.type = 'checkbox';
+                inputEl.classList.add('property-checkbox');
+                inputEl.checked = target[key] || false;
+            } else {
+                inputEl = document.createElement('input');
+                inputEl.type = type;
+                inputEl.classList.add('property-input');
+            }
+            
+            if (type !== 'checkbox' && type !== 'select') {
+                inputEl.value = target[key] !== undefined ? target[key] : defaultValue;
+            }
+            
+            inputEl.setAttribute('aria-label', label);
+            
+            inputEl.addEventListener('input', (e) => {
+                let value = e.target.value;
+                if (type === 'checkbox') {
+                    target[key] = e.target.checked;
+                } else {
+                    target[key] = value;
+                }
+                
+                saveHistory();
+                updatePreview();
+            });
+            
+            inputEl.addEventListener('change', (e) => {
+                if (type === 'select') {
+                    target[key] = e.target.value;
+                    saveHistory();
+                    updatePreview();
+                }
+            });
+            
+            div.appendChild(labelEl);
+            div.appendChild(inputEl);
+            container.appendChild(div);
+        }
+
+        function createCheckbox(label, key, target, container) {
+            const div = document.createElement('div');
+            div.classList.add('mb-3', 'flex', 'items-center');
+            
+            const inputEl = document.createElement('input');
+            inputEl.type = 'checkbox';
+            inputEl.id = key;
+            inputEl.checked = target[key] || false;
+            inputEl.classList.add('property-checkbox');
+            
+            inputEl.addEventListener('change', (e) => {
+                target[key] = e.target.checked;
+                saveHistory();
+                updatePreview();
+            });
+            
+            const labelEl = document.createElement('label');
+            labelEl.textContent = label;
+            labelEl.htmlFor = key;
+            labelEl.classList.add('property-label', 'mb-0');
+            
+            div.appendChild(inputEl);
+            div.appendChild(labelEl);
+            container.appendChild(div);
+        }
+
+        function showContainerProperties(container) {
+            const content = container.content;
+            
+            createInput('Container Name', 'name', 'text', 'Container', null, container, propertyInputs);
+            
+            const commonDetails = document.createElement('details');
+            commonDetails.classList.add('mb-2');
+            commonDetails.open = true;
+            const commonSummary = document.createElement('summary');
+            commonSummary.textContent = 'Container Styles';
+            commonSummary.classList.add('font-medium', 'cursor-pointer');
+            commonDetails.appendChild(commonSummary);
+            const commonContainer = document.createElement('div');
+            commonContainer.classList.add('p-2');
+            commonDetails.appendChild(commonContainer);
+            propertyInputs.appendChild(commonDetails);
+
+            createInput('CSS Class', 'containerClass', 'text', 'email-container', null, content, commonContainer);
+            createInput('CSS ID', 'containerId', 'text', '', null, content, commonContainer);
+            createInput('Background Type', 'backgroundType', 'select', 'color', [
+                {value: 'color', label: 'Color'},
+                {value: 'image', label: 'Image'},
+                {value: 'gradient', label: 'Gradient'}
+            ], content, commonContainer);
+            
+            if (content.backgroundType === 'color') {
+                createInput('Background Color', 'backgroundColor', 'color', '#ffffff', null, content, commonContainer);
+            } else if (content.backgroundType === 'image') {
+                createInput('Background Image URL', 'backgroundImage', 'text', '', null, content, commonContainer);
+            } else if (content.backgroundType === 'gradient') {
+                createInput('Background Gradient', 'backgroundGradient', 'text', 'linear-gradient(to right, #ffffff, #ffffff)', null, content, commonContainer);
+            }
+            
+            createInput('Border Width', 'borderWidth', 'text', '0px', null, content, commonContainer);
+            createInput('Border Color', 'borderColor', 'color', '#000000', null, content, commonContainer);
+            createInput('Border Style', 'borderStyle', 'select', 'solid', [
+                {value: 'solid', label: 'Solid'},
+                {value: 'dashed', label: 'Dashed'},
+                {value: 'dotted', label: 'Dotted'},
+                {value: 'none', label: 'None'}
+            ], content, commonContainer);
+            createInput('Border Radius', 'borderRadius', 'text', '0px', null, content, commonContainer);
+            createInput('Padding Top', 'paddingTop', 'text', '20px', null, content, commonContainer);
+            createInput('Padding Bottom', 'paddingBottom', 'text', '20px', null, content, commonContainer);
+            createInput('Padding Left', 'paddingLeft', 'text', '20px', null, content, commonContainer);
+            createInput('Padding Right', 'paddingRight', 'text', '20px', null, content, commonContainer);
+            createInput('Margin Top', 'marginTop', 'text', '0px', null, content, commonContainer);
+            createInput('Margin Bottom', 'marginBottom', 'text', '0px', null, content, commonContainer);
+            createInput('Margin Left', 'marginLeft', 'text', '0px', null, content, commonContainer);
+            createInput('Margin Right', 'marginRight', 'text', '0px', null, content, commonContainer);
+        }
+
+        function showSectionProperties(section) {
+            const content = section.content;
+
+            const commonDetails = document.createElement('details');
+            commonDetails.classList.add('mb-2');
+            commonDetails.open = true;
+            const commonSummary = document.createElement('summary');
+            commonSummary.textContent = 'Common Styles';
+            commonSummary.classList.add('font-medium', 'cursor-pointer');
+            commonDetails.appendChild(commonSummary);
+            const commonContainer = document.createElement('div');
+            commonContainer.classList.add('p-2');
+            commonDetails.appendChild(commonContainer);
+            propertyInputs.appendChild(commonDetails);
+
+            createInput('Background Type', 'backgroundType', 'select', 'color', [
+                {value: 'color', label: 'Color'},
+                {value: 'image', label: 'Image'},
+                {value: 'gradient', label: 'Gradient'}
+            ], content, commonContainer);
+            
+            if (content.backgroundType === 'color') {
+                createInput('Background Color', 'backgroundColor', 'color', '#ffffff', null, content, commonContainer);
+            } else if (content.backgroundType === 'image') {
+                createInput('Background Image URL', 'backgroundImage', 'text', '', null, content, commonContainer);
+            } else if (content.backgroundType === 'gradient') {
+                createInput('Background Gradient', 'backgroundGradient', 'text', 'linear-gradient(to right, #ffffff, #ffffff)', null, content, commonContainer);
+            }
+            
+            createInput('Border Width', 'borderWidth', 'text', '0px', null, content, commonContainer);
+            createInput('Border Color', 'borderColor', 'color', '#000000', null, content, commonContainer);
+            createInput('Border Style', 'borderStyle', 'select', 'solid', [
+                {value: 'solid', label: 'Solid'},
+                {value: 'dashed', label: 'Dashed'},
+                {value: 'dotted', label: 'Dotted'},
+                {value: 'none', label: 'None'}
+            ], content, commonContainer);
+            createInput('Border Radius', 'borderRadius', 'text', '0px', null, content, commonContainer);
+            createInput('Padding Top', 'paddingTop', 'text', '20px', null, content, commonContainer);
+            createInput('Padding Bottom', 'paddingBottom', 'text', '20px', null, content, commonContainer);
+            createInput('Padding Left', 'paddingLeft', 'text', '20px', null, content, commonContainer);
+            createInput('Padding Right', 'paddingRight', 'text', '20px', null, content, commonContainer);
+            createInput('Margin Top', 'marginTop', 'text', '0px', null, content, commonContainer);
+            createInput('Margin Bottom', 'marginBottom', 'text', '0px', null, content, commonContainer);
+            createInput('Margin Left', 'marginLeft', 'text', '0px', null, content, commonContainer);
+            createInput('Margin Right', 'marginRight', 'text', '0px', null, content, commonContainer);
+
+            // Add section-specific properties based on type
+            const specificDetails = document.createElement('details');
+            specificDetails.classList.add('mb-2');
+            specificDetails.open = true;
+            const specificSummary = document.createElement('summary');
+            specificSummary.textContent = 'Section Properties';
+            specificSummary.classList.add('font-medium', 'cursor-pointer');
+            specificDetails.appendChild(specificSummary);
+            const specificContainer = document.createElement('div');
+            specificContainer.classList.add('p-2');
+            specificDetails.appendChild(specificContainer);
+            propertyInputs.appendChild(specificDetails);
+
+            // Add basic properties based on section type
+            switch(section.type) {
+                case 'header-text':
+                    createInput('Title', 'title', 'text', 'Company Name', null, content, specificContainer);
+                    createInput('Font Size', 'fontSizeTitle', 'text', '24px', null, content, specificContainer);
+                    createInput('Text Color', 'textColorTitle', 'color', '#000000', null, content, specificContainer);
+                    createCheckbox('Show Subtitle', 'showSubtitle', content, specificContainer);
+                    if (content.showSubtitle) {
+                        createInput('Subtitle', 'subtitle', 'text', 'Tagline', null, content, specificContainer);
+                        createInput('Subtitle Font Size', 'subtitleFontSize', 'text', '14px', null, content, specificContainer);
+                        createInput('Subtitle Color', 'subtitleColor', 'color', '#666666', null, content, specificContainer);
+                    }
+                    break;
+
+                case 'header-image':
+                    createInput('Image URL', 'imageUrl', 'text', 'https://placehold.co/600x200/3a86ff/ffffff?text=Company+Logo', null, content, specificContainer);
+                    createInput('Alt Text', 'altText', 'text', 'Company Logo', null, content, specificContainer);
+                    createInput('Link URL', 'link', 'text', '#', null, content, specificContainer);
+                    createInput('Image Width', 'imageWidth', 'text', '100%', null, content, specificContainer);
+                    createInput('Max Width', 'maxWidth', 'text', '600px', null, content, specificContainer);
+                    createInput('Image Align', 'imageAlign', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    break;
+
+                case 'navigation':
+                    createInput('Font Size', 'fontSize', 'text', '16px', null, content, specificContainer);
+                    createInput('Text Color', 'textColor', 'color', '#333333', null, content, specificContainer);
+                    createInput('Active Color', 'activeColor', 'color', '#3a86ff', null, content, specificContainer);
+                    createInput('Item Spacing', 'itemSpacing', 'text', '20px', null, content, specificContainer);
+                    createInput('Item Padding', 'itemPadding', 'text', '10px 15px', null, content, specificContainer);
+                    createInput('Alignment', 'alignment', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    break;
+
+                case 'button-only':
+                    createInput('Button Text', 'buttonText', 'text', 'Click Me', null, content, specificContainer);
+                    createInput('Button Link', 'buttonLink', 'text', '#', null, content, specificContainer);
+                    createInput('Button Color', 'buttonColor', 'color', '#ffffff', null, content, specificContainer);
+                    createInput('Button Background', 'buttonBackground', 'color', '#007bff', null, content, specificContainer);
+                    createInput('Font Size', 'buttonFontSize', 'text', '16px', null, content, specificContainer);
+                    createInput('Padding', 'buttonPadding', 'text', '12px 24px', null, content, specificContainer);
+                    createInput('Border Radius', 'buttonBorderRadius', 'text', '4px', null, content, specificContainer);
+                    createInput('Align', 'buttonAlign', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    break;
+
+                case 'text-image':
+                    createInput('Image URL', 'imageUrl', 'text', 'https://placehold.co/300x200/3a86ff/ffffff?text=Image', null, content, specificContainer);
+                    createInput('Alt Text', 'altText', 'text', 'Content Image', null, content, specificContainer);
+                    createInput('Text Content', 'text', 'textarea', 'This is some text next to an image.', null, content, specificContainer);
+                    createInput('Font Size', 'fontSize', 'text', '16px', null, content, specificContainer);
+                    createInput('Text Color', 'textColor', 'color', '#333333', null, content, specificContainer);
+                    createInput('Image Position', 'imagePosition', 'select', 'left', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    createInput('Image Width', 'imageWidth', 'text', '50%', null, content, specificContainer);
+                    createCheckbox('Show Button', 'showButton', content, specificContainer);
+                    if (content.showButton) {
+                        createInput('Button Text', 'buttonText', 'text', 'Learn More', null, content, specificContainer);
+                        createInput('Button Link', 'buttonLink', 'text', '#', null, content, specificContainer);
+                        createInput('Button Background', 'buttonBackground', 'color', '#007bff', null, content, specificContainer);
+                        createInput('Button Color', 'buttonColor', 'color', '#ffffff', null, content, specificContainer);
+                    }
+                    break;
+
+                case 'hero':
+                    createInput('Background Image', 'backgroundImage', 'text', 'https://placehold.co/600x400/1a1a1a/ffffff?text=Hero+Background', null, content, specificContainer);
+                    createInput('Overlay Color', 'overlayColor', 'text', 'rgba(0,0,0,0.5)', null, content, specificContainer);
+                    createInput('Title', 'overlayTitle', 'text', 'Hero Title', null, content, specificContainer);
+                    createInput('Title Font Size', 'titleFontSize', 'text', '36px', null, content, specificContainer);
+                    createInput('Text', 'overlayText', 'textarea', 'Hero description text.', null, content, specificContainer);
+                    createInput('Text Font Size', 'textFontSize', 'text', '18px', null, content, specificContainer);
+                    createInput('Text Color', 'overlayTextColor', 'color', '#ffffff', null, content, specificContainer);
+                    createInput('Alignment', 'overlayAlign', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    createCheckbox('Show Button', 'showOverlayButton', content, specificContainer);
+                    if (content.showOverlayButton) {
+                        createInput('Button Text', 'overlayButtonText', 'text', 'Learn More', null, content, specificContainer);
+                        createInput('Button Link', 'overlayButtonLink', 'text', '#', null, content, specificContainer);
+                        createInput('Button Background', 'overlayButtonBackground', 'color', '#ffffff', null, content, specificContainer);
+                        createInput('Button Color', 'overlayButtonColor', 'color', '#000000', null, content, specificContainer);
+                    }
+                    break;
+
+                case 'image-only':
+                    createInput('Image URL', 'imageUrl', 'text', 'https://placehold.co/600x300/3a86ff/ffffff?text=Full+Width+Image', null, content, specificContainer);
+                    createInput('Alt Text', 'altText', 'text', 'Full Width Image', null, content, specificContainer);
+                    createInput('Link URL', 'link', 'text', '#', null, content, specificContainer);
+                    createInput('Caption', 'caption', 'text', '', null, content, specificContainer);
+                    createInput('Image Width', 'imageWidth', 'text', '100%', null, content, specificContainer);
+                    break;
             }
         }
 
@@ -1573,85 +1723,70 @@
                 const fontStyle = content.fontFamily ? `font-family: ${content.fontFamily};` : '';
 
                 switch (section.type) {
-                    case 'header':
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                <tr>
-                                    <td align="${content.align}" style="${paddingStyle}">
-                                        <a href="${content.link}" target="_blank">
-                                            <img src="${content.image}" alt="${escapeHtml(content.altText || 'Header')}" style="display: block; width: ${content.imageWidth}; max-width: 100%; height: auto; border-radius: ${content.borderRadius};" />
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-                    case 'title-only':
+                    case 'header-text':
                         return `
                             <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
                                 <tr>
                                     <td align="${content.textAlign}" style="${paddingStyle} ${fontStyle}">
-                                        <h1 style="font-size: ${content.fontSizeTitle}; line-height: ${content.lineHeightTitle}; color: ${content.textColorTitle}; margin: 0; text-align: ${content.textAlign};">${escapeHtml(content.title)}</h1>
+                                        <h1 style="font-size: ${content.fontSizeTitle}; line-height: ${content.lineHeightTitle}; color: ${content.textColorTitle}; margin: 0;">${escapeHtml(content.title)}</h1>
+                                        ${content.showSubtitle ? `<p style="font-size: ${content.subtitleFontSize}; color: ${content.subtitleColor}; margin-top: 5px;">${escapeHtml(content.subtitle)}</p>` : ''}
                                     </td>
                                 </tr>
                             </table>
                         `;
-                    case 'text-only':
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                <tr>
-                                    <td align="${content.textAlign}" style="${paddingStyle} ${fontStyle}">
-                                        <p style="font-size: ${content.fontSizeText}; line-height: ${content.lineHeightText}; color: ${content.textColorText}; margin: 0; text-align: ${content.textAlign};">${escapeHtml(content.text)}</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-                    case 'title-text':
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                <tr>
-                                    <td align="${content.textAlign}" style="${paddingStyle} ${fontStyle}">
-                                        <h1 style="font-size: ${content.fontSizeTitle}; line-height: ${content.lineHeightTitle}; color: ${content.textColorTitle}; margin: 0; text-align: ${content.textAlign};">${escapeHtml(content.title)}</h1>
-                                        <p style="font-size: ${content.fontSizeText}; line-height: ${content.lineHeightText}; color: ${content.textColorText}; margin-top: 10px; text-align: ${content.textAlign};">${escapeHtml(content.text)}</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-                    case 'text-image':
-                        const textWidth = content.textWidth || 50;
-                        const imageWidth = content.imageWidth || 50;
-                        const textContent = `
-                            <div style="font-size: ${content.fontSize}; line-height: ${content.lineHeight}; color: ${content.textColor}; text-align: ${content.textAlign}; margin: 0; ${fontStyle}">
-                                ${escapeHtml(content.text)}
-                                ${content.showButton ? `
-                                    <table cellpadding="0" cellspacing="0" border="0" style="margin-top: 15px;">
-                                        <tr>
-                                            <td style="background-color: ${content.buttonBackground}; border-radius: ${content.buttonBorderRadius};">
-                                                <a href="${content.buttonLink}" target="_blank" style="font-size: ${content.buttonFontSize}; color: ${content.buttonColor}; padding: ${content.buttonPadding}; display: inline-block; text-decoration: none;">${escapeHtml(content.buttonText)}</a>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                ` : ''}
-                            </div>
-                        `;
-                        const imageContent = `
-                            <img src="${content.image}" alt="${escapeHtml(content.altText || 'Image')}" style="display: block; width: 100%; max-width: 100%; height: auto;" />
-                        `;
-                        const leftContent = content.direction === 'text-left' ? textContent : imageContent;
-                        const rightContent = content.direction === 'text-left' ? imageContent : textContent;
-                        const leftWidth = content.direction === 'text-left' ? textWidth : imageWidth;
-                        const rightWidth = content.direction === 'text-left' ? imageWidth : textWidth;
 
+                    case 'header-image':
+                        const imageLink = content.link && content.link !== '#' ? content.link : null;
+                        const imageHtml = `
+                            <img src="${content.imageUrl}" alt="${escapeHtml(content.altText)}" width="${content.imageWidth}" style="display: block; width: ${content.imageWidth}; max-width: ${content.maxWidth}; height: auto; border: 0; margin: 0 auto;" />
+                        `;
                         return `
                             <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
                                 <tr>
-                                    <td style="${paddingStyle}">
-                                        <table cellpadding="0" cellspacing="0" border="0" width="100%" role="presentation">
+                                    <td align="${content.imageAlign}" style="${paddingStyle}">
+                                        ${imageLink ? `<a href="${imageLink}" style="text-decoration: none;">${imageHtml}</a>` : imageHtml}
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+
+                    case 'navigation':
+                        const menuItems = content.menuItems || [];
+                        let navHtml = '<table cellpadding="0" cellspacing="0" border="0" align="center" style="margin: 0 auto;"><tr>';
+                        
+                        menuItems.forEach((item, index) => {
+                            const isActive = item.active || false;
+                            const color = isActive ? content.activeColor : content.textColor;
+                            const spacing = index < menuItems.length - 1 ? `padding-right: ${content.itemSpacing};` : '';
+                            
+                            navHtml += `
+                                <td align="${content.alignment}" style="font-family: ${content.fontFamily}; font-size: ${content.fontSize}; ${spacing}">
+                                    <a href="${item.link}" style="color: ${color}; text-decoration: none; padding: ${content.itemPadding}; border-radius: ${content.itemBorderRadius}; background-color: ${content.backgroundColor}; display: inline-block;${isActive ? ' font-weight: bold;' : ''}">${escapeHtml(item.text)}</a>
+                                </td>
+                            `;
+                        });
+                        
+                        navHtml += '</tr></table>';
+                        
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                                <tr>
+                                    <td align="${content.alignment}" style="${paddingStyle}">
+                                        ${navHtml}
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+
+                    case 'button-only':
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                                <tr>
+                                    <td align="${content.buttonAlign}" style="${paddingStyle}">
+                                        <table cellpadding="0" cellspacing="0" border="0" align="${content.buttonAlign}" style="width: ${content.buttonWidth}; margin: 0 auto;">
                                             <tr>
-                                                <td class="column" style="width: ${leftWidth}%; vertical-align: top; padding: 0 10px;" width="${leftWidth}%">
-                                                    ${leftContent}
-                                                </td>
-                                                <td class="column" style="width: ${rightWidth}%; vertical-align: top; padding: 0 10px;" width="${rightWidth}%">
-                                                    ${rightContent}
+                                                <td style="background-color: ${content.buttonBackground}; border: ${content.buttonBorderWidth} ${content.buttonBorderStyle} ${content.buttonBorderColor}; border-radius: ${content.buttonBorderRadius};">
+                                                    <a href="${content.buttonLink}" target="_blank" style="font-size: ${content.buttonFontSize}; color: ${content.buttonColor}; padding: ${content.buttonPadding}; display: block; text-decoration: none; text-align: center;">${escapeHtml(content.buttonText)}</a>
                                                 </td>
                                             </tr>
                                         </table>
@@ -1659,54 +1794,333 @@
                                 </tr>
                             </table>
                         `;
+
+                    case 'title-only':
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                                <tr>
+                                    <td align="${content.textAlign}" style="${paddingStyle} ${fontStyle}">
+                                        <h1 style="font-size: ${content.fontSizeTitle}; line-height: ${content.lineHeightTitle}; color: ${content.textColorTitle}; margin: 0;">${escapeHtml(content.title)}</h1>
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+
+                    case 'text-only':
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                                <tr>
+                                    <td align="${content.textAlign}" style="${paddingStyle} ${fontStyle}">
+                                        <p style="font-size: ${content.fontSizeText}; line-height: ${content.lineHeightText}; color: ${content.textColorText}; margin: 0;">${escapeHtml(content.text)}</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+
+                    case 'title-text':
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                                <tr>
+                                    <td align="${content.textAlign}" style="${paddingStyle} ${fontStyle}">
+                                        <h1 style="font-size: ${content.fontSizeTitle}; line-height: ${content.lineHeightTitle}; color: ${content.textColorTitle}; margin: 0 0 10px 0;">${escapeHtml(content.title)}</h1>
+                                        <p style="font-size: ${content.fontSizeText}; line-height: ${content.lineHeightText}; color: ${content.textColorText}; margin: 0;">${escapeHtml(content.text)}</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+
+                    case 'text-image':
+                        const imagePosition = content.imagePosition || 'left';
+                        const textWidth = content.textWidth || '50%';
+                        const imageWidth = content.imageWidth || '50%';
+                        
+                        // Create image HTML
+                        const imgHtml = `
+                            <img src="${content.imageUrl}" alt="${escapeHtml(content.altText)}" style="display: block; width: 100%; max-width: 100%; height: auto; border: 0;" />
+                        `;
+                        
+                        // Create text HTML
+                        let textHtml = `
+                            <p style="font-size: ${content.fontSize}; line-height: ${content.lineHeight}; color: ${content.textColor}; margin: 0; text-align: ${content.textAlign};">${escapeHtml(content.text)}</p>
+                        `;
+                        
+                        // Add button if enabled
+                        if (content.showButton) {
+                            textHtml += `
+                                <table cellpadding="0" cellspacing="0" border="0" align="${content.buttonAlign}" style="margin-top: 15px;">
+                                    <tr>
+                                        <td style="background-color: ${content.buttonBackground}; border-radius: ${content.buttonBorderRadius};">
+                                            <a href="${content.buttonLink}" style="font-size: ${content.buttonFontSize}; color: ${content.buttonColor}; padding: ${content.buttonPadding}; display: inline-block; text-decoration: none;">${escapeHtml(content.buttonText)}</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            `;
+                        }
+                        
+                        // Create table with two columns
+                        if (imagePosition === 'left') {
+                            return `
+                                <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                                    <tr>
+                                        <td style="${paddingStyle}">
+                                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                <tr>
+                                                    <td width="${imageWidth}" style="vertical-align: ${content.verticalAlign}; padding-right: 20px;">${imgHtml}</td>
+                                                    <td width="${textWidth}" style="vertical-align: ${content.verticalAlign};">${textHtml}</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            `;
+                        } else {
+                            return `
+                                <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                                    <tr>
+                                        <td style="${paddingStyle}">
+                                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                <tr>
+                                                    <td width="${textWidth}" style="vertical-align: ${content.verticalAlign}; padding-right: 20px;">${textHtml}</td>
+                                                    <td width="${imageWidth}" style="vertical-align: ${content.verticalAlign};">${imgHtml}</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            `;
+                        }
+
                     case 'hero':
-                        const buttonHtml = content.showOverlayButton ? `
-                            <table cellpadding="0" cellspacing="0" border="0" align="${content.overlayButtonAlign}" style="margin-top: 20px; width: ${content.overlayButtonWidth};">
+                        const overlayStyle = `
+                            background-image: linear-gradient(${content.overlayColor}, ${content.overlayColor}), url(${content.backgroundImage});
+                            background-size: cover;
+                            background-position: center;
+                            background-repeat: no-repeat;
+                        `;
+                        
+                        let heroContent = `
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%" style="height: 100%;">
                                 <tr>
-                                    <td style="background-color: ${content.overlayButtonBackground}; border: ${content.overlayButtonBorderWidth} ${content.overlayButtonBorderStyle} ${content.overlayButtonBorderColor}; border-radius: 4px;">
-                                        <a href="${content.overlayButtonLink}" target="_blank" style="font-size: ${content.overlayButtonFontSize}; color: ${content.overlayButtonColor}; padding: 12px 24px; display: block; text-decoration: none; text-align: center;">${escapeHtml(content.overlayButtonText)}</a>
-                                    </td>
-                                </tr>
-                            </table>
-                        ` : '';
+                                    <td align="${content.overlayAlign}" style="padding: 40px 20px;">
+                                        <h1 style="font-size: ${content.titleFontSize}; line-height: ${content.lineHeightTitle}; color: ${content.overlayTextColor}; margin: 0 0 15px 0;">${escapeHtml(content.overlayTitle)}</h1>
+                                        <p style="font-size: ${content.textFontSize}; line-height: ${content.lineHeightText}; color: ${content.overlayTextColor}; margin: 0 0 20px 0;">${escapeHtml(content.overlayText)}</p>
+                        `;
+                        
+                        if (content.showOverlayButton) {
+                            heroContent += `
+                                <table cellpadding="0" cellspacing="0" border="0" align="${content.overlayButtonAlign}" style="margin: 0 auto;">
+                                    <tr>
+                                        <td style="background-color: ${content.overlayButtonBackground}; border: ${content.overlayButtonBorderWidth} ${content.overlayButtonBorderStyle} ${content.overlayButtonBorderColor}; border-radius: ${content.overlayButtonBorderRadius};">
+                                            <a href="${content.overlayButtonLink}" style="font-size: ${content.overlayButtonFontSize}; color: ${content.overlayButtonColor}; padding: ${content.overlayButtonPadding}; display: inline-block; text-decoration: none;">${escapeHtml(content.overlayButtonText)}</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            `;
+                        }
+                        
+                        heroContent += `</td></tr></table>`;
+                        
                         return `
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle} background-image: url(${content.backgroundImage}); background-size: cover; background-position: center;" role="presentation">
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
                                 <tr>
-                                    <td style="${paddingStyle} text-align: ${content.overlayAlign}; color: ${content.overlayTextColor}; ${fontStyle}">
-                                        <h1 style="font-size: 32px; line-height: ${content.lineHeightTitle}; margin: 0;">${escapeHtml(content.overlayTitle)}</h1>
-                                        <p style="font-size: 18px; line-height: ${content.lineHeightText}; margin-top: 10px;">${escapeHtml(content.overlayText)}</p>
-                                        ${buttonHtml}
+                                    <td style="padding: 0; background: ${content.backgroundColor}; ${overlayStyle}">
+                                        ${heroContent}
                                     </td>
                                 </tr>
                             </table>
                         `;
+
                     case 'image-only':
+                        const imageLinkUrl = content.link && content.link !== '#' ? content.link : null;
+                        const fullImageHtml = `
+                            <img src="${content.imageUrl}" alt="${escapeHtml(content.altText)}" style="display: block; width: ${content.imageWidth}; max-width: ${content.maxWidth || '100%'}; height: auto; border: 0; margin: 0 auto;" />
+                            ${content.caption ? `<p style="text-align: center; color: ${content.captionColor}; font-size: ${content.captionFontSize}; margin-top: 5px;">${escapeHtml(content.caption)}</p>` : ''}
+                        `;
+                        
                         return `
                             <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
                                 <tr>
-                                    <td style="${paddingStyle}">
-                                        <a href="${content.link}" target="_blank">
-                                            <img src="${content.image}" alt="${escapeHtml(content.altText || 'Image')}" style="display: block; width: 100%; max-width: 100%; height: auto; border: ${content.borderWidth} ${content.borderStyle} ${content.borderColor}; border-radius: ${content.borderRadius};" />
-                                        </a>
+                                    <td align="${content.imageAlign}" style="${paddingStyle}">
+                                        ${imageLinkUrl ? `<a href="${imageLinkUrl}" style="text-decoration: none;">${fullImageHtml}</a>` : fullImageHtml}
                                     </td>
                                 </tr>
                             </table>
                         `;
+
                     case 'single-column-blocks':
-                        const blocksHtml = content.order.filter(type => content.visible[type]).map(type => generateBlockHtml(content.blocks[type], type)).join('');
+                        const blocks = content.blocks;
+                        const order = content.order || ['image', 'title', 'text', 'button'];
+                        const visible = content.visible || {image: true, title: true, text: true, button: true};
+                        
+                        let blocksHtml = '';
+                        order.forEach(blockType => {
+                            if (visible[blockType] && blocks[blockType]) {
+                                if (blockType === 'image' && blocks.image.url) {
+                                    blocksHtml += `
+                                        <div style="text-align: ${blocks.image.align}; margin-bottom: 15px;">
+                                            <img src="${blocks.image.url}" alt="${blocks.image.altText}" style="max-width: 100%; height: auto; display: inline-block;" />
+                                        </div>
+                                    `;
+                                } else if (blockType === 'title') {
+                                    blocksHtml += `
+                                        <h2 style="font-size: ${blocks.title.fontSize}; color: ${blocks.title.color}; text-align: ${blocks.title.align}; line-height: ${blocks.title.lineHeight}; font-family: ${blocks.title.fontFamily}; margin: 0 0 10px 0;">
+                                            ${blocks.title.text}
+                                        </h2>
+                                    `;
+                                } else if (blockType === 'text') {
+                                    blocksHtml += `
+                                        <p style="font-size: ${blocks.text.fontSize}; color: ${blocks.text.color}; text-align: ${blocks.text.align}; line-height: ${blocks.text.lineHeight}; font-family: ${blocks.text.fontFamily}; margin: 0 0 15px 0;">
+                                            ${blocks.text.text}
+                                        </p>
+                                    `;
+                                } else if (blockType === 'button' && blocks.button.showButton) {
+                                    blocksHtml += `
+                                        <div style="text-align: ${blocks.button.align};">
+                                            <a href="${blocks.button.link}" style="display: inline-block; background-color: ${blocks.button.background}; color: ${blocks.button.color}; font-size: ${blocks.button.fontSize}; padding: ${blocks.button.padding}; border-radius: ${blocks.button.borderRadius}; text-decoration: none;">
+                                                ${blocks.button.text}
+                                            </a>
+                                        </div>
+                                    `;
+                                }
+                            }
+                        });
+                        
                         return `
                             <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
                                 <tr>
-                                    <td style="${paddingStyle}">
+                                    <td style="${paddingStyle} ${fontStyle}">
                                         ${blocksHtml}
                                     </td>
                                 </tr>
                             </table>
                         `;
+
                     case 'two-column-blocks':
-                        return generateMultiColumnHtml(content, 2);
+                        const columns2 = content.columns || [];
+                        const columnGap2 = content.columnGap || '20px';
+                        
+                        let columnsHtml2 = '<table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>';
+                        
+                        columns2.forEach((column, index) => {
+                            const colBlocks = column.blocks || getDefaultBlocks();
+                            const colOrder = column.order || ['image', 'title', 'text', 'button'];
+                            const colVisible = column.visible || {image: true, title: true, text: true, button: true};
+                            
+                            let colContent = '';
+                            colOrder.forEach(blockType => {
+                                if (colVisible[blockType] && colBlocks[blockType]) {
+                                    if (blockType === 'image' && colBlocks.image.url) {
+                                        colContent += `
+                                            <div style="text-align: ${colBlocks.image.align}; margin-bottom: 10px;">
+                                                <img src="${colBlocks.image.url}" alt="${colBlocks.image.altText}" style="max-width: 100%; height: auto;" />
+                                            </div>
+                                        `;
+                                    } else if (blockType === 'title') {
+                                        colContent += `
+                                            <h2 style="font-size: ${colBlocks.title.fontSize}; color: ${colBlocks.title.color}; text-align: ${colBlocks.title.align}; line-height: ${colBlocks.title.lineHeight}; margin: 0 0 8px 0;">
+                                                ${colBlocks.title.text}
+                                            </h2>
+                                        `;
+                                    } else if (blockType === 'text') {
+                                        colContent += `
+                                            <p style="font-size: ${colBlocks.text.fontSize}; color: ${colBlocks.text.color}; text-align: ${colBlocks.text.align}; line-height: ${colBlocks.text.lineHeight}; margin: 0 0 12px 0;">
+                                                ${colBlocks.text.text}
+                                            </p>
+                                        `;
+                                    } else if (blockType === 'button' && colBlocks.button.showButton) {
+                                        colContent += `
+                                            <div style="text-align: ${colBlocks.button.align};">
+                                                <a href="${colBlocks.button.link}" style="display: inline-block; background-color: ${colBlocks.button.background}; color: ${colBlocks.button.color}; font-size: ${colBlocks.button.fontSize}; padding: ${colBlocks.button.padding}; border-radius: ${colBlocks.button.borderRadius}; text-decoration: none;">
+                                                    ${colBlocks.button.text}
+                                                </a>
+                                            </div>
+                                        `;
+                                    }
+                                }
+                            });
+                            
+                            columnsHtml2 += `
+                                <td class="column" width="50%" style="vertical-align: top; padding-right: ${index < columns2.length - 1 ? columnGap2 : '0'};">
+                                    ${colContent}
+                                </td>
+                            `;
+                        });
+                        
+                        columnsHtml2 += '</tr></table>';
+                        
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                                <tr>
+                                    <td style="${paddingStyle} ${fontStyle}">
+                                        ${columnsHtml2}
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+
                     case 'three-column-blocks':
-                        return generateMultiColumnHtml(content, 3);
+                        const columns3 = content.columns || [];
+                        const columnGap3 = content.columnGap || '20px';
+                        
+                        let columnsHtml3 = '<table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>';
+                        
+                        columns3.forEach((column, index) => {
+                            const colBlocks = column.blocks || getDefaultBlocks();
+                            const colOrder = column.order || ['image', 'title', 'text', 'button'];
+                            const colVisible = column.visible || {image: true, title: true, text: true, button: true};
+                            
+                            let colContent = '';
+                            colOrder.forEach(blockType => {
+                                if (colVisible[blockType] && colBlocks[blockType]) {
+                                    if (blockType === 'image' && colBlocks.image.url) {
+                                        colContent += `
+                                            <div style="text-align: ${colBlocks.image.align}; margin-bottom: 10px;">
+                                                <img src="${colBlocks.image.url}" alt="${colBlocks.image.altText}" style="max-width: 100%; height: auto;" />
+                                            </div>
+                                        `;
+                                    } else if (blockType === 'title') {
+                                        colContent += `
+                                            <h2 style="font-size: ${colBlocks.title.fontSize}; color: ${colBlocks.title.color}; text-align: ${colBlocks.title.align}; line-height: ${colBlocks.title.lineHeight}; margin: 0 0 8px 0;">
+                                                ${colBlocks.title.text}
+                                            </h2>
+                                        `;
+                                    } else if (blockType === 'text') {
+                                        colContent += `
+                                            <p style="font-size: ${colBlocks.text.fontSize}; color: ${colBlocks.text.color}; text-align: ${colBlocks.text.align}; line-height: ${colBlocks.text.lineHeight}; margin: 0 0 12px 0;">
+                                                ${colBlocks.text.text}
+                                            </p>
+                                        `;
+                                    } else if (blockType === 'button' && colBlocks.button.showButton) {
+                                        colContent += `
+                                            <div style="text-align: ${colBlocks.button.align};">
+                                                <a href="${colBlocks.button.link}" style="display: inline-block; background-color: ${colBlocks.button.background}; color: ${colBlocks.button.color}; font-size: ${colBlocks.button.fontSize}; padding: ${colBlocks.button.padding}; border-radius: ${colBlocks.button.borderRadius}; text-decoration: none;">
+                                                    ${colBlocks.button.text}
+                                                </a>
+                                            </div>
+                                        `;
+                                    }
+                                }
+                            });
+                            
+                            columnsHtml3 += `
+                                <td class="column" width="33.33%" style="vertical-align: top; padding-right: ${index < columns3.length - 1 ? columnGap3 : '0'};">
+                                    ${colContent}
+                                </td>
+                            `;
+                        });
+                        
+                        columnsHtml3 += '</tr></table>';
+                        
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                                <tr>
+                                    <td style="${paddingStyle} ${fontStyle}">
+                                        ${columnsHtml3}
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+
                     case 'divider':
                         return `
                             <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
@@ -1717,123 +2131,68 @@
                                 </tr>
                             </table>
                         `;
+
                     case 'custom-html':
                         return `
                             <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
                                 <tr>
-                                    <td style="${paddingStyle} font-family: ${content.fontFamily}; font-size: 16px; line-height: 1.5; max-width: 100%;">
+                                    <td style="${paddingStyle} ${fontStyle}">
                                         ${sanitizeHtml(content.html)}
                                     </td>
                                 </tr>
                             </table>
                         `;
+
                     default:
-                        return `<div>Unsupported section type: ${section.type}</div>`;
+                        return `<div>Section type: ${section.type}</div>`;
                 }
             } catch (error) {
                 console.error('Error generating section HTML:', error);
-                return `<div>Error rendering section ${section.type}: ${error.message}</div>`;
+                return `<div>Error rendering section</div>`;
             }
         }
 
-        function generateBlockHtml(block, type) {
+        function generateContainerHtml(container) {
             try {
-                const fontStyle = block.fontFamily ? `font-family: ${block.fontFamily};` : '';
-                switch (type) {
-                    case 'image':
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" width="100%" align="${block.align}" style="margin-bottom: 10px;">
-                                <tr>
-                                    <td align="${block.align}">
-                                        <a href="${block.link}" target="_blank">
-                                            <img src="${block.url}" alt="${escapeHtml(block.altText || 'Image')}" style="display: block; width: 100%; max-width: 100%; height: auto;" />
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-                    case 'title':
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" width="100%" align="${block.align}" style="margin-bottom: 10px;">
-                                <tr>
-                                    <td align="${block.align}" style="${fontStyle}">
-                                        <h2 style="font-size: ${block.fontSize}; line-height: ${block.lineHeight}; color: ${block.color}; margin: 0; text-align: ${block.align};">${escapeHtml(block.text)}</h2>
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-                    case 'text':
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" width="100%" align="${block.align}" style="margin-bottom: 10px;">
-                                <tr>
-                                    <td align="${block.align}" style="${fontStyle}">
-                                        <p style="font-size: ${block.fontSize}; line-height: ${block.lineHeight}; color: ${block.color}; margin: 0; text-align: ${block.align};">${escapeHtml(block.text)}</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-                    case 'button':
-                        if (!block.showButton) return '';
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" width="100%" align="${block.align}" style="margin-bottom: 10px;">
-                                <tr>
-                                    <td align="${block.align}">
-                                        <table cellpadding="0" cellspacing="0" border="0" align="${block.align}">
-                                            <tr>
-                                                <td style="background-color: ${block.background}; border-radius: ${block.borderRadius};">
-                                                    <a href="${block.link}" target="_blank" style="font-size: ${block.fontSize}; color: ${block.color}; padding: ${block.padding}; display: inline-block; text-decoration: none;">${escapeHtml(block.text)}</a>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-                }
-            } catch (error) {
-                console.error('Error generating block HTML:', error);
-                return `<div>Error rendering block ${type}: ${error.message}</div>`;
-            }
-        }
-
-        function generateMultiColumnHtml(content, columnCount) {
-            try {
-                const columnWidth = Math.floor(100 / columnCount);
-                const { tableStyle, paddingStyle } = generateCommonStyles(content);
-                const columnsHtml = content.columns.map(col => {
-                    const blocksHtml = col.blocks.order ? col.blocks.order.filter(type => col.blocks.visible[type]).map(type => generateBlockHtml(col.blocks[type], type)).join('') : Object.keys(col.blocks).map(type => generateBlockHtml(col.blocks[type], type)).join('');
-                    return `
-                        <td class="column" style="width: ${columnWidth}%; vertical-align: top; padding: 0 10px;" width="${columnWidth}%">
-                            ${blocksHtml}
-                        </td>
-                    `;
+                const content = container.content;
+                const itemsHtml = container.items.map(item => {
+                    if (item.type === 'container') {
+                        return generateContainerHtml(item);
+                    } else {
+                        return generateSectionHtml(item);
+                    }
                 }).join('');
-
+                
+                const { tableStyle, paddingStyle } = generateCommonStyles(content);
+                
                 return `
-                    <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
+                    <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" class="${content.containerClass}" id="${content.containerId}" role="presentation">
                         <tr>
                             <td style="${paddingStyle}">
-                                <table cellpadding="0" cellspacing="0" border="0" width="100%" role="presentation">
-                                    <tr>
-                                        ${columnsHtml}
-                                    </tr>
-                                </table>
+                                ${itemsHtml}
                             </td>
                         </tr>
                     </table>
                 `;
             } catch (error) {
-                console.error('Error generating multi-column HTML:', error);
-                return `<div>Error rendering multi-column section: ${error.message}</div>`;
+                console.error('Error generating container HTML:', error);
+                return `<div>Error rendering container</div>`;
             }
         }
 
         function generateEmailHtml() {
             try {
-                const sectionsHtml = sections.map(generateSectionHtml).join('');
+                const structureHtml = structure.map(item => {
+                    if (item.type === 'container') {
+                        return generateContainerHtml(item);
+                    } else {
+                        return generateSectionHtml(item);
+                    }
+                }).join('');
+                
                 const fullHtml = `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -1849,6 +2208,8 @@
         table {
             border-spacing: 0;
             border-collapse: collapse;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
         }
         td {
             font-family: Arial, Helvetica, sans-serif;
@@ -1862,31 +2223,8 @@
         a {
             text-decoration: none;
         }
-        .container {
-            width: 100%;
-            max-width: ${isMobilePreview ? 320 : canvasWidth}px;
-            margin: 0 auto;
-            background-color: #ffffff;
-        }
-        .column {
-            vertical-align: top;
-        }
-        .custom-html-content {
-            max-width: 100%;
-            overflow-wrap: break-word;
-            word-wrap: break-word;
-            word-break: break-word;
-        }
-        .custom-html-content img {
-            max-width: 100% !important;
-            height: auto !important;
-        }
-        .custom-html-content p, .custom-html-content div, .custom-html-content span {
-            font-size: 16px;
-            line-height: 1.5;
-        }
         @media only screen and (max-width: 480px) {
-            .container {
+            table[class="container"] {
                 width: 100% !important;
                 max-width: 320px !important;
                 min-width: 0 !important;
@@ -1904,11 +2242,10 @@
         }
     </style>
 </head>
-
 <body style="margin: 0; padding: 0; background-color: #f6f6f6;">
     <center style="width: 100%; background-color: #f6f6f6;">
         <table class="container" cellpadding="0" cellspacing="0" border="0" align="center" style="width: 100%; max-width: ${canvasWidth}px; min-width: 0; background-color: #ffffff;" role="presentation">
-            ${sectionsHtml}
+            ${structureHtml}
         </table>
     </center>
 </body>
@@ -1917,7 +2254,7 @@
                 return fullHtml;
             } catch (error) {
                 console.error('Error generating email HTML:', error);
-                return `<div>Error generating email: ${error.message}</div>`;
+                return `<div>Error generating email</div>`;
             }
         }
 
@@ -1928,8 +2265,6 @@
                 doc.write(generateEmailHtml());
                 doc.close();
                 codeOutput.value = generateEmailHtml();
-
-                // Adjust iframe width for mobile preview
                 previewFrame.style.maxWidth = isMobilePreview ? '320px' : `${canvasWidth}px`;
             } catch (error) {
                 console.error('Error updating preview:', error);
@@ -1964,53 +2299,39 @@
                 showMessage('Error saving to file: ' + error.message, 'error');
             }
         }
-    </script>
-     
 
-<footer>
-    <div class="footer-content">
-        <div class="footer-column">
-            <h3>ResumePro</h3>
-            <p>Professional digital templates to showcase your career and work.</p>
-        </div>
-        
-        <div class="footer-column">
-            <h3>Templates</h3>
-            <ul class="footer-links">
-                <li><a href="resume-templates.html">Resume Templates</a></li>
-                <li><a href="portfolio-templates.html">Portfolio Templates</a></li>
-                <li><a href="#">All Templates</a></li>
-            </ul>
-        </div>
-        
-        <div class="footer-column">
-            <h3>Resources</h3>
-            <ul class="footer-links">
-                <li><a href="help.html#editing">How to Edit</a></li>
-                <li><a href="help.html#hosting">Hosting Guide</a></li>
-                <li><a href="help.html#tips">Tips & Examples</a></li>
-            </ul>
-        </div>
-        
-        <div class="footer-column">
-            <h3>Company</h3>
-            <ul class="footer-links">
-                <li><a href="about.html">About Us</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="privacy.html">Privacy Policy</a></li>
-                <li><a href="terms.html">Terms of Service</a></li>
-            </ul>
-        </div>
-    </div>
-    
-    <div class="copyright">
-        <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
-    </div>
-</footer>
+        function loadHtml() {
+            try {
+                const htmlContent = loadHtmlInput.value.trim();
+                if (!htmlContent) {
+                    showMessage('Please paste valid HTML code.', 'error');
+                    return;
+                }
+
+                structure = [];
+                
+                structure.push({
+                    id: Date.now() + Math.random(),
+                    type: 'custom-html',
+                    content: {
+                        ...getDefaultContent('custom-html'),
+                        html: sanitizeHtml(htmlContent)
+                    }
+                });
+
+                activePath = [0];
+                activeType = 'section';
+                saveHistory();
+                updateStructureList();
+                showProperties();
+                updatePreview();
+                showMessage('HTML loaded successfully!', 'success');
+                loadHtmlInput.value = '';
+            } catch (error) {
+                console.error('Error loading HTML:', error);
+                showMessage('Error loading HTML: ' + error.message, 'error');
+            }
+        }
+    </script>
 </body>
 </html>
-
-
-
-
-

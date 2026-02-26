@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-	<link rel="stylesheet" href="footer.css">
+    <link rel="stylesheet" href="footer.css">
     <link rel="stylesheet" href="header.css">
     <style>
         :root {
@@ -36,6 +36,8 @@
             cursor: pointer;
             transition: all 0.2s;
             border-left: 3px solid transparent;
+            position: relative;
+            user-select: none;
         }
         .section-item:hover, .container-item:hover {
             background-color: #f8fafc;
@@ -59,13 +61,58 @@
             padding-left: 8px;
         }
         .draggable-handle {
-            cursor: move;
+            cursor: grab;
             opacity: 0.5;
             transition: opacity 0.2s;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        .draggable-handle:active {
+            cursor: grabbing;
         }
         .section-item:hover .draggable-handle, .container-item:hover .draggable-handle {
             opacity: 1;
         }
+        
+        /* Drag and drop visual feedback */
+        .section-item.dragging, .container-item.dragging {
+            opacity: 0.5;
+            background-color: #e5e7eb;
+            border: 2px dashed #3b82f6;
+        }
+        
+        .drag-over-top {
+            border-top: 3px solid #3b82f6 !important;
+            margin-top: -2px;
+        }
+        
+        .drag-over-bottom {
+            border-bottom: 3px solid #3b82f6 !important;
+            margin-bottom: -2px;
+        }
+        
+        .drag-over-inside {
+            background-color: #dbeafe !important;
+            border: 2px solid #3b82f6 !important;
+        }
+        
+        .drag-feedback {
+            position: fixed;
+            background-color: #3b82f6;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            pointer-events: none;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: none;
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
         .column {
             vertical-align: top;
         }
@@ -399,8 +446,11 @@
             </button>
         </div>
     </div>
-	
-	<footer>
+    
+    <!-- Drag Feedback Element -->
+    <div id="drag-feedback" class="drag-feedback"></div>
+    
+    <footer>
     <div class="footer-content">
         <div class="footer-column">
             <h3>ResumePro</h3>
@@ -452,6 +502,14 @@
         let historyIndex = -1;
         const maxHistory = 20;
 
+        // Drag and drop variables
+        let draggedItem = null;
+        let draggedPath = null;
+        let draggedType = null;
+        let draggedElement = null;
+        let dropTarget = null;
+        let dropPosition = null; // 'top', 'bottom', 'inside'
+
         const previewFrame = document.getElementById('preview-frame');
         const propertiesPanel = document.getElementById('properties-panel');
         const propertyInputs = document.getElementById('property-inputs');
@@ -464,6 +522,7 @@
         const undoButton = document.getElementById('undo-button');
         const redoButton = document.getElementById('redo-button');
         const loadHtmlInput = document.getElementById('load-html-input');
+        const dragFeedback = document.getElementById('drag-feedback');
 
         const fontOptions = [
             {value: 'Arial, Helvetica, sans-serif', label: 'Arial'},
@@ -1084,40 +1143,44 @@
             return item;
         }
 
-        function removeItemByPath(path) {
-            if (!path || path.length === 0) return false;
+        function getParentArrayAndIndex(path) {
+            if (!path || path.length === 0) return { parentArray: null, index: -1 };
             
-            let current = structure;
+            let parentArray = structure;
             let parent = null;
-            let lastIndex = path[path.length - 1];
             
             for (let i = 0; i < path.length - 1; i++) {
                 const index = path[i];
+                
                 if (index === 'items') {
                     if (parent && parent.items) {
-                        current = parent.items;
+                        parentArray = parent.items;
                     } else {
-                        return false;
+                        return { parentArray: null, index: -1 };
                     }
                 } else if (typeof index === 'number') {
-                    if (Array.isArray(current) && index < current.length) {
-                        parent = current[index];
-                        if (parent.items) {
-                            current = parent.items;
-                        } else {
-                            current = [];
-                        }
+                    if (Array.isArray(parentArray) && index < parentArray.length) {
+                        parent = parentArray[index];
                     } else {
-                        return false;
+                        return { parentArray: null, index: -1 };
                     }
                 }
             }
             
-            if (typeof lastIndex === 'number' && Array.isArray(current) && lastIndex < current.length) {
-                current.splice(lastIndex, 1);
-                return true;
+            const lastIndex = path[path.length - 1];
+            if (typeof lastIndex === 'number') {
+                return { parentArray, index: lastIndex };
             }
             
+            return { parentArray: null, index: -1 };
+        }
+
+        function removeItemByPath(path) {
+            const { parentArray, index } = getParentArrayAndIndex(path);
+            if (parentArray && index >= 0 && index < parentArray.length) {
+                parentArray.splice(index, 1);
+                return true;
+            }
             return false;
         }
 
@@ -1184,6 +1247,198 @@
             showMessage('Section moved to container', 'success');
         }
 
+        // Improved drag and drop functions
+        function handleDragStart(e, path, type, item) {
+            e.stopPropagation();
+            
+            draggedPath = path;
+            draggedType = type;
+            draggedElement = e.target.closest('.section-item, .container-item');
+            
+            if (!draggedElement) return;
+            
+            // Set drag data
+            e.dataTransfer.setData('text/plain', JSON.stringify({
+                path: path,
+                type: type,
+                id: item.id
+            }));
+            e.dataTransfer.effectAllowed = 'move';
+            
+            // Add dragging class
+            draggedElement.classList.add('dragging');
+            
+            // Get item name for feedback
+            let itemName = '';
+            if (type === 'container') {
+                itemName = item.name || 'Container';
+            } else {
+                itemName = item.type.replace(/-/g, ' ').split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+            }
+            
+            // Show drag feedback
+            dragFeedback.textContent = `Moving: ${itemName}`;
+            dragFeedback.style.display = 'block';
+            dragFeedback.style.left = (e.clientX + 20) + 'px';
+            dragFeedback.style.top = (e.clientY + 10) + 'px';
+            
+            // Prevent default drag image
+            e.dataTransfer.setDragImage(new Image(), 0, 0);
+            
+            // Clear any existing drop indicators
+            clearDropIndicators();
+        }
+
+        function handleDragOver(e, path, type, element) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.dataTransfer.dropEffect = 'move';
+            
+            if (!draggedPath || pathsEqual(draggedPath, path)) return;
+            
+            const targetElement = e.target.closest('.section-item, .container-item');
+            if (!targetElement) return;
+            
+            // Update drag feedback position
+            dragFeedback.style.left = (e.clientX + 20) + 'px';
+            dragFeedback.style.top = (e.clientY + 10) + 'px';
+            
+            // Calculate drop position
+            const rect = targetElement.getBoundingClientRect();
+            const mouseY = e.clientY;
+            const threshold = rect.top + rect.height / 3;
+            const containerThreshold = rect.top + rect.height * 0.25;
+            
+            // Clear previous indicators
+            clearDropIndicators();
+            
+            // Determine drop position
+            if (type === 'container' && mouseY > rect.top + rect.height * 0.25 && mouseY < rect.bottom - rect.height * 0.25) {
+                // Inside container
+                targetElement.classList.add('drag-over-inside');
+                dropTarget = { path, type: 'container', position: 'inside' };
+                dropPosition = 'inside';
+            } else if (mouseY < rect.top + rect.height / 2) {
+                // Above
+                targetElement.classList.add('drag-over-top');
+                dropTarget = { path, type, position: 'top' };
+                dropPosition = 'top';
+            } else {
+                // Below
+                targetElement.classList.add('drag-over-bottom');
+                dropTarget = { path, type, position: 'bottom' };
+                dropPosition = 'bottom';
+            }
+        }
+
+        function handleDragEnd(e) {
+            // Remove all drag classes
+            document.querySelectorAll('.section-item, .container-item').forEach(el => {
+                el.classList.remove('dragging', 'drag-over-top', 'drag-over-bottom', 'drag-over-inside');
+            });
+            
+            // Hide drag feedback
+            dragFeedback.style.display = 'none';
+            
+            // Reset drag variables
+            draggedPath = null;
+            draggedType = null;
+            draggedElement = null;
+            dropTarget = null;
+            dropPosition = null;
+        }
+
+        function handleDrop(e, targetPath, targetType, targetElement) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (!draggedPath || pathsEqual(draggedPath, targetPath)) {
+                handleDragEnd(e);
+                return;
+            }
+            
+            try {
+                // Get dragged item
+                const draggedItem = getItemByPath(draggedPath);
+                if (!draggedItem) return;
+                
+                // Check if trying to drop a container into itself or its children
+                if (draggedType === 'container' && isDescendant(draggedPath, targetPath)) {
+                    showMessage('Cannot drop a container into itself or its children', 'error');
+                    handleDragEnd(e);
+                    return;
+                }
+                
+                // Remove from source
+                removeItemByPath(draggedPath);
+                
+                // Insert at target
+                if (dropPosition === 'inside' && targetType === 'container') {
+                    // Add inside container
+                    const targetContainer = getItemByPath(targetPath);
+                    if (targetContainer && targetContainer.type === 'container') {
+                        if (!targetContainer.items) targetContainer.items = [];
+                        targetContainer.items.push(draggedItem);
+                    }
+                } else {
+                    // Add before or after in the same array
+                    const { parentArray, index } = getParentArrayAndIndex(targetPath);
+                    if (parentArray) {
+                        const insertIndex = dropPosition === 'bottom' ? index + 1 : index;
+                        parentArray.splice(insertIndex, 0, draggedItem);
+                    }
+                }
+                
+                // Update active path if needed
+                if (activePath) {
+                    // Check if active item was moved
+                    if (pathsEqual(activePath, draggedPath)) {
+                        // Active item was moved, try to find its new path
+                        // This is complex, so we'll just clear selection for simplicity
+                        activePath = null;
+                        activeType = null;
+                    }
+                }
+                
+                saveHistory();
+                updateStructureList();
+                updatePreview();
+                showMessage('Item moved successfully', 'success');
+            } catch (error) {
+                console.error('Error during drop:', error);
+                showMessage('Error moving item: ' + error.message, 'error');
+            } finally {
+                handleDragEnd(e);
+            }
+        }
+
+        function pathsEqual(path1, path2) {
+            if (!path1 || !path2) return false;
+            if (path1.length !== path2.length) return false;
+            for (let i = 0; i < path1.length; i++) {
+                if (path1[i] !== path2[i]) return false;
+            }
+            return true;
+        }
+
+        function isDescendant(parentPath, childPath) {
+            if (!parentPath || !childPath) return false;
+            if (childPath.length <= parentPath.length) return false;
+            
+            for (let i = 0; i < parentPath.length; i++) {
+                if (parentPath[i] !== childPath[i]) return false;
+            }
+            
+            // Check if the next segment is 'items'
+            return childPath[parentPath.length] === 'items';
+        }
+
+        function clearDropIndicators() {
+            document.querySelectorAll('.section-item, .container-item').forEach(el => {
+                el.classList.remove('drag-over-top', 'drag-over-bottom', 'drag-over-inside');
+            });
+        }
+
         function updateStructureList() {
             try {
                 sectionListContainer.innerHTML = '';
@@ -1216,6 +1471,7 @@
             if (depth > 0) div.classList.add('container-nested');
             div.draggable = true;
             div.setAttribute('tabindex', '0');
+            div.setAttribute('data-path', JSON.stringify(path));
             
             const isActive = activePath && activePath.length === path.length && 
                             activePath.every((val, i) => val === path[i]) && 
@@ -1232,7 +1488,7 @@
                         <i class="fas fa-cubes mr-1 text-sm"></i> ${container.name || 'Container'}
                         <span class="badge badge-purple">${countItems(container)} items</span>
                     </span>
-                    <span class="draggable-handle text-gray-400 text-sm">☰</span>
+                    <span class="draggable-handle text-gray-400 text-sm" title="Drag to reorder">☰</span>
                 </div>
             `;
             
@@ -1249,26 +1505,23 @@
                 div.appendChild(emptyDiv);
             }
             
-            div.ondragstart = (e) => {
-                e.dataTransfer.setData('text/plain', JSON.stringify({type: 'container', path: path}));
-            };
-            div.ondragover = (e) => e.preventDefault();
-            div.ondrop = (e) => {
-                e.preventDefault();
-                try {
-                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-                    handleDrop(data, path);
-                } catch (error) {
-                    console.error('Error handling drop:', error);
-                }
-            };
+            // Drag and drop event handlers
+            div.addEventListener('dragstart', (e) => handleDragStart(e, path, 'container', container));
+            div.addEventListener('dragend', handleDragEnd);
+            div.addEventListener('dragover', (e) => handleDragOver(e, path, 'container', div));
+            div.addEventListener('dragleave', (e) => {
+                div.classList.remove('drag-over-top', 'drag-over-bottom', 'drag-over-inside');
+            });
+            div.addEventListener('drop', (e) => handleDrop(e, path, 'container', div));
             
-            div.onclick = () => {
+            // Click handler
+            div.addEventListener('click', (e) => {
+                if (e.target.closest('.draggable-handle')) return;
                 activePath = path;
                 activeType = 'container';
                 updateStructureList();
                 showProperties();
-            };
+            });
             
             containerEl.appendChild(div);
         }
@@ -1279,6 +1532,7 @@
             if (depth > 0) div.style.marginLeft = '20px';
             div.draggable = true;
             div.setAttribute('tabindex', '0');
+            div.setAttribute('data-path', JSON.stringify(path));
             
             const sectionName = section.type.replace(/-/g, ' ').split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
             
@@ -1295,29 +1549,26 @@
                 <span class="font-medium text-gray-700 flex items-center">
                     <i class="fas fa-file-alt mr-1 text-xs text-gray-500"></i> ${sectionName}
                 </span>
-                <span class="draggable-handle text-gray-400">☰</span>
+                <span class="draggable-handle text-gray-400" title="Drag to reorder">☰</span>
             `;
             
-            div.ondragstart = (e) => {
-                e.dataTransfer.setData('text/plain', JSON.stringify({type: 'section', path: path}));
-            };
-            div.ondragover = (e) => e.preventDefault();
-            div.ondrop = (e) => {
-                e.preventDefault();
-                try {
-                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-                    handleDrop(data, path);
-                } catch (error) {
-                    console.error('Error handling drop:', error);
-                }
-            };
+            // Drag and drop event handlers
+            div.addEventListener('dragstart', (e) => handleDragStart(e, path, 'section', section));
+            div.addEventListener('dragend', handleDragEnd);
+            div.addEventListener('dragover', (e) => handleDragOver(e, path, 'section', div));
+            div.addEventListener('dragleave', (e) => {
+                div.classList.remove('drag-over-top', 'drag-over-bottom', 'drag-over-inside');
+            });
+            div.addEventListener('drop', (e) => handleDrop(e, path, 'section', div));
             
-            div.onclick = () => {
+            // Click handler
+            div.addEventListener('click', (e) => {
+                if (e.target.closest('.draggable-handle')) return;
                 activePath = path;
                 activeType = 'section';
                 updateStructureList();
                 showProperties();
-            };
+            });
             
             containerEl.appendChild(div);
         }
@@ -1331,44 +1582,6 @@
                 }
             });
             return count;
-        }
-
-        function handleDrop(source, targetPath) {
-            try {
-                // Remove from source
-                const sourceItem = getItemByPath(source.path);
-                if (!sourceItem) return;
-                
-                removeItemByPath(source.path);
-                
-                // Get target parent
-                const targetParent = getItemByPath(targetPath);
-                
-                if (targetParent && targetParent.type === 'container') {
-                    // Add to target container
-                    if (!targetParent.items) targetParent.items = [];
-                    targetParent.items.push(sourceItem);
-                } else {
-                    // Add to root at target position
-                    const targetParentPath = targetPath.slice(0, -1);
-                    const targetIndex = targetPath[targetPath.length - 1];
-                    const parentArray = targetParentPath.length === 0 ? structure : getItemByPath(targetParentPath)?.items;
-                    
-                    if (parentArray && Array.isArray(parentArray)) {
-                        parentArray.splice(targetIndex, 0, sourceItem);
-                    } else {
-                        structure.push(sourceItem);
-                    }
-                }
-                
-                saveHistory();
-                updateStructureList();
-                updatePreview();
-                showMessage('Item moved successfully', 'success');
-            } catch (error) {
-                console.error('Error handling drop:', error);
-                showMessage('Error moving item: ' + error.message, 'error');
-            }
         }
 
         function showProperties() {

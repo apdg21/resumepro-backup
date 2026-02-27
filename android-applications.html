@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Android Applications | ResumePro Developer</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
-	<link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="footer.css">
     <style>
         :root {
@@ -41,8 +41,6 @@
             margin-top: 60px;
         }
 
-        
-        
         .android-hero h1 {
             font-size: 3rem;
             margin-bottom: 1rem;
@@ -202,6 +200,9 @@
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
         }
         
         .cta-button:hover {
@@ -222,6 +223,90 @@
         
         .privacy-btn:hover {
             background: #f0f8ff;
+        }
+        
+        /* Tester email collection - FormSubmit */
+        .tester-section {
+            background-color: #f0f7ff;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0 1rem;
+            border: 1px solid #b8daff;
+        }
+        
+        .tester-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+        
+        .email-input {
+            flex: 2;
+            min-width: 250px;
+            padding: 0.9rem 1.2rem;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.2s;
+        }
+        
+        .email-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .submit-tester-btn {
+            background-color: var(--android-dark);
+            color: white;
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 1rem;
+        }
+        
+        .submit-tester-btn:hover {
+            background-color: #0b7c42;
+        }
+        
+        .tester-note {
+            color: var(--gray);
+            font-size: 0.95rem;
+            background: #fff3cd;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+            margin-top: 1.5rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        /* FormSubmit credit */
+        .formsubmit-credit {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 0.5rem;
+            text-align: right;
         }
         
         /* Development Updates Section */
@@ -353,13 +438,8 @@
             flex-wrap: wrap;
         }
         
-        
-        
         /* Responsive Styles */
         @media (max-width: 768px) {
-
-            
-            
             .android-hero {
                 padding: 7rem 1rem 3rem;
             }
@@ -396,6 +476,11 @@
             .developer-links {
                 flex-direction: column;
                 align-items: center;
+            }
+
+            .form-row {
+                flex-direction: column;
+                align-items: stretch;
             }
         }
     </style>
@@ -457,23 +542,21 @@
     </div>
 </header>
 
-    
-    <main class="container">
+<main class="container">
     <!-- Android Apps Hero Section -->
-    <!-- Update the android-hero section description -->
-<section class="android-hero">
-    <div class="android-icon">🤖</div>
-    <h1>Android Applications</h1>
-    <p><strong>Voice-First Development:</strong> Building mobile applications with voice as the primary input method. 
-       Specialized in creating apps where you don't need to type - just speak to get things done!</p>
-    
-    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
-        <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">🎤 Voice Recognition</span>
-        <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">📝 No-Typing Notes</span>
-        <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">⏰ Smart Reminders</span>
-        <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">🗄️ Local Storage</span>
-    </div>
-</section>
+    <section class="android-hero">
+        <div class="android-icon">🤖</div>
+        <h1>Android Applications</h1>
+        <p><strong>Voice-First Development:</strong> Building mobile applications with voice as the primary input method. 
+           Specialized in creating apps where you don't need to type - just speak to get things done!</p>
+        
+        <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
+            <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">🎤 Voice Recognition</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">📝 No-Typing Notes</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">⏰ Smart Reminders</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">🗄️ Local Storage</span>
+        </div>
+    </section>
     
     <!-- Apps Showcase Section -->
     <section class="apps-showcase">
@@ -482,269 +565,205 @@
             <p>Voice-powered apps with proven implementation - ready for Play Store deployment</p>
         </div>
         
-        <!-- VoiceRide App -->
         <div class="app-grid">
-            <!-- Replace the existing app cards section in android-applications.html with this: -->
+            <!-- NEW APP: Voco - Voice Type Smart (replaces VoiceRide) -->
+            <div class="app-card-detailed">
+                <div class="app-header-detailed" style="background: linear-gradient(135deg, #7B1FA2 0%, #4A148C 100%);">
+                    <div class="app-icon-large">🎤⚡</div>
+                    <div class="app-title-section">
+                        <h2>Voco - Voice Type Smart</h2>
+                        <p>Floating microphone – speak, copy, paste anywhere</p>
+                        <span class="app-status-badge">🚀 Finalizing for Production</span>
+                    </div>
+                </div>
+                
+                <div class="app-body-detailed">
+                    <p class="app-description-detailed">
+                        <strong>Next‑gen voice typing:</strong> A floating mic button that follows you across any app. 
+                        Tap to speak, get instant text copied to clipboard and ready to paste. Built from the Kotlin 
+                        sources you provided – clean, lightweight, and privacy‑focused.
+                    </p>
+                    
+                    <div class="features-section">
+                        <h3>✨ Core Experience</h3>
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <strong>🖱️ Floating Mic</strong>
+                                <p>Drag anywhere, tap to start listening – works over any app</p>
+                            </div>
+                            <div class="feature-item">
+                                <strong>📋 Smart Paste</strong>
+                                <p>Recognized text is auto‑copied; one tap to paste where you need it</p>
+                            </div>
+                            <div class="feature-item">
+                                <strong>🔊 Natural Language</strong>
+                                <p>Uses Android speech recognizer with system locale</p>
+                            </div>
+                            <div class="feature-item">
+                                <strong>🧩 Lightweight Service</strong>
+                                <p>Minimal battery impact, starts/stops with a single toggle</p>
+                            </div>
+                        </div>
+                    </div>
 
-<!-- VoiceRide App (unchanged) -->
-<div class="app-card-detailed">
-    <!-- REPLACE the entire VoiceRide app card in android-applications.html with this: -->
+                    <div class="tech-stack-section">
+                        <h3>🔧 Implementation (from your code)</h3>
+                        <div class="tech-stack">
+                            <span class="tech-tag">FloatingView Service</span>
+                            <span class="tech-tag">WindowManager Overlay</span>
+                            <span class="tech-tag">SpeechRecognizer Intent</span>
+                            <span class="tech-tag">ClipboardManager</span>
+                            <span class="tech-tag">Kotlin Coroutines</span>
+                            <span class="tech-tag">Permission handling</span>
+                            <span class="tech-tag">Drag-to-move</span>
+                        </div>
+                    </div>
+                    
+                    <div class="features-section">
+                        <h3>📱 What you can do</h3>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0;">
+                            <span style="background: #f3e5f5; padding: 8px 15px; border-radius: 20px;">Take notes hands‑free</span>
+                            <span style="background: #f3e5f5; padding: 8px 15px; border-radius: 20px;">Dictate messages</span>
+                            <span style="background: #f3e5f5; padding: 8px 15px; border-radius: 20px;">Quick search by voice</span>
+                            <span style="background: #f3e5f5; padding: 8px 15px; border-radius: 20px;">Fill forms eyes‑free</span>
+                        </div>
+                    </div>
+                    
+                    <div class="app-links-detailed">
+                        <a href="#" class="cta-button" style="background: #7B1FA2; cursor: default;">
+                            📦 Preparing for Play Store
+                        </a>
+                        <a href="#" class="cta-button privacy-btn" onclick="alert('Privacy policy will be published with the app.'); return false;">
+                            📄 Privacy Policy (draft)
+                        </a>
+                        <span style="color: #666; font-size: 0.9rem; margin-left: 10px;">
+                            Production release ~ Q2 2025
+                        </span>
+                    </div>
 
-<div class="app-card-detailed">
-    <div class="app-header-detailed" style="background: linear-gradient(135deg, #2196F3 0%, #0D47A1 100%);">
-        <div class="app-icon-large">🚗🎤</div>
-        <div class="app-title-section">
-            <h2>VoiceRide Driving Assistant</h2>
-            <p>Complete hands-free voice control for driving & mobile tasks</p>
-            <span class="app-status-badge">✅ Fully Functional</span>
-        </div>
-    </div>
-    
-    <div class="app-body-detailed">
-        <p class="app-description-detailed">
-            <strong>Core Innovation:</strong> No touch required while driving! VoiceRide processes natural language commands 
-            to control apps, navigation, media, and device functions. The app uses advanced intent handling and 
-            Text-to-Speech feedback to create a completely hands-free mobile experience.
-        </p>
-        
-        <div class="features-section">
-            <h3>🎯 Implemented Voice Commands</h3>
-            <div class="features-grid">
-                <div class="feature-item">
-                    <strong>📱 App Launcher</strong>
-                    <p>Voice open any installed app: "Open Facebook", "Launch YouTube", "Start Spotify"</p>
-                </div>
-                <div class="feature-item">
-                    <strong>🗺️ Navigation</strong>
-                    <p>Voice navigation: "Navigate to [destination]", "Directions to [place]"</p>
-                </div>
-                <div class="feature-item">
-                    <strong>🎵 Media Control</strong>
-                    <p>Volume control: "Volume up", "Volume down", "Max volume", "Mute"</p>
-                </div>
-                <div class="feature-item">
-                    <strong>🔧 Device Functions</strong>
-                    <p>"Open camera", "Open settings", "Open phone", "Calculator", "Clock"</p>
-                </div>
-                <div class="feature-item">
-                    <strong>🌐 Web Search</strong>
-                    <p>Voice search: "Search [query]", integrated with browser</p>
-                </div>
-                <div class="feature-item">
-                    <strong>⏰ Time & Date</strong>
-                    <p>"What time is it?", "What's the date today?"</p>
+                    <div style="background: #F3E5F5; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #7B1FA2;">
+                        <p style="margin: 0; font-size: 0.95rem;">
+                            <strong>⚡ Based on your provided code:</strong> 
+                            <code>FloatingVoiceService.kt</code>, <code>MainActivity.kt</code>, <code>SettingsActivity.kt</code>, 
+                            <code>SpeechRecognitionActivity.kt</code> – fully functional floating mic + voice recognition.
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="features-section">
-            <h3>✅ Supported Apps (From Your Code)</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 15px;">
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Facebook</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">WhatsApp</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Instagram</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">YouTube</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Spotify</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Google Maps</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Chrome</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Gmail</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Netflix</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Disney+</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Telegram</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Twitter/X</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Shopee</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Lazada</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Gojek</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Grab</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">PUBG Mobile</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">Free Fire</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">COD Mobile</span>
-                <span style="background: #E3F2FD; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: center;">+30 more apps</span>
-            </div>
-        </div>
-        
-        <div class="tech-stack-section">
-            <h3>🔧 Technology Implementation</h3>
-            <div class="tech-stack">
-                <span class="tech-tag">Android Service</span>
-                <span class="tech-tag">TextToSpeech API</span>
-                <span class="tech-tag">SpeechRecognizer</span>
-                <span class="tech-tag">AudioManager</span>
-                <span class="tech-tag">PackageManager</span>
-                <span class="tech-tag">Intent System</span>
-                <span class="tech-tag">BroadcastReceiver</span>
-                <span class="tech-tag">Natural Language Processing</span>
-                <span class="tech-tag">App Discovery</span>
-                <span class="tech-tag">Error Handling</span>
-                <span class="tech-tag">Locale Support</span>
-                <span class="tech-tag">Kotlin Coroutines</span>
-            </div>
-        </div>
-        
-        <div class="features-section">
-            <h3>🛡️ Safety & Design Features</h3>
-            <div class="features-grid">
-                <div class="feature-item">
-                    <strong>✅ Safe Commands Only</strong>
-                    <p>Excluded dangerous commands (power off, lock screen, restart)</p>
+            
+            <!-- UPDATED: RemindMe Notes & Reminder App (Closed Testing) with FormSubmit email collection -->
+            <div class="app-card-detailed">
+                <div class="app-header-detailed" style="background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);">
+                    <div class="app-icon-large">📝⏰</div>
+                    <div class="app-title-section">
+                        <h2>RemindMe – Notes & Reminder</h2>
+                        <p>Voice‑first notes with smart reminders</p>
+                        <span class="app-status-badge">🧪 Closed Testing (Play Console)</span>
+                    </div>
                 </div>
-                <div class="feature-item">
-                    <strong>🔊 Voice Feedback</strong>
-                    <p>Real-time voice confirmation for every action</p>
-                </div>
-                <div class="feature-item">
-                    <strong>🌍 Multi-Language</strong>
-                    <p>Locale-based TextToSpeech with fallback handling</p>
-                </div>
-                <div class="feature-item">
-                    <strong>⚡ Background Service</strong>
-                    <p>Runs as foreground service for reliability</p>
-                </div>
-                <div class="feature-item">
-                    <strong>🎯 Smart App Detection</strong>
-                    <p>Multiple fallback strategies for app launching</p>
-                </div>
-                <div class="feature-item">
-                    <strong>📝 Logging System</strong>
-                    <p>Comprehensive logging for debugging</p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="app-links-detailed">
-            <a href="#" class="cta-button play-store-btn" style="cursor: pointer; background: #2196F3;">
-                📱 APK Available for Testing
-            </a>
-            <a href="https://voiceride.pages.dev/privacy_policy" 
-               target="_blank" 
-               class="cta-button privacy-btn">
-                📄 Privacy Policy
-            </a>
-            <span style="color: #666; font-size: 0.9rem; margin-left: 10px;">
-                Ready for Play Store submission
-            </span>
-        </div>
-        
-        <div style="background: #F5F5F5; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #4CAF50;">
-            <p style="margin: 0; font-size: 0.95rem; color: #333;">
-                <strong>🎤 Voice Command Examples:</strong> 
-                "Open Google Maps", "Navigate to nearest gas station", "Volume up", 
-                "What time is it?", "Search restaurants nearby", "Open Spotify", 
-                "Launch YouTube", "Open camera"
-            </p>
-        </div>
-    </div>
-</div>
-<!-- UPDATED: Notes & Reminder App with actual implemented features -->
-<div class="app-card-detailed">
-    <div class="app-header-detailed" style="background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);">
-        <div class="app-icon-large">📝</div>
-        <div class="app-title-section">
-            <h2>Notes & Reminder App</h2>
-            <p>Voice-powered notes with smart reminders</p>
-            <span class="app-status-badge">✅ Fully Implemented</span>
-        </div>
-    </div>
-    
-    <div class="app-body-detailed">
-        <p class="app-description-detailed">
-            <strong>Special Feature:</strong> Voice-first note creation - no typing required! 
-            A fully functional productivity app that lets you create notes and reminders using voice commands. 
-            Speak to create notes, set reminders hands-free, and manage tasks with smart notifications.
-        </p>
-        
-        <div class="features-section">
-            <h3>✅ Implemented Features</h3>
-            <div class="features-grid">
-                <div class="feature-item">
-                    <strong>🎤 Voice-to-Text Notes</strong>
-                    <p>Create notes by speaking - no typing required</p>
-                </div>
-                <div class="feature-item">
-                    <strong>⏰ Smart Reminders</strong>
-                    <p>Set reminders with Android AlarmManager</p>
-                </div>
-                <div class="feature-item">
-                    <strong>🗂️ Local Database</strong>
-                    <p>Room database for offline storage</p>
-                </div>
-                <div class="feature-item">
-                    <strong>🔔 Custom Notifications</strong>
-                    <p>Notification channels with priority settings</p>
-                </div>
-                <div class="feature-item">
-                    <strong>↔️ Swipe to Delete</strong>
-                    <p>Intuitive swipe gestures with undo option</p>
-                </div>
-                <div class="feature-item">
-                    <strong>🎨 Material Design</strong>
-                    <p>Modern UI with dark/light theme support</p>
-                </div>
-                <div class="feature-item">
-                    <strong>📋 Category Organization</strong>
-                    <p>Organize notes by categories and tags</p>
-                </div>
-                <div class="feature-item">
-                    <strong>🔍 Search & Filter</strong>
-                    <p>Quick search through all notes</p>
+                
+                <div class="app-body-detailed">
+                    <p class="app-description-detailed">
+                        <strong>Special Feature:</strong> Voice‑first note creation – no typing required! 
+                        Fully functional productivity app with Room database, swipe gestures, and reliable 
+                        alarm-based reminders.
+                    </p>
+                    
+                    <div class="features-section">
+                        <h3>✅ Implemented Features</h3>
+                        <div class="features-grid">
+                            <div class="feature-item"><strong>🎤 Voice-to-Text Notes</strong><p>Create notes by speaking</p></div>
+                            <div class="feature-item"><strong>⏰ Smart Reminders</strong><p>AlarmManager + notifications</p></div>
+                            <div class="feature-item"><strong>🗂️ Local Database</strong><p>Room with DAO & relations</p></div>
+                            <div class="feature-item"><strong>↔️ Swipe to Delete</strong><p>With undo option</p></div>
+                            <div class="feature-item"><strong>🎨 Material Design</strong><p>Dark/light theme support</p></div>
+                            <div class="feature-item"><strong>🔍 Search & Filter</strong><p>Quick note lookup</p></div>
+                        </div>
+                    </div>
+
+                    <div class="tech-stack-section">
+                        <h3>Technology Stack</h3>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Kotlin</span>
+                            <span class="tech-tag">Room</span>
+                            <span class="tech-tag">ViewModel/LiveData</span>
+                            <span class="tech-tag">AlarmManager</span>
+                            <span class="tech-tag">Notifications</span>
+                            <span class="tech-tag">RecyclerView</span>
+                        </div>
+                    </div>
+
+                    <!-- CLOSED TESTER INVITE + FormSubmit INTEGRATION -->
+                    <div class="tester-section">
+                        <h3 style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <span>📧</span> Become a closed tester
+                        </h3>
+                        <p style="margin-bottom: 1rem;">
+                            <strong>RemindMe</strong> is currently in <strong>closed testing</strong> on Google Play.  
+                            If you'd like to join the test, enter the <strong>email address linked to your Play Store account</strong> below.  
+                            I'll add you to the tester list within 48 hours.
+                        </p>
+
+                        <!-- FormSubmit form - sends emails to dolfean214@gmail.com -->
+                        <form action="https://formsubmit.co/dolfean214@gmail.com" method="POST" class="tester-form">
+                            <!-- FormSubmit configuration -->
+                            <input type="hidden" name="_subject" value="New RemindMe Tester Request">
+                            <input type="hidden" name="_template" value="table">
+                            <input type="hidden" name="_captcha" value="false">
+                            <input type="hidden" name="_next" value="{{CURRENT_URL}}?success=true#tester-section">
+                            
+                            <!-- Honeypot to prevent spam -->
+                            <input type="text" name="_honey" style="display:none">
+                            
+                            <!-- User's email input -->
+                            <div class="form-row">
+                                <input type="email" name="email" class="email-input" 
+                                       placeholder="your.playstore.email@example.com" required>
+                                <button type="submit" class="submit-tester-btn">✉️ Send request</button>
+                            </div>
+                            
+                            <!-- Hidden field to identify the app -->
+                            <input type="hidden" name="app" value="RemindMe">
+                            <input type="hidden" name="request_type" value="closed_tester">
+                            
+                            <div class="tester-note">
+                                <strong>Note:</strong> Your email is only used for Play Store tester access. 
+                                No spam, no marketing. (Powered by FormSubmit – you'll receive a confirmation.)
+                            </div>
+                            
+                            <!-- Optional FormSubmit credit (can be removed if you prefer) -->
+                            <div class="formsubmit-credit">
+                                Secured by FormSubmit
+                            </div>
+                        </form>
+
+                        <!-- Success message (shown if ?success=true in URL) -->
+                        <div id="testerSuccess" class="success-message hidden">
+                            ✅ Thanks! Your request has been sent. You'll receive an invitation to join the closed test soon.
+                        </div>
+
+                        <!-- Alternative direct contact -->
+                        <p style="margin-top: 1.5rem; font-size: 0.95rem;">
+                            📬 Prefer to email directly?  
+                            <a href="mailto:dolfean214@gmail.com?subject=RemindMe%20tester%20request&body=My%20Play%20Store%20email%3A%20[please%20enter]">Click here</a> 
+                            and include your Play Store email.
+                        </p>
+                    </div>
+                    
+                    <div class="app-links-detailed">
+                        <span class="cta-button" style="background: #4CAF50; cursor: default; opacity: 0.8;">
+                            ⏳ Closed Testing
+                        </span>
+                        <a href="#" class="cta-button privacy-btn" onclick="alert('Privacy policy available on Play Store listing.'); return false;">
+                            📄 Privacy Policy
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="tech-stack-section">
-            <h3>Technology Stack (Used in Code)</h3>
-            <div class="tech-stack">
-                <span class="tech-tag">Kotlin</span>
-                <span class="tech-tag">Android Jetpack</span>
-                <span class="tech-tag">Room Database</span>
-                <span class="tech-tag">ViewModel</span>
-                <span class="tech-tag">LiveData</span>
-                <span class="tech-tag">AlarmManager</span>
-                <span class="tech-tag">WorkManager</span>
-                <span class="tech-tag">RecyclerView</span>
-                <span class="tech-tag">Material Components</span>
-                <span class="tech-tag">Notifications API</span>
-                <span class="tech-tag">ViewBinding</span>
-                <span class="tech-tag">Swipe Gestures</span>
-            </div>
-        </div>
-        
-        <div class="features-section">
-            <h3>🎯 Core Functionalities (From Your Code)</h3>
-            <div class="features-grid">
-                <div class="feature-item">
-                    <strong>MainActivity</strong>
-                    <p>• Swipe-to-delete with undo<br>• Toolbar with menu options<br>• FAB for quick note creation</p>
-                </div>
-                <div class="feature-item">
-                    <strong>Database Layer</strong>
-                    <p>• Room entities with relations<br>• DAO with CRUD operations<br>• Type converters for dates</p>
-                </div>
-                <div class="feature-item">
-                    <strong>Reminder System</strong>
-                    <p>• AlarmManager scheduling<br>• PendingIntent broadcasts<br>• Notification channels</p>
-                </div>
-                <div class="feature-item">
-                    <strong>UI Components</strong>
-                    <p>• Create/Edit/View activities<br>• RecyclerView with adapters<br>• Custom swipe animations</p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="app-links-detailed">
-            <a href="#" class="cta-button" style="background: #4CAF50; cursor: pointer;">
-                ✅ Ready for Play Store
-            </a>
-            <span style="color: #666; font-size: 0.9rem; margin-left: 10px;">
-                APK available for testing
-            </span>
-        </div>
-    </div>
-</div>
         </div>
     </section>
     
-    <!-- Development Updates Section -->
+    <!-- Development Updates Section (updated timeline) -->
     <section class="updates-section">
         <div class="updates-container">
             <div class="section-title">
@@ -754,18 +773,20 @@
             
             <div class="updates-timeline">
                 <div class="update-item">
-                    <div class="update-date">Current Focus - December 2025</div>
-                    <p>Preparing both apps for Google Play Store submission. Finalizing store listing requirements, creating screenshots and promotional materials, completing privacy policy compliance, and conducting final testing phases.</p>
+                    <div class="update-date">Current Focus - February 2026</div>
+                    <p><strong>Voco:</strong> Finalizing UI polish and production signing. Preparing Play Store listing (graphics, privacy policy). Will apply for production access in March 2026.<br>
+                    <strong>RemindMe:</strong> Closed testing ongoing – gathering feedback, fixing edge cases. Next step: open beta.</p>
                 </div>
                 
                 <div class="update-item">
-                    <div class="update-date">Completed - November 2025</div>
-                    <p>Completed core development of VoiceRide app with voice recognition features.</p>
+                    <div class="update-date">Completed - January 2026</div>
+                    <p><strong>Voco:</strong> Core service based on your Kotlin files fully tested. Floating mic, speech recognition, clipboard integration stable.<br>
+                    <strong>RemindMe:</strong> Room database, swipe gestures, and AlarmManager notifications finalized.</p>
                 </div>
                 
                 <div class="update-item">
-                    <div class="update-date">In Progress - October 2025</div>
-                    <p>Developing Notes & Reminder app with Room database implementation. Working on notification scheduling system and intuitive UI/UX design following Material Design guidelines.</p>
+                    <div class="update-date">Completed - December 2025</div>
+                    <p>VoiceRide project concluded; focus shifted to Voco (voice typing) and RemindMe (notes). Closed testing track opened for RemindMe.</p>
                 </div>
             </div>
         </div>
@@ -801,9 +822,9 @@
             <a href="contact.html" class="cta-button secondary-button">Contact Me</a>
         </div>
     </section>
-    </main>    
+</main>    
     
-    <footer>
+<footer>
     <div class="footer-content">
         <div class="footer-column">
             <h3>ResumePro</h3>
@@ -844,11 +865,25 @@
     </div>
 </footer>
 
-      <!-- Existing header fetch script (replace with your actual script or file) -->
-    
-    <script src="clean-urls.js"></script>
-    <script src="header.js"></script>
+<script src="clean-urls.js"></script>
+<script src="header.js"></script>
 
-    
+<!-- Show success message if URL contains ?success=true -->
+<script>
+(function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('success') && urlParams.get('success') === 'true') {
+        const successDiv = document.getElementById('testerSuccess');
+        if (successDiv) {
+            successDiv.classList.remove('hidden');
+            // Optional: scroll to the message
+            setTimeout(() => {
+                successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        }
+    }
+})();
+</script>
+
 </body>
 </html>

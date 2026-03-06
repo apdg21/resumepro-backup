@@ -308,7 +308,6 @@
         </div>
     </div>
 </header>
-
 <script src="header.js"></script>
     <div class="container mx-auto p-4 max-w-7xl">   
         
@@ -399,7 +398,7 @@
             </div>
 
             <!-- Right Panel: Properties -->
-            <div class="w-full lg:w-1/4 bg-white p-5 rounded-xl shadow-sm border border-gray-200 hidden" id="properties-panel">
+            <div class="w-full lg:w-1/4 bg-white p-5 rounded-xl shadow-sm border border-gray-200" id="properties-panel">
                 <h2 class="text-lg font-semibold mb-4 text-gray-700 flex items-center">
                     <i class="fas fa-sliders-h mr-2 text-blue-500"></i> Properties
                 </h2>
@@ -494,8 +493,8 @@
     <script>
         // Data structure: supports nested containers
         let structure = [];
-        let activePath = null; // Array of indices to track nested selection
-        let activeType = null; // 'section', 'container'
+        let activePath = null;
+        let activeType = null;
         let canvasWidth = 600;
         let isMobilePreview = false;
         let history = [];
@@ -508,7 +507,7 @@
         let draggedType = null;
         let draggedElement = null;
         let dropTarget = null;
-        let dropPosition = null; // 'top', 'bottom', 'inside'
+        let dropPosition = null;
 
         const previewFrame = document.getElementById('preview-frame');
         const propertiesPanel = document.getElementById('properties-panel');
@@ -545,6 +544,7 @@
         window.onload = function() {
             initPreviewFrame();
             updateStructureList();
+            propertiesPanel.classList.add('hidden');
         };
 
         canvasWidthInput.oninput = (e) => {
@@ -599,23 +599,80 @@
             return `background-color: ${content.backgroundColor};`;
         }
 
-        function generateCommonStyles(content) {
-            try {
-                const backgroundStyle = getBackgroundStyle(content);
-                const borderStyle = content.borderStyle === 'none' ? 
-                    `border: none;` : 
-                    `border: ${content.borderWidth} ${content.borderStyle} ${content.borderColor};`;
-                const borderRadiusStyle = `border-radius: ${content.borderRadius};`;
-                const paddingStyle = `padding-top: ${content.paddingTop}; padding-bottom: ${content.paddingBottom}; padding-left: ${content.paddingLeft}; padding-right: ${content.paddingRight};`;
-                const marginStyle = `margin-top: ${content.marginTop}; margin-bottom: ${content.marginBottom}; margin-left: ${content.marginLeft}; margin-right: ${content.marginRight};`;
-                return {
-                    tableStyle: `width: 100%; max-width: ${isMobilePreview ? 320 : canvasWidth}px; min-width: 0; ${backgroundStyle} ${borderStyle} ${borderRadiusStyle} ${marginStyle}`,
-                    paddingStyle
-                };
-            } catch (error) {
-                console.error('Error generating common styles:', error);
-                return { tableStyle: '', paddingStyle: '' };
+        function getItemByPath(path) {
+            if (!path || path.length === 0) return null;
+            
+            let current = structure;
+            let item = null;
+            
+            for (let i = 0; i < path.length; i++) {
+                const segment = path[i];
+                
+                if (segment === 'items') {
+                    continue;
+                } else if (typeof segment === 'number') {
+                    if (Array.isArray(current)) {
+                        if (segment < current.length) {
+                            item = current[segment];
+                            if (item && item.type === 'container' && i + 1 < path.length) {
+                                current = item.items || [];
+                            } else {
+                                current = item;
+                            }
+                        } else {
+                            return null;
+                        }
+                    } else {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
             }
+            
+            return item;
+        }
+
+        function getParentArrayAndIndex(path) {
+            if (!path || path.length === 0) return { parentArray: null, index: -1 };
+            
+            let parentArray = structure;
+            let parent = null;
+            
+            const cleanPath = path.filter(segment => segment !== 'items');
+            
+            for (let i = 0; i < cleanPath.length - 1; i++) {
+                const index = cleanPath[i];
+                
+                if (typeof index === 'number') {
+                    if (Array.isArray(parentArray) && index < parentArray.length) {
+                        parent = parentArray[index];
+                        if (parent && parent.type === 'container') {
+                            parentArray = parent.items || [];
+                        } else {
+                            parentArray = parent;
+                        }
+                    } else {
+                        return { parentArray: null, index: -1 };
+                    }
+                }
+            }
+            
+            const lastIndex = cleanPath[cleanPath.length - 1];
+            if (typeof lastIndex === 'number') {
+                return { parentArray, index: lastIndex };
+            }
+            
+            return { parentArray: null, index: -1 };
+        }
+
+        function removeItemByPath(path) {
+            const { parentArray, index } = getParentArrayAndIndex(path);
+            if (parentArray && index >= 0 && index < parentArray.length) {
+                parentArray.splice(index, 1);
+                return true;
+            }
+            return false;
         }
 
         function saveHistory() {
@@ -707,25 +764,22 @@
                     type: 'container',
                     name: `Container ${getContainerCount() + 1}`,
                     content: getDefaultContainerContent(),
-                    items: [] // Can contain sections or other containers
+                    items: []
                 };
                 
                 if (activePath && activePath.length > 0) {
                     const parent = getItemByPath(activePath);
                     if (parent && parent.type === 'container') {
-                        // Add nested container to selected container
                         if (!parent.items) parent.items = [];
                         parent.items.push(newContainer);
                         activePath = [...activePath, 'items', parent.items.length - 1];
                         activeType = 'container';
                     } else {
-                        // Add to root
                         structure.push(newContainer);
                         activePath = [structure.length - 1];
                         activeType = 'container';
                     }
                 } else {
-                    // No selection, add to root
                     structure.push(newContainer);
                     activePath = [structure.length - 1];
                     activeType = 'container';
@@ -801,24 +855,19 @@
                     content: getDefaultContent(type)
                 };
                 
-                // Check if we have an active container selected
                 if (activePath && activePath.length > 0) {
                     const parent = getItemByPath(activePath);
                     if (parent && parent.type === 'container') {
-                        // Add to selected container
                         if (!parent.items) parent.items = [];
                         parent.items.push(newSection);
-                        // Update active path to point to the new section
                         activePath = [...activePath, 'items', parent.items.length - 1];
                         activeType = 'section';
                     } else {
-                        // Add to root
                         structure.push(newSection);
                         activePath = [structure.length - 1];
                         activeType = 'section';
                     }
                 } else {
-                    // No selection, add to root
                     structure.push(newSection);
                     activePath = [structure.length - 1];
                     activeType = 'section';
@@ -864,7 +913,10 @@
                     marginLeft: '0px',
                     marginRight: '0px',
                     fontFamily: 'Arial, Helvetica, sans-serif',
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    sectionClass: '',
+                    sectionId: '',
+                    customStyles: ''
                 };
 
                 switch (type) {
@@ -975,7 +1027,7 @@
                             lineHeight: '1.5',
                             textColor: '#333333',
                             textAlign: 'left',
-                            imagePosition: 'left', // 'left' or 'right'
+                            imagePosition: 'left',
                             imageWidth: '50%',
                             textWidth: '50%',
                             verticalAlign: 'middle',
@@ -1114,76 +1166,6 @@
             }
         }
 
-        function getItemByPath(path) {
-            if (!path || path.length === 0) return null;
-            
-            let current = structure;
-            let item = null;
-            
-            for (let i = 0; i < path.length; i++) {
-                const index = path[i];
-                
-                if (index === 'items') {
-                    if (item && item.items) {
-                        current = item.items;
-                    } else {
-                        return null;
-                    }
-                } else if (typeof index === 'number') {
-                    if (Array.isArray(current) && index < current.length) {
-                        item = current[index];
-                    } else {
-                        return null;
-                    }
-                } else {
-                    return null;
-                }
-            }
-            
-            return item;
-        }
-
-        function getParentArrayAndIndex(path) {
-            if (!path || path.length === 0) return { parentArray: null, index: -1 };
-            
-            let parentArray = structure;
-            let parent = null;
-            
-            for (let i = 0; i < path.length - 1; i++) {
-                const index = path[i];
-                
-                if (index === 'items') {
-                    if (parent && parent.items) {
-                        parentArray = parent.items;
-                    } else {
-                        return { parentArray: null, index: -1 };
-                    }
-                } else if (typeof index === 'number') {
-                    if (Array.isArray(parentArray) && index < parentArray.length) {
-                        parent = parentArray[index];
-                    } else {
-                        return { parentArray: null, index: -1 };
-                    }
-                }
-            }
-            
-            const lastIndex = path[path.length - 1];
-            if (typeof lastIndex === 'number') {
-                return { parentArray, index: lastIndex };
-            }
-            
-            return { parentArray: null, index: -1 };
-        }
-
-        function removeItemByPath(path) {
-            const { parentArray, index } = getParentArrayAndIndex(path);
-            if (parentArray && index >= 0 && index < parentArray.length) {
-                parentArray.splice(index, 1);
-                return true;
-            }
-            return false;
-        }
-
         function removeSelected() {
             try {
                 if (!activePath || activePath.length === 0) {
@@ -1213,7 +1195,6 @@
                 return;
             }
 
-            // Find first container in root
             let containerIndex = -1;
             for (let i = 0; i < structure.length; i++) {
                 if (structure[i].type === 'container') {
@@ -1227,14 +1208,11 @@
                 return;
             }
 
-            // Get the section
             const section = getItemByPath(activePath);
             if (!section) return;
 
-            // Remove from current location
             removeItemByPath(activePath);
             
-            // Add to first container
             structure[containerIndex].items.push(section);
             
             activePath = [containerIndex, 'items', structure[containerIndex].items.length - 1];
@@ -1247,7 +1225,7 @@
             showMessage('Section moved to container', 'success');
         }
 
-        // Improved drag and drop functions
+        // Drag and drop functions
         function handleDragStart(e, path, type, item) {
             e.stopPropagation();
             
@@ -1257,7 +1235,6 @@
             
             if (!draggedElement) return;
             
-            // Set drag data
             e.dataTransfer.setData('text/plain', JSON.stringify({
                 path: path,
                 type: type,
@@ -1265,10 +1242,8 @@
             }));
             e.dataTransfer.effectAllowed = 'move';
             
-            // Add dragging class
             draggedElement.classList.add('dragging');
             
-            // Get item name for feedback
             let itemName = '';
             if (type === 'container') {
                 itemName = item.name || 'Container';
@@ -1276,16 +1251,13 @@
                 itemName = item.type.replace(/-/g, ' ').split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
             }
             
-            // Show drag feedback
             dragFeedback.textContent = `Moving: ${itemName}`;
             dragFeedback.style.display = 'block';
             dragFeedback.style.left = (e.clientX + 20) + 'px';
             dragFeedback.style.top = (e.clientY + 10) + 'px';
             
-            // Prevent default drag image
             e.dataTransfer.setDragImage(new Image(), 0, 0);
             
-            // Clear any existing drop indicators
             clearDropIndicators();
         }
 
@@ -1299,32 +1271,23 @@
             const targetElement = e.target.closest('.section-item, .container-item');
             if (!targetElement) return;
             
-            // Update drag feedback position
             dragFeedback.style.left = (e.clientX + 20) + 'px';
             dragFeedback.style.top = (e.clientY + 10) + 'px';
             
-            // Calculate drop position
             const rect = targetElement.getBoundingClientRect();
             const mouseY = e.clientY;
-            const threshold = rect.top + rect.height / 3;
-            const containerThreshold = rect.top + rect.height * 0.25;
             
-            // Clear previous indicators
             clearDropIndicators();
             
-            // Determine drop position
             if (type === 'container' && mouseY > rect.top + rect.height * 0.25 && mouseY < rect.bottom - rect.height * 0.25) {
-                // Inside container
                 targetElement.classList.add('drag-over-inside');
                 dropTarget = { path, type: 'container', position: 'inside' };
                 dropPosition = 'inside';
             } else if (mouseY < rect.top + rect.height / 2) {
-                // Above
                 targetElement.classList.add('drag-over-top');
                 dropTarget = { path, type, position: 'top' };
                 dropPosition = 'top';
             } else {
-                // Below
                 targetElement.classList.add('drag-over-bottom');
                 dropTarget = { path, type, position: 'bottom' };
                 dropPosition = 'bottom';
@@ -1332,15 +1295,12 @@
         }
 
         function handleDragEnd(e) {
-            // Remove all drag classes
             document.querySelectorAll('.section-item, .container-item').forEach(el => {
                 el.classList.remove('dragging', 'drag-over-top', 'drag-over-bottom', 'drag-over-inside');
             });
             
-            // Hide drag feedback
             dragFeedback.style.display = 'none';
             
-            // Reset drag variables
             draggedPath = null;
             draggedType = null;
             draggedElement = null;
@@ -1358,30 +1318,24 @@
             }
             
             try {
-                // Get dragged item
                 const draggedItem = getItemByPath(draggedPath);
                 if (!draggedItem) return;
                 
-                // Check if trying to drop a container into itself or its children
                 if (draggedType === 'container' && isDescendant(draggedPath, targetPath)) {
                     showMessage('Cannot drop a container into itself or its children', 'error');
                     handleDragEnd(e);
                     return;
                 }
                 
-                // Remove from source
                 removeItemByPath(draggedPath);
                 
-                // Insert at target
                 if (dropPosition === 'inside' && targetType === 'container') {
-                    // Add inside container
                     const targetContainer = getItemByPath(targetPath);
                     if (targetContainer && targetContainer.type === 'container') {
                         if (!targetContainer.items) targetContainer.items = [];
                         targetContainer.items.push(draggedItem);
                     }
                 } else {
-                    // Add before or after in the same array
                     const { parentArray, index } = getParentArrayAndIndex(targetPath);
                     if (parentArray) {
                         const insertIndex = dropPosition === 'bottom' ? index + 1 : index;
@@ -1389,12 +1343,8 @@
                     }
                 }
                 
-                // Update active path if needed
                 if (activePath) {
-                    // Check if active item was moved
                     if (pathsEqual(activePath, draggedPath)) {
-                        // Active item was moved, try to find its new path
-                        // This is complex, so we'll just clear selection for simplicity
                         activePath = null;
                         activeType = null;
                     }
@@ -1429,7 +1379,6 @@
                 if (parentPath[i] !== childPath[i]) return false;
             }
             
-            // Check if the next segment is 'items'
             return childPath[parentPath.length] === 'items';
         }
 
@@ -1492,7 +1441,6 @@
                 </div>
             `;
             
-            // Render nested items
             if (container.items && container.items.length > 0) {
                 const nestedDiv = document.createElement('div');
                 nestedDiv.classList.add('ml-4', 'mt-2', 'space-y-1');
@@ -1505,7 +1453,6 @@
                 div.appendChild(emptyDiv);
             }
             
-            // Drag and drop event handlers
             div.addEventListener('dragstart', (e) => handleDragStart(e, path, 'container', container));
             div.addEventListener('dragend', handleDragEnd);
             div.addEventListener('dragover', (e) => handleDragOver(e, path, 'container', div));
@@ -1514,7 +1461,6 @@
             });
             div.addEventListener('drop', (e) => handleDrop(e, path, 'container', div));
             
-            // Click handler
             div.addEventListener('click', (e) => {
                 if (e.target.closest('.draggable-handle')) return;
                 activePath = path;
@@ -1552,7 +1498,6 @@
                 <span class="draggable-handle text-gray-400" title="Drag to reorder">☰</span>
             `;
             
-            // Drag and drop event handlers
             div.addEventListener('dragstart', (e) => handleDragStart(e, path, 'section', section));
             div.addEventListener('dragend', handleDragEnd);
             div.addEventListener('dragover', (e) => handleDragOver(e, path, 'section', div));
@@ -1561,11 +1506,13 @@
             });
             div.addEventListener('drop', (e) => handleDrop(e, path, 'section', div));
             
-            // Click handler
             div.addEventListener('click', (e) => {
                 if (e.target.closest('.draggable-handle')) return;
-                activePath = path;
+                
+                const exactPath = [...path];
+                activePath = exactPath;
                 activeType = 'section';
+                
                 updateStructureList();
                 showProperties();
             });
@@ -1592,6 +1539,7 @@
                 }
 
                 const item = getItemByPath(activePath);
+                
                 if (!item) {
                     propertiesPanel.classList.add('hidden');
                     return;
@@ -1710,6 +1658,20 @@
             container.appendChild(div);
         }
 
+        function toggleBlockVisibility(blockType) {
+            if (!activePath) return;
+            const item = getItemByPath(activePath);
+            if (!item || item.type !== 'section' || item.type !== 'single-column-blocks') return;
+            
+            if (!item.content.visible) {
+                item.content.visible = {image: true, title: true, text: true, button: true};
+            }
+            item.content.visible[blockType] = !item.content.visible[blockType];
+            saveHistory();
+            showProperties();
+            updatePreview();
+        }
+
         function showContainerProperties(container) {
             const content = container.content;
             
@@ -1764,896 +1726,522 @@
 
         // Replace the showSectionProperties function with this updated version
 function showSectionProperties(section) {
-    const content = section.content;
+            const content = section.content;
 
-    const commonDetails = document.createElement('details');
-    commonDetails.classList.add('mb-2');
-    commonDetails.open = true;
-    const commonSummary = document.createElement('summary');
-    commonSummary.textContent = 'Common Styles';
-    commonSummary.classList.add('font-medium', 'cursor-pointer');
-    commonDetails.appendChild(commonSummary);
-    const commonContainer = document.createElement('div');
-    commonContainer.classList.add('p-2');
-    commonDetails.appendChild(commonContainer);
-    propertyInputs.appendChild(commonDetails);
+            const commonDetails = document.createElement('details');
+            commonDetails.classList.add('mb-2');
+            commonDetails.open = true;
+            const commonSummary = document.createElement('summary');
+            commonSummary.textContent = 'Row Styles';
+            commonSummary.classList.add('font-medium', 'cursor-pointer');
+            commonDetails.appendChild(commonSummary);
+            const commonContainer = document.createElement('div');
+            commonContainer.classList.add('p-2');
+            commonDetails.appendChild(commonContainer);
+            propertyInputs.appendChild(commonDetails);
 
-    createInput('Background Type', 'backgroundType', 'select', 'color', [
-        {value: 'color', label: 'Color'},
-        {value: 'image', label: 'Image'},
-        {value: 'gradient', label: 'Gradient'}
-    ], content, commonContainer);
-    
-    if (content.backgroundType === 'color') {
-        createInput('Background Color', 'backgroundColor', 'color', '#ffffff', null, content, commonContainer);
-    } else if (content.backgroundType === 'image') {
-        createInput('Background Image URL', 'backgroundImage', 'text', '', null, content, commonContainer);
-    } else if (content.backgroundType === 'gradient') {
-        createInput('Background Gradient', 'backgroundGradient', 'text', 'linear-gradient(to right, #ffffff, #ffffff)', null, content, commonContainer);
-    }
-    
-    createInput('Border Width', 'borderWidth', 'text', '0px', null, content, commonContainer);
-    createInput('Border Color', 'borderColor', 'color', '#000000', null, content, commonContainer);
-    createInput('Border Style', 'borderStyle', 'select', 'solid', [
-        {value: 'solid', label: 'Solid'},
-        {value: 'dashed', label: 'Dashed'},
-        {value: 'dotted', label: 'Dotted'},
-        {value: 'none', label: 'None'}
-    ], content, commonContainer);
-    createInput('Border Radius', 'borderRadius', 'text', '0px', null, content, commonContainer);
-    createInput('Padding Top', 'paddingTop', 'text', '20px', null, content, commonContainer);
-    createInput('Padding Bottom', 'paddingBottom', 'text', '20px', null, content, commonContainer);
-    createInput('Padding Left', 'paddingLeft', 'text', '20px', null, content, commonContainer);
-    createInput('Padding Right', 'paddingRight', 'text', '20px', null, content, commonContainer);
-    createInput('Margin Top', 'marginTop', 'text', '0px', null, content, commonContainer);
-    createInput('Margin Bottom', 'marginBottom', 'text', '0px', null, content, commonContainer);
-    createInput('Margin Left', 'marginLeft', 'text', '0px', null, content, commonContainer);
-    createInput('Margin Right', 'marginRight', 'text', '0px', null, content, commonContainer);
-
-    // Add section-specific properties based on type
-    const specificDetails = document.createElement('details');
-    specificDetails.classList.add('mb-2');
-    specificDetails.open = true;
-    const specificSummary = document.createElement('summary');
-    specificSummary.textContent = 'Section Properties';
-    specificSummary.classList.add('font-medium', 'cursor-pointer');
-    specificDetails.appendChild(specificSummary);
-    const specificContainer = document.createElement('div');
-    specificContainer.classList.add('p-2');
-    specificDetails.appendChild(specificContainer);
-    propertyInputs.appendChild(specificDetails);
-
-    // Add basic properties based on section type
-    switch(section.type) {
-        case 'title-only':
-            createInput('Title', 'title', 'text', 'Your Title Here', null, content, specificContainer);
-            createInput('Font Size', 'fontSizeTitle', 'text', '24px', null, content, specificContainer);
-            createInput('Line Height', 'lineHeightTitle', 'text', '1.2', null, content, specificContainer);
-            createInput('Text Color', 'textColorTitle', 'color', '#000000', null, content, specificContainer);
-            createInput('Text Align', 'textAlign', 'select', 'center', [
-                {value: 'left', label: 'Left'},
-                {value: 'center', label: 'Center'},
-                {value: 'right', label: 'Right'}
-            ], content, specificContainer);
-            createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
-            break;
-
-        case 'text-only':
-            createInput('Text', 'text', 'textarea', 'This is a paragraph of text. You can edit this.', null, content, specificContainer);
-            createInput('Font Size', 'fontSizeText', 'text', '16px', null, content, specificContainer);
-            createInput('Line Height', 'lineHeightText', 'text', '1.5', null, content, specificContainer);
-            createInput('Text Color', 'textColorText', 'color', '#333333', null, content, specificContainer);
-            createInput('Text Align', 'textAlign', 'select', 'center', [
-                {value: 'left', label: 'Left'},
-                {value: 'center', label: 'Center'},
-                {value: 'right', label: 'Right'}
-            ], content, specificContainer);
-            createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
-            break;
-
-        case 'title-text':
-            createInput('Title', 'title', 'text', 'Your Title Here', null, content, specificContainer);
-            createInput('Title Font Size', 'fontSizeTitle', 'text', '24px', null, content, specificContainer);
-            createInput('Title Line Height', 'lineHeightTitle', 'text', '1.2', null, content, specificContainer);
-            createInput('Title Color', 'textColorTitle', 'color', '#000000', null, content, specificContainer);
+            createInput('CSS Class', 'sectionClass', 'text', '', null, content, commonContainer);
+            createInput('CSS ID', 'sectionId', 'text', '', null, content, commonContainer);
+            createInput('Custom Styles', 'customStyles', 'textarea', '', null, content, commonContainer);
+            createInput('Background Type', 'backgroundType', 'select', 'color', [
+                {value: 'color', label: 'Color'},
+                {value: 'image', label: 'Image'},
+                {value: 'gradient', label: 'Gradient'}
+            ], content, commonContainer);
             
-            createInput('Text', 'text', 'textarea', 'This is a paragraph of text. You can edit this.', null, content, specificContainer);
-            createInput('Text Font Size', 'fontSizeText', 'text', '16px', null, content, specificContainer);
-            createInput('Text Line Height', 'lineHeightText', 'text', '1.5', null, content, specificContainer);
-            createInput('Text Color', 'textColorText', 'color', '#333333', null, content, specificContainer);
-            
-            createInput('Text Align', 'textAlign', 'select', 'center', [
-                {value: 'left', label: 'Left'},
-                {value: 'center', label: 'Center'},
-                {value: 'right', label: 'Right'}
-            ], content, specificContainer);
-            createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
-            break;
-
-        case 'single-column-blocks':
-            // Block visibility controls
-            const blocks = content.blocks || getDefaultBlocks();
-            content.blocks = blocks;
-            
-            createInput('Block Spacing', 'blockSpacing', 'text', '20px', null, content, specificContainer);
-            createInput('Block Align', 'blockAlign', 'select', 'center', [
-                {value: 'left', label: 'Left'},
-                {value: 'center', label: 'Center'},
-                {value: 'right', label: 'Right'}
-            ], content, specificContainer);
-            
-            // Block order controls
-            const orderContainer = document.createElement('div');
-            orderContainer.classList.add('mb-3');
-            orderContainer.innerHTML = '<label class="property-label">Block Order (drag to reorder)</label>';
-            
-            const orderList = document.createElement('div');
-            orderList.classList.add('border', 'rounded', 'p-2', 'bg-gray-50');
-            
-            const order = content.order || ['image', 'title', 'text', 'button'];
-            content.order = order;
-            
-            order.forEach(blockType => {
-                const blockDiv = document.createElement('div');
-                blockDiv.classList.add('flex', 'items-center', 'justify-between', 'p-1', 'mb-1', 'bg-white', 'border', 'rounded');
-                blockDiv.setAttribute('draggable', 'true');
-                blockDiv.innerHTML = `
-                    <span><i class="fas fa-grip-vertical mr-2 text-gray-400"></i> ${blockType.charAt(0).toUpperCase() + blockType.slice(1)}</span>
-                    <i class="fas fa-eye ${content.visible && content.visible[blockType] ? 'text-blue-500' : 'text-gray-300'}" 
-                       style="cursor: pointer;" 
-                       onclick="toggleBlockVisibility('${blockType}')"></i>
-                `;
-                orderList.appendChild(blockDiv);
-            });
-            
-            orderContainer.appendChild(orderList);
-            specificContainer.appendChild(orderContainer);
-            
-            // Image block properties
-            const imageDetails = document.createElement('details');
-            imageDetails.classList.add('mb-2', 'border', 'rounded', 'p-2');
-            imageDetails.innerHTML = `
-                <summary class="font-medium cursor-pointer">Image Block</summary>
-                <div class="p-2" id="image-block-props"></div>
-            `;
-            specificContainer.appendChild(imageDetails);
-            
-            const imageContainer = imageDetails.querySelector('#image-block-props');
-            createInput('Image URL', 'url', 'text', 'https://placehold.co/200x200/EEEEEE/808080?text=Image', null, blocks.image, imageContainer);
-            createInput('Alt Text', 'altText', 'text', 'Block Image', null, blocks.image, imageContainer);
-            createInput('Link URL', 'link', 'text', '#', null, blocks.image, imageContainer);
-            createInput('Align', 'align', 'select', 'center', [
-                {value: 'left', label: 'Left'},
-                {value: 'center', label: 'Center'},
-                {value: 'right', label: 'Right'}
-            ], blocks.image, imageContainer);
-            
-            // Title block properties
-            const titleDetails = document.createElement('details');
-            titleDetails.classList.add('mb-2', 'border', 'rounded', 'p-2');
-            titleDetails.innerHTML = `
-                <summary class="font-medium cursor-pointer">Title Block</summary>
-                <div class="p-2" id="title-block-props"></div>
-            `;
-            specificContainer.appendChild(titleDetails);
-            
-            const titleContainer = titleDetails.querySelector('#title-block-props');
-            createInput('Title Text', 'text', 'text', 'Title', null, blocks.title, titleContainer);
-            createInput('Font Size', 'fontSize', 'text', '20px', null, blocks.title, titleContainer);
-            createInput('Color', 'color', 'color', '#000000', null, blocks.title, titleContainer);
-            createInput('Align', 'align', 'select', 'center', [
-                {value: 'left', label: 'Left'},
-                {value: 'center', label: 'Center'},
-                {value: 'right', label: 'Right'}
-            ], blocks.title, titleContainer);
-            createInput('Line Height', 'lineHeight', 'text', '1.2', null, blocks.title, titleContainer);
-            createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, blocks.title, titleContainer);
-            
-            // Text block properties
-            const textDetails = document.createElement('details');
-            textDetails.classList.add('mb-2', 'border', 'rounded', 'p-2');
-            textDetails.innerHTML = `
-                <summary class="font-medium cursor-pointer">Text Block</summary>
-                <div class="p-2" id="text-block-props"></div>
-            `;
-            specificContainer.appendChild(textDetails);
-            
-            const textContainer = textDetails.querySelector('#text-block-props');
-            createInput('Text Content', 'text', 'textarea', 'Description text.', null, blocks.text, textContainer);
-            createInput('Font Size', 'fontSize', 'text', '14px', null, blocks.text, textContainer);
-            createInput('Color', 'color', 'color', '#333333', null, blocks.text, textContainer);
-            createInput('Align', 'align', 'select', 'center', [
-                {value: 'left', label: 'Left'},
-                {value: 'center', label: 'Center'},
-                {value: 'right', label: 'Right'}
-            ], blocks.text, textContainer);
-            createInput('Line Height', 'lineHeight', 'text', '1.5', null, blocks.text, textContainer);
-            createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, blocks.text, textContainer);
-            
-            // Button block properties
-            const buttonDetails = document.createElement('details');
-            buttonDetails.classList.add('mb-2', 'border', 'rounded', 'p-2');
-            buttonDetails.innerHTML = `
-                <summary class="font-medium cursor-pointer">Button Block</summary>
-                <div class="p-2" id="button-block-props"></div>
-            `;
-            specificContainer.appendChild(buttonDetails);
-            
-            const buttonContainer = buttonDetails.querySelector('#button-block-props');
-            createCheckbox('Show Button', 'showButton', blocks.button, buttonContainer);
-            if (blocks.button.showButton) {
-                createInput('Button Text', 'text', 'text', 'Button', null, blocks.button, buttonContainer);
-                createInput('Button Link', 'link', 'text', '#', null, blocks.button, buttonContainer);
-                createInput('Background', 'background', 'color', '#007bff', null, blocks.button, buttonContainer);
-                createInput('Text Color', 'color', 'color', '#ffffff', null, blocks.button, buttonContainer);
-                createInput('Font Size', 'fontSize', 'text', '16px', null, blocks.button, buttonContainer);
-                createInput('Align', 'align', 'select', 'center', [
-                    {value: 'left', label: 'Left'},
-                    {value: 'center', label: 'Center'},
-                    {value: 'right', label: 'Right'}
-                ], blocks.button, buttonContainer);
-                createInput('Padding', 'padding', 'text', '10px 20px', null, blocks.button, buttonContainer);
-                createInput('Border Radius', 'borderRadius', 'text', '4px', null, blocks.button, buttonContainer);
+            if (content.backgroundType === 'color') {
+                createInput('Background Color', 'backgroundColor', 'color', '#ffffff', null, content, commonContainer);
+            } else if (content.backgroundType === 'image') {
+                createInput('Background Image URL', 'backgroundImage', 'text', '', null, content, commonContainer);
+            } else if (content.backgroundType === 'gradient') {
+                createInput('Background Gradient', 'backgroundGradient', 'text', 'linear-gradient(to right, #ffffff, #ffffff)', null, content, commonContainer);
             }
-            break;
+            
+            createInput('Border Width', 'borderWidth', 'text', '0px', null, content, commonContainer);
+            createInput('Border Color', 'borderColor', 'color', '#000000', null, content, commonContainer);
+            createInput('Border Style', 'borderStyle', 'select', 'solid', [
+                {value: 'solid', label: 'Solid'},
+                {value: 'dashed', label: 'Dashed'},
+                {value: 'dotted', label: 'Dotted'},
+                {value: 'none', label: 'None'}
+            ], content, commonContainer);
+            createInput('Border Radius', 'borderRadius', 'text', '0px', null, content, commonContainer);
+            createInput('Padding Top', 'paddingTop', 'text', '20px', null, content, commonContainer);
+            createInput('Padding Bottom', 'paddingBottom', 'text', '20px', null, content, commonContainer);
+            createInput('Padding Left', 'paddingLeft', 'text', '20px', null, content, commonContainer);
+            createInput('Padding Right', 'paddingRight', 'text', '20px', null, content, commonContainer);
+            createInput('Margin Top', 'marginTop', 'text', '0px', null, content, commonContainer);
+            createInput('Margin Bottom', 'marginBottom', 'text', '0px', null, content, commonContainer);
+            createInput('Margin Left', 'marginLeft', 'text', '0px', null, content, commonContainer);
+            createInput('Margin Right', 'marginRight', 'text', '0px', null, content, commonContainer);
 
-        case 'two-column-blocks':
-        case 'three-column-blocks':
-            const columns = content.columns || [];
-            const columnCount = section.type === 'two-column-blocks' ? 2 : 3;
-            
-            createInput('Column Gap', 'columnGap', 'text', '20px', null, content, specificContainer);
-            createCheckbox('Equal Height', 'equalHeight', content, specificContainer);
-            
-            // Create tabs for each column
-            const tabsDiv = document.createElement('div');
-            tabsDiv.classList.add('flex', 'mb-3', 'border-b');
-            
-            const tabContents = [];
-            
-            for (let i = 0; i < columnCount; i++) {
-                if (!columns[i]) {
-                    columns[i] = { 
-                        blocks: JSON.parse(JSON.stringify(getDefaultBlocks())),
-                        visible: {image: true, title: true, text: true, button: true},
-                        order: ['image', 'title', 'text', 'button']
-                    };
-                }
-                
-                const tabId = `col-${i}`;
-                const tab = document.createElement('button');
-                tab.classList.add('px-3', 'py-1', i === 0 ? 'border-b-2 border-blue-500' : '');
-                tab.textContent = `Column ${i + 1}`;
-                tab.onclick = () => {
-                    document.querySelectorAll('.col-tab').forEach(t => t.classList.remove('border-b-2', 'border-blue-500'));
-                    tab.classList.add('border-b-2', 'border-blue-500');
-                    document.querySelectorAll('.col-content').forEach(c => c.classList.add('hidden'));
-                    document.getElementById(tabId).classList.remove('hidden');
-                };
-                tab.classList.add('col-tab', 'cursor-pointer');
-                tabsDiv.appendChild(tab);
-                
-                const colDiv = document.createElement('div');
-                colDiv.id = tabId;
-                colDiv.classList.add('col-content', i === 0 ? '' : 'hidden');
-                
-                // Column content properties
-                const colBlocks = columns[i].blocks;
-                const colVisible = columns[i].visible;
-                const colOrder = columns[i].order;
-                
-                // Image block
-                const colImageDetails = document.createElement('details');
-                colImageDetails.classList.add('mb-2', 'border', 'rounded', 'p-2');
-                colImageDetails.innerHTML = `
-                    <summary class="font-medium cursor-pointer">Image Block</summary>
-                    <div class="p-2" id="col-${i}-image"></div>
-                `;
-                colDiv.appendChild(colImageDetails);
-                const colImageContainer = colImageDetails.querySelector(`#col-${i}-image`);
-                createInput('Image URL', 'url', 'text', 'https://placehold.co/200x200/EEEEEE/808080?text=Image', null, colBlocks.image, colImageContainer);
-                createInput('Alt Text', 'altText', 'text', 'Block Image', null, colBlocks.image, colImageContainer);
-                createInput('Link', 'link', 'text', '#', null, colBlocks.image, colImageContainer);
-                createInput('Align', 'align', 'select', 'center', [
-                    {value: 'left', label: 'Left'},
-                    {value: 'center', label: 'Center'},
-                    {value: 'right', label: 'Right'}
-                ], colBlocks.image, colImageContainer);
-                
-                // Title block
-                const colTitleDetails = document.createElement('details');
-                colTitleDetails.classList.add('mb-2', 'border', 'rounded', 'p-2');
-                colTitleDetails.innerHTML = `
-                    <summary class="font-medium cursor-pointer">Title Block</summary>
-                    <div class="p-2" id="col-${i}-title"></div>
-                `;
-                colDiv.appendChild(colTitleDetails);
-                const colTitleContainer = colTitleDetails.querySelector(`#col-${i}-title`);
-                createInput('Title Text', 'text', 'text', 'Title', null, colBlocks.title, colTitleContainer);
-                createInput('Font Size', 'fontSize', 'text', '20px', null, colBlocks.title, colTitleContainer);
-                createInput('Color', 'color', 'color', '#000000', null, colBlocks.title, colTitleContainer);
-                createInput('Align', 'align', 'select', 'center', [
-                    {value: 'left', label: 'Left'},
-                    {value: 'center', label: 'Center'},
-                    {value: 'right', label: 'Right'}
-                ], colBlocks.title, colTitleContainer);
-                
-                // Text block
-                const colTextDetails = document.createElement('details');
-                colTextDetails.classList.add('mb-2', 'border', 'rounded', 'p-2');
-                colTextDetails.innerHTML = `
-                    <summary class="font-medium cursor-pointer">Text Block</summary>
-                    <div class="p-2" id="col-${i}-text"></div>
-                `;
-                colDiv.appendChild(colTextDetails);
-                const colTextContainer = colTextDetails.querySelector(`#col-${i}-text`);
-                createInput('Text Content', 'text', 'textarea', 'Description text.', null, colBlocks.text, colTextContainer);
-                createInput('Font Size', 'fontSize', 'text', '14px', null, colBlocks.text, colTextContainer);
-                createInput('Color', 'color', 'color', '#333333', null, colBlocks.text, colTextContainer);
-                createInput('Align', 'align', 'select', 'center', [
-                    {value: 'left', label: 'Left'},
-                    {value: 'center', label: 'Center'},
-                    {value: 'right', label: 'Right'}
-                ], colBlocks.text, colTextContainer);
-                
-                // Button block
-                const colButtonDetails = document.createElement('details');
-                colButtonDetails.classList.add('mb-2', 'border', 'rounded', 'p-2');
-                colButtonDetails.innerHTML = `
-                    <summary class="font-medium cursor-pointer">Button Block</summary>
-                    <div class="p-2" id="col-${i}-button"></div>
-                `;
-                colDiv.appendChild(colButtonDetails);
-                const colButtonContainer = colButtonDetails.querySelector(`#col-${i}-button`);
-                createCheckbox('Show Button', 'showButton', colBlocks.button, colButtonContainer);
-                if (colBlocks.button.showButton) {
-                    createInput('Button Text', 'text', 'text', 'Button', null, colBlocks.button, colButtonContainer);
-                    createInput('Button Link', 'link', 'text', '#', null, colBlocks.button, colButtonContainer);
-                    createInput('Background', 'background', 'color', '#007bff', null, colBlocks.button, colButtonContainer);
-                    createInput('Text Color', 'color', 'color', '#ffffff', null, colBlocks.button, colButtonContainer);
-                    createInput('Font Size', 'fontSize', 'text', '16px', null, colBlocks.button, colButtonContainer);
+            const specificDetails = document.createElement('details');
+            specificDetails.classList.add('mb-2');
+            specificDetails.open = true;
+            const specificSummary = document.createElement('summary');
+            specificSummary.textContent = 'Content Properties';
+            specificSummary.classList.add('font-medium', 'cursor-pointer');
+            specificDetails.appendChild(specificSummary);
+            const specificContainer = document.createElement('div');
+            specificContainer.classList.add('p-2');
+            specificDetails.appendChild(specificContainer);
+            propertyInputs.appendChild(specificDetails);
+
+            switch(section.type) {
+                case 'title-only':
+                    createInput('Title', 'title', 'text', 'Your Title Here', null, content, specificContainer);
+                    createInput('Font Size', 'fontSizeTitle', 'text', '24px', null, content, specificContainer);
+                    createInput('Line Height', 'lineHeightTitle', 'text', '1.2', null, content, specificContainer);
+                    createInput('Text Color', 'textColorTitle', 'color', '#000000', null, content, specificContainer);
+                    createInput('Text Align', 'textAlign', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
+                    break;
+
+                case 'text-only':
+                    createInput('Text', 'text', 'textarea', 'This is a paragraph of text. You can edit this.', null, content, specificContainer);
+                    createInput('Font Size', 'fontSizeText', 'text', '16px', null, content, specificContainer);
+                    createInput('Line Height', 'lineHeightText', 'text', '1.5', null, content, specificContainer);
+                    createInput('Text Color', 'textColorText', 'color', '#333333', null, content, specificContainer);
+                    createInput('Text Align', 'textAlign', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
+                    break;
+
+                case 'title-text':
+                    createInput('Title', 'title', 'text', 'Your Title Here', null, content, specificContainer);
+                    createInput('Title Font Size', 'fontSizeTitle', 'text', '24px', null, content, specificContainer);
+                    createInput('Title Line Height', 'lineHeightTitle', 'text', '1.2', null, content, specificContainer);
+                    createInput('Title Color', 'textColorTitle', 'color', '#000000', null, content, specificContainer);
+                    
+                    createInput('Text', 'text', 'textarea', 'This is a paragraph of text. You can edit this.', null, content, specificContainer);
+                    createInput('Text Font Size', 'fontSizeText', 'text', '16px', null, content, specificContainer);
+                    createInput('Text Line Height', 'lineHeightText', 'text', '1.5', null, content, specificContainer);
+                    createInput('Text Color', 'textColorText', 'color', '#333333', null, content, specificContainer);
+                    
+                    createInput('Text Align', 'textAlign', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, content, specificContainer);
+                    break;
+
+                case 'button-only':
+                    createInput('Button Text', 'buttonText', 'text', 'Click Me', null, content, specificContainer);
+                    createInput('Button Link', 'buttonLink', 'text', '#', null, content, specificContainer);
+                    createInput('Button Color', 'buttonColor', 'color', '#ffffff', null, content, specificContainer);
+                    createInput('Button Background', 'buttonBackground', 'color', '#007bff', null, content, specificContainer);
+                    createInput('Font Size', 'buttonFontSize', 'text', '16px', null, content, specificContainer);
+                    createInput('Padding', 'buttonPadding', 'text', '12px 24px', null, content, specificContainer);
+                    createInput('Border Radius', 'buttonBorderRadius', 'text', '4px', null, content, specificContainer);
+                    createInput('Align', 'buttonAlign', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    break;
+
+                case 'header-text':
+                    createInput('Title', 'title', 'text', 'Company Name', null, content, specificContainer);
+                    createInput('Font Size', 'fontSizeTitle', 'text', '24px', null, content, specificContainer);
+                    createInput('Text Color', 'textColorTitle', 'color', '#000000', null, content, specificContainer);
+                    createCheckbox('Show Subtitle', 'showSubtitle', content, specificContainer);
+                    if (content.showSubtitle) {
+                        createInput('Subtitle', 'subtitle', 'text', 'Tagline', null, content, specificContainer);
+                        createInput('Subtitle Font Size', 'subtitleFontSize', 'text', '14px', null, content, specificContainer);
+                        createInput('Subtitle Color', 'subtitleColor', 'color', '#666666', null, content, specificContainer);
+                    }
+                    break;
+
+                case 'header-image':
+                    createInput('Image URL', 'imageUrl', 'text', 'https://placehold.co/600x200/3a86ff/ffffff?text=Company+Logo', null, content, specificContainer);
+                    createInput('Alt Text', 'altText', 'text', 'Company Logo', null, content, specificContainer);
+                    createInput('Link URL', 'link', 'text', '#', null, content, specificContainer);
+                    createInput('Image Width', 'imageWidth', 'text', '100%', null, content, specificContainer);
+                    createInput('Max Width', 'maxWidth', 'text', '600px', null, content, specificContainer);
+                    createInput('Image Align', 'imageAlign', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    break;
+
+                case 'navigation':
+                    createInput('Font Size', 'fontSize', 'text', '16px', null, content, specificContainer);
+                    createInput('Text Color', 'textColor', 'color', '#333333', null, content, specificContainer);
+                    createInput('Active Color', 'activeColor', 'color', '#3a86ff', null, content, specificContainer);
+                    createInput('Item Spacing', 'itemSpacing', 'text', '20px', null, content, specificContainer);
+                    createInput('Item Padding', 'itemPadding', 'text', '10px 15px', null, content, specificContainer);
+                    createInput('Alignment', 'alignment', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    break;
+
+                case 'text-image':
+                    createInput('Image URL', 'imageUrl', 'text', 'https://placehold.co/300x200/3a86ff/ffffff?text=Image', null, content, specificContainer);
+                    createInput('Alt Text', 'altText', 'text', 'Content Image', null, content, specificContainer);
+                    createInput('Text Content', 'text', 'textarea', 'This is some text next to an image.', null, content, specificContainer);
+                    createInput('Font Size', 'fontSize', 'text', '16px', null, content, specificContainer);
+                    createInput('Text Color', 'textColor', 'color', '#333333', null, content, specificContainer);
+                    createInput('Image Position', 'imagePosition', 'select', 'left', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    createInput('Image Width', 'imageWidth', 'text', '50%', null, content, specificContainer);
+                    createCheckbox('Show Button', 'showButton', content, specificContainer);
+                    if (content.showButton) {
+                        createInput('Button Text', 'buttonText', 'text', 'Learn More', null, content, specificContainer);
+                        createInput('Button Link', 'buttonLink', 'text', '#', null, content, specificContainer);
+                        createInput('Button Background', 'buttonBackground', 'color', '#007bff', null, content, specificContainer);
+                        createInput('Button Color', 'buttonColor', 'color', '#ffffff', null, content, specificContainer);
+                    }
+                    break;
+
+                case 'hero':
+                    createInput('Background Image', 'backgroundImage', 'text', 'https://placehold.co/600x400/1a1a1a/ffffff?text=Hero+Background', null, content, specificContainer);
+                    createInput('Overlay Color', 'overlayColor', 'text', 'rgba(0,0,0,0.5)', null, content, specificContainer);
+                    createInput('Title', 'overlayTitle', 'text', 'Hero Title', null, content, specificContainer);
+                    createInput('Title Font Size', 'titleFontSize', 'text', '36px', null, content, specificContainer);
+                    createInput('Text', 'overlayText', 'textarea', 'Hero description text.', null, content, specificContainer);
+                    createInput('Text Font Size', 'textFontSize', 'text', '18px', null, content, specificContainer);
+                    createInput('Text Color', 'overlayTextColor', 'color', '#ffffff', null, content, specificContainer);
+                    createInput('Alignment', 'overlayAlign', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    createCheckbox('Show Button', 'showOverlayButton', content, specificContainer);
+                    if (content.showOverlayButton) {
+                        createInput('Button Text', 'overlayButtonText', 'text', 'Learn More', null, content, specificContainer);
+                        createInput('Button Link', 'overlayButtonLink', 'text', '#', null, content, specificContainer);
+                        createInput('Button Background', 'overlayButtonBackground', 'color', '#ffffff', null, content, specificContainer);
+                        createInput('Button Color', 'overlayButtonColor', 'color', '#000000', null, content, specificContainer);
+                    }
+                    break;
+
+                case 'image-only':
+                    createInput('Image URL', 'imageUrl', 'text', 'https://placehold.co/600x300/3a86ff/ffffff?text=Full+Width+Image', null, content, specificContainer);
+                    createInput('Alt Text', 'altText', 'text', 'Full Width Image', null, content, specificContainer);
+                    createInput('Link URL', 'link', 'text', '#', null, content, specificContainer);
+                    createInput('Caption', 'caption', 'text', '', null, content, specificContainer);
+                    createInput('Image Width', 'imageWidth', 'text', '100%', null, content, specificContainer);
+                    break;
+
+                case 'single-column-blocks':
+                    const blocks = content.blocks || getDefaultBlocks();
+                    content.blocks = blocks;
+                    
+                    createInput('Block Spacing', 'blockSpacing', 'text', '20px', null, content, specificContainer);
+                    createInput('Block Align', 'blockAlign', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    
+                    const imageDetails = document.createElement('details');
+                    imageDetails.classList.add('mb-2', 'border', 'rounded', 'p-2');
+                    imageDetails.innerHTML = `
+                        <summary class="font-medium cursor-pointer">Image Block</summary>
+                        <div class="p-2" id="image-block-props"></div>
+                    `;
+                    specificContainer.appendChild(imageDetails);
+                    
+                    const imageContainer = imageDetails.querySelector('#image-block-props');
+                    createInput('Image URL', 'url', 'text', 'https://placehold.co/200x200/EEEEEE/808080?text=Image', null, blocks.image, imageContainer);
+                    createInput('Alt Text', 'altText', 'text', 'Block Image', null, blocks.image, imageContainer);
+                    createInput('Link URL', 'link', 'text', '#', null, blocks.image, imageContainer);
                     createInput('Align', 'align', 'select', 'center', [
                         {value: 'left', label: 'Left'},
                         {value: 'center', label: 'Center'},
                         {value: 'right', label: 'Right'}
-                    ], colBlocks.button, colButtonContainer);
-                }
-                
-                colDiv.appendChild(document.createElement('hr'));
-                specificContainer.appendChild(colDiv);
-                tabContents.push(colDiv);
-            }
-            
-            specificContainer.appendChild(tabsDiv);
-            tabContents.forEach(content => specificContainer.appendChild(content));
-            break;
-
-        case 'custom-html':
-            createInput('Custom HTML', 'html', 'textarea', '<p>Your custom HTML here</p>', null, content, specificContainer);
-            break;
-
-        default:
-            // For other section types, keep existing properties
-            if (section.type === 'header-text') {
-                createInput('Title', 'title', 'text', 'Company Name', null, content, specificContainer);
-                createInput('Font Size', 'fontSizeTitle', 'text', '24px', null, content, specificContainer);
-                createInput('Text Color', 'textColorTitle', 'color', '#000000', null, content, specificContainer);
-                createCheckbox('Show Subtitle', 'showSubtitle', content, specificContainer);
-                if (content.showSubtitle) {
-                    createInput('Subtitle', 'subtitle', 'text', 'Tagline', null, content, specificContainer);
-                    createInput('Subtitle Font Size', 'subtitleFontSize', 'text', '14px', null, content, specificContainer);
-                    createInput('Subtitle Color', 'subtitleColor', 'color', '#666666', null, content, specificContainer);
-                }
-            } else if (section.type === 'header-image') {
-                createInput('Image URL', 'imageUrl', 'text', 'https://placehold.co/600x200/3a86ff/ffffff?text=Company+Logo', null, content, specificContainer);
-                createInput('Alt Text', 'altText', 'text', 'Company Logo', null, content, specificContainer);
-                createInput('Link URL', 'link', 'text', '#', null, content, specificContainer);
-            } else if (section.type === 'navigation') {
-                createInput('Font Size', 'fontSize', 'text', '16px', null, content, specificContainer);
-                createInput('Text Color', 'textColor', 'color', '#333333', null, content, specificContainer);
-                createInput('Active Color', 'activeColor', 'color', '#3a86ff', null, content, specificContainer);
-            } else if (section.type === 'button-only') {
-                createInput('Button Text', 'buttonText', 'text', 'Click Me', null, content, specificContainer);
-                createInput('Button Link', 'buttonLink', 'text', '#', null, content, specificContainer);
-                createInput('Button Color', 'buttonColor', 'color', '#ffffff', null, content, specificContainer);
-                createInput('Button Background', 'buttonBackground', 'color', '#007bff', null, content, specificContainer);
-            } else if (section.type === 'text-image') {
-                createInput('Image URL', 'imageUrl', 'text', 'https://placehold.co/300x200/3a86ff/ffffff?text=Image', null, content, specificContainer);
-                createInput('Alt Text', 'altText', 'text', 'Content Image', null, content, specificContainer);
-                createInput('Text Content', 'text', 'textarea', 'This is some text next to an image.', null, content, specificContainer);
-            } else if (section.type === 'hero') {
-                createInput('Background Image', 'backgroundImage', 'text', 'https://placehold.co/600x400/1a1a1a/ffffff?text=Hero+Background', null, content, specificContainer);
-                createInput('Overlay Color', 'overlayColor', 'text', 'rgba(0,0,0,0.5)', null, content, specificContainer);
-                createInput('Title', 'overlayTitle', 'text', 'Hero Title', null, content, specificContainer);
-                createInput('Text', 'overlayText', 'textarea', 'Hero description text.', null, content, specificContainer);
-            } else if (section.type === 'image-only') {
-                createInput('Image URL', 'imageUrl', 'text', 'https://placehold.co/600x300/3a86ff/ffffff?text=Full+Width+Image', null, content, specificContainer);
-                createInput('Alt Text', 'altText', 'text', 'Full Width Image', null, content, specificContainer);
-                createInput('Link URL', 'link', 'text', '#', null, content, specificContainer);
-            } else if (section.type === 'divider') {
-                createInput('Height', 'height', 'text', '1px', null, content, specificContainer);
-                createInput('Color', 'color', 'color', '#cccccc', null, content, specificContainer);
-                createInput('Style', 'style', 'select', 'solid', [
-                    {value: 'solid', label: 'Solid'},
-                    {value: 'dashed', label: 'Dashed'},
-                    {value: 'dotted', label: 'Dotted'}
-                ], content, specificContainer);
-            }
-            break;
-    }
-}
-
-        function generateSectionHtml(section) {
-            try {
-                const content = section.content;
-                const { tableStyle, paddingStyle } = generateCommonStyles(content);
-                const fontStyle = content.fontFamily ? `font-family: ${content.fontFamily};` : '';
-
-                switch (section.type) {
-                    case 'header-text':
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                <tr>
-                                    <td align="${content.textAlign}" style="${paddingStyle} ${fontStyle}">
-                                        <h1 style="font-size: ${content.fontSizeTitle}; line-height: ${content.lineHeightTitle}; color: ${content.textColorTitle}; margin: 0;">${escapeHtml(content.title)}</h1>
-                                        ${content.showSubtitle ? `<p style="font-size: ${content.subtitleFontSize}; color: ${content.subtitleColor}; margin-top: 5px;">${escapeHtml(content.subtitle)}</p>` : ''}
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-
-                    case 'header-image':
-                        const imageLink = content.link && content.link !== '#' ? content.link : null;
-                        const imageHtml = `
-                            <img src="${content.imageUrl}" alt="${escapeHtml(content.altText)}" width="${content.imageWidth}" style="display: block; width: ${content.imageWidth}; max-width: ${content.maxWidth}; height: auto; border: 0; margin: 0 auto;" />
-                        `;
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                <tr>
-                                    <td align="${content.imageAlign}" style="${paddingStyle}">
-                                        ${imageLink ? `<a href="${imageLink}" style="text-decoration: none;">${imageHtml}</a>` : imageHtml}
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-
-                    case 'navigation':
-                        const menuItems = content.menuItems || [];
-                        let navHtml = '<table cellpadding="0" cellspacing="0" border="0" align="center" style="margin: 0 auto;"><tr>';
-                        
-                        menuItems.forEach((item, index) => {
-                            const isActive = item.active || false;
-                            const color = isActive ? content.activeColor : content.textColor;
-                            const spacing = index < menuItems.length - 1 ? `padding-right: ${content.itemSpacing};` : '';
-                            
-                            navHtml += `
-                                <td align="${content.alignment}" style="font-family: ${content.fontFamily}; font-size: ${content.fontSize}; ${spacing}">
-                                    <a href="${item.link}" style="color: ${color}; text-decoration: none; padding: ${content.itemPadding}; border-radius: ${content.itemBorderRadius}; background-color: ${content.backgroundColor}; display: inline-block;${isActive ? ' font-weight: bold;' : ''}">${escapeHtml(item.text)}</a>
-                                </td>
-                            `;
-                        });
-                        
-                        navHtml += '</tr></table>';
-                        
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                <tr>
-                                    <td align="${content.alignment}" style="${paddingStyle}">
-                                        ${navHtml}
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-
-                    case 'button-only':
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                <tr>
-                                    <td align="${content.buttonAlign}" style="${paddingStyle}">
-                                        <table cellpadding="0" cellspacing="0" border="0" align="${content.buttonAlign}" style="width: ${content.buttonWidth}; margin: 0 auto;">
-                                            <tr>
-                                                <td style="background-color: ${content.buttonBackground}; border: ${content.buttonBorderWidth} ${content.buttonBorderStyle} ${content.buttonBorderColor}; border-radius: ${content.buttonBorderRadius};">
-                                                    <a href="${content.buttonLink}" target="_blank" style="font-size: ${content.buttonFontSize}; color: ${content.buttonColor}; padding: ${content.buttonPadding}; display: block; text-decoration: none; text-align: center;">${escapeHtml(content.buttonText)}</a>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-
-                    case 'title-only':
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                <tr>
-                                    <td align="${content.textAlign}" style="${paddingStyle} ${fontStyle}">
-                                        <h1 style="font-size: ${content.fontSizeTitle}; line-height: ${content.lineHeightTitle}; color: ${content.textColorTitle}; margin: 0;">${escapeHtml(content.title)}</h1>
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-
-                    case 'text-only':
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                <tr>
-                                    <td align="${content.textAlign}" style="${paddingStyle} ${fontStyle}">
-                                        <p style="font-size: ${content.fontSizeText}; line-height: ${content.lineHeightText}; color: ${content.textColorText}; margin: 0;">${escapeHtml(content.text)}</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-
-                    case 'title-text':
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                <tr>
-                                    <td align="${content.textAlign}" style="${paddingStyle} ${fontStyle}">
-                                        <h1 style="font-size: ${content.fontSizeTitle}; line-height: ${content.lineHeightTitle}; color: ${content.textColorTitle}; margin: 0 0 10px 0;">${escapeHtml(content.title)}</h1>
-                                        <p style="font-size: ${content.fontSizeText}; line-height: ${content.lineHeightText}; color: ${content.textColorText}; margin: 0;">${escapeHtml(content.text)}</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-
-                    case 'text-image':
-                        const imagePosition = content.imagePosition || 'left';
-                        const textWidth = content.textWidth || '50%';
-                        const imageWidth = content.imageWidth || '50%';
-                        
-                        // Create image HTML
-                        const imgHtml = `
-                            <img src="${content.imageUrl}" alt="${escapeHtml(content.altText)}" style="display: block; width: 100%; max-width: 100%; height: auto; border: 0;" />
-                        `;
-                        
-                        // Create text HTML
-                        let textHtml = `
-                            <p style="font-size: ${content.fontSize}; line-height: ${content.lineHeight}; color: ${content.textColor}; margin: 0; text-align: ${content.textAlign};">${escapeHtml(content.text)}</p>
-                        `;
-                        
-                        // Add button if enabled
-                        if (content.showButton) {
-                            textHtml += `
-                                <table cellpadding="0" cellspacing="0" border="0" align="${content.buttonAlign}" style="margin-top: 15px;">
-                                    <tr>
-                                        <td style="background-color: ${content.buttonBackground}; border-radius: ${content.buttonBorderRadius};">
-                                            <a href="${content.buttonLink}" style="font-size: ${content.buttonFontSize}; color: ${content.buttonColor}; padding: ${content.buttonPadding}; display: inline-block; text-decoration: none;">${escapeHtml(content.buttonText)}</a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            `;
-                        }
-                        
-                        // Create table with two columns
-                        if (imagePosition === 'left') {
-                            return `
-                                <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                    <tr>
-                                        <td style="${paddingStyle}">
-                                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
-                                                <tr>
-                                                    <td width="${imageWidth}" style="vertical-align: ${content.verticalAlign}; padding-right: 20px;">${imgHtml}</td>
-                                                    <td width="${textWidth}" style="vertical-align: ${content.verticalAlign};">${textHtml}</td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                            `;
-                        } else {
-                            return `
-                                <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                    <tr>
-                                        <td style="${paddingStyle}">
-                                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
-                                                <tr>
-                                                    <td width="${textWidth}" style="vertical-align: ${content.verticalAlign}; padding-right: 20px;">${textHtml}</td>
-                                                    <td width="${imageWidth}" style="vertical-align: ${content.verticalAlign};">${imgHtml}</td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                            `;
-                        }
-
-                    case 'hero':
-                        const overlayStyle = `
-                            background-image: linear-gradient(${content.overlayColor}, ${content.overlayColor}), url(${content.backgroundImage});
-                            background-size: cover;
-                            background-position: center;
-                            background-repeat: no-repeat;
-                        `;
-                        
-                        let heroContent = `
-                            <table cellpadding="0" cellspacing="0" border="0" width="100%" style="height: 100%;">
-                                <tr>
-                                    <td align="${content.overlayAlign}" style="padding: 40px 20px;">
-                                        <h1 style="font-size: ${content.titleFontSize}; line-height: ${content.lineHeightTitle}; color: ${content.overlayTextColor}; margin: 0 0 15px 0;">${escapeHtml(content.overlayTitle)}</h1>
-                                        <p style="font-size: ${content.textFontSize}; line-height: ${content.lineHeightText}; color: ${content.overlayTextColor}; margin: 0 0 20px 0;">${escapeHtml(content.overlayText)}</p>
-                        `;
-                        
-                        if (content.showOverlayButton) {
-                            heroContent += `
-                                <table cellpadding="0" cellspacing="0" border="0" align="${content.overlayButtonAlign}" style="margin: 0 auto;">
-                                    <tr>
-                                        <td style="background-color: ${content.overlayButtonBackground}; border: ${content.overlayButtonBorderWidth} ${content.overlayButtonBorderStyle} ${content.overlayButtonBorderColor}; border-radius: ${content.overlayButtonBorderRadius};">
-                                            <a href="${content.overlayButtonLink}" style="font-size: ${content.overlayButtonFontSize}; color: ${content.overlayButtonColor}; padding: ${content.overlayButtonPadding}; display: inline-block; text-decoration: none;">${escapeHtml(content.overlayButtonText)}</a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            `;
-                        }
-                        
-                        heroContent += `</td></tr></table>`;
-                        
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                <tr>
-                                    <td style="padding: 0; background: ${content.backgroundColor}; ${overlayStyle}">
-                                        ${heroContent}
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-
-                    case 'image-only':
-                        const imageLinkUrl = content.link && content.link !== '#' ? content.link : null;
-                        const fullImageHtml = `
-                            <img src="${content.imageUrl}" alt="${escapeHtml(content.altText)}" style="display: block; width: ${content.imageWidth}; max-width: ${content.maxWidth || '100%'}; height: auto; border: 0; margin: 0 auto;" />
-                            ${content.caption ? `<p style="text-align: center; color: ${content.captionColor}; font-size: ${content.captionFontSize}; margin-top: 5px;">${escapeHtml(content.caption)}</p>` : ''}
-                        `;
-                        
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                <tr>
-                                    <td align="${content.imageAlign}" style="${paddingStyle}">
-                                        ${imageLinkUrl ? `<a href="${imageLinkUrl}" style="text-decoration: none;">${fullImageHtml}</a>` : fullImageHtml}
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-
-                    case 'single-column-blocks':
-                        const blocks = content.blocks;
-                        const order = content.order || ['image', 'title', 'text', 'button'];
-                        const visible = content.visible || {image: true, title: true, text: true, button: true};
-                        
-                        let blocksHtml = '';
-                        order.forEach(blockType => {
-                            if (visible[blockType] && blocks[blockType]) {
-                                if (blockType === 'image' && blocks.image.url) {
-                                    blocksHtml += `
-                                        <div style="text-align: ${blocks.image.align}; margin-bottom: 15px;">
-                                            <img src="${blocks.image.url}" alt="${blocks.image.altText}" style="max-width: 100%; height: auto; display: inline-block;" />
-                                        </div>
-                                    `;
-                                } else if (blockType === 'title') {
-                                    blocksHtml += `
-                                        <h2 style="font-size: ${blocks.title.fontSize}; color: ${blocks.title.color}; text-align: ${blocks.title.align}; line-height: ${blocks.title.lineHeight}; font-family: ${blocks.title.fontFamily}; margin: 0 0 10px 0;">
-                                            ${blocks.title.text}
-                                        </h2>
-                                    `;
-                                } else if (blockType === 'text') {
-                                    blocksHtml += `
-                                        <p style="font-size: ${blocks.text.fontSize}; color: ${blocks.text.color}; text-align: ${blocks.text.align}; line-height: ${blocks.text.lineHeight}; font-family: ${blocks.text.fontFamily}; margin: 0 0 15px 0;">
-                                            ${blocks.text.text}
-                                        </p>
-                                    `;
-                                } else if (blockType === 'button' && blocks.button.showButton) {
-                                    blocksHtml += `
-                                        <div style="text-align: ${blocks.button.align};">
-                                            <a href="${blocks.button.link}" style="display: inline-block; background-color: ${blocks.button.background}; color: ${blocks.button.color}; font-size: ${blocks.button.fontSize}; padding: ${blocks.button.padding}; border-radius: ${blocks.button.borderRadius}; text-decoration: none;">
-                                                ${blocks.button.text}
-                                            </a>
-                                        </div>
-                                    `;
-                                }
-                            }
-                        });
-                        
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                <tr>
-                                    <td style="${paddingStyle} ${fontStyle}">
-                                        ${blocksHtml}
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-
-                    case 'two-column-blocks':
-                        const columns2 = content.columns || [];
-                        const columnGap2 = content.columnGap || '20px';
-                        
-                        let columnsHtml2 = '<table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>';
-                        
-                        columns2.forEach((column, index) => {
-                            const colBlocks = column.blocks || getDefaultBlocks();
-                            const colOrder = column.order || ['image', 'title', 'text', 'button'];
-                            const colVisible = column.visible || {image: true, title: true, text: true, button: true};
-                            
-                            let colContent = '';
-                            colOrder.forEach(blockType => {
-                                if (colVisible[blockType] && colBlocks[blockType]) {
-                                    if (blockType === 'image' && colBlocks.image.url) {
-                                        colContent += `
-                                            <div style="text-align: ${colBlocks.image.align}; margin-bottom: 10px;">
-                                                <img src="${colBlocks.image.url}" alt="${colBlocks.image.altText}" style="max-width: 100%; height: auto;" />
-                                            </div>
-                                        `;
-                                    } else if (blockType === 'title') {
-                                        colContent += `
-                                            <h2 style="font-size: ${colBlocks.title.fontSize}; color: ${colBlocks.title.color}; text-align: ${colBlocks.title.align}; line-height: ${colBlocks.title.lineHeight}; margin: 0 0 8px 0;">
-                                                ${colBlocks.title.text}
-                                            </h2>
-                                        `;
-                                    } else if (blockType === 'text') {
-                                        colContent += `
-                                            <p style="font-size: ${colBlocks.text.fontSize}; color: ${colBlocks.text.color}; text-align: ${colBlocks.text.align}; line-height: ${colBlocks.text.lineHeight}; margin: 0 0 12px 0;">
-                                                ${colBlocks.text.text}
-                                            </p>
-                                        `;
-                                    } else if (blockType === 'button' && colBlocks.button.showButton) {
-                                        colContent += `
-                                            <div style="text-align: ${colBlocks.button.align};">
-                                                <a href="${colBlocks.button.link}" style="display: inline-block; background-color: ${colBlocks.button.background}; color: ${colBlocks.button.color}; font-size: ${colBlocks.button.fontSize}; padding: ${colBlocks.button.padding}; border-radius: ${colBlocks.button.borderRadius}; text-decoration: none;">
-                                                    ${colBlocks.button.text}
-                                                </a>
-                                            </div>
-                                        `;
-                                    }
-                                }
-                            });
-                            
-                            columnsHtml2 += `
-                                <td class="column" width="50%" style="vertical-align: top; padding-right: ${index < columns2.length - 1 ? columnGap2 : '0'};">
-                                    ${colContent}
-                                </td>
-                            `;
-                        });
-                        
-                        columnsHtml2 += '</tr></table>';
-                        
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                <tr>
-                                    <td style="${paddingStyle} ${fontStyle}">
-                                        ${columnsHtml2}
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-
-                    case 'three-column-blocks':
-                        const columns3 = content.columns || [];
-                        const columnGap3 = content.columnGap || '20px';
-                        
-                        let columnsHtml3 = '<table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>';
-                        
-                        columns3.forEach((column, index) => {
-                            const colBlocks = column.blocks || getDefaultBlocks();
-                            const colOrder = column.order || ['image', 'title', 'text', 'button'];
-                            const colVisible = column.visible || {image: true, title: true, text: true, button: true};
-                            
-                            let colContent = '';
-                            colOrder.forEach(blockType => {
-                                if (colVisible[blockType] && colBlocks[blockType]) {
-                                    if (blockType === 'image' && colBlocks.image.url) {
-                                        colContent += `
-                                            <div style="text-align: ${colBlocks.image.align}; margin-bottom: 10px;">
-                                                <img src="${colBlocks.image.url}" alt="${colBlocks.image.altText}" style="max-width: 100%; height: auto;" />
-                                            </div>
-                                        `;
-                                    } else if (blockType === 'title') {
-                                        colContent += `
-                                            <h2 style="font-size: ${colBlocks.title.fontSize}; color: ${colBlocks.title.color}; text-align: ${colBlocks.title.align}; line-height: ${colBlocks.title.lineHeight}; margin: 0 0 8px 0;">
-                                                ${colBlocks.title.text}
-                                            </h2>
-                                        `;
-                                    } else if (blockType === 'text') {
-                                        colContent += `
-                                            <p style="font-size: ${colBlocks.text.fontSize}; color: ${colBlocks.text.color}; text-align: ${colBlocks.text.align}; line-height: ${colBlocks.text.lineHeight}; margin: 0 0 12px 0;">
-                                                ${colBlocks.text.text}
-                                            </p>
-                                        `;
-                                    } else if (blockType === 'button' && colBlocks.button.showButton) {
-                                        colContent += `
-                                            <div style="text-align: ${colBlocks.button.align};">
-                                                <a href="${colBlocks.button.link}" style="display: inline-block; background-color: ${colBlocks.button.background}; color: ${colBlocks.button.color}; font-size: ${colBlocks.button.fontSize}; padding: ${colBlocks.button.padding}; border-radius: ${colBlocks.button.borderRadius}; text-decoration: none;">
-                                                    ${colBlocks.button.text}
-                                                </a>
-                                            </div>
-                                        `;
-                                    }
-                                }
-                            });
-                            
-                            columnsHtml3 += `
-                                <td class="column" width="33.33%" style="vertical-align: top; padding-right: ${index < columns3.length - 1 ? columnGap3 : '0'};">
-                                    ${colContent}
-                                </td>
-                            `;
-                        });
-                        
-                        columnsHtml3 += '</tr></table>';
-                        
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                <tr>
-                                    <td style="${paddingStyle} ${fontStyle}">
-                                        ${columnsHtml3}
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-
-                    case 'divider':
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                <tr>
-                                    <td style="${paddingStyle} text-align: ${content.align};">
-                                        <hr style="border: none; height: ${content.height}; width: ${content.width}; background-color: ${content.color}; border-top: ${content.height} ${content.style} ${content.color}; margin: 0 auto;" />
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-
-                    case 'custom-html':
-                        return `
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" role="presentation">
-                                <tr>
-                                    <td style="${paddingStyle} ${fontStyle}">
-                                        ${sanitizeHtml(content.html)}
-                                    </td>
-                                </tr>
-                            </table>
-                        `;
-
-                    default:
-                        return `<div>Section type: ${section.type}</div>`;
-                }
-            } catch (error) {
-                console.error('Error generating section HTML:', error);
-                return `<div>Error rendering section</div>`;
-            }
-        }
-
-        function generateContainerHtml(container) {
-            try {
-                const content = container.content;
-                const itemsHtml = container.items.map(item => {
-                    if (item.type === 'container') {
-                        return generateContainerHtml(item);
-                    } else {
-                        return generateSectionHtml(item);
+                    ], blocks.image, imageContainer);
+                    
+                    const titleDetails = document.createElement('details');
+                    titleDetails.classList.add('mb-2', 'border', 'rounded', 'p-2');
+                    titleDetails.innerHTML = `
+                        <summary class="font-medium cursor-pointer">Title Block</summary>
+                        <div class="p-2" id="title-block-props"></div>
+                    `;
+                    specificContainer.appendChild(titleDetails);
+                    
+                    const titleContainer = titleDetails.querySelector('#title-block-props');
+                    createInput('Title Text', 'text', 'text', 'Title', null, blocks.title, titleContainer);
+                    createInput('Font Size', 'fontSize', 'text', '20px', null, blocks.title, titleContainer);
+                    createInput('Color', 'color', 'color', '#000000', null, blocks.title, titleContainer);
+                    createInput('Align', 'align', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], blocks.title, titleContainer);
+                    createInput('Line Height', 'lineHeight', 'text', '1.2', null, blocks.title, titleContainer);
+                    createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, blocks.title, titleContainer);
+                    
+                    const textDetails = document.createElement('details');
+                    textDetails.classList.add('mb-2', 'border', 'rounded', 'p-2');
+                    textDetails.innerHTML = `
+                        <summary class="font-medium cursor-pointer">Text Block</summary>
+                        <div class="p-2" id="text-block-props"></div>
+                    `;
+                    specificContainer.appendChild(textDetails);
+                    
+                    const textContainer = textDetails.querySelector('#text-block-props');
+                    createInput('Text Content', 'text', 'textarea', 'Description text.', null, blocks.text, textContainer);
+                    createInput('Font Size', 'fontSize', 'text', '14px', null, blocks.text, textContainer);
+                    createInput('Color', 'color', 'color', '#333333', null, blocks.text, textContainer);
+                    createInput('Align', 'align', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], blocks.text, textContainer);
+                    createInput('Line Height', 'lineHeight', 'text', '1.5', null, blocks.text, textContainer);
+                    createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, blocks.text, textContainer);
+                    
+                    const buttonDetails = document.createElement('details');
+                    buttonDetails.classList.add('mb-2', 'border', 'rounded', 'p-2');
+                    buttonDetails.innerHTML = `
+                        <summary class="font-medium cursor-pointer">Button Block</summary>
+                        <div class="p-2" id="button-block-props"></div>
+                    `;
+                    specificContainer.appendChild(buttonDetails);
+                    
+                    const buttonContainer = buttonDetails.querySelector('#button-block-props');
+                    createCheckbox('Show Button', 'showButton', blocks.button, buttonContainer);
+                    if (blocks.button.showButton) {
+                        createInput('Button Text', 'text', 'text', 'Button', null, blocks.button, buttonContainer);
+                        createInput('Button Link', 'link', 'text', '#', null, blocks.button, buttonContainer);
+                        createInput('Background', 'background', 'color', '#007bff', null, blocks.button, buttonContainer);
+                        createInput('Text Color', 'color', 'color', '#ffffff', null, blocks.button, buttonContainer);
+                        createInput('Font Size', 'fontSize', 'text', '16px', null, blocks.button, buttonContainer);
+                        createInput('Align', 'align', 'select', 'center', [
+                            {value: 'left', label: 'Left'},
+                            {value: 'center', label: 'Center'},
+                            {value: 'right', label: 'Right'}
+                        ], blocks.button, buttonContainer);
+                        createInput('Padding', 'padding', 'text', '10px 20px', null, blocks.button, buttonContainer);
+                        createInput('Border Radius', 'borderRadius', 'text', '4px', null, blocks.button, buttonContainer);
                     }
-                }).join('');
-                
-                const { tableStyle, paddingStyle } = generateCommonStyles(content);
-                
-                return `
-                    <table cellpadding="0" cellspacing="0" border="0" align="center" style="${tableStyle}" class="${content.containerClass}" id="${content.containerId}" role="presentation">
-                        <tr>
-                            <td style="${paddingStyle}">
-                                ${itemsHtml}
-                            </td>
-                        </tr>
-                    </table>
-                `;
-            } catch (error) {
-                console.error('Error generating container HTML:', error);
-                return `<div>Error rendering container</div>`;
+                    break;
+
+                case 'two-column-blocks':
+case 'three-column-blocks':
+    const columns = content.columns || [];
+    const columnCount = section.type === 'two-column-blocks' ? 2 : 3;
+    
+    // Initialize columns if empty
+    for (let i = 0; i < columnCount; i++) {
+        if (!columns[i]) {
+            columns[i] = { 
+                blocks: JSON.parse(JSON.stringify(getDefaultBlocks())),
+                visible: {image: true, title: true, text: true, button: true},
+                order: ['image', 'title', 'text', 'button']
+            };
+        }
+    }
+    content.columns = columns;
+    
+    createInput('Column Gap', 'columnGap', 'text', '20px', null, content, specificContainer);
+    createCheckbox('Equal Height', 'equalHeight', content, specificContainer);
+    
+    // Create tabs for each column
+    const tabsDiv = document.createElement('div');
+    tabsDiv.classList.add('flex', 'mb-3', 'border-b', 'flex-wrap', 'gap-1');
+    
+    for (let i = 0; i < columnCount; i++) {
+        const tabId = `col-${i}-${Date.now()}`;
+        const tab = document.createElement('button');
+        tab.classList.add('px-3', 'py-1', 'mr-1', 'mb-1', 'text-sm', 'rounded-t-lg');
+        if (i === 0) {
+            tab.classList.add('bg-blue-500', 'text-white');
+        } else {
+            tab.classList.add('bg-gray-200', 'text-gray-700');
+        }
+        tab.textContent = `Column ${i + 1}`;
+        tab.setAttribute('data-col', i);
+        tab.onclick = function() {
+            // Update tab styles
+            tabsDiv.querySelectorAll('button').forEach(btn => {
+                btn.classList.remove('bg-blue-500', 'text-white');
+                btn.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            this.classList.remove('bg-gray-200', 'text-gray-700');
+            this.classList.add('bg-blue-500', 'text-white');
+            
+            // Show corresponding column content
+            const colContents = specificContainer.querySelectorAll('.column-content');
+            colContents.forEach(content => content.classList.add('hidden'));
+            const targetContent = specificContainer.querySelector(`.column-content[data-col="${i}"]`);
+            if (targetContent) targetContent.classList.remove('hidden');
+        };
+        tabsDiv.appendChild(tab);
+    }
+    specificContainer.appendChild(tabsDiv);
+    
+    // Create content for each column
+    for (let i = 0; i < columnCount; i++) {
+        const column = columns[i];
+        const colBlocks = column.blocks;
+        
+        const colDiv = document.createElement('div');
+        colDiv.className = `column-content ${i === 0 ? '' : 'hidden'}`;
+        colDiv.setAttribute('data-col', i);
+        
+        // Add a label for the column
+        const colLabel = document.createElement('h4');
+        colLabel.className = 'font-medium text-sm mb-2 text-gray-600';
+        colLabel.textContent = `Column ${i + 1} Content`;
+        colDiv.appendChild(colLabel);
+        
+        // Image Block
+        const imageDetails = document.createElement('details');
+        imageDetails.classList.add('mb-2', 'border', 'rounded', 'p-2');
+        imageDetails.open = true;
+        imageDetails.innerHTML = `
+            <summary class="font-medium cursor-pointer text-sm">Image Block</summary>
+            <div class="p-2" id="col-${i}-image-${Date.now()}"></div>
+        `;
+        colDiv.appendChild(imageDetails);
+        
+        const imageContainer = imageDetails.querySelector(`div[id^="col-${i}-image"]`);
+        createCheckbox('Show Image Block', 'image', column.visible, imageContainer);
+        if (column.visible.image !== false) {
+            createInput('Image URL', 'url', 'text', 'https://placehold.co/200x200/EEEEEE/808080?text=Image', null, colBlocks.image, imageContainer);
+            createInput('Alt Text', 'altText', 'text', 'Block Image', null, colBlocks.image, imageContainer);
+            createInput('Link URL', 'link', 'text', '#', null, colBlocks.image, imageContainer);
+            createInput('Align', 'align', 'select', 'center', [
+                {value: 'left', label: 'Left'},
+                {value: 'center', label: 'Center'},
+                {value: 'right', label: 'Right'}
+            ], colBlocks.image, imageContainer);
+        }
+        
+        // Title Block
+        const titleDetails = document.createElement('details');
+        titleDetails.classList.add('mb-2', 'border', 'rounded', 'p-2');
+        titleDetails.open = true;
+        titleDetails.innerHTML = `
+            <summary class="font-medium cursor-pointer text-sm">Title Block</summary>
+            <div class="p-2" id="col-${i}-title-${Date.now()}"></div>
+        `;
+        colDiv.appendChild(titleDetails);
+        
+        const titleContainer = titleDetails.querySelector(`div[id^="col-${i}-title"]`);
+        createCheckbox('Show Title Block', 'title', column.visible, titleContainer);
+        if (column.visible.title !== false) {
+            createInput('Title Text', 'text', 'text', 'Title', null, colBlocks.title, titleContainer);
+            createInput('Font Size', 'fontSize', 'text', '20px', null, colBlocks.title, titleContainer);
+            createInput('Color', 'color', 'color', '#000000', null, colBlocks.title, titleContainer);
+            createInput('Align', 'align', 'select', 'center', [
+                {value: 'left', label: 'Left'},
+                {value: 'center', label: 'Center'},
+                {value: 'right', label: 'Right'}
+            ], colBlocks.title, titleContainer);
+            createInput('Line Height', 'lineHeight', 'text', '1.2', null, colBlocks.title, titleContainer);
+            createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, colBlocks.title, titleContainer);
+        }
+        
+        // Text Block
+        const textDetails = document.createElement('details');
+        textDetails.classList.add('mb-2', 'border', 'rounded', 'p-2');
+        textDetails.open = true;
+        textDetails.innerHTML = `
+            <summary class="font-medium cursor-pointer text-sm">Text Block</summary>
+            <div class="p-2" id="col-${i}-text-${Date.now()}"></div>
+        `;
+        colDiv.appendChild(textDetails);
+        
+        const textContainer = textDetails.querySelector(`div[id^="col-${i}-text"]`);
+        createCheckbox('Show Text Block', 'text', column.visible, textContainer);
+        if (column.visible.text !== false) {
+            createInput('Text Content', 'text', 'textarea', 'Description text.', null, colBlocks.text, textContainer);
+            createInput('Font Size', 'fontSize', 'text', '14px', null, colBlocks.text, textContainer);
+            createInput('Color', 'color', 'color', '#333333', null, colBlocks.text, textContainer);
+            createInput('Align', 'align', 'select', 'center', [
+                {value: 'left', label: 'Left'},
+                {value: 'center', label: 'Center'},
+                {value: 'right', label: 'Right'}
+            ], colBlocks.text, textContainer);
+            createInput('Line Height', 'lineHeight', 'text', '1.5', null, colBlocks.text, textContainer);
+            createInput('Font Family', 'fontFamily', 'select', 'Arial, Helvetica, sans-serif', fontOptions, colBlocks.text, textContainer);
+        }
+        
+        // Button Block
+        const buttonDetails = document.createElement('details');
+        buttonDetails.classList.add('mb-2', 'border', 'rounded', 'p-2');
+        buttonDetails.open = true;
+        buttonDetails.innerHTML = `
+            <summary class="font-medium cursor-pointer text-sm">Button Block</summary>
+            <div class="p-2" id="col-${i}-button-${Date.now()}"></div>
+        `;
+        colDiv.appendChild(buttonDetails);
+        
+        const buttonContainer = buttonDetails.querySelector(`div[id^="col-${i}-button"]`);
+        createCheckbox('Show Button Block', 'button', column.visible, buttonContainer);
+        if (column.visible.button !== false) {
+            createCheckbox('Enable Button', 'showButton', colBlocks.button, buttonContainer);
+            if (colBlocks.button.showButton) {
+                createInput('Button Text', 'text', 'text', 'Button', null, colBlocks.button, buttonContainer);
+                createInput('Button Link', 'link', 'text', '#', null, colBlocks.button, buttonContainer);
+                createInput('Background', 'background', 'color', '#007bff', null, colBlocks.button, buttonContainer);
+                createInput('Text Color', 'color', 'color', '#ffffff', null, colBlocks.button, buttonContainer);
+                createInput('Font Size', 'fontSize', 'text', '16px', null, colBlocks.button, buttonContainer);
+                createInput('Align', 'align', 'select', 'center', [
+                    {value: 'left', label: 'Left'},
+                    {value: 'center', label: 'Center'},
+                    {value: 'right', label: 'Right'}
+                ], colBlocks.button, buttonContainer);
+                createInput('Padding', 'padding', 'text', '10px 20px', null, colBlocks.button, buttonContainer);
+                createInput('Border Radius', 'borderRadius', 'text', '4px', null, colBlocks.button, buttonContainer);
+            }
+        }
+        
+        specificContainer.appendChild(colDiv);
+    }
+    break;
+
+                case 'divider':
+                    createInput('Height', 'height', 'text', '1px', null, content, specificContainer);
+                    createInput('Color', 'color', 'color', '#cccccc', null, content, specificContainer);
+                    createInput('Style', 'style', 'select', 'solid', [
+                        {value: 'solid', label: 'Solid'},
+                        {value: 'dashed', label: 'Dashed'},
+                        {value: 'dotted', label: 'Dotted'}
+                    ], content, specificContainer);
+                    createInput('Width', 'width', 'text', '100%', null, content, specificContainer);
+                    createInput('Align', 'align', 'select', 'center', [
+                        {value: 'left', label: 'Left'},
+                        {value: 'center', label: 'Center'},
+                        {value: 'right', label: 'Right'}
+                    ], content, specificContainer);
+                    break;
+
+                case 'custom-html':
+                    createInput('Custom HTML', 'html', 'textarea', '<p>Your custom HTML here</p>', null, content, specificContainer);
+                    break;
             }
         }
 
+        // ============= HTML GENERATION FUNCTIONS =============
+
+        // Main function to generate the complete email HTML
         function generateEmailHtml() {
             try {
-                const structureHtml = structure.map(item => {
+                // Generate all sections as rows inside ONE master table
+                const rowsHtml = structure.map(item => {
                     if (item.type === 'container') {
-                        return generateContainerHtml(item);
+                        // Container creates a nested table inside a row
+                        return generateContainerRow(item);
                     } else {
-                        return generateSectionHtml(item);
+                        // Regular section is just a row
+                        return generateSectionRow(item);
                     }
                 }).join('');
                 
@@ -2691,7 +2279,7 @@ function showSectionProperties(section) {
             text-decoration: none;
         }
         @media only screen and (max-width: 480px) {
-            table[class="container"] {
+            .master-table {
                 width: 100% !important;
                 max-width: 320px !important;
                 min-width: 0 !important;
@@ -2711,8 +2299,11 @@ function showSectionProperties(section) {
 </head>
 <body style="margin: 0; padding: 0; background-color: #f6f6f6;">
     <center style="width: 100%; background-color: #f6f6f6;">
-        <table class="container" cellpadding="0" cellspacing="0" border="0" align="center" style="width: 100%; max-width: ${canvasWidth}px; min-width: 0; background-color: #ffffff;" role="presentation">
-            ${structureHtml}
+        <!-- MASTER TABLE - contains all sections as rows -->
+        <table class="master-table" cellpadding="0" cellspacing="0" border="0" align="center" 
+               style="width: 100%; max-width: ${canvasWidth}px; min-width: 0; background-color: #ffffff;" 
+               role="presentation">
+            ${rowsHtml}
         </table>
     </center>
 </body>
@@ -2722,6 +2313,401 @@ function showSectionProperties(section) {
             } catch (error) {
                 console.error('Error generating email HTML:', error);
                 return `<div>Error generating email</div>`;
+            }
+        }
+
+        // Generate a regular section as a row in the master table
+        function generateSectionRow(section) {
+            try {
+                const content = section.content;
+                
+                // Row styles (applied to <tr>)
+                const backgroundStyle = getBackgroundStyle(content);
+                const borderStyle = content.borderStyle === 'none' ? 
+                    `border: none;` : 
+                    `border: ${content.borderWidth} ${content.borderStyle} ${content.borderColor};`;
+                const borderRadiusStyle = `border-radius: ${content.borderRadius};`;
+                
+                // Note: margin doesn't work on <tr>, so we handle spacing with padding
+                const rowStyle = `${backgroundStyle} ${borderStyle} ${borderRadiusStyle}`;
+                
+                // Cell styles
+                const cellStyle = `padding-top: ${content.paddingTop}; padding-bottom: ${content.paddingBottom}; padding-left: ${content.paddingLeft}; padding-right: ${content.paddingRight}; ${content.fontFamily ? 'font-family: ' + content.fontFamily + ';' : ''} ${content.customStyles || ''}`;
+                
+                // Generate inner content based on section type
+                let innerContent = getSectionInnerContent(section);
+                
+                return `
+                    <tr class="${content.sectionClass || ''}" id="${content.sectionId || ''}" style="${rowStyle}">
+                        <td style="${cellStyle}">
+                            ${innerContent}
+                        </td>
+                    </tr>
+                `;
+            } catch (error) {
+                console.error('Error generating section row:', error);
+                return `<tr><td>Error rendering section</td></tr>`;
+            }
+        }
+
+        // Generate a container as a row with nested table
+        function generateContainerRow(container) {
+            try {
+                const content = container.content;
+                
+                // Generate all sections inside container as rows in the nested table
+                const nestedRowsHtml = container.items.map(item => {
+                    if (item.type === 'container') {
+                        return generateContainerRow(item); // Nested container
+                    } else {
+                        return generateSectionRow(item); // Section inside container
+                    }
+                }).join('');
+                
+                // Container row styles - transparent background (container table handles background)
+                const rowStyle = `background-color: transparent;`;
+                
+                // Container nested table styles
+                const backgroundStyle = getBackgroundStyle(content);
+                const borderStyle = content.borderStyle === 'none' ? 
+                    `border: none;` : 
+                    `border: ${content.borderWidth} ${content.borderStyle} ${content.borderColor};`;
+                const borderRadiusStyle = `border-radius: ${content.borderRadius};`;
+                const marginStyle = `margin-top: ${content.marginTop}; margin-bottom: ${content.marginBottom}; margin-left: ${content.marginLeft}; margin-right: ${content.marginRight};`;
+                
+                const tableStyle = `width: 100%; ${backgroundStyle} ${borderStyle} ${borderRadiusStyle} ${marginStyle}`;
+                const cellStyle = `padding-top: ${content.paddingTop}; padding-bottom: ${content.paddingBottom}; padding-left: ${content.paddingLeft}; padding-right: ${content.paddingRight};`;
+                
+                return `
+                    <tr style="${rowStyle}">
+                        <td style="padding: 0;">
+                            <!-- Nested Container Table -->
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%" 
+                                   style="${tableStyle}" 
+                                   class="${content.containerClass || ''}" 
+                                   id="${content.containerId || ''}" 
+                                   role="presentation">
+                                <tr>
+                                    <td style="${cellStyle}">
+                                        ${nestedRowsHtml}
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                `;
+            } catch (error) {
+                console.error('Error generating container row:', error);
+                return `<tr><td>Error rendering container</td></tr>`;
+            }
+        }
+
+        // Helper function to get inner content based on section type
+        function getSectionInnerContent(section) {
+            const content = section.content;
+            
+            switch(section.type) {
+                case 'title-only':
+                    return `
+                        <h1 style="font-size: ${content.fontSizeTitle}; line-height: ${content.lineHeightTitle}; color: ${content.textColorTitle}; margin: 0; text-align: ${content.textAlign};">${escapeHtml(content.title)}</h1>
+                    `;
+                    
+                case 'text-only':
+                    return `
+                        <p style="font-size: ${content.fontSizeText}; line-height: ${content.lineHeightText}; color: ${content.textColorText}; margin: 0; text-align: ${content.textAlign};">${escapeHtml(content.text)}</p>
+                    `;
+                    
+                case 'title-text':
+                    return `
+                        <h1 style="font-size: ${content.fontSizeTitle}; line-height: ${content.lineHeightTitle}; color: ${content.textColorTitle}; margin: 0 0 10px 0; text-align: ${content.textAlign};">${escapeHtml(content.title)}</h1>
+                        <p style="font-size: ${content.fontSizeText}; line-height: ${content.lineHeightText}; color: ${content.textColorText}; margin: 0; text-align: ${content.textAlign};">${escapeHtml(content.text)}</p>
+                    `;
+                    
+                case 'header-text':
+                    return `
+                        <h1 style="font-size: ${content.fontSizeTitle}; line-height: ${content.lineHeightTitle}; color: ${content.textColorTitle}; margin: 0; text-align: ${content.textAlign};">${escapeHtml(content.title)}</h1>
+                        ${content.showSubtitle ? `<p style="font-size: ${content.subtitleFontSize}; color: ${content.subtitleColor}; margin-top: 5px; text-align: ${content.textAlign};">${escapeHtml(content.subtitle)}</p>` : ''}
+                    `;
+                    
+                case 'header-image':
+                    const imageLink = content.link && content.link !== '#' ? content.link : null;
+                    const imageHtml = `
+                        <img src="${content.imageUrl}" alt="${escapeHtml(content.altText)}" style="display: block; width: ${content.imageWidth}; max-width: ${content.maxWidth}; height: auto; border: 0; margin: 0 auto;" />
+                    `;
+                    return imageLink ? `<a href="${imageLink}" style="text-decoration: none;">${imageHtml}</a>` : imageHtml;
+                    
+                case 'button-only':
+                    return `
+                        <table cellpadding="0" cellspacing="0" border="0" align="${content.buttonAlign}" style="margin: 0 auto;">
+                            <tr>
+                                <td style="background-color: ${content.buttonBackground}; border: ${content.buttonBorderWidth} ${content.buttonBorderStyle} ${content.buttonBorderColor}; border-radius: ${content.buttonBorderRadius};">
+                                    <a href="${content.buttonLink}" target="_blank" style="font-size: ${content.buttonFontSize}; color: ${content.buttonColor}; padding: ${content.buttonPadding}; display: block; text-decoration: none; text-align: center;">${escapeHtml(content.buttonText)}</a>
+                                </td>
+                            </tr>
+                        </table>
+                    `;
+                    
+                case 'image-only':
+                    const imageLinkUrl = content.link && content.link !== '#' ? content.link : null;
+                    const fullImageHtml = `
+                        <img src="${content.imageUrl}" alt="${escapeHtml(content.altText)}" style="display: block; width: ${content.imageWidth}; max-width: ${content.maxWidth || '100%'}; height: auto; border: 0; margin: 0 auto;" />
+                        ${content.caption ? `<p style="text-align: center; color: ${content.captionColor}; font-size: ${content.captionFontSize}; margin-top: 5px;">${escapeHtml(content.caption)}</p>` : ''}
+                    `;
+                    return imageLinkUrl ? `<a href="${imageLinkUrl}" style="text-decoration: none;">${fullImageHtml}</a>` : fullImageHtml;
+                    
+                case 'divider':
+                    return `
+                        <hr style="border: none; height: ${content.height}; width: ${content.width}; background-color: ${content.color}; border-top: ${content.height} ${content.style} ${content.color}; margin: 0 auto;" />
+                    `;
+                    
+                case 'custom-html':
+                    return sanitizeHtml(content.html);
+                    
+                // For complex sections that need nested tables (text-image, columns, etc.)
+                // These return their own table structures
+                case 'text-image':
+                case 'hero':
+                case 'navigation':
+                case 'single-column-blocks':
+                case 'two-column-blocks':
+                case 'three-column-blocks':
+                    return generateComplexSectionContent(section);
+                    
+                default:
+                    return `<div>Section type: ${section.type}</div>`;
+            }
+        }
+
+        // Handle complex sections that need nested tables
+        function generateComplexSectionContent(section) {
+            const content = section.content;
+            
+            switch(section.type) {
+                case 'text-image':
+                    const imagePosition = content.imagePosition || 'left';
+                    const textWidth = content.textWidth || '50%';
+                    const imageWidth = content.imageWidth || '50%';
+                    
+                    const imgHtml = `
+                        <img src="${content.imageUrl}" alt="${escapeHtml(content.altText)}" style="display: block; width: 100%; max-width: 100%; height: auto; border: 0;" />
+                    `;
+                    
+                    let textHtml = `
+                        <p style="font-size: ${content.fontSize}; line-height: ${content.lineHeight}; color: ${content.textColor}; margin: 0; text-align: ${content.textAlign};">${escapeHtml(content.text)}</p>
+                    `;
+                    
+                    if (content.showButton) {
+                        textHtml += `
+                            <table cellpadding="0" cellspacing="0" border="0" align="${content.buttonAlign}" style="margin-top: 15px;">
+                                <tr>
+                                    <td style="background-color: ${content.buttonBackground}; border-radius: ${content.buttonBorderRadius};">
+                                        <a href="${content.buttonLink}" style="font-size: ${content.buttonFontSize}; color: ${content.buttonColor}; padding: ${content.buttonPadding}; display: inline-block; text-decoration: none;">${escapeHtml(content.buttonText)}</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+                    }
+                    
+                    if (imagePosition === 'left') {
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                <tr>
+                                    <td width="${imageWidth}" style="vertical-align: ${content.verticalAlign}; padding-right: 20px;">${imgHtml}</td>
+                                    <td width="${textWidth}" style="vertical-align: ${content.verticalAlign};">${textHtml}</td>
+                                </tr>
+                            </table>
+                        `;
+                    } else {
+                        return `
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                <tr>
+                                    <td width="${textWidth}" style="vertical-align: ${content.verticalAlign}; padding-right: 20px;">${textHtml}</td>
+                                    <td width="${imageWidth}" style="vertical-align: ${content.verticalAlign};">${imgHtml}</td>
+                                </tr>
+                            </table>
+                        `;
+                    }
+                    
+                case 'hero':
+                    const overlayStyle = `
+                        background-image: linear-gradient(${content.overlayColor}, ${content.overlayColor}), url(${content.backgroundImage});
+                        background-size: cover;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                    `;
+                    
+                    let heroContent = `
+                        <table cellpadding="0" cellspacing="0" border="0" width="100%" style="height: 100%;">
+                            <tr>
+                                <td align="${content.overlayAlign}" style="padding: 40px 20px;">
+                                    <h1 style="font-size: ${content.titleFontSize}; line-height: ${content.lineHeightTitle}; color: ${content.overlayTextColor}; margin: 0 0 15px 0;">${escapeHtml(content.overlayTitle)}</h1>
+                                    <p style="font-size: ${content.textFontSize}; line-height: ${content.lineHeightText}; color: ${content.overlayTextColor}; margin: 0 0 20px 0;">${escapeHtml(content.overlayText)}</p>
+                    `;
+                    
+                    if (content.showOverlayButton) {
+                        heroContent += `
+                            <table cellpadding="0" cellspacing="0" border="0" align="${content.overlayButtonAlign}" style="margin: 0 auto;">
+                                <tr>
+                                    <td style="background-color: ${content.overlayButtonBackground}; border: ${content.overlayButtonBorderWidth} ${content.overlayButtonBorderStyle} ${content.overlayButtonBorderColor}; border-radius: ${content.overlayButtonBorderRadius};">
+                                        <a href="${content.overlayButtonLink}" style="font-size: ${content.overlayButtonFontSize}; color: ${content.overlayButtonColor}; padding: ${content.overlayButtonPadding}; display: inline-block; text-decoration: none;">${escapeHtml(content.overlayButtonText)}</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+                    }
+                    
+                    heroContent += `</td></tr></table>`;
+                    
+                    return `<div style="${overlayStyle}">${heroContent}</div>`;
+                    
+                case 'navigation':
+                    const menuItems = content.menuItems || [];
+                    let navHtml = '<table cellpadding="0" cellspacing="0" border="0" align="center" style="margin: 0 auto;"><tr>';
+                    
+                    menuItems.forEach((item, index) => {
+                        const isActive = item.active || false;
+                        const color = isActive ? content.activeColor : content.textColor;
+                        const spacing = index < menuItems.length - 1 ? `padding-right: ${content.itemSpacing};` : '';
+                        
+                        navHtml += `
+                            <td align="${content.alignment}" style="font-family: ${content.fontFamily}; font-size: ${content.fontSize}; ${spacing}">
+                                <a href="${item.link}" style="color: ${color}; text-decoration: none; padding: ${content.itemPadding}; border-radius: ${content.itemBorderRadius}; background-color: ${content.backgroundColor}; display: inline-block;${isActive ? ' font-weight: bold;' : ''}">${escapeHtml(item.text)}</a>
+                            </td>
+                        `;
+                    });
+                    
+                    navHtml += '</tr></table>';
+                    return navHtml;
+                    
+                case 'single-column-blocks':
+                    const blocks = content.blocks;
+                    const order = content.order || ['image', 'title', 'text', 'button'];
+                    const visible = content.visible || {image: true, title: true, text: true, button: true};
+                    
+                    let blocksHtml = '';
+                    order.forEach(blockType => {
+                        if (visible[blockType] && blocks[blockType]) {
+                            if (blockType === 'image' && blocks.image.url) {
+                                blocksHtml += `
+                                    <div style="text-align: ${blocks.image.align}; margin-bottom: 15px;">
+                                        <img src="${blocks.image.url}" alt="${blocks.image.altText}" style="max-width: 100%; height: auto; display: inline-block;" />
+                                    </div>
+                                `;
+                            } else if (blockType === 'title') {
+                                blocksHtml += `
+                                    <h2 style="font-size: ${blocks.title.fontSize}; color: ${blocks.title.color}; text-align: ${blocks.title.align}; line-height: ${blocks.title.lineHeight}; font-family: ${blocks.title.fontFamily}; margin: 0 0 10px 0;">
+                                        ${blocks.title.text}
+                                    </h2>
+                                `;
+                            } else if (blockType === 'text') {
+                                blocksHtml += `
+                                    <p style="font-size: ${blocks.text.fontSize}; color: ${blocks.text.color}; text-align: ${blocks.text.align}; line-height: ${blocks.text.lineHeight}; font-family: ${blocks.text.fontFamily}; margin: 0 0 15px 0;">
+                                        ${blocks.text.text}
+                                    </p>
+                                `;
+                            } else if (blockType === 'button' && blocks.button.showButton) {
+                                blocksHtml += `
+                                    <div style="text-align: ${blocks.button.align};">
+                                        <a href="${blocks.button.link}" style="display: inline-block; background-color: ${blocks.button.background}; color: ${blocks.button.color}; font-size: ${blocks.button.fontSize}; padding: ${blocks.button.padding}; border-radius: ${blocks.button.borderRadius}; text-decoration: none;">
+                                            ${blocks.button.text}
+                                        </a>
+                                    </div>
+                                `;
+                            }
+                        }
+                    });
+                    
+                    return blocksHtml;
+                    
+                // Update the two-column-blocks and three-column-blocks case in generateComplexSectionContent:
+
+case 'two-column-blocks':
+case 'three-column-blocks':
+    const columns = content.columns || [];
+    const columnGap = content.columnGap || '20px';
+    const colWidth = section.type === 'two-column-blocks' ? '50%' : '33.33%';
+    
+    let columnsHtml = '<table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>';
+    
+    columns.forEach((column, index) => {
+        const colBlocks = column.blocks || getDefaultBlocks();
+        const colVisible = column.visible || {image: true, title: true, text: true, button: true};
+        
+        let colContent = '';
+        
+        // Image block
+        if (colVisible.image !== false && colBlocks.image && colBlocks.image.url) {
+            colContent += `
+                <div style="text-align: ${colBlocks.image.align}; margin-bottom: 15px;">
+                    ${colBlocks.image.link && colBlocks.image.link !== '#' ? 
+                        `<a href="${colBlocks.image.link}" style="text-decoration: none;">` : ''}
+                    <img src="${colBlocks.image.url}" alt="${colBlocks.image.altText}" 
+                         style="max-width: 100%; height: auto; display: inline-block;" />
+                    ${colBlocks.image.link && colBlocks.image.link !== '#' ? '</a>' : ''}
+                </div>
+            `;
+        }
+        
+        // Title block
+        if (colVisible.title !== false && colBlocks.title) {
+            colContent += `
+                <h2 style="font-size: ${colBlocks.title.fontSize}; 
+                           color: ${colBlocks.title.color}; 
+                           text-align: ${colBlocks.title.align}; 
+                           line-height: ${colBlocks.title.lineHeight}; 
+                           font-family: ${colBlocks.title.fontFamily}; 
+                           margin: 0 0 10px 0;">
+                    ${colBlocks.title.text}
+                </h2>
+            `;
+        }
+        
+        // Text block
+        if (colVisible.text !== false && colBlocks.text) {
+            colContent += `
+                <p style="font-size: ${colBlocks.text.fontSize}; 
+                          color: ${colBlocks.text.color}; 
+                          text-align: ${colBlocks.text.align}; 
+                          line-height: ${colBlocks.text.lineHeight}; 
+                          font-family: ${colBlocks.text.fontFamily}; 
+                          margin: 0 0 15px 0;">
+                    ${colBlocks.text.text}
+                </p>
+            `;
+        }
+        
+        // Button block
+        if (colVisible.button !== false && colBlocks.button && colBlocks.button.showButton) {
+            colContent += `
+                <div style="text-align: ${colBlocks.button.align};">
+                    <a href="${colBlocks.button.link}" 
+                       style="display: inline-block; 
+                              background-color: ${colBlocks.button.background}; 
+                              color: ${colBlocks.button.color}; 
+                              font-size: ${colBlocks.button.fontSize}; 
+                              padding: ${colBlocks.button.padding}; 
+                              border-radius: ${colBlocks.button.borderRadius}; 
+                              text-decoration: none;">
+                        ${colBlocks.button.text}
+                    </a>
+                </div>
+            `;
+        }
+        
+        columnsHtml += `
+            <td class="column" width="${colWidth}" 
+                style="vertical-align: top; 
+                       padding-right: ${index < columns.length - 1 ? columnGap : '0'};">
+                ${colContent || '&nbsp;'}
+            </td>
+        `;
+    });
+    
+    columnsHtml += '</tr></table>';
+    return columnsHtml;
+                    
+                default:
+                    return `<div>Section type: ${section.type}</div>`;
             }
         }
 

@@ -287,6 +287,13 @@
         .add-block-btn:hover {
             background-color: #059669;
         }
+		/* Template list hover effects */
+#saved-templates-list > div {
+    transition: all 0.2s;
+}
+#saved-templates-list > div:hover {
+    transform: translateX(2px);
+}
     </style>
 </head>
 <body>
@@ -432,6 +439,25 @@
                     <button onclick="saveToFile()" class="template-action-btn bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center text-sm">
                         <i class="fas fa-download mr-1"></i> Export
                     </button>
+					</div>
+					<div>
+					<!-- Save/Load Management -->
+               <div class="mt-4 bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                    <h2 class="text-lg font-semibold mb-3 text-gray-700 flex items-center">
+                        <i class="fas fa-database mr-2 text-purple-500"></i> Saved Templates
+                    </h2>
+    
+    <!-- Save New Template -->
+              <div class="flex gap-2 mb-4">
+                    <input type="text" id="template-name" placeholder="Template name" class="flex-1 p-2 border rounded-lg text-sm">
+                    <button onclick="saveNamedTemplate()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm flex items-center">
+                        <i class="fas fa-save mr-1"></i> Save
+                    </button>
+              </div>
+    
+    <!-- List of Saved Templates -->
+              <div id="saved-templates-list" class="max-h-40 overflow-y-auto space-y-2"></div>
+               </div>
                 </div>
             </div>
 
@@ -3277,6 +3303,126 @@
                 showMessage('Error loading HTML: ' + error.message, 'error');
             }
         }
+		
+		// ===== NAMED TEMPLATE STORAGE =====
+const STORAGE_KEY = 'emailBuilder_templates';
+
+// Load saved templates list
+function getTemplates() {
+    const templates = localStorage.getItem(STORAGE_KEY);
+    return templates ? JSON.parse(templates) : {};
+}
+
+// Save current work with a name
+window.saveNamedTemplate = function() {
+    const name = document.getElementById('template-name').value.trim();
+    if (!name) {
+        showMessage('Please enter a template name', 'error');
+        return;
+    }
+    
+    const templates = getTemplates();
+    
+    // Check if exists
+    if (templates[name]) {
+        if (!confirm(`Template "${name}" already exists. Overwrite?`)) {
+            return;
+        }
+    }
+    
+    // Save current state
+    templates[name] = {
+        structure: JSON.parse(JSON.stringify(structure)),
+        masterSettings: JSON.parse(JSON.stringify(masterSettings)),
+        canvasWidth: canvasWidth,
+        date: new Date().toLocaleString()
+    };
+    
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(templates));
+    document.getElementById('template-name').value = '';
+    updateTemplatesList();
+    showMessage(`Template "${name}" saved!`, 'success');
+};
+
+// Load a named template
+window.loadNamedTemplate = function(name) {
+    const templates = getTemplates();
+    const template = templates[name];
+    
+    if (!template) return;
+    
+    if (confirm(`Load template "${name}"? Current work will be lost.`)) {
+        structure = JSON.parse(JSON.stringify(template.structure));
+        masterSettings = JSON.parse(JSON.stringify(template.masterSettings));
+        canvasWidth = template.canvasWidth || 600;
+        canvasWidthInput.value = canvasWidth;
+        
+        activePath = null;
+        activeType = null;
+        
+        saveHistory(); // Save to undo history
+        updateStructureList();
+        showMasterSettings();
+        updatePreview();
+        showMessage(`Template "${name}" loaded!`, 'success');
+    }
+};
+
+// Delete a named template
+window.deleteTemplate = function(name, event) {
+    event.stopPropagation(); // Prevent triggering load
+    
+    if (!confirm(`Delete template "${name}"?`)) return;
+    
+    const templates = getTemplates();
+    delete templates[name];
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(templates));
+    updateTemplatesList();
+    showMessage(`Template "${name}" deleted`, 'success');
+};
+
+// Update the templates list display
+function updateTemplatesList() {
+    const listDiv = document.getElementById('saved-templates-list');
+    const templates = getTemplates();
+    const names = Object.keys(templates);
+    
+    if (names.length === 0) {
+        listDiv.innerHTML = '<div class="text-gray-400 text-sm text-center py-2">No saved templates</div>';
+        return;
+    }
+    
+    // Sort by date (newest first)
+    names.sort((a, b) => {
+        return new Date(templates[b].date) - new Date(templates[a].date);
+    });
+    
+    let html = '';
+    names.forEach(name => {
+        const template = templates[name];
+        html += `
+            <div class="flex items-center justify-between bg-gray-50 hover:bg-gray-100 p-2 rounded-lg cursor-pointer group" onclick="loadNamedTemplate('${name.replace(/'/g, "\\'")}')">
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center">
+                        <i class="fas fa-file-alt text-gray-400 mr-2 text-sm"></i>
+                        <span class="text-sm font-medium truncate">${name}</span>
+                    </div>
+                    <div class="text-xs text-gray-400 ml-6">${template.date || ''}</div>
+                </div>
+                <button onclick="deleteTemplate('${name.replace(/'/g, "\\'")}', event)" class="text-red-500 hover:text-red-700 p-1 opacity-0 group-hover:opacity-100 transition" title="Delete">
+                    <i class="fas fa-trash-alt text-sm"></i>
+                </button>
+            </div>
+        `;
+    });
+    
+    listDiv.innerHTML = html;
+}
+
+// Load templates list on page start
+(function() {
+    updateTemplatesList();
+})();
     </script>
 	<footer>
     <div class="footer-content">

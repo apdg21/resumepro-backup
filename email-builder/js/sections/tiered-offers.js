@@ -112,6 +112,13 @@ SectionRegistry.register('tiered-offers', {
         // Comprehensive responsive styles
         const responsiveStyles = `
             <style>
+			    /* Base styles to prevent overflow */
+.tier-table {
+    width: 100% !important;
+    border-collapse: separate !important;
+    border-spacing: ${content.tierGap} !important;
+    table-layout: fixed !important; /* This helps with equal column widths */
+}
                 /* Tier cell hover effects */
                 .tier-cell {
                     transition: all 0.3s ease;

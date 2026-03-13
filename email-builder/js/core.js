@@ -1731,3 +1731,11 @@ window.deleteTemplate = deleteTemplate;
 window.updateTemplatesList = updateTemplatesList;
 
 console.log('Core.js loaded successfully');
+
+// Ensure templates list is updated when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        updateTemplatesList();
+        console.log('Templates loaded:', Object.keys(getTemplates()).length);
+    }, 200);
+});

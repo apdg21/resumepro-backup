@@ -1639,23 +1639,21 @@ function updateTemplatesList() {
         return;
     }
     
-    // Sort by date (newest first)
     names.sort((a, b) => {
-        return (templates[b].lastModified || 0) - (templates[a].lastModified || 0);
+        return new Date(templates[b].date) - new Date(templates[a].date);
     });
     
     let html = '';
     names.forEach(name => {
         const template = templates[name];
-        const dateStr = template.date || new Date(template.lastModified || 0).toLocaleString();
         html += `
             <div class="flex items-center justify-between bg-gray-50 hover:bg-gray-100 p-2 rounded-lg cursor-pointer group" onclick="loadNamedTemplate('${name.replace(/'/g, "\\'")}')">
                 <div class="flex-1 min-w-0">
                     <div class="flex items-center">
                         <i class="fas fa-file-alt text-gray-400 mr-2 text-sm"></i>
-                        <span class="text-sm font-medium truncate">${escapeHtml(name)}</span>
+                        <span class="text-sm font-medium truncate">${name}</span>
                     </div>
-                    <div class="text-xs text-gray-400 ml-6">${escapeHtml(dateStr)}</div>
+                    <div class="text-xs text-gray-400 ml-6">${template.date || ''}</div>
                 </div>
                 <button onclick="deleteTemplate('${name.replace(/'/g, "\\'")}', event)" class="text-red-500 hover:text-red-700 p-1 opacity-0 group-hover:opacity-100 transition" title="Delete">
                     <i class="fas fa-trash-alt text-sm"></i>
@@ -1733,11 +1731,3 @@ window.deleteTemplate = deleteTemplate;
 window.updateTemplatesList = updateTemplatesList;
 
 console.log('Core.js loaded successfully');
-
-// Ensure templates list is updated when page loads
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
-        updateTemplatesList();
-        console.log('Templates loaded:', Object.keys(getTemplates()).length);
-    }, 200);
-});

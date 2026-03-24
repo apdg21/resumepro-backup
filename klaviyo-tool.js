@@ -84,7 +84,7 @@
   let isTrialExpired = false;
   const TRIAL_START = new Date(2026, 1, 19, 12, 0, 0); // Feb 19, 2026 at 12:00 PM
   const TRIAL_END = new Date(TRIAL_START);
-  TRIAL_END.setDate(TRIAL_START.getDate() + 7);
+  TRIAL_END.setDate(TRIAL_START.getDate() + 100);
   TRIAL_END.setHours(23, 59, 59, 999); // Feb 26, 2026 at 11:59:59 PM
 
   // ========== UI ELEMENTS ==========

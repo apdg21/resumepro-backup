@@ -674,6 +674,7 @@
       justify-content: space-between;
     }
     .footer-brand { font-weight: 600; color: var(--muted); }
+	.footer { padding-left: 100px !important; }
 	
 	
     /* ── PRINT / PDF ── */
@@ -724,14 +725,91 @@
       text-align: center;
       line-height: 1.4;
     }
+	
+	.mobile-warning {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--ink);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    backdrop-filter: blur(8px);
+  }
+  
+  .mobile-warning.active {
+    display: flex;
+  }
+  
+  .mobile-warning-content {
+    background: var(--card);
+    border-radius: 24px;
+    padding: 2.5rem;
+    max-width: 320px;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.2);
+  }
+  
+  .mobile-warning-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+  
+  .mobile-warning-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+  }
+  
+  .mobile-warning-text {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+  }
+  
+  .mobile-warning-device {
+    background: var(--surface);
+    padding: 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    color: var(--muted2);
+    margin-top: 1rem;
+  }
+  
+  .mobile-warning-device span {
+    font-weight: 600;
+    color: var(--accent);
+  }
+  
+  @media (max-width: 768px) {
+    .mobile-warning {
+      display: flex;
+    }
+    
+    .page-wrap, .sidebar, .upload-overlay {
+      filter: blur(2px);
+      pointer-events: none;
+      user-select: none;
+    }
+  }
     [data-tip]:hover::after { opacity: 1; }
 
     /* animations */
     .fade-in { animation: fadeIn 0.4s ease both; }
     @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+	
+	
   </style>
 </head>
 <body>
+
 <header>
     <div class="header-content">
         <a href="index.html" class="logo">
@@ -788,6 +866,21 @@
         </div>
     </div>
 </header>
+<!-- Mobile Warning Overlay -->
+<div class="mobile-warning" id="mobileWarning">
+  <div class="mobile-warning-content">
+    <div class="mobile-warning-icon">💻📱</div>
+    <div class="mobile-warning-title">Desktop View Recommended</div>
+    <div class="mobile-warning-text">
+      This analytics dashboard is optimized for desktop and tablet viewing.<br><br>
+      For the best experience with full data visualization, charts, and tables, please use a laptop or desktop computer.
+    </div>
+    <div class="mobile-warning-device">
+      📊 Detected: <span id="deviceType">Mobile Device</span>
+    </div>
+  </div>
+</div>
+
 
 <!-- ── UPLOAD ZONE (shown when no data) ── -->
 <div class="upload-overlay" id="uploadOverlay">

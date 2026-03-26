@@ -1,0 +1,2054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Analytics · Executive Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="header.css">
+  <link rel="stylesheet" href="footer.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --ink: #0f1117;
+      --ink2: #1c2033;
+      --surface: #f9f8f6;
+      --card: #ffffff;
+      --border: rgba(15,17,23,0.08);
+      --accent: #d4622a;
+      --accent2: #2a6dd4;
+      --green: #1a7a4a;
+      --gold: #c9882a;
+      --muted: #6b7280;
+      --muted2: #9ca3af;
+      --radius: 18px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.1);
+	         --primary: #3a86ff;
+            --primary-dark: #2667cc;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+        }
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--surface);
+      color: var(--ink);
+      min-height: 100vh;
+      font-size: 15px;
+    }
+
+    /* ── SIDEBAR NAV ── */
+    .sidebar {
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      width: 220px;
+      background: var(--ink);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      padding: 2rem 0 1.5rem;
+      overflow: hidden;
+    }
+    .sidebar::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(212,98,42,0.12);
+      pointer-events: none;
+    }
+    .sidebar-brand {
+      padding: 0 1.5rem 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 1.5rem;
+    }
+    .sidebar-logo {
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+    }
+    .sidebar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+    }
+    .sidebar-sub {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-top: 0.25rem;
+      font-weight: 500;
+    }
+    .nav-section {
+      font-size: 0.58rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      font-weight: 600;
+      padding: 0 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.7rem 1.5rem;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+      cursor: pointer;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: #fff;
+      background: rgba(255,255,255,0.06);
+      border-left-color: var(--accent);
+    }
+    .nav-link.active { color: #fff; }
+    .nav-icon { font-size: 0.95rem; width: 18px; text-align: center; }
+    .nav-spacer { flex: 1; }
+    .sidebar-footer {
+      padding: 1rem 1.5rem 0;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .sidebar-footer-text {
+      font-size: 0.62rem;
+      color: rgba(255,255,255,0.2);
+      line-height: 1.5;
+    }
+
+    /* ── UPLOAD ZONE (shown when no data) ── */
+    .upload-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,17,23,0.85);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    .upload-modal {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 3rem 2.5rem;
+      max-width: 540px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.3);
+    }
+    .upload-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .upload-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    .upload-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+    .upload-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 4px;
+    }
+    .upload-tab {
+      flex: 1;
+      padding: 0.55rem;
+      border-radius: 9px;
+      border: none;
+      background: transparent;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .upload-tab.active {
+      background: var(--card);
+      color: var(--ink);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    .upload-panel { display: none; }
+    .upload-panel.active { display: block; }
+    .drop-zone {
+      border: 2px dashed var(--border);
+      border-radius: 14px;
+      padding: 2rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      margin-bottom: 1rem;
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--accent);
+      background: rgba(212,98,42,0.03);
+    }
+    .drop-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .drop-label { font-size: 0.82rem; color: var(--muted); }
+    .drop-label strong { color: var(--accent); }
+    .csv-note {
+      font-size: 0.72rem;
+      color: var(--muted2);
+      margin-top: 0.5rem;
+      text-align: left;
+      line-height: 1.6;
+    }
+    .csv-note code {
+      background: var(--surface);
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      font-size: 0.68rem;
+      font-family: monospace;
+    }
+    .btn-demo {
+      width: 100%;
+      padding: 0.85rem;
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-demo:hover { opacity: 0.85; }
+
+    /* ── MAIN LAYOUT ── */
+    .page-wrap {
+      margin-left: 220px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .topbar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .topbar-date {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .btn-upload {
+      padding: 0.45rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-upload:hover { background: var(--border); }
+    .btn-pdf {
+      padding: 0.45rem 1rem;
+      background: var(--accent);
+      border: none;
+      border-radius: 100px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-pdf:hover { opacity: 0.85; }
+
+    /* ── CONTENT ── */
+    .content { padding: 2rem; flex: 1; }
+
+    /* ── PAGE SECTIONS ── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── SECTION HEADER ── */
+    .section-eyebrow {
+      font-size: 0.62rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--muted2);
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .section-eyebrow::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── KPI CARDS ── */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 1100px) { .kpi-row { grid-template-columns: repeat(3,1fr); } }
+
+    .kpi-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kpi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .kpi-accent-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .kpi-icon { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .kpi-label {
+      font-size: 0.65rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    .kpi-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.1;
+      margin-bottom: 0.4rem;
+    }
+    .kpi-trend {
+      font-size: 0.72rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .trend-up { color: var(--green); }
+    .trend-down { color: var(--accent); }
+    .trend-neutral { color: var(--muted); }
+    .kpi-sub { font-size: 0.7rem; color: var(--muted2); margin-top: 0.15rem; }
+
+    /* ── LIST HEALTH STATUS ── */
+    .health-banner {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    .health-badge {
+      flex-shrink: 0;
+      padding: 0.6rem 1.2rem;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .health-badge.healthy { background: #dcfce7; color: #166534; }
+    .health-badge.moderate { background: #fef3c7; color: #92400e; }
+    .health-badge.at-risk { background: #fee2e2; color: #991b1b; }
+    .health-text { font-size: 0.83rem; color: var(--muted); line-height: 1.55; }
+    .health-text strong { color: var(--ink); }
+
+    /* ── CHARTS GRID ── */
+    .charts-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    .chart-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+    .chart-sub { font-size: 0.72rem; color: var(--muted); margin-bottom: 1.2rem; }
+    canvas { width: 100% !important; }
+
+    /* ── RECENT CAMPAIGNS TABLE ── */
+    .campaigns-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+    .campaigns-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.2rem;
+    }
+    .campaigns-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .view-all {
+      font-size: 0.75rem;
+      color: var(--accent);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .view-all:hover { opacity: 0.7; }
+    table.mini {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    table.mini th {
+      font-size: 0.62rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted2);
+      font-weight: 600;
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    table.mini td {
+      padding: 0.65rem 0.75rem;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      vertical-align: middle;
+    }
+    table.mini tr:last-child td { border-bottom: none; }
+    .ch-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+    .ch-email { background: #fef0e7; color: #c05012; }
+    .ch-sms { background: #e7f0fe; color: #1a4fa0; }
+    .perf-badge {
+      display: inline-block;
+      padding: 0.15rem 0.55rem;
+      border-radius: 100px;
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+    .perf-strong { background: #dcfce7; color: #166534; }
+    .perf-good { background: #fef3c7; color: #854d0e; }
+    .perf-needs { background: #fee2e2; color: #991b1b; }
+    .rev-val { font-weight: 700; color: var(--ink); }
+
+    /* ── MONTHLY TABLE ── */
+    .tbl-wrap { overflow-x: auto; }
+    table.data-tbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.79rem;
+      min-width: 900px;
+    }
+    table.data-tbl th {
+      font-size: 0.6rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted2);
+      font-weight: 600;
+      padding: 0.6rem 0.75rem;
+      text-align: left;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+    table.data-tbl td {
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    table.data-tbl tr:last-child td { border-bottom: none; }
+    table.data-tbl tr:hover td { background: var(--surface); }
+    .sticky-col { position: sticky; left: 0; background: var(--card); z-index: 2; }
+    table.data-tbl tr:hover .sticky-col { background: var(--surface); }
+    .status-badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+    .s-healthy { background: #dcfce7; color: #166534; }
+    .s-stable { background: #fef3c7; color: #854d0e; }
+    .s-revival { background: #ede9fe; color: #5b21b6; }
+    .s-declining { background: #fee2e2; color: #991b1b; }
+    .net-pos { color: var(--green); font-weight: 600; }
+    .net-neg { color: var(--accent); font-weight: 600; }
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .rev { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+    .unsub { color: var(--accent); text-align: right; }
+
+    /* ── CAMPAIGN TABLE ── */
+    table.camp-tbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      min-width: 1100px;
+    }
+    table.camp-tbl th {
+      font-size: 0.58rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted2);
+      font-weight: 600;
+      padding: 0.6rem 0.65rem;
+      text-align: left;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+    table.camp-tbl th:hover { color: var(--ink); }
+    table.camp-tbl td {
+      padding: 0.6rem 0.65rem;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      vertical-align: middle;
+    }
+    table.camp-tbl tr:last-child td { border-bottom: none; }
+    table.camp-tbl tr:hover td { background: var(--surface); }
+    .rate-bar-wrap { display: flex; align-items: center; gap: 6px; }
+    .rate-bar {
+      height: 5px;
+      border-radius: 3px;
+      background: var(--surface);
+      flex: 1;
+      max-width: 60px;
+      overflow: hidden;
+    }
+    .rate-bar-fill { height: 100%; border-radius: 3px; }
+    .bar-open { background: var(--accent); }
+    .bar-click { background: var(--accent2); }
+
+    /* ── INSIGHTS PAGE ── */
+    .insights-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .insight-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    .insight-card.wide { grid-column: 1 / -1; }
+    .insight-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+    .insight-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .insight-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .insight-list li {
+      display: flex;
+      gap: 0.75rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .insight-list li::before {
+      content: '→';
+      color: var(--accent);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .insight-list li strong { color: var(--ink); }
+    .action-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 0.75rem;
+      box-shadow: var(--shadow);
+    }
+    .action-item:nth-child(2) { border-left-color: var(--accent2); }
+    .action-item:nth-child(3) { border-left-color: var(--green); }
+    .action-item:nth-child(4) { border-left-color: var(--gold); }
+    .action-item:nth-child(5) { border-left-color: #8b5cf6; }
+    .action-num {
+      font-size: 0.62rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted2);
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+    .action-title {
+      font-weight: 700;
+      font-size: 0.92rem;
+      margin-bottom: 0.25rem;
+    }
+    .action-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      border-top: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+      font-size: 0.72rem;
+      color: var(--muted2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-brand { font-weight: 600; color: var(--muted); }
+	
+	.footer-content {
+     padding-left: 20rem !important;
+}
+
+    /* ── PRINT / PDF ── */
+    @media print {
+      .sidebar, .topbar, .upload-overlay { display: none !important; }
+      .page-wrap { margin-left: 0; }
+      .page { display: block !important; page-break-before: always; }
+      .page:first-of-type { page-break-before: avoid; }
+      body { background: white; font-size: 12px; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .sidebar { display: none; }
+      .page-wrap { margin-left: 0; }
+      .kpi-row { grid-template-columns: repeat(2,1fr); }
+      .charts-row { grid-template-columns: 1fr; }
+      .insights-grid { grid-template-columns: 1fr; }
+      .insight-card.wide { grid-column: auto; }
+      #insightsContent > div:first-child { grid-template-columns: repeat(3,1fr) !important; }
+    }
+    @media (max-width: 540px) {
+      #insightsContent > div:first-child { grid-template-columns: repeat(2,1fr) !important; }
+    }
+
+    /* ── TOOLTIP ── */
+    [data-tip] { position: relative; cursor: help; }
+    [data-tip]::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--ink);
+      color: #fff;
+      font-size: 0.68rem;
+      padding: 0.4rem 0.7rem;
+      border-radius: 8px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+      z-index: 999;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 400;
+      max-width: 220px;
+      white-space: normal;
+      text-align: center;
+      line-height: 1.4;
+    }
+    [data-tip]:hover::after { opacity: 1; }
+
+    /* animations */
+    .fade-in { animation: fadeIn 0.4s ease both; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+  </style>
+</head>
+<body>
+<header>
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+        
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation">☰</button>
+            <ul class="header-nav-menu">
+                <li class="header-nav-item"><a href="index.html" class="header-nav-link">Home</a></li>
+                <li class="header-nav-item header-dropdown">
+                    <a href="#" class="header-nav-link">
+                        Templates
+                        <span class="header-dropdown-icon">▼</span>
+                    </a>
+                    <div class="header-dropdown-content">
+                        <a href="resume-templates.html" class="header-dropdown-item">Resume Templates</a>
+                        <a href="portfolio-templates.html" class="header-dropdown-item">Portfolio Templates</a>
+                    </div>
+                </li>
+                
+                <!-- My Apps Menu Item -->
+                <li class="header-nav-item header-dropdown">
+                    <a href="#" class="header-nav-link">
+                        My Apps
+                        <span class="header-dropdown-icon">▼</span>
+                    </a>
+                    <div class="header-dropdown-content">
+                        <a href="android-applications.html" class="header-dropdown-item">Android Applications</a>
+                        <a href="family-connection-tools.html" class="header-dropdown-item">Web Applications</a>
+                      </div>
+                </li>
+                
+                <!-- UPDATED: Blog link now points to blog-list.html -->
+                <li class="header-nav-item"><a href="blog-list.html" class="header-nav-link">Blog</a></li>
+                
+                <li class="header-nav-item"><a href="klaviyo-analytics.html" class="header-nav-link">Klaviyo Analytics</a></li>
+                <li class="header-nav-item header-dropdown">
+                    <a href="#" class="header-nav-link">
+                        Productivity Tools
+                        <span class="header-dropdown-icon">▼</span>
+                    </a>
+                    <div class="header-dropdown-content">
+                        <a href="email-builder.html" class="header-dropdown-item">Email Builder</a>
+                        <a href="enhanced-todo.html" class="header-dropdown-item">Enhanced To-Do & Notes</a>
+                        <a href="klaviyo-tool.html" class="header-dropdown-item">Klaviyo Tool</a>
+						<a href="omnisend.html" class="header-dropdown-item">Omnisend Analytics Tool</a>
+                    </div>
+                </li>
+                <li class="header-nav-item"><a href="about.html" class="header-nav-link">About</a></li>
+                <li class="header-nav-item"><a href="contact.html" class="header-nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<!-- ── UPLOAD ZONE (shown when no data) ── -->
+<div class="upload-overlay" id="uploadOverlay">
+  <div class="upload-modal">
+    <div class="upload-icon">📊</div>
+    <div class="upload-title">Load Your Data</div>
+    <div class="upload-desc">Upload your monthly & campaign CSV exports from Omnisend, or load the built-in demo data to explore the dashboard.</div>
+
+    <div class="upload-tabs">
+      <button class="upload-tab active" onclick="switchTab('csv')">Upload CSV</button>
+      <button class="upload-tab" onclick="switchTab('demo')">Use Demo Data</button>
+    </div>
+
+    <div class="upload-panel active" id="tab-csv">
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1rem;text-align:left;line-height:1.5;">Upload <strong>two CSV files</strong>: one for monthly data, one for campaign data.</p>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem;">
+        <div>
+          <div style="font-size:0.72rem;font-weight:600;margin-bottom:0.4rem;">📅 Monthly Data</div>
+          <div class="drop-zone" id="dzMonthly">
+            <input type="file" accept=".csv" onchange="handleCSV(event,'monthly')" id="csvMonthly">
+            <div class="drop-label">Drop CSV or <strong>click to browse</strong></div>
+          </div>
+          <div class="csv-note">Required columns: <code>month</code>, <code>omni</code>, <code>camp</code>, <code>auto</code>, <code>store</code>, <code>emailSubs</code>, <code>newNet</code>, <code>unsub</code></div>
+        </div>
+        <div>
+          <div style="font-size:0.72rem;font-weight:600;margin-bottom:0.4rem;">📧 Campaign Data</div>
+          <div class="drop-zone" id="dzCampaign">
+            <input type="file" accept=".csv" onchange="handleCSV(event,'campaign')" id="csvCampaign">
+            <div class="drop-label">Drop CSV or <strong>click to browse</strong></div>
+          </div>
+          <div class="csv-note">Required columns: <code>date</code>, <code>name</code>, <code>channel</code>, <code>sent</code>, <code>rev</code>, <code>orders</code>, <code>openPct</code>, <code>clickPct</code></div>
+        </div>
+      </div>
+
+      <button class="btn-demo" id="btnLoadCSV" onclick="loadCSVData()" disabled style="opacity:0.4;">Load Dashboard →</button>
+      <div id="csvStatus" style="font-size:0.72rem;color:var(--muted);margin-top:0.6rem;text-align:center;"></div>
+      
+      <!-- Sample CSV Download Section -->
+      <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+        <div style="font-size:0.7rem; color:var(--muted2); margin-bottom:0.75rem; text-align:center;">📥 Need sample files to get started?</div>
+        <div style="display: flex; gap: 0.75rem; justify-content: center;">
+          <a href="#" onclick="downloadSampleMonthly(); return false;" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--surface); border-radius: 40px; text-decoration: none; font-size: 0.75rem; font-weight: 500; color: var(--accent); transition: all 0.2s;">
+            📊 Download Sample Monthly CSV
+          </a>
+          <a href="#" onclick="downloadSampleCampaign(); return false;" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--surface); border-radius: 40px; text-decoration: none; font-size: 0.75rem; font-weight: 500; color: var(--accent); transition: all 0.2s;">
+            📧 Download Sample Campaigns CSV
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="upload-panel" id="tab-demo">
+      <p style="font-size:0.82rem;color:var(--muted);line-height:1.6;margin-bottom:1.5rem;">Explore all dashboard features with 15 months of realistic Omnisend data and 16 campaign records.</p>
+      <button class="btn-demo" onclick="loadDemoData()">Load Demo Dashboard →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── SIDEBAR ── -->
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-logo">🧵</div>
+    <div class="sidebar-title">Analytics<br>Dashboard</div>
+    <div class="sidebar-sub">Email & SMS</div>
+  </div>
+
+  <div class="nav-section">Pages</div>
+  <a class="nav-link active" onclick="showPage('overview')" id="nav-overview">
+    <span class="nav-icon">⚡</span> Executive Overview
+  </a>
+  <a class="nav-link" onclick="showPage('list')" id="nav-list">
+    <span class="nav-icon">📈</span> List Health & Growth
+  </a>
+  <a class="nav-link" onclick="showPage('campaigns')" id="nav-campaigns">
+    <span class="nav-icon">📅</span> Campaign Performance
+  </a>
+  <a class="nav-link" onclick="showPage('insights')" id="nav-insights">
+    <span class="nav-icon">💡</span> Key Insights
+  </a>
+
+  <div class="nav-spacer"></div>
+
+  <div class="nav-section" style="margin-bottom:0.75rem;">Data</div>
+  <a class="nav-link" onclick="showUpload()">
+    <span class="nav-icon">📂</span> Change Data Source
+  </a>
+  <a class="nav-link" onclick="exportCSV()">
+    <span class="nav-icon">⬇</span> Export CSV
+  </a>
+  <a class="nav-link" onclick="window.print()">
+    <span class="nav-icon">🖨</span> Print / PDF
+  </a>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-text">Built by <strong style="color:rgba(255,255,255,0.4)">ResumePro</strong><br>Turning Omnisend data into profitable strategies.</div>
+  </div>
+</nav>
+
+<!-- ── MAIN ── -->
+<div class="page-wrap">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-title" id="pageTitle">Executive Overview</div>
+    <div class="topbar-right">
+      <div class="topbar-date" id="topbarDate">—</div>
+      <button class="btn-upload" onclick="showUpload()">⬆ Change Data</button>
+      <button class="btn-pdf" onclick="window.print()">Export PDF</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ══ PAGE 1: EXECUTIVE OVERVIEW ══ -->
+    <div class="page active fade-in" id="page-overview">
+      <div class="section-eyebrow">Executive Overview · Latest Month Snapshot</div>
+
+      <!-- KPI Row -->
+      <div class="kpi-row" id="kpiOverview">
+        <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#d4622a,#f0944a)"></div><div class="kpi-icon">📬</div><div class="kpi-label">Total Omnisend Rev</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">Loading…</div></div>
+        <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#2a6dd4,#5b9bd5)"></div><div class="kpi-icon">🆕</div><div class="kpi-label">Net New Subscribers</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">Loading…</div></div>
+        <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#1a7a4a,#34c77a)"></div><div class="kpi-icon">👁</div><div class="kpi-label">Avg Open Rate</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">Loading…</div></div>
+        <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#c9882a,#e0b060)"></div><div class="kpi-icon">⚙️</div><div class="kpi-label">Automation Revenue</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">Loading…</div></div>
+        <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#8b5cf6,#c084fc)"></div><div class="kpi-icon">📉</div><div class="kpi-label">Unsub Rate</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">Loading…</div></div>
+      </div>
+
+      <!-- Health Banner -->
+      <div class="health-banner" id="healthBanner">
+        <div class="health-badge healthy" id="healthBadge">● Healthy</div>
+        <div class="health-text" id="healthText">Loading list health status…</div>
+      </div>
+
+      <!-- Charts -->
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-title">Revenue vs New Subscribers</div>
+          <div class="chart-sub">Omnisend revenue correlated with subscriber acquisition momentum</div>
+          <canvas id="overviewTrendChart" height="200"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Revenue Split</div>
+          <div class="chart-sub">Campaigns vs Automation — latest month</div>
+          <canvas id="revSplitChart" height="200"></canvas>
+        </div>
+      </div>
+
+      <!-- Recent Campaigns -->
+      <div class="campaigns-card">
+        <div class="campaigns-card-header">
+          <div class="campaigns-card-title">Recent Campaigns</div>
+          <a class="view-all" onclick="showPage('campaigns')">View all →</a>
+        </div>
+        <div class="tbl-wrap">
+          <table class="mini" id="recentCampsTable">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Campaign Name</th>
+                <th>Channel</th>
+                <th>Sent</th>
+                <th>Open Rate</th>
+                <th>Revenue</th>
+                <th>Orders</th>
+                <th>Performance</th>
+              </tr>
+            </thead>
+            <tbody id="recentCampsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PAGE 2: LIST HEALTH ══ -->
+    <div class="page fade-in" id="page-list">
+      <div class="section-eyebrow">List Health & Growth · Full Monthly History</div>
+
+      <div class="kpi-row" id="kpiList" style="grid-template-columns: repeat(4,1fr);">
+        <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#d4622a,#f0944a)"></div><div class="kpi-icon">📬</div><div class="kpi-label">Total Omnisend (Period)</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">—</div></div>
+        <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#1a7a4a,#34c77a)"></div><div class="kpi-icon">👥</div><div class="kpi-label">Total Email Subscribers</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">—</div></div>
+        <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#2a6dd4,#5b9bd5)"></div><div class="kpi-icon">🆕</div><div class="kpi-label">Peak Monthly Net Growth</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">—</div></div>
+        <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#8b5cf6,#c084fc)"></div><div class="kpi-icon">⚙️</div><div class="kpi-label">Automation Share (Latest)</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">—</div></div>
+      </div>
+
+      <!-- 3 Charts -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+        <div class="chart-card">
+          <div class="chart-title">New Subscribers vs Engaged List</div>
+          <div class="chart-sub" data-tip="Engaged list = active subscribers modeled from engagement signals">Acquisition momentum & active audience size</div>
+          <canvas id="subsTrendChart" height="200"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Campaigns vs Automation Revenue</div>
+          <div class="chart-sub">Monthly revenue contribution by channel type</div>
+          <canvas id="revTypeChart" height="200"></canvas>
+        </div>
+      </div>
+      <div class="chart-card" style="margin-bottom:1rem;">
+        <div class="chart-title">Unsubscribe Rate Trend</div>
+        <div class="chart-sub">Monthly unsub rate — early signal of list fatigue. Target: below 2%</div>
+        <canvas id="unsubChart" height="110"></canvas>
+      </div>
+
+      <!-- Strategy callouts -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-bottom:1.25rem;">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem;box-shadow:var(--shadow);">
+          <div style="font-size:1rem;margin-bottom:0.5rem;">🎯</div>
+          <div style="font-size:0.78rem;font-weight:700;margin-bottom:0.3rem;">Slow Acquisition → Revenue Drop</div>
+          <div style="font-size:0.73rem;color:var(--muted);line-height:1.5;">When new subscriber growth slows, email revenue follows within 2–3 months. We recommend ramping lead magnets & pop-ups proactively.</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem;box-shadow:var(--shadow);">
+          <div style="font-size:1rem;margin-bottom:0.5rem;">⚠️</div>
+          <div style="font-size:0.78rem;font-weight:700;margin-bottom:0.3rem;">Rising Unsub Rate = Content Fatigue</div>
+          <div style="font-size:0.73rem;color:var(--muted);line-height:1.5;">Spikes in unsubscribes signal frequency overload or irrelevant content. We reduce sends & refresh segmentation before fatigue compounds.</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem;box-shadow:var(--shadow);">
+          <div style="font-size:1rem;margin-bottom:0.5rem;">⚙️</div>
+          <div style="font-size:0.78rem;font-weight:700;margin-bottom:0.3rem;">Automation = Predictable Revenue</div>
+          <div style="font-size:0.73rem;color:var(--muted);line-height:1.5;">Strong automation contribution means revenue flows even without active campaigns. We prioritize building welcome series, abandoned cart & post-purchase flows.</div>
+        </div>
+      </div>
+
+      <!-- Monthly Table -->
+      <div class="campaigns-card">
+        <div class="campaigns-card-header">
+          <div class="campaigns-card-title">Monthly Performance Table</div>
+          <div style="font-size:0.72rem;color:var(--muted2);">Jan 2025 – present · scroll horizontally</div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="data-tbl">
+            <thead>
+              <tr>
+                <th class="sticky-col">Month</th>
+                <th class="num">New Subs</th>
+                <th class="num">Unsubs</th>
+                <th class="num">Net Growth</th>
+                <th class="num">Engaged List*</th>
+                <th class="num">Unsub Rate</th>
+                <th class="rev">Campaigns (€)</th>
+                <th class="rev">Automation (€)</th>
+                <th class="rev">Omnisend (€)</th>
+                <th class="rev">Store Rev (€)</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="monthlyTableBody"></tbody>
+          </table>
+        </div>
+        <div style="font-size:0.68rem;color:var(--muted2);margin-top:0.75rem;line-height:1.5;">* Engaged List = active subscribers modeled from Omnisend engagement & acquisition signals (30-day proxy).</div>
+      </div>
+    </div>
+
+    <!-- ══ PAGE 3: CAMPAIGNS ══ -->
+    <div class="page fade-in" id="page-campaigns">
+      <div class="section-eyebrow">Campaign Performance · Tactical Analysis</div>
+
+      <div class="kpi-row" id="kpiCamps" style="grid-template-columns:repeat(5,1fr);">
+        <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#d4622a,#f0944a)"></div><div class="kpi-icon">💰</div><div class="kpi-label">Total Campaign Revenue</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">—</div></div>
+        <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#1a7a4a,#34c77a)"></div><div class="kpi-icon">🛒</div><div class="kpi-label">Total Orders</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">—</div></div>
+        <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#2a6dd4,#5b9bd5)"></div><div class="kpi-icon">👁</div><div class="kpi-label">Avg Open Rate (Email)</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">—</div></div>
+        <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#c9882a,#e0b060)"></div><div class="kpi-icon">🖱</div><div class="kpi-label">Avg Click Rate</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">—</div></div>
+        <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#8b5cf6,#c084fc)"></div><div class="kpi-icon">📨</div><div class="kpi-label">Revenue per Send (RPS)</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">—</div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+        <div class="chart-card">
+          <div class="chart-title">Revenue by Campaign</div>
+          <div class="chart-sub">Top campaigns by total revenue generated</div>
+          <canvas id="campRevChart" height="200"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Open Rate vs Click Rate (Email)</div>
+          <div class="chart-sub">Scatter view — high opens + low clicks = offer/landing page gap</div>
+          <canvas id="scatterChart" height="200"></canvas>
+        </div>
+      </div>
+
+      <!-- Strategy callouts -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-bottom:1.25rem;">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem;box-shadow:var(--shadow);">
+          <div style="font-size:1rem;margin-bottom:0.5rem;">🔍</div>
+          <div style="font-size:0.78rem;font-weight:700;margin-bottom:0.3rem;">High Open, Low Conversion</div>
+          <div style="font-size:0.73rem;color:var(--muted);line-height:1.5;">Strong subject lines but weak results signal a landing page or offer alignment issue — not an email problem. We audit destination pages.</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem;box-shadow:var(--shadow);">
+          <div style="font-size:1rem;margin-bottom:0.5rem;">💬</div>
+          <div style="font-size:0.78rem;font-weight:700;margin-bottom:0.3rem;">SMS Shows Strong CTR</div>
+          <div style="font-size:0.73rem;color:var(--muted);line-height:1.5;">SMS campaigns consistently outperform email on click rates. We recommend expanding SMS in high-intent automation flows.</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem;box-shadow:var(--shadow);">
+          <div style="font-size:1rem;margin-bottom:0.5rem;">🎯</div>
+          <div style="font-size:0.78rem;font-weight:700;margin-bottom:0.3rem;">Segment Matters</div>
+          <div style="font-size:0.73rem;color:var(--muted);line-height:1.5;">Engaged segments open at 75%+ vs cold lists at under 20%. Advanced segmentation is our highest-leverage optimization lever.</div>
+        </div>
+      </div>
+
+      <!-- Campaign Table -->
+      <div class="campaigns-card">
+        <div class="campaigns-card-header">
+          <div class="campaigns-card-title">Campaign Performance Table</div>
+          <div style="display:flex;gap:0.5rem;">
+            <button onclick="setCampFilter('all',this)" class="filter-btn active" style="padding:0.3rem 0.8rem;border:1px solid var(--border);background:var(--ink);color:#fff;border-radius:100px;font-family:Outfit,sans-serif;font-size:0.72rem;font-weight:600;cursor:pointer;">All</button>
+            <button onclick="setCampFilter('Email',this)" class="filter-btn" style="padding:0.3rem 0.8rem;border:1px solid var(--border);background:var(--card);border-radius:100px;font-family:Outfit,sans-serif;font-size:0.72rem;font-weight:600;cursor:pointer;">Email</button>
+            <button onclick="setCampFilter('SMS',this)" class="filter-btn" style="padding:0.3rem 0.8rem;border:1px solid var(--border);background:var(--card);border-radius:100px;font-family:Outfit,sans-serif;font-size:0.72rem;font-weight:600;cursor:pointer;">SMS</button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="camp-tbl">
+            <thead>
+              <tr>
+                <th onclick="sortCamps('date')">Date ↕</th>
+                <th>Campaign Name</th>
+                <th>Channel</th>
+                <th onclick="sortCamps('sent')" class="num">Sent ↕</th>
+                <th onclick="sortCamps('openPct')" class="num">Open Rate ↕</th>
+                <th onclick="sortCamps('clickPct')" class="num">Click Rate ↕</th>
+                <th onclick="sortCamps('rev')" class="num">Revenue ↕</th>
+                <th onclick="sortCamps('orders')" class="num">Orders ↕</th>
+                <th class="num">AOV</th>
+                <th class="num">RPS</th>
+                <th>Performance</th>
+              </tr>
+            </thead>
+            <tbody id="campTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PAGE 4: INSIGHTS ══ -->
+    <div class="page fade-in" id="page-insights">
+      <div class="section-eyebrow">Key Insights & Recommended Actions · Generated from your data</div>
+      <div id="insightsContent">
+        <div style="padding:3rem;text-align:center;color:var(--muted2);font-size:0.85rem;">Load data to generate insights…</div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <div class="page-footer">
+    <div class="footer-brand">🧵 Analytics Dashboard · Email & SMS Performance</div>
+    <div id="footerData" style="color:var(--muted2);">—</div>
+    <div>Built & Analyzed by <strong style="color:var(--muted);">ResumePro</strong> · Turning Omnisend data into profitable strategies.</div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+
+<script>
+  // ──────────────────────────────────────────────
+  // DATA STORE
+  // ──────────────────────────────────────────────
+  let MONTHLY = [];
+  let CAMPAIGNS = [];
+  let campFilter = 'all';
+  let campSortKey = 'date';
+  let campSortDir = -1;
+
+  const fmtEur = n => `€${Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+  const fmtK = n => n>=1000?(n/1000).toFixed(1)+'K':String(Math.round(n));
+  const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const dLabel = d => { const [y,m,day] = d.split('-'); return `${+day} ${mo[+m-1]}`; };
+
+  const computeEngaged = (email, newNet) => Math.min(email, Math.max(750, Math.floor(email * 0.32 + newNet * 1.4)));
+
+  // ──────────────────────────────────────────────
+  // UPLOAD / TABS
+  // ──────────────────────────────────────────────
+  let csvMonthlyData = null, csvCampaignData = null;
+
+  function switchTab(t) {
+    document.querySelectorAll('.upload-tab').forEach((el,i)=>el.classList.toggle('active', (t==='csv'&&i===0)||(t==='demo'&&i===1)));
+    document.getElementById('tab-csv').classList.toggle('active', t==='csv');
+    document.getElementById('tab-demo').classList.toggle('active', t==='demo');
+  }
+
+  function handleCSV(e, type) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const rows = parseCSV(ev.target.result);
+        if (type === 'monthly') {
+          csvMonthlyData = rows;
+          document.getElementById('dzMonthly').style.borderColor = 'var(--green)';
+          document.querySelector('#dzMonthly .drop-label').innerHTML = `✅ <strong>${rows.length} rows loaded</strong>`;
+        } else {
+          csvCampaignData = rows;
+          document.getElementById('dzCampaign').style.borderColor = 'var(--green)';
+          document.querySelector('#dzCampaign .drop-label').innerHTML = `✅ <strong>${rows.length} rows loaded</strong>`;
+        }
+        updateCSVBtn();
+      } catch(err) {
+        document.getElementById('csvStatus').textContent = '❌ Error: ' + err.message;
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function updateCSVBtn() {
+    const btn = document.getElementById('btnLoadCSV');
+    const count = (csvMonthlyData?1:0)+(csvCampaignData?1:0);
+    btn.disabled = count === 0;
+    btn.style.opacity = count === 0 ? '0.4' : '1';
+    document.getElementById('csvStatus').textContent = count===2 ? '✅ Both files ready — click Load Dashboard' : count===1 ? '⏳ One more file needed' : '';
+  }
+
+  function loadCSVData() {
+    if (csvMonthlyData) MONTHLY = csvMonthlyData.map(r => ({
+      month: r.month||r.Month||'',
+      omni: +r.omni||+r.Omnisend||0,
+      camp: +r.camp||+r.campaigns||0,
+      auto: +r.auto||+r.automation||0,
+      store: +r.store||+r.storeRev||0,
+      emailSubs: +r.emailSubs||+r.subscribers||0,
+      newNet: +r.newNet||+r.new_net||0,
+      unsub: +r.unsub||+r.unsubscribes||0
+    })).filter(r=>r.month);
+    if (csvCampaignData) CAMPAIGNS = csvCampaignData.map((r,i) => ({
+      id: i+1,
+      date: r.date||r.Date||'',
+      name: r.name||r.Name||r.campaign||'',
+      channel: r.channel||r.Channel||'Email',
+      sent: +r.sent||0,
+      openPct: r.openPct!=null&&r.openPct!==''?+r.openPct:null,
+      openN: r.openN!=null?+r.openN:null,
+      clickPct: r.clickPct!=null&&r.clickPct!==''?+r.clickPct:null,
+      clickN: r.clickN!=null?+r.clickN:null,
+      rev: +r.rev||0,
+      orders: r.orders!=null?+r.orders:null,
+      segment: r.segment||''
+    })).filter(r=>r.date);
+    hideUpload();
+    renderAll();
+  }
+
+  function parseCSV(text) {
+    const lines = text.trim().split('\n').filter(l=>l.trim());
+    if (lines.length < 2) throw new Error('CSV must have a header row and at least one data row');
+    const headers = lines[0].split(',').map(h=>h.trim().replace(/^"|"$/g,''));
+    return lines.slice(1).map(line => {
+      const vals = [];
+      let cur = '', inQ = false;
+      for (const ch of line) {
+        if (ch==='"') inQ=!inQ;
+        else if (ch===','&&!inQ) { vals.push(cur.trim()); cur=''; }
+        else cur+=ch;
+      }
+      vals.push(cur.trim());
+      const obj = {};
+      headers.forEach((h,i)=>{ obj[h]=(vals[i]||'').replace(/^"|"$/g,''); });
+      return obj;
+    });
+  }
+
+  function loadDemoData() {
+    MONTHLY = [
+      { month:"Jan '25", omni:13818.02, camp:8137.56, auto:5680.46, store:34117.21, emailSubs:12301, newNet:341, unsub:698 },
+      { month:"Feb '25", omni:26092.03, camp:14664.36, auto:11427.67, store:78444.30, emailSubs:14454, newNet:2153, unsub:1095 },
+      { month:"Mar '25", omni:16976.24, camp:9150.71, auto:7825.53, store:45458.74, emailSubs:15707, newNet:1253, unsub:732 },
+      { month:"Apr '25", omni:14042.72, camp:7786.31, auto:6256.41, store:34741.49, emailSubs:16355, newNet:611, unsub:733 },
+      { month:"May '25", omni:10535.75, camp:6025.63, auto:4510.12, store:26996.76, emailSubs:16785, newNet:430, unsub:511 },
+      { month:"Jun '25", omni:12705.31, camp:6874.95, auto:5830.36, store:35259.70, emailSubs:17695, newNet:910, unsub:400 },
+      { month:"Jul '25", omni:14440.95, camp:6990.24, auto:7450.71, store:47488.58, emailSubs:19331, newNet:1636, unsub:515 },
+      { month:"Aug '25", omni:15110.00, camp:5751.49, auto:9358.51, store:60405.98, emailSubs:21706, newNet:2375, unsub:572 },
+      { month:"Sep '25", omni:21068.92, camp:7859.15, auto:13209.77, store:84653.82, emailSubs:25244, newNet:3538, unsub:683 },
+      { month:"Oct '25", omni:19440.20, camp:7560.68, auto:11879.52, store:70098.19, emailSubs:27685, newNet:2441, unsub:678 },
+      { month:"Nov '25", omni:14218.65, camp:6798.14, auto:7420.51, store:42011.62, emailSubs:28714, newNet:1029, unsub:801 },
+      { month:"Dec '25", omni:9791.83, camp:5170.66, auto:4621.17, store:31852.92, emailSubs:29499, newNet:785, unsub:617 },
+      { month:"Jan '26", omni:15412.07, camp:7457.12, auto:7954.95, store:56014.00, emailSubs:31482, newNet:1983, unsub:715 },
+      { month:"Feb '26", omni:14073.31, camp:6133.66, auto:7939.65, store:50885.36, emailSubs:33089, newNet:1607, unsub:735 },
+      { month:"Mar '26", omni:8461.50, camp:3850.63, auto:4610.87, store:28661.15, emailSubs:33600, newNet:544, unsub:713 }
+    ];
+    CAMPAIGNS = [
+      {id:1,date:"2026-03-22",name:"Sunday Morning Coffee — The Spring Edit Follow-up",channel:"Email",sent:9893,openPct:74.4,openN:7364,clickPct:1.5,clickN:150,rev:208.22,orders:11,segment:"Active & Engaged"},
+      {id:2,date:"2026-03-21",name:"MAR_NAT_QUILT_DAY_2026",channel:"SMS",sent:6752,openPct:null,openN:null,clickPct:40.9,clickN:2763,rev:236.75,orders:12,segment:"Engaged SMS Subscribers"},
+      {id:3,date:"2026-03-21",name:"National Quilting Day — The Spring Edit Launch",channel:"Email",sent:9882,openPct:74.3,openN:7352,clickPct:2.4,clickN:242,rev:299.25,orders:14,segment:"Active & Engaged"},
+      {id:4,date:"2026-03-20",name:"National Quilting Day Teaser",channel:"Email",sent:10291,openPct:73.8,openN:7604,clickPct:1.3,clickN:141,rev:193.32,orders:8,segment:"Active & Engaged"},
+      {id:5,date:"2026-03-17",name:"The Lucky Green Edit [St. Patrick's Day]",channel:"Email",sent:10266,openPct:74.4,openN:7645,clickPct:1.9,clickN:197,rev:265.39,orders:19,segment:"Active & Engaged"},
+      {id:6,date:"2026-03-15",name:"March Maker Tiered Event [FINAL CALL] Less Engaged",channel:"Email",sent:9914,openPct:9.1,openN:908,clickPct:0.73,clickN:73,rev:133.37,orders:5,segment:"All Email Subscribers"},
+      {id:7,date:"2026-03-15",name:"March Maker Tiered Event [FINAL CALL]",channel:"Email",sent:9527,openPct:76.8,openN:7326,clickPct:2.2,clickN:210,rev:226.45,orders:13,segment:"Active & Engaged"},
+      {id:8,date:"2026-03-13",name:"March Maker Tiered Event - Less Engaged",channel:"Email",sent:11308,openPct:16.2,openN:1842,clickPct:1.7,clickN:195,rev:221.69,orders:8,segment:"All Email Subscribers"},
+      {id:9,date:"2026-03-13",name:"March Maker Tiered Event",channel:"Email",sent:8050,openPct:80.3,openN:6472,clickPct:3.1,clickN:251,rev:273.61,orders:17,segment:"Active & Engaged"},
+      {id:10,date:"2026-03-11",name:'The "No-Fuss" Quilt Fringe (Rag Edge)',channel:"Email",sent:8104,openPct:81.7,openN:6627,clickPct:2.9,clickN:237,rev:236.01,orders:19,segment:"Active & Engaged"},
+      {id:11,date:"2026-03-09",name:"International Women's Day [FINAL CALL]",channel:"Email",sent:8135,openPct:79.8,openN:6499,clickPct:3.3,clickN:269,rev:103.82,orders:7,segment:"Active & Engaged"},
+      {id:12,date:"2026-03-07",name:"International Women's Day Celebration",channel:"Email",sent:8203,openPct:79.2,openN:6501,clickPct:3.1,clickN:260,rev:344.88,orders:20,segment:"Active & Engaged"},
+      {id:13,date:"2026-03-05",name:"Spring Palette Reveal",channel:"Email",sent:8360,openPct:80.4,openN:6724,clickPct:2.3,clickN:198,rev:370.10,orders:21,segment:"Active & Engaged"},
+      {id:14,date:"2026-03-03",name:"National Craft Month Kickoff",channel:"Email",sent:8448,openPct:79.6,openN:6726,clickPct:3,clickN:261,rev:288.63,orders:12,segment:"Active & Engaged"},
+      {id:15,date:"2026-03-24",name:"National Quilting Day — Post-Event Gratitude",channel:"Email",sent:9677,openPct:71.8,openN:6955,clickPct:0.24,clickN:24,rev:62.65,orders:4,segment:"Active & Engaged"}
+    ];
+    hideUpload();
+    renderAll();
+  }
+
+  function showUpload() {
+    document.getElementById('uploadOverlay').style.display = 'flex';
+  }
+  function hideUpload() {
+    document.getElementById('uploadOverlay').style.display = 'none';
+  }
+
+  // ──────────────────────────────────────────────
+  // NAV
+  // ──────────────────────────────────────────────
+  const pageTitles = { overview:'Executive Overview', list:'List Health & Growth', campaigns:'Campaign Performance', insights:'Key Insights & Actions' };
+
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+    document.getElementById('page-'+id).classList.add('active');
+    document.getElementById('nav-'+id)?.classList.add('active');
+    document.getElementById('pageTitle').textContent = pageTitles[id]||'';
+  }
+
+  // ──────────────────────────────────────────────
+  // RENDER ALL
+  // ──────────────────────────────────────────────
+  let charts = {};
+
+  function destroyChart(id) {
+    if (charts[id]) { charts[id].destroy(); delete charts[id]; }
+  }
+
+  function renderAll() {
+    if (!MONTHLY.length) return;
+    const enriched = MONTHLY.map(m => ({ ...m, engaged: computeEngaged(m.emailSubs, m.newNet) }));
+    const latest = enriched[enriched.length-1];
+    const prev = enriched[enriched.length-2];
+    const months = enriched.map(d=>d.month);
+
+    // update footer date
+    document.getElementById('topbarDate').textContent = latest.month + ' · ' + new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+    document.getElementById('footerData').textContent = `${enriched[0].month} – ${latest.month} · ${CAMPAIGNS.length} campaigns`;
+
+    renderOverviewKPIs(enriched, latest, prev);
+    renderHealthBanner(enriched, latest);
+    renderOverviewCharts(enriched, months, latest);
+    renderRecentCamps();
+    renderListKPIs(enriched, latest);
+    renderListCharts(enriched, months);
+    renderMonthlyTable(enriched);
+    renderCampKPIs();
+    renderCampCharts();
+    renderCampTable();
+    renderInsights();
+  }
+
+  // ── Overview KPIs ──
+  function renderOverviewKPIs(enriched, latest, prev) {
+    const omniChange = prev ? ((latest.omni-prev.omni)/prev.omni*100) : 0;
+    const omniDir = omniChange>=0?'trend-up':'trend-down';
+    const emailCamps = CAMPAIGNS.filter(c=>c.channel==='Email'&&c.openPct!=null);
+    const avgOpen = emailCamps.length ? emailCamps.reduce((s,c)=>s+c.openPct,0)/emailCamps.length : null;
+    const openStatus = avgOpen>=70?'⬆ Excellent':avgOpen>=55?'● Good':'◑ Needs Attention';
+    const unsubRate = latest.emailSubs ? (latest.unsub/latest.emailSubs*100) : 0;
+    const unsubStatus = unsubRate<1?'trend-up':unsubRate<2?'trend-neutral':'trend-down';
+    const unsubLabel = unsubRate<1?'✅ Healthy':unsubRate<2?'⚠ Watch closely':'🔴 Action needed';
+
+    document.getElementById('kpiOverview').innerHTML = `
+      <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#d4622a,#f0944a)"></div>
+        <div class="kpi-icon">📬</div><div class="kpi-label">Total Omnisend Rev</div>
+        <div class="kpi-value">${fmtEur(latest.omni)}</div>
+        <div class="kpi-trend ${omniDir}">${omniChange>=0?'▲':'▼'} ${Math.abs(omniChange).toFixed(1)}% MoM</div>
+        <div class="kpi-sub">${latest.month}</div></div>
+      <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#2a6dd4,#5b9bd5)"></div>
+        <div class="kpi-icon">🆕</div><div class="kpi-label">Net New Subscribers</div>
+        <div class="kpi-value">+${latest.newNet.toLocaleString()}</div>
+        <div class="kpi-trend trend-up">▲ Total: ${latest.emailSubs.toLocaleString()}</div>
+        <div class="kpi-sub">${latest.month}</div></div>
+      <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#1a7a4a,#34c77a)"></div>
+        <div class="kpi-icon">👁</div><div class="kpi-label">Avg Open Rate</div>
+        <div class="kpi-value">${avgOpen!=null?avgOpen.toFixed(1)+'%':'—'}</div>
+        <div class="kpi-trend ${avgOpen>=70?'trend-up':avgOpen>=55?'trend-neutral':'trend-down'}">${openStatus}</div>
+        <div class="kpi-sub">Email campaigns</div></div>
+      <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#c9882a,#e0b060)"></div>
+        <div class="kpi-icon">⚙️</div><div class="kpi-label">Automation Revenue</div>
+        <div class="kpi-value">${fmtEur(latest.auto)}</div>
+        <div class="kpi-trend trend-neutral">${(latest.auto/latest.omni*100).toFixed(0)}% of total</div>
+        <div class="kpi-sub">${latest.month}</div></div>
+      <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#8b5cf6,#c084fc)"></div>
+        <div class="kpi-icon">📉</div><div class="kpi-label">Unsub Rate</div>
+        <div class="kpi-value">${unsubRate.toFixed(2)}%</div>
+        <div class="kpi-trend ${unsubStatus}">${unsubLabel}</div>
+        <div class="kpi-sub">${latest.month} · ${latest.unsub.toLocaleString()} unsubs</div></div>
+    `;
+  }
+
+  // ── Health Banner ──
+  function renderHealthBanner(enriched, latest) {
+    const avgNew3 = enriched.slice(-3).reduce((s,i)=>s+i.newNet,0)/3;
+    const unsubRate = latest.emailSubs?(latest.unsub/latest.emailSubs*100):0;
+    const emailCamps = CAMPAIGNS.filter(c=>c.channel==='Email'&&c.openPct!=null);
+    const avgOpen = emailCamps.length?emailCamps.reduce((s,c)=>s+c.openPct,0)/emailCamps.length:0;
+    
+    let status = 'healthy', label = '● Healthy', text;
+    if (unsubRate>2 || avgOpen<40 || avgNew3<200) {
+      status='at-risk'; label='⚠ At Risk';
+    } else if (unsubRate>1.5 || avgOpen<60 || avgNew3<500) {
+      status='moderate'; label='◑ Moderate';
+    }
+    
+    text = {
+      healthy: `List is in <strong>excellent health</strong>. Open rates are strong at ${avgOpen.toFixed(1)}%, unsubscribe rate is at a healthy ${unsubRate.toFixed(2)}%, and the subscriber base is growing steadily. Focus on building automation flows to compound this momentum.`,
+      moderate: `List is in <strong>moderate health</strong>. Some metrics need attention — average open rate at ${avgOpen.toFixed(1)}% and ${unsubRate.toFixed(2)}% unsub rate suggest opportunities to improve segmentation and content strategy.`,
+      'at-risk': `List shows <strong>at-risk signals</strong>. ${unsubRate>2?'Unsubscribe rate above 2% warns of list fatigue. ':''}${avgOpen<40?'Open rates below 40% indicate deliverability or relevance issues. ':''}Immediate action recommended on segmentation and content refresh.`
+    }[status];
+
+    document.getElementById('healthBadge').className = `health-badge ${status}`;
+    document.getElementById('healthBadge').textContent = label;
+    document.getElementById('healthText').innerHTML = `<strong>List Health Status:</strong> ${text}`;
+  }
+
+  // ── Overview Charts ──
+  function renderOverviewCharts(enriched, months, latest) {
+    Chart.defaults.font.family = "'Outfit', sans-serif";
+    Chart.defaults.color = '#6b7280';
+
+    destroyChart('overviewTrend');
+    const ctx1 = document.getElementById('overviewTrendChart').getContext('2d');
+    charts['overviewTrend'] = new Chart(ctx1, {
+      type:'line',
+      data:{ labels:months, datasets:[
+        { label:'New Subscribers', data:enriched.map(d=>d.newNet), borderColor:'#2a6dd4', backgroundColor:'rgba(42,109,212,0.08)', tension:0.35, fill:true, pointRadius:3, pointBackgroundColor:'#2a6dd4', pointBorderColor:'#fff', pointBorderWidth:2, yAxisID:'y' },
+        { label:'Omnisend Revenue (€)', data:enriched.map(d=>d.omni), borderColor:'#d4622a', tension:0.35, borderDash:[5,4], pointRadius:3, pointBackgroundColor:'#d4622a', pointBorderColor:'#fff', pointBorderWidth:2, fill:false, yAxisID:'y1' }
+      ]},
+      options:{ responsive:true, maintainAspectRatio:true, interaction:{mode:'index',intersect:false},
+        plugins:{ legend:{position:'top',labels:{usePointStyle:true,boxWidth:6,padding:16}} },
+        scales:{ x:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{maxRotation:45,font:{size:10}}},
+          y:{grid:{color:'rgba(0,0,0,0.04)'},title:{display:true,text:'New Subs',font:{size:10}}},
+          y1:{position:'right',grid:{drawOnChartArea:false},ticks:{callback:v=>`€${(v/1000).toFixed(0)}k`,font:{size:10}},title:{display:true,text:'Revenue',font:{size:10}}} } }
+    });
+
+    destroyChart('revSplit');
+    const ctx2 = document.getElementById('revSplitChart').getContext('2d');
+    charts['revSplit'] = new Chart(ctx2, {
+      type:'doughnut',
+      data:{ labels:['Campaigns','Automation'], datasets:[{ data:[latest.camp,latest.auto], backgroundColor:['#d4622a','#2a6dd4'], borderWidth:0, hoverOffset:6 }] },
+      options:{ responsive:true, maintainAspectRatio:true, cutout:'68%',
+        plugins:{ legend:{position:'bottom',labels:{usePointStyle:true,padding:16,font:{size:11}}},
+          tooltip:{callbacks:{label:ctx=>`€${ctx.raw.toLocaleString('en-US',{minimumFractionDigits:2})}`}} } }
+    });
+  }
+
+  // ── Recent Campaigns Table ──
+  function renderRecentCamps() {
+    const sorted = [...CAMPAIGNS].sort((a,b)=>b.date>a.date?1:-1).slice(0,5);
+    const perf = c => {
+      if(c.channel==='SMS') return c.clickPct>=30?['Strong','perf-strong']:c.clickPct>=15?['Good','perf-good']:['Needs Review','perf-needs'];
+      const score = (c.openPct||0)*0.4 + (c.clickPct||0)*3 + (c.rev/c.sent*1000)||0;
+      return score>32?['Strong','perf-strong']:score>18?['Good','perf-good']:['Needs Review','perf-needs'];
+    };
+    document.getElementById('recentCampsBody').innerHTML = sorted.map(c => {
+      const [pl,pc]=perf(c);
+      return `<tr>
+        <td>${dLabel(c.date)}</td>
+        <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${c.name}">${c.name}</td>
+        <td><span class="ch-pill ${c.channel==='SMS'?'ch-sms':'ch-email'}">${c.channel==='SMS'?'💬':'📧'} ${c.channel}</span></td>
+        <td class="num">${fmtK(c.sent)}</td>
+        <td class="num">${c.openPct!=null?c.openPct.toFixed(1)+'%':'—'}</td>
+        <td class="rev">${fmtEur(c.rev)}</td>
+        <td class="num">${c.orders??'—'}</td>
+        <td><span class="perf-badge ${pc}">${pl}</span></td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ── List Health KPIs ──
+  function renderListKPIs(enriched, latest) {
+    const totalOmni = enriched.reduce((s,m)=>s+m.omni,0);
+    const peakGrowth = Math.max(...enriched.map(m=>m.newNet));
+    const autoPct = (latest.auto/latest.omni*100).toFixed(0);
+    document.getElementById('kpiList').innerHTML = `
+      <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#d4622a,#f0944a)"></div>
+        <div class="kpi-icon">📬</div><div class="kpi-label">Total Omnisend (Period)</div>
+        <div class="kpi-value">${fmtEur(totalOmni)}</div>
+        <div class="kpi-trend trend-neutral">${enriched.length} months</div></div>
+      <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#1a7a4a,#34c77a)"></div>
+        <div class="kpi-icon">👥</div><div class="kpi-label">Total Email Subscribers</div>
+        <div class="kpi-value">${latest.emailSubs.toLocaleString()}</div>
+        <div class="kpi-trend trend-up">▲ ${latest.month}</div></div>
+      <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#2a6dd4,#5b9bd5)"></div>
+        <div class="kpi-icon">🆕</div><div class="kpi-label">Peak Monthly Net Growth</div>
+        <div class="kpi-value">+${peakGrowth.toLocaleString()}</div>
+        <div class="kpi-trend trend-up">▲ Best month</div></div>
+      <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#8b5cf6,#c084fc)"></div>
+        <div class="kpi-icon">⚙️</div><div class="kpi-label">Automation Share (Latest)</div>
+        <div class="kpi-value">${autoPct}%</div>
+        <div class="kpi-trend ${autoPct>=40?'trend-up':'trend-neutral'}">${autoPct>=40?'✅ Strong':'Target: 40%+'}</div></div>
+    `;
+  }
+
+  // ── List Charts ──
+  function renderListCharts(enriched, months) {
+    destroyChart('subsTrend');
+    const ctx1 = document.getElementById('subsTrendChart').getContext('2d');
+    charts['subsTrend'] = new Chart(ctx1, {
+      type:'line',
+      data:{ labels:months, datasets:[
+        { label:'New Subscribers', data:enriched.map(d=>d.newNet), borderColor:'#2a6dd4', backgroundColor:'rgba(42,109,212,0.08)', tension:0.35, fill:true, pointRadius:3, pointBackgroundColor:'#2a6dd4', pointBorderColor:'#fff', pointBorderWidth:2 },
+        { label:'Engaged List', data:enriched.map(d=>d.engaged), borderColor:'#d4622a', backgroundColor:'rgba(212,98,42,0.06)', tension:0.35, fill:true, pointRadius:3, pointBackgroundColor:'#d4622a', pointBorderColor:'#fff', pointBorderWidth:2 }
+      ]},
+      options:{ responsive:true, maintainAspectRatio:true, interaction:{mode:'index',intersect:false},
+        plugins:{ legend:{position:'top',labels:{usePointStyle:true,boxWidth:6,padding:12}} },
+        scales:{ x:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{maxRotation:45,font:{size:10}}}, y:{grid:{color:'rgba(0,0,0,0.04)'}} } }
+    });
+
+    destroyChart('revType');
+    const ctx2 = document.getElementById('revTypeChart').getContext('2d');
+    charts['revType'] = new Chart(ctx2, {
+      type:'bar',
+      data:{ labels:months, datasets:[
+        { label:'Campaigns', data:enriched.map(d=>d.camp), backgroundColor:'#d4622a', borderRadius:3, borderSkipped:false },
+        { label:'Automation', data:enriched.map(d=>d.auto), backgroundColor:'#2a6dd4', borderRadius:3, borderSkipped:false }
+      ]},
+      options:{ responsive:true, maintainAspectRatio:true, interaction:{mode:'index',intersect:false},
+        plugins:{ legend:{position:'top',labels:{usePointStyle:true,boxWidth:6,padding:12}}, tooltip:{callbacks:{label:ctx=>`€${ctx.raw.toFixed(0)}`}} },
+        scales:{ x:{grid:{display:false},ticks:{maxRotation:45,font:{size:10}}}, y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{callback:v=>`€${(v/1000).toFixed(0)}k`}} } }
+    });
+
+    destroyChart('unsub');
+    const unsubRates = enriched.map(m=>m.emailSubs?(m.unsub/m.emailSubs*100).toFixed(2):0);
+    const ctx3 = document.getElementById('unsubChart').getContext('2d');
+    charts['unsub'] = new Chart(ctx3, {
+      type:'line',
+      data:{ labels:months, datasets:[
+        { label:'Unsub Rate %', data:unsubRates, borderColor:'#8b5cf6', backgroundColor:'rgba(139,92,246,0.08)', tension:0.35, fill:true, pointRadius:3, pointBackgroundColor:'#8b5cf6', pointBorderColor:'#fff', pointBorderWidth:2 },
+        { label:'Warning Threshold (2%)', data:months.map(()=>2), borderColor:'rgba(239,68,68,0.4)', borderDash:[6,4], pointRadius:0, borderWidth:1.5, fill:false }
+      ]},
+      options:{ responsive:true, maintainAspectRatio:true, interaction:{mode:'index',intersect:false},
+        plugins:{ legend:{position:'top',labels:{usePointStyle:true,boxWidth:6,padding:12}}, tooltip:{callbacks:{label:ctx=>`${ctx.raw}%`}} },
+        scales:{ x:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{maxRotation:45,font:{size:10}}}, y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{callback:v=>v+'%'}} } }
+    });
+  }
+
+  // ── Monthly Table ──
+  const getStatus = (item, idx, total) => {
+    const n = item.newNet;
+    if (n>2000&&item.omni>20000) return {text:'● Healthy',cls:'s-healthy'};
+    if (n>1000&&item.omni>14000) return {text:'● Healthy',cls:'s-healthy'};
+    if (n>500&&item.omni>10000)  return {text:'◑ Stable', cls:'s-stable'};
+    if (n<450&&item.omni<12000&&idx>2) return {text:'▼ Declining',cls:'s-declining'};
+    if (n>=450&&item.omni>=8000) return {text:'✦ Revival',cls:'s-revival'};
+    return {text:'◑ Moderate',cls:'s-stable'};
+  };
+
+  function renderMonthlyTable(enriched) {
+    const fmt2 = n => `€${n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+    document.getElementById('monthlyTableBody').innerHTML = enriched.map((item,idx)=>{
+      const s = getStatus(item,idx,enriched.length);
+      const unsubRate = item.emailSubs?(item.unsub/item.emailSubs*100).toFixed(2)+'%':'—';
+      const netClass = item.newNet>=0?'net-pos':'net-neg';
+      const netStr = (item.newNet>=0?'+':'')+item.newNet.toLocaleString();
+      const gross = item.unsub+item.newNet;
+      return `<tr>
+        <td class="sticky-col" style="font-weight:600;">${item.month}</td>
+        <td class="num">+${gross.toLocaleString()}</td>
+        <td class="unsub">−${item.unsub.toLocaleString()}</td>
+        <td class="${netClass}">${netStr}</td>
+        <td class="num">${item.engaged.toLocaleString()}</td>
+        <td class="num">${unsubRate}</td>
+        <td class="rev">${fmt2(item.camp)}</td>
+        <td class="rev">${fmt2(item.auto)}</td>
+        <td class="rev"><strong>${fmt2(item.omni)}</strong></td>
+        <td class="rev">${fmt2(item.store)}</td>
+        <td><span class="status-badge ${s.cls}">${s.text}</span></td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ── Campaign KPIs ──
+  function renderCampKPIs() {
+    const fc = campFilter==='all'?CAMPAIGNS:CAMPAIGNS.filter(c=>c.channel===campFilter);
+    const totalRev = fc.reduce((s,c)=>s+c.rev,0);
+    const totalOrders = fc.reduce((s,c)=>s+(c.orders||0),0);
+    const emailC = fc.filter(c=>c.channel==='Email'&&c.openPct!=null);
+    const avgOpen = emailC.length?emailC.reduce((s,c)=>s+c.openPct,0)/emailC.length:null;
+    const allClick = fc.filter(c=>c.clickPct!=null);
+    const avgClick = allClick.length?allClick.reduce((s,c)=>s+c.clickPct,0)/allClick.length:null;
+    const totalSent = fc.reduce((s,c)=>s+c.sent,0);
+    const rps = totalSent>0?(totalRev/totalSent*1000):0;
+
+    document.getElementById('kpiCamps').innerHTML = `
+      <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#d4622a,#f0944a)"></div>
+        <div class="kpi-icon">💰</div><div class="kpi-label">Total Campaign Revenue</div>
+        <div class="kpi-value">${fmtEur(totalRev)}</div>
+        <div class="kpi-trend trend-neutral">${fc.length} sends</div></div>
+      <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#1a7a4a,#34c77a)"></div>
+        <div class="kpi-icon">🛒</div><div class="kpi-label">Total Orders</div>
+        <div class="kpi-value">${totalOrders.toLocaleString()}</div>
+        <div class="kpi-trend trend-neutral">AOV ${totalOrders>0?fmtEur(totalRev/totalOrders):'—'}</div></div>
+      <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#2a6dd4,#5b9bd5)"></div>
+        <div class="kpi-icon">👁</div><div class="kpi-label">Avg Open Rate (Email)</div>
+        <div class="kpi-value">${avgOpen!=null?avgOpen.toFixed(1)+'%':'—'}</div>
+        <div class="kpi-trend ${avgOpen>=70?'trend-up':'trend-neutral'}">${avgOpen>=70?'⬆ Excellent':avgOpen>=55?'● Good':'—'}</div></div>
+      <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#c9882a,#e0b060)"></div>
+        <div class="kpi-icon">🖱</div><div class="kpi-label">Avg Click Rate</div>
+        <div class="kpi-value">${avgClick!=null?avgClick.toFixed(1)+'%':'—'}</div>
+        <div class="kpi-trend trend-neutral">All channels</div></div>
+      <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#8b5cf6,#c084fc)"></div>
+        <div class="kpi-icon">📨</div><div class="kpi-label">Revenue per 1K Sent</div>
+        <div class="kpi-value">${fmtEur(rps)}</div>
+        <div class="kpi-trend trend-neutral">per 1,000 recipients</div></div>
+    `;
+  }
+
+  // ── Campaign Charts ──
+  function renderCampCharts() {
+    const fc = CAMPAIGNS.filter(c=>campFilter==='all'||c.channel===campFilter);
+    const topCamps = [...fc].sort((a,b)=>b.rev-a.rev).slice(0,10);
+
+    destroyChart('campRev');
+    const ctx1 = document.getElementById('campRevChart').getContext('2d');
+    charts['campRev'] = new Chart(ctx1, {
+      type:'bar',
+      data:{ labels:topCamps.map(c=>c.name.length>30?c.name.slice(0,28)+'…':c.name), datasets:[{
+        label:'Revenue (€)', data:topCamps.map(c=>c.rev),
+        backgroundColor:topCamps.map(c=>c.channel==='SMS'?'rgba(42,109,212,0.8)':'rgba(212,98,42,0.8)'), borderRadius:4, borderSkipped:false
+      }]},
+      options:{ indexAxis:'y', responsive:true, maintainAspectRatio:true,
+        plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>`€${ctx.raw.toFixed(2)}`}} },
+        scales:{ x:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{callback:v=>`€${v}`}}, y:{grid:{display:false},ticks:{font:{size:10}}} } }
+    });
+
+    const emailOnly = CAMPAIGNS.filter(c=>c.channel==='Email'&&c.openPct!=null&&c.clickPct!=null);
+    destroyChart('scatter');
+    const ctx2 = document.getElementById('scatterChart').getContext('2d');
+    charts['scatter'] = new Chart(ctx2, {
+      type:'scatter',
+      data:{ datasets:[{ label:'Email Campaigns', data:emailOnly.map(c=>({x:c.openPct,y:c.clickPct,label:c.name})),
+        backgroundColor:'rgba(212,98,42,0.6)', pointRadius:6, pointHoverRadius:8 }] },
+      options:{ responsive:true, maintainAspectRatio:true,
+        plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>`${ctx.raw.label?.slice(0,30)}: Open ${ctx.raw.x}% · Click ${ctx.raw.y}%`}} },
+        scales:{ x:{title:{display:true,text:'Open Rate %',font:{size:10}},grid:{color:'rgba(0,0,0,0.04)'}}, y:{title:{display:true,text:'Click Rate %',font:{size:10}},grid:{color:'rgba(0,0,0,0.04)'}} } }
+    });
+  }
+
+  // ── Campaign Table ──
+  let _campFilter='all';
+  function setCampFilter(f,el) {
+    _campFilter=f;
+    document.querySelectorAll('.filter-btn').forEach(b=>{b.style.background='var(--card)';b.style.color='var(--ink)';});
+    el.style.background='var(--ink)'; el.style.color='#fff';
+    renderCampTable(); renderCampKPIs(); renderCampCharts();
+  }
+
+  let _sortKey='date', _sortDir=-1;
+  function sortCamps(key) {
+    if(_sortKey===key) _sortDir*=-1; else {_sortKey=key;_sortDir=-1;}
+    renderCampTable();
+  }
+
+  const campPerf = c => {
+    if(c.channel==='SMS') return c.clickPct>=30?['Strong','perf-strong']:c.clickPct>=15?['Good','perf-good']:['Needs Review','perf-needs'];
+    const score=(c.openPct||0)*0.4+(c.clickPct||0)*3+(c.rev/(c.sent||1)*1000);
+    return score>32?['Strong','perf-strong']:score>18?['Good','perf-good']:['Needs Review','perf-needs'];
+  };
+
+  function renderCampTable() {
+    const fc = CAMPAIGNS.filter(c=>_campFilter==='all'||c.channel===_campFilter);
+    const sorted = [...fc].sort((a,b)=>{
+      let va=a[_sortKey],vb=b[_sortKey];
+      if(_sortKey==='date') { va=a.date+a.name; vb=b.date+b.name; }
+      if(va==null) return 1; if(vb==null) return -1;
+      return va>vb?_sortDir:va<vb?-_sortDir:0;
+    });
+
+    document.getElementById('campTableBody').innerHTML = sorted.map(c=>{
+      const aov = c.orders&&c.orders>0?fmtEur(c.rev/c.orders):'—';
+      const rps = c.sent>0?fmtEur(c.rev/c.sent*1000):'—';
+      const [pl,pc]=campPerf(c);
+      const openBar = c.openPct!=null?`<div class="rate-bar-wrap"><span>${c.openPct.toFixed(1)}%</span><div class="rate-bar"><div class="rate-bar-fill bar-open" style="width:${Math.min(c.openPct,100)}%"></div></div></div>`:'—';
+      const clickBar = c.clickPct!=null?`<div class="rate-bar-wrap"><span>${c.clickPct.toFixed(1)}%</span><div class="rate-bar"><div class="rate-bar-fill bar-click" style="width:${Math.min(c.clickPct*2,100)}%"></div></div></div>`:'—';
+      return `<tr>
+        <td style="white-space:nowrap;">${dLabel(c.date)}</td>
+        <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${c.name}">${c.name}</td>
+        <td><span class="ch-pill ${c.channel==='SMS'?'ch-sms':'ch-email'}">${c.channel==='SMS'?'💬':'📧'} ${c.channel}</span></td>
+        <td class="num">${fmtK(c.sent)}</td>
+        <td>${openBar}</td>
+        <td>${clickBar}</td>
+        <td class="rev">${fmtEur(c.rev)}</td>
+        <td class="num">${c.orders??'—'}</td>
+        <td class="num">${aov}</td>
+        <td class="num">${rps}</td>
+        <td><span class="perf-badge ${pc}">${pl}</span></td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ── DYNAMIC INSIGHTS ──────────────────────────────────────────────
+  function renderInsights() {
+    if (!MONTHLY.length) return;
+
+    const enriched = MONTHLY.map(m => ({ ...m, engaged: computeEngaged(m.emailSubs, m.newNet) }));
+    const latest   = enriched[enriched.length - 1];
+    const prev     = enriched[enriched.length - 2];
+    const all      = enriched;
+
+    // ── derived signals ──────────────────────────────────────────────
+    // Growth
+    const avgNew3      = all.slice(-3).reduce((s,m)=>s+m.newNet,0)/3;
+    const avgNew6      = all.slice(-6).reduce((s,m)=>s+m.newNet,0)/6;
+    const peakMonth    = all.reduce((best,m)=>m.newNet>best.newNet?m:best, all[0]);
+    const worstGrowth  = all.reduce((w,m)=>m.newNet<w.newNet?m:w, all[0]);
+    const growthTrend  = avgNew3 > avgNew6 ? 'accelerating' : avgNew3 < avgNew6 * 0.8 ? 'decelerating' : 'stable';
+    const lowGrowthMonths = all.filter(m=>m.newNet<500);
+
+    // Revenue
+    const totalOmni    = all.reduce((s,m)=>s+m.omni,0);
+    const peakRevMonth = all.reduce((b,m)=>m.omni>b.omni?m:b, all[0]);
+    const omniChange   = prev ? ((latest.omni-prev.omni)/prev.omni*100) : 0;
+    const revTrend3    = all.slice(-3).map(m=>m.omni);
+    const revDeclining = revTrend3[2]<revTrend3[1] && revTrend3[1]<revTrend3[0];
+
+    // Automation
+    const autoPct      = (latest.auto/latest.omni*100);
+    const autoGrowing  = all.length>=3 && (all[all.length-1].auto/all[all.length-1].omni) > (all[all.length-3].auto/all[all.length-3].omni);
+    const bestAutoMonth= all.reduce((b,m)=>(m.auto/m.omni)>(b.auto/b.omni)?m:b, all[0]);
+
+    // Unsub
+    const unsubRate    = latest.emailSubs ? (latest.unsub/latest.emailSubs*100) : 0;
+    const unsubRates   = all.map(m=>m.emailSubs?(m.unsub/m.emailSubs*100):0);
+    const avgUnsub     = unsubRates.reduce((s,v)=>s+v,0)/unsubRates.length;
+    const worstUnsubMonth = all.reduce((w,m,i)=>unsubRates[i]>unsubRates[all.indexOf(w)]?m:w, all[0]);
+    const worstUnsubRate  = unsubRates[all.indexOf(worstUnsubMonth)];
+    const unsubTrend3  = unsubRates.slice(-3);
+    const unsubRising  = unsubTrend3[2]>unsubTrend3[0]*1.15;
+
+    // Campaigns
+    const emailCamps   = CAMPAIGNS.filter(c=>c.channel==='Email'&&c.openPct!=null);
+    const smsCamps     = CAMPAIGNS.filter(c=>c.channel==='SMS'&&c.clickPct!=null);
+    const avgOpen      = emailCamps.length ? emailCamps.reduce((s,c)=>s+c.openPct,0)/emailCamps.length : null;
+    const avgClick     = emailCamps.filter(c=>c.clickPct!=null).length
+      ? emailCamps.filter(c=>c.clickPct!=null).reduce((s,c)=>s+c.clickPct,0)/emailCamps.filter(c=>c.clickPct!=null).length : null;
+    const avgSmsClick  = smsCamps.length ? smsCamps.reduce((s,c)=>s+c.clickPct,0)/smsCamps.length : null;
+    const topRevCamp   = CAMPAIGNS.length ? [...CAMPAIGNS].sort((a,b)=>b.rev-a.rev)[0] : null;
+    const worstRevCamp = CAMPAIGNS.length ? [...CAMPAIGNS].filter(c=>c.rev>0).sort((a,b)=>a.rev-b.rev)[0] : null;
+    // High open, low click (email only, open>60, click<1.5)
+    const highOpenLowClick = emailCamps.filter(c=>c.openPct>60&&c.clickPct!=null&&c.clickPct<1.5);
+    // Cold segment sends (open < 25%)
+    const coldSends    = emailCamps.filter(c=>c.openPct<25);
+    // RPS
+    const totalRev     = CAMPAIGNS.reduce((s,c)=>s+c.rev,0);
+    const totalSent    = CAMPAIGNS.reduce((s,c)=>s+c.sent,0);
+    const rps          = totalSent>0?(totalRev/totalSent*1000):0;
+
+    // ── helper to build insight card HTML ────────────────────────────
+    const insightCard = (icon, title, items) => `
+      <div class="insight-card">
+        <div class="insight-icon">${icon}</div>
+        <div class="insight-title">${title}</div>
+        <ul class="insight-list">${items.map(i=>`<li><span>${i}</span></li>`).join('')}</ul>
+      </div>`;
+
+    // ── helper to build action item HTML ─────────────────────────────
+    const actionItem = (num, priority, emoji, title, desc, urgency='') => `
+      <div class="action-item" style="${urgency?'border-left-color:'+urgency+';':''}">
+        <div class="action-num">Action ${String(num).padStart(2,'0')} · Priority: ${priority}</div>
+        <div class="action-title">${emoji} ${title}</div>
+        <div class="action-desc">${desc}</div>
+      </div>`;
+
+    // ── signal badge helper ───────────────────────────────────────────
+    const sig = (val, good, warn, labels=['Good','Watch','Action Needed']) =>
+      val<=good ? `<span style="color:#1a7a4a;font-weight:700;">${labels[0]}</span>`
+      : val<=warn ? `<span style="color:#c9882a;font-weight:700;">${labels[1]}</span>`
+      : `<span style="color:#d4622a;font-weight:700;">${labels[2]}</span>`;
+
+    // ── SECTION 1: Growth & Acquisition ──────────────────────────────
+    const growthItems = [];
+
+    if (growthTrend === 'accelerating') {
+      growthItems.push(`<strong>Acquisition is accelerating.</strong> Your 3-month average of <strong>${Math.round(avgNew3).toLocaleString()} new subscribers/month</strong> is ahead of the 6-month average of ${Math.round(avgNew6).toLocaleString()} — momentum is building. Keep fuelling this with active lead capture.`);
+    } else if (growthTrend === 'decelerating') {
+      growthItems.push(`<strong>⚠ Acquisition is slowing down.</strong> The 3-month average dropped to <strong>${Math.round(avgNew3).toLocaleString()} new subs/month</strong> vs ${Math.round(avgNew6).toLocaleString()} over 6 months. Based on your data, revenue follows acquisition by ~60–90 days — if this isn't reversed, a revenue dip is likely.`);
+    } else {
+      growthItems.push(`<strong>Acquisition is steady</strong> at ~${Math.round(avgNew3).toLocaleString()} new subscribers/month over the last 3 months. Consistent growth is positive, but the data shows your revenue peaks correlate directly with growth spikes — pushing past ${Math.round(avgNew3*1.5).toLocaleString()}/month could unlock a meaningful revenue jump.`);
+    }
+
+    growthItems.push(`<strong>Best growth month: ${peakMonth.month}</strong> with <strong>+${peakMonth.newNet.toLocaleString()} net new subscribers</strong> — this coincided with ${peakMonth.omni>totalOmni/all.length*1.3?'one of your highest revenue months':'strong campaign activity'}. Replicating those acquisition conditions is high-leverage.`);
+
+    if (lowGrowthMonths.length > 0) {
+      growthItems.push(`<strong>${lowGrowthMonths.length} month${lowGrowthMonths.length>1?'s':''} fell below 500 net new subscribers</strong> (${lowGrowthMonths.map(m=>m.month).join(', ')}). These are the periods where revenue risk is highest — lead magnet or pop-up underperformance is typically the cause.`);
+    } else {
+      growthItems.push(`<strong>No months dropped below 500 net new subscribers</strong> — a strong floor for consistent list health. Target raising this floor to 800+ to build a more resilient revenue base.`);
+    }
+
+    // ── SECTION 2: Email Engagement ──────────────────────────────────
+    const engItems = [];
+
+    if (avgOpen !== null) {
+      const openStatus = avgOpen>=70?'excellent — top 5% of email senders':avgOpen>=55?'above industry average':'below average — attention needed';
+      engItems.push(`<strong>Average open rate: ${avgOpen.toFixed(1)}%</strong> — ${openStatus}. ${avgOpen>=70?'This reflects a highly engaged, well-segmented audience, which is a major deliverability asset.':'Improving segmentation and subject line strategy should be the first focus area.'}`);
+    }
+
+    if (avgClick !== null) {
+      const ctoR = avgOpen>0?(avgClick/avgOpen*100):0;
+      engItems.push(`<strong>Average click rate: ${avgClick.toFixed(1)}%</strong> (click-to-open: ${ctoR.toFixed(1)}%). ${ctoR<5?`A click-to-open below 5% suggests the <strong>email body, CTA, or offer isn't converting the interest generated by the subject line</strong>. This is the #1 optimization lever.`:`A ${ctoR.toFixed(1)}% click-to-open rate is solid — the content is resonating once people open.`}`);
+    }
+
+    if (highOpenLowClick.length > 0) {
+      const names = highOpenLowClick.slice(0,2).map(c=>`"${c.name.slice(0,35)}"`).join(' and ');
+      engItems.push(`<strong>${highOpenLowClick.length} campaign${highOpenLowClick.length>1?'s':''} had high opens but low clicks</strong> — including ${names}. High opens confirm strong subject lines, but the drop-off inside the email points to a <strong>landing page, offer, or CTA alignment gap</strong>, not an audience problem.`);
+    }
+
+    if (coldSends.length > 0) {
+      engItems.push(`<strong>${coldSends.length} send${coldSends.length>1?'s':''} went to cold/less-engaged segments</strong> with open rates below 25%. While these can generate incremental revenue, they carry deliverability risk — keep cold sends isolated from your main sending domain reputation.`);
+    }
+
+    if (avgSmsClick !== null) {
+      engItems.push(`<strong>SMS click rate averages ${avgSmsClick.toFixed(1)}%</strong> across ${smsCamps.length} campaign${smsCamps.length>1?'s':''} — ${avgSmsClick>=30?'exceptionally strong, well above the 15–20% industry benchmark':'tracking toward industry average'}. SMS is a high-intent channel worth expanding.`);
+    }
+
+    // ── SECTION 3: Automation ─────────────────────────────────────────
+    const autoItems = [];
+
+    autoItems.push(`<strong>Automation is currently ${autoPct.toFixed(0)}% of Omnisend revenue</strong> — ${autoPct>=40?`above the 40% target, meaning your flows are working hard even between campaigns`:`below the 40% benchmark. Every percentage point below 40% represents revenue that could be captured without extra campaign effort`}. In ${latest.month}: ${fmtEur(latest.auto)} from automation vs ${fmtEur(latest.camp)} from campaigns.`);
+
+    if (autoGrowing) {
+      autoItems.push(`<strong>Automation share is growing</strong> over recent months — a strong signal that your flows are maturing and compounding. ${bestAutoMonth.month} was the peak automation month at ${(bestAutoMonth.auto/bestAutoMonth.omni*100).toFixed(0)}% of total Omnisend revenue (${fmtEur(bestAutoMonth.auto)}).`);
+    } else {
+      autoItems.push(`<strong>Automation share has plateaued or declined</strong> recently. The strongest automation month was <strong>${bestAutoMonth.month}</strong> at ${(bestAutoMonth.auto/bestAutoMonth.omni*100).toFixed(0)}% (${fmtEur(bestAutoMonth.auto)}). Revisiting and expanding current flows would help reclaim that share.`);
+    }
+
+    autoItems.push(`<strong>Revenue per subscriber from automation</strong> is your highest-leverage metric. With ${latest.emailSubs.toLocaleString()} subscribers and ${fmtEur(latest.auto)}/month in automation, each subscriber generates ~${(latest.auto/latest.emailSubs).toFixed(2)} in automated revenue. Every new subscriber added improves this at near-zero marginal cost.`);
+
+    // ── SECTION 4: List Health ────────────────────────────────────────
+    const healthItems = [];
+
+    const unsubLabel = unsubRate<1?'healthy — well below the 2% threshold':unsubRate<2?'moderate — approaching the 2% caution zone':'elevated — above the 2% threshold, action recommended';
+    healthItems.push(`<strong>Current unsub rate: ${unsubRate.toFixed(2)}%</strong> — ${unsubLabel}. In ${latest.month}, <strong>${latest.unsub.toLocaleString()} subscribers unsubscribed</strong> from a base of ${latest.emailSubs.toLocaleString()}.`);
+
+    if (unsubRising) {
+      healthItems.push(`<strong>⚠ Unsubscribe rate is trending upward</strong> over the last 3 months (${unsubTrend3.map(v=>v.toFixed(2)+'%').join(' → ')}). This is an early signal of content fatigue or frequency overload — typically 4–6 weeks before it starts impacting deliverability scores.`);
+    }
+
+    healthItems.push(`<strong>Worst unsub period: ${worstUnsubMonth.month}</strong> at ${worstUnsubRate.toFixed(2)}% — ${worstUnsubRate>2?`above the danger threshold. Analysing what changed in content or frequency that month will reveal preventable patterns.`:`still within an acceptable range, but worth noting as a ceiling to avoid.`}`);
+
+    healthItems.push(`<strong>Total unsubs across the period: ${all.reduce((s,m)=>s+m.unsub,0).toLocaleString()}</strong> against ${all.reduce((s,m)=>s+(m.unsub+m.newNet),0).toLocaleString()} gross new subscribers — a net retention rate that ${all.reduce((s,m)=>s+m.newNet,0)>0?'confirms consistent list growth despite natural churn':'needs attention'}. Sunset inactive subscribers every 90 days to keep the active rate high.`);
+
+    // ── BUILD RECOMMENDED ACTIONS (ranked by urgency) ─────────────────
+    const actions = [];
+
+    // Score-based priority ranking
+    const acqScore    = avgNew3 < 500 ? 3 : avgNew3 < 1000 ? 2 : 1;
+    const unsubScore  = unsubRate > 2 ? 3 : unsubRising ? 2 : 1;
+    const autoScore   = autoPct < 30 ? 3 : autoPct < 40 ? 2 : 1;
+    const engageScore = (avgOpen||0) < 50 ? 3 : highOpenLowClick.length > 2 ? 2 : 1;
+    const smsScore    = smsCamps.length === 0 ? 3 : smsCamps.length < 3 ? 2 : 1;
+
+    const priorityLabel = s => s===3?'🔴 High':s===2?'🟡 Medium':'🟢 Ongoing';
+    const priorityColor = s => s===3?'#d4622a':s===2?'#c9882a':'#1a7a4a';
+
+    actions.push({ score: acqScore, priority: priorityLabel(acqScore), color: priorityColor(acqScore),
+      emoji:'🚀', title:'Accelerate Subscriber Acquisition',
+      desc: acqScore===3
+        ? `Your 3-month average of ${Math.round(avgNew3).toLocaleString()} new subscribers/month is in a danger zone. Revenue typically lags acquisition by 60–90 days, meaning a revenue decline is likely if this isn't reversed. <strong>Immediate priority: deploy a high-converting exit-intent pop-up with a lead magnet.</strong> Based on your automation rate of ${autoPct.toFixed(0)}%, every 1,000 new subscribers generates an estimated €${(latest.auto/latest.emailSubs*1000).toFixed(0)} in monthly automation revenue within 90 days.`
+        : acqScore===2
+        ? `Acquisition at ${Math.round(avgNew3).toLocaleString()}/month is stable but below the growth threshold that correlates with your best revenue months. Your peak was ${peakMonth.newNet.toLocaleString()} in ${peakMonth.month} — replicating that would likely push Omnisend revenue back toward ${fmtEur(peakMonth.omni)}. Review what drove ${peakMonth.month}'s performance and replicate it.`
+        : `Acquisition is healthy at ${Math.round(avgNew3).toLocaleString()}/month. Focus now on quality — nurturing new subscribers faster into buyers via a strong welcome series will compound your already-strong numbers.`
+    });
+
+    if (unsubScore >= 2) {
+      actions.push({ score: unsubScore, priority: priorityLabel(unsubScore), color: priorityColor(unsubScore),
+        emoji:'🛡', title: unsubScore===3 ? 'Urgent: Reduce List Fatigue' : 'Monitor & Reduce Unsubscribe Trend',
+        desc: unsubScore===3
+          ? `Unsubscribe rate at ${unsubRate.toFixed(2)}% is above the 2% threshold. <strong>Immediate actions:</strong> (1) Reduce send frequency by 20–30% for 4 weeks, (2) Segment and suppress subscribers who haven't opened in 60+ days before next campaign, (3) Run a "stay subscribed" re-permission campaign to the cold segment to clean the list proactively.`
+          : `Unsubscribe rate is trending up (${unsubTrend3.map(v=>v.toFixed(2)+'%').join(' → ')}). This is a 4–6 week early warning before deliverability impact. Recommended: audit recent campaign frequency and add preference centre options so subscribers can reduce frequency instead of unsubscribing.`
+      });
+    }
+
+    actions.push({ score: autoScore, priority: priorityLabel(autoScore), color: priorityColor(autoScore),
+      emoji:'⚙️', title: autoScore===3 ? 'Build Core Automation Flows — Urgently' : autoScore===2 ? 'Strengthen Automation to Hit 40% Target' : 'Optimise & Expand Automation Flows',
+      desc: autoScore===3
+        ? `Automation is only ${autoPct.toFixed(0)}% of revenue — significantly below the 40% benchmark. You are leaving substantial recurring revenue on the table. <strong>Priority order: (1) Welcome Series (7 emails over 14 days), (2) Abandoned Cart (3-step), (3) Post-Purchase follow-up.</strong> With ${latest.emailSubs.toLocaleString()} subscribers, even a modest welcome series should generate an additional €${Math.round(latest.emailSubs*0.02*35).toLocaleString()}–€${Math.round(latest.emailSubs*0.04*35).toLocaleString()} per month.`
+        : autoScore===2
+        ? `Automation at ${autoPct.toFixed(0)}% is building well but hasn't hit the 40% target yet. The gap between current (${fmtEur(latest.auto)}) and target (~${fmtEur(latest.omni*0.4)}) is ${fmtEur(latest.omni*0.4-latest.auto)}/month. Focus on deepening browse abandonment and post-purchase sequences — these typically add 8–12% to automation share with minimal setup.`
+        : `Automation at ${autoPct.toFixed(0)}% is strong. Focus on A/B testing subject lines within flows, adding SMS touchpoints at high-intent moments (abandoned cart step 2), and building a win-back sequence for subscribers inactive 90+ days.`
+    });
+
+    if (engageScore >= 2 || highOpenLowClick.length > 0) {
+      actions.push({ score: engageScore, priority: priorityLabel(engageScore), color: priorityColor(engageScore),
+        emoji:'🎯', title: highOpenLowClick.length > 1 ? 'Fix the Open-to-Click Gap' : 'Improve Email Body Conversion',
+        desc: highOpenLowClick.length > 1
+          ? `${highOpenLowClick.length} campaigns had strong open rates but click rates below 1.5%, including "${highOpenLowClick[0].name.slice(0,45)}". The subject lines are working — the problem is inside the email. <strong>Audit:</strong> (1) Is the primary CTA above the fold? (2) Is the offer as compelling in the email as the subject line suggests? (3) Does the landing page match the email promise? Fixing this for your top-sent campaigns could add 15–25% more click-driven revenue with zero extra audience needed.`
+          : avgOpen && avgOpen < 50
+          ? `Average open rate of ${avgOpen.toFixed(1)}% is below the benchmark for a healthy, engaged list. Prioritise: (1) Subject line A/B testing on every campaign, (2) Review and tighten segmentation to remove inactive subscribers, (3) Send time optimisation — test early morning vs mid-morning for your audience.`
+          : `Email body engagement has room to grow. Average click rate of ${avgClick?.toFixed(1)||'—'}% suggests subject lines are stronger than CTAs. Test single-CTA emails vs multi-CTA, and ensure every campaign has a clear, benefit-led button as the primary action.`
+      });
+    }
+
+    if (smsCamps.length === 0) {
+      actions.push({ score: 3, priority: '🟡 Medium', color: '#c9882a',
+        emoji:'💬', title:'Launch SMS Marketing Channel',
+        desc:`SMS is not yet active in your data. For ecommerce stores with an engaged list, SMS typically achieves 30–45% click rates and generates €0.15–€0.40 per send. With your ${latest.emailSubs.toLocaleString()} subscribers, even a 10% SMS opt-in rate would create an additional €${Math.round(latest.emailSubs*0.1*0.25).toLocaleString()}–€${Math.round(latest.emailSubs*0.1*0.40).toLocaleString()} per campaign. Start with abandoned cart SMS as a single flow before adding broadcast campaigns.`
+      });
+    } else if (smsCamps.length > 0 && avgSmsClick !== null) {
+      actions.push({ score: smsScore, priority: priorityLabel(smsScore), color: priorityColor(smsScore),
+        emoji:'💬', title: smsScore <= 2 ? 'Scale SMS Into Automation Flows' : 'SMS is Performing — Double Down',
+        desc: `SMS campaigns are averaging ${avgSmsClick?.toFixed(1)}% click rates across ${smsCamps.length} send${smsCamps.length>1?'s':''} — ${avgSmsClick>=30?'outstanding':'solid'} performance. ${smsScore<=2?`The next step is integrating SMS into automation flows: add an SMS at step 2 of abandoned cart (sent 2 hours after the first email), and a post-purchase SMS for review requests. These two touchpoints alone typically add 12–18% more recovered revenue.`:`SMS is a proven channel in your mix. Test increasing send frequency to 2x per month and add SMS to your welcome series at day 3 to capture early purchase intent.`}`
+      });
+    }
+
+    actions.push({ score: 1, priority: '🟢 Ongoing', color: '#1a7a4a',
+      emoji:'📊', title:'Monthly List Health Audit Cadence',
+      desc:`Based on your data pattern, the following monthly audit is recommended: (1) Flag any month where new subs drop below ${Math.round(avgNew3*0.7).toLocaleString()} — trigger lead capture review, (2) Flag unsub rate above ${Math.max(1.5,avgUnsub*1.5).toFixed(1)}% — trigger frequency audit, (3) Track automation % monthly — target maintaining above 40%, (4) Sunset subscribers inactive for 90+ days quarterly — this has kept your engaged list quality high. The data shows your highest-revenue months all share the same pattern: strong acquisition + automation above 45% + unsub rate below 1.5%.`
+    });
+
+    // Sort actions by score descending
+    actions.sort((a,b)=>b.score-a.score);
+
+    // ── RENDER ───────────────────────────────────────────────────────
+    // Signal summary bar
+    const signals = [
+      { label:'Acquisition', val: avgNew3<500?'At Risk':avgNew3<1000?'Watch':'Strong', color: avgNew3<500?'#d4622a':avgNew3<1000?'#c9882a':'#1a7a4a', detail:`${Math.round(avgNew3).toLocaleString()} avg/mo` },
+      { label:'Open Rate', val: (avgOpen||0)<50?'At Risk':(avgOpen||0)<65?'Watch':'Strong', color:(avgOpen||0)<50?'#d4622a':(avgOpen||0)<65?'#c9882a':'#1a7a4a', detail:avgOpen?avgOpen.toFixed(1)+'%':'No email data' },
+      { label:'Unsub Rate', val: unsubRate>2?'At Risk':unsubRising?'Watch':'Healthy', color:unsubRate>2?'#d4622a':unsubRising?'#c9882a':'#1a7a4a', detail:unsubRate.toFixed(2)+'%' },
+      { label:'Automation Share', val: autoPct<30?'At Risk':autoPct<40?'Watch':'On Target', color:autoPct<30?'#d4622a':autoPct<40?'#c9882a':'#1a7a4a', detail:autoPct.toFixed(0)+'%' },
+      { label:'SMS Activity', val: smsCamps.length===0?'Not Started':smsCamps.length<3?'Early Stage':'Active', color:smsCamps.length===0?'#c9882a':smsCamps.length<3?'#c9882a':'#1a7a4a', detail:smsCamps.length+' campaigns' },
+      { label:'Revenue Trend', val: revDeclining?'Declining':omniChange>=0?'Growing':'Dipping', color:revDeclining?'#d4622a':omniChange>=0?'#1a7a4a':'#c9882a', detail:(omniChange>=0?'+':'')+omniChange.toFixed(1)+'% MoM' },
+    ];
+
+    const signalBar = `
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:0.75rem;margin-bottom:1.5rem;">
+        ${signals.map(s=>`
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem;box-shadow:var(--shadow);text-align:center;">
+            <div style="font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);font-weight:600;margin-bottom:0.4rem;">${s.label}</div>
+            <div style="font-size:0.82rem;font-weight:700;color:${s.color};margin-bottom:0.2rem;">${s.val}</div>
+            <div style="font-size:0.68rem;color:var(--muted2);">${s.detail}</div>
+          </div>`).join('')}
+      </div>`;
+
+    const insightsGridHTML = `
+      <div class="insights-grid">
+        ${insightCard('📈','Growth & Acquisition', growthItems)}
+        ${insightCard('💌','Email Engagement', engItems)}
+        ${insightCard('⚙️','Automation Revenue', autoItems)}
+        ${insightCard('📉','List Health & Fatigue', healthItems)}
+      </div>`;
+
+    const actionsHTML = `
+      <div class="section-eyebrow" style="margin-top:0.5rem;">Recommended Action Plan · Ranked by Urgency</div>
+      ${actions.map((a,i)=>actionItem(i+1, a.priority, a.emoji, a.title, a.desc, a.color)).join('')}`;
+
+    document.getElementById('insightsContent').innerHTML = signalBar + insightsGridHTML + actionsHTML;
+  }
+  
+  // Sample CSV data for download
+function downloadSampleMonthly() {
+  const sampleData = `month,omni,camp,auto,store,emailSubs,newNet,unsub
+Jan '25,13818.02,8137.56,5680.46,34117.21,12301,341,698
+Feb '25,26092.03,14664.36,11427.67,78444.30,14454,2153,1095
+Mar '25,16976.24,9150.71,7825.53,45458.74,15707,1253,732
+Apr '25,14042.72,7786.31,6256.41,34741.49,16355,611,733
+May '25,10535.75,6025.63,4510.12,26996.76,16785,430,511
+Jun '25,12705.31,6874.95,5830.36,35259.70,17695,910,400
+Jul '25,14440.95,6990.24,7450.71,47488.58,19331,1636,515
+Aug '25,15110.00,5751.49,9358.51,60405.98,21706,2375,572
+Sep '25,21068.92,7859.15,13209.77,84653.82,25244,3538,683
+Oct '25,19440.20,7560.68,11879.52,70098.19,27685,2441,678
+Nov '25,14218.65,6798.14,7420.51,42011.62,28714,1029,801
+Dec '25,9791.83,5170.66,4621.17,31852.92,29499,785,617
+Jan '26,15412.07,7457.12,7954.95,56014.00,31482,1983,715
+Feb '26,14073.31,6133.66,7939.65,50885.36,33089,1607,735
+Mar '26,8461.50,3850.63,4610.87,28661.15,33600,544,713`;
+
+  const blob = new Blob([sampleData], { type: 'text/csv' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'sample-monthly-data.csv';
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+function downloadSampleCampaign() {
+  const sampleData = `date,name,channel,sent,openPct,openN,clickPct,clickN,rev,orders,segment
+2026-03-22,Sunday Morning Coffee — The Spring Edit Follow-up,Email,9893,74.4,7364,1.5,150,208.22,11,Active & Engaged
+2026-03-21,MAR_NAT_QUILT_DAY_2026,SMS,6752,,,,2763,236.75,12,Engaged SMS Subscribers
+2026-03-21,National Quilting Day — The Spring Edit Launch,Email,9882,74.3,7352,2.4,242,299.25,14,Active & Engaged
+2026-03-20,National Quilting Day Teaser,Email,10291,73.8,7604,1.3,141,193.32,8,Active & Engaged
+2026-03-17,The Lucky Green Edit [St. Patrick's Day],Email,10266,74.4,7645,1.9,197,265.39,19,Active & Engaged
+2026-03-15,March Maker Tiered Event [FINAL CALL] Less Engaged,Email,9914,9.1,908,0.73,73,133.37,5,All Email Subscribers
+2026-03-15,March Maker Tiered Event [FINAL CALL],Email,9527,76.8,7326,2.2,210,226.45,13,Active & Engaged
+2026-03-13,March Maker Tiered Event - Less Engaged,Email,11308,16.2,1842,1.7,195,221.69,8,All Email Subscribers
+2026-03-13,March Maker Tiered Event,Email,8050,80.3,6472,3.1,251,273.61,17,Active & Engaged
+2026-03-11,The No-Fuss Quilt Fringe (Rag Edge),Email,8104,81.7,6627,2.9,237,236.01,19,Active & Engaged
+2026-03-09,International Women's Day [FINAL CALL],Email,8135,79.8,6499,3.3,269,103.82,7,Active & Engaged
+2026-03-07,International Women's Day Celebration,Email,8203,79.2,6501,3.1,260,344.88,20,Active & Engaged
+2026-03-05,Spring Palette Reveal,Email,8360,80.4,6724,2.3,198,370.10,21,Active & Engaged
+2026-03-03,National Craft Month Kickoff,Email,8448,79.6,6726,3,261,288.63,12,Active & Engaged
+2026-03-24,National Quilting Day — Post-Event Gratitude,Email,9677,71.8,6955,0.24,24,62.65,4,Active & Engaged`;
+
+  const blob = new Blob([sampleData], { type: 'text/csv' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'sample-campaigns-data.csv';
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+  // ── EXPORT CSV ──
+  function exportCSV() {
+    if (!MONTHLY.length && !CAMPAIGNS.length) { alert('No data loaded yet.'); return; }
+    let csv = 'TYPE,month,omni,camp,auto,store,emailSubs,newNet,unsub\n';
+    MONTHLY.forEach(m=>{ csv+=`monthly,${m.month},${m.omni},${m.camp},${m.auto},${m.store},${m.emailSubs},${m.newNet},${m.unsub}\n`; });
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+    a.download=`analytics-export-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+  }
+
+  // Init
+  Chart.defaults.font.family = "'Outfit', sans-serif";
+  Chart.defaults.color = '#6b7280';
+  Chart.defaults.plugins.legend.labels.boxWidth = 8;
+  Chart.defaults.plugins.legend.labels.padding = 14;
+  
+</script>
+<script src="header.js"></script>
+<footer>
+    <div class="footer-content">
+        <div class="footer-column">
+            <h3>ResumePro</h3>
+            <p>Professional digital templates to showcase your career and work.</p>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Templates</h3>
+            <ul class="footer-links">
+                <li><a href="resume-templates.html">Resume Templates</a></li>
+                <li><a href="portfolio-templates.html">Portfolio Templates</a></li>
+                <li><a href="#">All Templates</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Resources</h3>
+            <ul class="footer-links">
+                <li><a href="help.html#editing">How to Edit</a></li>
+                <li><a href="help.html#hosting">Hosting Guide</a></li>
+                <li><a href="help.html#tips">Tips & Examples</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Company</h3>
+            <ul class="footer-links">
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="copyright">
+        <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>

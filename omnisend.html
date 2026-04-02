@@ -56,7 +56,6 @@
       padding: 2rem 0 1.5rem;
       overflow: hidden;
     }
-	
     .sidebar::before {
       content: '';
       position: absolute;
@@ -675,8 +674,7 @@
     }
     .footer-brand { font-weight: 600; color: var(--muted); }
 	footer { padding-left: 100px !important; }
-	
-	
+
     /* ── PRINT / PDF ── */
     @media print {
       .sidebar, .topbar, .upload-overlay { display: none !important; }
@@ -725,7 +723,6 @@
       text-align: center;
       line-height: 1.4;
     }
-	
 	.mobile-warning {
     display: none;
     position: fixed;
@@ -804,12 +801,9 @@
     /* animations */
     .fade-in { animation: fadeIn 0.4s ease both; }
     @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
-	
-	
   </style>
 </head>
 <body>
-
 <header>
     <div class="header-content">
         <a href="index.html" class="logo">
@@ -866,21 +860,6 @@
         </div>
     </div>
 </header>
-<!-- Mobile Warning Overlay -->
-<div class="mobile-warning" id="mobileWarning">
-  <div class="mobile-warning-content">
-    <div class="mobile-warning-icon">💻📱</div>
-    <div class="mobile-warning-title">Desktop View Recommended</div>
-    <div class="mobile-warning-text">
-      This analytics dashboard is optimized for desktop and tablet viewing.<br><br>
-      For the best experience with full data visualization, charts, and tables, please use a laptop or desktop computer.
-    </div>
-    <div class="mobile-warning-device">
-      📊 Detected: <span id="deviceType">Mobile Device</span>
-    </div>
-  </div>
-</div>
-
 
 <!-- ── UPLOAD ZONE (shown when no data) ── -->
 <div class="upload-overlay" id="uploadOverlay">
@@ -1137,12 +1116,13 @@
     <div class="page fade-in" id="page-campaigns">
       <div class="section-eyebrow">Campaign Performance · Tactical Analysis</div>
 
-      <div class="kpi-row" id="kpiCamps" style="grid-template-columns:repeat(5,1fr);">
+      <div class="kpi-row" id="kpiCamps" style="grid-template-columns:repeat(6,1fr);">
         <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#d4622a,#f0944a)"></div><div class="kpi-icon">💰</div><div class="kpi-label">Total Campaign Revenue</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">—</div></div>
         <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#1a7a4a,#34c77a)"></div><div class="kpi-icon">🛒</div><div class="kpi-label">Total Orders</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">—</div></div>
         <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#2a6dd4,#5b9bd5)"></div><div class="kpi-icon">👁</div><div class="kpi-label">Avg Open Rate (Email)</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">—</div></div>
         <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#c9882a,#e0b060)"></div><div class="kpi-icon">🖱</div><div class="kpi-label">Avg Click Rate</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">—</div></div>
-        <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#8b5cf6,#c084fc)"></div><div class="kpi-icon">📨</div><div class="kpi-label">Revenue per Send (RPS)</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">—</div></div>
+        <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#8b5cf6,#c084fc)"></div><div class="kpi-icon">📨</div><div class="kpi-label">Revenue per 1K Sent</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">—</div></div>
+        <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#ef4444,#f87171)"></div><div class="kpi-icon">📉</div><div class="kpi-label">Avg Unsub Rate</div><div class="kpi-value">—</div><div class="kpi-trend trend-neutral">—</div></div>
       </div>
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
@@ -1200,7 +1180,9 @@
                 <th onclick="sortCamps('rev')" class="num">Revenue ↕</th>
                 <th onclick="sortCamps('orders')" class="num">Orders ↕</th>
                 <th class="num">AOV</th>
-                <th class="num">RPS</th>
+                <th onclick="sortCamps('unsubPct')" class="num" style="color:#ef4444;">Unsub Rate ↕</th>
+                <th onclick="sortCamps('spamPct')" class="num">Spam ↕</th>
+                <th onclick="sortCamps('failPct')" class="num">Failed ↕</th>
                 <th>Performance</th>
               </tr>
             </thead>
@@ -1227,7 +1209,6 @@
   </div>
 
 </div><!-- /page-wrap -->
-
 
 <script>
   // ──────────────────────────────────────────────
@@ -1312,6 +1293,10 @@
       clickN: r.clickN!=null?+r.clickN:null,
       rev: +r.rev||0,
       orders: r.orders!=null?+r.orders:null,
+      unsubPct: r.unsubPct!=null&&r.unsubPct!==''?+r.unsubPct:null,
+      unsubN: r.unsubN!=null&&r.unsubN!==''?+r.unsubN:null,
+      spamPct: r.spamPct!=null&&r.spamPct!==''?+r.spamPct:null,
+      failPct: r.failPct!=null&&r.failPct!==''?+r.failPct:null,
       segment: r.segment||''
     })).filter(r=>r.date);
     hideUpload();
@@ -1356,21 +1341,28 @@
       { month:"Mar '26", omni:8461.50, camp:3850.63, auto:4610.87, store:28661.15, emailSubs:33600, newNet:544, unsub:713 }
     ];
     CAMPAIGNS = [
-      {id:1,date:"2026-03-22",name:"Sunday Morning Coffee — The Spring Edit Follow-up",channel:"Email",sent:9893,openPct:74.4,openN:7364,clickPct:1.5,clickN:150,rev:208.22,orders:11,segment:"Active & Engaged"},
-      {id:2,date:"2026-03-21",name:"MAR_NAT_QUILT_DAY_2026",channel:"SMS",sent:6752,openPct:null,openN:null,clickPct:40.9,clickN:2763,rev:236.75,orders:12,segment:"Engaged SMS Subscribers"},
-      {id:3,date:"2026-03-21",name:"National Quilting Day — The Spring Edit Launch",channel:"Email",sent:9882,openPct:74.3,openN:7352,clickPct:2.4,clickN:242,rev:299.25,orders:14,segment:"Active & Engaged"},
-      {id:4,date:"2026-03-20",name:"National Quilting Day Teaser",channel:"Email",sent:10291,openPct:73.8,openN:7604,clickPct:1.3,clickN:141,rev:193.32,orders:8,segment:"Active & Engaged"},
-      {id:5,date:"2026-03-17",name:"The Lucky Green Edit [St. Patrick's Day]",channel:"Email",sent:10266,openPct:74.4,openN:7645,clickPct:1.9,clickN:197,rev:265.39,orders:19,segment:"Active & Engaged"},
-      {id:6,date:"2026-03-15",name:"March Maker Tiered Event [FINAL CALL] Less Engaged",channel:"Email",sent:9914,openPct:9.1,openN:908,clickPct:0.73,clickN:73,rev:133.37,orders:5,segment:"All Email Subscribers"},
-      {id:7,date:"2026-03-15",name:"March Maker Tiered Event [FINAL CALL]",channel:"Email",sent:9527,openPct:76.8,openN:7326,clickPct:2.2,clickN:210,rev:226.45,orders:13,segment:"Active & Engaged"},
-      {id:8,date:"2026-03-13",name:"March Maker Tiered Event - Less Engaged",channel:"Email",sent:11308,openPct:16.2,openN:1842,clickPct:1.7,clickN:195,rev:221.69,orders:8,segment:"All Email Subscribers"},
-      {id:9,date:"2026-03-13",name:"March Maker Tiered Event",channel:"Email",sent:8050,openPct:80.3,openN:6472,clickPct:3.1,clickN:251,rev:273.61,orders:17,segment:"Active & Engaged"},
-      {id:10,date:"2026-03-11",name:'The "No-Fuss" Quilt Fringe (Rag Edge)',channel:"Email",sent:8104,openPct:81.7,openN:6627,clickPct:2.9,clickN:237,rev:236.01,orders:19,segment:"Active & Engaged"},
-      {id:11,date:"2026-03-09",name:"International Women's Day [FINAL CALL]",channel:"Email",sent:8135,openPct:79.8,openN:6499,clickPct:3.3,clickN:269,rev:103.82,orders:7,segment:"Active & Engaged"},
-      {id:12,date:"2026-03-07",name:"International Women's Day Celebration",channel:"Email",sent:8203,openPct:79.2,openN:6501,clickPct:3.1,clickN:260,rev:344.88,orders:20,segment:"Active & Engaged"},
-      {id:13,date:"2026-03-05",name:"Spring Palette Reveal",channel:"Email",sent:8360,openPct:80.4,openN:6724,clickPct:2.3,clickN:198,rev:370.10,orders:21,segment:"Active & Engaged"},
-      {id:14,date:"2026-03-03",name:"National Craft Month Kickoff",channel:"Email",sent:8448,openPct:79.6,openN:6726,clickPct:3,clickN:261,rev:288.63,orders:12,segment:"Active & Engaged"},
-      {id:15,date:"2026-03-24",name:"National Quilting Day — Post-Event Gratitude",channel:"Email",sent:9677,openPct:71.8,openN:6955,clickPct:0.24,clickN:24,rev:62.65,orders:4,segment:"Active & Engaged"}
+      {id:1,date:"2026-04-01",name:"The April 1st Quiet Zone",channel:"Email",sent:320,openPct:55,openN:176,clickPct:3.1,clickN:10,rev:0,orders:0,unsubPct:0,unsubN:0,spamPct:0,failPct:0,segment:""},
+      {id:2,date:"2026-03-30",name:"MAR_CRAFT_GRAND_FINALE_25",channel:"SMS",sent:6860,openPct:null,openN:null,clickPct:38.1,clickN:2618,rev:334.92,orders:15,unsubPct:0.84,unsubN:58,spamPct:null,failPct:0.62,segment:""},
+      {id:3,date:"2026-03-30",name:"Craft Month Grand Finale — 25% OFF",channel:"Email",sent:8956,openPct:77.5,openN:6946,clickPct:2.5,clickN:227,rev:244.86,orders:13,unsubPct:0.31,unsubN:28,spamPct:0.01,failPct:0.04,segment:""},
+      {id:4,date:"2026-03-28",name:"Saturday Studio Audit — The Pattern Gap",channel:"Email",sent:9307,openPct:78.1,openN:7278,clickPct:3.5,clickN:332,rev:220.17,orders:12,unsubPct:0.27,unsubN:26,spamPct:0,failPct:0.04,segment:""},
+      {id:5,date:"2026-03-26",name:"National Scribble Day — The Art of the Imperfect",channel:"Email",sent:9484,openPct:77.1,openN:7319,clickPct:0.98,clickN:93,rev:310.58,orders:19,unsubPct:0.55,unsubN:53,spamPct:0,failPct:0.25,segment:""},
+      {id:6,date:"2026-03-24",name:"National Quilting Day — Post-Event Gratitude",channel:"Email",sent:9677,openPct:78.2,openN:7571,clickPct:0.27,clickN:27,rev:193.16,orders:11,unsubPct:0.39,unsubN:38,spamPct:0,failPct:0.64,segment:""},
+      {id:7,date:"2026-03-22",name:"Sunday Morning Coffee — The Spring Edit Follow-up",channel:"Email",sent:9893,openPct:77.1,openN:7629,clickPct:1.5,clickN:154,rev:217.17,orders:12,unsubPct:0.49,unsubN:49,spamPct:0.01,failPct:0.03,segment:""},
+      {id:8,date:"2026-03-21",name:"MAR_NAT_QUILT_DAY_2026",channel:"SMS",sent:6752,openPct:null,openN:null,clickPct:41.1,clickN:2778,rev:338.79,orders:19,unsubPct:0.51,unsubN:35,spamPct:null,failPct:2.2,segment:""},
+      {id:9,date:"2026-03-21",name:"National Quilting Day — The Spring Edit Launch",channel:"Email",sent:9882,openPct:75.9,openN:7502,clickPct:2.5,clickN:248,rev:372.94,orders:18,unsubPct:0.44,unsubN:44,spamPct:0.03,failPct:0.09,segment:""},
+      {id:10,date:"2026-03-20",name:"National Quilting Day Teaser",channel:"Email",sent:10200,openPct:74.9,openN:7713,clickPct:1.3,clickN:142,rev:210.33,orders:9,unsubPct:0.47,unsubN:49,spamPct:0.01,failPct:0.02,segment:""},
+      {id:11,date:"2026-03-17",name:"The Lucky Green Edit [St. Patrick's Day]",channel:"Email",sent:10200,openPct:74.8,openN:7684,clickPct:1.9,clickN:201,rev:278.82,orders:20,unsubPct:0.61,unsubN:63,spamPct:0,failPct:0.02,segment:""},
+      {id:12,date:"2026-03-15",name:"March Maker Tiered Event [FINAL CALL]",channel:"Email",sent:9527,openPct:77.1,openN:7354,clickPct:2.2,clickN:211,rev:226.45,orders:13,unsubPct:0.62,unsubN:60,spamPct:0,failPct:0.3,segment:""},
+      {id:13,date:"2026-03-15",name:"March Maker Tiered Event [FINAL CALL] Less Engaged",channel:"Email",sent:9914,openPct:9.5,openN:942,clickPct:0.74,clickN:74,rev:133.37,orders:5,unsubPct:0.42,unsubN:42,spamPct:0.02,failPct:0.18,segment:""},
+      {id:14,date:"2026-03-13",name:"March Maker Tiered Event - Less Engaged",channel:"Email",sent:11300,openPct:16.5,openN:1875,clickPct:1.7,clickN:197,rev:221.69,orders:8,unsubPct:0.56,unsubN:64,spamPct:0.03,failPct:0.68,segment:""},
+      {id:15,date:"2026-03-13",name:"March Maker Tiered Event",channel:"Email",sent:8050,openPct:80.5,openN:6487,clickPct:3.1,clickN:251,rev:273.61,orders:17,unsubPct:0.65,unsubN:53,spamPct:0,failPct:0.01,segment:""},
+      {id:16,date:"2026-03-11",name:'The "No-Fuss" Quilt Fringe (Rag Edge)',channel:"Email",sent:8104,openPct:81.9,openN:6643,clickPct:2.9,clickN:237,rev:244.96,orders:20,unsubPct:0.55,unsubN:45,spamPct:0.01,failPct:0.11,segment:""},
+      {id:17,date:"2026-03-09",name:"International Women's Day [FINAL CALL]",channel:"Email",sent:8135,openPct:80,openN:6509,clickPct:3.3,clickN:269,rev:103.82,orders:7,unsubPct:0.50,unsubN:41,spamPct:0,failPct:0.09,segment:""},
+      {id:18,date:"2026-03-08",name:"Copy of: International Women's Day Celebration",channel:"Email",sent:276,openPct:75.3,openN:208,clickPct:2.5,clickN:7,rev:26.85,orders:1,unsubPct:0.36,unsubN:1,spamPct:0,failPct:0,segment:""},
+      {id:19,date:"2026-03-07",name:"International Women's Day Celebration",channel:"Email",sent:8203,openPct:79.3,openN:6508,clickPct:3.1,clickN:261,rev:344.88,orders:20,unsubPct:0.54,unsubN:45,spamPct:0,failPct:0.19,segment:""},
+      {id:20,date:"2026-03-05",name:"Spring Palette Reveal",channel:"Email",sent:8360,openPct:80.5,openN:6732,clickPct:2.3,clickN:199,rev:370.10,orders:21,unsubPct:0.58,unsubN:49,spamPct:0,failPct:0.44,segment:""},
+      {id:21,date:"2026-03-03",name:"National Craft Month Kickoff",channel:"Email",sent:8448,openPct:79.7,openN:6737,clickPct:3,clickN:261,rev:288.63,orders:12,unsubPct:0.69,unsubN:59,spamPct:0.01,failPct:0.49,segment:""},
+      {id:22,date:"2026-03-01",name:"March 1st – New Beginnings",channel:"Email",sent:8196,openPct:80,openN:6559,clickPct:2.9,clickN:241,rev:325.79,orders:19,unsubPct:0.74,unsubN:61,spamPct:0.01,failPct:0.15,segment:""}
     ];
     hideUpload();
     renderAll();
@@ -1653,15 +1645,19 @@
 
   // ── Campaign KPIs ──
   function renderCampKPIs() {
-    const fc = campFilter==='all'?CAMPAIGNS:CAMPAIGNS.filter(c=>c.channel===campFilter);
+    const fc = _campFilter==='all'?CAMPAIGNS:CAMPAIGNS.filter(c=>c.channel===_campFilter);
     const totalRev = fc.reduce((s,c)=>s+c.rev,0);
     const totalOrders = fc.reduce((s,c)=>s+(c.orders||0),0);
     const emailC = fc.filter(c=>c.channel==='Email'&&c.openPct!=null);
-    const avgOpen = emailC.length?emailC.reduce((s,c)=>s+c.openPct,0)/emailC.length:null;
     const allClick = fc.filter(c=>c.clickPct!=null);
+    const avgOpen = emailC.length?emailC.reduce((s,c)=>s+c.openPct,0)/emailC.length:null;
     const avgClick = allClick.length?allClick.reduce((s,c)=>s+c.clickPct,0)/allClick.length:null;
     const totalSent = fc.reduce((s,c)=>s+c.sent,0);
     const rps = totalSent>0?(totalRev/totalSent*1000):0;
+    const unsubCamps = fc.filter(c=>c.unsubPct!=null);
+    const avgUnsub = unsubCamps.length?unsubCamps.reduce((s,c)=>s+c.unsubPct,0)/unsubCamps.length:null;
+    const unsubClass = avgUnsub==null?'trend-neutral':avgUnsub<0.3?'trend-up':avgUnsub<0.6?'trend-neutral':'trend-down';
+    const unsubLabel = avgUnsub==null?'—':avgUnsub<0.3?'✅ Very low':avgUnsub<0.6?'● Acceptable':'⚠ Watch closely';
 
     document.getElementById('kpiCamps').innerHTML = `
       <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#d4622a,#f0944a)"></div>
@@ -1684,12 +1680,16 @@
         <div class="kpi-icon">📨</div><div class="kpi-label">Revenue per 1K Sent</div>
         <div class="kpi-value">${fmtEur(rps)}</div>
         <div class="kpi-trend trend-neutral">per 1,000 recipients</div></div>
+      <div class="kpi-card"><div class="kpi-accent-bar" style="background:linear-gradient(90deg,#ef4444,#f87171)"></div>
+        <div class="kpi-icon">📉</div><div class="kpi-label">Avg Unsub Rate</div>
+        <div class="kpi-value">${avgUnsub!=null?avgUnsub.toFixed(2)+'%':'—'}</div>
+        <div class="kpi-trend ${unsubClass}">${unsubLabel}</div></div>
     `;
   }
 
   // ── Campaign Charts ──
   function renderCampCharts() {
-    const fc = CAMPAIGNS.filter(c=>campFilter==='all'||c.channel===campFilter);
+    const fc = CAMPAIGNS.filter(c=>_campFilter==='all'||c.channel===_campFilter);
     const topCamps = [...fc].sort((a,b)=>b.rev-a.rev).slice(0,10);
 
     destroyChart('campRev');
@@ -1750,13 +1750,24 @@
 
     document.getElementById('campTableBody').innerHTML = sorted.map(c=>{
       const aov = c.orders&&c.orders>0?fmtEur(c.rev/c.orders):'—';
-      const rps = c.sent>0?fmtEur(c.rev/c.sent*1000):'—';
       const [pl,pc]=campPerf(c);
       const openBar = c.openPct!=null?`<div class="rate-bar-wrap"><span>${c.openPct.toFixed(1)}%</span><div class="rate-bar"><div class="rate-bar-fill bar-open" style="width:${Math.min(c.openPct,100)}%"></div></div></div>`:'—';
       const clickBar = c.clickPct!=null?`<div class="rate-bar-wrap"><span>${c.clickPct.toFixed(1)}%</span><div class="rate-bar"><div class="rate-bar-fill bar-click" style="width:${Math.min(c.clickPct*2,100)}%"></div></div></div>`:'—';
+      // Unsub rate with color coding: <0.3 green, 0.3-0.6 neutral, >0.6 red
+      const unsubColor = c.unsubPct==null?'var(--muted2)':c.unsubPct<0.3?'#1a7a4a':c.unsubPct<0.6?'#c9882a':'#ef4444';
+      const unsubBg = c.unsubPct==null?'':c.unsubPct<0.3?'rgba(26,122,74,0.07)':c.unsubPct<0.6?'rgba(201,136,42,0.07)':'rgba(239,68,68,0.08)';
+      const unsubCell = c.unsubPct!=null
+        ? `<span style="color:${unsubColor};font-weight:700;background:${unsubBg};padding:0.15rem 0.4rem;border-radius:6px;">${c.unsubPct.toFixed(2)}%${c.unsubN!=null?' ('+c.unsubN+')':''}</span>`
+        : '—';
+      const spamCell = c.spamPct!=null
+        ? `<span style="color:${c.spamPct>0.08?'#ef4444':c.spamPct>0.03?'#c9882a':'var(--muted)'};font-size:0.75rem;">${c.spamPct.toFixed(2)}%</span>`
+        : '—';
+      const failCell = c.failPct!=null
+        ? `<span style="color:${c.failPct>1?'#ef4444':c.failPct>0.3?'#c9882a':'var(--muted)'};font-size:0.75rem;">${c.failPct.toFixed(2)}%</span>`
+        : '—';
       return `<tr>
         <td style="white-space:nowrap;">${dLabel(c.date)}</td>
-        <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${c.name}">${c.name}</td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${c.name}">${c.name}</td>
         <td><span class="ch-pill ${c.channel==='SMS'?'ch-sms':'ch-email'}">${c.channel==='SMS'?'💬':'📧'} ${c.channel}</span></td>
         <td class="num">${fmtK(c.sent)}</td>
         <td>${openBar}</td>
@@ -1764,7 +1775,9 @@
         <td class="rev">${fmtEur(c.rev)}</td>
         <td class="num">${c.orders??'—'}</td>
         <td class="num">${aov}</td>
-        <td class="num">${rps}</td>
+        <td class="num">${unsubCell}</td>
+        <td class="num">${spamCell}</td>
+        <td class="num">${failCell}</td>
         <td><span class="perf-badge ${pc}">${pl}</span></td>
       </tr>`;
     }).join('');
@@ -2027,6 +2040,23 @@
 
     document.getElementById('insightsContent').innerHTML = signalBar + insightsGridHTML + actionsHTML;
   }
+
+  // ── EXPORT CSV ──
+  function exportCSV() {
+    if (!MONTHLY.length && !CAMPAIGNS.length) { alert('No data loaded yet.'); return; }
+    let csv = 'TYPE,month,omni,camp,auto,store,emailSubs,newNet,unsub\n';
+    MONTHLY.forEach(m=>{ csv+=`monthly,${m.month},${m.omni},${m.camp},${m.auto},${m.store},${m.emailSubs},${m.newNet},${m.unsub}\n`; });
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+    a.download=`analytics-export-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+  }
+
+  // Init
+  Chart.defaults.font.family = "'Outfit', sans-serif";
+  Chart.defaults.color = '#6b7280';
+  Chart.defaults.plugins.legend.labels.boxWidth = 8;
+  Chart.defaults.plugins.legend.labels.padding = 14;
   
   // Sample CSV data for download
 function downloadSampleMonthly() {
@@ -2056,22 +2086,22 @@ Mar '26,8461.50,3850.63,4610.87,28661.15,33600,544,713`;
 }
 
 function downloadSampleCampaign() {
-  const sampleData = `date,name,channel,sent,openPct,openN,clickPct,clickN,rev,orders,segment
-2026-03-22,Sunday Morning Coffee — The Spring Edit Follow-up,Email,9893,74.4,7364,1.5,150,208.22,11,Active & Engaged
-2026-03-21,MAR_NAT_QUILT_DAY_2026,SMS,6752,,,,2763,236.75,12,Engaged SMS Subscribers
-2026-03-21,National Quilting Day — The Spring Edit Launch,Email,9882,74.3,7352,2.4,242,299.25,14,Active & Engaged
-2026-03-20,National Quilting Day Teaser,Email,10291,73.8,7604,1.3,141,193.32,8,Active & Engaged
-2026-03-17,The Lucky Green Edit [St. Patrick's Day],Email,10266,74.4,7645,1.9,197,265.39,19,Active & Engaged
-2026-03-15,March Maker Tiered Event [FINAL CALL] Less Engaged,Email,9914,9.1,908,0.73,73,133.37,5,All Email Subscribers
-2026-03-15,March Maker Tiered Event [FINAL CALL],Email,9527,76.8,7326,2.2,210,226.45,13,Active & Engaged
-2026-03-13,March Maker Tiered Event - Less Engaged,Email,11308,16.2,1842,1.7,195,221.69,8,All Email Subscribers
-2026-03-13,March Maker Tiered Event,Email,8050,80.3,6472,3.1,251,273.61,17,Active & Engaged
-2026-03-11,The No-Fuss Quilt Fringe (Rag Edge),Email,8104,81.7,6627,2.9,237,236.01,19,Active & Engaged
-2026-03-09,International Women's Day [FINAL CALL],Email,8135,79.8,6499,3.3,269,103.82,7,Active & Engaged
-2026-03-07,International Women's Day Celebration,Email,8203,79.2,6501,3.1,260,344.88,20,Active & Engaged
-2026-03-05,Spring Palette Reveal,Email,8360,80.4,6724,2.3,198,370.10,21,Active & Engaged
-2026-03-03,National Craft Month Kickoff,Email,8448,79.6,6726,3,261,288.63,12,Active & Engaged
-2026-03-24,National Quilting Day — Post-Event Gratitude,Email,9677,71.8,6955,0.24,24,62.65,4,Active & Engaged`;
+  const sampleData = `date,name,channel,sent,openPct,openN,clickPct,clickN,rev,orders,unsubPct,unsubN,spamPct,failPct,segment
+2026-03-22,Sunday Morning Coffee — The Spring Edit Follow-up,Email,9893,74.4,7364,1.5,150,208.22,11,0.49,49,0.01,0.03,Active & Engaged
+2026-03-21,MAR_NAT_QUILT_DAY_2026,SMS,6752,,,,2763,236.75,12,0.51,35,,2.2,Engaged SMS Subscribers
+2026-03-21,National Quilting Day — The Spring Edit Launch,Email,9882,74.3,7352,2.4,242,299.25,14,0.44,44,0.03,0.09,Active & Engaged
+2026-03-20,National Quilting Day Teaser,Email,10291,73.8,7604,1.3,141,193.32,8,0.47,49,0.01,0.02,Active & Engaged
+2026-03-17,The Lucky Green Edit [St. Patrick's Day],Email,10266,74.4,7645,1.9,197,265.39,19,0.61,63,0,0.02,Active & Engaged
+2026-03-15,March Maker Tiered Event [FINAL CALL] Less Engaged,Email,9914,9.1,908,0.73,73,133.37,5,0.42,42,0.02,0.18,All Email Subscribers
+2026-03-15,March Maker Tiered Event [FINAL CALL],Email,9527,76.8,7326,2.2,210,226.45,13,0.62,60,0,0.3,Active & Engaged
+2026-03-13,March Maker Tiered Event - Less Engaged,Email,11308,16.2,1842,1.7,195,221.69,8,0.56,64,0.03,0.68,All Email Subscribers
+2026-03-13,March Maker Tiered Event,Email,8050,80.3,6472,3.1,251,273.61,17,0.65,53,0,0.01,Active & Engaged
+2026-03-11,The No-Fuss Quilt Fringe (Rag Edge),Email,8104,81.7,6627,2.9,237,236.01,19,0.55,45,0.01,0.11,Active & Engaged
+2026-03-09,International Women's Day [FINAL CALL],Email,8135,79.8,6499,3.3,269,103.82,7,0.50,41,0,0.09,Active & Engaged
+2026-03-07,International Women's Day Celebration,Email,8203,79.2,6501,3.1,260,344.88,20,0.54,45,0,0.19,Active & Engaged
+2026-03-05,Spring Palette Reveal,Email,8360,80.4,6724,2.3,198,370.10,21,0.58,49,0,0.44,Active & Engaged
+2026-03-03,National Craft Month Kickoff,Email,8448,79.6,6726,3,261,288.63,12,0.69,59,0.01,0.49,Active & Engaged
+2026-03-24,National Quilting Day — Post-Event Gratitude,Email,9677,71.8,6955,0.24,24,62.65,4,0.39,38,0,0.64,Active & Engaged`;
 
   const blob = new Blob([sampleData], { type: 'text/csv' });
   const link = document.createElement('a');
@@ -2097,7 +2127,6 @@ function downloadSampleCampaign() {
   Chart.defaults.color = '#6b7280';
   Chart.defaults.plugins.legend.labels.boxWidth = 8;
   Chart.defaults.plugins.legend.labels.padding = 14;
-  
 </script>
 <script src="header.js"></script>
 <footer>

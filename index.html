@@ -7,675 +7,757 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="footer.css">
-	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7364684388402027"
-     crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7364684388402027" crossorigin="anonymous"></script>
     <style>
         :root {
-            --primary: #3a86ff;
+            --ink: #0e0e12;
+            --ink-soft: #2a2a35;
+            --paper: #fafaf8;
+            --paper-warm: #f4f1eb;
+            --accent: #c8a96e;
+            --accent-light: #e8d9b8;
+            --accent-dark: #9a7a3f;
+            --blue: #2d5be3;
+            --blue-light: #eef1fd;
+            --mid: #6b6b78;
+            --border: #e2e0d8;
+            --white: #ffffff;
+			--primary: #3a86ff;
             --primary-dark: #2667cc;
             --dark: #2b2d42;
             --light: #f8f9fa;
             --gray: #6c757d;
             --success: #28a745;
         }
-        
-        * {
+
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
+        html { scroll-behavior: smooth; }
+
         body {
-            background-color: #f5f5f7;
-            color: var(--dark);
+            background-color: var(--paper);
+            color: var(--ink);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 400;
             line-height: 1.6;
+            overflow-x: hidden;
         }
-        
-        /* Animation Classes */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.8s ease forwards;
-        }
-        
-        .fade-in-delay {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.8s ease 0.3s forwards;
-        }
-        
-        .fade-in-delay-2 {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.8s ease 0.6s forwards;
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        .float-animation {
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        .float-animation-delay {
-            animation: float 6s ease-in-out 2s infinite;
-        }
-        
-        .slide-in-left {
-            opacity: 0;
-            transform: translateX(-50px);
-            animation: slideInLeft 0.8s ease forwards;
-        }
-        
-        .slide-in-right {
-            opacity: 0;
-            transform: translateX(50px);
-            animation: slideInRight 0.8s ease forwards;
-        }
-        
-        .scale-up {
-            transform: scale(0.95);
-            opacity: 0;
-            animation: scaleUp 0.8s ease forwards;
-        }
-        
-        .rotate-3d {
-            animation: rotate3d 20s linear infinite;
-        }
-        
-        .bounce {
-            animation: bounce 2s infinite;
-        }
-        
-        /* Animation Keyframes */
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-        
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-20px);
-            }
-        }
-        
-        @keyframes slideInLeft {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        @keyframes slideInRight {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        @keyframes scaleUp {
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-        
-        @keyframes rotate3d {
-            0% {
-                transform: perspective(1000px) rotateY(0deg);
-            }
-            100% {
-                transform: perspective(1000px) rotateY(360deg);
-            }
-        }
-        
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-        
-        @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-        
-        /* NEW: Android Apps Announcement Section */
-        .announcement-section {
-            margin: 0px 0;
-            padding: 40px;
-            background: linear-gradient(-45deg, #1e3c72, #2a5298, #3b5998, #667eea);
-            background-size: 400% 400%;
-            color: white;
-            border-radius: 12px;
-            text-align: center;
+
+        /* ─── HERO ─────────────────────────────────────────────── */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             position: relative;
             overflow: hidden;
-            animation: gradientShift 15s ease infinite;
         }
-        
-        .announcement-section::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200px;
-            height: 200px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            animation: rotate3d 30s linear infinite;
-        }
-        
-        .announcement-section::after {
-            content: "";
-            position: absolute;
-            bottom: -30%;
-            left: -30%;
-            width: 150px;
-            height: 150px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 50%;
-            animation: rotate3d 25s linear infinite reverse;
-        }
-        
-        .announcement-content {
+
+        .hero-left {
+            background-color: var(--ink);
+            padding: 120px 60px 80px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             position: relative;
             z-index: 1;
         }
-        
-        .announcement-badge {
+
+        .hero-left::after {
+            content: '';
+            position: absolute;
+            right: -1px;
+            top: 0;
+            bottom: 0;
+            width: 80px;
+            background: var(--ink);
+            clip-path: polygon(0 0, 100% 15%, 100% 85%, 0 100%);
+            z-index: 2;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease 0.1s forwards;
+        }
+
+        .hero-eyebrow::before {
+            content: '';
             display: inline-block;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            font-weight: 500;
-            animation: pulse 2s infinite 1s;
+            width: 30px;
+            height: 2px;
+            background: var(--accent);
         }
-        
-        .announcement-section h2 {
-            font-size: 2.2rem;
-            margin-bottom: 15px;
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 5vw, 5rem);
+            font-weight: 900;
+            line-height: 1.07;
+            color: var(--white);
+            margin-bottom: 24px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease 0.25s forwards;
         }
-        
-        .announcement-section p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            max-width: 700px;
-            margin: 0 auto 25px;
-            line-height: 1.6;
+
+        .hero-title em {
+            font-style: italic;
+            color: var(--accent);
         }
-        
-        .android-features {
+
+        .hero-sub {
+            font-size: 1.05rem;
+            color: rgba(255,255,255,0.65);
+            max-width: 380px;
+            line-height: 1.75;
+            margin-bottom: 48px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease 0.4s forwards;
+        }
+
+        .hero-actions {
             display: flex;
-            justify-content: center;
-            gap: 15px;
+            gap: 14px;
             flex-wrap: wrap;
-            margin: 25px 0;
+            opacity: 0;
+            animation: fadeUp 0.7s ease 0.55s forwards;
         }
-        
-        .android-feature {
-            background: rgba(255,255,255,0.1);
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-        }
-        
-        .android-feature:hover {
-            transform: translateY(-5px) scale(1.05);
-            background: rgba(255,255,255,0.2);
-        }
-        
-        .announcement-button {
-            display: inline-block;
-            background: white;
-            color: #1e3c72;
-            padding: 12px 30px;
-            border-radius: 8px;
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent);
+            color: var(--ink);
+            padding: 14px 28px;
+            border-radius: 4px;
             text-decoration: none;
             font-weight: 600;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-            border: 2px solid white;
-            animation: bounce 3s infinite;
+            font-size: 0.9rem;
+            letter-spacing: 0.03em;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
         }
-        
-        .announcement-button:hover {
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.15);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,169,110,0.4); }
+        .btn-primary:hover::after { opacity: 1; }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             background: transparent;
-            color: white;
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            color: rgba(255,255,255,0.85);
+            padding: 14px 28px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.25);
+            transition: all 0.25s ease;
         }
-        
-        .announcement-apps {
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .hero-stats {
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-            flex-wrap: wrap;
+            gap: 36px;
+            margin-top: 56px;
+            padding-top: 36px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0;
+            animation: fadeUp 0.7s ease 0.7s forwards;
         }
-        
-        .announcement-app {
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 10px;
-            backdrop-filter: blur(5px);
-            min-width: 200px;
-            text-align: center;
-            transition: all 0.4s ease;
-        }
-        
-        .announcement-app:hover {
-            transform: translateY(-10px) rotateX(10deg);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-        }
-        
-        .app-icon-sm {
+
+        .stat-item { }
+
+        .stat-num {
+            font-family: 'Playfair Display', serif;
             font-size: 2rem;
-            margin-bottom: 10px;
-            animation: float 4s ease-in-out infinite;
+            font-weight: 700;
+            color: var(--white);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
         }
-        
-        .announcement-app:nth-child(2) .app-icon-sm {
-            animation-delay: 1s;
+
+        .stat-num span { color: var(--accent); }
+
+        .stat-label {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.45);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
         }
-        
-        .app-name {
+
+        /* Hero Right */
+        .hero-right {
+            background-color: var(--paper-warm);
+            padding: 120px 80px 80px 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-right-label {
+            font-size: 0.75rem;
             font-weight: 600;
-            margin-bottom: 5px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--mid);
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease 0.35s forwards;
         }
-        
-        .app-status {
-            font-size: 0.85rem;
-            opacity: 0.9;
-        }
-        
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 8rem 0 5rem;
-            background: linear-gradient(135deg, #E3F2FD 0%, #F5F7FA 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 20% 80%, rgba(58, 134, 255, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(102, 126, 234, 0.1) 0%, transparent 50%);
-            animation: gradientShift 20s ease infinite;
-            background-size: 400% 400%;
-        }
-        
-        .hero h1 {
-            font-size: 2.8rem;
-            margin-bottom: 1.5rem;
-            color: var(--dark);
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--gray);
-            max-width: 700px;
-            margin: 0 auto 2rem;
-            padding: 20px;
-        }
-        
-        .template-types {
+
+        .template-cards-stack {
             display: flex;
+            flex-direction: column;
+            gap: 16px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease 0.5s forwards;
+        }
+
+        .t-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 24px 28px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border: 1px solid var(--border);
+            text-decoration: none;
+            color: var(--ink);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .t-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 4px;
+            background: var(--accent);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            transform-origin: bottom;
+        }
+
+        .t-card:hover {
+            transform: translateX(6px);
+            box-shadow: 0 8px 28px rgba(0,0,0,0.09);
+            border-color: var(--accent-light);
+        }
+
+        .t-card:hover::before { transform: scaleY(1); }
+
+        .t-card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 10px;
+            background: var(--paper-warm);
+            display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        
-        .template-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 2rem;
-            width: 280px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .template-card::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            transition: left 0.5s ease;
-        }
-        
-        .template-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(58, 134, 255, 0.15);
-        }
-        
-        .template-card:hover::before {
-            left: 100%;
-        }
-        
-        .template-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        .template-card:nth-child(2) .template-icon {
-            animation-delay: 0.5s;
-        }
-        
-        .template-card h3 {
-            margin-bottom: 1rem;
-            color: var(--dark);
-        }
-        
-        .template-card p {
-            color: var(--gray);
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-        }
-        
-        /* Features Section */
-        .features {
-            padding: 5rem 0;
-            background-color: white;
-            position: relative;
-        }
-        
-        .features::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(58, 134, 255, 0.05) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(102, 126, 234, 0.05) 0%, transparent 20%);
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-        
-        .section-title h2 {
-            font-size: 2rem;
-            color: var(--dark);
-            margin-bottom: 1rem;
-        }
-        
-        .section-title p {
-            color: var(--gray);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        
-        .feature-card {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            box-shadow: 0 10px 30px rgba(58, 134, 255, 0.1);
-        }
-        
-        .feature-card::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), #667eea);
-            transform: scaleX(0);
+            font-size: 1.4rem;
+            flex-shrink: 0;
             transition: transform 0.3s ease;
         }
-        
-        .feature-card:hover::after {
-            transform: scaleX(1);
+
+        .t-card:hover .t-card-icon { transform: scale(1.1) rotate(-5deg); }
+
+        .t-card-body { flex: 1; }
+
+        .t-card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--ink);
         }
-        
-        .feature-icon {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            display: inline-block;
-            transition: all 0.3s ease;
+
+        .t-card-desc {
+            font-size: 0.85rem;
+            color: var(--mid);
+            line-height: 1.5;
         }
-        
-        .feature-card:hover .feature-icon {
-            transform: rotate(360deg) scale(1.2);
+
+        .t-card-arrow {
+            font-size: 1.1rem;
+            color: var(--accent);
+            transition: transform 0.3s ease;
+            opacity: 0;
         }
-        
-        .feature-card h3 {
-            margin-bottom: 1rem;
-            color: var(--dark);
-        }
-        
-        .feature-card p {
-            color: var(--gray);
-        }
-        
-        /* CTA Section */
-        .cta-section {
-            padding: 5rem 0;
-            text-align: center;
-            background: linear-gradient(-45deg, #667eea, #764ba2, #9b59b6, #8e44ad);
-            background-size: 400% 400%;
-            color: white;
-            position: relative;
-            overflow: hidden;
-            animation: gradientShift 10s ease infinite;
-        }
-        
-        .cta-section::before {
-            content: "";
+
+        .t-card:hover .t-card-arrow { opacity: 1; transform: translateX(4px); }
+
+        /* Decorative bg shape */
+        .hero-bg-shape {
             position: absolute;
-            top: -100px;
-            left: -100px;
-            width: 300px;
-            height: 300px;
-            background: rgba(255,255,255,0.1);
+            bottom: -80px;
+            right: -80px;
+            width: 320px;
+            height: 320px;
             border-radius: 50%;
-            animation: float 10s ease-in-out infinite;
+            border: 60px solid var(--accent-light);
+            opacity: 0.5;
+            pointer-events: none;
         }
-        
-        .cta-section::after {
-            content: "";
-            position: absolute;
-            bottom: -100px;
-            right: -100px;
-            width: 250px;
-            height: 250px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 50%;
-            animation: float 8s ease-in-out infinite reverse;
-        }
-        
-        .cta-section h2 {
-            font-size: 2.2rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .cta-section p {
-            max-width: 600px;
-            margin: 0 auto 2rem;
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .cta-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .cta-button {
-            display: inline-block;
-            background-color: var(--primary);
-            color: white;
-            padding: 0.8rem 2rem;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: 2px solid var(--primary);
+
+        /* ─── ANNOUNCEMENT ──────────────────────────────────────── */
+        .announcement {
+            background: var(--ink);
+            padding: 80px 0;
             position: relative;
             overflow: hidden;
         }
-        
-        .cta-button::before {
-            content: "";
+
+        .announcement::before {
+            content: 'ANDROID';
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
             transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
+            font-family: 'Playfair Display', serif;
+            font-size: 16vw;
+            font-weight: 900;
+            color: rgba(255,255,255,0.025);
+            white-space: nowrap;
+            pointer-events: none;
+            letter-spacing: -0.03em;
         }
-        
-        .cta-button:hover::before {
-            width: 300px;
-            height: 300px;
+
+        .container {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 0 40px;
         }
-        
-        .cta-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+
+        .ann-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
         }
-        
-        .secondary-button {
-            background-color: white;
-            color: var(--primary);
+
+        .ann-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(200,169,110,0.15);
+            border: 1px solid rgba(200,169,110,0.35);
+            color: var(--accent);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
         }
-        
-        .secondary-button:hover {
-            background-color: #f8f9fa;
+
+        .ann-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1.15;
+            margin-bottom: 18px;
         }
-        
-        /* Scroll Animation Trigger */
-        .animate-on-scroll {
+
+        .ann-title em { font-style: italic; color: var(--accent); }
+
+        .ann-desc {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.75;
+            margin-bottom: 28px;
+        }
+
+        .ann-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 32px;
+        }
+
+        .ann-tag {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.75);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            transition: all 0.2s;
+        }
+
+        .ann-tag:hover {
+            background: rgba(200,169,110,0.15);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-gold {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--accent);
+            color: var(--ink);
+            padding: 14px 28px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.25s ease;
+        }
+
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,169,110,0.4); }
+
+        .ann-apps {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .ann-app-card {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .ann-app-card:hover {
+            background: rgba(200,169,110,0.1);
+            border-color: rgba(200,169,110,0.35);
+            transform: translateY(-3px);
+        }
+
+        .ann-app-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+        }
+
+        .ann-app-name {
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+        }
+
+        .ann-app-sub {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.45);
+        }
+
+        .ann-app-pill {
+            margin-left: auto;
+            background: rgba(200,169,110,0.2);
+            color: var(--accent);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* ─── FEATURES ──────────────────────────────────────────── */
+        .features {
+            padding: 100px 0;
+            background: var(--white);
+            position: relative;
+        }
+
+        .section-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: end;
+            margin-bottom: 60px;
+        }
+
+        .section-eyebrow {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent-dark);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-eyebrow::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 2px;
+            background: var(--accent-dark);
+        }
+
+        .section-title-lg {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--ink);
+        }
+
+        .section-desc {
+            font-size: 1rem;
+            color: var(--mid);
+            line-height: 1.75;
+            max-width: 420px;
+            align-self: end;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .feat-card {
+            background: var(--white);
+            padding: 36px 32px;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+
+        .feat-card:hover { background: var(--paper-warm); }
+
+        .feat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--paper-warm);
+            line-height: 1;
+            margin-bottom: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .feat-card:hover .feat-num { color: var(--accent-light); }
+
+        .feat-icon-wrap {
+            width: 44px;
+            height: 44px;
+            background: var(--ink);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .feat-card:hover .feat-icon-wrap {
+            background: var(--accent-dark);
+            transform: rotate(-5deg) scale(1.05);
+        }
+
+        .feat-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--ink);
+        }
+
+        .feat-desc {
+            font-size: 0.88rem;
+            color: var(--mid);
+            line-height: 1.7;
+        }
+
+        /* ─── CTA ───────────────────────────────────────────────── */
+        .cta-section {
+            padding: 100px 0;
+            background: var(--paper-warm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -120px;
+            right: -120px;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-light) 0%, transparent 70%);
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .cta-inner {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 4vw, 3.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            color: var(--ink);
+            margin-bottom: 16px;
+        }
+
+        .cta-title em { font-style: italic; color: var(--accent-dark); }
+
+        .cta-sub {
+            font-size: 1rem;
+            color: var(--mid);
+            max-width: 500px;
+        }
+
+        .cta-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .btn-dark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--ink);
+            color: var(--white);
+            padding: 14px 28px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            transition: all 0.25s ease;
+        }
+
+        .btn-dark:hover { background: var(--ink-soft); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+        .btn-outline-dark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: transparent;
+            color: var(--ink);
+            padding: 14px 28px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: 1.5px solid var(--ink);
+            white-space: nowrap;
+            transition: all 0.25s ease;
+        }
+
+        .btn-outline-dark:hover {
+            background: var(--ink);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        /* ─── ANIMATIONS ────────────────────────────────────────── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(22px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal {
             opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
         }
-        
-        .animate-on-scroll.visible {
+
+        .reveal.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        
-        @media (max-width: 768px) {
-            .announcement-section {
-                padding: 30px 20px;
-                margin: 30px 15px;
-            }
-            
-            .announcement-section h2 {
-                font-size: 1.8rem;
-            }
-            
-            .announcement-section p {
-                font-size: 1rem;
-            }
-            
-            .announcement-apps {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .announcement-app {
-                width: 100%;
-                max-width: 300px;
-            }
-            
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            
-            .template-types {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
+
+        /* ─── RESPONSIVE ────────────────────────────────────────── */
+        @media (max-width: 900px) {
+            .hero { grid-template-columns: 1fr; min-height: auto; }
+            .hero-left { padding: 100px 40px 60px; }
+            .hero-left::after { display: none; }
+            .hero-right { padding: 50px 40px 70px; }
+            .hero-bg-shape { display: none; }
+            .ann-inner { grid-template-columns: 1fr; }
+            .section-header { grid-template-columns: 1fr; }
+            .section-desc { max-width: 100%; }
+            .features-grid { grid-template-columns: 1fr 1fr; }
+            .cta-inner { grid-template-columns: 1fr; }
+            .cta-btns { flex-direction: row; flex-wrap: wrap; }
+        }
+
+        @media (max-width: 600px) {
+            .hero-left { padding: 80px 24px 50px; }
+            .hero-right { padding: 40px 24px 60px; }
+            .hero-stats { gap: 20px; flex-wrap: wrap; }
+            .container { padding: 0 24px; }
+            .announcement, .features, .cta-section { padding: 60px 0; }
+            .features-grid { grid-template-columns: 1fr; }
+            .cta-btns { flex-direction: column; }
         }
     </style>
 </head>
 <body>
+
 <header>
     <div class="header-content">
         <a href="index.html" class="logo">
@@ -732,124 +814,189 @@
         </div>
     </div>
 </header>
-    
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1 class="fade-in">Professional Digital Templates</h1>
-            <p class="fade-in-delay">Create stunning resumes and portfolios that get you noticed. No coding required - just customize and launch.</p>
-            
-            <div class="template-types">
-                <div class="template-card fade-in">
-                    <div class="template-icon">📝</div>
-                    <h3>Resume Templates</h3>
-                    <p>Modern, responsive designs that showcase your career journey beautifully on any device.</p>
-                    <a href="resume-templates.html" class="cta-button">Browse Resumes</a>
-                </div>
-                
-                <div class="template-card fade-in-delay-2">
-                    <div class="template-icon">🎨</div>
-                    <h3>Portfolio Templates</h3>
-                    <p>Showcase your work with professional portfolios that highlight your best projects.</p>
-                    <a href="portfolio-templates.html" class="cta-button">Browse Portfolios</a>
-                </div>
+
+<!-- ═══════════════════════════════════════════ HERO -->
+<section class="hero">
+    <div class="hero-left">
+        <span class="hero-eyebrow">Professional Templates</span>
+        <h1 class="hero-title">
+            Stand out.<br>
+            Get <em>noticed.</em><br>
+            Land the role.
+        </h1>
+        <p class="hero-sub">
+            Beautifully crafted resume and portfolio templates that make your first impression unforgettable. No coding needed.
+        </p>
+        <div class="hero-actions">
+            <a href="resume-templates.html" class="btn-primary">Browse Resumes &rarr;</a>
+            <a href="portfolio-templates.html" class="btn-outline">See Portfolios</a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <span class="stat-num">20<span>+</span></span>
+                <span class="stat-label">Templates</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">100<span>%</span></span>
+                <span class="stat-label">Responsive</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">Free<span>*</span></span>
+                <span class="stat-label">To Host</span>
             </div>
         </div>
-    </section>
-    
-    <!-- NEW: Android Apps Announcement Section -->
-    <section class="announcement-section animate-on-scroll">
-        <div class="announcement-content">
-            <span class="announcement-badge">🚀 NEW ANNOUNCEMENT</span>
-            <h2>Now Developing Android Applications!</h2>
-            <p>Expanding beyond web development, I'm now creating mobile applications for Android platform. 
-               Building productivity tools and utility apps with modern Android development practices and Material Design.</p>
-            
-            <div class="android-features">
-                <span class="android-feature">🤖 Android Development</span>
-                <span class="android-feature slide-in-left">📱 Mobile-First Design</span>
-                <span class="android-feature slide-in-right">🚀 Coming to Play Store</span>
-                <span class="android-feature">🎯 Productivity Focus</span>
-            </div>
-            
-            <div class="announcement-apps">
-                <div class="announcement-app scale-up">
-                    <div class="app-icon-sm">🚗</div>
-                    <div class="app-name">VoiceRide Driving Assistant</div>
-                    <div class="app-status">Voice-controlled navigation app</div>
+    </div>
+
+    <div class="hero-right">
+        <p class="hero-right-label">Choose your template type</p>
+        <div class="template-cards-stack">
+            <a href="resume-templates.html" class="t-card">
+                <div class="t-card-icon">📝</div>
+                <div class="t-card-body">
+                    <div class="t-card-title">Resume Templates</div>
+                    <div class="t-card-desc">Modern, responsive designs that showcase your career journey on any device.</div>
                 </div>
-                
-                <div class="announcement-app scale-up" style="animation-delay: 0.2s">
-                    <div class="app-icon-sm">📝</div>
-                    <div class="app-name">Notes & Reminder App</div>
-                    <div class="app-status">Productivity task management</div>
+                <span class="t-card-arrow">→</span>
+            </a>
+            <a href="portfolio-templates.html" class="t-card">
+                <div class="t-card-icon">🎨</div>
+                <div class="t-card-body">
+                    <div class="t-card-title">Portfolio Templates</div>
+                    <div class="t-card-desc">Highlight your best projects with professional portfolios that impress.</div>
                 </div>
-            </div>
-            
-            <a href="https://resumepro.pages.dev/android-applications" class="announcement-button">
-                View Android Applications →
+                <span class="t-card-arrow">→</span>
+            </a>
+            <a href="android-applications.html" class="t-card">
+                <div class="t-card-icon">📱</div>
+                <div class="t-card-body">
+                    <div class="t-card-title">Android Applications</div>
+                    <div class="t-card-desc">Productivity tools and utilities built with modern Material Design.</div>
+                </div>
+                <span class="t-card-arrow">→</span>
             </a>
         </div>
-    </section>
-    
-    <!-- Features Section -->
-    <section class="features">
-        <div class="section-title">
-            <h2 class="fade-in">Why Choose Our Templates?</h2>
-            <p class="fade-in-delay">Everything you need to create a powerful online presence</p>
+        <div class="hero-bg-shape"></div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ ANNOUNCEMENT -->
+<section class="announcement">
+    <div class="container">
+        <div class="ann-inner reveal">
+            <div>
+                <span class="ann-badge">🚀 New &mdash; April 2025</span>
+                <h2 class="ann-title">Now building<br><em>Android</em> apps.</h2>
+                <p class="ann-desc">
+                    Expanding beyond web templates into native mobile development. 
+                    Crafting productivity tools and utilities for Android with Material Design 3 — 
+                    clean, fast, and purposeful.
+                </p>
+                <div class="ann-tags">
+                    <span class="ann-tag">🤖 Android Development</span>
+                    <span class="ann-tag">📱 Material Design 3</span>
+                    <span class="ann-tag">🚀 Coming to Play Store</span>
+                    <span class="ann-tag">🎯 Productivity Focus</span>
+                </div>
+                <a href="https://resumepro.pages.dev/android-applications" class="btn-gold">
+                    View All Android Apps &rarr;
+                </a>
+            </div>
+
+            <div class="ann-apps">
+                <div class="ann-app-card">
+                    <div class="ann-app-icon">🚗</div>
+                    <div>
+                        <div class="ann-app-name">VoiceRide Driving Assistant</div>
+                        <div class="ann-app-sub">Voice-controlled navigation &amp; assistance</div>
+                    </div>
+                    <span class="ann-app-pill">In Dev</span>
+                </div>
+                <div class="ann-app-card">
+                    <div class="ann-app-icon">📝</div>
+                    <div>
+                        <div class="ann-app-name">Notes &amp; Reminder App</div>
+                        <div class="ann-app-sub">Smart productivity &amp; task management</div>
+                    </div>
+                    <span class="ann-app-pill">In Dev</span>
+                </div>
+            </div>
         </div>
-        
-        <div class="features-grid">
-            <div class="feature-card animate-on-scroll">
-                <div class="feature-icon">🚀</div>
-                <h3>Easy Customization</h3>
-                <p>Change colors, fonts, and layouts with simple edits to the CSS file - no coding experience needed.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ FEATURES -->
+<section class="features">
+    <div class="container">
+        <div class="section-header reveal">
+            <div>
+                <p class="section-eyebrow">Why ResumePro</p>
+                <h2 class="section-title-lg">Everything you need<br>to stand out.</h2>
             </div>
-            
-            <div class="feature-card animate-on-scroll" style="transition-delay: 0.1s">
-                <div class="feature-icon">📱</div>
-                <h3>Fully Responsive</h3>
-                <p>Looks perfect on all devices from desktop to mobile without any extra work.</p>
+            <p class="section-desc">
+                Each template is designed to be a polished, professional tool — not just a pretty layout. Built for real job seekers, by a developer who cares about craft.
+            </p>
+        </div>
+
+        <div class="features-grid reveal">
+            <div class="feat-card">
+                <div class="feat-num">01</div>
+                <div class="feat-icon-wrap">🚀</div>
+                <h3 class="feat-title">Easy Customization</h3>
+                <p class="feat-desc">Change colors, fonts, and layouts with simple CSS edits. No coding experience needed.</p>
             </div>
-            
-            <div class="feature-card animate-on-scroll" style="transition-delay: 0.2s">
-                <div class="feature-icon">⚡</div>
-                <h3>Fast Loading</h3>
-                <p>Optimized for performance so your content loads quickly for recruiters and clients.</p>
+            <div class="feat-card">
+                <div class="feat-num">02</div>
+                <div class="feat-icon-wrap">📱</div>
+                <h3 class="feat-title">Fully Responsive</h3>
+                <p class="feat-desc">Looks pixel-perfect on every device — from desktop to the smallest phone screen.</p>
             </div>
-            
-            <div class="feature-card animate-on-scroll" style="transition-delay: 0.3s">
-                <div class="feature-icon">🎨</div>
-                <h3>Modern Designs</h3>
-                <p>Professionally designed templates that follow current trends while remaining timeless.</p>
+            <div class="feat-card">
+                <div class="feat-num">03</div>
+                <div class="feat-icon-wrap">⚡</div>
+                <h3 class="feat-title">Fast Loading</h3>
+                <p class="feat-desc">Optimized for performance so your content loads instantly for recruiters and clients.</p>
             </div>
-            
-            <div class="feature-card animate-on-scroll" style="transition-delay: 0.4s">
-                <div class="feature-icon">🔧</div>
-                <h3>Easy Hosting</h3>
-                <p>Works with GitHub Pages, Netlify, and other free hosting options with minimal setup.</p>
+            <div class="feat-card">
+                <div class="feat-num">04</div>
+                <div class="feat-icon-wrap">🎨</div>
+                <h3 class="feat-title">Modern Designs</h3>
+                <p class="feat-desc">Professionally crafted templates following current trends while remaining timeless.</p>
             </div>
-            
-            <div class="feature-card animate-on-scroll" style="transition-delay: 0.5s">
-                <div class="feature-icon">📚</div>
-                <h3>Detailed Guides</h3>
-                <p>Step-by-step instructions included with every template for easy setup.</p>
+            <div class="feat-card">
+                <div class="feat-num">05</div>
+                <div class="feat-icon-wrap">🔧</div>
+                <h3 class="feat-title">Easy Hosting</h3>
+                <p class="feat-desc">Works with GitHub Pages, Netlify, and other free hosting options with minimal setup.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-num">06</div>
+                <div class="feat-icon-wrap">📚</div>
+                <h3 class="feat-title">Detailed Guides</h3>
+                <p class="feat-desc">Step-by-step setup instructions included with every single template.</p>
             </div>
         </div>
-    </section>
-    
-    <!-- CTA Section -->
-    <section class="cta-section animate-on-scroll">
-        <h2>Ready to Build Your Online Presence?</h2>
-        <p>Join thousands of professionals who've transformed their job search with our templates.</p>
-        <div class="cta-buttons">
-            <a href="resume-templates.html" class="cta-button">Browse Resume Templates</a>
-            <a href="portfolio-templates.html" class="cta-button secondary-button">Browse Portfolio Templates</a>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ CTA -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-inner reveal">
+            <div>
+                <h2 class="cta-title">Ready to build your<br><em>online presence?</em></h2>
+                <p class="cta-sub">
+                    Join professionals who've elevated their job search with templates that are as impressive as their work.
+                </p>
+            </div>
+            <div class="cta-btns">
+                <a href="resume-templates.html" class="btn-dark">Browse Resumes</a>
+                <a href="portfolio-templates.html" class="btn-outline-dark">Browse Portfolios</a>
+            </div>
         </div>
-    </section>
-    
-    <!-- Footer -->
-    <footer>
+    </div>
+</section>
+
+<footer>
     <div class="footer-content">
         <div class="footer-column">
             <h3>ResumePro</h3>
@@ -890,77 +1037,41 @@
     </div>
 </footer>
 
-    <script>
-        // Scroll Animation Observer
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        });
-
-        // Observe all elements with animate-on-scroll class
-        document.querySelectorAll('.animate-on-scroll').forEach((el) => {
-            observer.observe(el);
-        });
-
-        // Button ripple effect
-        document.querySelectorAll('.cta-button, .announcement-button').forEach(button => {
-            button.addEventListener('click', function(e) {
-                const ripple = document.createElement('span');
-                const rect = this.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                const x = e.clientX - rect.left - size / 2;
-                const y = e.clientY - rect.top - size / 2;
-                
-                ripple.style.cssText = `
-                    position: absolute;
-                    border-radius: 50%;
-                    background: rgba(255,255,255,0.6);
-                    transform: scale(0);
-                    animation: ripple-animation 0.6s linear;
-                    width: ${size}px;
-                    height: ${size}px;
-                    top: ${y}px;
-                    left: ${x}px;
-                `;
-                
-                this.appendChild(ripple);
-                setTimeout(() => ripple.remove(), 600);
-            });
-        });
-
-        // Add ripple animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes ripple-animation {
-                to {
-                    transform: scale(4);
-                    opacity: 0;
-                }
+<script>
+    // Scroll reveal
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                entry.target.style.transitionDelay = (i * 0.05) + 's';
+                entry.target.classList.add('visible');
             }
-        `;
-        document.head.appendChild(style);
-
-        // Floating effect for template icons
-        document.querySelectorAll('.template-icon').forEach((icon, index) => {
-            icon.style.animationDelay = `${index * 0.5}s`;
         });
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
 
-        // Add hover sound effect (optional)
-        document.querySelectorAll('.template-card, .feature-card, .announcement-app').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-            });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // Stagger feat cards
+    const featObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.querySelectorAll('.feat-card').forEach((card, i) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    card.style.transition = `opacity 0.5s ease ${i * 0.08}s, transform 0.5s ease ${i * 0.08}s`;
+                    requestAnimationFrame(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    });
+                });
+            }
         });
-    </script>
-    
-    <script src="clean-urls.js"></script>
-    <script src="header.js"></script>
-    
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.features-grid').forEach(el => featObserver.observe(el));
+</script>
+
+<script src="clean-urls.js"></script>
+<script src="header.js"></script>
+
 </body>
 </html>

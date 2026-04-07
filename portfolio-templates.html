@@ -5,15 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Premium Portfolio Templates | Showcase Your Work Professionally</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <!-- Header CSS -->
     <link rel="stylesheet" href="header.css">
-    <!-- Footer CSS -->
     <link rel="stylesheet" href="footer.css">
-	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7364684388402027"
-     crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7364684388402027" crossorigin="anonymous"></script>
     <style>
         :root {
-            --primary: #3a86ff;
+            --ink: #0e0e12;
+            --ink-soft: #2a2a35;
+            --paper: #fafaf8;
+            --paper-warm: #f4f1eb;
+            --accent: #c8a96e;
+            --accent-light: #e8d9b8;
+            --accent-dark: #9a7a3f;
+            --mid: #6b6b78;
+            --border: #e2e0d8;
+            --white: #ffffff;
+            --shadow-sm: 0 2px 12px rgba(0,0,0,0.07);
+            --shadow-md: 0 8px 32px rgba(0,0,0,0.11);
+            --shadow-lg: 0 20px 60px rgba(0,0,0,0.16);
+			--primary: #3a86ff;
             --primary-dark: #2667cc;
             --dark: #2b2d42;
             --light: #f8f9fa;
@@ -21,611 +34,949 @@
             --success: #28a745;
 			--messenger: #0084ff;
         }
-        
-        * {
+		* {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
+		 }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
         body {
-            background-color: #f5f5f7;
-            color: var(--dark);
+            background: var(--paper);
+            color: var(--ink);
+            font-family: 'DM Sans', sans-serif;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        
-        
-        .cta-button {
-            display: inline-block;
-            background-color: white;
-            color: var(--primary);
-            padding: 0.6rem 1.2rem;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .cta-button:hover {
-            background-color: var(--light);
-            transform: translateY(-2px);
-        }
-        
-        
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 0rem;
+            padding: 0 40px;
         }
-         
-        .hero {
-            text-align: center;
-            padding: 8rem 0;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+
+        /* ─── PAGE HERO ──────────────────────────────────── */
+        .page-hero {
+            background: var(--ink);
+            padding: 100px 0 80px;
+            position: relative;
+            overflow: hidden;
         }
-        
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+
+        .page-hero::before {
+            content: 'PORTFOLIO';
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: 'Playfair Display', serif;
+            font-size: 16vw;
+            font-weight: 900;
+            color: rgba(255,255,255,0.022);
+            line-height: 1;
+            pointer-events: none;
+            white-space: nowrap;
+            letter-spacing: -0.02em;
         }
-        
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--gray);
-            max-width: 700px;
-            margin: 0 auto 2rem;
+
+        .page-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
         }
-        
-        .features {
+
+        .hero-inner {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 40px;
+            align-items: end;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.1s forwards;
+        }
+
+        .hero-eyebrow::before {
+            content: '';
+            width: 28px; height: 2px;
+            background: var(--accent);
+            display: inline-block;
+        }
+
+        .page-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.4rem, 4.5vw, 4rem);
+            font-weight: 900;
+            color: var(--white);
+            line-height: 1.08;
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.2s forwards;
+        }
+
+        .page-hero h1 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .hero-meta {
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.35s forwards;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 14px;
+        }
+
+        .hero-meta p {
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.55);
+            max-width: 320px;
+            text-align: right;
+        }
+
+        .hero-pills {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: 8px;
+            justify-content: flex-end;
         }
-        
-        .feature {
-            background-color: white;
-            padding: 0.5rem 1rem;
+
+        .pill {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.14);
+            color: rgba(255,255,255,0.7);
+            padding: 5px 14px;
             border-radius: 20px;
-            font-size: 0.9rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            font-size: 0.8rem;
+            font-weight: 500;
         }
-        
-        .templates {
-            padding: 3rem 0;
+
+        /* ─── SECTION LEAD ───────────────────────────────── */
+        .section-lead {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 40px;
+            padding-top: 70px;
         }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
+
+        .section-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.73rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent-dark);
+            margin-bottom: 10px;
         }
-        
-        .section-title h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
+
+        .section-eyebrow::before {
+            content: '';
+            width: 22px; height: 2px;
+            background: var(--accent-dark);
+            display: inline-block;
         }
-        
-        .section-title p {
-            color: var(--gray);
-            max-width: 600px;
-            margin: 0 auto;
+
+        .section-title-lg {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.2;
         }
-        
+
+        .section-count {
+            font-size: 0.85rem;
+            color: var(--mid);
+            text-align: right;
+        }
+
+        .section-count strong {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--ink);
+            display: block;
+            line-height: 1;
+        }
+
+        /* ─── TEMPLATE GRID ──────────────────────────────── */
+        .templates-section { padding-bottom: 80px; }
+
         .template-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 28px;
         }
-        
+
         .template-card {
-            background-color: white;
-            border-radius: 8px;
+            background: var(--white);
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .template-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-        
-        .template-image {
+            border: 1px solid var(--border);
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.35s ease, border-color 0.25s ease;
             position: relative;
-            height: 500px; /* Fixed height for consistency */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .template-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-light);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 14px; left: 14px;
+            z-index: 10;
+            background: var(--ink);
+            color: var(--accent);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .template-preview {
+            position: relative;
+            height: 480px;
             overflow: hidden;
+            background: var(--paper-warm);
+            cursor: pointer;
+        }
+
+        .template-preview::after {
+            content: '⟳ Preview';
+            position: absolute;
+            inset: 0;
+            background: rgba(14,14,18,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: white;
+            letter-spacing: 0.1em;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(2px);
+        }
+
+        .template-preview:hover::after { opacity: 1; }
+
+        .template-preview iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
             pointer-events: none;
-            background-color: #f5f5f5; /* Light background for empty space */
+            transform-origin: top center;
+        }
+
+        .template-info {
+            padding: 22px 24px 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .template-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 6px;
+        }
+
+        .template-desc {
+            font-size: 0.875rem;
+            color: var(--mid);
+            line-height: 1.65;
+            margin-bottom: 20px;
+            flex: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .template-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .template-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .template-price span {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: var(--mid);
+        }
+
+        .card-actions { display: flex; gap: 8px; }
+
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            border: 1.5px solid var(--border);
+            color: var(--mid);
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+
+        .btn-buy {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            background: var(--ink);
+            color: var(--white);
+            border: 1.5px solid var(--ink);
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-buy:hover {
+            background: var(--accent-dark);
+            border-color: var(--accent-dark);
+            transform: translateY(-1px);
+        }
+
+        /* ─── PAGINATION ─────────────────────────────────── */
+        .pagination-wrap {
             display: flex;
             justify-content: center;
             align-items: center;
-            
+            gap: 6px;
+            margin-top: 56px;
         }
-        
-        .template-image iframe {
-            width: 100%;
-            height: 100%; /* Make iframe taller than container */
-            border: none;
-            transform: scale(1); /* Scale down to fit */
-            transform-origin: top center; /* Scale from top center */
+
+        .page-btn {
+            width: 40px; height: 40px;
+            border: 1.5px solid var(--border);
+            background: var(--white);
+            color: var(--mid);
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-btn:hover { border-color: var(--ink); color: var(--ink); }
+        .page-btn.active { background: var(--ink); border-color: var(--ink); color: var(--white); }
+
+        .page { display: none; }
+        .page.active { display: grid; }
+
+        /* ─── BENEFITS ───────────────────────────────────── */
+        .benefits-section {
+            background: var(--ink);
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .benefits-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(200,169,110,0.08) 0%, transparent 60%);
             pointer-events: none;
         }
-        
-        .template-info {
-            padding: 1.5rem;
+
+        .benefits-header {
+            text-align: center;
+            margin-bottom: 56px;
+            position: relative;
+            z-index: 1;
         }
-        
-        .template-info h3 {
-            margin-bottom: 0.5rem;
-            font-size: 1.3rem;
+
+        .benefits-header .section-eyebrow {
+            justify-content: center;
+            color: var(--accent);
         }
-        
-        .template-info p {
-            color: var(--gray);
-            margin-bottom: 1.5rem;
+
+        .benefits-header .section-eyebrow::before { background: var(--accent); }
+
+        .benefits-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 12px;
+        }
+
+        .benefits-header p {
+            color: rgba(255,255,255,0.5);
+            max-width: 500px;
+            margin: 0 auto;
             font-size: 0.95rem;
         }
-        
-        .template-actions {
-            display: flex;
-            gap: 0.8rem;
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
         }
-        
-        .btn {
-            padding: 0.6rem 1rem;
+
+        .benefit-card {
+            background: rgba(255,255,255,0.03);
+            padding: 36px 28px;
+            transition: background 0.3s ease;
+        }
+
+        .benefit-card:hover { background: rgba(200,169,110,0.08); }
+
+        .benefit-icon {
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .benefit-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 10px;
+        }
+
+        .benefit-card p {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.45);
+            line-height: 1.7;
+        }
+
+        /* ─── TESTIMONIALS ───────────────────────────────── */
+        .testimonials-section {
+            padding: 80px 0;
+            background: var(--paper-warm);
+        }
+
+        .testimonials-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: end;
+            margin-bottom: 48px;
+        }
+
+        .testimonials-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 3vw, 2.5rem);
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.2;
+        }
+
+        .testimonials-header p {
+            font-size: 0.95rem;
+            color: var(--mid);
+            align-self: end;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 28px;
+            border: 1px solid var(--border);
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .quote-mark {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            line-height: 0.7;
+            color: var(--accent-light);
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .testimonial-text {
+            font-size: 0.9rem;
+            color: var(--ink-soft);
+            line-height: 1.75;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .testimonial-divider {
+            height: 1px;
+            background: var(--border);
+            margin-bottom: 16px;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--ink);
+            margin-bottom: 2px;
+        }
+
+        .testimonial-role {
+            font-size: 0.8rem;
+            color: var(--mid);
+        }
+
+        /* ─── FAQ ────────────────────────────────────────── */
+        .faq-section {
+            padding: 80px 0;
+            background: var(--white);
+        }
+
+        .faq-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .faq-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 12px;
+        }
+
+        .faq-header p { color: var(--mid); font-size: 0.95rem; }
+
+        .faq-list {
+            max-width: 760px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .faq-item {
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: border-color 0.2s ease;
+            background: var(--white);
+        }
+
+        .faq-item.active { border-color: var(--accent); }
+
+        .faq-question {
+            padding: 20px 24px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--ink);
+            user-select: none;
+            transition: background 0.2s ease;
+        }
+
+        .faq-question:hover { background: var(--paper-warm); }
+        .faq-item.active .faq-question { background: var(--paper-warm); color: var(--accent-dark); }
+
+        .faq-toggle {
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            background: var(--paper-warm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+            transition: transform 0.3s ease, background 0.2s ease;
+        }
+
+        .faq-item.active .faq-toggle { transform: rotate(45deg); background: var(--accent-light); }
+
+        .faq-answer {
+            display: none;
+            padding: 0 24px 20px;
+            color: var(--mid);
+            font-size: 0.9rem;
+            line-height: 1.75;
+        }
+
+        .faq-item.active .faq-answer { display: block; }
+
+        .faq-answer code {
+            background: var(--paper-warm);
+            padding: 2px 7px;
             border-radius: 4px;
+            font-size: 0.85rem;
+            color: var(--accent-dark);
+        }
+
+        .faq-answer pre {
+            background: var(--ink);
+            color: var(--accent-light);
+            padding: 16px 20px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            overflow-x: auto;
+            margin: 12px 0;
+            line-height: 1.7;
+        }
+
+        .faq-answer ol, .faq-answer ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .faq-answer li { margin-bottom: 4px; }
+
+        /* ─── BOTTOM CTA ─────────────────────────────────── */
+        .bottom-cta {
+            background: var(--paper-warm);
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bottom-cta::before {
+            content: '';
+            position: absolute;
+            bottom: -120px; right: -120px;
+            width: 420px; height: 420px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-light) 0%, transparent 70%);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .cta-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-inner h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-weight: 900;
+            color: var(--ink);
+            line-height: 1.1;
+        }
+
+        .cta-inner h2 em { font-style: italic; color: var(--accent-dark); }
+
+        .cta-inner p {
+            font-size: 0.95rem;
+            color: var(--mid);
+            margin-top: 12px;
+            max-width: 480px;
+        }
+
+        .btn-dark {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--ink);
+            color: var(--white);
+            padding: 14px 28px;
+            border-radius: 6px;
             text-decoration: none;
             font-weight: 600;
             font-size: 0.9rem;
-            transition: all 0.3s ease;
-            flex: 1;
-            text-align: center;
+            white-space: nowrap;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
         }
-        
-        .btn-outline {
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            background-color: transparent;
-        }
-        
-        .btn-outline:hover {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        .btn-solid {
-            background-color: var(--primary);
-            color: white;
-            border: 2px solid var(--primary);
-        }
-        
-        .btn-solid:hover {
-            background-color: var(--primary-dark);
-            border-color: var(--primary-dark);
-        }
-        
-        /* Pagination Styles */
-        .pagination {
+
+        .btn-dark:hover { background: var(--ink-soft); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+        /* ─── MESSENGER FLOAT ────────────────────────────── */
+        .messenger-float {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            z-index: 999;
             display: flex;
-            justify-content: center;
-            margin-top: 3rem;
-            gap: 0.5rem;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
         }
-        
-        .page-btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            background-color: #e9ecef;
-            color: var(--dark);
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
+
+        .float-badge {
+            background: var(--white);
+            color: var(--ink);
+            padding: 10px 18px;
+            border-radius: 40px;
+            box-shadow: var(--shadow-md);
+            font-size: 0.85rem;
+            font-weight: 500;
+            max-width: 240px;
+            border-left: 4px solid #0084ff;
+            line-height: 1.4;
+            /* Hidden by default — shown via JS on scroll */
+            opacity: 0;
+            transform: translateY(16px);
+            pointer-events: none;
+            transition: opacity 0.4s ease, transform 0.4s ease;
         }
-        
-        .page-btn:hover {
-            background-color: var(--primary);
-            color: white;
+
+        .float-badge.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
         }
-        
-        .page-btn.active {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        .page {
-            display: none;
-        }
-        
-        .page.active {
-            display: grid;
-        }
-        
-        .benefits {
-            padding: 3rem 0;
-            background-color: white;
-        }
-        
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        
-        .benefit-card {
-            text-align: center;
-            padding: 1.5rem;
-        }
-        
-        .benefit-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-        
-        .benefit-card h3 {
-            margin-bottom: 1rem;
-        }
-        
-        .benefit-card p {
-            color: var(--gray);
-        }
-        
-        .testimonials {
-            padding: 3rem 0;
-            background-color: #f8f9fa;
-        }
-        
-        .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        
-        .testimonial-card {
-            background-color: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        
-        .testimonial-text {
-            font-style: italic;
-            margin-bottom: 1rem;
-            color: var(--dark);
-        }
-        
-        .testimonial-author {
-            font-weight: 600;
-        }
-        
-        .testimonial-role {
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-        
-        .faq {
-            padding: 3rem 0;
-        }
-        
-        .faq-item {
-            margin-bottom: 1rem;
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .faq-question {
-            padding: 1.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .faq-answer {
-            padding: 0 1.5rem 1.5rem;
-            color: var(--gray);
-            display: none;
-        }
-        
-        .faq-item.active .faq-answer {
+
+        .float-badge span {
             display: block;
+            font-size: 0.78rem;
+            color: var(--mid);
+            margin-top: 3px;
         }
-        
-        .faq-toggle {
-            font-size: 1.2rem;
-            transition: transform 0.3s ease;
+
+        .messenger-btn {
+            background: #0084ff;
+            width: 58px; height: 58px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 8px 20px rgba(0,132,255,0.45);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            opacity: 0;
+            transform: scale(0.7);
+            transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.2s ease;
         }
-        
-        .faq-item.active .faq-toggle {
-            transform: rotate(45deg);
+
+        .messenger-btn.visible {
+            opacity: 1;
+            transform: scale(1);
         }
-        
-        .cta-section {
-            padding: 4rem 0;
-            text-align: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+
+        .messenger-btn:hover {
+            transform: scale(1.08) !important;
+            box-shadow: 0 12px 28px rgba(0,132,255,0.6);
         }
-        
-        .cta-section h2 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .cta-section p {
-            max-width: 600px;
-            margin: 0 auto 2rem;
-            opacity: 0.9;
-        }
-        
-        
-        
-        /* Updated Modal Styles */
+
+        .messenger-btn svg { width: 32px; height: 32px; fill: white; }
+
+        /* ─── MODAL ──────────────────────────────────────── */
         .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.8);
-            z-index: 1000;
+            inset: 0;
+            background: rgba(14,14,18,0.85);
+            z-index: 2000;
             justify-content: center;
             align-items: center;
-        }  
-        
+            backdrop-filter: blur(4px);
+        }
+
         .modal-content {
-            background-color: white;
-            border-radius: 8px;
+            background: var(--white);
+            border-radius: 14px;
             overflow: hidden;
-            width: 90%;
-            height: 80%;
-            max-width: 1000px;
+            width: 90%; height: 85%;
+            max-width: 1080px;
             display: flex;
             flex-direction: column;
+            box-shadow: var(--shadow-lg);
             transition: all 0.3s ease;
         }
-        
+
         .modal-content.fullscreen {
-            width: 100%;
-            height: 100%;
-            max-width: none;
-            border-radius: 0;
+            width: 100%; height: 100%;
+            max-width: none; border-radius: 0;
         }
-        
+
         .modal-header {
-            padding: 1rem;
-            background-color: var(--primary);
-            color: white;
+            padding: 14px 20px;
+            background: var(--ink);
+            color: var(--white);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0;
         }
-        
+
         .modal-title {
-            font-weight: 600;
-            font-size: 1.2rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--white);
         }
-        
-        .modal-actions {
-            display: flex;
-            gap: 10px;
+
+        .modal-title span {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 400;
+            color: var(--accent);
+            font-size: 0.85rem;
+            margin-left: 8px;
         }
-        
+
+        .modal-actions { display: flex; gap: 8px; }
+
         .modal-btn {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1);
             border: none;
             color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 32px; height: 32px;
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: background 0.2s;
         }
-        
-        .modal-btn:hover {
-            background: rgba(255,255,255,0.3);
-        }
-        
-        .modal-body {
-            flex: 1;
+
+        .modal-btn:hover { background: rgba(255,255,255,0.2); }
+
+        .view-tabs {
             display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+            padding: 0 16px;
+            background: var(--paper-warm);
+            flex-shrink: 0;
         }
-        
-        .view-options {
-            display: flex;
-            border-bottom: 1px solid #eee;
-            padding: 0.5rem 1rem;
-        }
-        
-        .view-btn {
-            padding: 0.5rem 1rem;
+
+        .view-tab {
+            padding: 10px 18px;
             background: none;
             border: none;
             cursor: pointer;
             font-weight: 600;
-            color: var(--gray);
+            font-size: 0.82rem;
+            color: var(--mid);
             border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            transition: all 0.2s;
+            letter-spacing: 0.03em;
         }
-        
-        .view-btn.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
+
+        .view-tab.active { color: var(--accent-dark); border-bottom-color: var(--accent-dark); }
+
+        .modal-body { flex: 1; overflow: auto; position: relative; }
+
+        .modal-iframe-container { width: 100%; height: 100%; position: relative; }
+
+        .modal-iframe-container.mobile-view {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            background: var(--paper-warm);
         }
-        
-        .modal-iframe-container {
-            flex: 1;
-            overflow: auto;
-            position: relative;
-        }
-        
+
         .modal-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
+            width: 100%; height: 100%; border: none; display: block;
         }
-        
-        .desktop-view .modal-iframe {
-            width: 100%;
-            height: 100%;
-        }
-        
+
         .mobile-view .modal-iframe {
-            width: 375px;
-            height: 667px;
-            margin: 0 auto;
-            display: block;
-            border: 1px solid #ddd;
-            border-radius: 10px;
+            width: 375px; height: 667px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
             overflow: hidden;
         }
-        
-        @media (max-width: 768px) {
-            /* [Previous responsive styles remain the same] */
-            
-            .modal-content {
-                width: 100%;
-                height: 100%;
-                border-radius: 0;
-            }
-            
-            .view-options {
-                display: none;
-            }
-            
-            .mobile-view .modal-iframe {
-                width: 100%;
-                height: 100%;
-                border: none;
-                border-radius: 0;
-            }
-        
 
-            
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            
-            .template-types {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            }
-			/* Messenger Floating Chat Button */
-.messenger-help {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    z-index: 999;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 12px;
-}
+        /* ─── ANIMATIONS ─────────────────────────────────── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.help-badge {
-    background-color: white;
-    color: var(--dark);
-    padding: 12px 24px;
-    border-radius: 50px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    font-size: 1rem;
-    font-weight: 500;
-    max-width: 260px;
-    text-align: center;
-    border-left: 5px solid var(--messenger);
-    opacity: 0;
-    transform: translateY(20px);
-    animation: slideUp 0.5s ease forwards 1s;
-}
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.65s ease, transform 0.65s ease;
+        }
 
-.help-badge span {
-    display: block;
-    font-size: 0.85rem;
-    color: var(--gray);
-    margin-top: 4px;
-}
+        .reveal.visible { opacity: 1; transform: translateY(0); }
 
-.messenger-btn {
-    background-color: var(--messenger);
-    color: white;
-    width: 65px;
-    height: 65px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 8px 20px rgba(0,132,255,0.4);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    text-decoration: none;
-}
+        /* ─── RESPONSIVE ─────────────────────────────────── */
+        @media (max-width: 960px) {
+            .hero-inner { grid-template-columns: 1fr; }
+            .hero-meta p { text-align: left; }
+            .hero-pills { justify-content: flex-start; }
+            .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+            .testimonials-grid { grid-template-columns: 1fr 1fr; }
+            .testimonials-header { grid-template-columns: 1fr; }
+            .cta-inner { flex-direction: column; align-items: flex-start; }
+        }
 
-.messenger-btn:hover {
-    transform: scale(1.08);
-    box-shadow: 0 12px 28px rgba(0,132,255,0.6);
-}
-
-.messenger-btn svg {
-    width: 38px;
-    height: 38px;
-    fill: white;
-}
-
-@keyframes slideUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Badge highlight for non-tech users */
-.highlight-nontech {
-    background-color: #fff3cd;
-    border-left-color: #ffc107;
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-    .messenger-help {
-        bottom: 20px;
-        right: 20px;
-    }
-    .help-badge {
-        padding: 8px 16px;
-        font-size: 0.9rem;
-        max-width: 220px;
-    }
-    .messenger-btn {
-        width: 55px;
-        height: 55px;
-    }
-    .messenger-btn svg {
-        width: 32px;
-        height: 32px;
-    }
-}
+        @media (max-width: 640px) {
+            .container { padding: 0 20px; }
+            .page-hero { padding: 80px 0 60px; }
+            .section-lead { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .template-grid { grid-template-columns: 1fr; }
+            .benefits-grid { grid-template-columns: 1fr; }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            .modal-content { width: 100%; height: 100%; border-radius: 0; }
+            .view-tabs { display: none; }
+            .messenger-float { bottom: 16px; right: 16px; }
+        }
     </style>
 </head>
 <body>
+
 <header>
     <div class="header-content">
         <a href="index.html" class="logo">
@@ -683,265 +1034,309 @@
     </div>
 </header>
 
-   
+<!-- ═══════════════════════════════════════ PAGE HERO -->
+<section class="page-hero">
+    <div class="container">
+        <div class="hero-inner">
+            <div>
+                <span class="hero-eyebrow">Portfolio Templates</span>
+                <h1>Showcase your work.<br>Win <em>clients.</em><br>Build your name.</h1>
+            </div>
+            <div class="hero-meta">
+                <p>10 professionally designed templates. Built for creatives, designers, and developers.</p>
+                <div class="hero-pills">
+                    <span class="pill">✓ Fully Customizable</span>
+                    <span class="pill">✓ Project Galleries</span>
+                    <span class="pill">✓ Mobile Optimized</span>
+                    <span class="pill">✓ One-Time Fee</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-    
-    <section class="hero">
-        <div class="container">
-            <h1>Showcase Your Work With a Stunning Portfolio</h1>
-            <p>Professional, responsive portfolio templates designed to highlight your projects and skills. No coding required.</p>
-            
-            <div class="features">
-                <span class="feature">✅ Fully Customizable</span>
-                <span class="feature">✅ Project Galleries</span>
-                <span class="feature">✅ Mobile Optimized</span>
-                <span class="feature">✅ One-Time Purchase</span>
+<!-- ═══════════════════════════════════════ TEMPLATES -->
+<section class="templates-section" id="templates">
+    <div class="container">
+        <div class="section-lead reveal">
+            <div>
+                <p class="section-eyebrow">Browse Collection</p>
+                <h2 class="section-title-lg">Premium Portfolio Templates</h2>
+            </div>
+            <div class="section-count">
+                <strong>10</strong>
+                templates available
             </div>
         </div>
-    </section>
-    
-    <section class="templates" id="templates">
-        <div class="container">
-            <div class="section-title">
-                <h2>Premium Portfolio Templates</h2>
-                <p>Choose from our collection of professionally designed templates to showcase your work in the best light.</p>
-            </div>
-            
-            <!-- Page 1 -->
-            <div class="template-grid page active" id="page1">
-                <!-- Template 1 -->
-                <div class="template-card">
-                    <div class="template-image">
-                        <iframe class="thumbs" src="https://apdg21.github.io/editableportfolio/style1/" loading="lazy" scrolling="no"></iframe>
-                    </div>
-                    <div class="template-info">
-                        <h3>Modern Minimalist Portfolio</h3>
-                        <p>This template features a clean, straightforward design with clear, sectioned areas for "About," "Work," "Testimonials," and "Contact." It's ideal for a professional looking for an organized and easily navigable showcase.</p>
-                        <div class="template-actions">
-                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style1">Live Preview</a>
-                            <a href="https://dolfean.gumroad.com/l/modern-minimalist-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
-                        </div>
-                    </div>
+
+        <!-- PAGE 1 -->
+        <div class="template-grid page active" id="page1">
+
+            <div class="template-card">
+                <span class="card-badge">Popular</span>
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style1/" data-name="Modern Minimalist">
+                    <iframe src="https://apdg21.github.io/editableportfolio/style1/" loading="lazy" scrolling="no"></iframe>
                 </div>
-                
-                <!-- Template 2 -->
-                <div class="template-card">
-                    <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableportfolio/style2" loading="lazy" scrolling="no"></iframe>
-                    </div>
-                    <div class="template-info">
-                        <h3>Simple Profile Portfolio</h3>
-                        <p>A clean and functional template designed for showcasing a profile with an "About" section and direct "Contact Me" options. Its minimalist layout is perfect for quick content population.</p>
-                        <div class="template-actions">
-                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style2">Live Preview</a>
-                            <a href="https://dolfean.gumroad.com/l/simple-profile-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Template 3 -->
-                <div class="template-card">
-                    <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableportfolio/style3" loading="lazy" scrolling="no"></iframe>
-                    </div>
-                    <div class="template-info">
-                        <h3>Clean & Focused Portfolio</h3>
-                        <p>This template offers a minimalist and professional look with simple navigation and clear sections for featured work, an "About Me" page, testimonials, and contact information. It's designed for easy content management.</p>
-                        <div class="template-actions">
-                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style3">Live Preview</a>
-                            <a href="https://dolfean.gumroad.com/l/clean-and-focused-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Template 4 -->
-                <div class="template-card">
-                    <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableportfolio/style4" loading="lazy" scrolling="no"></iframe>
-                    </div>
-                    <div class="template-info">
-                        <h3>Dynamic Showcase Portfolio</h3>
-                        <p>A streamlined and professional template with clear navigation, dedicated sections for showcasing projects, an "About" section, testimonials, and a contact form. It's designed for easy customization to highlight creative work.</p>
-                        <div class="template-actions">
-                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style4">Live Preview</a>
-                            <a href="https://dolfean.gumroad.com/l/dynamic-showcase-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Template 5 -->
-                <div class="template-card">
-                    <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableportfolio/style5" loading="lazy" scrolling="no"></iframe>
-                    </div>
-                    <div class="template-info"> 
-                        <h3>Structured Layout Portfolio</h3>
-                        <p>This clean and straightforward template provides a clear navigation menu and dedicated sections for displaying work, an "About Me" page, testimonials, and contact details. It prioritizes organized content presentation for easy deployment.</p>
-                        <div class="template-actions">
-                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style5">Live Preview</a>
-                            <a href="https://dolfean.gumroad.com/l/structured-layout-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Template 6 -->
-                <div class="template-card">
-                    <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableportfolio/style6" loading="lazy" scrolling="no"></iframe>
-                    </div>
-                    <div class="template-info">
-                        <h3>Photography Portfolio</h3>
-                        <p>A clean and professional template perfect for photographers, featuring standard sections for work, "About," testimonials, and contact. It includes filters for different photography genres and is user-friendly for no-code customization.</p>
-                        <div class="template-actions">
-                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style6">Live Preview</a>
-                            <a href="https://dolfean.gumroad.com/l/photography-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
+                <div class="template-info">
+                    <h3 class="template-name">Modern Minimalist</h3>
+                    <p class="template-desc">Clean, sectioned layout with "About," "Work," "Testimonials," and "Contact." Ideal for professionals wanting an organized, navigable showcase.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableportfolio/style1/" data-name="Modern Minimalist">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/modern-minimalist-portfolio" target="_blank" class="btn-buy">Buy Now</a>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Page 2 -->
-            <div class="template-grid page" id="page2">
-                <!-- Template 7 -->
-                <div class="template-card">
-                    <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableportfolio/style7" loading="lazy" scrolling="no"></iframe>
-                    </div>
-                    <div class="template-info">
-                        <h3>Modern Grid Portfolio</h3>
-                        <p>This template presents a clean, well-structured layout with easily navigable sections for showcasing work samples, personal details, client testimonials, and contact information. Its design supports easy content updates.</p>
-                        <div class="template-actions">
-                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style7">Live Preview</a>
-                            <a href="https://dolfean.gumroad.com/l/modern-grid-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
-                        </div>
-                    </div>
+
+            <div class="template-card">
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style2" data-name="Simple Profile">
+                    <iframe src="https://apdg21.github.io/editableportfolio/style2" loading="lazy" scrolling="no"></iframe>
                 </div>
-                
-                <!-- Template 8 -->
-                <div class="template-card">
-                    <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableportfolio/style8" loading="lazy" scrolling="no"></iframe>
-                    </div>
-                    <div class="template-info">
-                        <h3>Elegant Gallery Portfolio</h3>
-                        <p>This template offers an elegant and user-friendly design, ideal for visually driven content. It features prominent calls to action, clear navigation for different sections, and dedicated areas for collections and testimonials, making it easy to set up without coding.</p>
-                        <div class="template-actions">
-                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style8">Live Preview</a>
-                            <a href="https://dolfean.gumroad.com/l/elegant-gallery-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Template 9 -->
-                <div class="template-card">
-                    <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableportfolio/style9" loading="lazy" scrolling="no"></iframe>
-                    </div>
-                    <div class="template-info">
-                        <h3>Professional & Interactive Portfolio</h3>
-                        <p>This template features a clear, modular structure with standard navigation and sections for published work, an "About Me" page, testimonials, and contact information. It also includes modern interactive elements like a dark mode toggle, suitable for no-code platforms.</p>
-                        <div class="template-actions">
-                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style9">Live Preview</a>
-                            <a href="https://dolfean.gumroad.com/l/personal-and-interactive-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Template 10 -->
-                <div class="template-card">
-                    <div class="template-image">
-                        <iframe src="https://apdg21.github.io/editableportfolio/style10" loading="lazy" scrolling="no"></iframe>
-                    </div>
-                    <div class="template-info">
-                        <h3>Minimalist & Adaptable Portfolio</h3>
-                        <p>A streamlined and simple template with clear headings and a standard navigation structure. Its minimalist design and placeholders indicate it's a ready-to-use template for quick content population without any coding expertise.</p>
-                        <div class="template-actions">
-                            <a href="#" class="btn btn-outline preview-btn" data-url="https://apdg21.github.io/editableportfolio/style10">Live Preview</a>
-                            <a href="https://dolfean.gumroad.com/l/minimalist-and-adaptable-portfolio" target="_blank" class="btn btn-solid">Buy Now ($10)</a>
+                <div class="template-info">
+                    <h3 class="template-name">Simple Profile</h3>
+                    <p class="template-desc">Clean and functional with an "About" section and direct contact options. Minimalist layout perfect for quick content population.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableportfolio/style2" data-name="Simple Profile">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/simple-profile-portfolio" target="_blank" class="btn-buy">Buy Now</a>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Pagination Controls -->
-            <div class="pagination">
-                <button class="page-btn active" onclick="showPage(1)">1</button>
-                <button class="page-btn" onclick="showPage(2)">2</button>
+
+            <div class="template-card">
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style3" data-name="Clean & Focused">
+                    <iframe src="https://apdg21.github.io/editableportfolio/style3" loading="lazy" scrolling="no"></iframe>
+                </div>
+                <div class="template-info">
+                    <h3 class="template-name">Clean &amp; Focused</h3>
+                    <p class="template-desc">Minimalist and professional with clear navigation, featured work, "About Me," testimonials, and contact. Designed for easy content management.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableportfolio/style3" data-name="Clean & Focused">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/clean-and-focused-portfolio" target="_blank" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-card">
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style4" data-name="Dynamic Showcase">
+                    <iframe src="https://apdg21.github.io/editableportfolio/style4" loading="lazy" scrolling="no"></iframe>
+                </div>
+                <div class="template-info">
+                    <h3 class="template-name">Dynamic Showcase</h3>
+                    <p class="template-desc">Streamlined and professional with dedicated sections for projects, "About," testimonials, and a contact form. Built for easy customization.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableportfolio/style4" data-name="Dynamic Showcase">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/dynamic-showcase-portfolio" target="_blank" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-card">
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style5" data-name="Structured Layout">
+                    <iframe src="https://apdg21.github.io/editableportfolio/style5" loading="lazy" scrolling="no"></iframe>
+                </div>
+                <div class="template-info">
+                    <h3 class="template-name">Structured Layout</h3>
+                    <p class="template-desc">Clear navigation and organized sections for work, "About Me," testimonials, and contact. Prioritizes structured content presentation.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableportfolio/style5" data-name="Structured Layout">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/structured-layout-portfolio" target="_blank" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-card">
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style6" data-name="Photography Portfolio">
+                    <iframe src="https://apdg21.github.io/editableportfolio/style6" loading="lazy" scrolling="no"></iframe>
+                </div>
+                <div class="template-info">
+                    <h3 class="template-name">Photography Portfolio</h3>
+                    <p class="template-desc">Perfect for photographers — includes genre filters, work sections, testimonials, and contact. User-friendly for no-code customization.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableportfolio/style6" data-name="Photography Portfolio">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/photography-portfolio" target="_blank" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- PAGE 2 -->
+        <div class="template-grid page" id="page2">
+
+            <div class="template-card">
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style7" data-name="Modern Grid">
+                    <iframe src="https://apdg21.github.io/editableportfolio/style7" loading="lazy" scrolling="no"></iframe>
+                </div>
+                <div class="template-info">
+                    <h3 class="template-name">Modern Grid</h3>
+                    <p class="template-desc">Well-structured layout with easily navigable sections for work samples, personal details, testimonials, and contact. Supports easy updates.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableportfolio/style7" data-name="Modern Grid">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/modern-grid-portfolio" target="_blank" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-card">
+                <span class="card-badge">Editor's Pick</span>
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style8" data-name="Elegant Gallery">
+                    <iframe src="https://apdg21.github.io/editableportfolio/style8" loading="lazy" scrolling="no"></iframe>
+                </div>
+                <div class="template-info">
+                    <h3 class="template-name">Elegant Gallery</h3>
+                    <p class="template-desc">Elegant and user-friendly for visually driven content. Prominent CTAs, clear navigation, dedicated collection areas, and testimonials.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableportfolio/style8" data-name="Elegant Gallery">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/elegant-gallery-portfolio" target="_blank" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-card">
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style9" data-name="Professional & Interactive">
+                    <iframe src="https://apdg21.github.io/editableportfolio/style9" loading="lazy" scrolling="no"></iframe>
+                </div>
+                <div class="template-info">
+                    <h3 class="template-name">Professional &amp; Interactive</h3>
+                    <p class="template-desc">Modular structure with work, "About Me," testimonials, and contact sections. Features modern elements like a dark mode toggle.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableportfolio/style9" data-name="Professional & Interactive">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/personal-and-interactive-portfolio" target="_blank" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-card">
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style10" data-name="Minimalist & Adaptable">
+                    <iframe src="https://apdg21.github.io/editableportfolio/style10" loading="lazy" scrolling="no"></iframe>
+                </div>
+                <div class="template-info">
+                    <h3 class="template-name">Minimalist &amp; Adaptable</h3>
+                    <p class="template-desc">Streamlined and simple with clear headings and standard navigation. A ready-to-use template for quick population without any coding expertise.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableportfolio/style10" data-name="Minimalist & Adaptable">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/minimalist-and-adaptable-portfolio" target="_blank" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="pagination-wrap reveal">
+            <button class="page-btn active" data-page="1">1</button>
+            <button class="page-btn" data-page="2">2</button>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════ BENEFITS -->
+<section class="benefits-section">
+    <div class="container">
+        <div class="benefits-header reveal">
+            <p class="section-eyebrow">Why Go Professional</p>
+            <h2>Why a professional portfolio?</h2>
+            <p>Stand out from the competition with a digital portfolio that showcases your work effectively.</p>
+        </div>
+        <div class="benefits-grid reveal">
+            <div class="benefit-card">
+                <span class="benefit-icon">🎯</span>
+                <h3>First Impressions Matter</h3>
+                <p>Clients and employers judge your work within seconds. A professional portfolio makes those seconds count.</p>
+            </div>
+            <div class="benefit-card">
+                <span class="benefit-icon">📊</span>
+                <h3>Showcase Your Process</h3>
+                <p>Display not just final products but your creative process with case studies and project breakdowns.</p>
+            </div>
+            <div class="benefit-card">
+                <span class="benefit-icon">🌐</span>
+                <h3>Global Reach</h3>
+                <p>Your online portfolio works for you 24/7, accessible to potential clients and employers worldwide.</p>
+            </div>
+            <div class="benefit-card">
+                <span class="benefit-icon">💼</span>
+                <h3>Professional Credibility</h3>
+                <p>A custom portfolio domain establishes you as a serious professional in your field.</p>
             </div>
         </div>
-    </section>
-    
-    <section class="benefits">
-        <div class="container">
-            <div class="section-title">
-                <h2>Why Choose a Professional Portfolio?</h2>
-                <p>Stand out from the competition with a digital portfolio that showcases your work effectively.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════ TESTIMONIALS -->
+<section class="testimonials-section">
+    <div class="container">
+        <div class="testimonials-header reveal">
+            <div>
+                <p class="section-eyebrow">Success Stories</p>
+                <h2>What our customers say.</h2>
             </div>
-            
-            <div class="benefits-grid">
-                <div class="benefit-card">
-                    <div class="benefit-icon">🎯</div>
-                    <h3>First Impressions Matter</h3>
-                    <p>Clients and employers judge your work within seconds. A professional portfolio makes those seconds count.</p>
-                </div>
-                
-                <div class="benefit-card">
-                    <div class="benefit-icon">📊</div>
-                    <h3>Showcase Your Process</h3>
-                    <p>Display not just final products but your creative process with case studies and project breakdowns.</p>
-                </div>
-                
-                <div class="benefit-card">
-                    <div class="benefit-icon">🌐</div>
-                    <h3>Global Reach</h3>
-                    <p>Your online portfolio works for you 24/7, accessible to potential clients worldwide.</p>
-                </div>
-                
-                <div class="benefit-card">
-                    <div class="benefit-icon">💼</div>
-                    <h3>Professional Credibility</h3>
-                    <p>A custom portfolio domain establishes you as a serious professional in your field.</p>
-                </div>
+            <p>Real results from creatives who transformed their online presence with ResumePro portfolio templates.</p>
+        </div>
+        <div class="testimonials-grid reveal">
+            <div class="testimonial-card">
+                <span class="quote-mark">"</span>
+                <p class="testimonial-text">I landed my dream job at a top design agency within a month of launching my new portfolio. The hiring manager specifically mentioned how it stood out.</p>
+                <div class="testimonial-divider"></div>
+                <p class="testimonial-author">Jessica L.</p>
+                <p class="testimonial-role">Graphic Designer</p>
+            </div>
+            <div class="testimonial-card">
+                <span class="quote-mark">"</span>
+                <p class="testimonial-text">My client inquiries tripled after switching to a professional portfolio. The project showcase templates make it easy to highlight my best work.</p>
+                <div class="testimonial-divider"></div>
+                <p class="testimonial-author">Marcus T.</p>
+                <p class="testimonial-role">Photographer</p>
+            </div>
+            <div class="testimonial-card">
+                <span class="quote-mark">"</span>
+                <p class="testimonial-text">As a freelance developer, my portfolio has become my most powerful marketing tool. The clean design builds trust with potential clients immediately.</p>
+                <div class="testimonial-divider"></div>
+                <p class="testimonial-author">David R.</p>
+                <p class="testimonial-role">Web Developer</p>
             </div>
         </div>
-    </section>
-    
-    <section class="testimonials">
-        <div class="container">
-            <div class="section-title">
-                <h2>Success Stories</h2>
-                <p>Don't just take our word for it. Here's what our customers say.</p>
-            </div>
-            
-            <div class="testimonial-grid">
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"I landed my dream job at a top design agency within a month of launching my new portfolio. The hiring manager specifically mentioned how my portfolio stood out."</p>
-                    <p class="testimonial-author">Jessica L.</p>
-                    <p class="testimonial-role">Graphic Designer</p>
-                </div>
-                
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"My client inquiries tripled after switching to a professional portfolio. The project showcase templates make it easy to highlight my best work."</p>
-                    <p class="testimonial-author">Marcus T.</p>
-                    <p class="testimonial-role">Photographer</p>
-                </div>
-                
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"As a freelance developer, my portfolio has become my most powerful marketing tool. The clean, professional design builds trust with potential clients."</p>
-                    <p class="testimonial-author">David R.</p>
-                    <p class="testimonial-role">Web Developer</p>
-                </div>
-            </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════ FAQ -->
+<section class="faq-section">
+    <div class="container">
+        <div class="faq-header reveal">
+            <p class="section-eyebrow" style="justify-content:center">Questions</p>
+            <h2>Frequently Asked Questions</h2>
+            <p>Everything you need to know about our portfolio templates.</p>
         </div>
-    </section>
-    
-    <section class="faq">
-        <div class="container">
-            <div class="section-title">
-                <h2>Frequently Asked Questions</h2>
-                <p>Everything you need to know about our portfolio templates.</p>
-            </div>
-            
+        <div class="faq-list reveal">
             <div class="faq-item">
                 <div class="faq-question">
                     <span>Do I need coding skills to use these templates?</span>
@@ -951,47 +1346,36 @@
                     <p>No coding skills required! Our templates come with simple editable files where you just replace the placeholder content with your information. The templates handle all the design and layout automatically.</p>
                 </div>
             </div>
-            
             <div class="faq-item">
                 <div class="faq-question">
                     <span>How do I add my projects to the portfolio?</span>
                     <span class="faq-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>Each template includes detailed instructions for adding projects. Typically you'll:</p>
+                    <p>Each template includes detailed instructions. Typically you'll:</p>
                     <ol>
                         <li>Add your project images to the assets folder</li>
-                        <li>Edit the projects.json file (or similar) with your project details</li>
+                        <li>Edit the projects.json file with your project details</li>
                         <li>Optionally write case studies in the provided markdown files</li>
                     </ol>
-                    <p>No technical knowledge is needed - just follow the step-by-step guide included with your template.</p>
+                    <p>No technical knowledge needed — just follow the step-by-step guide included with your template.</p>
                 </div>
             </div>
-            
             <div class="faq-item">
                 <div class="faq-question">
                     <span>Can I customize the colors and fonts?</span>
                     <span class="faq-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>Absolutely! You can personalize your portfolio by editing the <code>style.css</code> file included with your template. Simply:</p>
-                    <ol>
-                        <li>Open <code>style.css</code> in any text editor</li>
-                        <li>Modify the color variables (like <code>--primary-color</code>) and font properties</li>
-                        <li>Save your changes and refresh your portfolio page</li>
-                    </ol>
-                    <p>For advanced customization, you can edit any CSS rules in the file. No coding experience is needed for basic changes - just follow the clear comments we've included.</p>
-                    <p><strong>Example customization:</strong></p>
-                    <pre>/* ======== Customize These Values ======== */
-:root {
+                    <p>Absolutely! Edit the <code>style.css</code> file to personalize your portfolio. Simply modify the color variables:</p>
+                    <pre>:root {
   --primary-color: #3a86ff;  /* Change main accent color */
   --text-color: #2b2d42;     /* Change text color */
   --font-main: 'Segoe UI', sans-serif; /* Change font */
 }</pre>
-                    <p>All templates include detailed instructions in the <code>Template_Guide.markdown</code> file for common customizations.</p>
+                    <p>All templates include a <code>Template_Guide.markdown</code> file with detailed customization instructions.</p>
                 </div>
             </div>
-            
             <div class="faq-item">
                 <div class="faq-question">
                     <span>What's included in the download?</span>
@@ -1001,43 +1385,42 @@
                     <p>You'll receive a ZIP file containing:</p>
                     <ul>
                         <li>All HTML, CSS, and JavaScript files</li>
-                        <li>Project template files</li>
-                        <li>Image placeholder assets</li>
-                        <li>Detailed setup instructions</li>
-                        <li>Customization guide</li>
+                        <li>Project template and image placeholder assets</li>
+                        <li>Detailed setup and customization guide</li>
                         <li>Tips for optimizing your portfolio</li>
                         <li>Free updates for one year</li>
                     </ul>
                 </div>
             </div>
-            
             <div class="faq-item">
                 <div class="faq-question">
                     <span>How do I host my portfolio?</span>
                     <span class="faq-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>We provide detailed instructions for free hosting options like:</p>
-                    <ul>
-                        <li>GitHub Pages (simple and free)</li>
-                        <li>Netlify (with continuous deployment)</li>
-                        <li>Vercel (great performance)</li>
-                    </ul>
-                    <p>You can also host on any standard web hosting service. No special server requirements needed - these are static websites that work anywhere.</p>
+                    <p>We provide detailed instructions for free hosting options including GitHub Pages, Netlify, and Vercel. These are static websites that work on any standard hosting service — no special server requirements needed.</p>
                 </div>
             </div>
         </div>
-    </section>
-    
-    <section class="cta-section">
-        <div class="container">
-            <h2>Ready to Showcase Your Work Professionally?</h2>
-            <p>Join thousands of creatives who've transformed their online presence with our premium portfolio templates.</p>
-            <a href="#templates" class="cta-button" style="background-color: white; color: #764ba2;">Browse Templates</a>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════ BOTTOM CTA -->
+<section class="bottom-cta">
+    <div class="container">
+        <div class="cta-inner reveal">
+            <div>
+                <h2>Ready to showcase<br>your <em>best work?</em></h2>
+                <p>Join thousands of creatives who've transformed their online presence with a portfolio that works as hard as they do.</p>
+            </div>
+            <a href="#templates" class="btn-dark" onclick="window.scrollTo({top: document.getElementById('templates').getBoundingClientRect().top + window.scrollY - 100, behavior:'smooth'}); return false;">
+                Browse Templates &rarr;
+            </a>
         </div>
-    </section>
-    
-    <footer>
+    </div>
+</section>
+
+<footer>
     <div class="footer-content">
         <div class="footer-column">
             <h3>ResumePro</h3>
@@ -1077,210 +1460,174 @@
         <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
     </div>
 </footer>
-    
-     <!-- Modal for template preview -->
-    <div class="modal" id="previewModal">
-        <div class="modal-content" id="modalContent">
-            <div class="modal-header">
-                <div class="modal-title">Template Preview</div>
-                <div class="modal-actions">
-                    <button class="modal-btn" id="fullscreenToggle" title="Toggle Fullscreen">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-                        </svg>
-                    </button>
-                    <button class="modal-btn close-modal" title="Close">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div class="view-options">
-                <button class="view-btn active" data-view="desktop">Desktop View</button>
-                <button class="view-btn" data-view="mobile">Mobile View</button>
-            </div>
-            <div class="modal-body">
-                <div class="modal-iframe-container">
-                    <iframe class="modal-iframe desktop-view" frameborder="0"></iframe>
-                </div>
-            </div>
-        </div>
-    </div>
-	
-	<!-- === FACEBOOK MESSENGER CHAT BUTTON (non-tech support) === -->
-    <div class="messenger-help">
-        <div class="help-badge">
-            ⚡ No tech skills? No problem!
-            <span>We can set it up for you — just chat with us.</span>
-        </div>
-        <a href="https://m.me/61578437432961" target="_blank" class="messenger-btn" title="Chat with us on Messenger for setup help">
-            <svg viewBox="0 0 24 24">
-                <path d="M12 2C6.5 2 2 6.14 2 11.25c0 2.84 1.35 5.38 3.48 7.07.12.1.19.26.18.42l-.27 1.96c-.05.39.33.69.7.51l2.19-1.07c.13-.06.28-.08.42-.06.67.15 1.36.23 2.08.23 5.5 0 10-4.14 10-9.25C22 6.14 17.5 2 12 2zm0 13.5c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm2-4.5c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-4 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
-            </svg>
-        </a>
-    </div>
 
-    <script>
-        // FAQ toggle functionality
-        document.querySelectorAll('.faq-question').forEach(question => {
-            question.addEventListener('click', () => {
-                const item = question.parentElement;
-                item.classList.toggle('active');
-                
-                // Close other open FAQs
-                document.querySelectorAll('.faq-item').forEach(otherItem => {
-                    if (otherItem !== item && otherItem.classList.contains('active')) {
-                        otherItem.classList.remove('active');
-                    }
-                });
-            });
+<!-- ═══════════════════════════════════════ MESSENGER -->
+<div class="messenger-float" id="messengerFloat">
+    <div class="float-badge" id="floatBadge">
+        ⚡ No tech skills? No problem!
+        <span>Chat with us — we can set it up for you.</span>
+    </div>
+    <a href="https://m.me/61578437432961" target="_blank" class="messenger-btn" id="messengerBtn" title="Chat on Messenger">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.5 2 2 6.14 2 11.25c0 2.84 1.35 5.38 3.48 7.07.12.1.19.26.18.42l-.27 1.96c-.05.39.33.69.7.51l2.19-1.07c.13-.06.28-.08.42-.06.67.15 1.36.23 2.08.23 5.5 0 10-4.14 10-9.25C22 6.14 17.5 2 12 2zm0 13.5c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm2-4.5c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-4 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
+        </svg>
+    </a>
+</div>
+
+<!-- ═══════════════════════════════════════ MODAL -->
+<div class="modal" id="previewModal">
+    <div class="modal-content" id="modalContent">
+        <div class="modal-header">
+            <div class="modal-title">Template Preview <span id="modalTemplateName"></span></div>
+            <div class="modal-actions">
+                <button class="modal-btn" id="fullscreenToggle" title="Toggle Fullscreen">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                    </svg>
+                </button>
+                <button class="modal-btn close-modal" title="Close">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="view-tabs">
+            <button class="view-tab active" data-view="desktop">Desktop</button>
+            <button class="view-tab" data-view="mobile">Mobile</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-iframe-container desktop-view" id="iframeContainer">
+                <iframe class="modal-iframe" id="modalIframe" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ── SCROLL REVEAL
+    const revealObs = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                entry.target.style.transitionDelay = (i * 0.04) + 's';
+                entry.target.classList.add('visible');
+            }
         });
-        
-        // Pagination functionality
-        function showPage(pageNum) {
-            // Hide all pages
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            
-            // Show selected page
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    // ── MESSENGER FLOAT — show after 50% scroll
+    const floatBadge = document.getElementById('floatBadge');
+    const messengerBtn = document.getElementById('messengerBtn');
+    let floatShown = false;
+
+    window.addEventListener('scroll', () => {
+        const scrolled = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPct = scrolled / docHeight;
+
+        if (!floatShown && scrollPct >= 0.5) {
+            floatShown = true;
+            messengerBtn.classList.add('visible');
+            // Delay badge slightly after button appears
+            setTimeout(() => floatBadge.classList.add('visible'), 300);
+        }
+    }, { passive: true });
+
+    // ── PAGINATION
+    document.querySelectorAll('.page-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const pageNum = this.dataset.page;
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page' + pageNum).classList.add('active');
-            
-            // Update active button
-            document.querySelectorAll('.page-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            // Scroll to templates section
-            document.getElementById('templates').scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        // Modal functionality with fullscreen toggle
-        const modal = document.getElementById('previewModal');
-        const modalContent = document.getElementById('modalContent');
-        const modalIframe = document.querySelector('.modal-iframe');
-        const viewBtns = document.querySelectorAll('.view-btn');
-        const closeModal = document.querySelector('.close-modal');
-        const previewBtns = document.querySelectorAll('.preview-btn');
-        const fullscreenToggle = document.getElementById('fullscreenToggle');
-        let isFullscreen = false;
+            document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById('templates').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
 
-        // Open modal when preview button is clicked
-        previewBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const url = btn.getAttribute('data-url');
-                modalIframe.src = url;
-                modal.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-                
-                // Reset to normal view when opening
-                modalContent.classList.remove('fullscreen');
-                isFullscreen = false;
-                updateFullscreenIcon();
-                
-                // On mobile, default to mobile view
-                if (window.innerWidth <= 768) {
-                    setView('mobile');
-                } else {
-                    setView('desktop');
-                }
-            });
-        });
-        
-        // Close modal
-        closeModal.addEventListener('click', () => {
-            closeModalHandler();
-        });
-        
-        // Close modal when clicking outside
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModalHandler();
-            }
-        });
-        
-        // View toggle functionality
-        viewBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const view = btn.getAttribute('data-view');
-                setView(view);
-                
-                // Update active button
-                viewBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-        
-        // Fullscreen toggle functionality
-        fullscreenToggle.addEventListener('click', () => {
-            isFullscreen = !isFullscreen;
-            modalContent.classList.toggle('fullscreen', isFullscreen);
-            updateFullscreenIcon();
-        });
-        
-        function setView(view) {
-            const iframeContainer = document.querySelector('.modal-iframe-container');
-            const iframe = document.querySelector('.modal-iframe');
-            
-            iframeContainer.className = 'modal-iframe-container';
-            iframe.className = 'modal-iframe';
-            
-            if (view === 'mobile') {
-                iframeContainer.classList.add('mobile-view');
-                iframe.classList.add('mobile-view');
-            } else {
-                iframeContainer.classList.add('desktop-view');
-                iframe.classList.add('desktop-view');
-            }
-        }
-        
-        function updateFullscreenIcon() {
-            const icon = fullscreenToggle.querySelector('svg');
-            if (isFullscreen) {
-                icon.innerHTML = `
-                    <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
-                `;
-                fullscreenToggle.setAttribute('title', 'Exit Fullscreen');
-            } else {
-                icon.innerHTML = `
-                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-                `;
-                fullscreenToggle.setAttribute('title', 'Enter Fullscreen');
-            }
-        }
-        
-        function closeModalHandler() {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            // Reset to normal view when closing
-            modalContent.classList.remove('fullscreen');
-            isFullscreen = false;
-            updateFullscreenIcon();
-        }
-        
-        // Handle ESC key to exit fullscreen or close modal
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                if (isFullscreen) {
-                    isFullscreen = false;
-                    modalContent.classList.remove('fullscreen');
-                    updateFullscreenIcon();
-                } else if (modal.style.display === 'flex') {
-                    closeModalHandler();
-                }
-            }
-        });
-    </script>
+    // ── MODAL
+    const modal = document.getElementById('previewModal');
+    const modalContent = document.getElementById('modalContent');
+    const modalIframe = document.getElementById('modalIframe');
+    const modalNameEl = document.getElementById('modalTemplateName');
+    const iframeContainer = document.getElementById('iframeContainer');
+    const fullscreenToggle = document.getElementById('fullscreenToggle');
+    let isFullscreen = false;
 
-    
-    
+    function openModal(url, name) {
+        modalIframe.src = url;
+        modalNameEl.textContent = '— ' + name;
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        modalContent.classList.remove('fullscreen');
+        isFullscreen = false;
+        setView('desktop');
+    }
+
+    function closeModalFn() {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+        modalIframe.src = '';
+        modalContent.classList.remove('fullscreen');
+        isFullscreen = false;
+    }
+
+    document.querySelectorAll('.preview-btn').forEach(el => {
+        el.addEventListener('click', (e) => {
+            e.preventDefault();
+            const url = el.dataset.url;
+            const name = el.dataset.name;
+            if (url && name) openModal(url, name);
+        });
+    });
+
+    document.querySelector('.close-modal').addEventListener('click', closeModalFn);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModalFn(); });
+
+    document.querySelectorAll('.view-tab').forEach(tab => {
+        tab.addEventListener('click', function () {
+            document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            setView(this.dataset.view);
+        });
+    });
+
+    function setView(view) {
+        iframeContainer.className = 'modal-iframe-container ' + view + '-view';
+    }
+
+    fullscreenToggle.addEventListener('click', () => {
+        isFullscreen = !isFullscreen;
+        modalContent.classList.toggle('fullscreen', isFullscreen);
+        const path = fullscreenToggle.querySelector('path');
+        if (isFullscreen) {
+            path.setAttribute('d', 'M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3');
+        } else {
+            path.setAttribute('d', 'M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3');
+        }
+    });
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            if (isFullscreen) { isFullscreen = false; modalContent.classList.remove('fullscreen'); }
+            else if (modal.style.display === 'flex') closeModalFn();
+        }
+    });
+
+    // ── FAQ
+    document.querySelectorAll('.faq-question').forEach(q => {
+        q.addEventListener('click', () => {
+            const item = q.parentElement;
+            const wasActive = item.classList.contains('active');
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+            if (!wasActive) item.classList.add('active');
+        });
+    });
+</script>
 
 <script src="clean-urls.js"></script>
 <script src="header.js"></script>
-    
+
 </body>
 </html>

@@ -4,376 +4,1639 @@
   <meta charset="utf-8" />
   <title>Klaviyo Analytics Dashboard</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  
-  <!-- External CSS -->
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Bootstrap & Icons -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  
-  <!-- Local CSS -->
-  <link rel="stylesheet" href="klaviyo-tool.css" />
-  <link rel="stylesheet" href="header.css" />
-  <link rel="stylesheet" href="footer.css" />
-  
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7364684388402027"
-     crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="header.css">
+  <link rel="stylesheet" href="footer.css">
+
+  <style>
+    /* ====== DESIGN TOKENS ====== */
+    :root {
+      --ink:       #0d0d0d;
+      --ink-mid:   #161616;
+      --ink-card:  #1a1a1a;
+      --ink-light: #222222;
+      --border:    rgba(200,169,110,0.15);
+      --gold:      #c8a96e;
+      --gold-dim:  rgba(200,169,110,0.12);
+      --gold-glow: rgba(200,169,110,0.35);
+      --text:      #e8e0d0;
+      --muted:     #8a8070;
+      --white:     #f5f0e8;
+      --success:   #6fb88a;
+      --danger:    #c46b6b;
+      --warning:   #d4a654;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'DM Sans', sans-serif;
+	  --primary: #4F46E5;  /* More professional purple */
+            --primary-dark: #4338CA;
+            --secondary: #10B981;
+            --dark: #1F2937;
+            --light: #F9FAFB;
+            --gray: #6B7280;
+            --success: #10B981;
+            --error: #EF4444;
+            
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--ink);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ====== HEADER ====== */
+    .site-header {
+      background: var(--ink-mid);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
+
+    .site-logo {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .site-logo .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--gold);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    .header-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: var(--font-body);
+      font-size: 13px;
+      padding: 7px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .header-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: var(--gold-dim);
+    }
+
+    /* ====== HERO ====== */
+    .dashboard-hero {
+      padding: 52px 30px 36px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, var(--ink-mid) 0%, var(--ink) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dashboard-hero::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .dashboard-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+
+    .dashboard-hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 500px;
+    }
+
+    /* ====== CONTAINER ====== */
+    .main-wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 30px 20px 60px;
+    }
+
+    /* ====== CARDS ====== */
+    .card-dark {
+      background: var(--ink-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .card-dark-body {
+      padding: 24px;
+    }
+
+    /* ====== UPLOAD SECTION ====== */
+    .upload-section label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .custom-file-label {
+      background: var(--ink-light);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .custom-file-label::after {
+      background: var(--gold-dim);
+      border-left: 1px solid var(--border);
+      color: var(--gold);
+      content: 'Browse';
+    }
+
+    .custom-file-input:focus ~ .custom-file-label,
+    .custom-file-label:hover {
+      border-color: var(--gold);
+    }
+
+    .form-control {
+      background: var(--ink-light);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .form-control:focus {
+      background: var(--ink-light);
+      border-color: var(--gold);
+      color: var(--text);
+      box-shadow: 0 0 0 3px var(--gold-dim);
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--ink);
+      border: none;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 14px;
+      padding: 10px 22px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-gold:hover {
+      background: #d9bc84;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px var(--gold-glow);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--gold);
+      border: 1px solid var(--border);
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 13px;
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 16px;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--gold);
+      background: var(--gold-dim);
+    }
+
+    /* ====== PROCESSING ====== */
+    .processing-badge {
+      display: none;
+      background: var(--gold-dim);
+      border: 1px solid var(--border);
+      color: var(--gold);
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(200,169,110,0.3);
+      border-radius: 50%;
+      border-top-color: var(--gold);
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ====== TABS ====== */
+    .tab-nav {
+      display: flex;
+      gap: 2px;
+      padding: 0 4px;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      background: var(--ink-mid);
+      border-radius: 12px 12px 0 0;
+    }
+
+    .tab-nav::-webkit-scrollbar { height: 0; }
+
+    .tab-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 14px 20px;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      position: relative;
+      bottom: -1px;
+    }
+
+    .tab-link:hover { color: var(--text); }
+
+    .tab-link.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .tab-link i { font-size: 12px; }
+
+    .tab-pane { display: none; padding: 24px; }
+    .tab-pane.active { display: block; }
+
+    /* ====== TABLES ====== */
+    table.dataTable {
+      width: 100% !important;
+      border-collapse: collapse !important;
+      font-size: 13px;
+    }
+
+    table.dataTable thead th {
+      background: var(--ink-light) !important;
+      color: var(--gold) !important;
+      font-family: var(--font-body) !important;
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.1em !important;
+      text-transform: uppercase !important;
+      border: none !important;
+      border-bottom: 1px solid var(--border) !important;
+      padding: 12px 14px !important;
+    }
+
+    table.dataTable tbody td {
+      background: transparent !important;
+      color: var(--text) !important;
+      border: none !important;
+      border-bottom: 1px solid rgba(200,169,110,0.06) !important;
+      padding: 10px 14px !important;
+    }
+
+    table.dataTable tbody tr:hover td {
+      background: var(--gold-dim) !important;
+    }
+
+    table.dataTable tbody tr.odd td { background: rgba(255,255,255,0.01) !important; }
+
+    .dataTables_wrapper {
+      color: var(--text) !important;
+      font-family: var(--font-body) !important;
+      font-size: 13px !important;
+    }
+
+    .dataTables_wrapper .dataTables_filter input,
+    .dataTables_wrapper .dataTables_length select {
+      background: var(--ink-light) !important;
+      border: 1px solid var(--border) !important;
+      color: var(--text) !important;
+      border-radius: 6px !important;
+      padding: 5px 10px !important;
+      font-family: var(--font-body) !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+      color: var(--muted) !important;
+      border-radius: 6px !important;
+      border: 1px solid transparent !important;
+      padding: 4px 10px !important;
+      font-family: var(--font-body) !important;
+      font-size: 12px !important;
+      cursor: pointer;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+      background: var(--gold-dim) !important;
+      color: var(--gold) !important;
+      border-color: var(--border) !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+      background: var(--gold) !important;
+      color: var(--ink) !important;
+      border-color: var(--gold) !important;
+      font-weight: 600 !important;
+    }
+
+    .dataTables_wrapper .dataTables_info { color: var(--muted) !important; font-size: 12px !important; }
+    .dataTables_wrapper .dataTables_filter label { color: var(--muted) !important; }
+    .dataTables_wrapper .dataTables_length label { color: var(--muted) !important; }
+
+    /* ====== CHARTS ====== */
+    .chart-wrap {
+      height: 280px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    /* ====== VALUE COLORS ====== */
+    .val-gold { color: var(--gold); font-weight: 600; }
+    .val-success { color: var(--success); }
+    .val-muted { color: var(--muted); }
+
+    /* ====== INSIGHTS TAB ====== */
+    .insight-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .insight-card {
+      background: var(--ink-light);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .insight-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gold);
+    }
+
+    .insight-card .insight-icon {
+      font-size: 22px;
+      margin-bottom: 10px;
+      opacity: 0.85;
+    }
+
+    .insight-card .insight-value {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .insight-card .insight-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .insight-card .insight-desc {
+      font-size: 13px;
+      color: var(--text);
+      opacity: 0.8;
+    }
+
+    .insight-section-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--white);
+      margin: 24px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .insight-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 24px;
+    }
+
+    .insight-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(200,169,110,0.05);
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .insight-list li:last-child { border-bottom: none; }
+
+    .insight-list .bullet {
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+
+    .empty-state i {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      color: var(--border);
+    }
+
+    .empty-state h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .empty-state p { font-size: 13px; }
+
+    /* ====== HELP MODAL ====== */
+    .modal-content {
+      background: var(--ink-card) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: 12px !important;
+      color: var(--text) !important;
+    }
+
+    .modal-header {
+      background: var(--ink-light) !important;
+      border-bottom: 1px solid var(--border) !important;
+      border-radius: 11px 11px 0 0 !important;
+      padding: 18px 24px !important;
+    }
+
+    .modal-header .modal-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--white);
+    }
+
+    .modal-header .close {
+      color: var(--muted) !important;
+      opacity: 1;
+      font-size: 1.4rem;
+    }
+
+    .modal-body { padding: 24px !important; }
+    .modal-footer {
+      border-top: 1px solid var(--border) !important;
+      background: var(--ink-light) !important;
+      border-radius: 0 0 11px 11px !important;
+    }
+
+    .help-step {
+      border-left: 2px solid var(--gold);
+      padding: 14px 18px;
+      margin: 16px 0;
+      background: var(--gold-dim);
+      border-radius: 0 8px 8px 0;
+    }
+
+    .help-step h6 {
+      font-family: var(--font-body);
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .help-step p, .help-step ul, .help-step li {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .badge-step {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: var(--gold);
+      color: var(--ink);
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+      margin-right: 8px;
+    }
+
+    .sample-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      background: var(--gold-dim);
+      border: 1px dashed var(--gold);
+      border-radius: 50px;
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .sample-link:hover {
+      background: var(--gold);
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .btn-outline-muted {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: var(--font-body);
+      font-size: 13px;
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-outline-muted:hover {
+      border-color: var(--muted);
+      color: var(--text);
+    }
+
+    /* ====== SCROLLBAR ====== */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--ink); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+    /* ====== RESPONSIVE ====== */
+    @media (max-width: 768px) {
+      .dashboard-hero { padding: 36px 20px 28px; }
+      .tab-link { padding: 12px 14px; font-size: 12px; }
+      .tab-pane { padding: 18px; }
+      .insight-grid { grid-template-columns: 1fr 1fr; }
+      .site-header { padding: 14px 20px; }
+    }
+
+    @media (max-width: 480px) {
+      .insight-grid { grid-template-columns: 1fr; }
+    }
+
+    /* chart container inside tabs with chart+table layout */
+    .chart-table-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .chart-table-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
+
 <header>
     <div class="header-content">
+
+        <!-- Logo -->
         <a href="index.html" class="logo">
             <span class="logo-icon">📄</span>
             <span>ResumePro</span>
         </a>
-        
+
+        <!-- Nav + Hamburger -->
         <div class="nav-container">
-            <button class="hamburger" aria-label="Toggle navigation">☰</button>
-            <ul class="header-nav-menu">
-                <li class="header-nav-item"><a href="index.html" class="header-nav-link">Home</a></li>
-                <li class="header-nav-item header-dropdown">
-                    <a href="#" class="header-nav-link">
+            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+
+            <ul class="header-nav-menu" role="menubar">
+
+                <li class="header-nav-item" role="none">
+                    <a href="index.html" class="header-nav-link" role="menuitem">Home</a>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                         Templates
-                        <span class="header-dropdown-icon">▼</span>
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
                     </a>
-                    <div class="header-dropdown-content">
-                        <a href="resume-templates.html" class="header-dropdown-item">Resume Templates</a>
-                        <a href="portfolio-templates.html" class="header-dropdown-item">Portfolio Templates</a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="resume-templates.html"   class="header-dropdown-item" role="menuitem">Resume Templates</a>
+                        <a href="portfolio-templates.html" class="header-dropdown-item" role="menuitem">Portfolio Templates</a>
                     </div>
                 </li>
-                
-                <!-- My Apps Menu Item -->
-                <li class="header-nav-item header-dropdown">
-                    <a href="#" class="header-nav-link">
-                        My Apps
-                        <span class="header-dropdown-icon">▼</span>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Apps
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
                     </a>
-                    <div class="header-dropdown-content">
-                        <a href="android-applications.html" class="header-dropdown-item">Android Applications</a>
-                        <a href="family-connection-tools.html" class="header-dropdown-item">Web Applications</a>
-                      </div>
-                </li>
-                
-                <!-- UPDATED: Blog link now points to blog-list.html -->
-                <li class="header-nav-item"><a href="blog-list.html" class="header-nav-link">Blog</a></li>
-                
-                <li class="header-nav-item"><a href="klaviyo-analytics.html" class="header-nav-link">Klaviyo Analytics</a></li>
-                <li class="header-nav-item header-dropdown">
-                    <a href="#" class="header-nav-link">
-                        Productivity Tools
-                        <span class="header-dropdown-icon">▼</span>
-                    </a>
-                    <div class="header-dropdown-content">
-                        <a href="email-builder.html" class="header-dropdown-item">Email Builder</a>
-                        <a href="enhanced-todo.html" class="header-dropdown-item">Enhanced To-Do & Notes</a>
-                        <a href="klaviyo-tool.html" class="header-dropdown-item">Klaviyo Tool</a>
-						<a href="omnisend.html" class="header-dropdown-item">Omnisend Analytics Tool</a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="android-applications.html"   class="header-dropdown-item" role="menuitem">Android Applications</a>
+                        <a href="family-connection-tools.html" class="header-dropdown-item" role="menuitem">Web Applications</a>
                     </div>
                 </li>
-                <li class="header-nav-item"><a href="about.html" class="header-nav-link">About</a></li>
-                <li class="header-nav-item"><a href="contact.html" class="header-nav-link">Contact</a></li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="blog-list.html" class="header-nav-link" role="menuitem">Blog</a>
+                </li>
+
+                <li class="header-nav-item" role="none" style="display: none;">
+                    <a href="klaviyo-analytics.html" class="header-nav-link" role="menuitem">Klaviyo Analytics</a>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Tools
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                    </a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="email-builder.html"  class="header-dropdown-item" role="menuitem">Email Builder</a>
+                        <a href="enhanced-todo.html"              class="header-dropdown-item" role="menuitem">To-Do &amp; Notes</a>
+                        <a href="klaviyo-tool.html"               class="header-dropdown-item" role="menuitem">Klaviyo Tool</a>
+                        <a href="omnisend.html"                   class="header-dropdown-item" role="menuitem">Omnisend Analytics</a>
+                    </div>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="about.html" class="header-nav-link" role="menuitem">About</a>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="contact.html" class="header-nav-link" role="menuitem">Contact</a>
+                </li>
+
             </ul>
         </div>
     </div>
 </header>
-<!-- Scroll-Triggered Trial Banner (Mini FAB Style) -->
-<div class="trial-mini-banner" id="trialBanner" onclick="showFullTrialModal()">
-  <i class="fas fa-gift"></i>
-  <span class="countdown" id="countdown">7 days</span>
-  <i class="fas fa-chevron-up ml-1"></i>
+
+<header class="site-header">
+  <div class="site-logo">
+    <div class="logo-icon"><i class="fas fa-chart-line"></i></div>
+    Klaviyo Analytics
+  </div>
+  <button class="header-btn" onclick="document.getElementById('helpModal').style.display='flex'">
+    <i class="fas fa-question-circle"></i> How to use
+  </button>
+</header>
+
+<!-- HERO -->
+<div class="dashboard-hero">
+  <div class="hero-eyebrow">✦ Email Intelligence Tool</div>
+  <h1>Klaviyo <em>Analytics</em> Dashboard</h1>
+  <p class="hero-sub">Upload your Klaviyo CSV export to visualize campaign performance, trends, growth, and seasonal patterns.</p>
 </div>
 
-<!-- Trial Offer Modal -->
-<div class="modal fade" id="trialOfferModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header" style="background: linear-gradient(135deg, #fd79a8, #6c5ce7); color: white;">
-        <h5 class="modal-title"><i class="fas fa-gift mr-2"></i>Limited Time Offer!</h5>
-        <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
+<!-- HELP MODAL -->
+<div id="helpModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)this.style.display='none'">
+  <div style="max-width:640px;width:100%;background:var(--ink-card);border:1px solid var(--border);border-radius:12px;max-height:85vh;overflow-y:auto;">
+    <div class="modal-header d-flex justify-content-between align-items-center" style="background:var(--ink-light);border-bottom:1px solid var(--border);padding:18px 24px;border-radius:11px 11px 0 0;">
+      <span class="modal-title" style="font-family:var(--font-display);font-size:1.1rem;color:var(--white);"><i class="fas fa-question-circle" style="color:var(--gold);margin-right:10px;"></i>How to Use</span>
+      <button onclick="document.getElementById('helpModal').style.display='none'" style="background:none;border:none;color:var(--muted);font-size:1.4rem;cursor:pointer;">&times;</button>
+    </div>
+    <div style="padding:24px;">
+      <p style="font-size:14px;color:var(--muted);margin-bottom:16px;">Follow these steps to analyze your Klaviyo campaigns:</p>
+
+      <div class="help-step">
+        <h6><span class="badge-step">1</span>Export CSV from Klaviyo</h6>
+        <ul style="padding-left:20px;margin:8px 0 0;">
+          <li>Go to <strong style="color:var(--text);">Analytics → Campaigns</strong></li>
+          <li>Select your date range, click <strong style="color:var(--text);">Export → CSV</strong></li>
+          <li>Ensure columns include: Campaign Name, Send Time, Subject, Total Recipients, Unique Opens, Unique Clicks, Revenue, Open Rate, Click Rate, Placed Order Rate, Send Weekday, List</li>
+        </ul>
       </div>
-      <div class="modal-body text-center py-4">
-        <i class="fas fa-crown fa-4x mb-3" style="color: #6c5ce7;"></i>
-        <h3>🎉 Full Access Unlocked!</h3>
-        <p class="lead">All premium features (Monthly, Trends, Growth, Seasonal) are now working for a limited time!</p>
-        
-        <!-- Trial Period Display -->
-        <div class="trial-info bg-light p-3 rounded mb-3">
-          <div class="row text-left">
-            <div class="col-6">
-              <small class="text-muted">Started:</small>
-              <div><strong id="startDateDisplay">Feb 19, 2026</strong></div>
-            </div>
-            <div class="col-6">
-              <small class="text-muted">Ends:</small>
-              <div><strong id="endDateDisplay">Feb 26, 2026</strong></div>
-            </div>
-          </div>
-          
-          <!-- Progress Bar -->
-          <div class="mt-2">
-            <div class="d-flex justify-content-between small">
-              <span>Trial Progress</span>
-              <span id="timeRemaining">7 days left</span>
-            </div>
-            <div class="progress mt-1" style="height: 8px;">
-              <div id="trialProgress" class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="alert alert-warning">
-          <strong id="modalCountdown">7 days remaining (ends Feb 26)</strong>
-        </div>
-        <p>After this trial, these features will be available in our desktop app.</p>
-        <a href="https://dolfean.gumroad.com/l/klaviyo-analytic-dashboard" target="_blank" class="btn btn-primary btn-lg">
-          <i class="fas fa-shopping-cart mr-2"></i> Get Desktop App
+
+      <div class="help-step">
+        <h6><span class="badge-step">2</span>Download sample CSV (optional)</h6>
+        <p style="margin-bottom:10px;">Test the dashboard with sample data first:</p>
+        <a href="https://docs.google.com/spreadsheets/d/1NsSs9EdZWcaYBWoA_Mrg3CNJCgH0-Q_LP9Q5rmI0fco/edit?usp=sharing" target="_blank" class="sample-link">
+          <i class="fas fa-download"></i> Download Sample CSV
         </a>
       </div>
+
+      <div class="help-step">
+        <h6><span class="badge-step">3</span>Upload &amp; filter</h6>
+        <p>Click <strong style="color:var(--text);">Choose file</strong>, select your CSV, optionally set a date range, then click <strong style="color:var(--text);">Analyse</strong>. All tabs will populate automatically.</p>
+      </div>
+
+      <div class="help-step">
+        <h6><span class="badge-step">4</span>Explore your data</h6>
+        <p>Browse Daily, Weekly, Monthly, Trends, Growth, Seasonal, and <strong style="color:var(--gold);">Key Insights</strong> tabs. Export any view as CSV.</p>
+      </div>
+    </div>
+    <div style="padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;">
+      <button class="btn-outline-muted" onclick="document.getElementById('helpModal').style.display='none'">Close</button>
     </div>
   </div>
 </div>
 
-<!-- Upgrade Modal (shown after trial expires) -->
-<div class="modal fade" id="upgradeModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header" style="background: linear-gradient(135deg, #6c5ce7, #fd79a8); color: white;">
-        <h5 class="modal-title"><i class="fas fa-crown mr-2"></i>Trial Ended - Upgrade Available</h5>
-        <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
-      </div>
-      <div class="modal-body text-center py-4">
-        <i class="fas fa-rocket fa-4x mb-3" style="color: #6c5ce7;"></i>
-        <h3>🚀 Continue Your Analytics Journey!</h3>
-        <p class="lead">Your 7-day trial of premium features has ended.</p>
-        
-        <div class="card bg-light mb-4">
-          <div class="card-body">
-            <h5 class="text-primary">Get the Desktop App for:</h5>
-            <div class="row mt-3">
-              <div class="col-6">
-                <i class="fas fa-check-circle text-success"></i> Monthly Trends
-              </div>
-              <div class="col-6">
-                <i class="fas fa-check-circle text-success"></i> Growth Analysis
-              </div>
-              <div class="col-6">
-                <i class="fas fa-check-circle text-success"></i> Seasonal Patterns
-              </div>
-              <div class="col-6">
-                <i class="fas fa-check-circle text-success"></i> Advanced Charts
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <a href="https://dolfean.gumroad.com/l/klaviyo-analytic-dashboard" target="_blank" class="btn btn-primary btn-lg">
-          <i class="fas fa-shopping-cart mr-2"></i> Get Desktop App
-        </a>
-        <p class="mt-2 text-muted small">
-          <i class="fas fa-clock"></i> One-time purchase • All features unlocked • No subscriptions
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- MAIN -->
+<div class="main-wrap">
 
-<!-- Help Modal (with Google Drive sample link) -->
-<div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-wide">
-    <div class="modal-content">
-      <div class="modal-header" style="background: linear-gradient(135deg, #6c5ce7, #a29bfe); color:white;">
-        <h5 class="modal-title" id="helpModalLabel"><i class="fas fa-question-circle mr-2"></i>How to use Klaviyo Analytics Dashboard</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:white;">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p><strong>Follow these simple steps to analyze your Klaviyo campaigns:</strong></p>
-        
-        <div class="help-step">
-          <h6><span class="badge badge-primary mr-2">1</span> Export report from Klaviyo</h6>
-          <p class="mb-2">In your Klaviyo account:</p>
-          <ul class="pl-3">
-            <li>Go to <strong>Analytics → Campaigns</strong></li>
-            <li>Select the date range you want to analyze</li>
-            <li>Click <strong>Export</strong> and choose <strong>CSV</strong> format</li>
-            <li>Make sure the export includes columns like: <em>Campaign Name, Send Time, Subject, Total Recipients, Unique Opens, Unique Clicks, Revenue, Open Rate, Click Rate, Placed Order Rate, Send Weekday, List</em></li>
-          </ul>
-          <p class="mb-0 text-muted small"><i class="fas fa-lightbulb"></i> The exported CSV will contain all campaign-level data needed.</p>
-        </div>
-
-        <div class="help-step">
-          <h6><span class="badge badge-primary mr-2">2</span> Download sample CSV (optional)</h6>
-          <p>If you want to test the dashboard first, click the button below to download a sample Klaviyo export file:</p>
-          <a href="https://docs.google.com/spreadsheets/d/1NsSs9EdZWcaYBWoA_Mrg3CNJCgH0-Q_LP9Q5rmI0fco/edit?usp=sharing" target="_blank" class="sample-link">
-            <i class="fas fa-download"></i> Download Sample CSV (Google Drive)
-          </a>
-          <p class="mt-2 small text-muted">Once downloaded, use "Upload Klaviyo CSV" to select the file.</p>
-        </div>
-
-        <div class="help-step">
-          <h6><span class="badge badge-primary mr-2">3</span> Upload & filter</h6>
-          <p>Click <strong>Choose file</strong> and select your Klaviyo CSV. Optionally set a date range, then click <strong>Filter Data</strong>. The dashboard will populate all tabs with charts and tables.</p>
-        </div>
-
-        <div class="help-step">
-          <h6><span class="badge badge-primary mr-2">4</span> Explore insights</h6>
-          <p>Navigate through tabs:</p>
-          <ul class="row">
-            <li class="col-sm-6"><i class="fas fa-calendar-day text-primary"></i> Daily: per‑campaign breakdown</li>
-            <li class="col-sm-6"><i class="fas fa-calendar-week text-primary"></i> Weekly: aggregated metrics</li>
-            <li class="col-sm-6"><i class="fas fa-calendar text-primary"></i> Monthly: month‑by‑month totals</li>
-            <li class="col-sm-6"><i class="fas fa-chart-line text-primary"></i> Trends: revenue line chart</li>
-            <li class="col-sm-6"><i class="fas fa-rocket text-primary"></i> Growth: top campaigns</li>
-            <li class="col-sm-6"><i class="fas fa-calendar-check text-primary"></i> Seasonal: best day/month</li>
-          </ul>
-          <p>Use the <strong>export buttons</strong> inside each tab to download the data as CSV.</p>
-        </div>
-
-        <div class="alert alert-light border mt-3">
-          <i class="fas fa-info-circle mr-2 text-primary"></i> 
-          <strong>Note:</strong> The CSV must contain the expected columns. The sample file matches the required format.
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="container-fluid">
-  
-  <div class="dashboard-header">
-    <div class="row align-items-center">
-      <div class="col-md-8">
-        <h1><i class="fas fa-chart-line mr-2"></i>Klaviyo Analytics Dashboard</h1>
-        <p class="mb-0">✨ Premium features unlocked for 7 days ✨</p>
-      </div>
-      <div class="col-md-4 text-md-right">
-        <button class="btn btn-light mr-2" data-toggle="modal" data-target="#helpModal">
-          <i class="fas fa-question-circle"></i> Help
-        </button>
-        <a href="https://dolfean.gumroad.com/l/klaviyo-analytic-dashboard" target="_blank" class="btn btn-light">
-          <i class="fas fa-shopping-cart"></i> Get Desktop App
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Upload Section -->
-  <div class="card">
-    <div class="card-body">
-      <div class="form-row align-items-end">
-        <div class="form-group col-md-4">
-          <label><i class="fas fa-file-upload mr-2"></i>Upload Klaviyo CSV</label>
+  <!-- UPLOAD CARD -->
+  <div class="card-dark upload-section">
+    <div class="card-dark-body">
+      <div class="row align-items-end">
+        <div class="col-md-4 form-group mb-3 mb-md-0">
+          <label><i class="fas fa-file-csv" style="color:var(--gold);margin-right:6px;"></i>Upload Klaviyo CSV</label>
           <div class="custom-file">
             <input type="file" class="custom-file-input" id="csvUpload" accept=".csv">
-            <label class="custom-file-label" for="csvUpload">Choose file...</label>
+            <label class="custom-file-label" for="csvUpload">Choose file…</label>
           </div>
         </div>
-        <div class="form-group col-md-2">
-          <label><i class="far fa-calendar-alt mr-2"></i>Start Date</label>
+        <div class="col-md-2 form-group mb-3 mb-md-0">
+          <label>Start Date</label>
           <input id="startDate" type="date" class="form-control" />
         </div>
-        <div class="form-group col-md-2">
-          <label><i class="far fa-calendar-alt mr-2"></i>End Date</label>
+        <div class="col-md-2 form-group mb-3 mb-md-0">
+          <label>End Date</label>
           <input id="endDate" type="date" class="form-control" />
         </div>
-        <div class="form-group col-md-2">
-          <button id="filterButton" class="btn btn-primary btn-block">
-            <i class="fas fa-filter mr-2"></i>Filter Data
+        <div class="col-md-2 form-group mb-3 mb-md-0">
+          <button id="filterButton" class="btn-gold w-100">
+            <i class="fas fa-chart-bar"></i> Analyse
           </button>
         </div>
-        <div class="form-group col-md-2">
-          <div id="loadingIndicator" class="alert alert-warning loading mb-0">
-            <div class="spinner"></div> Processing...
+        <div class="col-md-2 form-group mb-0">
+          <div id="loadingIndicator" class="processing-badge">
+            <div class="spinner"></div> Processing…
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Tabs Navigation -->
-  <div class="card">
-    <div class="card-body p-0">
-      <ul class="nav nav-tabs" id="mainTabs" role="tablist">
-        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#daily"><i class="fas fa-calendar-day mr-2"></i>Daily</a></li>
-        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#weekly"><i class="fas fa-calendar-week mr-2"></i>Weekly</a></li>
-        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#monthly"><i class="fas fa-calendar mr-2"></i>Monthly <span class="badge badge-warning ml-1">TRIAL</span></a></li>
-        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#trend"><i class="fas fa-chart-line mr-2"></i>Trends <span class="badge badge-warning ml-1">TRIAL</span></a></li>
-        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#growth"><i class="fas fa-rocket mr-2"></i>Growth <span class="badge badge-warning ml-1">TRIAL</span></a></li>
-        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#seasonal"><i class="fas fa-calendar-check mr-2"></i>Seasonal <span class="badge badge-warning ml-1">TRIAL</span></a></li>
-      </ul>
+  <!-- TABS CARD -->
+  <div class="card-dark" style="overflow:visible;">
+    <!-- Nav -->
+    <nav class="tab-nav" id="mainTabNav">
+      <button class="tab-link active" data-tab="daily"><i class="fas fa-calendar-day"></i>Daily</button>
+      <button class="tab-link" data-tab="weekly"><i class="fas fa-calendar-week"></i>Weekly</button>
+      <button class="tab-link" data-tab="monthly"><i class="fas fa-calendar"></i>Monthly</button>
+      <button class="tab-link" data-tab="trend"><i class="fas fa-chart-line"></i>Trends</button>
+      <button class="tab-link" data-tab="growth"><i class="fas fa-rocket"></i>Growth</button>
+      <button class="tab-link" data-tab="seasonal"><i class="fas fa-sun"></i>Seasonal</button>
+      <button class="tab-link" data-tab="insights"><i class="fas fa-lightbulb"></i>Key Insights</button>
+    </nav>
 
-      <!-- Tab Content -->
-      <div class="tab-content p-3">
-        <!-- Daily Tab -->
-        <div class="tab-pane fade show active" id="daily">
-          <button class="btn export-btn" id="exportDailyBtn"><i class="fas fa-download mr-2"></i>Export Daily Data</button>
-          <div id="dailyTable" class="table-responsive"></div>
+    <!-- Daily -->
+    <div class="tab-pane active" id="tab-daily">
+      <button class="btn-ghost" id="exportDailyBtn"><i class="fas fa-download"></i> Export CSV</button>
+      <div id="dailyTable" class="table-responsive"></div>
+    </div>
+
+    <!-- Weekly -->
+    <div class="tab-pane" id="tab-weekly">
+      <button class="btn-ghost" id="exportWeeklyBtn"><i class="fas fa-download"></i> Export CSV</button>
+      <div id="weeklyTable" class="table-responsive"></div>
+    </div>
+
+    <!-- Monthly -->
+    <div class="tab-pane" id="tab-monthly">
+      <button class="btn-ghost" id="exportMonthlyBtn"><i class="fas fa-download"></i> Export CSV</button>
+      <div id="monthlyTable" class="table-responsive"></div>
+    </div>
+
+    <!-- Trends -->
+    <div class="tab-pane" id="tab-trend">
+      <div class="chart-table-grid">
+        <div>
+          <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
+          <button class="btn-ghost" id="exportTrendBtn"><i class="fas fa-download"></i> Export CSV</button>
         </div>
+        <div id="trendTable" class="table-responsive"></div>
+      </div>
+    </div>
 
-        <!-- Weekly Tab -->
-        <div class="tab-pane fade" id="weekly">
-          <button class="btn export-btn" id="exportWeeklyBtn"><i class="fas fa-download mr-2"></i>Export Weekly Data</button>
-          <div id="weeklyTable" class="table-responsive"></div>
+    <!-- Growth -->
+    <div class="tab-pane" id="tab-growth">
+      <div class="chart-table-grid">
+        <div>
+          <div class="chart-wrap"><canvas id="growthChart"></canvas></div>
+          <button class="btn-ghost" id="exportGrowthBtn"><i class="fas fa-download"></i> Export CSV</button>
         </div>
+        <div id="growthTable" class="table-responsive"></div>
+      </div>
+    </div>
 
-        <!-- Monthly Tab -->
-        <div class="tab-pane fade" id="monthly">
-          <button class="btn export-btn" id="exportMonthlyBtn"><i class="fas fa-download mr-2"></i>Export Monthly Data</button>
-          <div id="monthlyTable" class="table-responsive"></div>
+    <!-- Seasonal -->
+    <div class="tab-pane" id="tab-seasonal">
+      <div class="chart-table-grid">
+        <div>
+          <div class="chart-wrap"><canvas id="seasonalChart"></canvas></div>
+          <button class="btn-ghost" id="exportSeasonalBtn"><i class="fas fa-download"></i> Export CSV</button>
         </div>
+        <div id="seasonalTable" class="table-responsive"></div>
+      </div>
+    </div>
 
-        <!-- Trends Tab -->
-        <div class="tab-pane fade" id="trend">
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
-              <button class="btn export-btn" id="exportTrendBtn"><i class="fas fa-download mr-2"></i>Export Trend Data</button>
-            </div>
-            <div class="col-lg-6"><div id="trendTable" class="table-responsive"></div></div>
-          </div>
-        </div>
-
-        <!-- Growth Tab -->
-        <div class="tab-pane fade" id="growth">
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="chart-wrap"><canvas id="growthChart"></canvas></div>
-              <button class="btn export-btn" id="exportGrowthBtn"><i class="fas fa-download mr-2"></i>Export Growth Data</button>
-            </div>
-            <div class="col-lg-6"><div id="growthTable" class="table-responsive"></div></div>
-          </div>
-        </div>
-
-        <!-- Seasonal Tab -->
-        <div class="tab-pane fade" id="seasonal">
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="chart-wrap"><canvas id="seasonalChart"></canvas></div>
-              <button class="btn export-btn" id="exportSeasonalBtn"><i class="fas fa-download mr-2"></i>Export Seasonal Data</button>
-            </div>
-            <div class="col-lg-6"><div id="seasonalTable" class="table-responsive"></div></div>
-          </div>
+    <!-- Key Insights -->
+    <div class="tab-pane" id="tab-insights">
+      <div id="insightsContent">
+        <div class="empty-state">
+          <i class="fas fa-lightbulb"></i>
+          <h3>No data yet</h3>
+          <p>Upload a Klaviyo CSV and click <strong>Analyse</strong> to generate key insights.</p>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Purchase Card -->
-  <div class="installer-card">
-    <i class="fas fa-crown fa-3x mb-3"></i>
-    <h3>Love the full access? Get the Desktop App!</h3>
-    <p>After 7 days, advanced features will be available only in the desktop version.</p>
-    <a href="https://dolfean.gumroad.com/l/klaviyo-analytic-dashboard" target="_blank" class="installer-btn">
-      <i class="fas fa-shopping-cart mr-2"></i>Get Desktop App
-    </a>
-    <p class="mt-3 small opacity-8">✓ All features permanently ✓ Faster processing ✓ No browser limits</p>
-  </div>
-</div>
+  </div><!-- /card-dark -->
+</div><!-- /main-wrap -->
 
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+
+<script>
+(function() {
+
+  // ====== CHART DEFAULTS ======
+  Chart.defaults.color = '#8a8070';
+  Chart.defaults.borderColor = 'rgba(200,169,110,0.08)';
+  Chart.defaults.font.family = "'DM Sans', sans-serif";
+  Chart.defaults.font.size = 12;
+
+  const GOLD = '#c8a96e';
+  const GOLD_ALPHA = 'rgba(200,169,110,0.15)';
+  const GOLD2 = 'rgba(200,169,110,0.65)';
+
+  function chartColors(n) {
+    const palette = ['#c8a96e','#6fb88a','#8a7ccc','#c46b6b','#5fa8c8','#d4a654','#8fbf9f','#c88ea0'];
+    const arr = [];
+    for (let i = 0; i < n; i++) arr.push(palette[i % palette.length]);
+    return arr;
+  }
+
+  // ====== HELPERS ======
+  function safeParseFloat(v) { const n = parseFloat(v); return isNaN(n) ? 0 : n; }
+
+  function parsePercentage(value) {
+    if (!value) return 0;
+    if (typeof value === 'string' && value.includes('%')) return parseFloat(value.replace('%', '')) / 100 || 0;
+    return parseFloat(value) || 0;
+  }
+
+  function parseSendTime(value) {
+    if (!value) return null;
+    if (value instanceof Date && !isNaN(value)) return value;
+    let s = String(value).trim();
+    let dt = new Date(s);
+    if (!isNaN(dt)) return dt;
+    dt = new Date(s.replace(/-/g, '/'));
+    if (!isNaN(dt)) return dt;
+    return null;
+  }
+
+  function isValidDate(d) { return d instanceof Date && !isNaN(d); }
+
+  function formatDateLong(d) {
+    const dt = (d && !(d instanceof Date)) ? parseSendTime(d) : d;
+    return isValidDate(dt) ? dt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '';
+  }
+
+  function formatDateISO(d) {
+    const dt = (d && !(d instanceof Date)) ? parseSendTime(d) : d;
+    if (!isValidDate(dt)) return '';
+    return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+  }
+
+  function formatMonthKey(d) {
+    const dt = (d && !(d instanceof Date)) ? parseSendTime(d) : d;
+    if (!isValidDate(dt)) return '';
+    return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0');
+  }
+
+  function getWeekStartDate(date) {
+    const d = new Date(date);
+    const day = d.getDay();
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+    const start = new Date(d);
+    start.setDate(diff);
+    start.setHours(0, 0, 0, 0);
+    return start;
+  }
+
+  function formatWeekDisplay(date) {
+    const s = getWeekStartDate(date);
+    const e = new Date(s);
+    e.setDate(s.getDate() + 6);
+    return formatDateLong(s) + ' – ' + formatDateLong(e);
+  }
+
+  function formatWeekKey(d) {
+    const ws = getWeekStartDate(d);
+    return ws.getFullYear() + '-' + String(ws.getMonth() + 1).padStart(2, '0') + '-' + String(ws.getDate()).padStart(2, '0');
+  }
+
+  function formatTimeFromRow(raw) {
+    const dt = parseSendTime(raw);
+    return isValidDate(dt) ? dt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '';
+  }
+
+  function formatNumberInt(n) {
+    return n ? Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(Math.round(n)) : '0';
+  }
+
+  function formatMoney(n) {
+    return n ? '$' + Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) : '$0.00';
+  }
+
+  function formatMoneyRaw(n) {
+    return n ? Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) : '0.00';
+  }
+
+  // ====== STATE ======
+  let rawData = [];
+  let filteredRows = [];
+  const outputs = { daily: null, weekly: null, monthly: null, trend: null, growth: null, seasonal: null };
+  let charts = { trend: null, growth: null, seasonal: null };
+
+  // ====== TAB SWITCHING ======
+  const tabLinks = document.querySelectorAll('.tab-link');
+  const tabPanes = document.querySelectorAll('.tab-pane');
+
+  tabLinks.forEach(btn => {
+    btn.addEventListener('click', function() {
+      tabLinks.forEach(b => b.classList.remove('active'));
+      tabPanes.forEach(p => p.classList.remove('active'));
+      this.classList.add('active');
+      document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+
+      // Redraw charts when switching to their tabs
+      if (this.dataset.tab === 'trend' && charts.trend) {
+        setTimeout(() => charts.trend.resize(), 50);
+      }
+      if (this.dataset.tab === 'growth' && charts.growth) {
+        setTimeout(() => charts.growth.resize(), 50);
+      }
+      if (this.dataset.tab === 'seasonal' && charts.seasonal) {
+        setTimeout(() => charts.seasonal.resize(), 50);
+      }
+    });
+  });
+
+  // ====== FILE INPUT LABEL ======
+  const fileInput = document.getElementById('csvUpload');
+  if (fileInput) {
+    fileInput.addEventListener('change', function(e) {
+      const fn = e.target.files[0] ? e.target.files[0].name : 'Choose file…';
+      e.target.nextElementSibling.textContent = fn;
+      handleFile(e);
+    });
+  }
+
+  // ====== FILTER BUTTON ======
+  document.getElementById('filterButton').addEventListener('click', runAll);
+
+  // ====== EXPORT BUTTONS ======
+  document.getElementById('exportDailyBtn').addEventListener('click', () => downloadCSV(outputs.daily, 'daily_data.csv'));
+  document.getElementById('exportWeeklyBtn').addEventListener('click', () => downloadCSV(outputs.weekly, 'weekly_data.csv'));
+  document.getElementById('exportMonthlyBtn').addEventListener('click', () => downloadCSV(outputs.monthly, 'monthly_data.csv'));
+  document.getElementById('exportTrendBtn').addEventListener('click', () => downloadCSV(outputs.trend, 'trend_data.csv'));
+  document.getElementById('exportGrowthBtn').addEventListener('click', () => downloadCSV(outputs.growth, 'growth_data.csv'));
+  document.getElementById('exportSeasonalBtn').addEventListener('click', () => downloadCSV(outputs.seasonal, 'seasonal_data.csv'));
+
+  // ====== FILE PARSE ======
+  function handleFile(e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    showLoading(true);
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: function(results) {
+        showLoading(false);
+        if (results.errors && results.errors.length) {
+          alert('CSV parse error: ' + results.errors[0].message);
+          return;
+        }
+        rawData = results.data;
+        runAll();
+      },
+      error: function(err) {
+        showLoading(false);
+        alert('CSV parse error: ' + err.message);
+      }
+    });
+  }
+
+  function showLoading(v) {
+    document.getElementById('loadingIndicator').style.display = v ? 'flex' : 'none';
+  }
+
+  // ====== RUN ALL ======
+  function runAll() {
+    if (!rawData || rawData.length === 0) {
+      alert('Please upload a Klaviyo CSV first.');
+      return;
+    }
+    showLoading(true);
+
+    const startVal = document.getElementById('startDate').value;
+    const endVal = document.getElementById('endDate').value;
+    const start = startVal ? new Date(startVal) : null;
+    const end = endVal ? new Date(endVal) : null;
+
+    filteredRows = rawData.filter(r => {
+      const dt = parseSendTime(r['Send Time']);
+      if (!isValidDate(dt)) return false;
+      if (start && dt < start) return false;
+      if (end && dt > end) return false;
+      return true;
+    });
+
+    if (filteredRows.length === 0) {
+      showLoading(false);
+      alert('No data matches the selected date range.');
+      return;
+    }
+
+    // Build everything
+    setTimeout(() => {
+      buildDailyWeeklyMonthly(filteredRows);
+      buildTrend(filteredRows);
+      buildGrowth(filteredRows);
+      buildSeasonal(filteredRows);
+      buildInsights(filteredRows);
+      showLoading(false);
+    }, 30);
+  }
+
+  // ====== BUILD DAILY / WEEKLY / MONTHLY ======
+  function buildDailyWeeklyMonthly(rows) {
+    const daily = {}, weekly = {}, monthly = {};
+
+    rows.forEach(r => {
+      const dt = parseSendTime(r['Send Time']);
+      if (!isValidDate(dt)) return;
+
+      const dateISO = formatDateISO(dt);
+      const dateDisplay = formatDateLong(dt);
+      const weekKey = formatWeekKey(dt);
+      const weekDisplay = formatWeekDisplay(dt);
+      const monthKey = formatMonthKey(dt);
+      const monthDisplay = dt.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      const campaignName = r['Campaign Name'] || 'Unknown';
+      const subject = r['Subject'] || '';
+      const sendDays = r['Send Weekday'] || '';
+      const listSegment = r['List'] || '';
+      const revenue = safeParseFloat(r['Revenue']);
+      const openRate = parsePercentage(r['Open Rate']);
+      const clickRate = parsePercentage(r['Click Rate']);
+      const convRate = parsePercentage(r['Placed Order Rate']);
+      const recipients = safeParseFloat(r['Total Recipients']);
+      const uniqueOpens = safeParseFloat(r['Unique Opens']);
+      const uniqueClicks = safeParseFloat(r['Unique Clicks']);
+
+      // Daily
+      if (!daily[dateISO]) daily[dateISO] = { display: dateDisplay, sendTime: formatTimeFromRow(r['Send Time']), campaigns: {} };
+      if (!daily[dateISO].campaigns[campaignName]) daily[dateISO].campaigns[campaignName] = { subject, count: 0, openRateSum: 0, clickRateSum: 0, convRateSum: 0, revenueSum: 0, sendDays, listSegment };
+      const dc = daily[dateISO].campaigns[campaignName];
+      dc.count++; dc.openRateSum += openRate; dc.clickRateSum += clickRate; dc.convRateSum += convRate; dc.revenueSum += revenue;
+
+      // Weekly
+      if (!weekly[weekKey]) weekly[weekKey] = { display: weekDisplay, revenueSum: 0, recipientsSum: 0, opensSum: 0, clicksSum: 0, count: 0 };
+      weekly[weekKey].revenueSum += revenue; weekly[weekKey].recipientsSum += recipients; weekly[weekKey].opensSum += uniqueOpens; weekly[weekKey].clicksSum += uniqueClicks; weekly[weekKey].count++;
+
+      // Monthly
+      if (!monthly[monthKey]) monthly[monthKey] = { display: monthDisplay, revenueSum: 0, recipientsSum: 0, opensSum: 0, clicksSum: 0, count: 0 };
+      monthly[monthKey].revenueSum += revenue; monthly[monthKey].recipientsSum += recipients; monthly[monthKey].opensSum += uniqueOpens; monthly[monthKey].clicksSum += uniqueClicks; monthly[monthKey].count++;
+    });
+
+    const dailyOutput = [['Date Sent', 'Campaign Name', 'Subject', 'Open Rate', 'Click Rate', 'Conv. Rate', 'Send Time', 'Send Days', 'List / Segment', 'Revenue']];
+    Object.keys(daily).sort().forEach(dateISO => {
+      const info = daily[dateISO];
+      Object.keys(info.campaigns).forEach(cn => {
+        const c = info.campaigns[cn];
+        dailyOutput.push([
+          info.display, cn, c.subject || '',
+          (c.count ? (c.openRateSum / c.count) * 100 : 0).toFixed(2) + '%',
+          (c.count ? (c.clickRateSum / c.count) * 100 : 0).toFixed(2) + '%',
+          (c.count ? (c.convRateSum / c.count) * 100 : 0).toFixed(2) + '%',
+          info.sendTime || '', c.sendDays || '', c.listSegment || '', formatMoney(c.revenueSum)
+        ]);
+      });
+    });
+    outputs.daily = dailyOutput;
+    renderTable('dailyTable', dailyOutput);
+
+    const weeklyOutput = [['Week', 'Total Revenue', 'Total Recipients', 'Total Opens', 'Total Clicks']];
+    Object.keys(weekly).sort().forEach(weekKey => {
+      const w = weekly[weekKey];
+      weeklyOutput.push([w.display, formatMoney(w.revenueSum), formatNumberInt(w.recipientsSum), formatNumberInt(w.opensSum), formatNumberInt(w.clicksSum)]);
+    });
+    outputs.weekly = weeklyOutput;
+    renderTable('weeklyTable', weeklyOutput);
+
+    const monthlyOutput = [['Month', 'Total Revenue', 'Total Recipients', 'Total Opens', 'Total Clicks']];
+    Object.keys(monthly).sort().forEach(monthKey => {
+      const m = monthly[monthKey];
+      monthlyOutput.push([m.display, formatMoney(m.revenueSum), formatNumberInt(m.recipientsSum), formatNumberInt(m.opensSum), formatNumberInt(m.clicksSum)]);
+    });
+    outputs.monthly = monthlyOutput;
+    renderTable('monthlyTable', monthlyOutput);
+  }
+
+  // ====== BUILD TREND ======
+  function buildTrend(rows) {
+    const trend = {};
+    rows.forEach(r => {
+      const dt = parseSendTime(r['Send Time']);
+      if (!isValidDate(dt)) return;
+      const ym = dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0');
+      const revenue = safeParseFloat(r['Revenue']);
+      if (!trend[ym]) trend[ym] = { revenueSum: 0, count: 0 };
+      trend[ym].revenueSum += revenue;
+      trend[ym].count++;
+    });
+
+    const months = Object.keys(trend).sort();
+    const trendOutput = [['Month', 'Total Revenue', 'Campaigns Sent']];
+    months.forEach(m => trendOutput.push([m, formatMoney(trend[m].revenueSum), trend[m].count]));
+    outputs.trend = trendOutput;
+    renderTable('trendTable', trendOutput);
+
+    const data = months.map(m => trend[m].revenueSum);
+    if (charts.trend) charts.trend.destroy();
+    const ctx = document.getElementById('trendChart')?.getContext('2d');
+    if (ctx) {
+      charts.trend = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: months,
+          datasets: [{
+            label: 'Revenue',
+            data,
+            borderColor: GOLD,
+            backgroundColor: GOLD_ALPHA,
+            borderWidth: 2,
+            pointBackgroundColor: GOLD,
+            pointRadius: 4,
+            tension: 0.35,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => 'Revenue: $' + ctx.raw.toFixed(2) } } },
+          scales: {
+            x: { grid: { color: 'rgba(200,169,110,0.06)' }, ticks: { color: '#8a8070' } },
+            y: { beginAtZero: true, grid: { color: 'rgba(200,169,110,0.06)' }, ticks: { color: '#8a8070', callback: v => '$' + v } }
+          }
+        }
+      });
+    }
+  }
+
+  // ====== BUILD GROWTH ======
+  function buildGrowth(rows) {
+    const growth = {};
+    rows.forEach(r => {
+      const name = r['Campaign Name'] || 'Unknown';
+      const revenue = safeParseFloat(r['Revenue']);
+      if (!growth[name]) growth[name] = { revenueSum: 0, count: 0 };
+      growth[name].revenueSum += revenue;
+      growth[name].count++;
+    });
+
+    const sorted = Object.keys(growth).sort((a, b) => growth[b].revenueSum - growth[a].revenueSum);
+    const growthOutput = [['Campaign Name', 'Total Revenue', 'Sends']];
+    sorted.forEach(name => growthOutput.push([name, formatMoney(growth[name].revenueSum), growth[name].count]));
+    outputs.growth = growthOutput;
+    renderTable('growthTable', growthOutput);
+
+    const top = sorted.slice(0, 10);
+    const colors = chartColors(top.length);
+    if (charts.growth) charts.growth.destroy();
+    const ctx = document.getElementById('growthChart')?.getContext('2d');
+    if (ctx) {
+      charts.growth = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: top.map(n => n.length > 22 ? n.slice(0, 22) + '…' : n),
+          datasets: [{ label: 'Revenue', data: top.map(n => growth[n].revenueSum), backgroundColor: colors, borderRadius: 5 }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          indexAxis: 'y',
+          plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$' + ctx.raw.toFixed(2) } } },
+          scales: {
+            x: { grid: { color: 'rgba(200,169,110,0.06)' }, ticks: { color: '#8a8070', callback: v => '$' + v } },
+            y: { grid: { color: 'rgba(0,0,0,0)' }, ticks: { color: '#8a8070' } }
+          }
+        }
+      });
+    }
+  }
+
+  // ====== BUILD SEASONAL ======
+  function buildSeasonal(rows) {
+    const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const weekdayAgg = {};
+
+    rows.forEach(r => {
+      const dt = parseSendTime(r['Send Time']);
+      if (!isValidDate(dt)) return;
+      const wd = dt.toLocaleDateString('en-US', { weekday: 'long' });
+      const revenue = safeParseFloat(r['Revenue']);
+      if (!weekdayAgg[wd]) weekdayAgg[wd] = { sum: 0, count: 0 };
+      weekdayAgg[wd].sum += revenue;
+      weekdayAgg[wd].count++;
+    });
+
+    const seasonalOutput = [['Day of Week', 'Average Revenue', 'Campaigns']];
+    weekdays.forEach(d => {
+      const o = weekdayAgg[d];
+      seasonalOutput.push([d, formatMoney(o ? o.sum / o.count : 0), o ? o.count : 0]);
+    });
+    outputs.seasonal = seasonalOutput;
+    renderTable('seasonalTable', seasonalOutput);
+
+    const data = weekdays.map(d => weekdayAgg[d] ? weekdayAgg[d].sum / weekdayAgg[d].count : 0);
+    const colors = chartColors(7);
+    if (charts.seasonal) charts.seasonal.destroy();
+    const ctx = document.getElementById('seasonalChart')?.getContext('2d');
+    if (ctx) {
+      charts.seasonal = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: weekdays.map(d => d.slice(0, 3)),
+          datasets: [{ label: 'Avg Revenue', data, backgroundColor: colors, borderRadius: 5 }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => 'Avg Revenue: $' + ctx.raw.toFixed(2) } } },
+          scales: {
+            x: { grid: { color: 'rgba(200,169,110,0.06)' }, ticks: { color: '#8a8070' } },
+            y: { beginAtZero: true, grid: { color: 'rgba(200,169,110,0.06)' }, ticks: { color: '#8a8070', callback: v => '$' + v } }
+          }
+        }
+      });
+    }
+  }
+
+  // ====== BUILD INSIGHTS ======
+  function buildInsights(rows) {
+    const container = document.getElementById('insightsContent');
+
+    // Compute aggregates
+    let totalRevenue = 0, totalRecipients = 0, totalOpens = 0, totalClicks = 0;
+    let openRateSum = 0, clickRateSum = 0, convRateSum = 0, openRateCount = 0;
+    const campaignRevenue = {}, weekdayRevenue = {}, monthRevenue = {};
+
+    rows.forEach(r => {
+      const dt = parseSendTime(r['Send Time']);
+      const revenue = safeParseFloat(r['Revenue']);
+      const recipients = safeParseFloat(r['Total Recipients']);
+      const opens = safeParseFloat(r['Unique Opens']);
+      const clicks = safeParseFloat(r['Unique Clicks']);
+      const openRate = parsePercentage(r['Open Rate']);
+      const clickRate = parsePercentage(r['Click Rate']);
+      const convRate = parsePercentage(r['Placed Order Rate']);
+      const name = r['Campaign Name'] || 'Unknown';
+
+      totalRevenue += revenue;
+      totalRecipients += recipients;
+      totalOpens += opens;
+      totalClicks += clicks;
+      openRateSum += openRate; clickRateSum += clickRate; convRateSum += convRate; openRateCount++;
+
+      if (!campaignRevenue[name]) campaignRevenue[name] = 0;
+      campaignRevenue[name] += revenue;
+
+      if (isValidDate(dt)) {
+        const wd = dt.toLocaleDateString('en-US', { weekday: 'long' });
+        if (!weekdayRevenue[wd]) weekdayRevenue[wd] = { sum: 0, count: 0 };
+        weekdayRevenue[wd].sum += revenue; weekdayRevenue[wd].count++;
+
+        const mk = dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0');
+        if (!monthRevenue[mk]) monthRevenue[mk] = 0;
+        monthRevenue[mk] += revenue;
+      }
+    });
+
+    const avgOpenRate = openRateCount ? ((openRateSum / openRateCount) * 100).toFixed(1) : 0;
+    const avgClickRate = openRateCount ? ((clickRateSum / openRateCount) * 100).toFixed(1) : 0;
+    const avgConvRate = openRateCount ? ((convRateSum / openRateCount) * 100).toFixed(2) : 0;
+    const totalCampaigns = rows.length;
+
+    // Best/worst campaign
+    const sortedCampaigns = Object.entries(campaignRevenue).sort((a, b) => b[1] - a[1]);
+    const bestCampaign = sortedCampaigns[0];
+    const worstCampaign = sortedCampaigns[sortedCampaigns.length - 1];
+
+    // Best day
+    const sortedDays = Object.entries(weekdayRevenue).sort((a, b) => (b[1].sum/b[1].count) - (a[1].sum/a[1].count));
+    const bestDay = sortedDays[0];
+
+    // Best month
+    const sortedMonths = Object.entries(monthRevenue).sort((a, b) => b[1] - a[1]);
+    const bestMonth = sortedMonths[0];
+
+    // Revenue per recipient
+    const rpr = totalRecipients > 0 ? (totalRevenue / totalRecipients).toFixed(4) : 0;
+
+    // Open-to-click rate
+    const o2c = totalOpens > 0 ? ((totalClicks / totalOpens) * 100).toFixed(1) : 0;
+
+    // Build HTML
+    let html = '';
+
+    // KPI cards
+    html += `<div class="insight-grid">
+      <div class="insight-card">
+        <div class="insight-icon">💰</div>
+        <div class="insight-value">${formatMoney(totalRevenue)}</div>
+        <div class="insight-label">Total Revenue</div>
+        <div class="insight-desc">Across ${totalCampaigns} campaign sends in the selected period.</div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon">📨</div>
+        <div class="insight-value">${formatNumberInt(totalRecipients)}</div>
+        <div class="insight-label">Total Recipients</div>
+        <div class="insight-desc">Revenue per recipient: <strong style="color:var(--gold)">$${rpr}</strong></div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon">📬</div>
+        <div class="insight-value">${avgOpenRate}%</div>
+        <div class="insight-label">Avg. Open Rate</div>
+        <div class="insight-desc">${totalOpens.toLocaleString()} total unique opens across all campaigns.</div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon">🖱️</div>
+        <div class="insight-value">${avgClickRate}%</div>
+        <div class="insight-label">Avg. Click Rate</div>
+        <div class="insight-desc">Open-to-click rate: <strong style="color:var(--gold)">${o2c}%</strong> of openers clicked.</div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon">🛒</div>
+        <div class="insight-value">${avgConvRate}%</div>
+        <div class="insight-label">Avg. Conv. Rate</div>
+        <div class="insight-desc">Average Placed Order Rate across all campaigns.</div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon">📅</div>
+        <div class="insight-value">${bestDay ? bestDay[0].slice(0,3) : 'N/A'}</div>
+        <div class="insight-label">Best Send Day</div>
+        <div class="insight-desc">${bestDay ? bestDay[0] + ' averages ' + formatMoney(bestDay[1].sum/bestDay[1].count) + ' per campaign.' : 'No day data.'}</div>
+      </div>
+    </div>`;
+
+    // Campaign performance insights
+    html += `<div class="insight-section-title"><i class="fas fa-trophy" style="color:var(--gold);margin-right:8px;"></i>Campaign Performance</div>`;
+    html += `<ul class="insight-list">`;
+
+    if (bestCampaign) {
+      html += `<li><span class="bullet"></span><div>
+        <strong style="color:var(--white)">Top revenue campaign:</strong> "${bestCampaign[0]}" generated ${formatMoney(bestCampaign[1])}, 
+        representing <strong style="color:var(--gold)">${totalRevenue > 0 ? ((bestCampaign[1]/totalRevenue)*100).toFixed(1) : 0}%</strong> of all revenue.
+      </div></li>`;
+    }
+
+    if (worstCampaign && worstCampaign[0] !== bestCampaign[0]) {
+      html += `<li><span class="bullet"></span><div>
+        <strong style="color:var(--white)">Lowest revenue campaign:</strong> "${worstCampaign[0]}" generated ${formatMoney(worstCampaign[1])}. Consider reviewing subject line and send time.
+      </div></li>`;
+    }
+
+    if (parseFloat(avgOpenRate) >= 20) {
+      html += `<li><span class="bullet"></span><div>Your <strong style="color:var(--white)">average open rate of ${avgOpenRate}%</strong> is above the typical e-commerce benchmark of ~20%. Strong subject lines are working well.</div></li>`;
+    } else {
+      html += `<li><span class="bullet"></span><div>Your <strong style="color:var(--white)">average open rate of ${avgOpenRate}%</strong> is below the ~20% benchmark. Consider A/B testing subject lines or send times.</div></li>`;
+    }
+
+    if (parseFloat(o2c) > 0) {
+      const o2cNum = parseFloat(o2c);
+      if (o2cNum >= 10) {
+        html += `<li><span class="bullet"></span><div>Open-to-click rate of <strong style="color:var(--gold)">${o2c}%</strong> is strong — your email content is resonating with people who open.</div></li>`;
+      } else {
+        html += `<li><span class="bullet"></span><div>Open-to-click rate of <strong style="color:var(--gold)">${o2c}%</strong> suggests room to improve CTAs and content relevance within emails.</div></li>`;
+      }
+    }
+
+    html += `</ul>`;
+
+    // Timing insights
+    if (sortedDays.length > 0) {
+      html += `<div class="insight-section-title"><i class="fas fa-clock" style="color:var(--gold);margin-right:8px;"></i>Send Timing Insights</div>`;
+      html += `<ul class="insight-list">`;
+      html += `<li><span class="bullet"></span><div><strong style="color:var(--white)">Best day to send:</strong> ${sortedDays[0][0]} (avg. ${formatMoney(sortedDays[0][1].sum/sortedDays[0][1].count)} revenue per campaign, ${sortedDays[0][1].count} sends).</div></li>`;
+      if (sortedDays.length > 1) {
+        const worst = sortedDays[sortedDays.length - 1];
+        html += `<li><span class="bullet"></span><div><strong style="color:var(--white)">Lowest performing day:</strong> ${worst[0]} averages ${formatMoney(worst[1].sum/worst[1].count)} per campaign. Consider shifting sends to ${sortedDays[0][0]}.</div></li>`;
+      }
+      if (bestMonth) {
+        html += `<li><span class="bullet"></span><div><strong style="color:var(--white)">Best performing month:</strong> ${bestMonth[0]} generated ${formatMoney(bestMonth[1])} in total revenue.</div></li>`;
+      }
+      html += `</ul>`;
+    }
+
+    // Top 5 campaigns table
+    if (sortedCampaigns.length > 0) {
+      html += `<div class="insight-section-title"><i class="fas fa-medal" style="color:var(--gold);margin-right:8px;"></i>Top 5 Campaigns by Revenue</div>`;
+      html += `<table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <thead><tr>
+          <th style="text-align:left;padding:10px 14px;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--border);">Campaign</th>
+          <th style="text-align:right;padding:10px 14px;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--border);">Revenue</th>
+          <th style="text-align:right;padding:10px 14px;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--border);">% of Total</th>
+        </tr></thead><tbody>`;
+      sortedCampaigns.slice(0, 5).forEach(([name, rev], idx) => {
+        const pct = totalRevenue > 0 ? ((rev/totalRevenue)*100).toFixed(1) : 0;
+        html += `<tr style="border-bottom:1px solid rgba(200,169,110,0.05);">
+          <td style="padding:10px 14px;color:var(--text);">${idx + 1}. ${name}</td>
+          <td style="padding:10px 14px;text-align:right;color:var(--gold);font-weight:600;">${formatMoney(rev)}</td>
+          <td style="padding:10px 14px;text-align:right;color:var(--muted);">${pct}%</td>
+        </tr>`;
+      });
+      html += `</tbody></table>`;
+    }
+
+    container.innerHTML = html;
+  }
+
+  // ====== RENDER TABLE ======
+  function renderTable(containerId, arr2d) {
+    const container = document.getElementById(containerId);
+    if (!container || !arr2d || arr2d.length < 1) {
+      if (container) container.innerHTML = '<div class="empty-state"><i class="fas fa-table"></i><h3>No data</h3><p>No records to display.</p></div>';
+      return;
+    }
+
+    let html = '<table class="table display"><thead><tr>';
+    arr2d[0].forEach(h => html += `<th>${h}</th>`);
+    html += '</tr></thead><tbody>';
+
+    for (let i = 1; i < arr2d.length; i++) {
+      html += '<tr>';
+      arr2d[i].forEach(cell => {
+        const s = String(cell);
+        if (s.startsWith('$')) {
+          html += `<td class="val-gold">${cell}</td>`;
+        } else if (s.endsWith('%')) {
+          const v = parseFloat(s);
+          const cls = v >= 30 ? 'val-success' : (v >= 10 ? '' : 'val-muted');
+          html += `<td class="${cls}">${cell}</td>`;
+        } else {
+          html += `<td>${cell}</td>`;
+        }
+      });
+      html += '</tr>';
+    }
+    html += '</tbody></table>';
+    container.innerHTML = html;
+
+    const $tbl = $(container).find('table');
+    if ($.fn.DataTable.isDataTable($tbl)) $tbl.DataTable().destroy();
+
+    const dt = $tbl.DataTable({
+      paging: true,
+      searching: true,
+      ordering: true,
+      lengthMenu: [10, 25, 50, 100],
+      responsive: true,
+      destroy: true,
+      pageLength: 10,
+      language: {
+        search: '<i class="fas fa-search"></i>',
+        searchPlaceholder: 'Search…',
+      }
+    });
+
+    // Redraw chart when pagination changes (for trend/growth/seasonal)
+    $tbl.on('page.dt', function() {
+      setTimeout(() => {
+        if (charts.trend) charts.trend.resize();
+        if (charts.growth) charts.growth.resize();
+        if (charts.seasonal) charts.seasonal.resize();
+      }, 50);
+    });
+  }
+
+  // ====== CSV DOWNLOAD ======
+  function downloadCSV(arr2d, filename) {
+    if (!arr2d || arr2d.length === 0) { alert('No data to export'); return; }
+    const rows = arr2d.map(r => r.map(cell => {
+      if (cell === null || cell === undefined) return '';
+      const s = String(cell).replace(/"/g, '""');
+      return /[",\n]/.test(s) ? `"${s}"` : s;
+    }).join(','));
+    const blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename || 'export.csv';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 150);
+  }
+
+  console.log('Klaviyo Analytics Dashboard — ready');
+})();
+</script>
+<script src="header.js"></script>
 <footer>
     <div class="footer-content">
         <div class="footer-column">
@@ -414,17 +1677,5 @@
         <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
     </div>
 </footer>
-
-<!-- Scripts -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
-
-<!-- Local JavaScript -->
-<script src="klaviyo-tool.js"></script>
-<script src="header.js"></script>
 </body>
 </html>

@@ -806,60 +806,79 @@
 <body>
 <header>
     <div class="header-content">
+
+        <!-- Logo -->
         <a href="index.html" class="logo">
             <span class="logo-icon">📄</span>
             <span>ResumePro</span>
         </a>
-        
+
+        <!-- Nav + Hamburger -->
         <div class="nav-container">
-            <button class="hamburger" aria-label="Toggle navigation">☰</button>
-            <ul class="header-nav-menu">
-                <li class="header-nav-item"><a href="index.html" class="header-nav-link">Home</a></li>
-                <li class="header-nav-item header-dropdown">
-                    <a href="#" class="header-nav-link">
+            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+
+            <ul class="header-nav-menu" role="menubar">
+
+                <li class="header-nav-item" role="none">
+                    <a href="index.html" class="header-nav-link" role="menuitem">Home</a>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                         Templates
-                        <span class="header-dropdown-icon">▼</span>
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
                     </a>
-                    <div class="header-dropdown-content">
-                        <a href="resume-templates.html" class="header-dropdown-item">Resume Templates</a>
-                        <a href="portfolio-templates.html" class="header-dropdown-item">Portfolio Templates</a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="resume-templates.html"   class="header-dropdown-item" role="menuitem">Resume Templates</a>
+                        <a href="portfolio-templates.html" class="header-dropdown-item" role="menuitem">Portfolio Templates</a>
                     </div>
                 </li>
-                
-                <!-- My Apps Menu Item -->
-                <li class="header-nav-item header-dropdown">
-                    <a href="#" class="header-nav-link">
-                        My Apps
-                        <span class="header-dropdown-icon">▼</span>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Apps
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
                     </a>
-                    <div class="header-dropdown-content">
-                        <a href="android-applications.html" class="header-dropdown-item">Android Applications</a>
-                        <a href="family-connection-tools.html" class="header-dropdown-item">Web Applications</a>
-                      </div>
-                </li>
-                
-                <!-- UPDATED: Blog link now points to blog-list.html -->
-                <li class="header-nav-item"><a href="blog-list.html" class="header-nav-link">Blog</a></li>
-                
-                <li class="header-nav-item"><a href="klaviyo-analytics.html" class="header-nav-link">Klaviyo Analytics</a></li>
-                <li class="header-nav-item header-dropdown">
-                    <a href="#" class="header-nav-link">
-                        Productivity Tools
-                        <span class="header-dropdown-icon">▼</span>
-                    </a>
-                    <div class="header-dropdown-content">
-                        <a href="email-builder.html" class="header-dropdown-item">Email Builder</a>
-                        <a href="enhanced-todo.html" class="header-dropdown-item">Enhanced To-Do & Notes</a>
-                        <a href="klaviyo-tool.html" class="header-dropdown-item">Klaviyo Tool</a>
-						<a href="omnisend.html" class="header-dropdown-item">Omnisend Analytics Tool</a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="android-applications.html"   class="header-dropdown-item" role="menuitem">Android Applications</a>
+                        <a href="family-connection-tools.html" class="header-dropdown-item" role="menuitem">Web Applications</a>
                     </div>
                 </li>
-                <li class="header-nav-item"><a href="about.html" class="header-nav-link">About</a></li>
-                <li class="header-nav-item"><a href="contact.html" class="header-nav-link">Contact</a></li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="blog-list.html" class="header-nav-link" role="menuitem">Blog</a>
+                </li>
+
+                <li class="header-nav-item" role="none" style="display: none;">
+                    <a href="klaviyo-analytics.html" class="header-nav-link" role="menuitem">Klaviyo Analytics</a>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Tools
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                    </a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="email-builder.html"  class="header-dropdown-item" role="menuitem">Email Builder</a>
+                        <a href="enhanced-todo.html"              class="header-dropdown-item" role="menuitem">To-Do &amp; Notes</a>
+                        <a href="klaviyo-tool.html"               class="header-dropdown-item" role="menuitem">Klaviyo Tool</a>
+                        <a href="omnisend.html"                   class="header-dropdown-item" role="menuitem">Omnisend Analytics</a>
+                    </div>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="about.html" class="header-nav-link" role="menuitem">About</a>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="contact.html" class="header-nav-link" role="menuitem">Contact</a>
+                </li>
+
             </ul>
         </div>
     </div>
 </header>
+
 
 <!-- Mobile Warning Overlay -->
 <div class="mobile-warning" id="mobileWarning">

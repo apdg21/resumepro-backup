@@ -5,828 +5,1262 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Android Applications | ResumePro Developer</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="footer.css">
-	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7364684388402027"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7364684388402027" crossorigin="anonymous"></script>
+
     <style>
         :root {
-            --primary: #3a86ff;
-            --primary-dark: #2667cc;
-            --dark: #2b2d42;
-            --light: #f8f9fa;
-            --gray: #6c757d;
-            --success: #28a745;
-            --android-green: #3ddc84;
-            --android-dark: #0f9d58;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #f5f5f7;
-            color: var(--dark);
-            line-height: 1.6;
-        }
-        
-        /* Android Apps Hero Section */
-        .android-hero {
-            background: linear-gradient(135deg, #0f9d58 0%, #1e8e3e 100%);
-            color: white;
-            text-align: center;
-            padding: 8rem 0 4rem;
-            margin-top: 60px;
+            --ink:          #0e0e12;
+            --ink-soft:     #2a2a35;
+            --paper:        #fafaf8;
+            --paper-warm:   #f4f1eb;
+            --accent:       #c8a96e;
+            --accent-light: #e8d9b8;
+            --accent-dark:  #9a7a3f;
+            --mid:          #6b6b78;
+            --border:       #e2e0d8;
+            --white:        #ffffff;
+            --green:        #2e7d52;
+            --green-light:  #d4f0e0;
+            --purple:       #6b3fa0;
+            --purple-light: #ede0ff;
+            --shadow-sm:    0 2px 12px rgba(0,0,0,0.07);
+            --shadow-md:    0 8px 32px rgba(0,0,0,0.11);
+            --shadow-lg:    0 20px 60px rgba(0,0,0,0.14);
         }
 
-        .android-hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--paper);
+            color: var(--ink);
+            font-family: 'DM Sans', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
-        
-        .android-hero p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            max-width: 700px;
-            margin: 0 auto 2rem;
-            padding: 20px;
-        }
-        
-        .android-icon {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        /* App Showcase Section */
-        .apps-showcase {
-            padding: 4rem 1rem;
+
+        .container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 40px;
         }
-        
-        .app-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-        
-        .app-card-detailed {
-            background-color: white;
-            border-radius: 12px;
+
+        /* ── PAGE HERO ── */
+        .page-hero {
+            background: var(--ink);
+            padding: 100px 0 80px;
+            position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            border: 1px solid #e9ecef;
         }
-        
-        .app-card-detailed:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+
+        .page-hero::before {
+            content: 'ANDROID';
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: 'Playfair Display', serif;
+            font-size: 17vw;
+            font-weight: 900;
+            color: rgba(255,255,255,0.022);
+            line-height: 1;
+            pointer-events: none;
+            white-space: nowrap;
+            letter-spacing: -0.02em;
         }
-        
-        .app-header-detailed {
-            background: linear-gradient(135deg, #3a86ff 0%, #2667cc 100%);
-            color: white;
-            padding: 2rem;
-            display: flex;
+
+        .page-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 40px;
+            align-items: end;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
             align-items: center;
-            gap: 1.5rem;
+            gap: 10px;
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.1s forwards;
         }
-        
-        .app-icon-large {
-            font-size: 3.5rem;
-            background: rgba(255,255,255,0.1);
-            width: 80px;
-            height: 80px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .app-title-section h2 {
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .app-status-badge {
+
+        .hero-eyebrow::before {
+            content: '';
+            width: 28px; height: 2px;
+            background: var(--accent);
             display: inline-block;
-            background: rgba(255,255,255,0.2);
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
         }
-        
-        .app-body-detailed {
-            padding: 2rem;
+
+        .page-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.4rem, 4.5vw, 4rem);
+            font-weight: 900;
+            color: var(--white);
+            line-height: 1.08;
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.2s forwards;
         }
-        
-        .app-description-detailed {
-            color: var(--gray);
-            margin-bottom: 1.5rem;
+
+        .page-hero h1 em { font-style: italic; color: var(--accent); }
+
+        .hero-meta {
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.35s forwards;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 14px;
+        }
+
+        .hero-meta p {
             font-size: 1rem;
+            color: rgba(255,255,255,0.55);
+            max-width: 320px;
+            text-align: right;
             line-height: 1.7;
         }
-        
-        .features-section h3,
-        .tech-stack-section h3 {
-            color: var(--dark);
-            margin: 1.5rem 0 1rem;
-            font-size: 1.3rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #f0f0f0;
+
+        .hero-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: flex-end;
         }
-        
+
+        .pill {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.14);
+            color: rgba(255,255,255,0.7);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* ── SHARED SECTION CHROME ── */
+        .section-lead {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 48px;
+            padding-top: 72px;
+        }
+
+        .section-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.73rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent-dark);
+            margin-bottom: 10px;
+        }
+
+        .section-eyebrow::before {
+            content: '';
+            width: 22px; height: 2px;
+            background: var(--accent-dark);
+            display: inline-block;
+        }
+
+        .section-title-lg {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.2;
+        }
+
+        .section-desc {
+            font-size: 0.95rem;
+            color: var(--mid);
+            max-width: 400px;
+            text-align: right;
+            align-self: end;
+            line-height: 1.7;
+        }
+
+        /* ── APP CARDS ── */
+        .apps-section { padding-bottom: 80px; }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+            gap: 32px;
+        }
+
+        .app-card {
+            background: var(--white);
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                        box-shadow 0.35s ease,
+                        border-color 0.25s ease;
+        }
+
+        .app-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-light);
+        }
+
+        /* App card header band */
+        .app-card-header {
+            padding: 28px 32px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 1px;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .app-card-header.purple {
+            background: linear-gradient(135deg, #5b2391 0%, #3a1060 100%);
+        }
+
+        .app-card-header.green {
+            background: linear-gradient(135deg, #1b6b3a 0%, #0d4422 100%);
+        }
+
+        .app-icon-wrap {
+            width: 72px; height: 72px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.12);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .app-header-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .app-header-text p {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.65);
+            margin-bottom: 10px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.9);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.76rem;
+            font-weight: 600;
+        }
+
+        /* App card body */
+        .app-card-body { padding: 28px 32px; }
+
+        .app-desc {
+            font-size: 0.92rem;
+            color: var(--mid);
+            line-height: 1.75;
+            margin-bottom: 24px;
+        }
+
+        .app-desc strong { color: var(--ink); }
+
+        /* Features grid */
+        .features-label {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 1rem 0;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+            margin-bottom: 24px;
         }
-        
+
         .feature-item {
-            background: #f8f9fa;
-            padding: 1rem;
+            background: var(--paper-warm);
+            border: 1px solid var(--border);
             border-radius: 8px;
-            border-left: 4px solid var(--primary);
+            padding: 12px 14px;
+            transition: border-color 0.2s ease;
         }
-        
+
+        .feature-item:hover { border-color: var(--accent-light); }
+
         .feature-item strong {
-            color: var(--dark);
             display: block;
-            margin-bottom: 0.3rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 3px;
         }
-        
+
         .feature-item p {
-            color: var(--gray);
-            font-size: 0.9rem;
+            font-size: 0.78rem;
+            color: var(--mid);
+            line-height: 1.4;
         }
-        
+
+        /* Tech stack */
+        .tech-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--mid);
+            margin-bottom: 10px;
+            display: block;
+        }
+
         .tech-stack {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.8rem;
-            margin: 1rem 0;
+            gap: 7px;
+            margin-bottom: 24px;
         }
-        
+
         .tech-tag {
-            background: #e3f2fd;
-            color: #0d47a1;
-            padding: 0.5rem 1rem;
+            background: var(--ink);
+            color: rgba(255,255,255,0.8);
+            padding: 4px 12px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.76rem;
             font-weight: 500;
         }
-        
-        .app-links-detailed {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #eee;
-            flex-wrap: wrap;
-        }
-        
-        .cta-button {
-            display: inline-block;
-            background-color: var(--primary);
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        
-        .cta-button:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-        
-        .play-store-btn {
-            background: var(--android-green);
-            color: #000;
-        }
-        
-        .privacy-btn {
-            background: transparent;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-        }
-        
-        .privacy-btn:hover {
-            background: #f0f8ff;
-        }
-        
-        /* Tester email collection - FormSubmit */
-        .tester-section {
-            background-color: #f0f7ff;
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 2rem 0 1rem;
-            border: 1px solid #b8daff;
-        }
-        
-        .tester-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-        
-        .form-row {
+
+        /* Use-case pills */
+        .use-pills {
             display: flex;
             flex-wrap: wrap;
-            gap: 1rem;
-            align-items: flex-end;
-        }
-        
-        .email-input {
-            flex: 2;
-            min-width: 250px;
-            padding: 0.9rem 1.2rem;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border 0.2s;
-        }
-        
-        .email-input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        
-        .submit-tester-btn {
-            background-color: var(--android-dark);
-            color: white;
-            border: none;
-            padding: 0.9rem 2rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-            font-size: 1rem;
-        }
-        
-        .submit-tester-btn:hover {
-            background-color: #0b7c42;
-        }
-        
-        .tester-note {
-            color: var(--gray);
-            font-size: 0.95rem;
-            background: #fff3cd;
-            padding: 1rem;
-            border-radius: 8px;
-            border-left: 4px solid #ffc107;
-            margin-top: 1.5rem;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        .success-message {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 1rem;
-            border-radius: 8px;
-            margin: 1rem 0;
+            gap: 8px;
+            margin-bottom: 24px;
         }
 
-        /* FormSubmit credit */
-        .formsubmit-credit {
+        .use-pill {
+            background: var(--purple-light);
+            color: var(--purple);
+            padding: 6px 14px;
+            border-radius: 20px;
             font-size: 0.8rem;
-            color: #6c757d;
-            margin-top: 0.5rem;
-            text-align: right;
         }
-        
-        /* Development Updates Section */
-        .updates-section {
-            padding: 4rem 1rem;
-            background-color: #f8f9fa;
-            margin-top: 2rem;
+
+        .use-pill.green-pill {
+            background: var(--green-light);
+            color: var(--green);
         }
-        
-        .updates-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-        
-        .section-title h2 {
-            font-size: 2rem;
-            color: var(--dark);
-            margin-bottom: 1rem;
-        }
-        
-        .section-title p {
-            color: var(--gray);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .updates-timeline {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .update-item {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border-left: 4px solid var(--android-green);
-            position: relative;
-        }
-        
-        .update-date {
-            color: var(--android-dark);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+
+        /* Action strip */
+        .app-actions {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .update-date::before {
-            content: "📅";
-            font-size: 1.1rem;
-        }
-        
-        /* Developer Info Section */
-        .developer-info {
-            padding: 4rem 1rem;
-            text-align: center;
-            background: white;
-        }
-        
-        .developer-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .developer-info h2 {
-            color: var(--dark);
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
-        }
-        
-        .developer-info p {
-            color: var(--gray);
-            margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .developer-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 2rem;
+            gap: 10px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
             flex-wrap: wrap;
         }
-        
-        .secondary-button {
-            background-color: white;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-        }
-        
-        .secondary-button:hover {
-            background-color: #f8f9fa;
-        }
-        
-        /* CTA Section */
-        .cta-section-android {
-            padding: 5rem 1rem;
-            text-align: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .cta-section-android h2 {
-            font-size: 2.2rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .cta-section-android p {
-            max-width: 600px;
-            margin: 0 auto 2rem;
-            opacity: 0.9;
-        }
-        
-        .cta-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            .android-hero {
-                padding: 7rem 1rem 3rem;
-            }
-            
-            .android-hero h1 {
-                font-size: 2.2rem;
-            }
-            
-            .android-hero p {
-                font-size: 1rem;
-                padding: 0;
-            }
-            
-            .app-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .app-header-detailed {
-                flex-direction: column;
-                text-align: center;
-                gap: 1rem;
-                padding: 1.5rem;
-            }
-            
-            .app-links-detailed {
-                flex-direction: column;
-            }
-            
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .developer-links {
-                flex-direction: column;
-                align-items: center;
-            }
 
-            .form-row {
-                flex-direction: column;
-                align-items: stretch;
-            }
+        .btn-app {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 10px 20px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.84rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-app.dark {
+            background: var(--ink);
+            color: var(--white);
+        }
+
+        .btn-app.dark:hover { background: var(--ink-soft); transform: translateY(-1px); }
+
+        .btn-app.outline {
+            background: transparent;
+            color: var(--ink);
+            border: 1.5px solid var(--border);
+        }
+
+        .btn-app.outline:hover { border-color: var(--ink); }
+
+        .btn-app.purple {
+            background: var(--purple);
+            color: var(--white);
+            opacity: 0.85;
+            cursor: default;
+        }
+
+        .btn-app.green-btn {
+            background: var(--green);
+            color: var(--white);
+            opacity: 0.85;
+            cursor: default;
+        }
+
+        .app-release-note {
+            font-size: 0.78rem;
+            color: var(--mid);
+            margin-left: 4px;
+        }
+
+        /* Code reference block */
+        .code-ref {
+            background: var(--paper-warm);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--purple);
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-top: 18px;
+        }
+
+        .code-ref.green-ref { border-left-color: var(--green); }
+
+        .code-ref p {
+            font-size: 0.84rem;
+            color: var(--mid);
+            line-height: 1.6;
+        }
+
+        .code-ref p strong { color: var(--ink); }
+
+        .code-ref code {
+            background: rgba(0,0,0,0.06);
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Tester invite box */
+        .tester-box {
+            background: var(--paper-warm);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0 0;
+        }
+
+        .tester-box h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tester-box p {
+            font-size: 0.88rem;
+            color: var(--mid);
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .tester-box p strong { color: var(--ink); }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+            flex-wrap: wrap;
+        }
+
+        .email-input {
+            flex: 2;
+            min-width: 220px;
+            padding: 10px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 7px;
+            font-size: 0.88rem;
+            background: var(--white);
+            color: var(--ink);
+            outline: none;
+            transition: border-color 0.15s;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .email-input:focus { border-color: var(--green); }
+        .email-input::placeholder { color: var(--mid); }
+
+        .submit-btn {
+            padding: 10px 22px;
+            background: var(--green);
+            color: var(--white);
+            border: none;
+            border-radius: 7px;
+            font-weight: 600;
+            font-size: 0.86rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: 'DM Sans', sans-serif;
+            white-space: nowrap;
+        }
+
+        .submit-btn:hover { background: #1e6040; }
+
+        .tester-note {
+            margin-top: 14px;
+            font-size: 0.82rem;
+            color: var(--mid);
+            background: rgba(200,169,110,0.1);
+            border: 1px solid var(--accent-light);
+            border-radius: 7px;
+            padding: 10px 14px;
+            line-height: 1.6;
+        }
+
+        .tester-note strong { color: var(--accent-dark); }
+
+        .formsubmit-credit {
+            font-size: 0.72rem;
+            color: var(--mid);
+            text-align: right;
+            margin-top: 8px;
+            opacity: 0.7;
+        }
+
+        .success-message {
+            background: var(--green-light);
+            color: var(--green);
+            border: 1px solid rgba(46,125,82,0.3);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            margin-top: 12px;
+        }
+
+        .hidden { display: none !important; }
+
+        /* ── TIMELINE ── */
+        .timeline-section {
+            background: var(--ink);
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timeline-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 90% 50%, rgba(200,169,110,0.07) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 56px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-header .section-eyebrow {
+            justify-content: center;
+            color: var(--accent);
+        }
+
+        .timeline-header .section-eyebrow::before { background: var(--accent); }
+
+        .timeline-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .timeline-header p {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.95rem;
+            margin-top: 10px;
+        }
+
+        .timeline-list {
+            max-width: 760px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-list::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 8px; bottom: 8px;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent), rgba(200,169,110,0.1));
+        }
+
+        .timeline-item {
+            padding: 0 0 32px 32px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -5px; top: 6px;
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid var(--ink);
+            box-shadow: 0 0 0 3px rgba(200,169,110,0.25);
+        }
+
+        .timeline-date {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .timeline-content {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 18px 20px;
+        }
+
+        .timeline-content p {
+            font-size: 0.88rem;
+            color: rgba(255,255,255,0.65);
+            line-height: 1.75;
+        }
+
+        .timeline-content p strong { color: rgba(255,255,255,0.9); }
+
+        /* ── DEVELOPER BIO ── */
+        .bio-section {
+            padding: 80px 0;
+            background: var(--white);
+        }
+
+        .bio-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .bio-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 3vw, 2.6rem);
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .bio-text h2 em { font-style: italic; color: var(--accent-dark); }
+
+        .bio-text p {
+            font-size: 0.95rem;
+            color: var(--mid);
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .bio-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+
+        .btn-dark {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--ink);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.88rem;
+            transition: all 0.2s;
+        }
+
+        .btn-dark:hover { background: var(--ink-soft); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+
+        .btn-outline-dark {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: transparent;
+            color: var(--ink);
+            padding: 12px 24px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.88rem;
+            border: 1.5px solid var(--ink);
+            transition: all 0.2s;
+        }
+
+        .btn-outline-dark:hover { background: var(--ink); color: var(--white); }
+
+        /* Stat grid in bio right column */
+        .bio-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .stat-card {
+            background: var(--paper-warm);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            transition: border-color 0.2s;
+        }
+
+        .stat-card:hover { border-color: var(--accent-light); }
+
+        .stat-card .stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--ink);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-card .stat-num span { color: var(--accent); }
+
+        .stat-card .stat-label {
+            font-size: 0.78rem;
+            color: var(--mid);
+            font-weight: 500;
+        }
+
+        /* ── BOTTOM CTA ── */
+        .bottom-cta {
+            background: var(--paper-warm);
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bottom-cta::before {
+            content: '';
+            position: absolute;
+            top: -120px; right: -120px;
+            width: 420px; height: 420px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-light) 0%, transparent 70%);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .cta-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-inner h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-weight: 900;
+            color: var(--ink);
+            line-height: 1.1;
+        }
+
+        .cta-inner h2 em { font-style: italic; color: var(--accent-dark); }
+
+        .cta-inner p {
+            font-size: 0.95rem;
+            color: var(--mid);
+            margin-top: 10px;
+            max-width: 480px;
+        }
+
+        .cta-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        /* ── REVEAL ANIMATION ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.65s ease, transform 0.65s ease;
+        }
+
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 960px) {
+            .hero-inner { grid-template-columns: 1fr; }
+            .hero-meta p { text-align: left; }
+            .hero-pills { justify-content: flex-start; }
+            .app-grid { grid-template-columns: 1fr; }
+            .bio-inner { grid-template-columns: 1fr; }
+            .cta-inner { flex-direction: column; align-items: flex-start; }
+            .cta-btns { flex-direction: row; flex-wrap: wrap; }
+        }
+
+        @media (max-width: 640px) {
+            .container { padding: 0 20px; }
+            .page-hero { padding: 80px 0 60px; }
+            .section-lead { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .app-card-header { flex-direction: column; text-align: center; }
+            .app-card-body { padding: 22px 20px; }
+            .features-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
 <body>
+
 <header>
     <div class="header-content">
+
+        <!-- Logo -->
         <a href="index.html" class="logo">
             <span class="logo-icon">📄</span>
             <span>ResumePro</span>
         </a>
-        
+
+        <!-- Nav + Hamburger -->
         <div class="nav-container">
-            <button class="hamburger" aria-label="Toggle navigation">☰</button>
-            <ul class="header-nav-menu">
-                <li class="header-nav-item"><a href="index.html" class="header-nav-link">Home</a></li>
-                <li class="header-nav-item header-dropdown">
-                    <a href="#" class="header-nav-link">
+            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+
+            <ul class="header-nav-menu" role="menubar">
+
+                <li class="header-nav-item" role="none">
+                    <a href="index.html" class="header-nav-link" role="menuitem">Home</a>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                         Templates
-                        <span class="header-dropdown-icon">▼</span>
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
                     </a>
-                    <div class="header-dropdown-content">
-                        <a href="resume-templates.html" class="header-dropdown-item">Resume Templates</a>
-                        <a href="portfolio-templates.html" class="header-dropdown-item">Portfolio Templates</a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="resume-templates.html"   class="header-dropdown-item" role="menuitem">Resume Templates</a>
+                        <a href="portfolio-templates.html" class="header-dropdown-item" role="menuitem">Portfolio Templates</a>
                     </div>
                 </li>
-                
-                <!-- My Apps Menu Item -->
-                <li class="header-nav-item header-dropdown">
-                    <a href="#" class="header-nav-link">
-                        My Apps
-                        <span class="header-dropdown-icon">▼</span>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Apps
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
                     </a>
-                    <div class="header-dropdown-content">
-                        <a href="android-applications.html" class="header-dropdown-item">Android Applications</a>
-                        <a href="family-connection-tools.html" class="header-dropdown-item">Web Applications</a>
-                      </div>
-                </li>
-                
-                <!-- UPDATED: Blog link now points to blog-list.html -->
-                <li class="header-nav-item"><a href="blog-list.html" class="header-nav-link">Blog</a></li>
-                
-                <li class="header-nav-item"><a href="klaviyo-analytics.html" class="header-nav-link">Klaviyo Analytics</a></li>
-                <li class="header-nav-item header-dropdown">
-                    <a href="#" class="header-nav-link">
-                        Productivity Tools
-                        <span class="header-dropdown-icon">▼</span>
-                    </a>
-                    <div class="header-dropdown-content">
-                        <a href="email-builder.html" class="header-dropdown-item">Email Builder</a>
-                        <a href="enhanced-todo.html" class="header-dropdown-item">Enhanced To-Do & Notes</a>
-                        <a href="klaviyo-tool.html" class="header-dropdown-item">Klaviyo Tool</a>
-						<a href="omnisend.html" class="header-dropdown-item">Omnisend Analytics Tool</a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="android-applications.html"   class="header-dropdown-item" role="menuitem">Android Applications</a>
+                        <a href="family-connection-tools.html" class="header-dropdown-item" role="menuitem">Web Applications</a>
                     </div>
                 </li>
-                <li class="header-nav-item"><a href="about.html" class="header-nav-link">About</a></li>
-                <li class="header-nav-item"><a href="contact.html" class="header-nav-link">Contact</a></li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="blog-list.html" class="header-nav-link" role="menuitem">Blog</a>
+                </li>
+
+                <li class="header-nav-item" role="none" style="display: none;">
+                    <a href="klaviyo-analytics.html" class="header-nav-link" role="menuitem">Klaviyo Analytics</a>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Tools
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                    </a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="email-builder.html"  class="header-dropdown-item" role="menuitem">Email Builder</a>
+                        <a href="enhanced-todo.html"              class="header-dropdown-item" role="menuitem">To-Do &amp; Notes</a>
+                        <a href="klaviyo-tool.html"               class="header-dropdown-item" role="menuitem">Klaviyo Tool</a>
+                        <a href="omnisend.html"                   class="header-dropdown-item" role="menuitem">Omnisend Analytics</a>
+                    </div>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="about.html" class="header-nav-link" role="menuitem">About</a>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="contact.html" class="header-nav-link" role="menuitem">Contact</a>
+                </li>
+
             </ul>
         </div>
     </div>
 </header>
 
-<main class="container">
-    <!-- Android Apps Hero Section -->
-    <section class="android-hero">
-        <div class="android-icon">🤖</div>
-        <h1>Android Applications</h1>
-        <p><strong>Voice-First Development:</strong> Building mobile applications with voice as the primary input method. 
-           Specialized in creating apps where you don't need to type - just speak to get things done!</p>
-        
-        <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
-            <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">🎤 Voice Recognition</span>
-            <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">📝 No-Typing Notes</span>
-            <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">⏰ Smart Reminders</span>
-            <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">🗄️ Local Storage</span>
+
+<!-- ══════════════════════════════════ HERO -->
+<section class="page-hero">
+    <div class="container">
+        <div class="hero-inner">
+            <div>
+                <span class="hero-eyebrow">Mobile Development</span>
+                <h1>Android<br>Applications<br>by <em>Adolf.</em></h1>
+            </div>
+            <div class="hero-meta">
+                <p>Voice-first mobile apps built with Kotlin and Material Design 3 — productivity tools designed to get out of the way.</p>
+                <div class="hero-pills">
+                    <span class="pill">🎤 Voice Recognition</span>
+                    <span class="pill">📝 No-Typing Notes</span>
+                    <span class="pill">⏰ Smart Reminders</span>
+                    <span class="pill">🗄️ Local Storage</span>
+                </div>
+            </div>
         </div>
-    </section>
-    
-    <!-- Apps Showcase Section -->
-    <section class="apps-showcase">
-        <div class="section-title">
-            <h2>Featured Android Applications</h2>
-            <p>Voice-powered apps with proven implementation - ready for Play Store deployment</p>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════ APPS -->
+<section class="apps-section">
+    <div class="container">
+        <div class="section-lead reveal">
+            <div>
+                <p class="section-eyebrow">Featured Apps</p>
+                <h2 class="section-title-lg">Voice-Powered<br>Android Apps</h2>
+            </div>
+            <p class="section-desc">
+                Both applications are production-ready, developed with clean architecture and proven Kotlin patterns — currently in testing on Google Play.
+            </p>
         </div>
-        
+
         <div class="app-grid">
-            <!-- NEW APP: Voco - Voice Type Smart (replaces VoiceRide) -->
-            <div class="app-card-detailed">
-                <div class="app-header-detailed" style="background: linear-gradient(135deg, #7B1FA2 0%, #4A148C 100%);">
-                    <div class="app-icon-large">🎤⚡</div>
-                    <div class="app-title-section">
-                        <h2>Voco - Voice Type Smart</h2>
-                        <p>Floating microphone – speak, copy, paste anywhere</p>
-                        <span class="app-status-badge">🚀 Finalizing for Production</span>
+
+            <!-- ── VOCO ── -->
+            <div class="app-card reveal">
+                <div class="app-card-header purple">
+                    <div class="app-icon-wrap">🎤⚡</div>
+                    <div class="app-header-text">
+                        <h2>Voco — Voice Type Smart</h2>
+                        <p>Floating microphone — speak, copy, paste anywhere</p>
+                        <span class="status-badge">🚀 Finalizing for Production</span>
                     </div>
                 </div>
-                
-                <div class="app-body-detailed">
-                    <p class="app-description-detailed">
-                        <strong>Next‑gen voice typing:</strong> A floating mic button that follows you across any app. 
-                        Tap to speak, get instant text copied to clipboard and ready to paste. Built from the Kotlin 
-                        sources you provided – clean, lightweight, and privacy‑focused.
+
+                <div class="app-card-body">
+                    <p class="app-desc">
+                        <strong>Next-gen voice typing.</strong> Adolf built Voco as a floating mic overlay that follows the user across every app. A single tap starts listening — recognized speech is instantly copied to the clipboard, ready to paste anywhere. Clean, lightweight, and fully privacy-focused with no cloud dependency.
                     </p>
-                    
-                    <div class="features-section">
-                        <h3>✨ Core Experience</h3>
-                        <div class="features-grid">
-                            <div class="feature-item">
-                                <strong>🖱️ Floating Mic</strong>
-                                <p>Drag anywhere, tap to start listening – works over any app</p>
-                            </div>
-                            <div class="feature-item">
-                                <strong>📋 Smart Paste</strong>
-                                <p>Recognized text is auto‑copied; one tap to paste where you need it</p>
-                            </div>
-                            <div class="feature-item">
-                                <strong>🔊 Natural Language</strong>
-                                <p>Uses Android speech recognizer with system locale</p>
-                            </div>
-                            <div class="feature-item">
-                                <strong>🧩 Lightweight Service</strong>
-                                <p>Minimal battery impact, starts/stops with a single toggle</p>
-                            </div>
+
+                    <p class="features-label">✨ Core Experience</p>
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <strong>🖱️ Floating Mic</strong>
+                            <p>Draggable overlay, works over any app</p>
+                        </div>
+                        <div class="feature-item">
+                            <strong>📋 Smart Paste</strong>
+                            <p>Auto-copies recognized text for instant pasting</p>
+                        </div>
+                        <div class="feature-item">
+                            <strong>🔊 Natural Language</strong>
+                            <p>Android speech recognizer with system locale</p>
+                        </div>
+                        <div class="feature-item">
+                            <strong>🧩 Lightweight</strong>
+                            <p>Minimal battery impact, single-toggle service</p>
                         </div>
                     </div>
 
-                    <div class="tech-stack-section">
-                        <h3>🔧 Implementation (from your code)</h3>
-                        <div class="tech-stack">
-                            <span class="tech-tag">FloatingView Service</span>
-                            <span class="tech-tag">WindowManager Overlay</span>
-                            <span class="tech-tag">SpeechRecognizer Intent</span>
-                            <span class="tech-tag">ClipboardManager</span>
-                            <span class="tech-tag">Kotlin Coroutines</span>
-                            <span class="tech-tag">Permission handling</span>
-                            <span class="tech-tag">Drag-to-move</span>
-                        </div>
-                    </div>
-                    
-                    <div class="features-section">
-                        <h3>📱 What you can do</h3>
-                        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0;">
-                            <span style="background: #f3e5f5; padding: 8px 15px; border-radius: 20px;">Take notes hands‑free</span>
-                            <span style="background: #f3e5f5; padding: 8px 15px; border-radius: 20px;">Dictate messages</span>
-                            <span style="background: #f3e5f5; padding: 8px 15px; border-radius: 20px;">Quick search by voice</span>
-                            <span style="background: #f3e5f5; padding: 8px 15px; border-radius: 20px;">Fill forms eyes‑free</span>
-                        </div>
-                    </div>
-                    
-                    <div class="app-links-detailed">
-                        <a href="#" class="cta-button" style="background: #7B1FA2; cursor: default;">
-                            📦 Preparing for Play Store
-                        </a>
-                        <a href="#" class="cta-button privacy-btn" onclick="alert('Privacy policy will be published with the app.'); return false;">
-                            📄 Privacy Policy (draft)
-                        </a>
-                        <span style="color: #666; font-size: 0.9rem; margin-left: 10px;">
-                            Production release ~ Q2 2025
-                        </span>
+                    <p class="features-label">📱 What users can do</p>
+                    <div class="use-pills">
+                        <span class="use-pill">Take notes hands-free</span>
+                        <span class="use-pill">Dictate messages</span>
+                        <span class="use-pill">Quick voice search</span>
+                        <span class="use-pill">Fill forms eyes-free</span>
                     </div>
 
-                    <div style="background: #F3E5F5; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #7B1FA2;">
-                        <p style="margin: 0; font-size: 0.95rem;">
-                            <strong>⚡ Based on your provided code:</strong> 
-                            <code>FloatingVoiceService.kt</code>, <code>MainActivity.kt</code>, <code>SettingsActivity.kt</code>, 
-                            <code>SpeechRecognitionActivity.kt</code> – fully functional floating mic + voice recognition.
-                        </p>
+                    <span class="tech-label">Technology Stack</span>
+                    <div class="tech-stack">
+                        <span class="tech-tag">FloatingView Service</span>
+                        <span class="tech-tag">WindowManager Overlay</span>
+                        <span class="tech-tag">SpeechRecognizer Intent</span>
+                        <span class="tech-tag">ClipboardManager</span>
+                        <span class="tech-tag">Kotlin Coroutines</span>
+                        <span class="tech-tag">Drag-to-move</span>
+                    </div>
+
+                    <div class="code-ref">
+                        <p><strong>Implementation:</strong> Core service built from <code>FloatingVoiceService.kt</code>, <code>MainActivity.kt</code>, <code>SettingsActivity.kt</code>, and <code>SpeechRecognitionActivity.kt</code> — fully functional floating mic with voice recognition.</p>
+                    </div>
+
+                    <div class="app-actions">
+                        <span class="btn-app purple">📦 Preparing for Play Store</span>
+                        <button class="btn-app outline" onclick="alert('Privacy policy will be published with the app.'); return false;">📄 Privacy Policy (draft)</button>
+                        <span class="app-release-note">Production release ~ Q2 2025</span>
                     </div>
                 </div>
             </div>
-            
-            <!-- UPDATED: RemindMe Notes & Reminder App (Closed Testing) with FormSubmit email collection -->
-            <div class="app-card-detailed">
-                <div class="app-header-detailed" style="background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);">
-                    <div class="app-icon-large">📝⏰</div>
-                    <div class="app-title-section">
-                        <h2>RemindMe – Notes & Reminder</h2>
-                        <p>Voice‑first notes with smart reminders</p>
-                        <span class="app-status-badge">🧪 Closed Testing (Play Console)</span>
+
+            <!-- ── REMINDME ── -->
+            <div class="app-card reveal">
+                <div class="app-card-header green">
+                    <div class="app-icon-wrap">📝⏰</div>
+                    <div class="app-header-text">
+                        <h2>RemindMe — Notes &amp; Reminder</h2>
+                        <p>Voice-first notes with smart reminders</p>
+                        <span class="status-badge">🧪 Closed Testing (Play Console)</span>
                     </div>
                 </div>
-                
-                <div class="app-body-detailed">
-                    <p class="app-description-detailed">
-                        <strong>Special Feature:</strong> Voice‑first note creation – no typing required! 
-                        Fully functional productivity app with Room database, swipe gestures, and reliable 
-                        alarm-based reminders.
+
+                <div class="app-card-body">
+                    <p class="app-desc">
+                        <strong>No typing required.</strong> RemindMe is Adolf's fully functional productivity app centered around voice-first note creation. Users speak their notes, set reminders, and let the app handle everything — backed by a Room database, swipe gestures, and reliable alarm-based notifications.
                     </p>
-                    
-                    <div class="features-section">
-                        <h3>✅ Implemented Features</h3>
-                        <div class="features-grid">
-                            <div class="feature-item"><strong>🎤 Voice-to-Text Notes</strong><p>Create notes by speaking</p></div>
-                            <div class="feature-item"><strong>⏰ Smart Reminders</strong><p>AlarmManager + notifications</p></div>
-                            <div class="feature-item"><strong>🗂️ Local Database</strong><p>Room with DAO & relations</p></div>
-                            <div class="feature-item"><strong>↔️ Swipe to Delete</strong><p>With undo option</p></div>
-                            <div class="feature-item"><strong>🎨 Material Design</strong><p>Dark/light theme support</p></div>
-                            <div class="feature-item"><strong>🔍 Search & Filter</strong><p>Quick note lookup</p></div>
+
+                    <p class="features-label">✅ Implemented Features</p>
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <strong>🎤 Voice-to-Text Notes</strong>
+                            <p>Create notes by speaking — no keyboard needed</p>
+                        </div>
+                        <div class="feature-item">
+                            <strong>⏰ Smart Reminders</strong>
+                            <p>AlarmManager + reliable notifications</p>
+                        </div>
+                        <div class="feature-item">
+                            <strong>🗂️ Local Database</strong>
+                            <p>Room with DAO &amp; entity relations</p>
+                        </div>
+                        <div class="feature-item">
+                            <strong>↔️ Swipe to Delete</strong>
+                            <p>With undo support</p>
+                        </div>
+                        <div class="feature-item">
+                            <strong>🎨 Material Design</strong>
+                            <p>Dark/light theme support</p>
+                        </div>
+                        <div class="feature-item">
+                            <strong>🔍 Search &amp; Filter</strong>
+                            <p>Quick note lookup</p>
                         </div>
                     </div>
 
-                    <div class="tech-stack-section">
-                        <h3>Technology Stack</h3>
-                        <div class="tech-stack">
-                            <span class="tech-tag">Kotlin</span>
-                            <span class="tech-tag">Room</span>
-                            <span class="tech-tag">ViewModel/LiveData</span>
-                            <span class="tech-tag">AlarmManager</span>
-                            <span class="tech-tag">Notifications</span>
-                            <span class="tech-tag">RecyclerView</span>
-                        </div>
+                    <span class="tech-label">Technology Stack</span>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Kotlin</span>
+                        <span class="tech-tag">Room</span>
+                        <span class="tech-tag">ViewModel/LiveData</span>
+                        <span class="tech-tag">AlarmManager</span>
+                        <span class="tech-tag">Notifications</span>
+                        <span class="tech-tag">RecyclerView</span>
                     </div>
 
-                    <!-- CLOSED TESTER INVITE + FormSubmit INTEGRATION -->
-                    <div class="tester-section">
-                        <h3 style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <span>📧</span> Become a closed tester
-                        </h3>
-                        <p style="margin-bottom: 1rem;">
-                            <strong>RemindMe</strong> is currently in <strong>closed testing</strong> on Google Play.  
-                            If you'd like to join the test, enter the <strong>email address linked to your Play Store account</strong> below.  
-                            I'll add you to the tester list within 48 hours.
+                    <!-- Tester invite -->
+                    <div class="tester-box" id="tester-section">
+                        <h3>📧 Become a closed tester</h3>
+                        <p>
+                            RemindMe is currently in <strong>closed testing</strong> on Google Play.
+                            To join, enter the <strong>email address linked to your Play Store account</strong> below.
+                            Adolf will add you to the tester list within 48 hours.
                         </p>
 
-                        <!-- FormSubmit form - sends emails to dolfean214@gmail.com -->
-                        <form action="https://formsubmit.co/dolfean214@gmail.com" method="POST" class="tester-form">
-                            <!-- FormSubmit configuration -->
+                        <form action="https://formsubmit.co/dolfean214@gmail.com" method="POST" class="tester-form" style="margin-top:0;">
                             <input type="hidden" name="_subject" value="New RemindMe Tester Request">
                             <input type="hidden" name="_template" value="table">
                             <input type="hidden" name="_captcha" value="false">
                             <input type="hidden" name="_next" value="{{CURRENT_URL}}?success=true#tester-section">
-                            
-                            <!-- Honeypot to prevent spam -->
                             <input type="text" name="_honey" style="display:none">
-                            
-                            <!-- User's email input -->
+
                             <div class="form-row">
-                                <input type="email" name="email" class="email-input" 
+                                <input type="email" name="email" class="email-input"
                                        placeholder="your.playstore.email@example.com" required>
-                                <button type="submit" class="submit-tester-btn">✉️ Send request</button>
+                                <button type="submit" class="submit-btn">✉️ Send request</button>
                             </div>
-                            
-                            <!-- Hidden field to identify the app -->
+
                             <input type="hidden" name="app" value="RemindMe">
                             <input type="hidden" name="request_type" value="closed_tester">
-                            
+
                             <div class="tester-note">
-                                <strong>Note:</strong> Your email is only used for Play Store tester access. 
-                                No spam, no marketing. (Powered by FormSubmit – you'll receive a confirmation.)
+                                <strong>Note:</strong> Your email is only used for Play Store tester access. No spam, no marketing. (Powered by FormSubmit — you'll receive a confirmation.)
                             </div>
-                            
-                            <!-- Optional FormSubmit credit (can be removed if you prefer) -->
-                            <div class="formsubmit-credit">
-                                Secured by FormSubmit
-                            </div>
+                            <div class="formsubmit-credit">Secured by FormSubmit</div>
                         </form>
 
-                        <!-- Success message (shown if ?success=true in URL) -->
                         <div id="testerSuccess" class="success-message hidden">
-                            ✅ Thanks! Your request has been sent. You'll receive an invitation to join the closed test soon.
+                            ✅ Thanks! Your request has been sent. You'll receive an invitation to join the closed test shortly.
                         </div>
 
-                        <!-- Alternative direct contact -->
-                        <p style="margin-top: 1.5rem; font-size: 0.95rem;">
-                            📬 Prefer to email directly?  
-                            <a href="mailto:dolfean214@gmail.com?subject=RemindMe%20tester%20request&body=My%20Play%20Store%20email%3A%20[please%20enter]">Click here</a> 
+                        <p style="margin-top:14px;font-size:0.84rem;color:var(--mid);">
+                            📬 Prefer to email directly?
+                            <a href="/cdn-cgi/l/email-protection#86e2e9eae0e3e7e8b4b7b2c6e1ebe7efeaa8e5e9ebb9f5f3e4ece3e5f2bbd4e3ebefe8e2cbe3a3b4b6f2e3f5f2e3f4a3b4b6f4e3f7f3e3f5f2a0e4e9e2ffbbcbffa3b4b6d6eae7ffa3b4b6d5f2e9f4e3a3b4b6e3ebe7efeaa3b5c7a3b4b6ddf6eae3e7f5e3a3b4b6e3e8f2e3f4db"
+                               style="color:var(--green);font-weight:600;">Click here</a>
                             and include your Play Store email.
                         </p>
                     </div>
-                    
-                    <div class="app-links-detailed">
-                        <span class="cta-button" style="background: #4CAF50; cursor: default; opacity: 0.8;">
-                            ⏳ Closed Testing
-                        </span>
-                        <a href="#" class="cta-button privacy-btn" onclick="alert('Privacy policy available on Play Store listing.'); return false;">
-                            📄 Privacy Policy
-                        </a>
+
+                    <div class="app-actions">
+                        <span class="btn-app green-btn">⏳ Closed Testing</span>
+                        <button class="btn-app outline" onclick="alert('Privacy policy available on Play Store listing.'); return false;">📄 Privacy Policy</button>
                     </div>
                 </div>
             </div>
+
         </div>
-    </section>
-    
-    <!-- Development Updates Section (updated timeline) -->
-    <section class="updates-section">
-        <div class="updates-container">
-            <div class="section-title">
-                <h2>Development Updates</h2>
-                <p>Latest progress and milestones in Android app development</p>
-            </div>
-            
-            <div class="updates-timeline">
-                <div class="update-item">
-                    <div class="update-date">Current Focus - February 2026</div>
-                    <p><strong>Voco:</strong> Finalizing UI polish and production signing. Preparing Play Store listing (graphics, privacy policy). Will apply for production access in March 2026.<br>
-                    <strong>RemindMe:</strong> Closed testing ongoing – gathering feedback, fixing edge cases. Next step: open beta.</p>
-                </div>
-                
-                <div class="update-item">
-                    <div class="update-date">Completed - January 2026</div>
-                    <p><strong>Voco:</strong> Core service based on your Kotlin files fully tested. Floating mic, speech recognition, clipboard integration stable.<br>
-                    <strong>RemindMe:</strong> Room database, swipe gestures, and AlarmManager notifications finalized.</p>
-                </div>
-                
-                <div class="update-item">
-                    <div class="update-date">Completed - December 2025</div>
-                    <p>VoiceRide project concluded; focus shifted to Voco (voice typing) and RemindMe (notes). Closed testing track opened for RemindMe.</p>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════ TIMELINE -->
+<section class="timeline-section">
+    <div class="container">
+        <div class="timeline-header reveal">
+            <p class="section-eyebrow">Progress Log</p>
+            <h2>Development Updates</h2>
+            <p>Latest milestones in Adolf's Android app development journey</p>
+        </div>
+
+        <div class="timeline-list reveal">
+            <div class="timeline-item">
+                <div class="timeline-date">Current Focus — February 2026</div>
+                <div class="timeline-content">
+                    <p>
+                        <strong>Voco:</strong> UI polish and production signing are being finalized. Play Store listing graphics and privacy policy are in preparation. Production access application is planned for March 2026.<br><br>
+                        <strong>RemindMe:</strong> Closed testing is ongoing — user feedback is being collected and edge cases addressed. The next milestone is open beta.
+                    </p>
                 </div>
             </div>
-        </div>
-    </section>
-    
-    <!-- Developer Info Section -->
-    <section class="developer-info">
-        <div class="developer-container">
-            <h2>About the Developer</h2>
-            <p>
-                Building useful applications across web and mobile platforms with a focus on clean design, 
-                reliable functionality, and solving real-world problems. Passionate about creating tools that 
-                enhance productivity and improve everyday experiences.
-            </p>
-            <p>
-                Currently developing Android applications while maintaining several web projects including 
-                ResumePro templates, productivity tools, and real-time communication applications.
-            </p>
-            
-            <div class="developer-links">
-                <a href="index.html" class="cta-button">Visit ResumePro</a>
-                <a href="contact.html" class="cta-button secondary-button">Contact</a>
+
+            <div class="timeline-item">
+                <div class="timeline-date">Completed — January 2026</div>
+                <div class="timeline-content">
+                    <p>
+                        <strong>Voco:</strong> Core service fully tested. Floating mic, speech recognition, and clipboard integration confirmed stable.<br><br>
+                        <strong>RemindMe:</strong> Room database, swipe gestures, and AlarmManager notifications finalized and tested across devices.
+                    </p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-date">Completed — December 2025</div>
+                <div class="timeline-content">
+                    <p>
+                        The VoiceRide project was concluded; Adolf shifted focus to Voco (voice typing) and RemindMe (notes &amp; reminders). The closed testing track on Google Play Console was opened for RemindMe.
+                    </p>
+                </div>
             </div>
         </div>
-    </section>
-    
-    <!-- CTA Section -->
-    <section class="cta-section-android">
-        <h2>Interested in My Apps?</h2>
-        <p>Check out my web applications and other projects, or get in touch for app-related inquiries.</p>
-        <div class="cta-buttons">
-            <a href="https://family-connection-tools.pages.dev/" class="cta-button">View Web Applications</a>
-            <a href="contact.html" class="cta-button secondary-button">Contact Me</a>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════ DEVELOPER BIO -->
+<section class="bio-section">
+    <div class="container">
+        <div class="bio-inner reveal">
+            <div class="bio-text">
+                <p class="section-eyebrow">About the Developer</p>
+                <h2>Building tools that<br>work as hard as<br><em>you do.</em></h2>
+                <p>
+                    Adolf de Guzman builds useful applications across web and mobile platforms with a focus on clean design, reliable functionality, and solving real-world problems. His work is driven by a simple principle — productivity tools should feel effortless.
+                </p>
+                <p>
+                    Alongside his Android projects, he maintains several web products including ResumePro templates, email marketing tools, and real-time productivity applications — all designed with the same voice-first, friction-free philosophy.
+                </p>
+                <div class="bio-links">
+                    <a href="index.html" class="btn-dark">Visit ResumePro</a>
+                    <a href="contact.html" class="btn-outline-dark">Get in Touch</a>
+                </div>
+            </div>
+
+            <div class="bio-stats">
+                <div class="stat-card">
+                    <span class="stat-num">2<span>+</span></span>
+                    <span class="stat-label">Android Apps<br>in Development</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-num">Kotlin</span>
+                    <span class="stat-label">Primary Language</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-num">M3</span>
+                    <span class="stat-label">Material Design 3<br>UI Standard</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-num">2026<span></span></span>
+                    <span class="stat-label">Production Release<br>Target Year</span>
+                </div>
+            </div>
         </div>
-    </section>
-</main>    
-    
+    </div>
+</section>
+
+<!-- ══════════════════════════════════ BOTTOM CTA -->
+<section class="bottom-cta">
+    <div class="container">
+        <div class="cta-inner reveal">
+            <div>
+                <h2>Interested in<br>Adolf's <em>work?</em></h2>
+                <p>Explore the web applications and productivity tools he has built, or get in touch for app-related inquiries and collaboration.</p>
+            </div>
+            <div class="cta-btns">
+                <a href="https://family-connection-tools.pages.dev/" class="btn-dark">View Web Applications</a>
+                <a href="contact.html" class="btn-outline-dark">Contact Adolf</a>
+            </div>
+        </div>
+    </div>
+</section>
+
 <footer>
     <div class="footer-content">
         <div class="footer-column">
@@ -868,24 +1302,34 @@
     </div>
 </footer>
 
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script src="clean-urls.js"></script>
 <script src="header.js"></script>
 
-<!-- Show success message if URL contains ?success=true -->
 <script>
-(function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('success') && urlParams.get('success') === 'true') {
-        const successDiv = document.getElementById('testerSuccess');
-        if (successDiv) {
-            successDiv.classList.remove('hidden');
-            // Optional: scroll to the message
-            setTimeout(() => {
-                successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 100);
+    // Show success message if URL contains ?success=true
+    (function () {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('success') === 'true') {
+            const el = document.getElementById('testerSuccess');
+            if (el) {
+                el.classList.remove('hidden');
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
         }
-    }
-})();
+    })();
+
+    // Scroll reveal
+    const revealObs = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                entry.target.style.transitionDelay = (i * 0.05) + 's';
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 </script>
 
 </body>

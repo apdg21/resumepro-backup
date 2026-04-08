@@ -3,200 +3,560 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us | ResumePro</title>
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">  
-    <!-- Header CSS -->
+    <title>About | ResumePro</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="header.css">
-    <!-- Footer CSS -->
     <link rel="stylesheet" href="footer.css">
-	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7364684388402027"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7364684388402027" crossorigin="anonymous"></script>
+
     <style>
         :root {
-            --primary: #3a86ff;
+            --ink:          #0e0e12;
+            --ink-soft:     #2a2a35;
+            --paper:        #fafaf8;
+            --paper-warm:   #f4f1eb;
+            --accent:       #c8a96e;
+            --accent-light: #e8d9b8;
+            --accent-dark:  #9a7a3f;
+            --mid:          #6b6b78;
+            --border:       #e2e0d8;
+            --white:        #ffffff;
+            --shadow-sm:    0 2px 12px rgba(0,0,0,0.07);
+            --shadow-md:    0 8px 32px rgba(0,0,0,0.10);
+            --shadow-lg:    0 20px 60px rgba(0,0,0,0.13);
+			--primary: #3a86ff;
             --primary-dark: #2667cc;
             --dark: #2b2d42;
             --light: #f8f9fa;
             --gray: #6c757d;
             --success: #28a745;
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
         body {
-            background-color: #f5f5f5;
-            color: var(--dark);
+            background: var(--paper);
+            color: var(--ink);
+            font-family: 'DM Sans', sans-serif;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-       
-
-        /* About Us Content Styling */
-        .about-container {
-            max-width: 1200px;
+        .container {
+            max-width: 1160px;
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 0 40px;
         }
-        
-        .hero-section {
-            text-align: center;
-            padding: 8rem 0;
+
+        /* ── PAGE HERO ── */
+        .page-hero {
+            background: var(--ink);
+            padding: 100px 0 80px;
+            position: relative;
+            overflow: hidden;
         }
-        
-        .hero-section h1 {
-            font-size: 2.5rem;
-            color: var(--dark);
-            margin-bottom: 1rem;
+
+        .page-hero::before {
+            content: 'ABOUT';
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: 'Playfair Display', serif;
+            font-size: 20vw;
+            font-weight: 900;
+            color: rgba(255,255,255,0.022);
+            line-height: 1;
+            pointer-events: none;
+            white-space: nowrap;
+            letter-spacing: -0.02em;
         }
-        
-        .hero-section p {
-            color: var(--gray);
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 2rem;
+
+        .page-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
         }
-        
-        .mission-section {
-            background-color: white;
-            padding: 3rem;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin-bottom: 3rem;
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.1s forwards;
         }
-        
-        .success-section {
-            margin-bottom: 3rem;
+
+        .hero-eyebrow::before {
+            content: '';
+            width: 28px; height: 2px;
+            background: var(--accent);
+            display: inline-block;
         }
-        
-        .success-grid {
+
+        .page-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.6rem, 5vw, 4.2rem);
+            font-weight: 900;
+            color: var(--white);
+            line-height: 1.08;
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.2s forwards;
+        }
+
+        .page-hero h1 em { font-style: italic; color: var(--accent); }
+
+        .hero-sub {
+            font-size: 1.05rem;
+            color: rgba(255,255,255,0.55);
+            max-width: 520px;
+            line-height: 1.75;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.35s forwards;
+        }
+
+        /* ── WHAT WE DO ── */
+        .what-section {
+            padding: 88px 0 0;
+            background: var(--white);
+        }
+
+        .split-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 72px;
+            align-items: center;
+            padding-bottom: 80px;
         }
-        
-        .success-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
+
+        .split-text .section-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.73rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent-dark);
+            margin-bottom: 14px;
         }
-        
-        .success-card:hover {
-            transform: translateY(-5px);
+
+        .split-text .section-eyebrow::before {
+            content: '';
+            width: 22px; height: 2px;
+            background: var(--accent-dark);
+            display: inline-block;
         }
-        
-        .success-info h3 {
-            color: var(--dark);
-            margin-bottom: 0.5rem;
+
+        .split-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.18;
+            margin-bottom: 20px;
         }
-        
-        .success-info p {
-            color: var(--gray);
-            margin-bottom: 1rem;
+
+        .split-text h2 em { font-style: italic; color: var(--accent-dark); }
+
+        .split-text p {
+            font-size: 0.97rem;
+            color: var(--mid);
+            line-height: 1.8;
+            margin-bottom: 16px;
         }
-        
-        .success-quote {
-            font-style: italic;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
+
+        /* Right column — numbered cards */
+        .pillar-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
-        
+
+        .pillar-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            background: var(--paper-warm);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px 20px;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .pillar-card:hover {
+            border-color: var(--accent-light);
+            transform: translateX(4px);
+        }
+
+        .pillar-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent-light);
+            line-height: 1;
+            flex-shrink: 0;
+            width: 28px;
+            padding-top: 2px;
+        }
+
+        .pillar-body h3 {
+            font-weight: 600;
+            font-size: 0.92rem;
+            color: var(--ink);
+            margin-bottom: 4px;
+        }
+
+        .pillar-body p {
+            font-size: 0.84rem;
+            color: var(--mid);
+            line-height: 1.55;
+        }
+
+        /* ── STATS BAND ── */
+        .stats-band {
+            background: var(--ink);
+            padding: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-band::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .stats-band::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 100%, rgba(200,169,110,0.07) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .stats-inner {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.03);
+            padding: 32px 24px;
+            text-align: center;
+            transition: background 0.2s ease;
+        }
+
+        .stat-item:hover { background: rgba(200,169,110,0.07); }
+
+        .stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: var(--white);
+            display: block;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .stat-num span { color: var(--accent); }
+
+        .stat-label {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.45);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 500;
+        }
+
+        /* ── VALUES ── */
         .values-section {
-            background-color: #f8f9fa;
-            padding: 3rem;
-            border-radius: 8px;
-            margin-bottom: 3rem;
+            padding: 88px 0;
+            background: var(--paper-warm);
         }
-        
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 56px;
+        }
+
+        .section-header .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.73rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent-dark);
+            margin-bottom: 14px;
+        }
+
+        .section-header .eyebrow::before {
+            content: '';
+            width: 22px; height: 2px;
+            background: var(--accent-dark);
+            display: inline-block;
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 3.5vw, 2.6rem);
+            font-weight: 700;
+            color: var(--ink);
+        }
+
         .values-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
         }
-        
+
         .value-card {
+            background: var(--white);
+            padding: 32px 26px;
+            transition: background 0.2s ease;
+            position: relative;
+        }
+
+        .value-card:hover { background: var(--paper-warm); }
+
+        .value-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--paper-warm);
+            line-height: 1;
+            margin-bottom: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .value-card:hover .value-num { color: var(--accent-light); }
+
+        .value-icon-wrap {
+            width: 42px; height: 42px;
+            background: var(--ink);
+            border-radius: 9px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+            margin-bottom: 14px;
+            transition: background 0.2s ease;
+        }
+
+        .value-card:hover .value-icon-wrap { background: var(--accent-dark); }
+
+        .value-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+        .value-card p {
+            font-size: 0.85rem;
+            color: var(--mid);
+            line-height: 1.65;
+        }
+
+        /* ── WHAT'S INCLUDED ── */
+        .included-section {
+            padding: 88px 0;
+            background: var(--white);
+        }
+
+        .included-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 0;
+        }
+
+        .included-card {
+            background: var(--paper-warm);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 28px 24px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .included-card:hover {
+            border-color: var(--accent-light);
+            box-shadow: var(--shadow-md);
+        }
+
+        .included-icon {
+            font-size: 1.5rem;
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .included-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+        .included-card p {
+            font-size: 0.85rem;
+            color: var(--mid);
+            line-height: 1.65;
+        }
+
+        /* ── BOTTOM CTA ── */
+        .bottom-cta {
+            background: var(--ink);
+            padding: 88px 0;
+            position: relative;
+            overflow: hidden;
             text-align: center;
-            padding: 1.5rem;
         }
-        
-        .value-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
+
+        .bottom-cta::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(200,169,110,0.08) 0%, transparent 65%);
+            pointer-events: none;
         }
-        
-        .contact-cta {
-            text-align: center;
-            padding: 3rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            border-radius: 8px;
+
+        .bottom-cta::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
         }
-        
-        .contact-cta h2 {
-            margin-bottom: 1rem;
+
+        .bottom-cta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 900;
+            color: var(--white);
+            line-height: 1.1;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
         }
-        
-        .contact-cta p {
-            margin-bottom: 1.5rem;
+
+        .bottom-cta h2 em { font-style: italic; color: var(--accent); }
+
+        .bottom-cta p {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.5);
+            max-width: 520px;
+            margin: 0 auto 36px;
+            line-height: 1.75;
+            position: relative;
+            z-index: 1;
         }
-        
-        .cta-button {
-            display: inline-block;
-            background-color: white;
-            color: var(--primary);
-            padding: 0.6rem 1.2rem;
-            border-radius: 4px;
+
+        .cta-row {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-gold {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent);
+            color: var(--ink);
+            padding: 13px 28px;
+            border-radius: 7px;
             text-decoration: none;
             font-weight: 600;
-            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
         }
-        
-        .cta-button:hover {
-            background-color: var(--light);
+
+        .btn-gold:hover {
+            background: #d9bc84;
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(200,169,110,0.35);
         }
-        
-       
-        /* Mobile Responsiveness */
-        @media (max-width: 768px) {
-            
-            .about-container {
-                padding: 1rem;
-            }
-            
-            .hero-section {
-                padding: 2rem 0;
-            }
-            
-            .hero-section h1 {
-                font-size: 1.8rem;
-                margin-top: 100px;
-            }
-            
-            .hero-section p {
-                font-size: 1rem;
-            }
-            
-            .mission-section,
-            .values-section,
-            .success-section {
-                padding: 1.5rem;
-            }
-            
-            .contact-cta {
-                padding: 1.5rem;
-            }
-            }
-        
+
+        .btn-outline-white {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            color: rgba(255,255,255,0.8);
+            padding: 13px 28px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: 1.5px solid rgba(255,255,255,0.2);
+            transition: all 0.2s ease;
+        }
+
+        .btn-outline-white:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.65s ease, transform 0.65s ease;
+        }
+
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 960px) {
+            .split-grid { grid-template-columns: 1fr; gap: 48px; }
+            .stats-inner { grid-template-columns: repeat(2, 1fr); }
+            .values-grid { grid-template-columns: repeat(2, 1fr); }
+            .included-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 640px) {
+            .container { padding: 0 20px; }
+            .page-hero { padding: 80px 0 60px; }
+            .stats-inner { grid-template-columns: repeat(2, 1fr); }
+            .values-grid { grid-template-columns: 1fr 1fr; }
+            .included-grid { grid-template-columns: 1fr; }
+            .cta-row { flex-direction: column; align-items: center; }
+        }
     </style>
 </head>
 <body>
@@ -276,98 +636,185 @@
     </div>
 </header>
 
-        
-    <div class="about-container">
-        <!-- Hero Section -->
-        <section class="hero-section">
-            <h1>About ResumePro</h1>
-            <p>We're revolutionizing how professionals showcase their careers with beautiful, modern digital resumes.</p>
-        </section>
-        
-        <!-- Mission Section -->
-        <section class="mission-section">
-            <h2>Our Mission</h2>
-            <p>At ResumePro, we believe everyone deserves a resume that truly represents their professional journey. Traditional PDF resumes are static and outdated - we're changing that with responsive, data-driven templates that work across all devices.</p>
-            <p>Founded in 2023, our team of designers and developers have created the easiest way to build a professional online presence without needing to code.</p>
-        </section>
 
-        <!-- About Me Section -->
-        <section class="mission-section">
-            <h2>About Me</h2>
-            <p>Hello! I am an Email Marketing Specialist/Strategist dedicated to helping businesses enhance their marketing efforts through effective email campaigns. With a passion for crafting compelling content and a keen understanding of analytics, I create strategies that drive engagement and conversions.</p>
-            <p>For more about my work and projects, feel free to check my portfolio: <a href="https://apdg21.github.io/email-marketing/portfolio1128.html" target="_blank">My Portfolio</a> and learn more about ResumePro at <a href="https://resumepro.pages.dev/" target="_blank">ResumePro</a>.</p>
-        </section>
-        
-        <!-- User Success Stories Section -->
-        <section class="success-section">
-            <h2>User Success Stories</h2>
-            <p>Our users have transformed their careers with ResumePro's templates. Here’s what they’re saying.</p>
-            <div class="success-grid">
-                <div class="success-card">
-                    <div class="success-info">
-                        <p class="success-quote">"Using ResumePro's Sleek template, I landed three interviews in a week!"</p>
-                        <h3>Marketing Professional</h3>
-                        <p>Increased interview callbacks by 30% with a modern portfolio.</p>
-                    </div>
-                </div>
-                
-                <div class="success-card">
-                    <div class="success-info">
-                        <p class="success-quote">"The Executive template helped me showcase my leadership experience clearly."</p>
-                        <h3>Senior Manager</h3>
-                        <p>Secured a C-level role with a polished digital resume.</p>
-                    </div>
-                </div>
-                
-                <div class="success-card">
-                    <div class="success-info">
-                        <p class="success-quote">"ResumePro’s templates made my portfolio stand out to freelance clients."</p>
-                        <h3>Graphic Designer</h3>
-                        <p>Boosted client inquiries by 25% with an interactive resume.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Values Section -->
-        <section class="values-section">
-            <h2>Our Core Values</h2>
-            <div class="values-grid">
-                <div class="value-card">
-                    <div class="value-icon">✨</div>
-                    <h3>Quality</h3>
-                    <p>Pixel-perfect designs that impress recruiters.</p>
-                </div>
-                
-                <div class="value-card">
-                    <div class="value-icon">⚡</div>
-                    <h3>Simplicity</h3>
-                    <p>No coding required - just focus on your content.</p>
-                </div>
-                
-                <div class="value-card">
-                    <div class="value-icon">🌍</div>
-                    <h3>Accessibility</h3>
-                    <p>Templates that work for everyone, everywhere.</p>
-                </div>
-                
-                <div class="value-card">
-                    <div class="value-icon">❤️</div>
-                    <h3>Support</h3>
-                    <p>We're here to help you succeed.</p>
-                </div>
-            </div>
-        </section>
-        
-        <!-- CTA Section -->
-        <section class="contact-cta">
-            <h2>Ready to Transform Your Resume?</h2>
-            <p>Join thousands of professionals who've upgraded their job search with ResumePro.</p>
-            <a href="index.html#templates" class="cta-button">Browse Templates</a>
-        </section>
+<!-- ══ HERO ══════════════════════════════════════════ -->
+<section class="page-hero">
+    <div class="container">
+        <span class="hero-eyebrow">About ResumePro</span>
+        <h1>Built for people<br>who take their<br>career <em>seriously.</em></h1>
+        <p class="hero-sub">
+            ResumePro is a collection of professional digital templates — resume, portfolio, and productivity tools — designed to help anyone build a polished online presence without writing a single line of code.
+        </p>
     </div>
-    
-   <footer>
+</section>
+
+<!-- ══ WHAT WE DO ════════════════════════════════════ -->
+<section class="what-section">
+    <div class="container">
+        <div class="split-grid reveal">
+            <div class="split-text">
+                <p class="section-eyebrow">What ResumePro Is</p>
+                <h2>A platform built<br>around <em>craft</em><br>and clarity.</h2>
+                <p>
+                    ResumePro started from a straightforward observation: most resume and portfolio templates on the internet are either overdesigned, difficult to customize, or locked behind expensive subscriptions.
+                </p>
+                <p>
+                    Every template here is built to be genuinely editable, mobile-responsive, and fast-loading — with clear setup guides so anyone can get their resume online in under an hour. No subscriptions, no recurring fees. One purchase, yours forever.
+                </p>
+                <p>
+                    The platform also includes free productivity tools — an email builder, a to-do and notes app, and analytics tools — for professionals who want more than just a resume.
+                </p>
+            </div>
+
+            <div class="pillar-list">
+                <div class="pillar-card">
+                    <span class="pillar-num">01</span>
+                    <div class="pillar-body">
+                        <h3>Digital Resume Templates</h3>
+                        <p>10 professionally designed HTML/CSS resume templates. Editable without coding — just update a text file and host for free on GitHub Pages or Netlify.</p>
+                    </div>
+                </div>
+                <div class="pillar-card">
+                    <span class="pillar-num">02</span>
+                    <div class="pillar-body">
+                        <h3>Portfolio Templates</h3>
+                        <p>10 portfolio layouts built for designers, developers, photographers, and creatives who need to showcase their work with purpose.</p>
+                    </div>
+                </div>
+                <div class="pillar-card">
+                    <span class="pillar-num">03</span>
+                    <div class="pillar-body">
+                        <h3>Free Productivity Tools</h3>
+                        <p>An email template builder, an enhanced to-do and notes app, and marketing analytics tools — all free and running in the browser, no install needed.</p>
+                    </div>
+                </div>
+                <div class="pillar-card">
+                    <span class="pillar-num">04</span>
+                    <div class="pillar-body">
+                        <h3>Android Applications</h3>
+                        <p>Voice-first mobile apps in development — productivity tools designed to work hands-free, currently in testing on Google Play.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ STATS ══════════════════════════════════════════ -->
+<section class="stats-band">
+    <div class="container">
+        <div class="stats-inner reveal">
+            <div class="stat-item">
+                <span class="stat-num">20<span>+</span></span>
+                <span class="stat-label">Templates Available</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">Free<span>*</span></span>
+                <span class="stat-label">To Host Anywhere</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">100<span>%</span></span>
+                <span class="stat-label">Responsive Design</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">4<span>+</span></span>
+                <span class="stat-label">Free Tools</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ VALUES ════════════════════════════════════════ -->
+<section class="values-section">
+    <div class="container">
+        <div class="section-header reveal">
+            <p class="eyebrow">Core Values</p>
+            <h2>What drives every decision.</h2>
+        </div>
+        <div class="values-grid reveal">
+            <div class="value-card">
+                <div class="value-num">01</div>
+                <div class="value-icon-wrap">✨</div>
+                <h3>Quality</h3>
+                <p>Every template is designed with care — pixel-precise layouts, clean code, and real-world testing across devices and email clients.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-num">02</div>
+                <div class="value-icon-wrap">⚡</div>
+                <h3>Simplicity</h3>
+                <p>No coding required. Customization is as simple as editing a text file. The goal is always to reduce friction, not add to it.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-num">03</div>
+                <div class="value-icon-wrap">🌍</div>
+                <h3>Accessibility</h3>
+                <p>Templates that load fast, work on every device, and can be hosted for free — so cost and technical ability are never blockers.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-num">04</div>
+                <div class="value-icon-wrap">🔧</div>
+                <h3>Usefulness</h3>
+                <p>Tools and templates are only worth building if they solve a real problem. Every product on this platform exists because it needed to exist.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ WHAT'S INCLUDED ═══════════════════════════════ -->
+<section class="included-section">
+    <div class="container">
+        <div class="section-header reveal">
+            <p class="eyebrow">Every Template Includes</p>
+            <h2>Everything to get you live,<br>nothing you don't need.</h2>
+        </div>
+        <div class="included-grid reveal">
+            <div class="included-card">
+                <span class="included-icon">📁</span>
+                <h3>Complete Source Files</h3>
+                <p>All HTML, CSS, and JavaScript files are included and clearly organized. Edit them in any text editor — no build tools or frameworks required.</p>
+            </div>
+            <div class="included-card">
+                <span class="included-icon">📖</span>
+                <h3>Setup Guide</h3>
+                <p>A step-by-step <code style="font-family:monospace;background:var(--border);padding:1px 5px;border-radius:3px;font-size:0.78rem;">Template_Guide.md</code> walks through customization, color changes, and deployment from start to finish.</p>
+            </div>
+            <div class="included-card">
+                <span class="included-icon">🚀</span>
+                <h3>Free Hosting Instructions</h3>
+                <p>Detailed guides for deploying to GitHub Pages, Netlify, and Vercel — all free options that work out of the box with no server configuration.</p>
+            </div>
+            <div class="included-card">
+                <span class="included-icon">📱</span>
+                <h3>Mobile-First Responsive</h3>
+                <p>Every template is tested on phones, tablets, and desktops. Recruiters viewing your resume on any device will see it exactly as intended.</p>
+            </div>
+            <div class="included-card">
+                <span class="included-icon">🎨</span>
+                <h3>CSS Variable Theming</h3>
+                <p>Colors, fonts, and spacing are controlled through documented CSS variables. Changing the entire look of a template takes under five minutes.</p>
+            </div>
+            <div class="included-card">
+                <span class="included-icon">🔄</span>
+                <h3>One Year of Free Updates</h3>
+                <p>Every purchase includes free updates to that template for 12 months — bug fixes, browser compatibility patches, and design improvements.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ CTA ════════════════════════════════════════════ -->
+<section class="bottom-cta">
+    <div class="container">
+        <h2>Ready to build<br>your <em>online presence?</em></h2>
+        <p>Browse the full collection of resume and portfolio templates, or explore the free productivity tools — no account required.</p>
+        <div class="cta-row">
+            <a href="resume-templates.html" class="btn-gold">Browse Resume Templates</a>
+            <a href="portfolio-templates.html" class="btn-outline-white">Browse Portfolio Templates</a>
+        </div>
+    </div>
+</section>
+
+<footer>
     <div class="footer-content">
         <div class="footer-column">
             <h3>ResumePro</h3>
@@ -408,12 +855,21 @@
     </div>
 </footer>
 
-    
-    <script src="clean-url.js"></script>
-    <script src="header.js"></script>
-    
-    
+<script src="clean-urls.js"></script>
+<script src="header.js"></script>
 
-    
+<script>
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach((e, i) => {
+            if (e.isIntersecting) {
+                e.target.style.transitionDelay = (i * 0.06) + 's';
+                e.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+
 </body>
 </html>

@@ -62,6 +62,13 @@
       "date": "2023-06-15",
       "excerpt": "Your portfolio is your digital handshake. Learn the essential elements that make hiring managers take notice.",
       "image": "assets/blog/portfolio-best-practices.jpg"
+    },
+    {
+      "title": "Why Leading Email Platforms Favor Balanced Image–Text Designs",
+      "url": "balanced-email-design.html",
+      "date": "2026-03-13",
+      "excerpt": "Discover why Klaviyo, Omnisend, and Figma use balanced text-image emails—improving deliverability, accessibility, and engagement while avoiding spam filters.",
+      "image": "assets/blog/balanced-email-design.jpg"
     }
   ]
 }

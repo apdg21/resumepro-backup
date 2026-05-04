@@ -65,6 +65,11 @@
     .how-step-n { font-weight:700; color:var(--accent); flex-shrink:0; min-width:18px; }
     .how-card.monthly .how-step-n { color:var(--accent2); }
 
+    /* FORMAT BADGE */
+    .format-badge { display:inline-flex; align-items:center; gap:0.4rem; padding:0.2rem 0.6rem; border-radius:100px; font-size:0.62rem; font-weight:700; margin-left:0.5rem; }
+    .format-tsv { background:#e7f0fe; color:#1a4fa0; }
+    .format-block { background:#fef0e7; color:#c05012; }
+
     /* STEP LABELS */
     .step-label { display:flex; align-items:center; gap:0.65rem; font-size:0.62rem; letter-spacing:2px; text-transform:uppercase; color:var(--muted2); font-weight:700; margin-bottom:0.75rem; }
     .step-num { width:22px; height:22px; border-radius:50%; background:var(--ink); color:#fff; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
@@ -200,8 +205,8 @@
     <div class="how-card">
       <div class="how-title">📋 How to Use — Campaign Converter</div>
       <div class="how-steps">
-        <div class="how-step"><span class="how-step-n">1.</span><span>In Omnisend go to <strong>Reports → Campaigns</strong>, select your date range, and copy the full table (header row included).</span></div>
-        <div class="how-step"><span class="how-step-n">2.</span><span>Paste below. Each campaign is <strong>11 lines</strong>: name, type, date, sent, open rate, click rate, order rate, revenue, failed delivery, spam rate, unsub rate.</span></div>
+        <div class="how-step"><span class="how-step-n">1.</span><span>In Omnisend go to <strong>Reports → Campaigns</strong>, select your date range, and copy the full table.</span></div>
+        <div class="how-step"><span class="how-step-n">2.</span><span>Paste below. Supports <strong>two formats automatically</strong>: <span class="format-badge format-tsv">Tab-separated</span> (copy from browser table — one row per campaign) and <span class="format-badge format-block">Block format</span> (11 lines per campaign, one value per line).</span></div>
         <div class="how-step"><span class="how-step-n">3.</span><span>Click <strong>Convert</strong> to parse and preview, then <strong>Download CSV</strong> to get the file.</span></div>
       </div>
     </div>
@@ -210,27 +215,22 @@
     <div class="card">
       <textarea class="paste-area" id="campPasteArea" oninput="campOnInput()" placeholder="Paste your Omnisend campaign data here…
 
+Tab-separated (copy directly from the Omnisend table):
+Campaign name	Type	Send date	Messages sent	Open rate	…
+My Campaign	Email	Apr 30, 2026	8,802	75.1% (6,615)	…
+
+— or —
+
+Block format (11 lines per campaign):
 Campaign name
 Type
 Send date
-Messages sent
-Open rate
-Click rate
-Placed order rate
-Revenue
-Failed delivery rate
-Marked as spam rate
-Unsubscribe rate
-My Campaign Name
-Email
-Mar 30, 2026
-8,956
-78.5% (7,036)
 …"></textarea>
       <div class="btn-row">
         <button class="btn btn-primary" onclick="campConvert()">⚡ Convert</button>
         <button class="btn btn-secondary" onclick="campClear()">✕ Clear</button>
         <button class="btn btn-secondary" onclick="campLoadSample()">📄 Load Sample</button>
+        <button class="btn btn-secondary" onclick="campLoadSampleBlock()">📄 Block Sample</button>
       </div>
       <div class="status-bar" id="campStatus">
         <div class="status-dot" id="campDot"></div>
@@ -242,6 +242,7 @@ Mar 30, 2026
       <div class="step-num" id="c-step2">2</div>
       Preview & Validate
       <span id="campCountBadge" style="display:none;" class="count-badge">0 campaigns</span>
+      <span id="campFormatBadge" style="display:none;" class="format-badge"></span>
     </div>
     <div class="card" style="padding:0;overflow:hidden;">
       <div id="campPreview"><div class="empty-state"><div class="empty-icon">📊</div>Parsed campaigns will appear here</div></div>
@@ -375,7 +376,6 @@ function switchTab(tab) {
 // ═══════════════════════════════════════════════════════
 const MON_NUM = {Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',
                  Jul:'07',Aug:'08',Sep:'09',Oct:'10',Nov:'11',Dec:'12'};
-const MON_ABB = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 function dlCSV(filename, csvText) {
   const blob = new Blob([csvText], { type:'text/csv;charset=utf-8;' });
@@ -397,6 +397,8 @@ const N = CAMP_HEADERS.length;
 let campRows = [];
 
 function parseCampDate(s) {
+  if (!s) return s;
+  s = s.trim();
   const m = s.match(/^(\w+)\s+(\d+),\s+(\d{4})$/);
   if (!m) return s;
   return `${m[3]}-${MON_NUM[m[1]]||'??'}-${String(m[2]).padStart(2,'0')}`;
@@ -404,133 +406,255 @@ function parseCampDate(s) {
 
 function parsePctN(s) {
   if (!s || s.trim()==='N/A' || s.trim()==='') return {pct:null,n:null};
+  s = s.trim();
+  // Revenue like €409.19 (24)
   const rev = s.match(/€([\d,]+\.?\d*)\s*\((\d+)\)/);
   if (rev) return {pct:parseFloat(rev[1].replace(/,/g,'')), n:parseInt(rev[2])};
+  // Percentage like 75.1% (6,615) or 0% (0)
   const pc = s.match(/([\d.]+)%\s*\(?([\d,]*)\)?/);
   if (pc) return {pct:parseFloat(pc[1]), n:pc[2]?parseInt(pc[2].replace(/,/g,'')):null};
+  // Plain number
   const plain = parseFloat(s.replace(/[,€]/g,''));
   return isNaN(plain)?{pct:null,n:null}:{pct:plain,n:null};
 }
 
 function parseSent(s) {
+  if (!s) return 0;
   s = s.trim();
   if (s.endsWith('K')||s.endsWith('k')) return Math.round(parseFloat(s)*1000);
   return parseInt(s.replace(/,/g,''))||0;
 }
 
-function campParseRaw(raw) {
-  const lines = raw.split('\n').map(l=>l.trim()).filter(l=>l!=='');
+// ── Detect whether input is TSV (tab-separated) or block format ──
+function detectFormat(raw) {
+  const firstLine = raw.split('\n')[0];
+  // TSV has tabs
+  if (firstLine.includes('\t')) return 'tsv';
+  return 'block';
+}
+
+// ── Build a campaign row object from 11 field strings ──
+function buildCampRow(fields) {
+  const [name, type, dateRaw, sentRaw, openRaw, clickRaw, orderRaw, revRaw, failRaw, spamRaw, unsubRaw] = fields;
+  const channel = (type||'').trim() === 'SMS' ? 'SMS' : 'Email';
+  const open  = parsePctN(openRaw);
+  const click = parsePctN(clickRaw);
+  const rev   = parsePctN(revRaw);
+  const fail  = parsePctN(failRaw);
+  const spam  = parsePctN(spamRaw);
+  const unsub = parsePctN(unsubRaw);
+  return {
+    date:     parseCampDate((dateRaw||'').trim()),
+    name:     (name||'').trim(),
+    channel,
+    sent:     parseSent(sentRaw),
+    openPct:  open.pct,  openN:  open.n,
+    clickPct: click.pct, clickN: click.n,
+    rev:      rev.pct,   orders: rev.n,
+    failPct:  fail.pct,
+    spamPct:  spam.pct,
+    unsubPct: unsub.pct, unsubN: unsub.n,
+  };
+}
+
+// ── TSV parser: one row per campaign, tab-separated ──
+function campParseRawTSV(raw) {
+  const lines = raw.split('\n').map(l => l.trimEnd()).filter(l => l !== '');
+  const rows = [], errors = [];
   let start = 0;
-  if (lines[0]===CAMP_HEADERS[0]) {
-    let isH=true;
-    for(let i=1;i<N;i++) if(lines[i]!==CAMP_HEADERS[i]){isH=false;break;}
-    if(isH) start=N;
+
+  // Skip header row if present (first cell matches "Campaign name")
+  if (lines[0] && lines[0].split('\t')[0].trim() === 'Campaign name') {
+    start = 1;
   }
-  const data=lines.slice(start), rows=[], errors=[];
-  let i=0;
-  while(i+N-1<data.length) {
-    const [name,type,dateRaw,sentRaw,openRaw,clickRaw,orderRaw,revRaw,failRaw,spamRaw,unsubRaw]=data.slice(i,i+N);
-    if(!name||!type||!dateRaw){errors.push(`Row ${rows.length+1}: missing name/type/date — skipped.`);i+=N;continue;}
-    const channel=type.trim()==='SMS'?'SMS':'Email';
-    const open=parsePctN(openRaw), click=parsePctN(clickRaw);
-    const rev=parsePctN(revRaw), fail=parsePctN(failRaw);
-    const spam=parsePctN(spamRaw), unsub=parsePctN(unsubRaw);
-    rows.push({
-      date:parseCampDate(dateRaw.trim()), name:name.trim(), channel,
-      sent:parseSent(sentRaw),
-      openPct:open.pct, openN:open.n,
-      clickPct:click.pct, clickN:click.n,
-      rev:rev.pct, orders:rev.n,
-      failPct:fail.pct, spamPct:spam.pct,
-      unsubPct:unsub.pct, unsubN:unsub.n,
-    });
-    i+=N;
+
+  for (let i = start; i < lines.length; i++) {
+    const cols = lines[i].split('\t');
+    if (cols.length < N) {
+      errors.push(`Row ${i - start + 1}: only ${cols.length} columns found (expected ${N}) — skipped.`);
+      continue;
+    }
+    // Trim each cell
+    const fields = cols.slice(0, N).map(c => c.trim());
+    if (!fields[0] || !fields[1] || !fields[2]) {
+      errors.push(`Row ${i - start + 1}: missing name/type/date — skipped.`);
+      continue;
+    }
+    rows.push(buildCampRow(fields));
   }
-  const leftover=data.length-i;
-  if(leftover>0&&leftover<N) errors.push(`⚠ ${leftover} trailing line(s) couldn't form a complete row — ignored.`);
-  return {rows,errors};
+
+  return { rows, errors, format: 'tsv' };
+}
+
+// ── Block parser: 11 lines per campaign ──
+function campParseRawBlock(raw) {
+  const lines = raw.split('\n').map(l => l.trim()).filter(l => l !== '');
+  let start = 0;
+
+  // Skip header block if present
+  if (lines[0] === CAMP_HEADERS[0]) {
+    let isH = true;
+    for (let i = 1; i < N; i++) if (lines[i] !== CAMP_HEADERS[i]) { isH = false; break; }
+    if (isH) start = N;
+  }
+
+  const data = lines.slice(start), rows = [], errors = [];
+  let i = 0;
+  while (i + N - 1 < data.length) {
+    const fields = data.slice(i, i + N);
+    if (!fields[0] || !fields[1] || !fields[2]) {
+      errors.push(`Row ${rows.length + 1}: missing name/type/date — skipped.`);
+      i += N; continue;
+    }
+    rows.push(buildCampRow(fields));
+    i += N;
+  }
+
+  const leftover = data.length - i;
+  if (leftover > 0 && leftover < N) {
+    errors.push(`⚠ ${leftover} trailing line(s) couldn't form a complete row — ignored.`);
+  }
+
+  return { rows, errors, format: 'block' };
+}
+
+// ── Auto-detect and parse ──
+function campParseRaw(raw) {
+  const fmt = detectFormat(raw);
+  if (fmt === 'tsv') return campParseRawTSV(raw);
+  return campParseRawBlock(raw);
 }
 
 function campConvert() {
-  const raw=document.getElementById('campPasteArea').value;
-  if(!raw.trim()){campSetStatus('err','Nothing to convert — paste your Omnisend data first.');return;}
-  const {rows,errors}=campParseRaw(raw);
-  campRows=rows;
-  if(!rows.length){campSetStatus('err','No campaigns found. Check format — each campaign needs exactly 11 lines.');}
-  else {
-    campSetStatus('ok',`✅ ${rows.length} campaign${rows.length>1?'s':''} parsed.${errors.length?' '+errors.length+' warning(s).':''}`);
+  const raw = document.getElementById('campPasteArea').value;
+  if (!raw.trim()) { campSetStatus('err', 'Nothing to convert — paste your Omnisend data first.'); return; }
+
+  const { rows, errors, format } = campParseRaw(raw);
+  campRows = rows;
+
+  // Show format badge
+  const fb = document.getElementById('campFormatBadge');
+  if (rows.length) {
+    fb.style.display = 'inline-flex';
+    if (format === 'tsv') {
+      fb.className = 'format-badge format-tsv';
+      fb.textContent = '⇥ Tab-separated';
+    } else {
+      fb.className = 'format-badge format-block';
+      fb.textContent = '≡ Block format';
+    }
+  } else {
+    fb.style.display = 'none';
+  }
+
+  if (!rows.length) {
+    campSetStatus('err', 'No campaigns found. Check format — try tab-separated (copy from table) or block format (11 lines per campaign).');
+  } else {
+    campSetStatus('ok', `✅ ${rows.length} campaign${rows.length > 1 ? 's' : ''} parsed (${format === 'tsv' ? 'tab-separated' : 'block'} format).${errors.length ? ' ' + errors.length + ' warning(s).' : ''}`);
     document.getElementById('c-step1').classList.add('done');
     document.getElementById('c-step2').classList.add('done');
   }
-  const badge=document.getElementById('campCountBadge');
-  if(rows.length){badge.style.display='inline-flex';badge.textContent=rows.length+' campaign'+(rows.length>1?'s':'');}
-  else badge.style.display='none';
+
+  const badge = document.getElementById('campCountBadge');
+  if (rows.length) { badge.style.display = 'inline-flex'; badge.textContent = rows.length + ' campaign' + (rows.length > 1 ? 's' : ''); }
+  else badge.style.display = 'none';
+
   campRenderPreview(rows);
-  const errEl=document.getElementById('campErrors');
-  if(errors.length){errEl.innerHTML=`<div class="error-list">${errors.map(e=>`<div class="warn-item">⚠ ${e}</div>`).join('')}</div>`;errEl.style.padding='0 1.5rem 1rem';}
-  else{errEl.innerHTML='';errEl.style.padding='0';}
-  document.getElementById('campDownloadBtn').disabled=!rows.length;
-  if(rows.length) document.getElementById('c-step3').classList.add('done');
+
+  const errEl = document.getElementById('campErrors');
+  if (errors.length) {
+    errEl.innerHTML = `<div class="error-list">${errors.map(e => `<div class="warn-item">⚠ ${e}</div>`).join('')}</div>`;
+    errEl.style.padding = '0 1.5rem 1rem';
+  } else { errEl.innerHTML = ''; errEl.style.padding = '0'; }
+
+  document.getElementById('campDownloadBtn').disabled = !rows.length;
+  if (rows.length) document.getElementById('c-step3').classList.add('done');
 }
 
 function campRenderPreview(rows) {
-  const area=document.getElementById('campPreview');
-  if(!rows.length){area.innerHTML=`<div class="empty-state"><div class="empty-icon">⚠️</div>No campaigns parsed. Check the format.</div>`;return;}
-  const uc=v=>v==null?'':v>=0.6?'unsub-hi':v>=0.3?'unsub-md':'unsub-lo';
-  area.innerHTML=`<div class="preview-wrap"><table class="preview"><thead><tr>
+  const area = document.getElementById('campPreview');
+  if (!rows.length) {
+    area.innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div>No campaigns parsed. Check the format.</div>`;
+    return;
+  }
+  const uc = v => v == null ? '' : v >= 0.6 ? 'unsub-hi' : v >= 0.3 ? 'unsub-md' : 'unsub-lo';
+  area.innerHTML = `<div class="preview-wrap"><table class="preview"><thead><tr>
     <th>Campaign Name</th><th>Ch</th><th>Date</th>
     <th style="text-align:right">Sent</th><th style="text-align:right">Open%</th>
     <th style="text-align:right">Click%</th><th style="text-align:right">Revenue</th>
     <th style="text-align:right">Orders</th>
     <th style="text-align:right;color:#ef4444">Unsub%</th>
     <th style="text-align:right">Spam%</th><th style="text-align:right">Failed%</th>
-  </tr></thead><tbody>${rows.map(r=>`<tr>
+  </tr></thead><tbody>${rows.map(r => `<tr>
     <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;" title="${r.name}"><strong>${r.name}</strong></td>
-    <td><span class="ch-pill ${r.channel==='SMS'?'ch-sms':'ch-email'}">${r.channel==='SMS'?'💬':'📧'} ${r.channel}</span></td>
+    <td><span class="ch-pill ${r.channel === 'SMS' ? 'ch-sms' : 'ch-email'}">${r.channel === 'SMS' ? '💬' : '📧'} ${r.channel}</span></td>
     <td>${r.date}</td>
     <td style="text-align:right">${r.sent.toLocaleString()}</td>
-    <td style="text-align:right">${r.openPct!=null?r.openPct.toFixed(1)+'%':'—'}</td>
-    <td style="text-align:right">${r.clickPct!=null?r.clickPct.toFixed(1)+'%':'—'}</td>
-    <td style="text-align:right">${r.rev!=null?'€'+r.rev.toFixed(2):'—'}</td>
-    <td style="text-align:right">${r.orders??'—'}</td>
-    <td style="text-align:right" class="${uc(r.unsubPct)}">${r.unsubPct!=null?r.unsubPct.toFixed(2)+'%'+(r.unsubN!=null?' ('+r.unsubN+')':''):'—'}</td>
-    <td style="text-align:right">${r.spamPct!=null?r.spamPct.toFixed(2)+'%':'—'}</td>
-    <td style="text-align:right">${r.failPct!=null?r.failPct.toFixed(2)+'%':'—'}</td>
+    <td style="text-align:right">${r.openPct != null ? r.openPct.toFixed(1) + '%' : '—'}</td>
+    <td style="text-align:right">${r.clickPct != null ? r.clickPct.toFixed(1) + '%' : '—'}</td>
+    <td style="text-align:right">${r.rev != null ? '€' + r.rev.toFixed(2) : '—'}</td>
+    <td style="text-align:right">${r.orders ?? '—'}</td>
+    <td style="text-align:right" class="${uc(r.unsubPct)}">${r.unsubPct != null ? r.unsubPct.toFixed(2) + '%' + (r.unsubN != null ? ' (' + r.unsubN + ')' : '') : '—'}</td>
+    <td style="text-align:right">${r.spamPct != null ? r.spamPct.toFixed(2) + '%' : '—'}</td>
+    <td style="text-align:right">${r.failPct != null ? r.failPct.toFixed(2) + '%' : '—'}</td>
   </tr>`).join('')}</tbody></table></div>`;
 }
 
 function campDownload() {
-  if(!campRows.length) return;
-  const hdrs=['date','name','channel','sent','openPct','openN','clickPct','clickN','rev','orders','unsubPct','unsubN','spamPct','failPct','segment'];
-  const esc=v=>{if(v==null||v==='')return'';const s=String(v);return s.includes(',')||s.includes('"')?`"${s.replace(/"/g,'""')}"`:''+s;};
-  const lines=[hdrs.join(','),...campRows.map(r=>[
-    esc(r.date),esc(r.name),esc(r.channel),r.sent,
-    r.openPct??'',r.openN??'',r.clickPct??'',r.clickN??'',
-    r.rev??'',r.orders??'',r.unsubPct??'',r.unsubN??'',
-    r.spamPct??'',r.failPct??'',''
+  if (!campRows.length) return;
+  const hdrs = ['date','name','channel','sent','openPct','openN','clickPct','clickN','rev','orders','unsubPct','unsubN','spamPct','failPct','segment'];
+  const esc = v => { if (v == null || v === '') return ''; const s = String(v); return s.includes(',') || s.includes('"') ? `"${s.replace(/"/g,'""')}"` : '' + s; };
+  const lines = [hdrs.join(','), ...campRows.map(r => [
+    esc(r.date), esc(r.name), esc(r.channel), r.sent,
+    r.openPct ?? '', r.openN ?? '', r.clickPct ?? '', r.clickN ?? '',
+    r.rev ?? '', r.orders ?? '', r.unsubPct ?? '', r.unsubN ?? '',
+    r.spamPct ?? '', r.failPct ?? '', ''
   ].join(','))];
   dlCSV(`campaigns-${new Date().toISOString().slice(0,10)}.csv`, lines.join('\n'));
-  campSetStatus('ok',`⬇ Downloaded — ${campRows.length} campaigns.`);
+  campSetStatus('ok', `⬇ Downloaded — ${campRows.length} campaigns.`);
 }
 
-function campSetStatus(type,msg){
-  const d=document.getElementById('campDot');
-  d.className='status-dot'+(type==='ok'?' ok':type==='err'?' err':type==='warn'?' warn':'');
-  document.getElementById('campMsg').textContent=msg;
+function campSetStatus(type, msg) {
+  const d = document.getElementById('campDot');
+  d.className = 'status-dot' + (type === 'ok' ? ' ok' : type === 'err' ? ' err' : type === 'warn' ? ' warn' : '');
+  document.getElementById('campMsg').textContent = msg;
 }
-function campOnInput(){const v=document.getElementById('campPasteArea').value.trim();campSetStatus('',v?'Click Convert to parse.':'Paste your data above and click Convert.');}
-function campClear(){
-  document.getElementById('campPasteArea').value='';campRows=[];
-  document.getElementById('campPreview').innerHTML=`<div class="empty-state"><div class="empty-icon">📊</div>Parsed campaigns will appear here</div>`;
-  document.getElementById('campErrors').innerHTML='';
-  document.getElementById('campCountBadge').style.display='none';
-  document.getElementById('campDownloadBtn').disabled=true;
-  ['c-step1','c-step2','c-step3'].forEach(id=>document.getElementById(id).classList.remove('done'));
-  campSetStatus('','Paste your data above and click Convert.');
+function campOnInput() {
+  const v = document.getElementById('campPasteArea').value.trim();
+  if (v) {
+    const fmt = detectFormat(v);
+    campSetStatus('', `${fmt === 'tsv' ? '⇥ Tab-separated format detected' : '≡ Block format detected'} — click Convert to parse.`);
+  } else {
+    campSetStatus('', 'Paste your data above and click Convert.');
+  }
 }
-function campLoadSample(){
-  document.getElementById('campPasteArea').value=`Campaign name\nType\nSend date\nMessages sent\nOpen rate\nClick rate\nPlaced order rate\nRevenue\nFailed delivery rate\nMarked as spam rate\nUnsubscribe rate\nMAR_CRAFT_GRAND_FINALE_25\nSMS\nMar 30, 2026\n6,860\nN/A\n38.4% (2,635)\n0.23% (16)\n€386.83 (17)\n0.65% (45)\nN/A\n0.87% (60)\nCraft Month Grand Finale — 25% OFF\nEmail\nMar 30, 2026\n8,956\n78.5% (7,036)\n2.5% (228)\n0.14% (13)\n€244.86 (13)\n0.04% (4)\n0.01% (1)\n0.33% (30)\nSpring Palette Reveal\nEmail\nMar 5, 2026\n8,360\n80.5% (6,734)\n2.3% (199)\n0.23% (20)\n€370.10 (21)\n0.44% (37)\n0% (0)\n0.58% (49)`;
-  campSetStatus('','Sample loaded — click Convert to parse.');
+function campClear() {
+  document.getElementById('campPasteArea').value = ''; campRows = [];
+  document.getElementById('campPreview').innerHTML = `<div class="empty-state"><div class="empty-icon">📊</div>Parsed campaigns will appear here</div>`;
+  document.getElementById('campErrors').innerHTML = '';
+  document.getElementById('campCountBadge').style.display = 'none';
+  document.getElementById('campFormatBadge').style.display = 'none';
+  document.getElementById('campDownloadBtn').disabled = true;
+  ['c-step1','c-step2','c-step3'].forEach(id => document.getElementById(id).classList.remove('done'));
+  campSetStatus('', 'Paste your data above and click Convert.');
+}
+
+// TSV sample (the new format)
+function campLoadSample() {
+  document.getElementById('campPasteArea').value = [
+    'Campaign name\tType\tSend date\tMessages sent\tOpen rate\tClick rate\tPlaced order rate\tRevenue\tFailed delivery rate\tMarked as spam rate\tUnsubscribe rate',
+    'The Final Hours of April\tEmail\tApr 30, 2026\t8,802\t75.1% (6,615)\t1.5% (140)\t0.27% (24)\t€409.19 (24)\t0.03% (3)\t0.01% (1)\t0.27% (24)',
+    'The Late-April Spark\tEmail\tApr 29, 2026\t8,805\t77.1% (6,795)\t2.1% (188)\t0.23% (21)\t€360.54 (21)\t0.02% (2)\t0% (0)\t0.29% (26)',
+    'SMS_AprilCloseout_30OFF\tSMS\tApr 27, 2026\t7,095\tN/A\t39.9% (2,836)\t0.29% (21)\t€418.71 (21)\t2.1% (151)\tN/A\t0.98% (70)',
+    'A Simple Offer, Before April Ends\tEmail\tApr 27, 2026\t8,787\t77.8% (6,838)\t2.8% (250)\t0.35% (31)\t€453.12 (32)\t0.04% (4)\t0.01% (1)\t0.33% (29)',
+  ].join('\n');
+  campSetStatus('', '⇥ Tab-separated sample loaded — click Convert to parse.');
+}
+
+// Block sample (old format)
+function campLoadSampleBlock() {
+  document.getElementById('campPasteArea').value = `Campaign name\nType\nSend date\nMessages sent\nOpen rate\nClick rate\nPlaced order rate\nRevenue\nFailed delivery rate\nMarked as spam rate\nUnsubscribe rate\nMAR_CRAFT_GRAND_FINALE_25\nSMS\nMar 30, 2026\n6,860\nN/A\n38.4% (2,635)\n0.23% (16)\n€386.83 (17)\n0.65% (45)\nN/A\n0.87% (60)\nCraft Month Grand Finale — 25% OFF\nEmail\nMar 30, 2026\n8,956\n78.5% (7,036)\n2.5% (228)\n0.14% (13)\n€244.86 (13)\n0.04% (4)\n0.01% (1)\n0.33% (30)`;
+  campSetStatus('', '≡ Block format sample loaded — click Convert to parse.');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -547,7 +671,6 @@ function parseNum(s) {
 }
 
 function parseSigned(s) {
-  // "+623" or "-22.62%" → number (strip % and sign logic preserved)
   if (!s) return null;
   s = s.trim().replace(/[%,]/g,'');
   const n = parseFloat(s);
@@ -555,9 +678,8 @@ function parseSigned(s) {
 }
 
 function parseSubLine(s) {
-  // "1,480 subscribed|857 unsubscribed" → {sub:1480, unsub:857}
   if (!s) return {sub:null, unsub:null};
-  const subM  = s.match(/([\d,]+)\s+subscribed/);
+  const subM   = s.match(/([\d,]+)\s+subscribed/);
   const unsubM = s.match(/([\d,]+)\s+unsubscribed/);
   return {
     sub:   subM  ? parseInt(subM[1].replace(/,/g,''))  : null,
@@ -573,39 +695,25 @@ function monthParseBlock(raw) {
     errors:[], warnings:[]
   };
 
-  // We'll scan line-by-line looking for known anchors
   let i=0;
   while(i<lines.length) {
     const l=lines[i];
 
-    // ── Revenue from Omnisend block ──
     if (l==='Revenue from Omnisend') {
-      // next line: total €
       if (lines[i+1]) result.omni = parseNum(lines[i+1]);
-      // scan forward for Campaigns, Automation, Total store revenue
       let j=i+1;
       while(j<lines.length && lines[j]!=='Email subscribers') {
-        if (lines[j]==='Campaigns' && lines[j+1]) {
-          result.camp = parseNum(lines[j+1]);
-        }
-        if (lines[j]==='Automation' && lines[j+1]) {
-          result.auto = parseNum(lines[j+1]);
-        }
-        if (lines[j]==='Total store revenue' && lines[j+1]) {
-          result.store = parseNum(lines[j+1]);
-        }
+        if (lines[j]==='Campaigns' && lines[j+1]) result.camp = parseNum(lines[j+1]);
+        if (lines[j]==='Automation' && lines[j+1]) result.auto = parseNum(lines[j+1]);
+        if (lines[j]==='Total store revenue' && lines[j+1]) result.store = parseNum(lines[j+1]);
         j++;
       }
       i=j; continue;
     }
 
-    // ── Email subscribers ──
     if (l==='Email subscribers') {
-      // i+1: total like "33.7K"
       if (lines[i+1]) result.emailSubs = Math.round(parseNum(lines[i+1]));
-      // i+2: net change like "+623"
       if (lines[i+2]) result.newNet = parseSigned(lines[i+2]);
-      // i+3: "1,480 subscribed|857 unsubscribed"
       if (lines[i+3]) {
         const p = parseSubLine(lines[i+3]);
         if (result.unsub === null) result.unsub = p.unsub;
@@ -613,13 +721,11 @@ function monthParseBlock(raw) {
       i+=4; continue;
     }
 
-    // ── SMS / Push subscribers (skip — not needed for monthly CSV) ──
     if (l==='SMS subscribers'||l==='Push subscribers') { i+=4; continue; }
 
     i++;
   }
 
-  // Validation
   if (result.omni===null) result.errors.push('Could not find "Revenue from Omnisend" value.');
   if (result.camp===null) result.warnings.push('Campaigns revenue not found — will be blank.');
   if (result.auto===null) result.warnings.push('Automation revenue not found — will be blank.');
@@ -638,7 +744,6 @@ function monthParse() {
   if (!label) { monthSetStatus('err','Please enter a month label (e.g. Mar \'26) first.'); return; }
   if (!raw)   { monthSetStatus('err','Nothing to parse — paste the Omnisend overview stats first.'); return; }
 
-  // Check for duplicate label
   if (monthRows.find(r=>r.month===label)) {
     monthSetStatus('warn',`⚠ A row for "${label}" already exists — remove it first if you want to replace it.`);
     return;
@@ -667,7 +772,6 @@ function monthParse() {
   const warnTxt = parsed.warnings.length ? ' ⚠ '+parsed.warnings.join(' | ') : '';
   monthSetStatus('ok', `✅ "${label}" added (${monthRows.length} month${monthRows.length>1?'s':''} total).${warnTxt}`);
 
-  // Clear input for next month
   document.getElementById('monthPasteArea').value='';
   document.getElementById('monthLabel').value='';
 

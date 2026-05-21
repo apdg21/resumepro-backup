@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W52LYHBGZY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-W52LYHBGZY');
+</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../header.css">
+    <link rel="stylesheet" href="../footer.css">
+    <title>Seasonality in Email Marketing: Why Your Numbers Lie | ResumePro Blog</title>
+    <style>
+        /* === exact styles from sample blog, kept verbatim === */
+        :root {
+            --primary: #3a86ff;
+            --primary-dark: #2667cc;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .blog-container {
+            max-width: 800px;
+            margin: 5rem auto 3rem auto;
+            padding: 0 2rem;
+        }
+        
+        .blog-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            margin-top: 150px;
+        }
+        
+        .blog-meta {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+        
+        .blog-image {
+            width: 100%;
+            height: 400px;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            object-fit: fill;
+        }
+        
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+        }
+        
+        .blog-content {
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .blog-content h2 {
+            font-size: 1.8rem;
+            margin: 2.5rem 0 1.5rem;
+            color: var(--primary);
+        }
+        
+        .blog-content h3 {
+            font-size: 1.4rem;
+            margin: 2rem 0 1rem;
+            color: var(--dark);
+        }
+        
+        .blog-content p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .blog-content ul, .blog-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+        
+        .blog-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .tip-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        @media (max-width: 768px) {
+            .blog-container {
+                margin: 4rem auto 2rem auto;
+            }
+            
+            .blog-title {
+                font-size: 1.8rem;
+            }
+            
+            .blog-meta {
+                font-size: 0.9rem;
+            }
+            
+            .blog-image {
+                height: 200px;
+            }
+            
+            .blog-content {
+                font-size: 1rem;
+            }
+            
+            .blog-content h2 {
+                font-size: 1.5rem;
+            }
+            
+            .blog-content h3 {
+                font-size: 1.2rem;
+            }
+            
+            .tip-box {
+                padding: 1rem;
+            }
+            
+            .cta-button {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+    <div class="header-content">
+
+        <!-- Logo -->
+        <a href="../index.html" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+
+        <!-- Nav + Hamburger -->
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+
+            <ul class="header-nav-menu" role="menubar">
+
+                <li class="header-nav-item" role="none">
+                    <a href="../index.html" class="header-nav-link" role="menuitem">Home</a>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Templates
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                    </a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="../resume-templates.html"   class="header-dropdown-item" role="menuitem">Resume Templates</a>
+                        <a href="../portfolio-templates.html" class="header-dropdown-item" role="menuitem">Portfolio Templates</a>
+                    </div>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Apps
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                    </a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="../android-applications.html"   class="header-dropdown-item" role="menuitem">Android Applications</a>
+                        <a href="../family-connection-tools.html" class="header-dropdown-item" role="menuitem">Web Applications</a>
+                    </div>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="../blog-list.html" class="header-nav-link" role="menuitem">Blog</a>
+                </li>
+
+                <li class="header-nav-item" role="none" style="display: none;">
+                    <a href="../klaviyo-analytics.html" class="header-nav-link" role="menuitem">Klaviyo Analytics</a>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Tools
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                    </a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="../email-builder.html"  class="header-dropdown-item" role="menuitem">Email Builder</a>
+                        <a href="../enhanced-todo.html"              class="header-dropdown-item" role="menuitem">To-Do &amp; Notes</a>
+                        <a href="../klaviyo-tool.html"               class="header-dropdown-item" role="menuitem">Klaviyo Tool</a>
+                        <a href="../omnisend.html"                   class="header-dropdown-item" role="menuitem">Omnisend Analytics</a>
+                    </div>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="../about.html" class="header-nav-link" role="menuitem">About</a>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="../contact.html" class="header-nav-link" role="menuitem">Contact</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</header>
+
+
+    <main class="blog-container">
+        <div class="blog-header">
+            <h1 class="blog-title">Seasonality in Email Marketing: Why Your Numbers Are Lying to You</h1>
+            <div class="blog-meta">Posted on May 21, 2026 | 6 min read</div>
+            
+            <div class="blog-image">
+                <img src="../assets/blog/email-seasonality.jpg" alt="Email marketing performance chart showing seasonal highs and lows throughout the year">
+                <div style="display: none;">Featured image: email marketing calendar with seasonal performance trends</div>
+            </div>
+        </div>
+        
+        <article class="blog-content">
+            <p>Every email marketer has been there. Open rates drop. Click-throughs go quiet. Revenue slows. And the first instinct is to ask: <em>what did we break?</em> So you start testing new subject lines, tweaking templates, reshuffling your segments — and nothing works. Weeks pass. You've changed everything, and you still can't figure out why performance is down.</p>
+
+            <p>Here's the uncomfortable truth: sometimes, nothing is broken. The season just changed. And if you don't know what your data looks like across a full year, you'll spend your slow months dismantling a strategy that was actually working fine.</p>
+
+            <h2>Seasonality Is Real — and Most Brands Ignore It</h2>
+            <p>Seasonality affects virtually every email program, regardless of industry. Consumer behavior shifts with the calendar — buying intent, inbox attention, and emotional state all fluctuate throughout the year. Some periods are naturally high-energy (holiday shopping, back-to-school, New Year), while others are quiet by nature (mid-January slump, summer lulls for some niches).</p>
+            <ul>
+                <li><strong>Naturally strong seasons:</strong> Q4 holidays, Valentine's Day, Mother's Day, major sale events.</li>
+                <li><strong>Naturally weak seasons:</strong> Post-holiday January, mid-summer doldrums, certain regional and cultural slow periods.</li>
+                <li><strong>Niche-specific seasons:</strong> Fitness brands spike in January; back-to-school brands peak in August; B2B brands often dip in December.</li>
+            </ul>
+            <p>None of this is random. These patterns repeat year after year — but only become visible when you actually look at the data across time.</p>
+
+            <h2>The Danger of Not Knowing</h2>
+            <p>When a marketer doesn't understand their seasonal baseline, a natural performance dip looks like a failure. And that triggers a chain reaction that can be very hard to undo.</p>
+            <ul>
+                <li><strong>Unnecessary changes:</strong> Subject line formulas get scrapped. Send times get shifted. Templates get redesigned — all because of a dip that had nothing to do with those elements.</li>
+                <li><strong>Compounding variables:</strong> Each change adds a new unknown. After five untested changes in a row, you can no longer tell what's working or what made things worse.</li>
+                <li><strong>List damage:</strong> Panic-sending to your full list during a low-engagement period drives up unsubscribes and spam complaints — the very signals that hurt your long-term deliverability.</li>
+                <li><strong>False credit:</strong> When the season naturally recovers, the last change made gets credited for the "turnaround" — reinforcing the wrong lesson.</li>
+            </ul>
+            <p>The result is a program that's harder to manage, harder to trust, and harder to grow — all because of a problem that was never really there.</p>
+
+            <h2>The Right Question to Ask</h2>
+            <p>When performance dips, most marketers ask: <em>"What did we do wrong this month?"</em> The better question is: <em>"What did this same period look like last year?"</em></p>
+            <p>A 25% drop in open rate from December to January is alarming — unless January always drops 25% from December, in which case you're right on track. Without year-over-year context, every data point is misleading. Month-over-month comparisons alone are not enough to make strategic decisions.</p>
+
+            <div class="tip-box">
+                <h3>📅 Pro Tip</h3>
+                <p>Always compare the same period year-over-year — not just month-over-month. If January this year is performing at the same level as January last year, your program is healthy. Beat last January, not last December.</p>
+            </div>
+
+            <h2>How to Use Seasonality to Your Advantage</h2>
+            <p>Once you understand your seasonal patterns, you stop fighting the calendar and start working with it. Here's how smart email marketers use seasonal awareness:</p>
+            <ul>
+                <li><strong>Protect your list during slow periods:</strong> Don't aggressively blast your full list during naturally low-engagement windows. Send smarter, not harder — focus on your most engaged segments.</li>
+                <li><strong>Run experiments in weak seasons:</strong> Low-traffic periods are actually ideal for testing. Lower stakes, more contained results, and any wins carry forward into strong seasons.</li>
+                <li><strong>Prepare for strong seasons in advance:</strong> Use quiet periods to clean your list, build new segments, warm up sender reputation, and pre-schedule flows. When the peak arrives, you're ready.</li>
+                <li><strong>Set honest internal expectations:</strong> Share your seasonal calendar with stakeholders so no one panics during predictable dips — or demands risky interventions at the worst possible time.</li>
+            </ul>
+
+            <h2>Building Your Seasonal Performance Calendar</h2>
+            <p>The most practical thing you can do is build a 12-month baseline using your own historical data. Pull your key metrics — open rate, click rate, revenue, unsubscribe rate — for every week or month over the past two years. Then map the patterns.</p>
+            <ul>
+                <li><strong>Identify your strong weeks:</strong> Mark periods where performance consistently exceeds your annual average.</li>
+                <li><strong>Identify your weak windows:</strong> Note the periods that reliably underperform — these are your "don't panic" zones.</li>
+                <li><strong>Note any anomalies:</strong> One-off spikes or drops that don't repeat are not seasonal — they were caused by something specific.</li>
+                <li><strong>Update it every year:</strong> Seasonality can shift slightly over time as your audience and market evolve.</li>
+            </ul>
+            <p>This calendar becomes your single most important reference document. Before making any strategic change, check it first.</p>
+
+            <h2>Seasonality Doesn't Mean Giving Up</h2>
+            <p>Understanding that a season is weak doesn't mean accepting poor performance — it means setting the right benchmark and using the period wisely. There's still plenty you can do during slow seasons: deepen relationships with your existing subscribers, test content formats, refine automations, and lay the groundwork for your next peak. The goal is to come out of every slow season in a stronger position than you entered it.</p>
+
+            <p>The brands that grow consistently aren't the ones who react the fastest to every dip — they're the ones who understand their data well enough to know when to act and when to stay steady.</p>
+
+            <div class="tip-box">
+                <h3>📊 Pro Tip</h3>
+                <p>Use our <a href="../klaviyo-analytics.html">Klaviyo Analytics Tool</a> to pull your year-over-year performance trends side by side. Spot your seasonal patterns, set smarter benchmarks, and stop chasing problems that aren't there.</p>
+            </div>
+
+            <p style="margin-top:2rem;">
+                <a href="../klaviyo-analytics.html" class="cta-button">Analyze your seasonal trends →</a>
+            </p>
+            <p style="font-size:0.95rem; color: var(--gray);">No credit card required. Upload your Klaviyo export and see your full-year performance picture.</p>
+        </article>
+    </main>
+
+    <footer>
+    <div class="footer-content">
+        <div class="footer-column">
+            <h3>ResumePro</h3>
+            <p>Professional digital templates to showcase your career and work.</p>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Templates</h3>
+            <ul class="footer-links">
+                <li><a href="../resume-templates.html">Resume Templates</a></li>
+                <li><a href="../portfolio-templates.html">Portfolio Templates</a></li>
+                <li><a href="#">All Templates</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Resources</h3>
+            <ul class="footer-links">
+                <li><a href="help.html#editing">How to Edit</a></li>
+                <li><a href="help.html#hosting">Hosting Guide</a></li>
+                <li><a href="help.html#tips">Tips & Examples</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Company</h3>
+            <ul class="footer-links">
+                <li><a href="../about.html">About Us</a></li>
+                <li><a href="../contact.html">Contact</a></li>
+                <li><a href="../privacy.html">Privacy Policy</a></li>
+                <li><a href="../terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="copyright">
+        <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
+    </div>
+</footer>
+
+    <script src="../clean-urls.js"></script>
+    <script src="../header.js"></script>
+    <script src="../footer.js"></script>
+</body>
+</html>

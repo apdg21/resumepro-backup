@@ -13,9 +13,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CSS Inliner — Email Development Tool</title>
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="header.css">
-    <link rel="stylesheet" href="footer.css">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../header.css">
+    <link rel="stylesheet" href="../footer.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
@@ -353,12 +353,6 @@
   /* ══════════════════════════
      EDITORS
   ══════════════════════════ */
-  .editor-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-
   .editor-panel {
     display: flex;
     flex-direction: column;
@@ -579,6 +573,7 @@
   }
 
   
+
   /* ══════════════════════════
      MISC
   ══════════════════════════ */
@@ -593,6 +588,98 @@
   textarea::-webkit-scrollbar { width: 5px; }
   textarea::-webkit-scrollbar-track { background: transparent; }
   textarea::-webkit-scrollbar-thumb { background: var(--cream-3); border-radius: 3px; }
+
+  /* ══════════════════════════
+     RESULTS TABBED PANEL
+  ══════════════════════════ */
+  .results-wrap {
+    display: none;
+    border: 1px solid var(--border-cream-2);
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .results-header {
+    background: var(--cream-2);
+    border-bottom: 1px solid var(--border-cream);
+    padding: 0 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    min-height: 46px;
+  }
+
+  .results-tabs {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .rtab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-dim);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 12px 14px 10px;
+    cursor: pointer;
+    transition: color 0.12s, border-color 0.12s;
+    white-space: nowrap;
+  }
+
+  .rtab:hover { color: var(--text-dark); }
+
+  .rtab.active {
+    color: var(--text-dark);
+    font-weight: 500;
+    border-bottom-color: var(--gold);
+  }
+
+  .results-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .results-meta {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--text-dim);
+  }
+
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+
+  .tab-pane textarea {
+    width: 100%;
+    height: 420px;
+    background: #fff;
+    color: var(--text-dark);
+    border: none;
+    resize: none;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.7;
+    padding: 16px;
+    outline: none;
+    cursor: default;
+  }
+
+  .tab-pane iframe {
+    width: 100%;
+    height: 520px;
+    border: none;
+    display: block;
+    background: #fff;
+  }
 
   /* ══════════════════════════
      RESPONSIVE
@@ -688,7 +775,8 @@
 <!-- ══ NAV ══ -->
 <nav>
   <a class="nav-brand" href="#">
-    <span style="color:var(--text-muted);font-weight:400;font-size:14px;">· Inliner</span></span>
+    
+    <span class="nav-logo-text">Inliner</span> <span style="color:var(--text-muted);font-weight:400;font-size:14px;"></span></span>
   </a>
   <div class="nav-right">
     <span class="nav-tag">email tool</span>
@@ -767,43 +855,21 @@
       <label class="opt"><input type="checkbox" id="opt-preserve-media"> Keep @media queries</label>
     </div>
 
-    <!-- Editors -->
-    <div class="editor-grid">
-      <div class="editor-panel">
-        <div class="panel-header">
-          <span class="panel-title">
-            <span class="dot dot-input"></span>
-            Input HTML
-          </span>
-          <div class="panel-actions">
-            <button class="btn btn-sm" id="paste-btn">
-              <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="6" height="3" rx="1"/><path d="M4 3H3a1 1 0 00-1 1v9a1 1 0 001 1h10a1 1 0 001-1V4a1 1 0 00-1-1h-1"/></svg>
-              Paste
-            </button>
-          </div>
+    <!-- Input panel -->
+    <div class="editor-panel">
+      <div class="panel-header">
+        <span class="panel-title">
+          <span class="dot dot-input"></span>
+          Input HTML
+        </span>
+        <div class="panel-actions">
+          <button class="btn btn-sm" id="paste-btn">
+            <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="6" height="3" rx="1"/><path d="M4 3H3a1 1 0 00-1 1v9a1 1 0 001 1h10a1 1 0 001-1V4a1 1 0 00-1-1h-1"/></svg>
+            Paste
+          </button>
         </div>
-        <textarea id="input" placeholder="Paste your HTML with &lt;style&gt; blocks here…" spellcheck="false" autocorrect="off" autocapitalize="off"></textarea>
       </div>
-
-      <div class="editor-panel">
-        <div class="panel-header">
-          <span class="panel-title">
-            <span class="dot dot-output"></span>
-            Inlined output
-          </span>
-          <div class="panel-actions">
-            <button class="btn btn-sm" id="copy-btn">
-              <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5"/></svg>
-              Copy
-            </button>
-            <button class="btn btn-sm" id="download-btn">
-              <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v7M5 7l3 3 3-3"/><path d="M3 12h10"/></svg>
-              Download
-            </button>
-          </div>
-        </div>
-        <textarea id="output" readonly placeholder="Output will appear here after inlining…" spellcheck="false"></textarea>
-      </div>
+      <textarea id="input" placeholder="Paste your HTML with &lt;style&gt; blocks here…" spellcheck="false" autocorrect="off" autocapitalize="off"></textarea>
     </div>
 
     <!-- Action row -->
@@ -815,20 +881,55 @@
       <span class="status" id="status"></span>
     </div>
 
-    <!-- Preview -->
-    <div class="preview-wrap" id="preview-wrap">
-      <div class="preview-bar">
-        <span class="preview-bar-title">
-          <svg style="width:12px;height:12px;" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 8s3-5 7-5 7 5 7 5-3 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2"/></svg>
-          Preview
-        </span>
-        <span class="preview-meta" id="preview-meta"></span>
+    <!-- Results: tabbed panel -->
+    <div class="results-wrap" id="results-wrap">
+      <div class="results-header">
+        <div class="results-tabs">
+          <button class="rtab active" data-tab="html">
+            <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="5 4 1 8 5 12"/><polyline points="11 4 15 8 11 12"/></svg>
+            HTML
+          </button>
+          <button class="rtab" data-tab="raw">
+            <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 6h6M5 9h4"/></svg>
+            Raw HTML
+          </button>
+          <button class="rtab" data-tab="preview">
+            <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 8s3-5 7-5 7 5 7 5-3 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2"/></svg>
+            Preview
+          </button>
+        </div>
+        <div class="results-actions">
+          <span class="results-meta" id="results-meta"></span>
+          <button class="btn btn-sm" id="copy-btn">
+            <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5"/></svg>
+            Copy
+          </button>
+          <button class="btn btn-sm" id="download-btn">
+            <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v7M5 7l3 3 3-3"/><path d="M3 12h10"/></svg>
+            Download
+          </button>
+        </div>
       </div>
-      <iframe id="preview-frame" title="Rendered preview of inlined HTML" sandbox="allow-same-origin"></iframe>
+
+      <!-- Tab: HTML (syntax highlighted) -->
+      <div class="tab-pane active" id="tab-html">
+        <textarea id="output-html" readonly spellcheck="false"></textarea>
+      </div>
+
+      <!-- Tab: Raw HTML -->
+      <div class="tab-pane" id="tab-raw">
+        <textarea id="output-raw" readonly spellcheck="false"></textarea>
+      </div>
+
+      <!-- Tab: Preview -->
+      <div class="tab-pane" id="tab-preview">
+        <iframe id="preview-frame" title="Rendered preview of inlined HTML"></iframe>
+      </div>
     </div>
 
   </div>
 </div>
+
 
 
 <script>
@@ -992,20 +1093,52 @@ function inlineStyles(html, opts) {
   return '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
 }
 
+/* ── state ── */
+let lastResult = '';
+
 function setStatus(msg, type) {
   const el = document.getElementById('status');
   el.textContent = msg;
   el.className = 'status ' + (type || '');
 }
 
-function loadSample() {
-  document.getElementById('input').value = SAMPLE;
-  document.getElementById('output').value = '';
-  setStatus('');
-  document.getElementById('preview-wrap').style.display = 'none';
-  document.querySelector('.tool-section').scrollIntoView({ behavior: 'smooth' });
+/* ── tabs ── */
+function switchTab(name) {
+  document.querySelectorAll('.rtab').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'tab-' + name));
+
+  if (name === 'preview' && lastResult) {
+    const frame = document.getElementById('preview-frame');
+    const fd = frame.contentDocument || frame.contentWindow.document;
+    fd.open();
+    fd.write(lastResult);
+    fd.close();
+  }
 }
 
+document.querySelectorAll('.rtab').forEach(btn => {
+  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+
+/* ── pretty-print HTML ── */
+function prettyHTML(html) {
+  let indent = 0;
+  return html
+    .replace(/></g, '>\n<')
+    .split('\n')
+    .map(line => {
+      line = line.trim();
+      if (!line) return '';
+      if (/^<\//.test(line)) indent = Math.max(0, indent - 1);
+      const out = '  '.repeat(indent) + line;
+      if (/^<[^/!][^>]*[^/]>$/.test(line) && !/^<(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)/i.test(line)) indent++;
+      return out;
+    })
+    .filter(Boolean)
+    .join('\n');
+}
+
+/* ── main convert ── */
 document.getElementById('inline-btn').addEventListener('click', () => {
   const input = document.getElementById('input').value.trim();
   if (!input) { setStatus('Paste some HTML first.', 'err'); return; }
@@ -1016,33 +1149,55 @@ document.getElementById('inline-btn').addEventListener('click', () => {
   };
   try {
     const result = inlineStyles(input, opts);
-    document.getElementById('output').value = result;
+    lastResult = result;
+
+    /* HTML tab — pretty printed */
+    document.getElementById('output-html').value = prettyHTML(result);
+    /* Raw tab — compact single string */
+    document.getElementById('output-raw').value = result;
+
     const styleCount = (input.match(/<style[\s>]/gi) || []).length;
     const ruleCount  = (input.match(/\{[^}]*\}/g) || []).length;
     setStatus(`✓ ${styleCount} style block${styleCount !== 1 ? 's' : ''}, ~${ruleCount} rule${ruleCount !== 1 ? 's' : ''} inlined`, 'ok');
-    const wrap = document.getElementById('preview-wrap');
-    wrap.style.display = '';
-    document.getElementById('preview-frame').srcdoc = result;
-    document.getElementById('preview-meta').textContent = result.length.toLocaleString() + ' chars';
+
+    document.getElementById('results-meta').textContent = result.length.toLocaleString() + ' chars';
+    document.getElementById('results-wrap').style.display = 'block';
+
+    /* default to HTML tab, render preview in background */
+    switchTab('html');
+
+    document.getElementById('results-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch(e) {
     setStatus('Error: ' + e.message, 'err');
   }
 });
 
+/* ── load sample ── */
+function loadSample() {
+  document.getElementById('input').value = SAMPLE;
+  lastResult = '';
+  setStatus('');
+  document.getElementById('results-wrap').style.display = 'none';
+  document.querySelector('.tool-section').scrollIntoView({ behavior: 'smooth' });
+}
+
 document.getElementById('load-sample-btn').addEventListener('click', loadSample);
 document.getElementById('load-sample-hero-btn').addEventListener('click', loadSample);
 
+/* ── clear ── */
 document.getElementById('clear-btn').addEventListener('click', () => {
   document.getElementById('input').value = '';
-  document.getElementById('output').value = '';
+  document.getElementById('output-html').value = '';
+  document.getElementById('output-raw').value = '';
+  lastResult = '';
   setStatus('');
-  document.getElementById('preview-wrap').style.display = 'none';
+  document.getElementById('results-wrap').style.display = 'none';
 });
 
+/* ── copy ── */
 document.getElementById('copy-btn').addEventListener('click', () => {
-  const out = document.getElementById('output').value;
-  if (!out) return;
-  navigator.clipboard.writeText(out).then(() => {
+  if (!lastResult) return;
+  navigator.clipboard.writeText(lastResult).then(() => {
     const btn = document.getElementById('copy-btn');
     btn.classList.add('success');
     btn.innerHTML = `<svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg> Copied`;
@@ -1053,6 +1208,7 @@ document.getElementById('copy-btn').addEventListener('click', () => {
   });
 });
 
+/* ── paste ── */
 document.getElementById('paste-btn').addEventListener('click', async () => {
   try {
     const text = await navigator.clipboard.readText();
@@ -1062,11 +1218,11 @@ document.getElementById('paste-btn').addEventListener('click', async () => {
   }
 });
 
+/* ── download ── */
 document.getElementById('download-btn').addEventListener('click', () => {
-  const out = document.getElementById('output').value;
-  if (!out) return;
+  if (!lastResult) return;
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([out], { type: 'text/html' }));
+  a.href = URL.createObjectURL(new Blob([lastResult], { type: 'text/html' }));
   a.download = 'inlined-email.html';
   a.click();
   URL.revokeObjectURL(a.href);
@@ -1113,7 +1269,8 @@ document.getElementById('download-btn').addEventListener('click', () => {
     </div>
 </footer>
 
-     <script src="header.js"></script>
+    
+    <script src="header.js"></script>
     
 </body>
 </html>

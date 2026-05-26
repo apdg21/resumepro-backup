@@ -1010,10 +1010,18 @@
             font-weight: 500;
             max-width: 240px;
             border-left: 4px solid #0084ff;
+            line-height: 1.4;
+            /* Hidden by default — shown via JS on scroll */
             opacity: 0;
             transform: translateY(16px);
-            animation: slideUp 0.5s ease 1.2s forwards;
-            line-height: 1.4;
+            pointer-events: none;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .float-badge.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
         }
 
         .float-badge span {
@@ -1025,8 +1033,7 @@
 
         .messenger-btn {
             background: #0084ff;
-            width: 60px;
-            height: 60px;
+            width: 58px; height: 58px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1034,14 +1041,22 @@
             text-decoration: none;
             box-shadow: 0 8px 20px rgba(0,132,255,0.45);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            opacity: 0;
+            transform: scale(0.7);
+            transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.2s ease;
+        }
+
+        .messenger-btn.visible {
+            opacity: 1;
+            transform: scale(1);
         }
 
         .messenger-btn:hover {
-            transform: scale(1.08);
+            transform: scale(1.08) !important;
             box-shadow: 0 12px 28px rgba(0,132,255,0.6);
         }
 
-        .messenger-btn svg { width: 34px; height: 34px; fill: white; }
+        .messenger-btn svg { width: 32px; height: 32px; fill: white; }
 
         /* ─── MODAL ──────────────────────────────────────── */
         .modal {

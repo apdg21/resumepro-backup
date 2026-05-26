@@ -1011,7 +1011,6 @@
             max-width: 240px;
             border-left: 4px solid #0084ff;
             line-height: 1.4;
-            /* Hidden by default — shown via JS on scroll */
             opacity: 0;
             transform: translateY(16px);
             pointer-events: none;
@@ -1033,14 +1032,14 @@
 
         .messenger-btn {
             background: #0084ff;
-            width: 58px; height: 58px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
             box-shadow: 0 8px 20px rgba(0,132,255,0.45);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
             opacity: 0;
             transform: scale(0.7);
             transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.2s ease;
@@ -1056,7 +1055,7 @@
             box-shadow: 0 12px 28px rgba(0,132,255,0.6);
         }
 
-        .messenger-btn svg { width: 32px; height: 32px; fill: white; }
+        .messenger-btn svg { width: 34px; height: 34px; fill: white; }
 
         /* ─── MODAL ──────────────────────────────────────── */
         .modal {
@@ -2349,12 +2348,12 @@
 </footer>
 
 <!-- ═══════════════════════════════════════ MESSENGER -->
-<div class="messenger-float">
-    <div class="float-badge">
+<div class="messenger-float" id="messengerFloat">
+    <div class="float-badge" id="floatBadge">
         ⚡ No tech skills? No problem!
         <span>Chat with us — we can set it up for you.</span>
     </div>
-    <a href="https://m.me/61578437432961" target="_blank" class="messenger-btn" title="Chat on Messenger">
+    <a href="https://m.me/61578437432961" target="_blank" class="messenger-btn" id="messengerBtn" title="Chat on Messenger">
         <svg viewBox="0 0 24 24">
             <path d="M12 2C6.5 2 2 6.14 2 11.25c0 2.84 1.35 5.38 3.48 7.07.12.1.19.26.18.42l-.27 1.96c-.05.39.33.69.7.51l2.19-1.07c.13-.06.28-.08.42-.06.67.15 1.36.23 2.08.23 5.5 0 10-4.14 10-9.25C22 6.14 17.5 2 12 2zm0 13.5c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm2-4.5c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-4 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
         </svg>

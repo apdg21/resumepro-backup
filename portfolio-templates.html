@@ -270,38 +270,238 @@
 
         .template-preview {
             position: relative;
-            height: 480px;
+            height: 260px;
             overflow: hidden;
-            background: var(--paper-warm);
             cursor: pointer;
+            display: flex;
+            align-items: stretch;
         }
 
         .template-preview::after {
-            content: '⟳ Preview';
+            content: '⟳ Live Preview';
             position: absolute;
             inset: 0;
-            background: rgba(14,14,18,0.6);
+            background: rgba(14,14,18,0.55);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-size: 0.82rem;
+            font-weight: 700;
             color: white;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
             opacity: 0;
             transition: opacity 0.3s ease;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(3px);
         }
 
         .template-preview:hover::after { opacity: 1; }
 
-        .template-preview iframe {
+        /* ─── PORTFOLIO STYLE CARDS ──────────────────────── */
+        .pc {
             width: 100%;
-            height: 100%;
-            border: none;
-            pointer-events: none;
-            transform-origin: top center;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.4s ease;
+            overflow: hidden;
         }
+        .template-preview:hover .pc { transform: scale(1.03); }
+
+        /* Shared nav bar element */
+        .pc-nav {
+            display: flex;
+            align-items: center;
+            padding: 0 14px;
+            height: 28px;
+            flex-shrink: 0;
+            gap: 8px;
+        }
+        .pc-logo { width: 18px; height: 6px; border-radius: 2px; }
+        .pc-nav-links { display: flex; gap: 6px; margin-left: auto; }
+        .pc-nav-link { width: 22px; height: 4px; border-radius: 2px; opacity: 0.45; }
+
+        /* Hero area */
+        .pc-hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 14px 18px;
+            flex-shrink: 0;
+        }
+        .pc-hero-title { height: 10px; border-radius: 4px; width: 70%; margin-bottom: 6px; }
+        .pc-hero-sub { height: 6px; border-radius: 3px; width: 50%; opacity: 0.5; }
+        .pc-hero-sub2 { height: 6px; border-radius: 3px; width: 38%; opacity: 0.35; margin-top: 4px; }
+        .pc-cta { height: 20px; width: 70px; border-radius: 4px; margin-top: 10px; }
+
+        /* Grid of project thumbnails */
+        .pc-grid {
+            display: grid;
+            gap: 5px;
+            padding: 8px 14px;
+            flex: 1;
+        }
+        .pc-grid.col2 { grid-template-columns: 1fr 1fr; }
+        .pc-grid.col3 { grid-template-columns: 1fr 1fr 1fr; }
+        .pc-thumb {
+            border-radius: 4px;
+            min-height: 36px;
+        }
+        .pc-thumb.tall { min-height: 54px; }
+
+        /* Sidebar layout */
+        .pc-split {
+            display: grid;
+            grid-template-columns: 38% 1fr;
+            flex: 1;
+            overflow: hidden;
+        }
+        .pc-sidebar {
+            padding: 10px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .pc-sidebar-avatar {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            margin-bottom: 4px;
+        }
+        .pc-sidebar-bar { height: 5px; border-radius: 2px; }
+        .pc-sidebar-bar.w80 { width: 80%; }
+        .pc-sidebar-bar.w55 { width: 55%; opacity: 0.5; }
+        .pc-content {
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .pc-bar { height: 5px; border-radius: 2px; }
+        .pc-bar.w90 { width: 90%; }
+        .pc-bar.w70 { width: 70%; }
+        .pc-bar.w55 { width: 55%; }
+        .pc-bar.w40 { width: 40%; opacity: 0.5; }
+
+        /* ── Style 1: Modern Minimalist — white/charcoal, clean grid */
+        .p1 { background: #fff; }
+        .p1 .pc-nav { background: #0e0e12; }
+        .p1 .pc-logo, .p1 .pc-nav-link { background: #c8a96e; }
+        .p1 .pc-hero { background: #f4f1eb; height: 72px; }
+        .p1 .pc-hero-title { background: #0e0e12; }
+        .p1 .pc-hero-sub, .p1 .pc-hero-sub2 { background: #6b6b78; }
+        .p1 .pc-cta { background: #0e0e12; }
+        .p1 .pc-thumb { background: #e2e0d8; }
+        .p1 .pc-thumb:nth-child(odd) { background: #d0cdc3; }
+
+        /* ── Style 2: Simple Profile — light grey/blue accent */
+        .p2 { background: #f8f9fc; }
+        .p2 .pc-nav { background: #fff; border-bottom: 1px solid #e5e7eb; }
+        .p2 .pc-logo { background: #3a86ff; }
+        .p2 .pc-nav-link { background: #6b6b78; }
+        .p2 .pc-hero { background: #fff; height: 80px; flex-direction: row; align-items: center; gap: 12px; }
+        .p2 .pc-sidebar-avatar { background: #3a86ff; flex-shrink: 0; }
+        .p2 .pc-hero-title { background: #0e0e12; }
+        .p2 .pc-hero-sub { background: #6b6b78; }
+        .p2 .pc-cta { background: #3a86ff; }
+        .p2 .pc-thumb { background: #e9ecf5; }
+        .p2 .pc-thumb:nth-child(2) { background: #d6ddf5; }
+        .p2 .pc-thumb:nth-child(3) { background: #c3cdee; }
+
+        /* ── Style 3: Clean & Focused — white/emerald */
+        .p3 { background: #fff; }
+        .p3 .pc-nav { background: #fff; border-bottom: 2px solid #10b981; }
+        .p3 .pc-logo { background: #10b981; }
+        .p3 .pc-nav-link { background: #374151; }
+        .p3 .pc-hero { background: #ecfdf5; height: 70px; }
+        .p3 .pc-hero-title { background: #065f46; }
+        .p3 .pc-hero-sub { background: #6b7280; }
+        .p3 .pc-cta { background: #10b981; }
+        .p3 .pc-thumb { background: #d1fae5; }
+        .p3 .pc-thumb:nth-child(odd) { background: #a7f3d0; }
+
+        /* ── Style 4: Dynamic Showcase — dark/orange */
+        .p4 { background: #18181b; }
+        .p4 .pc-nav { background: #09090b; }
+        .p4 .pc-logo { background: #f97316; }
+        .p4 .pc-nav-link { background: rgba(255,255,255,0.3); }
+        .p4 .pc-hero { background: #18181b; height: 70px; }
+        .p4 .pc-hero-title { background: #fff; }
+        .p4 .pc-hero-sub { background: rgba(255,255,255,0.4); }
+        .p4 .pc-cta { background: #f97316; }
+        .p4 .pc-thumb { background: #27272a; }
+        .p4 .pc-thumb:nth-child(odd) { background: #3f3f46; }
+
+        /* ── Style 5: Structured Layout — warm sand/rust */
+        .p5 { background: #fdf6ee; }
+        .p5 .pc-nav { background: #fdf6ee; border-bottom: 1px solid #e8d5b7; }
+        .p5 .pc-logo { background: #c2410c; }
+        .p5 .pc-nav-link { background: #78716c; }
+        .p5 .pc-hero { background: #fff7ed; height: 70px; }
+        .p5 .pc-hero-title { background: #1c1917; }
+        .p5 .pc-hero-sub { background: #78716c; }
+        .p5 .pc-cta { background: #c2410c; }
+        .p5 .pc-thumb { background: #fed7aa; }
+        .p5 .pc-thumb:nth-child(odd) { background: #fdba74; }
+
+        /* ── Style 6: Photography Portfolio — black/white dramatic */
+        .p6 { background: #0a0a0a; }
+        .p6 .pc-nav { background: #000; }
+        .p6 .pc-logo { background: #fff; }
+        .p6 .pc-nav-link { background: rgba(255,255,255,0.4); }
+        .p6 .pc-hero { background: #111; height: 65px; }
+        .p6 .pc-hero-title { background: #fff; }
+        .p6 .pc-hero-sub { background: rgba(255,255,255,0.4); }
+        .p6 .pc-cta { background: #fff; }
+        .p6 .pc-thumb { background: #1f1f1f; }
+        .p6 .pc-thumb:nth-child(even) { background: #2e2e2e; }
+        .p6 .pc-thumb:nth-child(3n) { background: #3d3d3d; }
+
+        /* ── Style 7: Modern Grid — slate/violet */
+        .p7 { background: #f8f8ff; }
+        .p7 .pc-nav { background: #1e1b4b; }
+        .p7 .pc-logo { background: #a78bfa; }
+        .p7 .pc-nav-link { background: rgba(255,255,255,0.35); }
+        .p7 .pc-hero { background: #ede9fe; height: 70px; }
+        .p7 .pc-hero-title { background: #1e1b4b; }
+        .p7 .pc-hero-sub { background: #6d6d9a; }
+        .p7 .pc-cta { background: #7c3aed; }
+        .p7 .pc-thumb { background: #ddd6fe; }
+        .p7 .pc-thumb:nth-child(odd) { background: #c4b5fd; }
+
+        /* ── Style 8: Elegant Gallery — blush/gold */
+        .p8 { background: #fdf8f5; }
+        .p8 .pc-nav { background: #fdf8f5; border-bottom: 1px solid #e8cdb5; }
+        .p8 .pc-logo { background: #9a7a3f; }
+        .p8 .pc-nav-link { background: #7c6b56; }
+        .p8 .pc-hero { background: #faf0e6; height: 70px; }
+        .p8 .pc-hero-title { background: #3d2b1f; }
+        .p8 .pc-hero-sub { background: #9a8572; }
+        .p8 .pc-cta { background: #9a7a3f; }
+        .p8 .pc-thumb { background: #ead5bc; }
+        .p8 .pc-thumb:nth-child(even) { background: #d4b896; }
+
+        /* ── Style 9: Professional & Interactive — dark/teal toggle */
+        .p9 { background: #0f172a; }
+        .p9 .pc-nav { background: #020617; }
+        .p9 .pc-logo { background: #14b8a6; }
+        .p9 .pc-nav-link { background: rgba(255,255,255,0.3); }
+        .p9 .pc-hero { background: #0f172a; height: 70px; }
+        .p9 .pc-hero-title { background: #f1f5f9; }
+        .p9 .pc-hero-sub { background: rgba(255,255,255,0.35); }
+        .p9 .pc-cta { background: #14b8a6; }
+        .p9 .pc-thumb { background: #1e293b; }
+        .p9 .pc-thumb:nth-child(odd) { background: #293548; }
+
+        /* ── Style 10: Minimalist & Adaptable — white/ink */
+        .p10 { background: #fff; }
+        .p10 .pc-nav { background: #fff; border-bottom: 1px solid #e5e7eb; }
+        .p10 .pc-logo { background: #111; }
+        .p10 .pc-nav-link { background: #9ca3af; }
+        .p10 .pc-hero { background: #f9fafb; height: 70px; }
+        .p10 .pc-hero-title { background: #111; }
+        .p10 .pc-hero-sub { background: #6b7280; }
+        .p10 .pc-cta { background: #111; border-radius: 20px; }
+        .p10 .pc-thumb { background: #f3f4f6; }
+        .p10 .pc-thumb:nth-child(even) { background: #e5e7eb; }
 
         .template-info {
             padding: 22px 24px 24px;
@@ -1104,7 +1304,28 @@
             <div class="template-card">
                 <span class="card-badge">Popular</span>
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style1/" data-name="Modern Minimalist">
-                    <iframe src="https://apdg21.github.io/editableportfolio/style1/" loading="lazy" scrolling="no"></iframe>
+                    <div class="pc p1">
+                        <div class="pc-nav">
+                            <div class="pc-logo"></div>
+                            <div class="pc-nav-links">
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                            </div>
+                        </div>
+                        <div class="pc-hero p1">
+                            <div class="pc-hero-title"></div>
+                            <div class="pc-hero-sub"></div>
+                            <div class="pc-hero-sub2"></div>
+                            <div class="pc-cta"></div>
+                        </div>
+                        <div class="pc-grid col2 p1">
+                            <div class="pc-thumb tall"></div>
+                            <div class="pc-thumb tall"></div>
+                            <div class="pc-thumb"></div>
+                            <div class="pc-thumb"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Modern Minimalist</h3>
@@ -1121,7 +1342,29 @@
 
             <div class="template-card">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style2" data-name="Simple Profile">
-                    <iframe src="https://apdg21.github.io/editableportfolio/style2" loading="lazy" scrolling="no"></iframe>
+                    <div class="pc p2">
+                        <div class="pc-nav">
+                            <div class="pc-logo"></div>
+                            <div class="pc-nav-links">
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                            </div>
+                        </div>
+                        <div class="pc-hero p2" style="flex-direction:row;gap:12px">
+                            <div class="pc-sidebar-avatar" style="background:#3a86ff;flex-shrink:0"></div>
+                            <div style="display:flex;flex-direction:column;gap:5px;justify-content:center">
+                                <div class="pc-hero-title" style="width:100px"></div>
+                                <div class="pc-hero-sub" style="width:70px"></div>
+                                <div class="pc-cta" style="width:55px;height:16px;margin-top:4px"></div>
+                            </div>
+                        </div>
+                        <div class="pc-grid col3 p2">
+                            <div class="pc-thumb tall"></div>
+                            <div class="pc-thumb tall"></div>
+                            <div class="pc-thumb tall"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Simple Profile</h3>
@@ -1138,7 +1381,28 @@
 
             <div class="template-card">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style3" data-name="Clean & Focused">
-                    <iframe src="https://apdg21.github.io/editableportfolio/style3" loading="lazy" scrolling="no"></iframe>
+                    <div class="pc p3">
+                        <div class="pc-nav">
+                            <div class="pc-logo"></div>
+                            <div class="pc-nav-links">
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                            </div>
+                        </div>
+                        <div class="pc-hero p3">
+                            <div class="pc-hero-title"></div>
+                            <div class="pc-hero-sub"></div>
+                            <div class="pc-hero-sub2"></div>
+                            <div class="pc-cta"></div>
+                        </div>
+                        <div class="pc-grid col2 p3">
+                            <div class="pc-thumb tall"></div>
+                            <div class="pc-thumb tall"></div>
+                            <div class="pc-thumb"></div>
+                            <div class="pc-thumb"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Clean &amp; Focused</h3>
@@ -1155,7 +1419,27 @@
 
             <div class="template-card">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style4" data-name="Dynamic Showcase">
-                    <iframe src="https://apdg21.github.io/editableportfolio/style4" loading="lazy" scrolling="no"></iframe>
+                    <div class="pc p4">
+                        <div class="pc-nav">
+                            <div class="pc-logo"></div>
+                            <div class="pc-nav-links">
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                            </div>
+                        </div>
+                        <div class="pc-hero p4">
+                            <div class="pc-hero-title"></div>
+                            <div class="pc-hero-sub"></div>
+                            <div class="pc-hero-sub2"></div>
+                            <div class="pc-cta"></div>
+                        </div>
+                        <div class="pc-grid col3 p4">
+                            <div class="pc-thumb tall"></div>
+                            <div class="pc-thumb tall"></div>
+                            <div class="pc-thumb tall"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Dynamic Showcase</h3>
@@ -1172,7 +1456,37 @@
 
             <div class="template-card">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style5" data-name="Structured Layout">
-                    <iframe src="https://apdg21.github.io/editableportfolio/style5" loading="lazy" scrolling="no"></iframe>
+                    <div class="pc p5">
+                        <div class="pc-nav">
+                            <div class="pc-logo"></div>
+                            <div class="pc-nav-links">
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                            </div>
+                        </div>
+                        <div class="pc-split p5">
+                            <div class="pc-sidebar p5">
+                                <div class="pc-sidebar-avatar" style="background:#c2410c"></div>
+                                <div class="pc-sidebar-bar w80" style="background:#1c1917"></div>
+                                <div class="pc-sidebar-bar w55" style="background:#78716c"></div>
+                                <div style="height:1px;background:#e8d5b7;margin:4px 0"></div>
+                                <div class="pc-sidebar-bar w80" style="background:#fed7aa;height:4px"></div>
+                                <div class="pc-sidebar-bar w55" style="background:#fed7aa;height:4px"></div>
+                                <div class="pc-sidebar-bar w80" style="background:#fed7aa;height:4px"></div>
+                            </div>
+                            <div class="pc-content p5">
+                                <div class="pc-bar w90" style="background:#1c1917"></div>
+                                <div class="pc-bar w70" style="background:#78716c"></div>
+                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:4px;flex:1">
+                                    <div class="pc-thumb tall" style="background:#fed7aa"></div>
+                                    <div class="pc-thumb tall" style="background:#fdba74"></div>
+                                    <div class="pc-thumb" style="background:#fde68a"></div>
+                                    <div class="pc-thumb" style="background:#fed7aa"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Structured Layout</h3>
@@ -1189,7 +1503,28 @@
 
             <div class="template-card">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style6" data-name="Photography Portfolio">
-                    <iframe src="https://apdg21.github.io/editableportfolio/style6" loading="lazy" scrolling="no"></iframe>
+                    <div class="pc p6">
+                        <div class="pc-nav">
+                            <div class="pc-logo"></div>
+                            <div class="pc-nav-links">
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                            </div>
+                        </div>
+                        <div class="pc-hero p6">
+                            <div class="pc-hero-title"></div>
+                            <div class="pc-hero-sub"></div>
+                            <div class="pc-cta" style="background:#fff;border-radius:2px"></div>
+                        </div>
+                        <div class="pc-grid col3 p6" style="gap:3px;padding:5px 10px">
+                            <div class="pc-thumb tall"></div>
+                            <div class="pc-thumb" style="grid-row:span 2;min-height:74px;background:#333"></div>
+                            <div class="pc-thumb tall"></div>
+                            <div class="pc-thumb"></div>
+                            <div class="pc-thumb"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Photography Portfolio</h3>
@@ -1211,7 +1546,27 @@
 
             <div class="template-card">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style7" data-name="Modern Grid">
-                    <iframe src="https://apdg21.github.io/editableportfolio/style7" loading="lazy" scrolling="no"></iframe>
+                    <div class="pc p7">
+                        <div class="pc-nav">
+                            <div class="pc-logo"></div>
+                            <div class="pc-nav-links">
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                            </div>
+                        </div>
+                        <div class="pc-hero p7">
+                            <div class="pc-hero-title"></div>
+                            <div class="pc-hero-sub"></div>
+                            <div class="pc-hero-sub2"></div>
+                            <div class="pc-cta"></div>
+                        </div>
+                        <div class="pc-grid col3 p7">
+                            <div class="pc-thumb tall"></div>
+                            <div class="pc-thumb tall"></div>
+                            <div class="pc-thumb tall"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Modern Grid</h3>
@@ -1229,7 +1584,28 @@
             <div class="template-card">
                 <span class="card-badge">Editor's Pick</span>
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style8" data-name="Elegant Gallery">
-                    <iframe src="https://apdg21.github.io/editableportfolio/style8" loading="lazy" scrolling="no"></iframe>
+                    <div class="pc p8">
+                        <div class="pc-nav">
+                            <div class="pc-logo"></div>
+                            <div class="pc-nav-links">
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                            </div>
+                        </div>
+                        <div class="pc-hero p8">
+                            <div class="pc-hero-title"></div>
+                            <div class="pc-hero-sub"></div>
+                            <div class="pc-hero-sub2"></div>
+                            <div class="pc-cta"></div>
+                        </div>
+                        <div class="pc-grid col2 p8">
+                            <div class="pc-thumb tall"></div>
+                            <div class="pc-thumb tall"></div>
+                            <div class="pc-thumb"></div>
+                            <div class="pc-thumb"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Elegant Gallery</h3>
@@ -1246,7 +1622,37 @@
 
             <div class="template-card">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style9" data-name="Professional & Interactive">
-                    <iframe src="https://apdg21.github.io/editableportfolio/style9" loading="lazy" scrolling="no"></iframe>
+                    <div class="pc p9">
+                        <div class="pc-nav">
+                            <div class="pc-logo"></div>
+                            <div class="pc-nav-links">
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                                <!-- dark mode toggle hint -->
+                                <div style="width:22px;height:11px;background:#14b8a6;border-radius:6px;opacity:0.9"></div>
+                            </div>
+                        </div>
+                        <div class="pc-split p9">
+                            <div class="pc-sidebar p9">
+                                <div class="pc-sidebar-avatar" style="background:#14b8a6"></div>
+                                <div class="pc-sidebar-bar w80" style="background:#f1f5f9"></div>
+                                <div class="pc-sidebar-bar w55" style="background:rgba(255,255,255,0.3)"></div>
+                                <div style="height:1px;background:rgba(255,255,255,0.1);margin:4px 0"></div>
+                                <div class="pc-sidebar-bar w80" style="background:#1e293b;height:4px"></div>
+                                <div class="pc-sidebar-bar w55" style="background:#1e293b;height:4px"></div>
+                            </div>
+                            <div class="pc-content p9">
+                                <div class="pc-bar w90" style="background:#f1f5f9"></div>
+                                <div class="pc-bar w70" style="background:rgba(255,255,255,0.35)"></div>
+                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:4px;flex:1">
+                                    <div class="pc-thumb tall" style="background:#1e293b"></div>
+                                    <div class="pc-thumb tall" style="background:#293548"></div>
+                                    <div class="pc-thumb" style="background:#1e293b"></div>
+                                    <div class="pc-thumb" style="background:#293548"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Professional &amp; Interactive</h3>
@@ -1263,7 +1669,27 @@
 
             <div class="template-card">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style10" data-name="Minimalist & Adaptable">
-                    <iframe src="https://apdg21.github.io/editableportfolio/style10" loading="lazy" scrolling="no"></iframe>
+                    <div class="pc p10">
+                        <div class="pc-nav">
+                            <div class="pc-logo"></div>
+                            <div class="pc-nav-links">
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                                <div class="pc-nav-link"></div>
+                            </div>
+                        </div>
+                        <div class="pc-hero p10">
+                            <div class="pc-hero-title"></div>
+                            <div class="pc-hero-sub"></div>
+                            <div class="pc-hero-sub2"></div>
+                            <div class="pc-cta"></div>
+                        </div>
+                        <div class="pc-grid col3 p10">
+                            <div class="pc-thumb tall"></div>
+                            <div class="pc-thumb tall"></div>
+                            <div class="pc-thumb tall"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Minimalist &amp; Adaptable</h3>
@@ -1545,23 +1971,25 @@
     }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
-    // ── MESSENGER FLOAT — show after 50% scroll
+    // ── MESSENGER FLOAT — show after 200px scroll, hide near bottom
     const floatBadge = document.getElementById('floatBadge');
     const messengerBtn = document.getElementById('messengerBtn');
-    let floatShown = false;
 
-    window.addEventListener('scroll', () => {
+    function updateFloat() {
         const scrolled = window.scrollY;
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const scrollPct = scrolled / docHeight;
+        const nearBottom = scrolled > docHeight - 300;
 
-        if (!floatShown && scrollPct >= 0.5) {
-            floatShown = true;
+        if (scrolled > 200 && !nearBottom) {
             messengerBtn.classList.add('visible');
-            // Delay badge slightly after button appears
-            setTimeout(() => floatBadge.classList.add('visible'), 300);
+            floatBadge.classList.add('visible');
+        } else {
+            messengerBtn.classList.remove('visible');
+            floatBadge.classList.remove('visible');
         }
-    }, { passive: true });
+    }
+
+    window.addEventListener('scroll', updateFloat, { passive: true });
 
     // ── PAGINATION
     document.querySelectorAll('.page-btn').forEach(btn => {

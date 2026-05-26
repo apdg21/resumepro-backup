@@ -2388,6 +2388,26 @@
     }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
+    // ── MESSENGER FLOAT — show after 200px scroll, hide near bottom
+    const floatBadge = document.getElementById('floatBadge');
+    const messengerBtn = document.getElementById('messengerBtn');
+
+    function updateFloat() {
+        const scrolled = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const nearBottom = scrolled > docHeight - 300;
+
+        if (scrolled > 200 && !nearBottom) {
+            messengerBtn.classList.add('visible');
+            floatBadge.classList.add('visible');
+        } else {
+            messengerBtn.classList.remove('visible');
+            floatBadge.classList.remove('visible');
+        }
+    }
+
+    window.addEventListener('scroll', updateFloat, { passive: true });
+
     // ── PAGINATION
     document.querySelectorAll('.page-btn').forEach(btn => {
         btn.addEventListener('click', function() {

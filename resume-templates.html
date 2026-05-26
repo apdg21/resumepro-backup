@@ -267,38 +267,252 @@
 
         .template-preview {
             position: relative;
-            height: 480px;
+            height: 260px;
             overflow: hidden;
-            background: var(--paper-warm);
             cursor: pointer;
-        }
-
-        .template-preview::after {
-            content: '⟳ Preview';
-            position: absolute;
-            inset: 0;
-            background: rgba(14,14,18,0.6);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.85rem;
-            font-weight: 600;
+        }
+
+        .template-preview::after {
+            content: '⟳ Live Preview';
+            position: absolute;
+            inset: 0;
+            background: rgba(14,14,18,0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.82rem;
+            font-weight: 700;
             color: white;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
             opacity: 0;
             transition: opacity 0.3s ease;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(3px);
         }
 
         .template-preview:hover::after { opacity: 1; }
 
-        .template-preview iframe {
+        /* ─── STYLE CARDS ─────────────────────────────── */
+        .style-card {
             width: 100%;
             height: 100%;
-            border: none;
-            pointer-events: none;
-            transform-origin: top center;
+            display: flex;
+            flex-direction: column;
+            padding: 22px 20px 16px;
+            gap: 10px;
+            transition: transform 0.4s ease;
         }
+        .template-preview:hover .style-card { transform: scale(1.03); }
+
+        .sc-header { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+        .sc-avatar { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; }
+        .sc-name-block { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+        .sc-bar { height: 6px; border-radius: 3px; }
+        .sc-bar.name { width: 70%; }
+        .sc-bar.title { width: 45%; opacity: 0.5; }
+
+        .sc-divider { height: 1px; width: 100%; flex-shrink: 0; }
+
+        .sc-section { display: flex; flex-direction: column; gap: 5px; }
+        .sc-label { height: 5px; border-radius: 2px; width: 35%; opacity: 0.7; }
+        .sc-line { height: 4px; border-radius: 2px; }
+        .sc-line.l90 { width: 90%; }
+        .sc-line.l75 { width: 75%; }
+        .sc-line.l60 { width: 60%; }
+        .sc-line.l50 { width: 50%; }
+        .sc-line.l40 { width: 40%; }
+
+        .sc-two-col { display: grid; grid-template-columns: 40% 1fr; gap: 10px; flex: 1; }
+        .sc-sidebar { display: flex; flex-direction: column; gap: 6px; padding: 8px; border-radius: 4px; }
+        .sc-main { display: flex; flex-direction: column; gap: 8px; }
+
+        .sc-tag { height: 14px; border-radius: 7px; }
+        .sc-tag.w50 { width: 50%; }
+        .sc-tag.w70 { width: 70%; }
+        .sc-tag.w40 { width: 40%; }
+
+        /* Style 1 – Timeless: white/charcoal, serif classic */
+        .s1 { background: #f9f7f4; }
+        .s1 .sc-avatar { background: #2a2a2a; }
+        .s1 .sc-bar, .s1 .sc-label, .s1 .sc-line, .s1 .sc-tag { background: #2a2a2a; }
+        .s1 .sc-divider { background: #2a2a2a; }
+
+        /* Style 2 – Sleek: dark sidebar, electric blue */
+        .s2 { background: #1a1f2e; flex-direction: row; align-items: stretch; padding: 0; }
+        .s2 .sc-sidebar-strip { width: 36%; background: #131720; padding: 18px 12px; display: flex; flex-direction: column; gap: 7px; }
+        .s2 .sc-main-area { flex: 1; padding: 18px 14px; display: flex; flex-direction: column; gap: 8px; }
+        .s2 .sc-avatar { background: #3d8ef0; }
+        .s2 .sc-bar, .s2 .sc-label, .s2 .sc-line, .s2 .sc-tag { background: #3d8ef0; }
+        .s2 .sc-bar.title, .s2 .sc-line { background: rgba(255,255,255,0.3); }
+        .s2 .sc-divider { background: rgba(61,142,240,0.4); }
+
+        /* Style 3 – Executive: navy with gold rule */
+        .s3 { background: #fff; border-top: 6px solid #1a2744; }
+        .s3 .sc-avatar { background: #1a2744; border-radius: 0; }
+        .s3 .sc-bar, .s3 .sc-label, .s3 .sc-tag { background: #1a2744; }
+        .s3 .sc-line { background: #c8a040; }
+        .s3 .sc-divider { background: #c8a040; }
+
+        /* Style 4 – Vivid: coral/teal creative */
+        .s4 { background: linear-gradient(135deg, #fff5f3 0%, #f0fafa 100%); }
+        .s4 .sc-avatar { background: #ff6b6b; }
+        .s4 .sc-bar { background: #ff6b6b; }
+        .s4 .sc-label { background: #00b4a6; }
+        .s4 .sc-line { background: #ffb3b3; }
+        .s4 .sc-line:nth-child(odd) { background: #a0e6e2; }
+        .s4 .sc-divider { background: linear-gradient(90deg, #ff6b6b, #00b4a6); height: 2px; border-radius: 1px; }
+        .s4 .sc-tag { background: #ff6b6b; }
+
+        /* Style 5 – Pure: stark white, single color */
+        .s5 { background: #fff; }
+        .s5 .sc-avatar { background: #111; border-radius: 2px; }
+        .s5 .sc-bar, .s5 .sc-label, .s5 .sc-line, .s5 .sc-tag { background: #111; }
+        .s5 .sc-bar.title, .s5 .sc-line { background: #ccc; }
+        .s5 .sc-divider { background: #111; height: 2px; }
+
+        /* Style 6 – Refined: blush/rose gold */
+        .s6 { background: #fdf8f5; }
+        .s6 .sc-avatar { background: #b57b6a; }
+        .s6 .sc-bar { background: #3a2e2a; }
+        .s6 .sc-label { background: #b57b6a; }
+        .s6 .sc-line { background: #e0c9bf; }
+        .s6 .sc-divider { background: #b57b6a; }
+        .s6 .sc-tag { background: #b57b6a; }
+
+        /* Style 7 – Dynamic: bold black/yellow */
+        .s7 { background: #111; }
+        .s7 .sc-avatar { background: #f5d000; border-radius: 0; }
+        .s7 .sc-bar { background: #f5d000; }
+        .s7 .sc-bar.title { background: rgba(255,255,255,0.4); }
+        .s7 .sc-label { background: #f5d000; }
+        .s7 .sc-line { background: rgba(255,255,255,0.25); }
+        .s7 .sc-divider { background: #f5d000; height: 2px; }
+        .s7 .sc-tag { background: #f5d000; }
+
+        /* Style 8 – SkillFocus: teal/skill bars */
+        .s8 { background: #f4fbfa; }
+        .s8 .sc-avatar { background: #00897b; }
+        .s8 .sc-bar { background: #00897b; }
+        .s8 .sc-label { background: #004d45; }
+        .s8 .sc-line { background: #b2dfdb; }
+        .s8 .sc-divider { background: #b2dfdb; }
+        .s8 .sc-tag { background: #00897b; }
+
+        /* Style 9 – Corporate: slate grey */
+        .s9 { background: #f5f6f8; }
+        .s9 .sc-avatar { background: #374264; }
+        .s9 .sc-bar { background: #374264; }
+        .s9 .sc-label { background: #374264; }
+        .s9 .sc-line { background: #bdc3d4; }
+        .s9 .sc-divider { background: #374264; }
+        .s9 .sc-tag { background: #374264; }
+
+        /* Style 10 – Trendy: pastel purple/pink */
+        .s10 { background: #faf5ff; }
+        .s10 .sc-avatar { background: #7c3aed; }
+        .s10 .sc-bar { background: #7c3aed; }
+        .s10 .sc-label { background: #db2777; }
+        .s10 .sc-line { background: #ddd6fe; }
+        .s10 .sc-divider { background: linear-gradient(90deg, #7c3aed, #db2777); height: 2px; border-radius: 1px; }
+        .s10 .sc-tag { background: #7c3aed; }
+
+        /* Style 11 – Horizon: olive/sage */
+        .s11 { background: #f3f5f0; }
+        .s11 .sc-avatar { background: #4a5c3a; }
+        .s11 .sc-bar { background: #4a5c3a; }
+        .s11 .sc-label { background: #7d9668; }
+        .s11 .sc-line { background: #c8d5bf; }
+        .s11 .sc-divider { background: #4a5c3a; }
+        .s11 .sc-tag { background: #7d9668; }
+
+        /* Style 12 – Midnight: deep navy/silver */
+        .s12 { background: #0d1b2a; }
+        .s12 .sc-avatar { background: #c0cfe0; }
+        .s12 .sc-bar { background: #c0cfe0; }
+        .s12 .sc-bar.title { background: rgba(255,255,255,0.3); }
+        .s12 .sc-label { background: #5b8fc4; }
+        .s12 .sc-line { background: rgba(255,255,255,0.2); }
+        .s12 .sc-divider { background: #5b8fc4; }
+        .s12 .sc-tag { background: #5b8fc4; }
+
+        /* Style 13 – Ember: deep red/charcoal */
+        .s13 { background: #1c1211; }
+        .s13 .sc-avatar { background: #e05c3a; border-radius: 0; }
+        .s13 .sc-bar { background: #e05c3a; }
+        .s13 .sc-bar.title { background: rgba(255,255,255,0.35); }
+        .s13 .sc-label { background: #e05c3a; }
+        .s13 .sc-line { background: rgba(255,255,255,0.2); }
+        .s13 .sc-divider { background: #e05c3a; }
+        .s13 .sc-tag { background: #e05c3a; }
+
+        /* Style 14 – Canvas: warm tan/terracotta */
+        .s14 { background: #fdf3e7; }
+        .s14 .sc-avatar { background: #c6603a; }
+        .s14 .sc-bar { background: #3d2b1f; }
+        .s14 .sc-label { background: #c6603a; }
+        .s14 .sc-line { background: #e8d0b8; }
+        .s14 .sc-divider { background: #c6603a; }
+        .s14 .sc-tag { background: #c6603a; }
+
+        /* Style 15 – Graphite: charcoal/mint */
+        .s15 { background: #2b2d2f; }
+        .s15 .sc-avatar { background: #5df0c0; border-radius: 2px; }
+        .s15 .sc-bar { background: #5df0c0; }
+        .s15 .sc-bar.title { background: rgba(255,255,255,0.3); }
+        .s15 .sc-label { background: #5df0c0; }
+        .s15 .sc-line { background: rgba(255,255,255,0.2); }
+        .s15 .sc-divider { background: #5df0c0; }
+        .s15 .sc-tag { background: #5df0c0; }
+
+        /* Style 16 – Ivory: clean cream/bronze */
+        .s16 { background: #fffdf5; border-left: 5px solid #9a7a3f; }
+        .s16 .sc-avatar { background: #9a7a3f; }
+        .s16 .sc-bar { background: #1f1a10; }
+        .s16 .sc-label { background: #9a7a3f; }
+        .s16 .sc-line { background: #e0d5b8; }
+        .s16 .sc-divider { background: #9a7a3f; }
+        .s16 .sc-tag { background: #9a7a3f; }
+
+        /* Style 17 – Storm: indigo/ice */
+        .s17 { background: #1e2140; }
+        .s17 .sc-avatar { background: #a5b4e8; }
+        .s17 .sc-bar { background: #a5b4e8; }
+        .s17 .sc-bar.title { background: rgba(255,255,255,0.3); }
+        .s17 .sc-label { background: #6a7fd4; }
+        .s17 .sc-line { background: rgba(255,255,255,0.2); }
+        .s17 .sc-divider { background: #6a7fd4; }
+        .s17 .sc-tag { background: #6a7fd4; }
+
+        /* Style 18 – Linen: soft neutral/ink */
+        .s18 { background: #f8f4ef; }
+        .s18 .sc-avatar { background: #1a1610; border-radius: 50% 0 50% 50%; }
+        .s18 .sc-bar { background: #1a1610; }
+        .s18 .sc-label { background: #8c7b60; }
+        .s18 .sc-line { background: #d9cebd; }
+        .s18 .sc-divider { background: #1a1610; }
+        .s18 .sc-tag { background: #8c7b60; }
+
+        /* Style 19 – Prism: white/rainbow accent */
+        .s19 { background: #fff; border-top: 4px solid transparent; border-image: linear-gradient(90deg,#f00,#f90,#ff0,#0f0,#0cf,#00f,#90f) 1; }
+        .s19 .sc-avatar { background: linear-gradient(135deg,#f00,#f90,#ff0,#0f0,#0cf,#00f); }
+        .s19 .sc-bar { background: #111; }
+        .s19 .sc-label { background: #555; }
+        .s19 .sc-line { background: #ddd; }
+        .s19 .sc-divider { background: linear-gradient(90deg,#f00,#f90,#ff0,#0f0,#0cf,#00f); height: 2px; }
+        .s19 .sc-tag { background: #111; }
+
+        /* Style 20 – Obsidian: deep black/gold luxury */
+        .s20 { background: #090909; }
+        .s20 .sc-avatar { background: #c8a040; }
+        .s20 .sc-bar { background: #c8a040; }
+        .s20 .sc-bar.title { background: rgba(200,160,64,0.4); }
+        .s20 .sc-label { background: #c8a040; }
+        .s20 .sc-line { background: rgba(200,160,64,0.25); }
+        .s20 .sc-divider { background: #c8a040; }
+        .s20 .sc-tag { background: #c8a040; }
 
         .template-info {
             padding: 22px 24px 24px;
@@ -1081,7 +1295,7 @@
                 <h1>Make your<br><em>first impression</em><br>count.</h1>
             </div>
             <div class="hero-meta">
-                <p>10 professionally designed templates. One-time purchase. Yours forever.</p>
+                <p>20 professionally designed templates. One-time purchase. Yours forever.</p>
                 <div class="hero-pills">
                     <span class="pill">✓ Fully Editable</span>
                     <span class="pill">✓ Mobile Friendly</span>
@@ -1102,7 +1316,7 @@
                 <h2 class="section-title">Premium Resume Templates</h2>
             </div>
             <div class="section-count">
-                <strong>10</strong>
+                <strong>20</strong>
                 templates available
             </div>
         </div>
@@ -1110,15 +1324,41 @@
         <!-- PAGE 1 -->
         <div class="template-grid page active" id="page1">
 
-            <div class="template-card">
+            <div class="template-card reveal">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style1/" data-name="Timeless">
-                    <iframe src="https://apdg21.github.io/editableresume/style1/" loading="lazy" scrolling="no"></iframe>
+                    <div class="style-card s1">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l50"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                            <div class="sc-line l40"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Timeless</h3>
                     <p class="template-desc">A clean, single-column layout with a classic font and minimalistic design. Perfect for law, academia, or traditional roles.</p>
                     <div class="template-footer">
-                        <div class="template-price">$12 <span>one-time</span></div>
+                        <div class="template-price">$10 <span>one-time</span></div>
                         <div class="card-actions">
                             <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style1/" data-name="Timeless">Preview</button>
                             <a href="https://dolfean.gumroad.com/l/digital-resume-timeless" target="_blank" class="btn-buy">Buy Now</a>
@@ -1127,15 +1367,40 @@
                 </div>
             </div>
 
-            <div class="template-card">
+            <div class="template-card reveal">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style2/" data-name="Sleek">
-                    <iframe src="https://apdg21.github.io/editableresume/style2/" loading="lazy" scrolling="no"></iframe>
+                    <div class="style-card s2">
+                        <div class="sc-sidebar-strip">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-bar name" style="margin-top:6px"></div>
+                            <div class="sc-bar title"></div>
+                            <div class="sc-divider" style="margin:6px 0"></div>
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l70"></div>
+                            <div class="sc-label" style="margin-top:6px"></div>
+                            <div class="sc-tag w70"></div>
+                            <div class="sc-tag w50"></div>
+                        </div>
+                        <div class="sc-main-area">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                            <div class="sc-label" style="margin-top:8px"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l50"></div>
+                            <div class="sc-label" style="margin-top:8px"></div>
+                            <div class="sc-tag w50"></div>
+                            <div class="sc-tag w40"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Sleek</h3>
                     <p class="template-desc">Modern typography and a streamlined two-column format. Ideal for tech professionals and startups.</p>
                     <div class="template-footer">
-                        <div class="template-price">$12 <span>one-time</span></div>
+                        <div class="template-price">$10 <span>one-time</span></div>
                         <div class="card-actions">
                             <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style2/" data-name="Sleek">Preview</button>
                             <a href="https://dolfean.gumroad.com/l/digital-resume-sleek" target="_blank" class="btn-buy">Buy Now</a>
@@ -1144,16 +1409,41 @@
                 </div>
             </div>
 
-            <div class="template-card">
+            <div class="template-card reveal">
                 <span class="card-badge">Popular</span>
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style3/" data-name="Executive">
-                    <iframe src="https://apdg21.github.io/editableresume/style3/" loading="lazy" scrolling="no"></iframe>
+                    <div class="style-card s3">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l60"></div>
+                            <div class="sc-line l75"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-tag w50"></div>
+                            <div class="sc-tag w70"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Executive</h3>
                     <p class="template-desc">Formal, structured design with bold section headers. Suited for corporate and leadership positions.</p>
                     <div class="template-footer">
-                        <div class="template-price">$14 <span>one-time</span></div>
+                        <div class="template-price">$10 <span>one-time</span></div>
                         <div class="card-actions">
                             <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style3/" data-name="Executive">Preview</button>
                             <a href="https://dolfean.gumroad.com/l/digital-resume-executive" target="_blank" class="btn-buy">Buy Now</a>
@@ -1162,15 +1452,38 @@
                 </div>
             </div>
 
-            <div class="template-card">
+            <div class="template-card reveal">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style4/" data-name="Vivid">
-                    <iframe src="https://apdg21.github.io/editableresume/style4/" loading="lazy" scrolling="no"></iframe>
+                    <div class="style-card s4">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div style="display:flex;gap:5px;flex-wrap:wrap">
+                                <div class="sc-tag w50" style="height:18px;border-radius:9px"></div>
+                                <div class="sc-tag w40" style="height:18px;border-radius:9px;background:#00b4a6"></div>
+                                <div class="sc-tag w50" style="height:18px;border-radius:9px"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Vivid</h3>
                     <p class="template-desc">Colorful accents and creative icons. Great for designers, marketers, and anyone wanting to show personality.</p>
                     <div class="template-footer">
-                        <div class="template-price">$16 <span>one-time</span></div>
+                        <div class="template-price">$10 <span>one-time</span></div>
                         <div class="card-actions">
                             <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style4/" data-name="Vivid">Preview</button>
                             <a href="https://dolfean.gumroad.com/l/digital-resume-vivid" target="_blank" class="btn-buy">Buy Now</a>
@@ -1179,15 +1492,40 @@
                 </div>
             </div>
 
-            <div class="template-card">
+            <div class="template-card reveal">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style5/" data-name="Pure">
-                    <iframe src="https://apdg21.github.io/editableresume/style5/" loading="lazy" scrolling="no"></iframe>
+                    <div class="style-card s5">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l50"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l40"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Pure</h3>
                     <p class="template-desc">Minimalist, distraction-free with a monochromatic palette. Versatile for any industry.</p>
                     <div class="template-footer">
-                        <div class="template-price">$12 <span>one-time</span></div>
+                        <div class="template-price">$10 <span>one-time</span></div>
                         <div class="card-actions">
                             <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style5/" data-name="Pure">Preview</button>
                             <a href="https://dolfean.gumroad.com/l/digital-resume-pure" target="_blank" class="btn-buy">Buy Now</a>
@@ -1196,15 +1534,40 @@
                 </div>
             </div>
 
-            <div class="template-card">
+            <div class="template-card reveal">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style6/" data-name="Refined">
-                    <iframe src="https://apdg21.github.io/editableresume/style6/" loading="lazy" scrolling="no"></iframe>
+                    <div class="style-card s6">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l60"></div>
+                            <div class="sc-line l50"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-tag w50"></div>
+                            <div class="sc-tag w40"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Refined</h3>
                     <p class="template-desc">Elegant with subtle design elements — thin lines and sophisticated fonts. Ideal for high-end and executive roles.</p>
                     <div class="template-footer">
-                        <div class="template-price">$14 <span>one-time</span></div>
+                        <div class="template-price">$10 <span>one-time</span></div>
                         <div class="card-actions">
                             <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style6/" data-name="Refined">Preview</button>
                             <a href="https://dolfean.gumroad.com/l/digital-resume-refined" target="_blank" class="btn-buy">Buy Now</a>
@@ -1218,15 +1581,35 @@
         <!-- PAGE 2 -->
         <div class="template-grid page" id="page2">
 
-            <div class="template-card">
+            <div class="template-card reveal">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style7/" data-name="Dynamic">
-                    <iframe src="https://apdg21.github.io/editableresume/style7/" loading="lazy" scrolling="no"></iframe>
+                    <div class="style-card s7">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l50"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Dynamic</h3>
                     <p class="template-desc">Bold typography with contrasting colors. A striking look perfect for sales, media, and competitive fields.</p>
                     <div class="template-footer">
-                        <div class="template-price">$12 <span>one-time</span></div>
+                        <div class="template-price">$10 <span>one-time</span></div>
                         <div class="card-actions">
                             <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style7/" data-name="Dynamic">Preview</button>
                             <a href="https://dolfean.gumroad.com/l/digital-resume-dynamic" target="_blank" class="btn-buy">Buy Now</a>
@@ -1235,15 +1618,46 @@
                 </div>
             </div>
 
-            <div class="template-card">
+            <div class="template-card reveal">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style8/" data-name="SkillFocus">
-                    <iframe src="https://apdg21.github.io/editableresume/style8/" loading="lazy" scrolling="no"></iframe>
+                    <div class="style-card s8">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div style="display:flex;flex-direction:column;gap:6px">
+                                <div style="display:flex;align-items:center;gap:6px">
+                                    <div class="sc-line" style="width:55px;height:4px;background:#004d45;flex-shrink:0"></div>
+                                    <div class="sc-line" style="flex:1;background:#b2dfdb"></div>
+                                </div>
+                                <div style="display:flex;align-items:center;gap:6px">
+                                    <div class="sc-line" style="width:70px;height:4px;background:#004d45;flex-shrink:0"></div>
+                                    <div class="sc-line" style="flex:1;background:#b2dfdb"></div>
+                                </div>
+                                <div style="display:flex;align-items:center;gap:6px">
+                                    <div class="sc-line" style="width:40px;height:4px;background:#004d45;flex-shrink:0"></div>
+                                    <div class="sc-line" style="flex:1;background:#b2dfdb"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">SkillFocus</h3>
                     <p class="template-desc">Prioritizes skills and achievements. Ideal for career changers or those with non-linear work histories.</p>
                     <div class="template-footer">
-                        <div class="template-price">$14 <span>one-time</span></div>
+                        <div class="template-price">$10 <span>one-time</span></div>
                         <div class="card-actions">
                             <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style8/" data-name="SkillFocus">Preview</button>
                             <a href="https://dolfean.gumroad.com/l/digital-resume-skillfocus" target="_blank" class="btn-buy">Buy Now</a>
@@ -1252,15 +1666,40 @@
                 </div>
             </div>
 
-            <div class="template-card">
+            <div class="template-card reveal">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style9/" data-name="Corporate">
-                    <iframe src="https://apdg21.github.io/editableresume/style9/" loading="lazy" scrolling="no"></iframe>
+                    <div class="style-card s9">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l50"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-tag w50"></div>
+                            <div class="sc-tag w70"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Corporate</h3>
                     <p class="template-desc">Polished and organized with a focus on clarity. Tailored for business, finance, and professional services.</p>
                     <div class="template-footer">
-                        <div class="template-price">$12 <span>one-time</span></div>
+                        <div class="template-price">$10 <span>one-time</span></div>
                         <div class="card-actions">
                             <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style9/" data-name="Corporate">Preview</button>
                             <a href="https://dolfean.gumroad.com/l/digital-resume-corporate" target="_blank" class="btn-buy">Buy Now</a>
@@ -1269,18 +1708,426 @@
                 </div>
             </div>
 
-            <div class="template-card">
+            <div class="template-card reveal">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style10/" data-name="Trendy">
-                    <iframe src="https://apdg21.github.io/editableresume/style10/" loading="lazy" scrolling="no"></iframe>
+                    <div class="style-card s10">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div style="display:flex;gap:5px;flex-wrap:wrap">
+                                <div class="sc-tag w50" style="height:18px;border-radius:9px"></div>
+                                <div class="sc-tag w40" style="height:18px;border-radius:9px;background:#db2777"></div>
+                                <div class="sc-tag w50" style="height:18px;border-radius:9px"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="template-info">
                     <h3 class="template-name">Trendy</h3>
                     <p class="template-desc">Stylish fonts and modern layout with creative flair. Suited for fashion, creative, and lifestyle roles.</p>
                     <div class="template-footer">
-                        <div class="template-price">$12 <span>one-time</span></div>
+                        <div class="template-price">$10 <span>one-time</span></div>
                         <div class="card-actions">
                             <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style10/" data-name="Trendy">Preview</button>
                             <a href="https://dolfean.gumroad.com/l/digital-resume-trendy" target="_blank" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-card reveal">
+                <span class="card-badge">New</span>
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style11/" data-name="Horizon">
+                    <div class="style-card s11">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l50"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template-info">
+                    <h3 class="template-name">Horizon</h3>
+                    <p class="template-desc">Nature-inspired earth tones with structured columns. A breath of fresh air for environmental, wellness, and non-profit roles.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style11/" data-name="Horizon">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-horizon" target="_blank" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-card reveal">
+                <span class="card-badge">New</span>
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style12/" data-name="Midnight">
+                    <div class="style-card s12">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l50"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template-info">
+                    <h3 class="template-name">Midnight</h3>
+                    <p class="template-desc">Dark, sophisticated layout with silver accents. Commands attention in tech, cybersecurity, and creative fields.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style12/" data-name="Midnight">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-midnight" target="_blank" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- PAGE 3 -->
+        <div class="template-grid page" id="page3">
+
+            <div class="template-card reveal">
+                <span class="card-badge">New</span>
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style13/" data-name="Ember">
+                    <div class="style-card s13">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l50"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template-info">
+                    <h3 class="template-name">Ember</h3>
+                    <p class="template-desc">Warm embers palette on a deep charcoal base. A bold, confident look suited for creative directors and strategists.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style13/" data-name="Ember">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-ember" target="_blank" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-card reveal">
+                <span class="card-badge">New</span>
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style14/" data-name="Canvas">
+                    <div class="style-card s14">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l50"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template-info">
+                    <h3 class="template-name">Canvas</h3>
+                    <p class="template-desc">Warm terracotta on soft cream. Artisanal and welcoming — perfect for hospitality, arts, and education professionals.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style14/" data-name="Canvas">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-canvas" target="_blank" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-card reveal">
+                <span class="card-badge">New</span>
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style15/" data-name="Graphite">
+                    <div class="style-card s15">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l50"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template-info">
+                    <h3 class="template-name">Graphite</h3>
+                    <p class="template-desc">Dark charcoal with electric mint highlights. Ultra-modern feel ideal for data scientists, engineers, and developers.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style15/" data-name="Graphite">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-graphite" target="_blank" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-card reveal">
+                <span class="card-badge">New</span>
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style16/" data-name="Ivory">
+                    <div class="style-card s16">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-tag w50"></div>
+                            <div class="sc-tag w70"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template-info">
+                    <h3 class="template-name">Ivory</h3>
+                    <p class="template-desc">Cream background with bronze accents and a clean left border rule. Understated luxury for legal, consulting, and finance.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style16/" data-name="Ivory">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-ivory" target="_blank" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-card reveal">
+                <span class="card-badge">New</span>
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style17/" data-name="Storm">
+                    <div class="style-card s17">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l50"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template-info">
+                    <h3 class="template-name">Storm</h3>
+                    <p class="template-desc">Deep indigo with cool ice-blue accents. Dynamic and authoritative for product managers, analysts, and tech leads.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style17/" data-name="Storm">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-storm" target="_blank" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-card reveal">
+                <span class="card-badge">New</span>
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style18/" data-name="Linen">
+                    <div class="style-card s18">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l50"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template-info">
+                    <h3 class="template-name">Linen</h3>
+                    <p class="template-desc">Soft neutral tones with organic warmth. A gentle yet professional aesthetic for writers, researchers, and educators.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style18/" data-name="Linen">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-linen" target="_blank" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-card reveal">
+                <span class="card-badge">New</span>
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style19/" data-name="Prism">
+                    <div class="style-card s19">
+                        <div class="sc-header">
+                            <div class="sc-avatar" style="background:linear-gradient(135deg,#f00,#f90,#ff0,#0f0,#0cf,#00f)"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-tag w50"></div>
+                            <div class="sc-tag w40"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template-info">
+                    <h3 class="template-name">Prism</h3>
+                    <p class="template-desc">Clean white canvas with a subtle rainbow spectrum accent. A standout choice for creative technologists and multidisciplinary professionals.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style19/" data-name="Prism">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-prism" target="_blank" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-card reveal">
+                <span class="card-badge">New</span>
+                <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style20/" data-name="Obsidian">
+                    <div class="style-card s20">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-tag w50"></div>
+                            <div class="sc-tag w70"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template-info">
+                    <h3 class="template-name">Obsidian</h3>
+                    <p class="template-desc">Deep black with pure gold accents — the pinnacle of luxury branding. For C-suite executives and senior leaders who demand presence.</p>
+                    <div class="template-footer">
+                        <div class="template-price">$10 <span>one-time</span></div>
+                        <div class="card-actions">
+                            <button class="btn-ghost preview-btn" data-url="https://apdg21.github.io/editableresume/style20/" data-name="Obsidian">Preview</button>
+                            <a href="https://dolfean.gumroad.com/l/digital-resume-obsidian" target="_blank" class="btn-buy">Buy Now</a>
                         </div>
                     </div>
                 </div>
@@ -1292,6 +2139,7 @@
         <div class="pagination-wrap reveal">
             <button class="page-btn active" data-page="1">1</button>
             <button class="page-btn" data-page="2">2</button>
+            <button class="page-btn" data-page="3">3</button>
         </div>
     </div>
 </section>

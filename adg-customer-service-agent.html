@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W52LYHBGZY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-W52LYHBGZY');
+</script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CS Agent — AI-Powered Customer Service</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../header.css">
+    <link rel="stylesheet" href="../footer.css">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css" />
+<style>
+  :root {
+    --primary: #3a86ff;
+    --primary-dark: #2667cc;
+    --dark: #2b2d42;
+    --bg: #0e0e10;
+    --bg2: #17171b;
+    --bg3: #1e1e24;
+    --bg4: #26262e;
+    --border: #2e2e38;
+    --border2: #3a3a48;
+    --text: #e8e8f0;
+    --text2: #9898b0;
+    --text3: #5a5a72;
+    --accent: #7b6ef6;
+    --accent2: #9b8ff8;
+    --accent-bg: #1e1a3a;
+    --accent-border: #3d3470;
+    --green: #3dd68c;
+    --green-bg: #0d2a1e;
+    --amber: #f5a623;
+    --amber-bg: #2a1e0a;
+    --red: #f56565;
+    --red-bg: #2a0f0f;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --radius-lg: 14px;
+    --font: 'DM Sans', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 15px; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Nav ── */
+  .nav {
+    border-bottom: 1px solid var(--border);
+    padding: .85rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav h1 { font-size: 15px; font-weight: 600; color: var(--text); }
+  .nav p { font-size: 12px; color: var(--text3); margin-top: 1px; }
+  .header-right { margin-left: auto; display: flex; align-items: center; gap: .5rem; }
+  .pill {
+    font-size: 11px; font-weight: 500;
+    padding: 3px 10px; border-radius: 20px;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .pill-green { background: var(--green-bg); color: var(--green); border: 1px solid #1a4a30; }
+  .pill-amber { background: var(--amber-bg); color: var(--amber); border: 1px solid #3a2808; }
+  .pill-red { background: var(--red-bg); color: var(--red); border: 1px solid #3a1010; }
+  .pill-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+
+  /* ── Layout ── */
+  .app {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 300px 1fr 340px;
+    gap: 0;
+    height: calc(100vh - 56px);
+    overflow: hidden;
+  }
+
+  /* ── Panels ── */
+  .panel {
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .panel:last-child { border-right: none; }
+  .panel-header {
+    padding: .85rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--text3);
+    display: flex; align-items: center; gap: 7px;
+    position: sticky; top: 0;
+    background: var(--bg);
+    z-index: 10;
+    flex-shrink: 0;
+  }
+  .panel-body { padding: 1.1rem 1.25rem; display: flex; flex-direction: column; gap: 1.1rem; flex: 1; }
+
+  /* ── Form elements ── */
+  label {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--text2);
+    margin-bottom: 5px;
+  }
+  .field { display: flex; flex-direction: column; }
+  .hint { font-size: 11px; color: var(--text3); margin-top: 4px; line-height: 1.5; }
+  input[type=text], input[type=password], select, textarea {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 13px;
+    padding: 8px 10px;
+    transition: border-color .15s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input[type=text], input[type=password] { height: 36px; padding: 0 10px; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); background: var(--bg4); }
+  select { height: 36px; cursor: pointer; }
+  textarea { resize: vertical; line-height: 1.65; }
+  .input-wrap { position: relative; }
+  .input-wrap input { padding-right: 36px; font-family: var(--mono); font-size: 12px; }
+  .eye-btn {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; color: var(--text3);
+    font-size: 15px; padding: 0; display: flex; align-items: center;
+    transition: color .15s;
+  }
+  .eye-btn:hover { color: var(--text2); }
+
+  /* ── Tone buttons ── */
+  .tone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .tone-btn {
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    color: var(--text2);
+    border-radius: var(--radius-sm);
+    padding: 7px 6px;
+    font-size: 12px;
+    font-family: var(--font);
+    cursor: pointer;
+    text-align: center;
+    transition: all .15s;
+    font-weight: 400;
+  }
+  .tone-btn:hover { border-color: var(--border2); color: var(--text); }
+  .tone-btn.active {
+    border-color: var(--accent-border);
+    background: var(--accent-bg);
+    color: var(--accent2);
+    font-weight: 500;
+  }
+
+  /* ── Provider selector ── */
+  .providers { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .prov-btn {
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    border-radius: var(--radius-sm);
+    padding: 8px 8px;
+    cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    transition: all .15s;
+    text-align: center;
+  }
+  .prov-btn:hover { border-color: var(--border2); background: var(--bg4); }
+  .prov-btn.active { border-color: var(--accent-border); background: var(--accent-bg); }
+  .prov-name { font-size: 11.5px; font-weight: 500; color: var(--text2); }
+  .prov-btn.active .prov-name { color: var(--accent2); }
+  .prov-icon { font-size: 18px; }
+
+  /* ── Divider ── */
+  .divider { height: 1px; background: var(--border); margin: .1rem 0; flex-shrink: 0; }
+
+  /* ── Middle panel ── */
+  .middle { border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+  .middle-body { flex: 1; overflow-y: auto; padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 1.1rem; }
+  .middle-body textarea { min-height: 90px; }
+  #emailInput { min-height: 130px; font-size: 13.5px; }
+
+  /* ── Upload ── */
+  .upload-zone {
+    border: 1px dashed var(--border2);
+    border-radius: var(--radius);
+    padding: 18px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    transition: border-color .15s, background .15s;
+  }
+  .upload-zone:hover { border-color: var(--accent-border); background: var(--accent-bg); }
+  .upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .upload-zone i { font-size: 22px; color: var(--text3); display: block; margin-bottom: 5px; }
+  .upload-zone p { font-size: 12px; color: var(--text3); }
+  .attachments { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .att-chip {
+    display: flex; align-items: center; gap: 5px;
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 20px; padding: 3px 10px;
+    font-size: 12px; color: var(--text2);
+  }
+  .att-chip button { background: none; border: none; cursor: pointer; color: var(--text3); font-size: 14px; line-height: 1; padding: 0; }
+  .att-chip button:hover { color: var(--red); }
+  .att-thumb { width: 22px; height: 22px; border-radius: 4px; object-fit: cover; }
+
+  /* ── Action bar ── */
+  .action-bar {
+    border-top: 1px solid var(--border);
+    padding: .85rem 1.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--bg);
+    flex-shrink: 0;
+  }
+  .char-count { font-size: 12px; color: var(--text3); font-family: var(--mono); }
+  .btn-row { display: flex; gap: 8px; }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 9px 20px;
+    font-family: var(--font);
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 7px;
+    transition: opacity .15s, transform .1s;
+  }
+  .btn-primary:hover { opacity: .9; }
+  .btn-primary:active { transform: scale(.98); }
+  .btn-primary:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 14px;
+    font-family: var(--font);
+    font-size: 13px;
+    color: var(--text2);
+    cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+    transition: border-color .15s, color .15s;
+  }
+  .btn-ghost:hover { border-color: var(--border2); color: var(--text); }
+  .btn-ghost:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* ── Right panel: response ── */
+  .right { display: flex; flex-direction: column; overflow: hidden; }
+  .resp-header {
+    padding: .85rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .resp-title { font-size: 11px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--text3); display: flex; align-items: center; gap: 6px; }
+  .resp-actions { display: flex; gap: 6px; }
+  .icon-btn {
+    background: none; border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 5px 8px;
+    font-size: 13px; color: var(--text2); cursor: pointer;
+    display: flex; align-items: center; gap: 5px;
+    transition: all .15s;
+  }
+  .icon-btn:hover { border-color: var(--border2); color: var(--text); }
+  .resp-body { flex: 1; overflow-y: auto; padding: 1.25rem; }
+
+  /* ── Empty state ── */
+  .empty {
+    height: 100%; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: .75rem; color: var(--text3); text-align: center; padding: 2rem;
+  }
+  .empty i { font-size: 36px; opacity: .3; }
+  .empty p { font-size: 13px; line-height: 1.7; }
+
+  /* ── Thinking animation ── */
+  .thinking {
+    display: flex; align-items: center; gap: 10px;
+    color: var(--text2); font-size: 13px; padding: .5rem 0;
+  }
+  .dots { display: flex; gap: 5px; }
+  .dots span {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent); opacity: .3;
+    animation: blink 1.3s ease-in-out infinite;
+  }
+  .dots span:nth-child(2) { animation-delay: .2s; }
+  .dots span:nth-child(3) { animation-delay: .4s; }
+  @keyframes blink { 0%,80%,100%{opacity:.2}40%{opacity:.9} }
+
+  /* ── Response content ── */
+  .resp-content {
+    font-size: 13.5px; line-height: 1.8;
+    color: var(--text); white-space: pre-wrap; word-break: break-word;
+  }
+
+  /* ── Confidence ── */
+  .conf-block {
+    margin-top: 1rem; padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  .conf-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .conf-label { font-size: 11px; color: var(--text3); min-width: 60px; }
+  .bar-track { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 2px; transition: width .7s cubic-bezier(.4,0,.2,1); }
+  .conf-pct { font-size: 12px; font-weight: 500; font-family: var(--mono); min-width: 30px; text-align: right; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .tag {
+    font-size: 11px; padding: 3px 9px;
+    border-radius: 20px; background: var(--bg3);
+    border: 1px solid var(--border); color: var(--text2);
+  }
+
+  /* ── Error ── */
+  .error-box {
+    background: var(--red-bg); border: 1px solid #3a1010;
+    border-radius: var(--radius-sm); padding: 12px;
+    color: var(--red); font-size: 13px;
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+
+  /* ── History log ── */
+  .history-list { display: flex; flex-direction: column; gap: 8px; }
+  .hist-item {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 10px 12px;
+    cursor: pointer; transition: border-color .15s;
+  }
+  .hist-item:hover { border-color: var(--border2); }
+  .hist-time { font-size: 11px; color: var(--text3); font-family: var(--mono); }
+  .hist-preview { font-size: 12px; color: var(--text2); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 1100px) {
+    .app { grid-template-columns: 260px 1fr 300px; }
+  }
+  @media (max-width: 860px) {
+    .app { grid-template-columns: 1fr; grid-template-rows: auto; height: auto; overflow: visible; }
+    .panel, .middle, .right { border-right: none; border-bottom: 1px solid var(--border); height: auto; overflow: visible; }
+    .middle-body, .resp-body { overflow: visible; }
+    body { height: auto; }
+  }
+
+  /* ── Reference links ── */
+  .link-row { display:flex; gap:6px; align-items:center; }
+  .link-row input { flex:1; height:34px; font-size:12.5px; }
+  .link-status { font-size:11px; display:flex; align-items:center; gap:4px; white-space:nowrap; min-width:70px; }
+  .link-status.fetching { color:var(--amber); }
+  .link-status.ok { color:var(--green); }
+  .link-status.err { color:var(--red); }
+  .link-remove { background:none; border:1px solid var(--border); border-radius:var(--radius-sm); width:28px; height:34px; cursor:pointer; color:var(--text3); font-size:15px; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .15s; }
+  .link-remove:hover { border-color:var(--red); color:var(--red); }
+  .link-add { background:none; border:1px dashed var(--border2); border-radius:var(--radius-sm); padding:6px 12px; font-size:12px; color:var(--text3); cursor:pointer; font-family:var(--font); width:100%; margin-top:5px; transition:all .15s; display:flex; align-items:center; justify-content:center; gap:5px; }
+  .link-add:hover { border-color:var(--accent-border); color:var(--accent2); background:var(--accent-bg); }
+
+  /* ── Stream cursor ── */
+  .cursor { display: inline-block; width: 2px; height: 1em; background: var(--accent); vertical-align: middle; animation: caret .7s steps(1) infinite; margin-left: 2px; }
+  @keyframes caret { 0%,100%{opacity:1}50%{opacity:0} }
+  @keyframes spin { from{transform:rotate(0deg)}to{transform:rotate(360deg)} }
+
+  /* Model chips */
+  .model-section { display: none; }
+  .model-section.visible { display: block; }
+</style>
+</head>
+<body>
+<header>
+    <div class="header-content">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+
+        <!-- Nav + Hamburger -->
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+
+            <ul class="header-nav-menu" role="menubar">
+
+                <li class="header-nav-item" role="none">
+                    <a href="index.html" class="header-nav-link" role="menuitem">Home</a>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Templates
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                    </a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="resume-templates.html"   class="header-dropdown-item" role="menuitem">Resume Templates</a>
+                        <a href="portfolio-templates.html" class="header-dropdown-item" role="menuitem">Portfolio Templates</a>
+                    </div>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Apps
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                    </a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="android-applications.html"   class="header-dropdown-item" role="menuitem">Android Applications</a>
+                        <a href="family-connection-tools.html" class="header-dropdown-item" role="menuitem">Web Applications</a>
+                    </div>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="blog-list.html" class="header-nav-link" role="menuitem">Blog</a>
+                </li>
+
+                <li class="header-nav-item" role="none" style="display: none;">
+                    <a href="klaviyo-analytics.html" class="header-nav-link" role="menuitem">Klaviyo Analytics</a>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Tools
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                    </a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="email-builder.html"  class="header-dropdown-item" role="menuitem">Email Builder</a>
+                        <a href="inliner.html"              class="header-dropdown-item" role="menuitem">Inliner</a>
+                        <a href="klaviyo-tool.html"               class="header-dropdown-item" role="menuitem">Klaviyo Tool</a>
+                        <a href="omnisend.html"                   class="header-dropdown-item" role="menuitem">Omnisend Analytics</a>
+						<a href="adg-customer-service-agent.html"   class="header-dropdown-item" role="menuitem">CS Agent</a>
+                    </div>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="about.html" class="header-nav-link" role="menuitem">About</a>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="contact.html" class="header-nav-link" role="menuitem">Contact</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</header>
+
+
+<div class="nav">
+  
+  <div>
+    <h1>CS Agent</h1>
+    <p>AI-powered customer service drafting</p>
+  </div>
+  <div class="header-right">
+    <span class="pill pill-green" id="statusPill"><span class="pill-dot"></span> Ready</span>
+    <button class="btn-ghost" onclick="openHelp()" style="padding:6px 12px;font-size:12px"><i class="ti ti-help-circle"></i> Help</button>
+    <button class="btn-ghost" onclick="clearAll()" style="padding:6px 12px;font-size:12px"><i class="ti ti-refresh"></i> Clear all</button>
+  </div>
+</div>
+
+<!-- ── Help Modal ── -->
+<div id="helpOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;backdrop-filter:blur(4px)" onclick="closeHelp(event)">
+  <div id="helpModal" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#17171b;border:1px solid #2e2e38;border-radius:16px;width:min(680px,96vw);max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.6)">
+
+    <!-- Modal header -->
+    <div style="padding:1.4rem 1.6rem;border-bottom:1px solid #2e2e38;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#17171b;z-index:1;border-radius:16px 16px 0 0">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:32px;height:32px;background:linear-gradient(135deg,#7b6ef6,#b06ef6);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px"><i class="ti ti-help"></i></div>
+        <div>
+          <div style="font-size:15px;font-weight:600;color:#e8e8f0">How to use CS Agent</div>
+          <div style="font-size:12px;color:#5a5a72;margin-top:1px">Setup guide &amp; provider comparison</div>
+        </div>
+      </div>
+      <button onclick="closeHelp()" style="background:none;border:1px solid #2e2e38;border-radius:8px;padding:6px 10px;color:#9898b0;cursor:pointer;font-size:18px;line-height:1"><i class="ti ti-x"></i></button>
+    </div>
+
+    <div style="padding:1.6rem">
+
+      <!-- Quick start -->
+      <div style="margin-bottom:1.8rem">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5a5a72;margin-bottom:1rem">Quick start</div>
+        <div style="display:flex;flex-direction:column;gap:.6rem">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:24px;height:24px;border-radius:50%;background:#1e1a3a;border:1px solid #3d3470;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#9b8ff8;flex-shrink:0">1</div>
+            <div style="font-size:13.5px;color:#9898b0;padding-top:3px">Choose your <strong style="color:#e8e8f0">AI Provider</strong> from the left sidebar and paste your API key. It saves automatically.</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:24px;height:24px;border-radius:50%;background:#1e1a3a;border:1px solid #3d3470;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#9b8ff8;flex-shrink:0">2</div>
+            <div style="font-size:13.5px;color:#9898b0;padding-top:3px">Paste the <strong style="color:#e8e8f0">full customer email thread</strong> — not just the latest message. The more history, the better the reply.</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:24px;height:24px;border-radius:50%;background:#1e1a3a;border:1px solid #3d3470;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#9b8ff8;flex-shrink:0">3</div>
+            <div style="font-size:13.5px;color:#9898b0;padding-top:3px">Add <strong style="color:#e8e8f0">context</strong> — order numbers, account info, prior complaints, product details. Attach screenshots or photos if relevant.</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:24px;height:24px;border-radius:50%;background:#1e1a3a;border:1px solid #3d3470;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#9b8ff8;flex-shrink:0">4</div>
+            <div style="font-size:13.5px;color:#9898b0;padding-top:3px">Hit <strong style="color:#e8e8f0">Generate response</strong> (or press <kbd style="background:#26262e;border:1px solid #3a3a48;border-radius:4px;padding:1px 6px;font-size:11px;font-family:monospace">Ctrl+Enter</kbd>) and copy the drafted reply.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div style="height:1px;background:#2e2e38;margin-bottom:1.8rem"></div>
+
+      <!-- Provider cards -->
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5a5a72;margin-bottom:1rem">AI Providers — which one to choose?</div>
+
+      <!-- Anthropic -->
+      <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.75rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:20px">🟣</span>
+            <span style="font-size:14px;font-weight:600;color:#e8e8f0">Anthropic — Claude</span>
+          </div>
+          <span style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:#2a1e0a;color:#f5a623;border:1px solid #3a2808">Paid — free trial credits</span>
+        </div>
+        <p style="font-size:13px;color:#9898b0;line-height:1.7;margin-bottom:.8rem">The most capable option for customer service work. Excellent at reading long conversation histories, analyzing images (screenshots, product photos), and writing nuanced, context-aware replies. Recommended if you want the best quality responses.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+          <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:#9b8ff8;background:#1e1a3a;border:1px solid #3d3470;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-external-link" style="font-size:12px"></i> Get API key — console.anthropic.com</a>
+          <a href="https://www.anthropic.com/pricing" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#5a5a72;background:#26262e;border:1px solid #2e2e38;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-currency-dollar" style="font-size:12px"></i> View pricing</a>
+        </div>
+        <p style="font-size:11.5px;color:#5a5a72;margin-top:.7rem;line-height:1.5">💡 New accounts get free credits to start. After that, pay-as-you-go. Claude Sonnet 4 is the sweet spot of cost vs quality.</p>
+      </div>
+
+      <!-- Gemini -->
+      <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.75rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:20px">🔵</span>
+            <span style="font-size:14px;font-weight:600;color:#e8e8f0">Google — Gemini</span>
+          </div>
+          <span style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:#0d2a1e;color:#3dd68c;border:1px solid #1a4a30">Free tier available</span>
+        </div>
+        <p style="font-size:13px;color:#9898b0;line-height:1.7;margin-bottom:.8rem">Google's AI with a generous free tier. Gemini 2.0 Flash is fast and capable — great for most customer service tasks. Free usage has rate limits (requests per minute/day) but is more than enough for testing and low-to-medium volume use.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+          <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:#3dd68c;background:#0d2a1e;border:1px solid #1a4a30;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-external-link" style="font-size:12px"></i> Get API key — aistudio.google.com</a>
+          <a href="https://ai.google.dev/pricing" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#5a5a72;background:#26262e;border:1px solid #2e2e38;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-currency-dollar" style="font-size:12px"></i> View pricing</a>
+        </div>
+        <p style="font-size:11.5px;color:#5a5a72;margin-top:.7rem;line-height:1.5">💡 Gemini 2.0 Flash is free up to 1,500 requests/day — ideal for getting started at zero cost.</p>
+      </div>
+
+      <!-- Groq -->
+      <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.75rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:20px">⚡</span>
+            <span style="font-size:14px;font-weight:600;color:#e8e8f0">Groq</span>
+          </div>
+          <span style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:#0d2a1e;color:#3dd68c;border:1px solid #1a4a30">Free tier available</span>
+        </div>
+        <p style="font-size:13px;color:#9898b0;line-height:1.7;margin-bottom:.8rem">Groq runs open-source models (Llama, Mixtral) on custom hardware — the result is extremely fast responses, often 5–10× faster than other providers. Great for quick drafts. Free tier has daily token limits. Uses open-source models which are slightly less polished than Claude or Gemini for nuanced writing.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+          <a href="https://console.groq.com/keys" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:#3dd68c;background:#0d2a1e;border:1px solid #1a4a30;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-external-link" style="font-size:12px"></i> Get API key — console.groq.com</a>
+          <a href="https://groq.com/pricing" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#5a5a72;background:#26262e;border:1px solid #2e2e38;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-currency-dollar" style="font-size:12px"></i> View pricing</a>
+        </div>
+        <p style="font-size:11.5px;color:#5a5a72;margin-top:.7rem;line-height:1.5">💡 Best if speed is the priority. Llama 3.3 70B is the recommended model — open-source but surprisingly capable for CS work.</p>
+      </div>
+
+      <!-- OpenRouter -->
+      <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.75rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:20px">🔀</span>
+            <span style="font-size:14px;font-weight:600;color:#e8e8f0">OpenRouter</span>
+          </div>
+          <span style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:#0d2a1e;color:#3dd68c;border:1px solid #1a4a30">Free models available</span>
+        </div>
+        <p style="font-size:13px;color:#9898b0;line-height:1.7;margin-bottom:.8rem">A marketplace that gives you access to many AI models through a single API key — including free community-hosted models. This app currently uses only free models for OpenRouter, making it perfect for testing at zero cost. Quality varies per model; GPT-4o Mini is a reliable starting point.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+          <a href="https://openrouter.ai/keys" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:#9b8ff8;background:#1e1a3a;border:1px solid #3d3470;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-external-link" style="font-size:12px"></i> Get API key — openrouter.ai/keys</a>
+          <a href="https://openrouter.ai/models?q=free" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#5a5a72;background:#26262e;border:1px solid #2e2e38;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-list" style="font-size:12px"></i> Browse free models</a>
+        </div>
+        <p style="font-size:11.5px;color:#5a5a72;margin-top:.7rem;line-height:1.5">💡 Sign up is free, no credit card needed for free models. Good for exploring different models before committing to a paid provider.</p>
+      </div>
+
+      <!-- Divider -->
+      <div style="height:1px;background:#2e2e38;margin:1.5rem 0"></div>
+
+      <!-- Comparison table -->
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5a5a72;margin-bottom:.9rem">Quick comparison</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+          <thead>
+            <tr style="border-bottom:1px solid #2e2e38">
+              <th style="text-align:left;padding:8px 10px;color:#5a5a72;font-weight:500">Provider</th>
+              <th style="text-align:left;padding:8px 10px;color:#5a5a72;font-weight:500">Cost</th>
+              <th style="text-align:left;padding:8px 10px;color:#5a5a72;font-weight:500">Speed</th>
+              <th style="text-align:left;padding:8px 10px;color:#5a5a72;font-weight:500">Quality</th>
+              <th style="text-align:left;padding:8px 10px;color:#5a5a72;font-weight:500">Images</th>
+              <th style="text-align:left;padding:8px 10px;color:#5a5a72;font-weight:500">Best for</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #1e1e24">
+              <td style="padding:9px 10px;color:#e8e8f0;font-weight:500">🟣 Anthropic</td>
+              <td style="padding:9px 10px;color:#f5a623">Paid</td>
+              <td style="padding:9px 10px;color:#9898b0">Fast</td>
+              <td style="padding:9px 10px;color:#3dd68c">★★★★★</td>
+              <td style="padding:9px 10px;color:#3dd68c">✓ Full</td>
+              <td style="padding:9px 10px;color:#9898b0">Production use</td>
+            </tr>
+            <tr style="border-bottom:1px solid #1e1e24">
+              <td style="padding:9px 10px;color:#e8e8f0;font-weight:500">🔵 Gemini</td>
+              <td style="padding:9px 10px;color:#3dd68c">Free tier</td>
+              <td style="padding:9px 10px;color:#9898b0">Fast</td>
+              <td style="padding:9px 10px;color:#3dd68c">★★★★☆</td>
+              <td style="padding:9px 10px;color:#f5a623">✓ Limited</td>
+              <td style="padding:9px 10px;color:#9898b0">Free daily use</td>
+            </tr>
+            <tr style="border-bottom:1px solid #1e1e24">
+              <td style="padding:9px 10px;color:#e8e8f0;font-weight:500">⚡ Groq</td>
+              <td style="padding:9px 10px;color:#3dd68c">Free tier</td>
+              <td style="padding:9px 10px;color:#3dd68c">⚡ Fastest</td>
+              <td style="padding:9px 10px;color:#f5a623">★★★☆☆</td>
+              <td style="padding:9px 10px;color:#f56565">✗ No</td>
+              <td style="padding:9px 10px;color:#9898b0">Speed priority</td>
+            </tr>
+            <tr>
+              <td style="padding:9px 10px;color:#e8e8f0;font-weight:500">🔀 OpenRouter</td>
+              <td style="padding:9px 10px;color:#3dd68c">Free models</td>
+              <td style="padding:9px 10px;color:#9898b0">Varies</td>
+              <td style="padding:9px 10px;color:#f5a623">★★★☆☆</td>
+              <td style="padding:9px 10px;color:#f56565">✗ No</td>
+              <td style="padding:9px 10px;color:#9898b0">Testing &amp; exploring</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Divider -->
+      <div style="height:1px;background:#2e2e38;margin:1.5rem 0"></div>
+
+      <!-- Tips -->
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5a5a72;margin-bottom:.9rem">Tips for better responses</div>
+      <div style="display:flex;flex-direction:column;gap:.6rem">
+        <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">📋 Paste the full email thread</strong> — not just the latest message. Include every previous reply so the AI sees all prior commitments and won't contradict them.</div>
+        <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">🖼 Upload product photos or screenshots</strong> — if the customer sent an image of a "defect", paste it here. The AI will analyze it and may find it's normal behavior, saving you a wrong escalation.</div>
+        <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">📄 Paste your policies in the constraints field</strong> — refund windows, escalation rules, what's covered under warranty. The AI will work within them instead of making promises you can't keep.</div>
+        <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">🔐 Your API key stays on your device</strong> — it is saved in your browser's local storage and is never sent to any server other than the AI provider you choose.</div>
+      </div>
+
+      <div style="margin-top:1.5rem;text-align:center">
+        <button onclick="closeHelp()" style="background:linear-gradient(135deg,#7b6ef6,#b06ef6);color:#fff;border:none;border-radius:8px;padding:10px 28px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer">Got it, let's go →</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="app">
+
+  <!-- LEFT: Settings -->
+  <div class="panel" id="leftPanel">
+    <div class="panel-header"><i class="ti ti-settings" style="font-size:14px"></i> Settings</div>
+    <div class="panel-body">
+
+      <!-- Provider -->
+      <div class="field">
+        <label>AI Provider</label>
+        <div class="providers">
+          <button class="prov-btn active" data-provider="anthropic" onclick="setProvider(this)">
+            <span class="prov-icon">🟣</span>
+            <span class="prov-name">Anthropic</span>
+          </button>
+          <button class="prov-btn" data-provider="gemini" onclick="setProvider(this)">
+            <span class="prov-icon">🔵</span>
+            <span class="prov-name">Gemini</span>
+          </button>
+          <button class="prov-btn" data-provider="groq" onclick="setProvider(this)">
+            <span class="prov-icon">⚡</span>
+            <span class="prov-name">Groq</span>
+          </button>
+          <button class="prov-btn" data-provider="openrouter" onclick="setProvider(this)">
+            <span class="prov-icon">🔀</span>
+            <span class="prov-name">OpenRouter</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- API Key -->
+      <div class="field">
+        <label>API Key</label>
+        <div class="input-wrap">
+          <input type="password" id="apiKey" placeholder="Paste your API key…" autocomplete="off" oninput="saveKey(); updateSaveIndicator()" />
+          <button class="eye-btn" onclick="toggleKey()" aria-label="Toggle visibility"><i class="ti ti-eye" id="eyeIcon"></i></button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
+          <p class="hint" id="keyHint" style="margin:0">Get your key from console.anthropic.com</p>
+          <span id="saveIndicator" style="font-size:11px;color:var(--text3);display:none"><i class="ti ti-device-floppy" style="font-size:12px;vertical-align:-1px"></i> Saved</span>
+        </div>
+        <button onclick="clearSavedKey()" id="clearKeyBtn" style="display:none;margin-top:6px;background:none;border:1px solid var(--border);border-radius:var(--radius-sm);padding:4px 10px;font-size:11px;color:var(--text3);cursor:pointer;font-family:var(--font)"><i class="ti ti-trash" style="font-size:11px"></i> Clear saved key</button>
+      </div>
+
+      <!-- Model -->
+      <div class="field">
+        <label>Model</label>
+        <select id="modelSelect">
+          <option value="claude-sonnet-4-20250514">Claude Sonnet 4 ✦ Recommended</option>
+          <option value="claude-opus-4-20250514">Claude Opus 4 — Most capable</option>
+          <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 — Fastest</option>
+        </select>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Tone -->
+      <div class="field">
+        <label>Response tone</label>
+        <div class="tone-grid">
+          <button class="tone-btn active" data-tone="Professional & Empathetic" onclick="setTone(this)">Professional</button>
+          <button class="tone-btn" data-tone="Friendly & Casual" onclick="setTone(this)">Friendly</button>
+          <button class="tone-btn" data-tone="Formal & Concise" onclick="setTone(this)">Formal</button>
+          <button class="tone-btn" data-tone="Warm & Supportive" onclick="setTone(this)">Warm</button>
+        </div>
+      </div>
+
+      <!-- Language -->
+      <div class="field">
+        <label>Response language</label>
+        <select id="langSelect">
+          <option value="English">English</option>
+          <option value="Filipino / Tagalog">Filipino / Tagalog</option>
+          <option value="Spanish">Spanish</option>
+          <option value="French">French</option>
+          <option value="German">German</option>
+          <option value="Portuguese">Portuguese</option>
+          <option value="Japanese">Japanese</option>
+          <option value="Korean">Korean</option>
+          <option value="Mandarin Chinese">Mandarin Chinese</option>
+          <option value="Arabic">Arabic</option>
+          <option value="Hindi">Hindi</option>
+          <option value="Indonesian">Indonesian</option>
+          <option value="Dutch">Dutch / Nederlands</option>
+        </select>
+      </div>
+
+      <!-- Length -->
+      <div class="field">
+        <label>Response length</label>
+        <select id="lengthSelect">
+          <option value="concise">Concise — 2–3 paragraphs</option>
+          <option value="standard" selected>Standard — balanced</option>
+          <option value="detailed">Detailed — thorough</option>
+        </select>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Brand -->
+      <div class="field">
+        <label>Company / brand name</label>
+        <input type="text" id="companyName" placeholder="e.g. Acme Store" />
+      </div>
+      <div class="field">
+        <label>Rep name <span style="color:var(--text3);font-weight:400">(optional)</span></label>
+        <input type="text" id="repName" placeholder="e.g. Maria" />
+      </div>
+      <div class="field">
+        <label>Department</label>
+        <select id="deptSelect">
+          <option value="Customer Support">Customer Support</option>
+          <option value="Billing & Payments">Billing & Payments</option>
+          <option value="Technical Support">Technical Support</option>
+          <option value="Shipping & Delivery">Shipping & Delivery</option>
+          <option value="Returns & Refunds">Returns & Refunds</option>
+          <option value="Sales">Sales</option>
+          <option value="General Inquiries">General Inquiries</option>
+        </select>
+      </div>
+
+      <div style="margin-top:auto">
+        <p style="font-size:11px;color:var(--text3);line-height:1.6">Your API key is used directly in the browser and is never stored or sent to any server other than the provider you select.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MIDDLE: Input -->
+  <div class="middle">
+    <div class="panel-header"><i class="ti ti-inbox" style="font-size:14px"></i> Customer message & context</div>
+    <div class="middle-body">
+
+      <div class="field">
+        <label><i class="ti ti-mail" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Customer email / message <span style="color:var(--red)">*</span></label>
+        <textarea id="emailInput" rows="6" placeholder="Paste the customer's email, chat message, or support ticket here…" oninput="updateCount()"></textarea>
+      </div>
+
+      <div class="field">
+        <label><i class="ti ti-history" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Conversation history & context</label>
+        <textarea id="historyInput" rows="4" placeholder="Previous exchanges, order #, account tier, product model, purchase date, prior complaints…" oninput="updateCount()"></textarea>
+        <p class="hint">The more context, the more specific (less generic) the reply will be.</p>
+      </div>
+
+      <div class="field">
+        <label><i class="ti ti-shield-check" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Policies / constraints</label>
+        <textarea id="policyInput" rows="2" placeholder="e.g. Refund window is 30 days. No replacements on consumables. Escalate billing disputes to manager."></textarea>
+      </div>
+
+      <div class="field" id="refLinksField">
+        <label><i class="ti ti-link" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Reference links <span style="color:var(--text3);font-weight:400">(product pages, manuals, FAQs…)</span></label>
+        <div id="linksList"></div>
+        <button class="link-add" onclick="addLinkRow()"><i class="ti ti-plus" style="font-size:13px"></i> Add reference link</button>
+        <p class="hint">AI will fetch and read each page to use as context when drafting the reply.</p>
+      </div>
+
+      <div class="field">
+        <label><i class="ti ti-photo" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Attachments <span style="color:var(--text3);font-weight:400">(images for context)</span></label>
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" multiple accept="image/*" onchange="handleFiles(this.files)" aria-label="Upload images" />
+          <i class="ti ti-cloud-upload"></i>
+          <p>Drop images / screenshots here or click to browse</p>
+        </div>
+        <div class="attachments" id="attachments"></div>
+      </div>
+
+      <div class="field">
+        <label><i class="ti ti-speakerphone" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Urgency level</label>
+        <select id="urgencySelect">
+          <option value="normal">Normal</option>
+          <option value="high">High — customer frustrated or escalating</option>
+          <option value="vip">VIP / premium customer — prioritize</option>
+          <option value="legal">Legal / complaint risk — handle carefully</option>
+        </select>
+      </div>
+
+    </div>
+    <div class="action-bar">
+      <span class="char-count" id="charCount">0 chars</span>
+      <div class="btn-row">
+        <button class="btn-ghost" id="draftBtn" style="display:none" onclick="generate(true)"><i class="ti ti-wand"></i> Quick draft</button>
+        <button class="btn-primary" id="genBtn" onclick="generate(false)"><i class="ti ti-sparkles"></i> Generate response</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Response -->
+  <div class="right">
+    <div class="resp-header">
+      <div class="resp-title"><i class="ti ti-message-check" style="font-size:13px"></i> Drafted response</div>
+      <div class="resp-actions">
+        <button class="icon-btn" id="copyBtn" onclick="copyResp()" style="display:none"><i class="ti ti-copy"></i> Copy</button>
+        <button class="icon-btn" id="regenBtn" onclick="generate(false)" style="display:none"><i class="ti ti-refresh"></i> Redo</button>
+      </div>
+    </div>
+    <div class="resp-body" id="respBody">
+      <div class="empty">
+        <i class="ti ti-message-dots"></i>
+        <p>Your AI-drafted response will appear here.<br />Fill in the customer message and press <strong>Generate response</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+let provider = 'anthropic';
+let tone = 'Professional & Empathetic';
+let attachedFiles = [];
+let lastRawResponse = '';
+let history = [];
+
+// ── Provider models ────────────────────────────────────────────────────────
+const MODELS = {
+  anthropic: [
+    { v: 'claude-sonnet-4-20250514', l: 'Claude Sonnet 4 ✦ Recommended' },
+    { v: 'claude-opus-4-20250514', l: 'Claude Opus 4 — Most capable' },
+    { v: 'claude-haiku-4-5-20251001', l: 'Claude Haiku 4.5 — Fastest' },
+  ],
+  gemini: [
+    { v: 'gemini-2.0-flash', l: 'Gemini 2.0 Flash ✦ Recommended' },
+    { v: 'gemini-2.5-pro-preview-05-06', l: 'Gemini 2.5 Pro — Most capable' },
+    { v: 'gemini-1.5-flash-8b', l: 'Gemini 1.5 Flash 8B — Fastest' },
+  ],
+  groq: [
+    { v: 'llama-3.3-70b-versatile', l: 'Llama 3.3 70B ✦ Recommended' },
+    { v: 'llama-3.1-8b-instant', l: 'Llama 3.1 8B — Fastest' },
+    { v: 'mixtral-8x7b-32768', l: 'Mixtral 8x7B' },
+    { v: 'gemma2-9b-it', l: 'Gemma 2 9B' },
+  ],
+  openrouter: [
+    { v: 'openai/gpt-4o-mini:free', l: 'GPT-4o Mini (free) ✦ Recommended' },
+    { v: 'openai/gpt-oss-120b:free', l: 'GPT OSS 120B (free)' },
+    { v: 'openai/gpt-oss-20b:free', l: 'GPT OSS 20B (free)' },
+    { v: 'qwen/qwen3-next-80b-a3b-instruct:free', l: 'Qwen3 80B (free)' },
+    { v: 'arcee-ai/trinity-large-preview:free', l: 'Arcee Trinity Large (free)' },
+    { v: 'liquid/lfm-2.5-1.2b-thinking:free', l: 'LFM 2.5 Thinking (free)' },
+    { v: 'liquid/lfm-2.5-1.2b-instruct:free', l: 'LFM 2.5 Instruct (free)' },
+    { v: 'nvidia/nemotron-3-nano-30b-a3b:free', l: 'Nemotron Nano 30B (free)' },
+    { v: 'nvidia/nemotron-nano-12b-v2-vl:free', l: 'Nemotron Nano 12B (free)' },
+    { v: 'nvidia/nemotron-nano-9b-v2:free', l: 'Nemotron Nano 9B (free)' },
+  ],
+};
+
+const KEY_HINTS = {
+  anthropic: 'Get your key at console.anthropic.com',
+  gemini: 'Get your key at aistudio.google.com',
+  groq: 'Get your key at console.groq.com',
+  openrouter: 'Get your key at openrouter.ai/keys',
+};
+
+// ── API key persistence ────────────────────────────────────────────────────
+function saveKey() {
+  const key = document.getElementById('apiKey').value.trim();
+  if (key) localStorage.setItem('csagent_key_' + provider, key);
+  else localStorage.removeItem('csagent_key_' + provider);
+}
+
+function loadKey(prov) {
+  return localStorage.getItem('csagent_key_' + prov) || '';
+}
+
+// ── Provider / tone / UI helpers ───────────────────────────────────────────
+function setProvider(btn) {
+  document.querySelectorAll('.prov-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  provider = btn.dataset.provider;
+  // Update model list
+  const sel = document.getElementById('modelSelect');
+  sel.innerHTML = MODELS[provider].map(m => `<option value="${m.v}">${m.l}</option>`).join('');
+  // Update hint
+  document.getElementById('keyHint').textContent = KEY_HINTS[provider];
+  // Load saved key for this provider
+  const saved = loadKey(provider);
+  const inp = document.getElementById('apiKey');
+  inp.value = saved;
+  inp.placeholder = provider === 'openrouter' ? 'sk-or-…' : 'API key…';
+  updateSaveIndicator();
+}
+
+function setTone(btn) {
+  document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  tone = btn.dataset.tone;
+}
+
+function toggleKey() {
+  const inp = document.getElementById('apiKey');
+  const ic = document.getElementById('eyeIcon');
+  if (inp.type === 'password') { inp.type = 'text'; ic.className = 'ti ti-eye-off'; }
+  else { inp.type = 'password'; ic.className = 'ti ti-eye'; }
+}
+
+function updateCount() {
+  const n = (document.getElementById('emailInput').value.length +
+             document.getElementById('historyInput').value.length +
+             document.getElementById('policyInput').value.length);
+  document.getElementById('charCount').textContent = n.toLocaleString() + ' chars';
+  document.getElementById('draftBtn').style.display =
+    document.getElementById('emailInput').value.trim().length > 20 ? 'flex' : 'none';
+}
+
+function setStatus(text, type) {
+  const p = document.getElementById('statusPill');
+  p.className = 'pill pill-' + type;
+  p.innerHTML = `<span class="pill-dot"></span> ${text}`;
+}
+
+// ── File handling ──────────────────────────────────────────────────────────
+function handleFiles(files) {
+  for (const f of files) {
+    if (attachedFiles.length >= 5) break;
+    if (!f.type.startsWith('image/')) continue;
+    const reader = new FileReader();
+    reader.onload = e => {
+      attachedFiles.push({ name: f.name, type: f.type, data: e.target.result.split(',')[1] });
+      renderChips();
+    };
+    reader.readAsDataURL(f);
+  }
+}
+
+function renderChips() {
+  const box = document.getElementById('attachments');
+  box.innerHTML = '';
+  attachedFiles.forEach((f, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'att-chip';
+    chip.innerHTML = `<i class="ti ti-photo" style="font-size:13px"></i>${f.name.length>22?f.name.slice(0,20)+'…':f.name}<button onclick="removeFile(${i})" aria-label="Remove ${f.name}">×</button>`;
+    box.appendChild(chip);
+  });
+}
+
+function removeFile(i) {
+  attachedFiles.splice(i, 1);
+  renderChips();
+}
+
+// ── Clear ──────────────────────────────────────────────────────────────────
+function clearAll() {
+  ['emailInput','historyInput','policyInput'].forEach(id => { document.getElementById(id).value = ''; });
+  refLinks = []; linkCounter = 0; renderLinkRows();
+  attachedFiles = [];
+  document.getElementById('attachments').innerHTML = '';
+  updateCount();
+  document.getElementById('respBody').innerHTML = '<div class="empty"><i class="ti ti-message-dots"></i><p>Your AI-drafted response will appear here.<br />Fill in the customer message and press <strong>Generate response</strong>.</p></div>';
+  document.getElementById('copyBtn').style.display = 'none';
+  document.getElementById('regenBtn').style.display = 'none';
+  setStatus('Ready', 'green');
+  lastRawResponse = '';
+}
+
+// ── System prompt ──────────────────────────────────────────────────────────
+function buildSystemPrompt() {
+  const company = document.getElementById('companyName').value.trim() || 'our company';
+  const rep = document.getElementById('repName').value.trim();
+  const lang = document.getElementById('langSelect').value;
+  const length = document.getElementById('lengthSelect').value;
+  const dept = document.getElementById('deptSelect').value;
+  const urgency = document.getElementById('urgencySelect').value;
+
+  const urgencyNote = {
+    normal: '',
+    high: 'NOTE: The customer appears frustrated or is escalating. Prioritize de-escalation and acknowledgment of their frustration before moving to solutions.',
+    vip: 'NOTE: This is a VIP/premium customer. Prioritize their satisfaction and offer premium solutions.',
+    legal: 'NOTE: This may involve legal or complaint risk. Be factual, avoid admissions of liability, and offer escalation to management.',
+  }[urgency];
+
+  return `You are an expert ${dept} representative for ${company}${rep ? `, your name is ${rep}` : ''}. Write a ${tone.toLowerCase()} customer service reply in ${lang}.
+
+${urgencyNote}
+
+CRITICAL RULES:
+1. Analyze the SPECIFIC problem — never give a generic copy-paste answer.
+2. Reference specific details from the email (names, dates, order numbers, product details) to show you actually read it carefully.
+3. If history/context is provided, acknowledge prior interactions and avoid asking for information already given.
+4. If policies are provided, work within them — communicate limitations with empathy, not as cold rejections.
+5. Address EVERY issue raised, not just the first one.
+6. If images/screenshots are attached, reference what you can observe in them.
+7. End with a clear next step or resolution path, not vague "feel free to contact us" closings.
+8. Length: ${length === 'concise' ? 'Keep it short, 2–3 paragraphs max.' : length === 'detailed' ? 'Be thorough and detailed, anticipate follow-up questions.' : 'Standard length — balanced and complete.'}
+9. Never open with "I hope this email finds you well", "Thank you for reaching out", or other filler openers. Start directly.
+10. Sign off naturally as ${rep || 'the support team'} from ${company}.
+
+After the response body, on a new line write exactly:
+CONFIDENCE:[0-100]
+TAGS:[comma-separated issue tags, e.g. refund request,shipping delay,technical issue,billing]`;
+}
+
+// ── Reference links state ─────────────────────────────────────────────────
+let refLinks = []; // [{ id, url, status:'idle'|'fetching'|'ok'|'err', content, title }]
+let linkCounter = 0;
+
+function addLinkRow(url) {
+  const id = ++linkCounter;
+  refLinks.push({ id, url: url || '', status: 'idle', content: '', title: '' });
+  renderLinkRows();
+}
+
+function removeLinkRow(id) {
+  refLinks = refLinks.filter(l => l.id !== id);
+  renderLinkRows();
+}
+
+function onLinkInput(id, val) {
+  const link = refLinks.find(l => l.id === id);
+  if (link) { link.url = val.trim(); link.status = 'idle'; link.content = ''; link.title = ''; }
+  renderLinkRows();
+}
+
+function renderLinkRows() {
+  const box = document.getElementById('linksList');
+  box.innerHTML = '';
+  refLinks.forEach(link => {
+    const row = document.createElement('div');
+    row.className = 'link-row';
+    row.style.marginBottom = '6px';
+    let statusHtml = '';
+    if (link.status === 'fetching') statusHtml = `<span class="link-status fetching"><i class="ti ti-loader" style="animation:spin .8s linear infinite"></i> Fetching…</span>`;
+    else if (link.status === 'ok') statusHtml = `<span class="link-status ok"><i class="ti ti-check"></i> ${escHtml(link.title ? link.title.slice(0,18)+(link.title.length>18?'…':'') : 'Loaded')}</span>`;
+    else if (link.status === 'err') statusHtml = `<span class="link-status err"><i class="ti ti-alert-circle"></i> Failed</span>`;
+    row.innerHTML = `
+      <input type="text" placeholder="https://…" value="${escHtml(link.url)}"
+        oninput="onLinkInput(${link.id}, this.value)"
+        onblur="fetchLinkContent(${link.id})"
+        onkeydown="if(event.key==='Enter'){event.preventDefault();fetchLinkContent(${link.id})}"
+        style="font-size:12.5px;height:34px" />
+      ${statusHtml}
+      <button class="link-remove" onclick="removeLinkRow(${link.id})" title="Remove"><i class="ti ti-x"></i></button>`;
+    box.appendChild(row);
+  });
+}
+
+async function fetchLinkContent(id) {
+  const link = refLinks.find(l => l.id === id);
+  if (!link || !link.url || link.status === 'fetching' || link.status === 'ok') return;
+  let url = link.url;
+  if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+  link.url = url;
+  link.status = 'fetching';
+  renderLinkRows();
+  try {
+    // Use allorigins CORS proxy to fetch page text
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+    const resp = await fetch(proxyUrl);
+    if (!resp.ok) throw new Error('Fetch failed');
+    const data = await resp.json();
+    if (!data.contents) throw new Error('Empty response');
+    // Strip HTML tags to get readable text, limit to ~4000 chars
+    const div = document.createElement('div');
+    div.innerHTML = data.contents;
+    // Remove script/style
+    div.querySelectorAll('script,style,nav,footer,header').forEach(el => el.remove());
+    const text = (div.innerText || div.textContent || '').replace(/\s+/g,' ').trim().slice(0, 4000);
+    const titleMatch = data.contents.match(/<title[^>]*>([^<]+)<\/title>/i);
+    link.title = titleMatch ? titleMatch[1].trim() : url;
+    link.content = text;
+    link.status = 'ok';
+  } catch(e) {
+    link.status = 'err';
+    link.content = '';
+  }
+  renderLinkRows();
+}
+
+async function fetchAllLinks() {
+  const pending = refLinks.filter(l => l.url && l.status === 'idle');
+  await Promise.all(pending.map(l => fetchLinkContent(l.id)));
+}
+
+// ── User message ───────────────────────────────────────────────────────────
+async function buildUserContent(quick) {
+  // Fetch any unfetched links first
+  await fetchAllLinks();
+
+  const email = document.getElementById('emailInput').value.trim();
+  const ctx = document.getElementById('historyInput').value.trim();
+  const policy = document.getElementById('policyInput').value.trim();
+
+  let text = `CUSTOMER MESSAGE:\n${email}`;
+  if (ctx) text += `\n\nCONVERSATION HISTORY & CONTEXT:\n${ctx}`;
+  if (policy) text += `\n\nPOLICIES / CONSTRAINTS:\n${policy}`;
+
+  // Append fetched reference content
+  const loaded = refLinks.filter(l => l.status === 'ok' && l.content);
+  if (loaded.length) {
+    text += `\n\nREFERENCE DOCUMENTS (fetched from provided links — use these to inform your response):`;
+    loaded.forEach((l, i) => {
+      text += `\n\n--- Reference ${i+1}: ${l.title} (${l.url}) ---\n${l.content}`;
+    });
+  }
+  const failed = refLinks.filter(l => l.status === 'err');
+  if (failed.length) {
+    text += `\n\nNote: Could not fetch content from: ${failed.map(l=>l.url).join(', ')}`;
+  }
+
+  if (attachedFiles.length) text += `\n\nATTACHMENTS: ${attachedFiles.map(f=>f.name).join(', ')}`;
+  if (quick) text += '\n\n[QUICK DRAFT — shorter first pass]';
+
+  // Build content array for Anthropic (supports vision)
+  const content = [];
+  if (provider === 'anthropic' && attachedFiles.length > 0) {
+    attachedFiles.forEach(f => {
+      content.push({ type: 'image', source: { type: 'base64', media_type: f.type, data: f.data } });
+    });
+  }
+  content.push({ type: 'text', text });
+  return content;
+}
+
+// ── API callers ────────────────────────────────────────────────────────────
+async function callAnthropic(apiKey, model, system, userContent) {
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true',
+    },
+    body: JSON.stringify({
+      model, max_tokens: 1800, system,
+      messages: [{ role: 'user', content: userContent }]
+    })
+  });
+  const data = await resp.json();
+  if (!resp.ok) throw new Error(data.error?.message || `Anthropic error ${resp.status}`);
+  return data.content.map(c => c.text || '').join('');
+}
+
+async function callOpenAICompatible(url, apiKey, model, system, userContent, extraHeaders) {
+  // For OpenAI-compatible APIs (Groq, OpenRouter, Gemini OpenAI compat)
+  const textContent = userContent.find(c => c.type === 'text')?.text || '';
+  const resp = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+      ...(extraHeaders || {}),
+    },
+    body: JSON.stringify({
+      model, max_tokens: 1800,
+      messages: [
+        { role: 'system', content: system },
+        { role: 'user', content: textContent }
+      ]
+    })
+  });
+  const data = await resp.json();
+  if (!resp.ok) {
+    const msg = data.error?.message || data.message || `Error ${resp.status}`;
+    throw new Error(msg);
+  }
+  return data.choices?.[0]?.message?.content || '';
+}
+
+async function callGemini(apiKey, model, system, userContent) {
+  const textContent = userContent.find(c => c.type === 'text')?.text || '';
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  const resp = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      system_instruction: { parts: [{ text: system }] },
+      contents: [{ role: 'user', parts: [{ text: textContent }] }],
+      generationConfig: { maxOutputTokens: 1800 }
+    })
+  });
+  const data = await resp.json();
+  if (!resp.ok) {
+    throw new Error(data.error?.message || `Gemini error ${resp.status}`);
+  }
+  return data.candidates?.[0]?.content?.parts?.map(p => p.text || '').join('') || '';
+}
+
+async function callProvider(system, userContent) {
+  const apiKey = document.getElementById('apiKey').value.trim();
+  const model = document.getElementById('modelSelect').value;
+  if (!apiKey) throw new Error('Please enter your API key in the left sidebar.');
+
+  switch (provider) {
+    case 'anthropic':
+      return callAnthropic(apiKey, model, system, userContent);
+
+    case 'gemini':
+      return callGemini(apiKey, model, system, userContent);
+
+    case 'groq':
+      return callOpenAICompatible(
+        'https://api.groq.com/openai/v1/chat/completions',
+        apiKey, model, system, userContent
+      );
+
+    case 'openrouter':
+      return callOpenAICompatible(
+        'https://openrouter.ai/api/v1/chat/completions',
+        apiKey, model, system, userContent,
+        { 'HTTP-Referer': window.location.href, 'X-Title': 'CS Agent' }
+      );
+
+    default:
+      throw new Error('Unknown provider');
+  }
+}
+
+// ── Parse AI response ──────────────────────────────────────────────────────
+function parseResponse(raw) {
+  let text = raw.trim();
+  let confidence = null;
+  let tags = [];
+  const confM = text.match(/CONFIDENCE:\s*(\d+)/i);
+  const tagsM = text.match(/TAGS:\s*([^\n]+)/i);
+  if (confM) { confidence = Math.min(100, Math.max(0, parseInt(confM[1]))); }
+  if (tagsM) { tags = tagsM[1].split(',').map(t => t.trim()).filter(Boolean); }
+  text = text
+    .replace(/\nCONFIDENCE:\s*\d+/gi, '')
+    .replace(/\nTAGS:\s*[^\n]+/gi, '')
+    .trim();
+  return { text, confidence, tags };
+}
+
+// ── Render response ────────────────────────────────────────────────────────
+function renderResponse(parsed) {
+  const confColor = parsed.confidence > 75 ? '#3dd68c' : parsed.confidence > 50 ? '#f5a623' : '#f56565';
+  const confPct = parsed.confidence !== null ? parsed.confidence + '%' : '—';
+
+  document.getElementById('respBody').innerHTML = `
+    <div class="resp-content" id="respText">${escHtml(parsed.text)}</div>
+    ${parsed.confidence !== null ? `
+      <div class="conf-block">
+        <div class="conf-row">
+          <span class="conf-label">Confidence</span>
+          <div class="bar-track"><div class="bar-fill" id="confBar" style="width:0%;background:${confColor}"></div></div>
+          <span class="conf-pct" id="confPct" style="color:${confColor}">—</span>
+        </div>
+        ${parsed.tags.length ? `<div class="tags">${parsed.tags.map(t=>`<span class="tag">${escHtml(t)}</span>`).join('')}</div>` : ''}
+      </div>` : ''}
+  `;
+  if (parsed.confidence !== null) {
+    setTimeout(() => {
+      const bar = document.getElementById('confBar');
+      const pct = document.getElementById('confPct');
+      if (bar) bar.style.width = confPct;
+      if (pct) pct.textContent = confPct;
+    }, 80);
+  }
+  document.getElementById('copyBtn').style.display = 'flex';
+  document.getElementById('regenBtn').style.display = 'flex';
+}
+
+// ── Generate ───────────────────────────────────────────────────────────────
+async function generate(quick) {
+  const email = document.getElementById('emailInput').value.trim();
+  if (!email) { showError('Please paste a customer message first.'); return; }
+
+  const genBtn = document.getElementById('genBtn');
+  const draftBtn = document.getElementById('draftBtn');
+  genBtn.disabled = true;
+  draftBtn.disabled = true;
+  setStatus('Generating…', 'amber');
+
+  document.getElementById('respBody').innerHTML = `
+    <div class="thinking">
+      <div class="dots"><span></span><span></span><span></span></div>
+      Analyzing message and context…
+    </div>`;
+  document.getElementById('copyBtn').style.display = 'none';
+  document.getElementById('regenBtn').style.display = 'none';
+
+  try {
+    const system = buildSystemPrompt();
+    const userContent = await buildUserContent(quick || false);
+    const raw = await callProvider(system, userContent);
+    lastRawResponse = raw;
+    const parsed = parseResponse(raw);
+    renderResponse(parsed);
+    setStatus('Done', 'green');
+  } catch (e) {
+    showError(e.message);
+    setStatus('Error', 'red');
+  }
+
+  genBtn.disabled = false;
+  draftBtn.disabled = false;
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function showError(msg) {
+  document.getElementById('respBody').innerHTML = `
+    <div class="error-box">
+      <i class="ti ti-alert-circle" style="font-size:18px;flex-shrink:0;margin-top:1px"></i>
+      <div><strong>Error</strong><br>${escHtml(msg)}</div>
+    </div>`;
+}
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function copyResp() {
+  if (!lastRawResponse) return;
+  const parsed = parseResponse(lastRawResponse);
+  navigator.clipboard.writeText(parsed.text).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.innerHTML = '<i class="ti ti-check"></i> Copied!';
+    setTimeout(() => { btn.innerHTML = '<i class="ti ti-copy"></i> Copy'; }, 2000);
+  }).catch(() => {
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = parseResponse(lastRawResponse).text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+  });
+}
+
+// ── Save indicator & init ──────────────────────────────────────────────────
+function updateSaveIndicator() {
+  const key = document.getElementById('apiKey').value.trim();
+  const ind = document.getElementById('saveIndicator');
+  const clr = document.getElementById('clearKeyBtn');
+  if (key) {
+    ind.style.display = 'inline';
+    clr.style.display = 'inline-block';
+    ind.style.color = 'var(--green)';
+    ind.innerHTML = '<i class="ti ti-device-floppy" style="font-size:12px;vertical-align:-1px"></i> Saved';
+  } else {
+    ind.style.display = 'none';
+    clr.style.display = 'none';
+  }
+}
+
+function clearSavedKey() {
+  localStorage.removeItem('csagent_key_' + provider);
+  document.getElementById('apiKey').value = '';
+  updateSaveIndicator();
+}
+
+function init() {
+  // Load saved key for default provider (anthropic)
+  const saved = loadKey(provider);
+  if (saved) {
+    document.getElementById('apiKey').value = saved;
+    updateSaveIndicator();
+  }
+}
+init();
+
+// ── Help modal ────────────────────────────────────────────────────────────
+function openHelp() {
+  document.getElementById('helpOverlay').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeHelp(e) {
+  if (!e || e.target === document.getElementById('helpOverlay')) {
+    document.getElementById('helpOverlay').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeHelp();
+});
+
+// Drag & drop on upload zone
+const zone = document.getElementById('uploadZone');
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor = 'var(--accent)'; });
+zone.addEventListener('dragleave', () => { zone.style.borderColor = ''; });
+zone.addEventListener('drop', e => {
+  e.preventDefault();
+  zone.style.borderColor = '';
+  handleFiles(e.dataTransfer.files);
+});
+
+// Keyboard shortcut: Ctrl/Cmd + Enter to generate
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+    e.preventDefault();
+    generate(false);
+  }
+});
+</script>
+<footer>
+    <div class="footer-content">
+        <div class="footer-column">
+            <h3>ResumePro</h3>
+            <p>Professional digital templates to showcase your career and work.</p>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Templates</h3>
+            <ul class="footer-links">
+                <li><a href="resume-templates.html">Resume Templates</a></li>
+                <li><a href="portfolio-templates.html">Portfolio Templates</a></li>
+                <li><a href="#">All Templates</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Resources</h3>
+            <ul class="footer-links">
+                <li><a href="help.html#editing">How to Edit</a></li>
+                <li><a href="help.html#hosting">Hosting Guide</a></li>
+                <li><a href="help.html#tips">Tips & Examples</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Company</h3>
+            <ul class="footer-links">
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="copyright">
+        <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
+    </div>
+</footer>
+
+    
+<script src="header.js"></script>
+
+</body>
+</html>

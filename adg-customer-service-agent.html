@@ -22,9 +22,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css" />
 <style>
   :root {
-    --primary: #3a86ff;
-    --primary-dark: #2667cc;
-    --dark: #2b2d42;
     --bg: #0e0e10;
     --bg2: #17171b;
     --bg3: #1e1e24;
@@ -52,13 +49,18 @@
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { font-size: 15px; }
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
   body {
     font-family: var(--font);
     background: var(--bg);
     color: var(--text);
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
 
   /* ── Nav ── */
@@ -93,7 +95,7 @@
     display: grid;
     grid-template-columns: 300px 1fr 340px;
     gap: 0;
-    height: calc(100vh - 56px);
+    height: calc(100vh - 98px);
     overflow: hidden;
   }
 
@@ -370,10 +372,11 @@
     .app { grid-template-columns: 260px 1fr 300px; }
   }
   @media (max-width: 860px) {
+    html, body { height: auto; overflow: auto; }
     .app { grid-template-columns: 1fr; grid-template-rows: auto; height: auto; overflow: visible; }
     .panel, .middle, .right { border-right: none; border-bottom: 1px solid var(--border); height: auto; overflow: visible; }
     .middle-body, .resp-body { overflow: visible; }
-    body { height: auto; }
+    .tab-pane.active { overflow: visible; }
   }
 
   /* ── Reference links ── */
@@ -387,6 +390,141 @@
   .link-remove:hover { border-color:var(--red); color:var(--red); }
   .link-add { background:none; border:1px dashed var(--border2); border-radius:var(--radius-sm); padding:6px 12px; font-size:12px; color:var(--text3); cursor:pointer; font-family:var(--font); width:100%; margin-top:5px; transition:all .15s; display:flex; align-items:center; justify-content:center; gap:5px; }
   .link-add:hover { border-color:var(--accent-border); color:var(--accent2); background:var(--accent-bg); }
+
+
+
+  /* ── Knowledge Base ── */
+  .kb-layout { grid-template-columns: 260px 1fr; height:calc(100vh - 98px); overflow:hidden; }
+  .kb-sidebar { border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
+  .kb-sidebar-body { flex:1; overflow-y:auto; padding:.75rem; }
+  .ws-btn {
+    width:100%; text-align:left; background:none; border:1px solid transparent;
+    border-radius:var(--radius-sm); padding:.55rem .75rem; font-family:var(--font);
+    font-size:13px; color:var(--text2); cursor:pointer; display:flex; align-items:center;
+    gap:8px; transition:all .15s; margin-bottom:3px;
+  }
+  .ws-btn:hover { background:var(--bg3); border-color:var(--border); color:var(--text); }
+  .ws-btn.active { background:var(--accent-bg); border-color:var(--accent-border); color:var(--accent2); }
+  .ws-btn .ws-icon { font-size:16px; flex-shrink:0; }
+  .ws-btn .ws-name { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .ws-btn .ws-count { font-size:11px; color:var(--text3); font-family:var(--mono); flex-shrink:0; }
+  .ws-add-btn {
+    width:100%; background:none; border:1px dashed var(--border2); border-radius:var(--radius-sm);
+    padding:.55rem; font-family:var(--font); font-size:12px; color:var(--text3); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:6px; margin-top:6px;
+    transition:all .15s;
+  }
+  .ws-add-btn:hover { border-color:var(--accent-border); color:var(--accent2); background:var(--accent-bg); }
+  .kb-main { display:flex; flex-direction:column; overflow:hidden; }
+  .kb-main-body { flex:1; overflow-y:auto; padding:1.25rem 1.5rem; }
+  .kb-empty { height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.75rem; color:var(--text3); text-align:center; padding:2rem; }
+  .kb-empty i { font-size:36px; opacity:.25; }
+  .kb-section { margin-bottom:1.5rem; }
+  .kb-section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:.6rem; }
+  .kb-section-title { font-size:11px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; color:var(--text3); display:flex; align-items:center; gap:6px; }
+  .kb-item {
+    background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm);
+    padding:.65rem .85rem; margin-bottom:5px; display:flex; align-items:flex-start; gap:10px;
+    transition:border-color .15s;
+  }
+  .kb-item:hover { border-color:var(--border2); }
+  .kb-item-icon { font-size:16px; color:var(--text3); flex-shrink:0; margin-top:1px; }
+  .kb-item-body { flex:1; min-width:0; }
+  .kb-item-name { font-size:13px; color:var(--text); font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .kb-item-meta { font-size:11px; color:var(--text3); margin-top:2px; }
+  .kb-item-actions { display:flex; gap:5px; flex-shrink:0; }
+  .kb-action-btn {
+    background:none; border:1px solid var(--border); border-radius:var(--radius-sm);
+    width:26px; height:26px; cursor:pointer; color:var(--text3); font-size:13px;
+    display:flex; align-items:center; justify-content:center; transition:all .15s;
+  }
+  .kb-action-btn:hover { border-color:var(--border2); color:var(--text); }
+  .kb-action-btn.danger:hover { border-color:var(--red); color:var(--red); }
+  .kb-status-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+  .kb-status-ok { background:var(--green); }
+  .kb-status-err { background:var(--red); }
+  .kb-status-pending { background:var(--text3); }
+  .kb-status-fetching { background:var(--amber); animation:pulse-dot .8s ease-in-out infinite; }
+  @keyframes pulse-dot { 0%,100%{opacity:.4}50%{opacity:1} }
+
+  /* snippet textarea */
+  .snippet-add { width:100%; background:var(--bg3); border:1px dashed var(--border2); border-radius:var(--radius-sm); padding:.65rem .85rem; font-family:var(--font); font-size:13px; color:var(--text2); resize:none; min-height:70px; transition:border-color .15s; }
+  .snippet-add:focus { outline:none; border-color:var(--accent); border-style:solid; }
+
+  /* ws modal */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:500; backdrop-filter:blur(3px); align-items:center; justify-content:center; }
+  .modal-overlay.open { display:flex; }
+  .modal-box { background:var(--bg2); border:1px solid var(--border2); border-radius:var(--radius-lg); padding:1.5rem; width:min(420px,92vw); box-shadow:0 20px 60px rgba(0,0,0,.5); }
+  .modal-title { font-size:15px; font-weight:600; color:var(--text); margin-bottom:1rem; display:flex; align-items:center; gap:8px; }
+  .modal-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:1.1rem; }
+  .emoji-grid { display:grid; grid-template-columns:repeat(8,1fr); gap:4px; margin-top:.5rem; }
+  .emoji-opt { background:none; border:1px solid var(--border); border-radius:var(--radius-sm); padding:5px; font-size:18px; cursor:pointer; transition:all .15s; text-align:center; }
+  .emoji-opt:hover { background:var(--bg4); border-color:var(--border2); }
+  .emoji-opt.selected { border-color:var(--accent-border); background:var(--accent-bg); }
+
+  /* platform selector in draft tab */
+  .platform-bar { padding:.6rem 1.5rem; background:var(--bg2); border-bottom:1px solid var(--border); display:flex; align-items:center; gap:.75rem; flex-shrink:0; flex-wrap:wrap; }
+  .platform-bar-label { font-size:12px; color:var(--text3); white-space:nowrap; }
+  .platform-chip {
+    display:flex; align-items:center; gap:5px; padding:4px 12px; border-radius:20px;
+    border:1px solid var(--border); background:var(--bg3); font-size:12px; font-weight:500;
+    color:var(--text2); cursor:pointer; transition:all .15s; white-space:nowrap;
+  }
+  .platform-chip:hover { border-color:var(--border2); color:var(--text); }
+  .platform-chip.active { border-color:var(--accent-border); background:var(--accent-bg); color:var(--accent2); }
+  .platform-chip .chip-icon { font-size:14px; }
+  .kb-refs-loaded { font-size:11px; color:var(--green); display:flex; align-items:center; gap:4px; margin-left:auto; }
+
+  /* ── Tabs ── */
+  .tab-bar { display:flex; align-items:center; gap:0; border-bottom:1px solid var(--border); background:var(--bg); padding:0 2rem; position:sticky; top:56px; z-index:90; }
+  .tab-btn { padding:.65rem 1.2rem; font-size:13px; font-weight:500; color:var(--text3); background:none; border:none; border-bottom:2px solid transparent; cursor:pointer; font-family:var(--font); display:flex; align-items:center; gap:6px; transition:color .15s, border-color .15s; white-space:nowrap; }
+  .tab-btn:hover { color:var(--text2); }
+  .tab-btn.active { color:var(--text); border-bottom-color:var(--accent); }
+  .tab-pane { display:none; overflow:hidden; }
+  .tab-pane.active { display:block; overflow:hidden; }
+
+  /* ── QA panel layout ── */
+  .qa-layout { grid-template-columns: 300px 1fr 380px; height:calc(100vh - 98px); overflow:hidden; }
+  .qa-input-body { flex:1; overflow-y:auto; padding:1.25rem 1.5rem; display:flex; flex-direction:column; gap:1.1rem; }
+  .qa-input-body textarea { min-height:100px; }
+
+  /* ── Score ring ── */
+  .score-ring { position:relative; width:80px; height:80px; flex-shrink:0; }
+  .score-ring svg { transform:rotate(-90deg); }
+  .score-ring-num { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; }
+
+  /* ── Issue cards ── */
+  .issue-card { border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; margin-bottom:.6rem; }
+  .issue-header { padding:.7rem 1rem; display:flex; align-items:center; gap:10px; cursor:pointer; transition:background .15s; }
+  .issue-header:hover { background:var(--bg3); }
+  .issue-body { padding:.8rem 1rem; border-top:1px solid var(--border); font-size:13px; color:var(--text2); line-height:1.75; display:none; }
+  .issue-body.open { display:block; }
+  .issue-title { font-size:13px; font-weight:500; color:var(--text); flex:1; }
+  .sev { font-size:11px; font-weight:600; padding:2px 8px; border-radius:20px; }
+  .sev-critical { background:#2a0f0f; color:#f56565; border:1px solid #3a1010; }
+  .sev-moderate { background:var(--amber-bg); color:var(--amber); border:1px solid #3a2808; }
+  .sev-minor { background:#0d2a1e; color:#3dd68c; border:1px solid #1a4a30; }
+  .sev-positive { background:#0d1a2a; color:#60a5fa; border:1px solid #1a2a3a; }
+  .issue-icon { font-size:16px; flex-shrink:0; }
+  .chevron { font-size:14px; color:var(--text3); transition:transform .2s; flex-shrink:0; }
+  .chevron.open { transform:rotate(90deg); }
+
+  /* ── Summary row ── */
+  .summary-row { display:flex; align-items:center; gap:1rem; background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius); padding:1rem 1.2rem; margin-bottom:1rem; }
+  .summary-stats { display:flex; gap:1.2rem; flex-wrap:wrap; }
+  .stat-item { text-align:center; }
+  .stat-num { font-size:20px; font-weight:700; line-height:1; }
+  .stat-lbl { font-size:11px; color:var(--text3); margin-top:2px; }
+  .verdict-badge { margin-left:auto; font-size:12px; font-weight:600; padding:5px 14px; border-radius:20px; }
+
+  /* ── Category pills ── */
+  .cat-pills { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:1rem; }
+  .cat-pill { font-size:11.5px; padding:4px 12px; border-radius:20px; border:1px solid var(--border); background:var(--bg3); color:var(--text2); cursor:pointer; transition:all .15s; }
+  .cat-pill.active { border-color:var(--accent-border); background:var(--accent-bg); color:var(--accent2); }
+
+  /* ── Suggestion box ── */
+  .suggestion-box { background:var(--accent-bg); border:1px solid var(--accent-border); border-radius:var(--radius-sm); padding:.7rem .9rem; margin-top:.6rem; font-size:12.5px; color:var(--accent2); line-height:1.65; }
+  .suggestion-box strong { color:var(--accent2); }
 
   /* ── Stream cursor ── */
   .cursor { display: inline-block; width: 2px; height: 1em; background: var(--accent); vertical-align: middle; animation: caret .7s steps(1) infinite; margin-left: 2px; }
@@ -487,6 +625,13 @@
     <button class="btn-ghost" onclick="openHelp()" style="padding:6px 12px;font-size:12px"><i class="ti ti-help-circle"></i> Help</button>
     <button class="btn-ghost" onclick="clearAll()" style="padding:6px 12px;font-size:12px"><i class="ti ti-refresh"></i> Clear all</button>
   </div>
+</div>
+
+<!-- ── Tab bar ── -->
+<div class="tab-bar">
+  <button class="tab-btn active" id="tab-draft" onclick="switchTab('draft')"><i class="ti ti-pencil" style="font-size:14px"></i> Draft Response</button>
+  <button class="tab-btn" id="tab-qa" onclick="switchTab('qa')"><i class="ti ti-shield-check" style="font-size:14px"></i> QA Review</button>
+  <button class="tab-btn" id="tab-kb" onclick="switchTab('kb')"><i class="ti ti-book" style="font-size:14px"></i> Knowledge Base</button>
 </div>
 
 <!-- ── Help Modal ── -->
@@ -678,6 +823,8 @@
   </div>
 </div>
 
+<!-- ── Tab: Draft ── -->
+<div class="tab-pane active" id="pane-draft">
 <div class="app">
 
   <!-- LEFT: Settings -->
@@ -809,6 +956,7 @@
   <!-- MIDDLE: Input -->
   <div class="middle">
     <div class="panel-header"><i class="ti ti-inbox" style="font-size:14px"></i> Customer message & context</div>
+    <div class="platform-bar" id="platformBar" style="display:none"></div>
     <div class="middle-body">
 
       <div class="field">
@@ -882,6 +1030,195 @@
   </div>
 
 </div>
+</div><!-- end pane-draft -->
+
+<!-- ── Tab: QA Review ── -->
+<div class="tab-pane" id="pane-qa">
+<div class="app qa-layout">
+
+  <!-- QA LEFT: Settings (reuses same sidebar concept) -->
+  <div class="panel">
+    <div class="panel-header"><i class="ti ti-settings" style="font-size:14px"></i> QA Settings</div>
+    <div class="panel-body">
+
+      <div class="field">
+        <label>Provider &amp; model</label>
+        <p class="hint" style="margin:0">Uses the same provider and API key configured in the Draft tab.</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field">
+        <label>Evaluation strictness</label>
+        <select id="qaStrictness">
+          <option value="standard">Standard — balanced review</option>
+          <option value="strict">Strict — flag everything</option>
+          <option value="lenient">Lenient — critical issues only</option>
+        </select>
+        <p class="hint">Strict mode flags minor tone issues and missed opportunities. Lenient only surfaces serious mistakes.</p>
+      </div>
+
+      <div class="field">
+        <label>Focus areas</label>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:2px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);font-weight:400;margin:0;cursor:pointer"><input type="checkbox" id="chk-accuracy" checked style="accent-color:var(--accent)"> Accuracy &amp; policy compliance</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);font-weight:400;margin:0;cursor:pointer"><input type="checkbox" id="chk-completeness" checked style="accent-color:var(--accent)"> Completeness — all issues addressed</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);font-weight:400;margin:0;cursor:pointer"><input type="checkbox" id="chk-tone" checked style="accent-color:var(--accent)"> Tone &amp; empathy</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);font-weight:400;margin:0;cursor:pointer"><input type="checkbox" id="chk-resolution" checked style="accent-color:var(--accent)"> Resolution &amp; next steps</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);font-weight:400;margin:0;cursor:pointer"><input type="checkbox" id="chk-consistency" checked style="accent-color:var(--accent)"> Agent consistency</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);font-weight:400;margin:0;cursor:pointer"><input type="checkbox" id="chk-risk" checked style="accent-color:var(--accent)"> Legal / escalation risk</label>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field">
+        <label>Company policies <span style="color:var(--text3);font-weight:400">(optional)</span></label>
+        <textarea id="qaPolicies" rows="4" placeholder="Paste your refund policy, SLA commitments, escalation rules… The AI will judge responses against these specifically."></textarea>
+        <p class="hint">Without this, the AI judges against general best practices.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- QA MIDDLE: Input -->
+  <div class="middle">
+    <div class="panel-header"><i class="ti ti-messages" style="font-size:14px"></i> Conversation to review</div>
+    <div class="platform-bar" id="qaPlatformBar" style="display:none"></div>
+    <div class="qa-input-body">
+
+      <div class="field">
+        <label><i class="ti ti-message-2" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Full conversation thread <span style="color:var(--red)">*</span></label>
+        <textarea id="qaConversation" rows="12" placeholder="Paste the complete conversation thread here — customer messages AND agent replies, in order. Include timestamps and agent names if available.&#10;&#10;Example format:&#10;[Customer - 10:32am] My order #1234 hasn't arrived after 2 weeks...&#10;[Agent: Maria - 10:45am] Hi, thanks for reaching out. Let me check that for you...&#10;[Customer - 11:02am] I already contacted you last week about this!&#10;[Agent: John - 11:15am] I apologize for the inconvenience..."></textarea>
+        <p class="hint">The more complete the thread, the more accurate the review. Include all previous agent replies — this is how the AI catches inconsistencies between agents.</p>
+      </div>
+
+      <div class="field">
+        <label><i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Additional context <span style="color:var(--text3);font-weight:400">(optional)</span></label>
+        <textarea id="qaContext" rows="3" placeholder="Order details, product info, customer account status, anything the agents should have known…"></textarea>
+      </div>
+
+    </div>
+    <div class="action-bar">
+      <span class="char-count" id="qaCharCount">0 chars</span>
+      <div class="btn-row">
+        <button class="btn-ghost" onclick="clearQA()" style="font-size:13px"><i class="ti ti-eraser"></i> Clear</button>
+        <button class="btn-primary" id="qaBtn" onclick="runQA()"><i class="ti ti-shield-search"></i> Run QA Review</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QA RIGHT: Results -->
+  <div class="right">
+    <div class="resp-header">
+      <div class="resp-title"><i class="ti ti-clipboard-check" style="font-size:13px"></i> Review results</div>
+      <div class="resp-actions">
+        <button class="icon-btn" id="qaExportBtn" onclick="exportQA()" style="display:none"><i class="ti ti-download"></i> Export</button>
+        <button class="icon-btn" id="qaRerunBtn" onclick="runQA()" style="display:none"><i class="ti ti-refresh"></i> Re-run</button>
+      </div>
+    </div>
+    <div class="resp-body" id="qaResultBody">
+      <div class="empty">
+        <i class="ti ti-shield-check" style="opacity:.25"></i>
+        <p>Paste a conversation thread and press <strong>Run QA Review</strong>.<br /><br />The AI will analyze for accuracy, tone, completeness, consistency, and escalation risks.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div><!-- end pane-qa -->
+
+
+<!-- ── Tab: Knowledge Base ── -->
+<div class="tab-pane" id="pane-kb">
+<div class="app kb-layout">
+
+  <!-- KB Sidebar: workspace list -->
+  <div class="kb-sidebar">
+    <div class="panel-header"><i class="ti ti-layers-subtract" style="font-size:14px"></i> Platforms</div>
+    <div class="kb-sidebar-body" id="wsList"></div>
+    <div style="padding:.75rem;border-top:1px solid var(--border);flex-shrink:0">
+      <button class="ws-add-btn" onclick="openWsModal()"><i class="ti ti-plus"></i> Add platform</button>
+    </div>
+  </div>
+
+  <!-- KB Main: references for selected workspace -->
+  <div class="kb-main">
+    <div class="panel-header" style="justify-content:space-between">
+      <span id="kbMainTitle" style="display:flex;align-items:center;gap:7px"><i class="ti ti-book" style="font-size:14px"></i> Select a platform</span>
+      <div style="display:flex;gap:6px">
+        <button class="icon-btn" id="kbRenameBtn" onclick="openWsModal('rename')" style="display:none"><i class="ti ti-edit"></i> Rename</button>
+        <button class="icon-btn danger" id="kbDeleteBtn" onclick="deleteWorkspace()" style="display:none;border-color:var(--border);color:var(--text3)"><i class="ti ti-trash"></i> Delete platform</button>
+      </div>
+    </div>
+    <div class="kb-main-body" id="kbMainBody">
+      <div class="kb-empty">
+        <i class="ti ti-building-store"></i>
+        <p>Add a platform on the left<br>(e.g. Shopify, Amazon, TikTok Shop)<br><br>Each platform keeps its own references — manuals, policies, promo links — so the AI never mixes them up.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div><!-- end pane-kb -->
+
+<!-- ── Workspace modal ── -->
+<div class="modal-overlay" id="wsModal" onclick="closeWsModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-title"><i class="ti ti-building-store"></i> <span id="wsModalTitle">Add platform</span></div>
+    <div class="field" style="margin-bottom:.75rem">
+      <label>Platform name</label>
+      <input type="text" id="wsNameInput" placeholder="e.g. Shopify, Amazon, TikTok Shop, Website" maxlength="40" />
+    </div>
+    <div class="field">
+      <label>Icon</label>
+      <div class="emoji-grid" id="emojiGrid"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeWsModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveWorkspace()"><i class="ti ti-check"></i> <span id="wsModalSaveLabel">Add platform</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Add link modal ── -->
+<div class="modal-overlay" id="addLinkModal" onclick="closeAddLinkModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-title"><i class="ti ti-link"></i> Add reference link</div>
+    <div class="field" style="margin-bottom:.75rem">
+      <label>Label <span style="color:var(--text3);font-weight:400">(what is this link?)</span></label>
+      <input type="text" id="addLinkLabel" placeholder="e.g. Return Policy, Product Manual, March Promo" />
+    </div>
+    <div class="field">
+      <label>URL</label>
+      <input type="text" id="addLinkUrl" placeholder="https://…" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeAddLinkModal()">Cancel</button>
+      <button class="btn-primary" onclick="confirmAddLink()"><i class="ti ti-plus"></i> Add link</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Add snippet modal ── -->
+<div class="modal-overlay" id="addSnippetModal" onclick="closeAddSnippetModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-title"><i class="ti ti-notes"></i> Add text note</div>
+    <div class="field" style="margin-bottom:.75rem">
+      <label>Label</label>
+      <input type="text" id="addSnippetLabel" placeholder="e.g. March Promo Rules, Escalation Policy" />
+    </div>
+    <div class="field">
+      <label>Content</label>
+      <textarea id="addSnippetContent" rows="5" placeholder="Paste your policy text, promo details, or any notes here…" style="min-height:110px"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeAddSnippetModal()">Cancel</button>
+      <button class="btn-primary" onclick="confirmAddSnippet()"><i class="ti ti-plus"></i> Add note</button>
+    </div>
+  </div>
+</div>
+
 
 <script>
 // ── State ──────────────────────────────────────────────────────────────────
@@ -889,51 +1226,58 @@ let provider = 'anthropic';
 let tone = 'Professional & Empathetic';
 let attachedFiles = [];
 let lastRawResponse = '';
-let history = [];
 
 // ── Provider models ────────────────────────────────────────────────────────
 const MODELS = {
   anthropic: [
-    { v: 'claude-sonnet-4-20250514', l: 'Claude Sonnet 4 ✦ Recommended' },
-    { v: 'claude-opus-4-20250514', l: 'Claude Opus 4 — Most capable' },
-    { v: 'claude-haiku-4-5-20251001', l: 'Claude Haiku 4.5 — Fastest' },
+    { v: 'claude-sonnet-4-20250514', l: 'Claude Sonnet 4 \u2736 Recommended' },
+    { v: 'claude-opus-4-20250514',   l: 'Claude Opus 4 \u2014 Most capable' },
+    { v: 'claude-haiku-4-5-20251001',l: 'Claude Haiku 4.5 \u2014 Fastest' },
   ],
   gemini: [
     { v: 'gemini-3.5-flash', l: 'Gemini 3.5 Flash ✦ Recommended' },
     { v: 'gemini-3.1-flash-lite', l: 'Gemini-3.1-flash-lite' },
     { v: 'gemma-4-31b-it', l: 'Gemma-4-31b-it' },
-	{ v: 'gemma-4-26b-a4b-it', l: 'Gemma-4-26b-a4b-it' },
+	  { v: 'gemma-4-26b-a4b-it', l: 'Gemma-4-26b-a4b-it' },
   ],
   groq: [
-    { v: 'llama-3.3-70b-versatile', l: 'Llama 3.3 70B ✦ Recommended' },
-    { v: 'llama-3.1-8b-instant', l: 'Llama 3.1 8B — Fastest' },
-    { v: 'mixtral-8x7b-32768', l: 'Mixtral 8x7B' },
-    { v: 'gemma2-9b-it', l: 'Gemma 2 9B' },
+    { v: 'llama-3.3-70b-versatile', l: 'Llama 3.3 70B \u2736 Recommended' },
+    { v: 'llama-3.1-8b-instant',    l: 'Llama 3.1 8B \u2014 Fastest' },
+    { v: 'mixtral-8x7b-32768',      l: 'Mixtral 8x7B' },
+    { v: 'gemma2-9b-it',            l: 'Gemma 2 9B' },
   ],
   openrouter: [
-    { v: 'openai/gpt-4o-mini:free', l: 'GPT-4o Mini (free) ✦ Recommended' },
-    { v: 'openai/gpt-oss-120b:free', l: 'GPT OSS 120B (free)' },
-    { v: 'openai/gpt-oss-20b:free', l: 'GPT OSS 20B (free)' },
-    { v: 'qwen/qwen3-next-80b-a3b-instruct:free', l: 'Qwen3 80B (free)' },
-    { v: 'arcee-ai/trinity-large-preview:free', l: 'Arcee Trinity Large (free)' },
-    { v: 'liquid/lfm-2.5-1.2b-thinking:free', l: 'LFM 2.5 Thinking (free)' },
-    { v: 'liquid/lfm-2.5-1.2b-instruct:free', l: 'LFM 2.5 Instruct (free)' },
-    { v: 'nvidia/nemotron-3-nano-30b-a3b:free', l: 'Nemotron Nano 30B (free)' },
-    { v: 'nvidia/nemotron-nano-12b-v2-vl:free', l: 'Nemotron Nano 12B (free)' },
-    { v: 'nvidia/nemotron-nano-9b-v2:free', l: 'Nemotron Nano 9B (free)' },
+    { v: 'openai/gpt-4o-mini:free',                  l: 'GPT-4o Mini (free) \u2736 Recommended' },
+    { v: 'openai/gpt-oss-120b:free',                 l: 'GPT OSS 120B (free)' },
+    { v: 'openai/gpt-oss-20b:free',                  l: 'GPT OSS 20B (free)' },
+    { v: 'qwen/qwen3-next-80b-a3b-instruct:free',    l: 'Qwen3 80B (free)' },
+    { v: 'arcee-ai/trinity-large-preview:free',      l: 'Arcee Trinity Large (free)' },
+    { v: 'liquid/lfm-2.5-1.2b-thinking:free',        l: 'LFM 2.5 Thinking (free)' },
+    { v: 'liquid/lfm-2.5-1.2b-instruct:free',        l: 'LFM 2.5 Instruct (free)' },
+    { v: 'nvidia/nemotron-3-nano-30b-a3b:free',      l: 'Nemotron Nano 30B (free)' },
+    { v: 'nvidia/nemotron-nano-12b-v2-vl:free',      l: 'Nemotron Nano 12B (free)' },
+    { v: 'nvidia/nemotron-nano-9b-v2:free',          l: 'Nemotron Nano 9B (free)' },
   ],
 };
 
 const KEY_HINTS = {
-  anthropic: 'Get your key at console.anthropic.com',
-  gemini: 'Get your key at aistudio.google.com',
-  groq: 'Get your key at console.groq.com',
-  openrouter: 'Get your key at openrouter.ai/keys',
+  anthropic:   'Get your key at console.anthropic.com',
+  gemini:      'Get your key at aistudio.google.com',
+  groq:        'Get your key at console.groq.com',
+  openrouter:  'Get your key at openrouter.ai/keys',
 };
+
+// ── Tab switching ──────────────────────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.tab-pane').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('pane-' + tab).classList.add('active');
+}
 
 // ── API key persistence ────────────────────────────────────────────────────
 function saveKey() {
-  const key = document.getElementById('apiKey').value.trim();
+  var key = document.getElementById('apiKey').value.trim();
   if (key) localStorage.setItem('csagent_key_' + provider, key);
   else localStorage.removeItem('csagent_key_' + provider);
 }
@@ -944,468 +1288,52 @@ function loadKey(prov) {
 
 // ── Provider / tone / UI helpers ───────────────────────────────────────────
 function setProvider(btn) {
-  document.querySelectorAll('.prov-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.prov-btn').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
   provider = btn.dataset.provider;
-  // Update model list
-  const sel = document.getElementById('modelSelect');
-  sel.innerHTML = MODELS[provider].map(m => `<option value="${m.v}">${m.l}</option>`).join('');
-  // Update hint
+  var sel = document.getElementById('modelSelect');
+  sel.innerHTML = MODELS[provider].map(function(m) { return '<option value="' + m.v + '">' + m.l + '</option>'; }).join('');
   document.getElementById('keyHint').textContent = KEY_HINTS[provider];
-  // Load saved key for this provider
-  const saved = loadKey(provider);
-  const inp = document.getElementById('apiKey');
+  var saved = loadKey(provider);
+  var inp = document.getElementById('apiKey');
   inp.value = saved;
-  inp.placeholder = provider === 'openrouter' ? 'sk-or-…' : 'API key…';
+  inp.placeholder = provider === 'openrouter' ? 'sk-or-\u2026' : 'API key\u2026';
   updateSaveIndicator();
 }
 
 function setTone(btn) {
-  document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tone-btn').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
   tone = btn.dataset.tone;
 }
 
 function toggleKey() {
-  const inp = document.getElementById('apiKey');
-  const ic = document.getElementById('eyeIcon');
-  if (inp.type === 'password') { inp.type = 'text'; ic.className = 'ti ti-eye-off'; }
-  else { inp.type = 'password'; ic.className = 'ti ti-eye'; }
+  var inp = document.getElementById('apiKey');
+  var ic  = document.getElementById('eyeIcon');
+  if (inp.type === 'password') { inp.type = 'text';     ic.className = 'ti ti-eye-off'; }
+  else                         { inp.type = 'password'; ic.className = 'ti ti-eye'; }
 }
 
 function updateCount() {
-  const n = (document.getElementById('emailInput').value.length +
-             document.getElementById('historyInput').value.length +
-             document.getElementById('policyInput').value.length);
+  var n = document.getElementById('emailInput').value.length
+        + document.getElementById('historyInput').value.length
+        + document.getElementById('policyInput').value.length;
   document.getElementById('charCount').textContent = n.toLocaleString() + ' chars';
   document.getElementById('draftBtn').style.display =
     document.getElementById('emailInput').value.trim().length > 20 ? 'flex' : 'none';
 }
 
 function setStatus(text, type) {
-  const p = document.getElementById('statusPill');
+  var p = document.getElementById('statusPill');
   p.className = 'pill pill-' + type;
-  p.innerHTML = `<span class="pill-dot"></span> ${text}`;
+  p.innerHTML = '<span class="pill-dot"></span> ' + text;
 }
 
-// ── File handling ──────────────────────────────────────────────────────────
-function handleFiles(files) {
-  for (const f of files) {
-    if (attachedFiles.length >= 5) break;
-    if (!f.type.startsWith('image/')) continue;
-    const reader = new FileReader();
-    reader.onload = e => {
-      attachedFiles.push({ name: f.name, type: f.type, data: e.target.result.split(',')[1] });
-      renderChips();
-    };
-    reader.readAsDataURL(f);
-  }
-}
-
-function renderChips() {
-  const box = document.getElementById('attachments');
-  box.innerHTML = '';
-  attachedFiles.forEach((f, i) => {
-    const chip = document.createElement('div');
-    chip.className = 'att-chip';
-    chip.innerHTML = `<i class="ti ti-photo" style="font-size:13px"></i>${f.name.length>22?f.name.slice(0,20)+'…':f.name}<button onclick="removeFile(${i})" aria-label="Remove ${f.name}">×</button>`;
-    box.appendChild(chip);
-  });
-}
-
-function removeFile(i) {
-  attachedFiles.splice(i, 1);
-  renderChips();
-}
-
-// ── Clear ──────────────────────────────────────────────────────────────────
-function clearAll() {
-  ['emailInput','historyInput','policyInput'].forEach(id => { document.getElementById(id).value = ''; });
-  refLinks = []; linkCounter = 0; renderLinkRows();
-  attachedFiles = [];
-  document.getElementById('attachments').innerHTML = '';
-  updateCount();
-  document.getElementById('respBody').innerHTML = '<div class="empty"><i class="ti ti-message-dots"></i><p>Your AI-drafted response will appear here.<br />Fill in the customer message and press <strong>Generate response</strong>.</p></div>';
-  document.getElementById('copyBtn').style.display = 'none';
-  document.getElementById('regenBtn').style.display = 'none';
-  setStatus('Ready', 'green');
-  lastRawResponse = '';
-}
-
-// ── System prompt ──────────────────────────────────────────────────────────
-function buildSystemPrompt() {
-  const company = document.getElementById('companyName').value.trim() || 'our company';
-  const rep = document.getElementById('repName').value.trim();
-  const lang = document.getElementById('langSelect').value;
-  const length = document.getElementById('lengthSelect').value;
-  const dept = document.getElementById('deptSelect').value;
-  const urgency = document.getElementById('urgencySelect').value;
-
-  const urgencyNote = {
-    normal: '',
-    high: 'NOTE: The customer appears frustrated or is escalating. Prioritize de-escalation and acknowledgment of their frustration before moving to solutions.',
-    vip: 'NOTE: This is a VIP/premium customer. Prioritize their satisfaction and offer premium solutions.',
-    legal: 'NOTE: This may involve legal or complaint risk. Be factual, avoid admissions of liability, and offer escalation to management.',
-  }[urgency];
-
-  return `You are an expert ${dept} representative for ${company}${rep ? `, your name is ${rep}` : ''}. Write a ${tone.toLowerCase()} customer service reply in ${lang}.
-
-${urgencyNote}
-
-CRITICAL RULES:
-1. Analyze the SPECIFIC problem — never give a generic copy-paste answer.
-2. Reference specific details from the email (names, dates, order numbers, product details) to show you actually read it carefully.
-3. If history/context is provided, acknowledge prior interactions and avoid asking for information already given.
-4. If policies are provided, work within them — communicate limitations with empathy, not as cold rejections.
-5. Address EVERY issue raised, not just the first one.
-6. If images/screenshots are attached, reference what you can observe in them.
-7. End with a clear next step or resolution path, not vague "feel free to contact us" closings.
-8. Length: ${length === 'concise' ? 'Keep it short, 2–3 paragraphs max.' : length === 'detailed' ? 'Be thorough and detailed, anticipate follow-up questions.' : 'Standard length — balanced and complete.'}
-9. Never open with "I hope this email finds you well", "Thank you for reaching out", or other filler openers. Start directly.
-10. Sign off naturally as ${rep || 'the support team'} from ${company}.
-
-After the response body, on a new line write exactly:
-CONFIDENCE:[0-100]
-TAGS:[comma-separated issue tags, e.g. refund request,shipping delay,technical issue,billing]`;
-}
-
-// ── Reference links state ─────────────────────────────────────────────────
-let refLinks = []; // [{ id, url, status:'idle'|'fetching'|'ok'|'err', content, title }]
-let linkCounter = 0;
-
-function addLinkRow(url) {
-  const id = ++linkCounter;
-  refLinks.push({ id, url: url || '', status: 'idle', content: '', title: '' });
-  renderLinkRows();
-}
-
-function removeLinkRow(id) {
-  refLinks = refLinks.filter(l => l.id !== id);
-  renderLinkRows();
-}
-
-function onLinkInput(id, val) {
-  const link = refLinks.find(l => l.id === id);
-  if (link) { link.url = val.trim(); link.status = 'idle'; link.content = ''; link.title = ''; }
-  renderLinkRows();
-}
-
-function renderLinkRows() {
-  const box = document.getElementById('linksList');
-  box.innerHTML = '';
-  refLinks.forEach(link => {
-    const row = document.createElement('div');
-    row.className = 'link-row';
-    row.style.marginBottom = '6px';
-    let statusHtml = '';
-    if (link.status === 'fetching') statusHtml = `<span class="link-status fetching"><i class="ti ti-loader" style="animation:spin .8s linear infinite"></i> Fetching…</span>`;
-    else if (link.status === 'ok') statusHtml = `<span class="link-status ok"><i class="ti ti-check"></i> ${escHtml(link.title ? link.title.slice(0,18)+(link.title.length>18?'…':'') : 'Loaded')}</span>`;
-    else if (link.status === 'err') statusHtml = `<span class="link-status err"><i class="ti ti-alert-circle"></i> Failed</span>`;
-    row.innerHTML = `
-      <input type="text" placeholder="https://…" value="${escHtml(link.url)}"
-        oninput="onLinkInput(${link.id}, this.value)"
-        onblur="fetchLinkContent(${link.id})"
-        onkeydown="if(event.key==='Enter'){event.preventDefault();fetchLinkContent(${link.id})}"
-        style="font-size:12.5px;height:34px" />
-      ${statusHtml}
-      <button class="link-remove" onclick="removeLinkRow(${link.id})" title="Remove"><i class="ti ti-x"></i></button>`;
-    box.appendChild(row);
-  });
-}
-
-async function fetchLinkContent(id) {
-  const link = refLinks.find(l => l.id === id);
-  if (!link || !link.url || link.status === 'fetching' || link.status === 'ok') return;
-  let url = link.url;
-  if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
-  link.url = url;
-  link.status = 'fetching';
-  renderLinkRows();
-  try {
-    // Use allorigins CORS proxy to fetch page text
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-    const resp = await fetch(proxyUrl);
-    if (!resp.ok) throw new Error('Fetch failed');
-    const data = await resp.json();
-    if (!data.contents) throw new Error('Empty response');
-    // Strip HTML tags to get readable text, limit to ~4000 chars
-    const div = document.createElement('div');
-    div.innerHTML = data.contents;
-    // Remove script/style
-    div.querySelectorAll('script,style,nav,footer,header').forEach(el => el.remove());
-    const text = (div.innerText || div.textContent || '').replace(/\s+/g,' ').trim().slice(0, 4000);
-    const titleMatch = data.contents.match(/<title[^>]*>([^<]+)<\/title>/i);
-    link.title = titleMatch ? titleMatch[1].trim() : url;
-    link.content = text;
-    link.status = 'ok';
-  } catch(e) {
-    link.status = 'err';
-    link.content = '';
-  }
-  renderLinkRows();
-}
-
-async function fetchAllLinks() {
-  const pending = refLinks.filter(l => l.url && l.status === 'idle');
-  await Promise.all(pending.map(l => fetchLinkContent(l.id)));
-}
-
-// ── User message ───────────────────────────────────────────────────────────
-async function buildUserContent(quick) {
-  // Fetch any unfetched links first
-  await fetchAllLinks();
-
-  const email = document.getElementById('emailInput').value.trim();
-  const ctx = document.getElementById('historyInput').value.trim();
-  const policy = document.getElementById('policyInput').value.trim();
-
-  let text = `CUSTOMER MESSAGE:\n${email}`;
-  if (ctx) text += `\n\nCONVERSATION HISTORY & CONTEXT:\n${ctx}`;
-  if (policy) text += `\n\nPOLICIES / CONSTRAINTS:\n${policy}`;
-
-  // Append fetched reference content
-  const loaded = refLinks.filter(l => l.status === 'ok' && l.content);
-  if (loaded.length) {
-    text += `\n\nREFERENCE DOCUMENTS (fetched from provided links — use these to inform your response):`;
-    loaded.forEach((l, i) => {
-      text += `\n\n--- Reference ${i+1}: ${l.title} (${l.url}) ---\n${l.content}`;
-    });
-  }
-  const failed = refLinks.filter(l => l.status === 'err');
-  if (failed.length) {
-    text += `\n\nNote: Could not fetch content from: ${failed.map(l=>l.url).join(', ')}`;
-  }
-
-  if (attachedFiles.length) text += `\n\nATTACHMENTS: ${attachedFiles.map(f=>f.name).join(', ')}`;
-  if (quick) text += '\n\n[QUICK DRAFT — shorter first pass]';
-
-  // Build content array for Anthropic (supports vision)
-  const content = [];
-  if (provider === 'anthropic' && attachedFiles.length > 0) {
-    attachedFiles.forEach(f => {
-      content.push({ type: 'image', source: { type: 'base64', media_type: f.type, data: f.data } });
-    });
-  }
-  content.push({ type: 'text', text });
-  return content;
-}
-
-// ── API callers ────────────────────────────────────────────────────────────
-async function callAnthropic(apiKey, model, system, userContent) {
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
-    body: JSON.stringify({
-      model, max_tokens: 1800, system,
-      messages: [{ role: 'user', content: userContent }]
-    })
-  });
-  const data = await resp.json();
-  if (!resp.ok) throw new Error(data.error?.message || `Anthropic error ${resp.status}`);
-  return data.content.map(c => c.text || '').join('');
-}
-
-async function callOpenAICompatible(url, apiKey, model, system, userContent, extraHeaders) {
-  // For OpenAI-compatible APIs (Groq, OpenRouter, Gemini OpenAI compat)
-  const textContent = userContent.find(c => c.type === 'text')?.text || '';
-  const resp = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`,
-      ...(extraHeaders || {}),
-    },
-    body: JSON.stringify({
-      model, max_tokens: 1800,
-      messages: [
-        { role: 'system', content: system },
-        { role: 'user', content: textContent }
-      ]
-    })
-  });
-  const data = await resp.json();
-  if (!resp.ok) {
-    const msg = data.error?.message || data.message || `Error ${resp.status}`;
-    throw new Error(msg);
-  }
-  return data.choices?.[0]?.message?.content || '';
-}
-
-async function callGemini(apiKey, model, system, userContent) {
-  const textContent = userContent.find(c => c.type === 'text')?.text || '';
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-  const resp = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      system_instruction: { parts: [{ text: system }] },
-      contents: [{ role: 'user', parts: [{ text: textContent }] }],
-      generationConfig: { maxOutputTokens: 1800 }
-    })
-  });
-  const data = await resp.json();
-  if (!resp.ok) {
-    throw new Error(data.error?.message || `Gemini error ${resp.status}`);
-  }
-  return data.candidates?.[0]?.content?.parts?.map(p => p.text || '').join('') || '';
-}
-
-async function callProvider(system, userContent) {
-  const apiKey = document.getElementById('apiKey').value.trim();
-  const model = document.getElementById('modelSelect').value;
-  if (!apiKey) throw new Error('Please enter your API key in the left sidebar.');
-
-  switch (provider) {
-    case 'anthropic':
-      return callAnthropic(apiKey, model, system, userContent);
-
-    case 'gemini':
-      return callGemini(apiKey, model, system, userContent);
-
-    case 'groq':
-      return callOpenAICompatible(
-        'https://api.groq.com/openai/v1/chat/completions',
-        apiKey, model, system, userContent
-      );
-
-    case 'openrouter':
-      return callOpenAICompatible(
-        'https://openrouter.ai/api/v1/chat/completions',
-        apiKey, model, system, userContent,
-        { 'HTTP-Referer': window.location.href, 'X-Title': 'CS Agent' }
-      );
-
-    default:
-      throw new Error('Unknown provider');
-  }
-}
-
-// ── Parse AI response ──────────────────────────────────────────────────────
-function parseResponse(raw) {
-  let text = raw.trim();
-  let confidence = null;
-  let tags = [];
-  const confM = text.match(/CONFIDENCE:\s*(\d+)/i);
-  const tagsM = text.match(/TAGS:\s*([^\n]+)/i);
-  if (confM) { confidence = Math.min(100, Math.max(0, parseInt(confM[1]))); }
-  if (tagsM) { tags = tagsM[1].split(',').map(t => t.trim()).filter(Boolean); }
-  text = text
-    .replace(/\nCONFIDENCE:\s*\d+/gi, '')
-    .replace(/\nTAGS:\s*[^\n]+/gi, '')
-    .trim();
-  return { text, confidence, tags };
-}
-
-// ── Render response ────────────────────────────────────────────────────────
-function renderResponse(parsed) {
-  const confColor = parsed.confidence > 75 ? '#3dd68c' : parsed.confidence > 50 ? '#f5a623' : '#f56565';
-  const confPct = parsed.confidence !== null ? parsed.confidence + '%' : '—';
-
-  document.getElementById('respBody').innerHTML = `
-    <div class="resp-content" id="respText">${escHtml(parsed.text)}</div>
-    ${parsed.confidence !== null ? `
-      <div class="conf-block">
-        <div class="conf-row">
-          <span class="conf-label">Confidence</span>
-          <div class="bar-track"><div class="bar-fill" id="confBar" style="width:0%;background:${confColor}"></div></div>
-          <span class="conf-pct" id="confPct" style="color:${confColor}">—</span>
-        </div>
-        ${parsed.tags.length ? `<div class="tags">${parsed.tags.map(t=>`<span class="tag">${escHtml(t)}</span>`).join('')}</div>` : ''}
-      </div>` : ''}
-  `;
-  if (parsed.confidence !== null) {
-    setTimeout(() => {
-      const bar = document.getElementById('confBar');
-      const pct = document.getElementById('confPct');
-      if (bar) bar.style.width = confPct;
-      if (pct) pct.textContent = confPct;
-    }, 80);
-  }
-  document.getElementById('copyBtn').style.display = 'flex';
-  document.getElementById('regenBtn').style.display = 'flex';
-}
-
-// ── Generate ───────────────────────────────────────────────────────────────
-async function generate(quick) {
-  const email = document.getElementById('emailInput').value.trim();
-  if (!email) { showError('Please paste a customer message first.'); return; }
-
-  const genBtn = document.getElementById('genBtn');
-  const draftBtn = document.getElementById('draftBtn');
-  genBtn.disabled = true;
-  draftBtn.disabled = true;
-  setStatus('Generating…', 'amber');
-
-  document.getElementById('respBody').innerHTML = `
-    <div class="thinking">
-      <div class="dots"><span></span><span></span><span></span></div>
-      Analyzing message and context…
-    </div>`;
-  document.getElementById('copyBtn').style.display = 'none';
-  document.getElementById('regenBtn').style.display = 'none';
-
-  try {
-    const system = buildSystemPrompt();
-    const userContent = await buildUserContent(quick || false);
-    const raw = await callProvider(system, userContent);
-    lastRawResponse = raw;
-    const parsed = parseResponse(raw);
-    renderResponse(parsed);
-    setStatus('Done', 'green');
-  } catch (e) {
-    showError(e.message);
-    setStatus('Error', 'red');
-  }
-
-  genBtn.disabled = false;
-  draftBtn.disabled = false;
-}
-
-// ── Helpers ────────────────────────────────────────────────────────────────
-function showError(msg) {
-  document.getElementById('respBody').innerHTML = `
-    <div class="error-box">
-      <i class="ti ti-alert-circle" style="font-size:18px;flex-shrink:0;margin-top:1px"></i>
-      <div><strong>Error</strong><br>${escHtml(msg)}</div>
-    </div>`;
-}
-
-function escHtml(s) {
-  return String(s)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;');
-}
-
-function copyResp() {
-  if (!lastRawResponse) return;
-  const parsed = parseResponse(lastRawResponse);
-  navigator.clipboard.writeText(parsed.text).then(() => {
-    const btn = document.getElementById('copyBtn');
-    btn.innerHTML = '<i class="ti ti-check"></i> Copied!';
-    setTimeout(() => { btn.innerHTML = '<i class="ti ti-copy"></i> Copy'; }, 2000);
-  }).catch(() => {
-    // Fallback
-    const ta = document.createElement('textarea');
-    ta.value = parseResponse(lastRawResponse).text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    ta.remove();
-  });
-}
-
-// ── Save indicator & init ──────────────────────────────────────────────────
+// ── Save indicator ─────────────────────────────────────────────────────────
 function updateSaveIndicator() {
-  const key = document.getElementById('apiKey').value.trim();
-  const ind = document.getElementById('saveIndicator');
-  const clr = document.getElementById('clearKeyBtn');
+  var key = document.getElementById('apiKey').value.trim();
+  var ind = document.getElementById('saveIndicator');
+  var clr = document.getElementById('clearKeyBtn');
   if (key) {
     ind.style.display = 'inline';
     clr.style.display = 'inline-block';
@@ -1423,17 +1351,652 @@ function clearSavedKey() {
   updateSaveIndicator();
 }
 
-function init() {
-  // Load saved key for default provider (anthropic)
-  const saved = loadKey(provider);
-  if (saved) {
-    document.getElementById('apiKey').value = saved;
-    updateSaveIndicator();
+// ── File handling ──────────────────────────────────────────────────────────
+function handleFiles(files) {
+  for (var i = 0; i < files.length; i++) {
+    if (attachedFiles.length >= 5) break;
+    if (!files[i].type.startsWith('image/')) continue;
+    (function(f) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        attachedFiles.push({ name: f.name, type: f.type, data: e.target.result.split(',')[1] });
+        renderChips();
+      };
+      reader.readAsDataURL(f);
+    })(files[i]);
   }
 }
-init();
 
-// ── Help modal ────────────────────────────────────────────────────────────
+function renderChips() {
+  var box = document.getElementById('attachments');
+  box.innerHTML = '';
+  attachedFiles.forEach(function(f, i) {
+    var chip = document.createElement('div');
+    chip.className = 'att-chip';
+    chip.innerHTML = '<i class="ti ti-photo" style="font-size:13px"></i>'
+      + (f.name.length > 22 ? f.name.slice(0, 20) + '\u2026' : f.name)
+      + '<button onclick="removeFile(' + i + ')" aria-label="Remove">\u00d7</button>';
+    box.appendChild(chip);
+  });
+}
+
+function removeFile(i) {
+  attachedFiles.splice(i, 1);
+  renderChips();
+}
+
+// ── Clear all ──────────────────────────────────────────────────────────────
+function clearAll() {
+  ['emailInput','historyInput','policyInput'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+  attachedFiles = [];
+  refLinks = []; linkCounter = 0; renderLinkRows();
+  document.getElementById('attachments').innerHTML = '';
+  updateCount();
+  document.getElementById('respBody').innerHTML = '<div class="empty"><i class="ti ti-message-dots"></i><p>Your AI-drafted response will appear here.<br />Fill in the customer message and press <strong>Generate response</strong>.</p></div>';
+  document.getElementById('copyBtn').style.display  = 'none';
+  document.getElementById('regenBtn').style.display = 'none';
+  setStatus('Ready', 'green');
+  lastRawResponse = '';
+}
+
+// ── Reference links ────────────────────────────────────────────────────────
+var refLinks = [];
+var linkCounter = 0;
+
+function addLinkRow(url) {
+  linkCounter++;
+  var id = linkCounter;
+  refLinks.push({ id: id, url: url || '', status: 'idle', content: '', title: '' });
+  renderLinkRows();
+}
+
+function removeLinkRow(id) {
+  refLinks = refLinks.filter(function(l) { return l.id !== id; });
+  renderLinkRows();
+}
+
+function onLinkInput(id, val) {
+  var link = refLinks.find(function(l) { return l.id === id; });
+  if (link) { link.url = val.trim(); link.status = 'idle'; link.content = ''; link.title = ''; }
+  renderLinkRows();
+}
+
+function renderLinkRows() {
+  var box = document.getElementById('linksList');
+  if (!box) return;
+  box.innerHTML = '';
+  refLinks.forEach(function(link) {
+    var row = document.createElement('div');
+    row.className = 'link-row';
+    row.style.marginBottom = '6px';
+    var statusHtml = '';
+    if (link.status === 'fetching') {
+      statusHtml = '<span class="link-status fetching"><i class="ti ti-loader" style="animation:spin .8s linear infinite"></i> Fetching\u2026</span>';
+    } else if (link.status === 'ok') {
+      var t = link.title ? link.title.slice(0, 18) + (link.title.length > 18 ? '\u2026' : '') : 'Loaded';
+      statusHtml = '<span class="link-status ok"><i class="ti ti-check"></i> ' + escHtml(t) + '</span>';
+    } else if (link.status === 'err') {
+      statusHtml = '<span class="link-status err"><i class="ti ti-alert-circle"></i> Failed</span>';
+    }
+    row.innerHTML = '<input type="text" placeholder="https://\u2026" value="' + escHtml(link.url) + '"'
+      + ' oninput="onLinkInput(' + link.id + ', this.value)"'
+      + ' onblur="fetchLinkContent(' + link.id + ')"'
+      + ' onkeydown="if(event.key===\'Enter\'){event.preventDefault();fetchLinkContent(' + link.id + ')}"'
+      + ' style="font-size:12.5px;height:34px" />'
+      + statusHtml
+      + '<button class="link-remove" onclick="removeLinkRow(' + link.id + ')" title="Remove"><i class="ti ti-x"></i></button>';
+    box.appendChild(row);
+  });
+}
+
+function fetchLinkContent(id) {
+  var link = refLinks.find(function(l) { return l.id === id; });
+  if (!link || !link.url || link.status === 'fetching' || link.status === 'ok') return;
+  var url = link.url;
+  if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+  link.url = url;
+  link.status = 'fetching';
+  renderLinkRows();
+  var proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
+  fetch(proxyUrl)
+    .then(function(resp) {
+      if (!resp.ok) throw new Error('Fetch failed');
+      return resp.json();
+    })
+    .then(function(data) {
+      if (!data.contents) throw new Error('Empty response');
+      var div = document.createElement('div');
+      div.innerHTML = data.contents;
+      div.querySelectorAll('script,style,nav,footer,header').forEach(function(el) { el.remove(); });
+      var text = (div.innerText || div.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 4000);
+      var titleMatch = data.contents.match(/<title[^>]*>([^<]+)<\/title>/i);
+      link.title   = titleMatch ? titleMatch[1].trim() : url;
+      link.content = text;
+      link.status  = 'ok';
+      renderLinkRows();
+    })
+    .catch(function() {
+      link.status  = 'err';
+      link.content = '';
+      renderLinkRows();
+    });
+}
+
+function fetchAllLinks() {
+  var pending = refLinks.filter(function(l) { return l.url && l.status === 'idle'; });
+  return Promise.all(pending.map(function(l) {
+    return new Promise(function(resolve) {
+      fetchLinkContent(l.id);
+      // poll until done
+      var check = setInterval(function() {
+        var lnk = refLinks.find(function(x) { return x.id === l.id; });
+        if (!lnk || lnk.status === 'ok' || lnk.status === 'err') {
+          clearInterval(check);
+          resolve();
+        }
+      }, 300);
+    });
+  }));
+}
+
+// ── System prompt ──────────────────────────────────────────────────────────
+function buildSystemPrompt() {
+  var company = document.getElementById('companyName').value.trim() || 'our company';
+  var rep     = document.getElementById('repName').value.trim();
+  var lang    = document.getElementById('langSelect').value;
+  var length  = document.getElementById('lengthSelect').value;
+  var dept    = document.getElementById('deptSelect').value;
+  var urgency = document.getElementById('urgencySelect').value;
+
+  var urgencyNotes = {
+    normal: '',
+    high:   'NOTE: The customer appears frustrated or is escalating. Prioritize de-escalation and acknowledgment of their frustration before moving to solutions.',
+    vip:    'NOTE: This is a VIP/premium customer. Prioritize their satisfaction and offer premium solutions.',
+    legal:  'NOTE: This may involve legal or complaint risk. Be factual, avoid admissions of liability, and offer escalation to management.',
+  };
+  var urgencyNote = urgencyNotes[urgency] || '';
+
+  var signoff = (rep || 'the support team') + ' from ' + company;
+  var lengthNote = length === 'concise' ? 'Keep it short, 2-3 paragraphs max.'
+                 : length === 'detailed' ? 'Be thorough and detailed, anticipate follow-up questions.'
+                 : 'Standard length - balanced and complete.';
+
+  var platformNote = activePlatformId ? ' You are currently handling a customer from the ' + (kbGetWs(activePlatformId) ? kbGetWs(activePlatformId).name : '') + ' platform.' : '';
+  return 'You are an expert ' + dept + ' representative for ' + company
+    + (rep ? ', your name is ' + rep : '') + '. Write a ' + tone.toLowerCase() + ' customer service reply in ' + lang + '.' + platformNote + '\n\n'
+    + (urgencyNote ? urgencyNote + '\n\n' : '')
+    + 'CRITICAL RULES:\n'
+    + '1. Analyze the SPECIFIC problem - never give a generic copy-paste answer.\n'
+    + '2. Reference specific details from the email (names, dates, order numbers, product details).\n'
+    + '3. If history/context is provided, acknowledge prior interactions and avoid asking for info already given.\n'
+    + '4. If policies are provided, work within them with empathy.\n'
+    + '5. Address EVERY issue raised, not just the first one.\n'
+    + '6. If images/screenshots are attached, reference what you observe in them.\n'
+    + '7. End with a clear next step or resolution path.\n'
+    + '8. ' + lengthNote + '\n'
+    + '9. Never open with "I hope this email finds you well" or other filler openers. Start directly.\n'
+    + '10. Sign off naturally as ' + (rep || 'the support team') + ' from ' + company + '.\n\n'
+    + 'After the response body, on a new line write exactly:\n'
+    + 'CONFIDENCE:[0-100]\n'
+    + 'TAGS:[comma-separated issue tags]';
+}
+
+// ── Build user message ─────────────────────────────────────────────────────
+function buildUserContent(quick) {
+  var email  = document.getElementById('emailInput').value.trim();
+  var ctx    = document.getElementById('historyInput').value.trim();
+  var policy = document.getElementById('policyInput').value.trim();
+
+  var kbCtx = getKbContext();
+  var text = 'CUSTOMER MESSAGE:\n' + email;
+  if (ctx)    text += '\n\nCONVERSATION HISTORY & CONTEXT:\n' + ctx;
+  if (policy) text += '\n\nPOLICIES / CONSTRAINTS:\n' + policy;
+  if (kbCtx)  text += kbCtx;
+
+  var loaded = refLinks.filter(function(l) { return l.status === 'ok' && l.content; });
+  if (loaded.length) {
+    text += '\n\nREFERENCE DOCUMENTS (use these to inform your response):';
+    loaded.forEach(function(l, i) {
+      text += '\n\n--- Reference ' + (i+1) + ': ' + l.title + ' (' + l.url + ') ---\n' + l.content;
+    });
+  }
+
+  var failed = refLinks.filter(function(l) { return l.status === 'err'; });
+  if (failed.length) {
+    text += '\n\nNote: Could not fetch: ' + failed.map(function(l) { return l.url; }).join(', ');
+  }
+
+  if (attachedFiles.length) text += '\n\nATTACHMENTS: ' + attachedFiles.map(function(f) { return f.name; }).join(', ');
+  if (quick) text += '\n\n[QUICK DRAFT - shorter first pass]';
+
+  var content = [];
+  if (provider === 'anthropic') {
+    attachedFiles.forEach(function(f) {
+      content.push({ type: 'image', source: { type: 'base64', media_type: f.type, data: f.data } });
+    });
+  }
+  content.push({ type: 'text', text: text });
+  return content;
+}
+
+// ── API callers ────────────────────────────────────────────────────────────
+function callAnthropic(apiKey, model, system, userContent) {
+  return fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true',
+    },
+    body: JSON.stringify({ model: model, max_tokens: 1800, system: system, messages: [{ role: 'user', content: userContent }] })
+  }).then(function(resp) {
+    return resp.json().then(function(data) {
+      if (!resp.ok) throw new Error(data.error ? data.error.message : 'Anthropic error ' + resp.status);
+      return data.content.map(function(c) { return c.text || ''; }).join('');
+    });
+  });
+}
+
+function callOpenAICompat(url, apiKey, model, system, userContent, extraHeaders) {
+  var textContent = '';
+  userContent.forEach(function(c) { if (c.type === 'text') textContent += c.text; });
+  var headers = Object.assign({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey }, extraHeaders || {});
+  return fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify({
+      model: model,
+      max_tokens: 1800,
+      messages: [{ role: 'system', content: system }, { role: 'user', content: textContent }]
+    })
+  }).then(function(resp) {
+    return resp.json().then(function(data) {
+      if (!resp.ok) throw new Error((data.error && data.error.message) || data.message || 'Error ' + resp.status);
+      return data.choices[0].message.content || '';
+    });
+  });
+}
+
+function callGemini(apiKey, model, system, userContent) {
+  var textContent = '';
+  userContent.forEach(function(c) { if (c.type === 'text') textContent += c.text; });
+  var url = 'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + apiKey;
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      system_instruction: { parts: [{ text: system }] },
+      contents: [{ role: 'user', parts: [{ text: textContent }] }],
+      generationConfig: { maxOutputTokens: 1800 }
+    })
+  }).then(function(resp) {
+    return resp.json().then(function(data) {
+      if (!resp.ok) throw new Error((data.error && data.error.message) || 'Gemini error ' + resp.status);
+      return data.candidates[0].content.parts.map(function(p) { return p.text || ''; }).join('');
+    });
+  });
+}
+
+function callProvider(system, userContent) {
+  var apiKey = document.getElementById('apiKey').value.trim();
+  var model  = document.getElementById('modelSelect').value;
+  if (!apiKey) return Promise.reject(new Error('Please enter your API key in the left sidebar.'));
+  if (provider === 'anthropic')  return callAnthropic(apiKey, model, system, userContent);
+  if (provider === 'gemini')     return callGemini(apiKey, model, system, userContent);
+  if (provider === 'groq')       return callOpenAICompat('https://api.groq.com/openai/v1/chat/completions', apiKey, model, system, userContent);
+  if (provider === 'openrouter') return callOpenAICompat('https://openrouter.ai/api/v1/chat/completions', apiKey, model, system, userContent, { 'HTTP-Referer': window.location.href, 'X-Title': 'CS Agent' });
+  return Promise.reject(new Error('Unknown provider'));
+}
+
+// ── Parse AI response ──────────────────────────────────────────────────────
+function parseResponse(raw) {
+  var text = raw.trim();
+  var confidence = null;
+  var tags = [];
+  var confM = text.match(/CONFIDENCE:\s*(\d+)/i);
+  var tagsM = text.match(/TAGS:\s*([^\n]+)/i);
+  if (confM) confidence = Math.min(100, Math.max(0, parseInt(confM[1])));
+  if (tagsM) tags = tagsM[1].split(',').map(function(t) { return t.trim(); }).filter(Boolean);
+  text = text.replace(/\nCONFIDENCE:\s*\d+/gi, '').replace(/\nTAGS:\s*[^\n]+/gi, '').trim();
+  return { text: text, confidence: confidence, tags: tags };
+}
+
+// ── Render response ────────────────────────────────────────────────────────
+function renderResponse(parsed) {
+  var confColor = parsed.confidence > 75 ? '#3dd68c' : parsed.confidence > 50 ? '#f5a623' : '#f56565';
+  var confPct   = parsed.confidence !== null ? parsed.confidence + '%' : '--';
+  var circumference = 2 * Math.PI * 30;
+  var confHtml = '';
+  if (parsed.confidence !== null) {
+    confHtml = '<div class="conf-block">'
+      + '<div class="conf-row"><span class="conf-label">Confidence</span>'
+      + '<div class="bar-track"><div class="bar-fill" id="confBar" style="width:0%;background:' + confColor + '"></div></div>'
+      + '<span class="conf-pct" id="confPct" style="color:' + confColor + '">--</span></div>'
+      + (parsed.tags.length ? '<div class="tags">' + parsed.tags.map(function(t) { return '<span class="tag">' + escHtml(t) + '</span>'; }).join('') + '</div>' : '')
+      + '</div>';
+  }
+  document.getElementById('respBody').innerHTML =
+    '<div class="resp-content" id="respText">' + escHtml(parsed.text) + '</div>' + confHtml;
+
+  if (parsed.confidence !== null) {
+    setTimeout(function() {
+      var bar = document.getElementById('confBar');
+      var pct = document.getElementById('confPct');
+      if (bar) bar.style.width = confPct;
+      if (pct) pct.textContent = confPct;
+    }, 80);
+  }
+  document.getElementById('copyBtn').style.display  = 'flex';
+  document.getElementById('regenBtn').style.display = 'flex';
+}
+
+// ── Generate ───────────────────────────────────────────────────────────────
+function generate(quick) {
+  var email = document.getElementById('emailInput').value.trim();
+  if (!email) { alert('Please paste a customer message first.'); return; }
+
+  var genBtn   = document.getElementById('genBtn');
+  var draftBtn = document.getElementById('draftBtn');
+  genBtn.disabled   = true;
+  draftBtn.disabled = true;
+  setStatus('Generating\u2026', 'amber');
+
+  document.getElementById('respBody').innerHTML =
+    '<div class="thinking"><div class="dots"><span></span><span></span><span></span></div>Analyzing message and context\u2026</div>';
+  document.getElementById('copyBtn').style.display  = 'none';
+  document.getElementById('regenBtn').style.display = 'none';
+
+  fetchAllLinks().then(function() {
+    var system      = buildSystemPrompt();
+    var userContent = buildUserContent(quick || false);
+    return callProvider(system, userContent);
+  }).then(function(raw) {
+    lastRawResponse = raw;
+    renderResponse(parseResponse(raw));
+    setStatus('Done', 'green');
+  }).catch(function(e) {
+    showError(e.message);
+    setStatus('Error', 'red');
+  }).finally(function() {
+    genBtn.disabled   = false;
+    draftBtn.disabled = false;
+  });
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function showError(msg) {
+  document.getElementById('respBody').innerHTML =
+    '<div class="error-box"><i class="ti ti-alert-circle" style="font-size:18px;flex-shrink:0;margin-top:1px"></i>'
+    + '<div><strong>Error</strong><br>' + escHtml(msg) + '</div></div>';
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function copyResp() {
+  if (!lastRawResponse) return;
+  var text = parseResponse(lastRawResponse).text;
+  navigator.clipboard.writeText(text).then(function() {
+    var btn = document.getElementById('copyBtn');
+    btn.innerHTML = '<i class="ti ti-check"></i> Copied!';
+    setTimeout(function() { btn.innerHTML = '<i class="ti ti-copy"></i> Copy'; }, 2000);
+  }).catch(function() {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+  });
+}
+
+// ── QA char counter ────────────────────────────────────────────────────────
+document.getElementById('qaConversation').addEventListener('input', function() {
+  var n = this.value.length + document.getElementById('qaContext').value.length;
+  document.getElementById('qaCharCount').textContent = n.toLocaleString() + ' chars';
+});
+document.getElementById('qaContext').addEventListener('input', function() {
+  var n = this.value.length + document.getElementById('qaConversation').value.length;
+  document.getElementById('qaCharCount').textContent = n.toLocaleString() + ' chars';
+});
+
+function clearQA() {
+  document.getElementById('qaConversation').value = '';
+  document.getElementById('qaContext').value      = '';
+  document.getElementById('qaCharCount').textContent = '0 chars';
+  document.getElementById('qaResultBody').innerHTML =
+    '<div class="empty"><i class="ti ti-shield-check" style="opacity:.25"></i>'
+    + '<p>Paste a conversation thread and press <strong>Run QA Review</strong>.'
+    + '<br /><br />The AI will analyze for accuracy, tone, completeness, consistency, and escalation risks.</p></div>';
+  document.getElementById('qaExportBtn').style.display = 'none';
+  document.getElementById('qaRerunBtn').style.display  = 'none';
+}
+
+// ── QA system prompt ───────────────────────────────────────────────────────
+function buildQAPrompt() {
+  var strictness = document.getElementById('qaStrictness').value;
+  var policies   = document.getElementById('qaPolicies').value.trim();
+
+  var focusMap = {
+    'chk-accuracy':     'Accuracy & Policy Compliance: Did agents give correct information? Did they violate or contradict any stated policies? Did they make promises they may not be able to keep?',
+    'chk-completeness': 'Completeness: Did agents address every issue the customer raised, or were some questions ignored or left unanswered?',
+    'chk-tone':         'Tone & Empathy: Was the tone appropriate for the situation? Were agents dismissive, cold, over-apologetic, or unprofessional at any point?',
+    'chk-resolution':   'Resolution & Next Steps: Was the issue actually resolved? Did the agent provide a clear next step, or leave the customer without direction?',
+    'chk-consistency':  'Agent Consistency: If multiple agents replied, did they give contradictory information or commitments?',
+    'chk-risk':         'Legal & Escalation Risk: Are there any statements that could create legal liability, or signs this conversation could escalate into a formal complaint?',
+  };
+
+  var focusLines = [];
+  Object.keys(focusMap).forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && el.checked) focusLines.push('- ' + focusMap[id]);
+  });
+
+  var strictNotes = {
+    standard: "Use balanced judgment - flag genuine issues but don't nitpick minor phrasing.",
+    strict:   'Be thorough - flag everything including minor tone issues, missed opportunities to empathize, and any ambiguous statements.',
+    lenient:  'Focus only on serious mistakes - incorrect information, policy violations, unresolved issues, and escalation risks. Ignore minor stylistic issues.',
+  };
+  var strictNote = strictNotes[strictness] || strictNotes.standard;
+
+  var qaWs = kbGetWs(qaActivePlatformId);
+  var platformNote = qaWs ? '\nPLATFORM: This conversation is from the ' + qaWs.icon + ' ' + qaWs.name + ' platform. Apply that platform\'s specific rules from the knowledge base.' : '';
+  var policySection = (policies
+    ? 'COMPANY POLICIES TO JUDGE AGAINST:\n' + policies
+    : 'No company policies provided - judge against general customer service best practices.')
+    + platformNote;
+
+  return 'You are an expert customer service quality assurance auditor. Review the conversation thread and identify issues, mistakes, and areas for improvement.\n\n'
+    + 'STRICTNESS: ' + strictness.toUpperCase() + ' - ' + strictNote + '\n\n'
+    + 'FOCUS AREAS:\n' + focusLines.join('\n') + '\n\n'
+    + policySection + '\n\n'
+    + 'Respond with a valid JSON object ONLY - no markdown, no explanation outside the JSON:\n'
+    + '{\n'
+    + '  "overall_score": <0-100>,\n'
+    + '  "verdict": "<Excellent|Good|Needs Improvement|Poor|Critical Issues>",\n'
+    + '  "verdict_summary": "<2-3 sentence overall summary>",\n'
+    + '  "issues": [\n'
+    + '    {\n'
+    + '      "id": <integer>,\n'
+    + '      "severity": "<critical|moderate|minor|positive>",\n'
+    + '      "category": "<Accuracy|Completeness|Tone|Resolution|Consistency|Risk|Positive>",\n'
+    + '      "title": "<short title max 10 words>",\n'
+    + '      "detail": "<detailed explanation 2-4 sentences>",\n'
+    + '      "location": "<quote or description of where in conversation>",\n'
+    + '      "suggestion": "<specific suggestion or empty string for positives>"\n'
+    + '    }\n'
+    + '  ],\n'
+    + '  "quick_wins": ["<tip>"],\n'
+    + '  "strengths": ["<strength>"]\n'
+    + '}\n\n'
+    + 'RULES: Include 1-2 positive findings if they exist. Be specific - reference actual quotes. overall_score: 90-100=Excellent, 75-89=Good, 55-74=Needs Improvement, 35-54=Poor, 0-34=Critical Issues. Return ONLY the JSON.';
+}
+
+// ── Run QA ─────────────────────────────────────────────────────────────────
+var lastQAResult = null;
+
+function runQA() {
+  var conversation = document.getElementById('qaConversation').value.trim();
+  if (!conversation) { alert('Please paste a conversation thread first.'); return; }
+  var apiKey = document.getElementById('apiKey').value.trim();
+  if (!apiKey) { alert('Please enter your API key in the Draft tab settings first.'); switchTab('draft'); return; }
+
+  var btn = document.getElementById('qaBtn');
+  btn.disabled = true;
+  setStatus('Reviewing\u2026', 'amber');
+
+  document.getElementById('qaResultBody').innerHTML =
+    '<div class="thinking"><div class="dots"><span></span><span></span><span></span></div>Analyzing conversation for issues\u2026</div>';
+  document.getElementById('qaExportBtn').style.display = 'none';
+  document.getElementById('qaRerunBtn').style.display  = 'none';
+
+  var system  = buildQAPrompt();
+  var ctx     = document.getElementById('qaContext').value.trim();
+  var qaKbCtx = getQaKbContext();
+  var userTxt = 'CONVERSATION THREAD TO REVIEW:\n' + conversation;
+  if (ctx)      userTxt += '\n\nADDITIONAL CONTEXT:\n' + ctx;
+  if (qaKbCtx)  userTxt += qaKbCtx;
+  var userContent = [{ type: 'text', text: userTxt }];
+
+  callProvider(system, userContent)
+    .then(function(raw) {
+      var cleaned = raw.replace(/```json|```/gi, '').trim();
+      var result  = JSON.parse(cleaned);
+      lastQAResult = result;
+      renderQAResult(result);
+      setStatus('Done', 'green');
+      document.getElementById('qaExportBtn').style.display = 'flex';
+      document.getElementById('qaRerunBtn').style.display  = 'flex';
+    })
+    .catch(function(e) {
+      document.getElementById('qaResultBody').innerHTML =
+        '<div class="error-box"><i class="ti ti-alert-circle" style="font-size:18px;flex-shrink:0;margin-top:1px"></i>'
+        + '<div><strong>Error</strong><br>' + escHtml(e.message)
+        + '<br><span style="font-size:11px;opacity:.7">Try a more capable model like Claude Sonnet or GPT-4o Mini.</span></div></div>';
+      setStatus('Error', 'red');
+    })
+    .finally(function() { btn.disabled = false; });
+}
+
+// ── Render QA result ────────────────────────────────────────────────────────
+function renderQAResult(r) {
+  var score = r.overall_score || 0;
+  var verdictColors = {
+    'Excellent':         { ring:'#3dd68c', bg:'#0d2a1e', text:'#3dd68c', border:'#1a4a30' },
+    'Good':              { ring:'#60a5fa', bg:'#0d1a2a', text:'#60a5fa', border:'#1a2a3a' },
+    'Needs Improvement': { ring:'#f5a623', bg:'#2a1e0a', text:'#f5a623', border:'#3a2808' },
+    'Poor':              { ring:'#f97316', bg:'#2a1208', text:'#f97316', border:'#3a1c08' },
+    'Critical Issues':   { ring:'#f56565', bg:'#2a0f0f', text:'#f56565', border:'#3a1010' },
+  };
+  var vc = verdictColors[r.verdict] || verdictColors['Needs Improvement'];
+  var circumference = 2 * Math.PI * 30;
+  var dash = (score / 100) * circumference;
+
+  var issues   = r.issues   || [];
+  var critCount = issues.filter(function(i) { return i.severity === 'critical';  }).length;
+  var modCount  = issues.filter(function(i) { return i.severity === 'moderate';  }).length;
+  var minCount  = issues.filter(function(i) { return i.severity === 'minor';     }).length;
+  var posCount  = issues.filter(function(i) { return i.severity === 'positive';  }).length;
+
+  var sevIcon  = { critical:'ti-alert-octagon', moderate:'ti-alert-triangle', minor:'ti-info-circle', positive:'ti-thumb-up' };
+  var sevLabel = { critical:'Critical', moderate:'Moderate', minor:'Minor', positive:'Positive' };
+  var sevClr   = { critical:'#f56565',  moderate:'#f5a623',  minor:'#3dd68c', positive:'#60a5fa' };
+
+  var issuesHtml = '';
+  issues.forEach(function(issue, idx) {
+    var icon = sevIcon[issue.severity]  || 'ti-circle';
+    var clr  = sevClr[issue.severity]   || '#9898b0';
+    var lbl  = sevLabel[issue.severity] || issue.severity;
+    var sevClass = 'sev-' + issue.severity;
+    issuesHtml +=
+      '<div class="issue-card" id="issue-' + idx + '">'
+      + '<div class="issue-header" onclick="toggleIssue(' + idx + ')">'
+      + '<i class="ti ' + icon + ' issue-icon" style="color:' + clr + '"></i>'
+      + '<span class="issue-title">' + escHtml(issue.title) + '</span>'
+      + '<span class="sev ' + sevClass + '">' + lbl + '</span>'
+      + '<span style="font-size:11px;color:var(--text3);margin-left:4px;font-family:var(--mono)">' + escHtml(issue.category) + '</span>'
+      + '<i class="ti ti-chevron-right chevron" id="chev-' + idx + '"></i>'
+      + '</div>'
+      + '<div class="issue-body" id="ibody-' + idx + '">'
+      + '<p>' + escHtml(issue.detail) + '</p>'
+      + (issue.location ? '<p style="margin-top:.6rem;padding:.5rem .7rem;background:var(--bg3);border-left:2px solid var(--border2);border-radius:0 4px 4px 0;font-size:12.5px;color:var(--text3)"><i class="ti ti-quote" style="font-size:12px"></i> ' + escHtml(issue.location) + '</p>' : '')
+      + (issue.suggestion ? '<div class="suggestion-box"><strong>Suggested approach:</strong> ' + escHtml(issue.suggestion) + '</div>' : '')
+      + '</div></div>';
+  });
+
+  var statsHtml = '';
+  if (critCount) statsHtml += '<div class="stat-item"><div class="stat-num" style="color:#f56565">' + critCount + '</div><div class="stat-lbl">Critical</div></div>';
+  if (modCount)  statsHtml += '<div class="stat-item"><div class="stat-num" style="color:#f5a623">' + modCount  + '</div><div class="stat-lbl">Moderate</div></div>';
+  if (minCount)  statsHtml += '<div class="stat-item"><div class="stat-num" style="color:#3dd68c">' + minCount  + '</div><div class="stat-lbl">Minor</div></div>';
+  if (posCount)  statsHtml += '<div class="stat-item"><div class="stat-num" style="color:#60a5fa">' + posCount  + '</div><div class="stat-lbl">Positive</div></div>';
+
+  var qwHtml = (r.quick_wins || []).map(function(w) { return '<li style="margin-bottom:.4rem">' + escHtml(w) + '</li>'; }).join('');
+  var stHtml = (r.strengths  || []).map(function(s) { return '<li style="margin-bottom:.4rem">' + escHtml(s) + '</li>'; }).join('');
+
+  document.getElementById('qaResultBody').innerHTML =
+    '<div class="summary-row">'
+    + '<div class="score-ring">'
+    + '<svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="30" fill="none" stroke="var(--border2)" stroke-width="7"/>'
+    + '<circle cx="40" cy="40" r="30" fill="none" stroke="' + vc.ring + '" stroke-width="7"'
+    + ' stroke-dasharray="' + dash.toFixed(1) + ' ' + circumference.toFixed(1) + '"'
+    + ' stroke-linecap="round" style="transition:stroke-dasharray .8s ease"/></svg>'
+    + '<div class="score-ring-num" style="color:' + vc.ring + '">' + score + '</div>'
+    + '</div>'
+    + '<div style="flex:1">'
+    + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:.4rem">'
+    + '<span style="font-size:15px;font-weight:600;color:var(--text)">' + escHtml(r.verdict) + '</span>'
+    + '<span class="sev" style="background:' + vc.bg + ';color:' + vc.text + ';border-color:' + vc.border + '">' + score + '/100</span>'
+    + '</div>'
+    + '<p style="font-size:13px;color:var(--text2);line-height:1.65">' + escHtml(r.verdict_summary || '') + '</p>'
+    + '</div></div>'
+    + (statsHtml ? '<div class="summary-stats" style="margin-bottom:1rem">' + statsHtml + '</div>' : '')
+    + '<div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);margin-bottom:.6rem">Findings</div>'
+    + issuesHtml
+    + (qwHtml ? '<div style="margin-top:1rem"><div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);margin-bottom:.6rem">Quick wins for next time</div><ul style="font-size:13px;color:var(--text2);line-height:1.7;padding-left:1.2rem">' + qwHtml + '</ul></div>' : '')
+    + (stHtml ? '<div style="margin-top:1rem"><div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);margin-bottom:.6rem">What was done well</div><ul style="font-size:13px;color:var(--text2);line-height:1.7;padding-left:1.2rem">' + stHtml + '</ul></div>' : '');
+}
+
+function toggleIssue(idx) {
+  var body = document.getElementById('ibody-' + idx);
+  var chev = document.getElementById('chev-' + idx);
+  if (body) body.classList.toggle('open');
+  if (chev) chev.classList.toggle('open');
+}
+
+// ── Export QA ──────────────────────────────────────────────────────────────
+function exportQA() {
+  if (!lastQAResult) return;
+  var r    = lastQAResult;
+  var text = 'CS AGENT - QA REVIEW REPORT\n' + '='.repeat(40) + '\n\n';
+  text += 'Overall Score: ' + r.overall_score + '/100 - ' + r.verdict + '\n';
+  text += 'Summary: ' + r.verdict_summary + '\n\nFINDINGS\n' + '-'.repeat(30) + '\n';
+  (r.issues || []).forEach(function(issue, i) {
+    text += '\n' + (i+1) + '. [' + issue.severity.toUpperCase() + '] ' + issue.title + '\n';
+    text += '   Category: ' + issue.category + '\n';
+    text += '   ' + issue.detail + '\n';
+    if (issue.location)   text += '   Where: "' + issue.location + '"\n';
+    if (issue.suggestion) text += '   Suggestion: ' + issue.suggestion + '\n';
+  });
+  if (r.quick_wins && r.quick_wins.length) {
+    text += '\nQUICK WINS\n' + '-'.repeat(30) + '\n';
+    r.quick_wins.forEach(function(w) { text += '- ' + w + '\n'; });
+  }
+  if (r.strengths && r.strengths.length) {
+    text += '\nSTRENGTHS\n' + '-'.repeat(30) + '\n';
+    r.strengths.forEach(function(s) { text += '- ' + s + '\n'; });
+  }
+  var blob = new Blob([text], { type: 'text/plain' });
+  var a    = document.createElement('a');
+  a.href   = URL.createObjectURL(blob);
+  a.download = 'qa-review-' + new Date().toISOString().slice(0,10) + '.txt';
+  a.click();
+}
+
+// ── Help modal ─────────────────────────────────────────────────────────────
 function openHelp() {
   document.getElementById('helpOverlay').style.display = 'block';
   document.body.style.overflow = 'hidden';
@@ -1446,71 +2009,531 @@ function closeHelp(e) {
   }
 }
 
-document.addEventListener('keydown', e => {
+// ── Drag & drop ────────────────────────────────────────────────────────────
+var zone = document.getElementById('uploadZone');
+zone.addEventListener('dragover',  function(e) { e.preventDefault(); zone.style.borderColor = 'var(--accent)'; });
+zone.addEventListener('dragleave', function()  { zone.style.borderColor = ''; });
+zone.addEventListener('drop',      function(e) { e.preventDefault(); zone.style.borderColor = ''; handleFiles(e.dataTransfer.files); });
+
+// ── Keyboard shortcuts ─────────────────────────────────────────────────────
+document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeHelp();
-});
-
-// Drag & drop on upload zone
-const zone = document.getElementById('uploadZone');
-zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor = 'var(--accent)'; });
-zone.addEventListener('dragleave', () => { zone.style.borderColor = ''; });
-zone.addEventListener('drop', e => {
-  e.preventDefault();
-  zone.style.borderColor = '';
-  handleFiles(e.dataTransfer.files);
-});
-
-// Keyboard shortcut: Ctrl/Cmd + Enter to generate
-document.addEventListener('keydown', e => {
   if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
     e.preventDefault();
-    generate(false);
+    var activeTab = document.querySelector('.tab-btn.active');
+    if (activeTab && activeTab.id === 'tab-qa') runQA();
+    else generate(false);
   }
 });
+
+// ── Knowledge Base ─────────────────────────────────────────────────────────
+// Storage key: 'csagent_kb' -> JSON array of workspaces
+// Workspace: { id, name, icon, refs: [{id,type:'link'|'doc'|'snippet',label,url?,content,status,size?}] }
+
+var KB_KEY = 'csagent_kb';
+var kbWorkspaces = [];
+var kbActiveWsId = null;
+var wsModalMode = 'add'; // 'add' | 'rename'
+var wsSelectedEmoji = '🛍️';
+var addLinkTarget = null;
+var addSnippetTarget = null;
+
+var EMOJI_OPTIONS = ['🛍️','📦','🌐','📱','💻','🏪','🎯','⚡','🔵','🟣','🟠','🟢','🔴','⭐','🎁','📋','📄','🔗','🏬','🛒'];
+
+function kbLoad() {
+  try {
+    var raw = localStorage.getItem(KB_KEY);
+    kbWorkspaces = raw ? JSON.parse(raw) : [];
+  } catch(e) { kbWorkspaces = []; }
+}
+
+function kbSave() {
+  localStorage.setItem(KB_KEY, JSON.stringify(kbWorkspaces));
+}
+
+function kbGetWs(id) {
+  return kbWorkspaces.find(function(w) { return w.id === id; });
+}
+
+// ── Workspace CRUD ─────────────────────────────────────────────────────────
+function openWsModal(mode) {
+  wsModalMode = mode || 'add';
+  document.getElementById('wsModalTitle').textContent   = wsModalMode === 'rename' ? 'Rename platform' : 'Add platform';
+  document.getElementById('wsModalSaveLabel').textContent = wsModalMode === 'rename' ? 'Save' : 'Add platform';
+  var ws = kbGetWs(kbActiveWsId);
+  document.getElementById('wsNameInput').value = (wsModalMode === 'rename' && ws) ? ws.name : '';
+  wsSelectedEmoji = (wsModalMode === 'rename' && ws) ? ws.icon : '🛍️';
+  renderEmojiGrid();
+  document.getElementById('wsModal').classList.add('open');
+  setTimeout(function() { document.getElementById('wsNameInput').focus(); }, 80);
+}
+
+function closeWsModal(e) {
+  if (!e || e.target === document.getElementById('wsModal')) {
+    document.getElementById('wsModal').classList.remove('open');
+  }
+}
+
+function renderEmojiGrid() {
+  var grid = document.getElementById('emojiGrid');
+  grid.innerHTML = '';
+  EMOJI_OPTIONS.forEach(function(em) {
+    var btn = document.createElement('button');
+    btn.className = 'emoji-opt' + (em === wsSelectedEmoji ? ' selected' : '');
+    btn.textContent = em;
+    btn.onclick = function() { wsSelectedEmoji = em; renderEmojiGrid(); };
+    grid.appendChild(btn);
+  });
+}
+
+function saveWorkspace() {
+  var name = document.getElementById('wsNameInput').value.trim();
+  if (!name) { document.getElementById('wsNameInput').focus(); return; }
+  if (wsModalMode === 'rename') {
+    var ws = kbGetWs(kbActiveWsId);
+    if (ws) { ws.name = name; ws.icon = wsSelectedEmoji; }
+  } else {
+    var newWs = { id: 'ws_' + Date.now(), name: name, icon: wsSelectedEmoji, refs: [] };
+    kbWorkspaces.push(newWs);
+    kbActiveWsId = newWs.id;
+  }
+  kbSave();
+  document.getElementById('wsModal').classList.remove('open');
+  renderWsList();
+  renderKbMain();
+  renderPlatformBar();
+}
+
+function deleteWorkspace() {
+  var ws = kbGetWs(kbActiveWsId);
+  if (!ws) return;
+  if (!confirm('Delete platform "' + ws.name + '" and all its references? This cannot be undone.')) return;
+  kbWorkspaces = kbWorkspaces.filter(function(w) { return w.id !== kbActiveWsId; });
+  kbActiveWsId = kbWorkspaces.length ? kbWorkspaces[0].id : null;
+  kbSave();
+  renderWsList();
+  renderKbMain();
+  renderPlatformBar();
+}
+
+function selectWorkspace(id) {
+  kbActiveWsId = id;
+  renderWsList();
+  renderKbMain();
+}
+
+// ── Render sidebar ─────────────────────────────────────────────────────────
+function renderWsList() {
+  var box = document.getElementById('wsList');
+  if (!box) return;
+  box.innerHTML = '';
+  if (kbWorkspaces.length === 0) {
+    box.innerHTML = '<p style="font-size:12px;color:var(--text3);text-align:center;padding:1rem .5rem;line-height:1.6">No platforms yet.<br>Add one below.</p>';
+    return;
+  }
+  kbWorkspaces.forEach(function(ws) {
+    var btn = document.createElement('button');
+    btn.className = 'ws-btn' + (ws.id === kbActiveWsId ? ' active' : '');
+    btn.innerHTML = '<span class="ws-icon">' + ws.icon + '</span>'
+      + '<span class="ws-name">' + escHtml(ws.name) + '</span>'
+      + '<span class="ws-count">' + ws.refs.length + '</span>';
+    btn.onclick = function() { selectWorkspace(ws.id); };
+    box.appendChild(btn);
+  });
+}
+
+// ── Render main KB panel ───────────────────────────────────────────────────
+function renderKbMain() {
+  var titleEl   = document.getElementById('kbMainTitle');
+  var bodyEl    = document.getElementById('kbMainBody');
+  var renameBtn = document.getElementById('kbRenameBtn');
+  var deleteBtn = document.getElementById('kbDeleteBtn');
+  if (!titleEl || !bodyEl) return;
+
+  var ws = kbGetWs(kbActiveWsId);
+  if (!ws) {
+    titleEl.innerHTML = '<i class="ti ti-book" style="font-size:14px"></i> Select a platform';
+    renameBtn.style.display = 'none';
+    deleteBtn.style.display = 'none';
+    bodyEl.innerHTML = '<div class="kb-empty"><i class="ti ti-building-store"></i><p>Add a platform on the left<br>(e.g. Shopify, Amazon, TikTok Shop)<br><br>Each platform keeps its own references so the AI never mixes them up.</p></div>';
+    return;
+  }
+
+  titleEl.innerHTML = '<span style="font-size:18px">' + ws.icon + '</span> ' + escHtml(ws.name);
+  renameBtn.style.display = 'flex';
+  deleteBtn.style.display = 'flex';
+
+  var links    = ws.refs.filter(function(r) { return r.type === 'link'; });
+  var docs     = ws.refs.filter(function(r) { return r.type === 'doc';  });
+  var snippets = ws.refs.filter(function(r) { return r.type === 'snippet'; });
+
+  var html = '';
+
+  // Links section
+  html += '<div class="kb-section">'
+    + '<div class="kb-section-header">'
+    + '<span class="kb-section-title"><i class="ti ti-link"></i> Reference links (' + links.length + ')</span>'
+    + '<button class="icon-btn" onclick="openAddLinkModal()"><i class="ti ti-plus"></i> Add link</button>'
+    + '</div>';
+  if (links.length === 0) {
+    html += '<p style="font-size:12.5px;color:var(--text3);padding:.5rem 0">No links yet. Add product pages, policy URLs, promo pages…</p>';
+  } else {
+    links.forEach(function(ref) {
+      var statusClass = { ok:'kb-status-ok', err:'kb-status-err', fetching:'kb-status-fetching', pending:'kb-status-pending' }[ref.status] || 'kb-status-pending';
+      var statusTitle = { ok:'Content loaded', err:'Failed to fetch', fetching:'Fetching…', pending:'Not fetched yet' }[ref.status] || '';
+      html += '<div class="kb-item">'
+        + '<div class="kb-status-dot ' + statusClass + '" title="' + statusTitle + '"></div>'
+        + '<div class="kb-item-body">'
+        + '<div class="kb-item-name">' + escHtml(ref.label) + '</div>'
+        + '<div class="kb-item-meta">' + escHtml(ref.url || '') + (ref.content ? ' &nbsp;·&nbsp; ' + Math.round(ref.content.length/100)/10 + 'k chars loaded' : '') + '</div>'
+        + '</div>'
+        + '<div class="kb-item-actions">'
+        + '<button class="kb-action-btn" onclick="refetchRef(\'' + ws.id + '\',\'' + ref.id + '\')" title="Re-fetch"><i class="ti ti-refresh"></i></button>'
+        + '<button class="kb-action-btn danger" onclick="deleteRef(\'' + ws.id + '\',\'' + ref.id + '\')" title="Remove"><i class="ti ti-trash"></i></button>'
+        + '</div></div>';
+    });
+  }
+  html += '</div>';
+
+  // Documents section
+  html += '<div class="kb-section">'
+    + '<div class="kb-section-header">'
+    + '<span class="kb-section-title"><i class="ti ti-file-text"></i> Uploaded documents (' + docs.length + ')</span>'
+    + '<label class="icon-btn" style="cursor:pointer" title="Upload PDF or TXT"><i class="ti ti-upload"></i> Upload<input type="file" accept=".txt,.pdf,.md" style="display:none" onchange="handleDocUpload(event,\'' + ws.id + '\')" multiple /></label>'
+    + '</div>';
+  if (docs.length === 0) {
+    html += '<p style="font-size:12.5px;color:var(--text3);padding:.5rem 0">No documents yet. Upload TXT, PDF, or Markdown files — manuals, guides, product descriptions…</p>';
+  } else {
+    docs.forEach(function(ref) {
+      html += '<div class="kb-item">'
+        + '<i class="ti ti-file-text kb-item-icon"></i>'
+        + '<div class="kb-item-body">'
+        + '<div class="kb-item-name">' + escHtml(ref.label) + '</div>'
+        + '<div class="kb-item-meta">' + (ref.size ? ref.size : '') + (ref.content ? ' &nbsp;·&nbsp; ' + Math.round(ref.content.length/100)/10 + 'k chars' : '') + '</div>'
+        + '</div>'
+        + '<div class="kb-item-actions">'
+        + '<button class="kb-action-btn danger" onclick="deleteRef(\'' + ws.id + '\',\'' + ref.id + '\')" title="Remove"><i class="ti ti-trash"></i></button>'
+        + '</div></div>';
+    });
+  }
+  html += '</div>';
+
+  // Snippets section
+  html += '<div class="kb-section">'
+    + '<div class="kb-section-header">'
+    + '<span class="kb-section-title"><i class="ti ti-notes"></i> Text notes (' + snippets.length + ')</span>'
+    + '<button class="icon-btn" onclick="openAddSnippetModal()"><i class="ti ti-plus"></i> Add note</button>'
+    + '</div>';
+  if (snippets.length === 0) {
+    html += '<p style="font-size:12.5px;color:var(--text3);padding:.5rem 0">No notes yet. Add promo rules, escalation procedures, quick policies as plain text…</p>';
+  } else {
+    snippets.forEach(function(ref) {
+      html += '<div class="kb-item">'
+        + '<i class="ti ti-notes kb-item-icon"></i>'
+        + '<div class="kb-item-body">'
+        + '<div class="kb-item-name">' + escHtml(ref.label) + '</div>'
+        + '<div class="kb-item-meta">' + (ref.content ? ref.content.slice(0,80).replace(/\n/g,' ') + (ref.content.length > 80 ? '…' : '') : '') + '</div>'
+        + '</div>'
+        + '<div class="kb-item-actions">'
+        + '<button class="kb-action-btn danger" onclick="deleteRef(\'' + ws.id + '\',\'' + ref.id + '\')" title="Remove"><i class="ti ti-trash"></i></button>'
+        + '</div></div>';
+    });
+  }
+  html += '</div>';
+
+  bodyEl.innerHTML = html;
+}
+
+// ── Add link ───────────────────────────────────────────────────────────────
+function openAddLinkModal() {
+  document.getElementById('addLinkLabel').value = '';
+  document.getElementById('addLinkUrl').value   = '';
+  document.getElementById('addLinkModal').classList.add('open');
+  setTimeout(function() { document.getElementById('addLinkLabel').focus(); }, 80);
+}
+
+function closeAddLinkModal(e) {
+  if (!e || e.target === document.getElementById('addLinkModal')) {
+    document.getElementById('addLinkModal').classList.remove('open');
+  }
+}
+
+function confirmAddLink() {
+  var label = document.getElementById('addLinkLabel').value.trim();
+  var url   = document.getElementById('addLinkUrl').value.trim();
+  if (!label || !url) { alert('Please fill in both label and URL.'); return; }
+  if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+  var ws = kbGetWs(kbActiveWsId);
+  if (!ws) return;
+  var ref = { id: 'ref_' + Date.now(), type: 'link', label: label, url: url, content: '', status: 'pending' };
+  ws.refs.push(ref);
+  kbSave();
+  document.getElementById('addLinkModal').classList.remove('open');
+  renderKbMain();
+  renderWsList();
+  renderPlatformBar();
+  // Auto-fetch
+  fetchKbLink(kbActiveWsId, ref.id);
+}
+
+function fetchKbLink(wsId, refId) {
+  var ws  = kbGetWs(wsId);
+  var ref = ws ? ws.refs.find(function(r) { return r.id === refId; }) : null;
+  if (!ref || ref.type !== 'link') return;
+  ref.status = 'fetching';
+  renderKbMain();
+  var proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(ref.url);
+  fetch(proxyUrl)
+    .then(function(resp) { if (!resp.ok) throw new Error('fail'); return resp.json(); })
+    .then(function(data) {
+      if (!data.contents) throw new Error('empty');
+      var div = document.createElement('div');
+      div.innerHTML = data.contents;
+      div.querySelectorAll('script,style,nav,footer,header').forEach(function(el) { el.remove(); });
+      ref.content = (div.innerText || div.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 6000);
+      ref.status  = 'ok';
+      kbSave();
+      renderKbMain();
+    })
+    .catch(function() {
+      ref.status = 'err';
+      kbSave();
+      renderKbMain();
+    });
+}
+
+function refetchRef(wsId, refId) {
+  var ws  = kbGetWs(wsId);
+  var ref = ws ? ws.refs.find(function(r) { return r.id === refId; }) : null;
+  if (!ref) return;
+  ref.status  = 'pending';
+  ref.content = '';
+  kbSave();
+  fetchKbLink(wsId, refId);
+}
+
+// ── Upload document ────────────────────────────────────────────────────────
+function handleDocUpload(event, wsId) {
+  var files = event.target.files;
+  var ws    = kbGetWs(wsId);
+  if (!ws || !files.length) return;
+  Array.prototype.forEach.call(files, function(file) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var content = e.target.result || '';
+      // Limit to 8000 chars to keep localStorage manageable
+      if (content.length > 8000) content = content.slice(0, 8000) + '\n[truncated…]';
+      var ref = {
+        id: 'ref_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
+        type: 'doc',
+        label: file.name,
+        content: content,
+        status: 'ok',
+        size: file.size > 1024 ? Math.round(file.size/1024) + ' KB' : file.size + ' B'
+      };
+      ws.refs.push(ref);
+      kbSave();
+      renderKbMain();
+      renderWsList();
+      renderPlatformBar();
+    };
+    reader.readAsText(file);
+  });
+  event.target.value = '';
+}
+
+// ── Add snippet ────────────────────────────────────────────────────────────
+function openAddSnippetModal() {
+  document.getElementById('addSnippetLabel').value   = '';
+  document.getElementById('addSnippetContent').value = '';
+  document.getElementById('addSnippetModal').classList.add('open');
+  setTimeout(function() { document.getElementById('addSnippetLabel').focus(); }, 80);
+}
+
+function closeAddSnippetModal(e) {
+  if (!e || e.target === document.getElementById('addSnippetModal')) {
+    document.getElementById('addSnippetModal').classList.remove('open');
+  }
+}
+
+function confirmAddSnippet() {
+  var label   = document.getElementById('addSnippetLabel').value.trim();
+  var content = document.getElementById('addSnippetContent').value.trim();
+  if (!label || !content) { alert('Please fill in both label and content.'); return; }
+  var ws = kbGetWs(kbActiveWsId);
+  if (!ws) return;
+  ws.refs.push({ id: 'ref_' + Date.now(), type: 'snippet', label: label, content: content, status: 'ok' });
+  kbSave();
+  document.getElementById('addSnippetModal').classList.remove('open');
+  renderKbMain();
+  renderWsList();
+  renderPlatformBar();
+  renderQaPlatformBar();
+}
+
+// ── Delete ref ─────────────────────────────────────────────────────────────
+function deleteRef(wsId, refId) {
+  var ws = kbGetWs(wsId);
+  if (!ws) return;
+  ws.refs = ws.refs.filter(function(r) { return r.id !== refId; });
+  kbSave();
+  renderKbMain();
+  renderWsList();
+  renderPlatformBar();
+  renderQaPlatformBar();
+}
+
+// ── Platform bar in draft tab ──────────────────────────────────────────────
+var activePlatformId = null;
+
+function renderPlatformBar() {
+  var bar = document.getElementById('platformBar');
+  if (!bar) return;
+  if (kbWorkspaces.length === 0) { bar.style.display = 'none'; return; }
+  bar.style.display = 'flex';
+  bar.innerHTML = '';
+
+  var lbl = document.createElement('span');
+  lbl.className = 'platform-bar-label';
+  lbl.innerHTML = '<i class="ti ti-layers-subtract" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>Platform:';
+  bar.appendChild(lbl);
+
+  var noneBtn = document.createElement('button');
+  noneBtn.className = 'platform-chip' + (!activePlatformId ? ' active' : '');
+  noneBtn.textContent = 'None';
+  noneBtn.onclick = function() { selectPlatform(null); };
+  bar.appendChild(noneBtn);
+
+  kbWorkspaces.forEach(function(ws) {
+    var btn = document.createElement('button');
+    btn.className = 'platform-chip' + (activePlatformId === ws.id ? ' active' : '');
+    btn.innerHTML = '<span class="chip-icon">' + ws.icon + '</span>' + escHtml(ws.name);
+    btn.onclick = (function(id) { return function() { selectPlatform(id); }; })(ws.id);
+    bar.appendChild(btn);
+  });
+
+  if (activePlatformId) {
+    var ws = kbGetWs(activePlatformId);
+    if (ws) {
+      var loaded = ws.refs.filter(function(r) { return r.content && r.content.length > 0; }).length;
+      var info = document.createElement('span');
+      info.className = 'kb-refs-loaded';
+      info.innerHTML = '<i class="ti ti-database"></i>' + loaded + ' ref' + (loaded !== 1 ? 's' : '') + ' loaded';
+      bar.appendChild(info);
+    }
+  }
+}
+
+function selectPlatform(id) {
+  activePlatformId = id;
+  renderPlatformBar();
+}
+
+// ── QA Platform selector (mirrors draft one) ───────────────────────────────
+var qaActivePlatformId = null;
+
+function renderQaPlatformBar() {
+  var bar = document.getElementById('qaPlatformBar');
+  if (!bar) return;
+  if (kbWorkspaces.length === 0) { bar.style.display = 'none'; return; }
+  bar.style.display = 'flex';
+  bar.innerHTML = '';
+
+  var lbl = document.createElement('span');
+  lbl.className = 'platform-bar-label';
+  lbl.innerHTML = '<i class="ti ti-layers-subtract" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>Platform:';
+  bar.appendChild(lbl);
+
+  var noneBtn = document.createElement('button');
+  noneBtn.className = 'platform-chip' + (!qaActivePlatformId ? ' active' : '');
+  noneBtn.textContent = 'None';
+  noneBtn.onclick = function() { selectQaPlatform(null); };
+  bar.appendChild(noneBtn);
+
+  kbWorkspaces.forEach(function(ws) {
+    var btn = document.createElement('button');
+    btn.className = 'platform-chip' + (qaActivePlatformId === ws.id ? ' active' : '');
+    btn.innerHTML = '<span class="chip-icon">' + ws.icon + '</span>' + escHtml(ws.name);
+    btn.onclick = (function(id) { return function() { selectQaPlatform(id); }; })(ws.id);
+    bar.appendChild(btn);
+  });
+
+  if (qaActivePlatformId) {
+    var ws = kbGetWs(qaActivePlatformId);
+    if (ws) {
+      var loaded = ws.refs.filter(function(r) { return r.content && r.content.length > 0; }).length;
+      var info = document.createElement('span');
+      info.className = 'kb-refs-loaded';
+      info.innerHTML = '<i class="ti ti-database"></i>' + loaded + ' ref' + (loaded !== 1 ? 's' : '') + ' loaded';
+      bar.appendChild(info);
+    }
+  }
+}
+
+
+function selectQaPlatform(id) {
+  qaActivePlatformId = id;
+  renderQaPlatformBar();
+}
+
+function getQaKbContext() {
+  if (!qaActivePlatformId) return '';
+  var ws = kbGetWs(qaActivePlatformId);
+  if (!ws) return '';
+  var loaded = ws.refs.filter(function(r) { return r.content && r.content.length > 0; });
+  if (!loaded.length) return '';
+  var ctx = '\n\nKNOWLEDGE BASE — ' + ws.icon + ' ' + ws.name.toUpperCase() + ' PLATFORM REFERENCES (use these as the ground truth when judging the agent\'s replies — check for accuracy against these policies, correct product info, valid promotions, etc.):';
+  loaded.forEach(function(ref, i) {
+    ctx += '\n\n--- [' + (i+1) + '] ' + ref.label + (ref.url ? ' (' + ref.url + ')' : '') + ' ---\n' + ref.content;
+  });
+  return ctx;
+}
+
+// ── Inject KB context into prompt ──────────────────────────────────────────
+function getKbContext() {
+  if (!activePlatformId) return '';
+  var ws = kbGetWs(activePlatformId);
+  if (!ws) return '';
+  var loaded = ws.refs.filter(function(r) { return r.content && r.content.length > 0; });
+  if (!loaded.length) return '';
+  var ctx = '\n\nKNOWLEDGE BASE — ' + ws.icon + ' ' + ws.name.toUpperCase() + ' PLATFORM REFERENCES (use these specifically for this platform\'s policies, products, and promotions):';
+  loaded.forEach(function(ref, i) {
+    ctx += '\n\n--- [' + (i+1) + '] ' + ref.label + (ref.url ? ' (' + ref.url + ')' : '') + ' ---\n' + ref.content;
+  });
+  return ctx;
+}
+
+// Keyboard close modals
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    document.getElementById('wsModal').classList.remove('open');
+    document.getElementById('addLinkModal').classList.remove('open');
+    document.getElementById('addSnippetModal').classList.remove('open');
+  }
+});
+
+// ── KB init ────────────────────────────────────────────────────────────────
+kbLoad();
+renderWsList();
+if (kbWorkspaces.length > 0) kbActiveWsId = kbWorkspaces[0].id;
+renderKbMain();
+renderPlatformBar();
+renderQaPlatformBar();
+
+
+// ── Init ───────────────────────────────────────────────────────────────────
+(function init() {
+  var saved = loadKey(provider);
+  if (saved) {
+    document.getElementById('apiKey').value = saved;
+    updateSaveIndicator();
+  }
+})();
+
 </script>
-<footer>
-    <div class="footer-content">
-        <div class="footer-column">
-            <h3>ResumePro</h3>
-            <p>Professional digital templates to showcase your career and work.</p>
-        </div>
-        
-        <div class="footer-column">
-            <h3>Templates</h3>
-            <ul class="footer-links">
-                <li><a href="resume-templates.html">Resume Templates</a></li>
-                <li><a href="portfolio-templates.html">Portfolio Templates</a></li>
-                <li><a href="#">All Templates</a></li>
-            </ul>
-        </div>
-        
-        <div class="footer-column">
-            <h3>Resources</h3>
-            <ul class="footer-links">
-                <li><a href="help.html#editing">How to Edit</a></li>
-                <li><a href="help.html#hosting">Hosting Guide</a></li>
-                <li><a href="help.html#tips">Tips & Examples</a></li>
-            </ul>
-        </div>
-        
-        <div class="footer-column">
-            <h3>Company</h3>
-            <ul class="footer-links">
-                <li><a href="about.html">About Us</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="privacy.html">Privacy Policy</a></li>
-                <li><a href="terms.html">Terms of Service</a></li>
-            </ul>
-        </div>
-    </div>
-    
-    <div class="copyright">
-        <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
-    </div>
-</footer>
+
 
     
-<script src="header.js"></script>
-
+    <script src="header.js"></script>
 </body>
 </html>

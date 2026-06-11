@@ -7,20 +7,19 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-W52LYHBGZY');
 </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResumePro | Professional Digital Templates</title>
+    <title>ResumePro | Professional Templates, Tools & Apps by Adolf de Guzman</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="footer.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7364684388402027" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7364684388402027" crossorigin="anonymous"></script>
     <style>
         :root {
             --ink: #0e0e12;
@@ -30,25 +29,14 @@
             --accent: #c8a96e;
             --accent-light: #e8d9b8;
             --accent-dark: #9a7a3f;
-            --blue: #2d5be3;
-            --blue-light: #eef1fd;
             --mid: #6b6b78;
             --border: #e2e0d8;
             --white: #ffffff;
-			--primary: #3a86ff;
-            --primary-dark: #2667cc;
-            --dark: #2b2d42;
-            --light: #f8f9fa;
-            --gray: #6c757d;
-            --success: #28a745;
+            --green: #2d7a4f;
+            --green-light: #eaf4ee;
         }
 
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
 
         body {
@@ -60,7 +48,51 @@
             overflow-x: hidden;
         }
 
-        /* ─── HERO ─────────────────────────────────────────────── */
+        /* ─── SHARED ──────────────────────────────────────────── */
+        .container { max-width: 1160px; margin: 0 auto; padding: 0 40px; }
+
+        .section-eyebrow {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--accent-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .section-eyebrow::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 2px;
+            background: var(--accent-dark);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.9rem, 3vw, 2.6rem);
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--ink);
+        }
+        .section-title em { font-style: italic; color: var(--accent-dark); }
+
+        /* ─── REVEAL ──────────────────────────────────────────── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.65s ease, transform 0.65s ease;
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ─── HERO ──────────────────────────────────────────────  */
         .hero {
             min-height: 100vh;
             display: grid;
@@ -71,7 +103,7 @@
 
         .hero-left {
             background-color: var(--ink);
-            padding: 120px 60px 80px 80px;
+            padding: 130px 60px 80px 80px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -79,12 +111,11 @@
             z-index: 1;
         }
 
+        /* diagonal divider */
         .hero-left::after {
             content: '';
             position: absolute;
-            right: -1px;
-            top: 0;
-            bottom: 0;
+            right: -1px; top: 0; bottom: 0;
             width: 80px;
             background: var(--ink);
             clip-path: polygon(0 0, 100% 15%, 100% 85%, 0 100%);
@@ -96,55 +127,50 @@
             align-items: center;
             gap: 10px;
             color: var(--accent);
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 600;
             letter-spacing: 0.18em;
             text-transform: uppercase;
-            margin-bottom: 28px;
+            margin-bottom: 26px;
             opacity: 0;
             animation: fadeUp 0.7s ease 0.1s forwards;
         }
-
         .hero-eyebrow::before {
             content: '';
             display: inline-block;
-            width: 30px;
+            width: 28px;
             height: 2px;
             background: var(--accent);
         }
 
         .hero-title {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(3rem, 5vw, 5rem);
+            font-size: clamp(2.8rem, 4.5vw, 4.6rem);
             font-weight: 900;
             line-height: 1.07;
             color: var(--white);
-            margin-bottom: 24px;
+            margin-bottom: 22px;
             opacity: 0;
             animation: fadeUp 0.7s ease 0.25s forwards;
         }
-
-        .hero-title em {
-            font-style: italic;
-            color: var(--accent);
-        }
+        .hero-title em { font-style: italic; color: var(--accent); }
 
         .hero-sub {
-            font-size: 1.05rem;
-            color: rgba(255,255,255,0.65);
+            font-size: 1rem;
+            color: rgba(255,255,255,0.6);
             max-width: 380px;
-            line-height: 1.75;
-            margin-bottom: 48px;
+            line-height: 1.8;
+            margin-bottom: 40px;
             opacity: 0;
             animation: fadeUp 0.7s ease 0.4s forwards;
         }
 
         .hero-actions {
             display: flex;
-            gap: 14px;
+            gap: 12px;
             flex-wrap: wrap;
             opacity: 0;
-            animation: fadeUp 0.7s ease 0.55s forwards;
+            animation: fadeUp 0.7s ease 0.52s forwards;
         }
 
         .btn-primary {
@@ -158,80 +184,57 @@
             text-decoration: none;
             font-weight: 600;
             font-size: 0.9rem;
-            letter-spacing: 0.03em;
-            transition: all 0.25s ease;
-            position: relative;
-            overflow: hidden;
+            letter-spacing: 0.02em;
+            transition: all 0.22s ease;
         }
-
-        .btn-primary::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(255,255,255,0.15);
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,169,110,0.4); }
-        .btn-primary:hover::after { opacity: 1; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,169,110,0.45); }
 
         .btn-outline {
             display: inline-flex;
             align-items: center;
             gap: 8px;
             background: transparent;
-            color: rgba(255,255,255,0.85);
+            color: rgba(255,255,255,0.8);
             padding: 14px 28px;
             border-radius: 4px;
             text-decoration: none;
             font-weight: 500;
             font-size: 0.9rem;
-            border: 1px solid rgba(255,255,255,0.25);
-            transition: all 0.25s ease;
+            border: 1px solid rgba(255,255,255,0.22);
+            transition: all 0.22s ease;
         }
+        .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 
-        .btn-outline:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            transform: translateY(-2px);
-        }
-
-        .hero-stats {
-            display: flex;
-            gap: 36px;
-            margin-top: 56px;
-            padding-top: 36px;
+        /* maker badge */
+        .maker-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 44px;
+            padding-top: 30px;
             border-top: 1px solid rgba(255,255,255,0.1);
             opacity: 0;
-            animation: fadeUp 0.7s ease 0.7s forwards;
+            animation: fadeUp 0.7s ease 0.68s forwards;
         }
-
-        .stat-item { }
-
-        .stat-num {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--white);
-            display: block;
-            line-height: 1;
-            margin-bottom: 4px;
+        .maker-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
         }
+        .maker-info { line-height: 1.3; }
+        .maker-name { font-size: 0.88rem; font-weight: 600; color: var(--white); }
+        .maker-role { font-size: 0.75rem; color: rgba(255,255,255,0.4); }
 
-        .stat-num span { color: var(--accent); }
-
-        .stat-label {
-            font-size: 0.78rem;
-            color: rgba(255,255,255,0.45);
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-        }
-
-        /* Hero Right */
+        /* hero right */
         .hero-right {
             background-color: var(--paper-warm);
-            padding: 120px 80px 80px 100px;
+            padding: 130px 80px 80px 100px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -239,12 +242,12 @@
         }
 
         .hero-right-label {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-weight: 600;
             letter-spacing: 0.15em;
             text-transform: uppercase;
             color: var(--mid);
-            margin-bottom: 28px;
+            margin-bottom: 24px;
             opacity: 0;
             animation: fadeUp 0.7s ease 0.35s forwards;
         }
@@ -252,7 +255,7 @@
         .template-cards-stack {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 14px;
             opacity: 0;
             animation: fadeUp 0.7s ease 0.5s forwards;
         }
@@ -260,18 +263,17 @@
         .t-card {
             background: var(--white);
             border-radius: 10px;
-            padding: 24px 28px;
+            padding: 22px 26px;
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 18px;
             border: 1px solid var(--border);
             text-decoration: none;
             color: var(--ink);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
         }
-
         .t-card::before {
             content: '';
             position: absolute;
@@ -279,166 +281,274 @@
             width: 4px;
             background: var(--accent);
             transform: scaleY(0);
-            transition: transform 0.3s ease;
+            transition: transform 0.28s ease;
             transform-origin: bottom;
         }
+        .t-card:hover { transform: translateX(6px); box-shadow: 0 8px 28px rgba(0,0,0,0.09); border-color: var(--accent-light); }
+        .t-card:hover::before { transform: scaleY(1); }
+        .t-card-icon {
+            width: 50px; height: 50px;
+            border-radius: 10px;
+            background: var(--paper-warm);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.35rem;
+            flex-shrink: 0;
+            transition: transform 0.28s ease;
+        }
+        .t-card:hover .t-card-icon { transform: scale(1.1) rotate(-5deg); }
+        .t-card-body { flex: 1; }
+        .t-card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+        .t-card-desc { font-size: 0.83rem; color: var(--mid); line-height: 1.5; }
+        .t-card-arrow { font-size: 1rem; color: var(--accent); opacity: 0; transition: all 0.28s ease; }
+        .t-card:hover .t-card-arrow { opacity: 1; transform: translateX(4px); }
 
-        .t-card:hover {
-            transform: translateX(6px);
-            box-shadow: 0 8px 28px rgba(0,0,0,0.09);
+        /* stats row inside hero */
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.09);
+            opacity: 0;
+            animation: fadeUp 0.7s ease 0.62s forwards;
+        }
+        .stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--white);
+            display: block;
+            line-height: 1;
+            margin-bottom: 3px;
+        }
+        .stat-num span { color: var(--accent); }
+        .stat-label { font-size: 0.72rem; color: rgba(255,255,255,0.4); letter-spacing: 0.06em; text-transform: uppercase; }
+
+        .hero-bg-shape {
+            position: absolute;
+            bottom: -80px; right: -80px;
+            width: 300px; height: 300px;
+            border-radius: 50%;
+            border: 56px solid var(--accent-light);
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        /* ─── TRUST STRIP ─────────────────────────────────────── */
+        .trust-strip {
+            background: var(--white);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 0;
+        }
+        .trust-inner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.82rem;
+            color: var(--mid);
+            font-weight: 500;
+        }
+        .trust-item span:first-child { font-size: 1rem; }
+
+        /* ─── FEATURED TEMPLATES ──────────────────────────────── */
+        .templates-section {
+            padding: 96px 0;
+            background: var(--paper);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 52px;
+        }
+
+        .view-all-link {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--accent-dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 1px solid var(--accent-light);
+            padding-bottom: 2px;
+            transition: all 0.2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-bottom: 4px;
+        }
+        .view-all-link:hover { color: var(--ink); border-color: var(--ink); gap: 10px; }
+
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .tmpl-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            text-decoration: none;
+            color: var(--ink);
+            transition: all 0.28s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .tmpl-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.1);
             border-color: var(--accent-light);
         }
 
-        .t-card:hover::before { transform: scaleY(1); }
-
-        .t-card-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 10px;
+        .tmpl-preview {
+            aspect-ratio: 3/2;
             background: var(--paper-warm);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
-            flex-shrink: 0;
-            transition: transform 0.3s ease;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
         }
-
-        .t-card:hover .t-card-icon { transform: scale(1.1) rotate(-5deg); }
-
-        .t-card-body { flex: 1; }
-
-        .t-card-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.15rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-            color: var(--ink);
-        }
-
-        .t-card-desc {
-            font-size: 0.85rem;
-            color: var(--mid);
-            line-height: 1.5;
-        }
-
-        .t-card-arrow {
-            font-size: 1.1rem;
-            color: var(--accent);
-            transition: transform 0.3s ease;
-            opacity: 0;
-        }
-
-        .t-card:hover .t-card-arrow { opacity: 1; transform: translateX(4px); }
-
-        /* Decorative bg shape */
-        .hero-bg-shape {
+        /* Decorative preview grid lines */
+        .tmpl-preview::before {
+            content: '';
             position: absolute;
-            bottom: -80px;
-            right: -80px;
-            width: 320px;
-            height: 320px;
-            border-radius: 50%;
-            border: 60px solid var(--accent-light);
-            opacity: 0.5;
-            pointer-events: none;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 18px,
+                rgba(0,0,0,0.03) 18px,
+                rgba(0,0,0,0.03) 19px
+            );
         }
+        .tmpl-preview-dark { background: var(--ink); }
+        .tmpl-preview-blue { background: #1a2e5e; }
 
-        /* ─── ANNOUNCEMENT ──────────────────────────────────────── */
-        .announcement {
+        /* simulated resume lines inside preview */
+        .preview-lines {
+            width: 75%; display: flex; flex-direction: column; gap: 6px; position: relative; z-index: 1;
+        }
+        .prev-line {
+            height: 6px; border-radius: 3px; background: rgba(255,255,255,0.15);
+        }
+        .prev-line.h { height: 11px; width: 60%; }
+        .prev-line.short { width: 45%; }
+        .prev-line.accent-line { background: var(--accent); opacity: 0.7; width: 30%; }
+        .tmpl-preview-dark .prev-line { background: rgba(255,255,255,0.15); }
+        .tmpl-preview:not(.tmpl-preview-dark):not(.tmpl-preview-blue) .prev-line { background: rgba(14,14,18,0.12); }
+        .tmpl-preview:not(.tmpl-preview-dark):not(.tmpl-preview-blue) .prev-line.accent-line { background: var(--accent); opacity: 0.6; }
+
+        .tmpl-badge {
+            position: absolute;
+            top: 12px; right: 12px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 20px;
+            z-index: 2;
+        }
+        .badge-free { background: var(--green-light); color: var(--green); }
+        .badge-premium { background: rgba(200,169,110,0.18); color: var(--accent-dark); border: 1px solid rgba(200,169,110,0.35); }
+        .badge-new { background: #eef1fd; color: #2d5be3; }
+
+        .tmpl-body { padding: 22px 24px 24px; flex: 1; display: flex; flex-direction: column; }
+        .tmpl-category { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); margin-bottom: 6px; }
+        .tmpl-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
+        .tmpl-desc { font-size: 0.85rem; color: var(--mid); line-height: 1.55; flex: 1; }
+        .tmpl-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); }
+        .tmpl-cta { font-size: 0.82rem; font-weight: 600; color: var(--accent-dark); display: flex; align-items: center; gap: 5px; }
+        .tmpl-card:hover .tmpl-cta { gap: 8px; }
+
+        /* ─── FEATURED TOOL (CS AGENT) ────────────────────────── */
+        .featured-tool {
             background: var(--ink);
             padding: 80px 0;
             position: relative;
             overflow: hidden;
         }
-
-        .announcement::before {
-            content: 'ANDROID';
+        .featured-tool::before {
+            content: 'CS AGENT';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
             font-family: 'Playfair Display', serif;
-            font-size: 16vw;
+            font-size: 14vw;
             font-weight: 900;
             color: rgba(255,255,255,0.025);
             white-space: nowrap;
             pointer-events: none;
-            letter-spacing: -0.03em;
+            letter-spacing: -0.02em;
         }
-
-        .container {
-            max-width: 1160px;
-            margin: 0 auto;
-            padding: 0 40px;
-        }
-
-        .ann-inner {
+        .ft-inner {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 60px;
+            gap: 70px;
             align-items: center;
             position: relative;
             z-index: 1;
         }
-
-        .ann-badge {
+        .ft-tag {
             display: inline-flex;
             align-items: center;
             gap: 8px;
             background: rgba(200,169,110,0.15);
-            border: 1px solid rgba(200,169,110,0.35);
+            border: 1px solid rgba(200,169,110,0.3);
             color: var(--accent);
             padding: 6px 16px;
             border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.12em;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
             text-transform: uppercase;
             margin-bottom: 20px;
         }
-
-        .ann-title {
+        .ft-title {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-size: clamp(2rem, 3.2vw, 2.8rem);
             font-weight: 700;
             color: var(--white);
             line-height: 1.15;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
-
-        .ann-title em { font-style: italic; color: var(--accent); }
-
-        .ann-desc {
-            font-size: 1rem;
-            color: rgba(255,255,255,0.6);
-            line-height: 1.75;
-            margin-bottom: 28px;
+        .ft-title em { font-style: italic; color: var(--accent); }
+        .ft-desc { font-size: 1rem; color: rgba(255,255,255,0.58); line-height: 1.78; margin-bottom: 32px; }
+        .ft-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+        .ft-features li {
+            display: flex; align-items: flex-start; gap: 12px;
+            font-size: 0.92rem; color: rgba(255,255,255,0.72);
         }
-
-        .ann-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 32px;
-        }
-
-        .ann-tag {
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.75);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.82rem;
-            transition: all 0.2s;
-        }
-
-        .ann-tag:hover {
-            background: rgba(200,169,110,0.15);
-            border-color: var(--accent);
+        .ft-features li::before {
+            content: '✓';
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: rgba(200,169,110,0.18);
             color: var(--accent);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 2px;
         }
-
         .btn-gold {
             display: inline-flex;
             align-items: center;
@@ -450,205 +560,328 @@
             text-decoration: none;
             font-weight: 600;
             font-size: 0.9rem;
-            transition: all 0.25s ease;
+            transition: all 0.22s ease;
         }
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,169,110,0.42); }
 
-        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,169,110,0.4); }
-
-        .ann-apps {
+        /* mock UI widget on the right */
+        .ft-mockup {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .ft-mock-bar {
+            background: rgba(255,255,255,0.07);
+            padding: 12px 18px;
             display: flex;
-            flex-direction: column;
-            gap: 16px;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
         }
-
-        .ann-app-card {
+        .ft-mock-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .ft-mock-title { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-left: 4px; flex: 1; text-align: center; }
+        .ft-mock-body { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+        .ft-msg {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.83rem;
+            line-height: 1.55;
+            max-width: 85%;
+        }
+        .ft-msg-user {
+            background: var(--accent);
+            color: var(--ink);
+            align-self: flex-end;
+            border-bottom-right-radius: 3px;
+            font-weight: 500;
+        }
+        .ft-msg-agent {
+            background: rgba(255,255,255,0.09);
+            color: rgba(255,255,255,0.82);
+            align-self: flex-start;
+            border-bottom-left-radius: 3px;
+        }
+        .ft-mock-input {
+            margin: 0 20px 20px;
             background: rgba(255,255,255,0.06);
             border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .ft-mock-input span { font-size: 0.8rem; color: rgba(255,255,255,0.3); }
+        .ft-mock-send {
+            width: 28px; height: 28px;
+            border-radius: 6px;
+            background: var(--accent);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem;
+            color: var(--ink);
+        }
+
+        /* ─── TOOLS GRID ──────────────────────────────────────── */
+        .tools-section {
+            padding: 96px 0;
+            background: var(--white);
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 52px;
+        }
+        .tool-card {
+            background: var(--paper);
+            border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 24px;
-            display: flex;
-            align-items: center;
-            gap: 18px;
+            padding: 28px 24px;
             text-decoration: none;
-            transition: all 0.3s ease;
+            color: var(--ink);
+            transition: all 0.26s ease;
+            display: flex;
+            flex-direction: column;
         }
-
-        .ann-app-card:hover {
-            background: rgba(200,169,110,0.1);
-            border-color: rgba(200,169,110,0.35);
-            transform: translateY(-3px);
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.09);
+            border-color: var(--accent-light);
         }
+        .tool-icon {
+            width: 46px; height: 46px;
+            background: var(--ink);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem;
+            margin-bottom: 18px;
+            transition: background 0.26s, transform 0.26s;
+        }
+        .tool-card:hover .tool-icon { background: var(--accent-dark); transform: rotate(-5deg) scale(1.05); }
+        .tool-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+        .tool-desc { font-size: 0.83rem; color: var(--mid); line-height: 1.6; flex: 1; }
+        .tool-link { font-size: 0.8rem; font-weight: 600; color: var(--accent-dark); margin-top: 16px; display: flex; align-items: center; gap: 5px; }
+        .tool-card:hover .tool-link { gap: 8px; }
 
-        .ann-app-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
-            background: rgba(255,255,255,0.08);
+        /* ─── ANDROID APPS ────────────────────────────────────── */
+        .android-section {
+            background: var(--ink);
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .android-section::before {
+            content: 'ANDROID';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            font-family: 'Playfair Display', serif;
+            font-size: 16vw;
+            font-weight: 900;
+            color: rgba(255,255,255,0.022);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        .android-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        .android-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(200,169,110,0.14);
+            border: 1px solid rgba(200,169,110,0.3);
+            color: var(--accent);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+        .android-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.9rem, 3vw, 2.7rem);
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1.15;
+            margin-bottom: 14px;
+        }
+        .android-title em { font-style: italic; color: var(--accent); }
+        .android-desc { font-size: 0.97rem; color: rgba(255,255,255,0.56); line-height: 1.78; margin-bottom: 28px; }
+        .android-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
+        .android-tag {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.68);
+            padding: 5px 13px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        .android-tag:hover { background: rgba(200,169,110,0.14); border-color: var(--accent); color: var(--accent); }
+        .android-apps { display: flex; flex-direction: column; gap: 14px; }
+        .android-app-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 12px;
+            padding: 22px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
+            gap: 16px;
+            transition: all 0.26s ease;
+        }
+        .android-app-card:hover { background: rgba(200,169,110,0.09); border-color: rgba(200,169,110,0.3); transform: translateY(-3px); }
+        .app-icon-wrap {
+            width: 52px; height: 52px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.07);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
             flex-shrink: 0;
         }
-
-        .ann-app-name {
-            font-weight: 600;
-            color: var(--white);
-            margin-bottom: 4px;
-            font-size: 0.95rem;
-        }
-
-        .ann-app-sub {
-            font-size: 0.82rem;
-            color: rgba(255,255,255,0.45);
-        }
-
-        .ann-app-pill {
-            margin-left: auto;
-            background: rgba(200,169,110,0.2);
+        .app-info { flex: 1; }
+        .app-name { font-weight: 600; color: var(--white); margin-bottom: 3px; font-size: 0.93rem; }
+        .app-sub { font-size: 0.8rem; color: rgba(255,255,255,0.42); }
+        .app-pill {
+            background: rgba(200,169,110,0.18);
             color: var(--accent);
-            padding: 4px 12px;
+            padding: 4px 11px;
             border-radius: 12px;
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             font-weight: 600;
             white-space: nowrap;
         }
 
-        /* ─── FEATURES ──────────────────────────────────────────── */
-        .features {
-            padding: 100px 0;
-            background: var(--white);
-            position: relative;
+        /* ─── WHY RESUMEPRO (condensed) ───────────────────────── */
+        .features-section {
+            padding: 96px 0;
+            background: var(--paper-warm);
         }
-
-        .section-header {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: end;
-            margin-bottom: 60px;
-        }
-
-        .section-eyebrow {
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--accent-dark);
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-eyebrow::before {
-            content: '';
-            display: inline-block;
-            width: 24px;
-            height: 2px;
-            background: var(--accent-dark);
-        }
-
-        .section-title-lg {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2rem, 3.5vw, 2.8rem);
-            font-weight: 700;
-            line-height: 1.2;
-            color: var(--ink);
-        }
-
-        .section-desc {
-            font-size: 1rem;
-            color: var(--mid);
-            line-height: 1.75;
-            max-width: 420px;
-            align-self: end;
-        }
-
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 2px;
             background: var(--border);
             border: 1px solid var(--border);
             border-radius: 12px;
             overflow: hidden;
+            margin-top: 52px;
         }
-
         .feat-card {
             background: var(--white);
-            padding: 36px 32px;
+            padding: 32px 28px;
             position: relative;
-            transition: background 0.3s ease;
+            transition: background 0.26s;
         }
-
         .feat-card:hover { background: var(--paper-warm); }
-
-        .feat-num {
-            font-family: 'Playfair Display', serif;
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: var(--paper-warm);
-            line-height: 1;
-            margin-bottom: 16px;
-            transition: color 0.3s ease;
-        }
-
-        .feat-card:hover .feat-num { color: var(--accent-light); }
-
         .feat-icon-wrap {
-            width: 44px;
-            height: 44px;
+            width: 42px; height: 42px;
             background: var(--ink);
             border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.05rem;
             margin-bottom: 16px;
-            transition: background 0.3s ease, transform 0.3s ease;
+            transition: background 0.26s, transform 0.26s;
         }
+        .feat-card:hover .feat-icon-wrap { background: var(--accent-dark); transform: rotate(-5deg) scale(1.05); }
+        .feat-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+        .feat-desc { font-size: 0.84rem; color: var(--mid); line-height: 1.7; }
 
-        .feat-card:hover .feat-icon-wrap {
-            background: var(--accent-dark);
-            transform: rotate(-5deg) scale(1.05);
+        /* ─── TESTIMONIALS ────────────────────────────────────── */
+        .testimonials-section {
+            padding: 96px 0;
+            background: var(--white);
         }
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 52px;
+        }
+        .testi-card {
+            background: var(--paper);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+        }
+        .testi-stars { color: var(--accent); font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 18px; }
+        .testi-quote { font-size: 0.95rem; color: var(--ink-soft); line-height: 1.72; margin-bottom: 22px; font-style: italic; }
+        .testi-author { display: flex; align-items: center; gap: 12px; }
+        .testi-avatar {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+        .testi-name { font-size: 0.88rem; font-weight: 600; }
+        .testi-role { font-size: 0.78rem; color: var(--mid); }
 
-        .feat-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 10px;
+        /* ─── BLOG ────────────────────────────────────────────── */
+        .blog-section {
+            padding: 96px 0;
+            background: var(--paper);
+        }
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 52px;
+        }
+        .blog-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            text-decoration: none;
             color: var(--ink);
+            transition: all 0.26s ease;
         }
-
-        .feat-desc {
-            font-size: 0.88rem;
-            color: var(--mid);
-            line-height: 1.7;
-        }
-
-        /* ─── CTA ───────────────────────────────────────────────── */
-        .cta-section {
-            padding: 100px 0;
-            background: var(--paper-warm);
+        .blog-card:hover { transform: translateY(-4px); box-shadow: 0 14px 36px rgba(0,0,0,0.09); border-color: var(--accent-light); }
+        .blog-thumb {
+            height: 160px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.8rem;
             position: relative;
             overflow: hidden;
         }
+        .blog-body { padding: 24px; }
+        .blog-category {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--accent-dark);
+            margin-bottom: 8px;
+        }
+        .blog-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; line-height: 1.4; margin-bottom: 10px; }
+        .blog-excerpt { font-size: 0.84rem; color: var(--mid); line-height: 1.6; margin-bottom: 18px; }
+        .blog-meta { font-size: 0.76rem; color: var(--mid); display: flex; align-items: center; gap: 6px; }
 
+        /* ─── FINAL CTA ───────────────────────────────────────── */
+        .cta-section {
+            background: var(--ink);
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
         .cta-section::before {
             content: '';
             position: absolute;
-            top: -120px;
-            right: -120px;
-            width: 500px;
-            height: 500px;
+            top: -100px; right: -100px;
+            width: 500px; height: 500px;
             border-radius: 50%;
-            background: radial-gradient(circle, var(--accent-light) 0%, transparent 70%);
-            opacity: 0.6;
+            background: radial-gradient(circle, rgba(200,169,110,0.12) 0%, transparent 70%);
             pointer-events: none;
         }
-
         .cta-inner {
             display: grid;
             grid-template-columns: 1fr auto;
@@ -657,228 +890,238 @@
             position: relative;
             z-index: 1;
         }
-
         .cta-title {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(2.2rem, 4vw, 3.5rem);
+            font-size: clamp(2.2rem, 3.8vw, 3.4rem);
             font-weight: 900;
             line-height: 1.1;
-            color: var(--ink);
-            margin-bottom: 16px;
-        }
-
-        .cta-title em { font-style: italic; color: var(--accent-dark); }
-
-        .cta-sub {
-            font-size: 1rem;
-            color: var(--mid);
-            max-width: 500px;
-        }
-
-        .cta-btns {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            flex-shrink: 0;
-        }
-
-        .btn-dark {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: var(--ink);
             color: var(--white);
-            padding: 14px 28px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            transition: all 0.25s ease;
+            margin-bottom: 14px;
         }
-
-        .btn-dark:hover { background: var(--ink-soft); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
-
-        .btn-outline-dark {
+        .cta-title em { font-style: italic; color: var(--accent); }
+        .cta-sub { font-size: 0.97rem; color: rgba(255,255,255,0.52); max-width: 480px; line-height: 1.7; }
+        .cta-btns { display: flex; flex-direction: column; gap: 12px; flex-shrink: 0; }
+        .btn-gold-outline {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             background: transparent;
-            color: var(--ink);
+            color: rgba(255,255,255,0.75);
             padding: 14px 28px;
             border-radius: 4px;
             text-decoration: none;
             font-weight: 500;
             font-size: 0.9rem;
-            border: 1.5px solid var(--ink);
+            border: 1px solid rgba(255,255,255,0.2);
             white-space: nowrap;
-            transition: all 0.25s ease;
+            transition: all 0.22s;
         }
+        .btn-gold-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 
-        .btn-outline-dark:hover {
+        /* newsletter */
+        .newsletter-wrap {
+            margin-top: 56px;
+            padding-top: 48px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .newsletter-text h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+        .newsletter-text p { font-size: 0.88rem; color: rgba(255,255,255,0.45); }
+        .newsletter-form { display: flex; gap: 10px; flex-wrap: wrap; }
+        .newsletter-input {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 4px;
+            padding: 12px 18px;
+            font-size: 0.88rem;
+            color: var(--white);
+            font-family: 'DM Sans', sans-serif;
+            width: 240px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .newsletter-input::placeholder { color: rgba(255,255,255,0.3); }
+        .newsletter-input:focus { border-color: var(--accent); }
+        .btn-newsletter {
+            background: var(--accent);
+            color: var(--ink);
+            border: none;
+            padding: 12px 22px;
+            border-radius: 4px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.22s;
+        }
+        .btn-newsletter:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(200,169,110,0.4); }
+
+        /* floating CTA */
+        .floating-cta {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
             background: var(--ink);
             color: var(--white);
-            transform: translateY(-2px);
-        }
-
-        /* ─── ANIMATIONS ────────────────────────────────────────── */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(22px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .reveal {
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 11px 20px;
+            border-radius: 30px;
+            font-size: 0.83rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.25);
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
+            transform: translateY(12px);
+            transition: all 0.3s ease;
+            z-index: 100;
         }
+        .floating-cta.show { opacity: 1; transform: translateY(0); }
+        .floating-cta:hover { background: var(--accent); color: var(--ink); border-color: transparent; transform: translateY(-2px); }
+        .floating-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 1.8s ease infinite; }
+        .floating-cta:hover .floating-dot { background: var(--ink); }
+        @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(0.85); } }
 
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
+        /* ─── RESPONSIVE ──────────────────────────────────────── */
+        @media (max-width: 1000px) {
+            .templates-grid, .blog-grid, .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+            .tools-grid { grid-template-columns: repeat(2, 1fr); }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .ft-inner, .android-inner { grid-template-columns: 1fr; }
         }
-
-        /* ─── RESPONSIVE ────────────────────────────────────────── */
         @media (max-width: 900px) {
             .hero { grid-template-columns: 1fr; min-height: auto; }
             .hero-left { padding: 100px 40px 60px; }
             .hero-left::after { display: none; }
             .hero-right { padding: 50px 40px 70px; }
             .hero-bg-shape { display: none; }
-            .ann-inner { grid-template-columns: 1fr; }
-            .section-header { grid-template-columns: 1fr; }
-            .section-desc { max-width: 100%; }
-            .features-grid { grid-template-columns: 1fr 1fr; }
             .cta-inner { grid-template-columns: 1fr; }
             .cta-btns { flex-direction: row; flex-wrap: wrap; }
+            .section-header { flex-direction: column; align-items: flex-start; gap: 12px; }
         }
-
-        @media (max-width: 600px) {
+        @media (max-width: 640px) {
             .hero-left { padding: 80px 24px 50px; }
             .hero-right { padding: 40px 24px 60px; }
-            .hero-stats { gap: 20px; flex-wrap: wrap; }
+            .hero-stats { gap: 18px; flex-wrap: wrap; }
             .container { padding: 0 24px; }
-            .announcement, .features, .cta-section { padding: 60px 0; }
-            .features-grid { grid-template-columns: 1fr; }
+            .templates-grid, .blog-grid, .testimonials-grid, .tools-grid, .features-grid { grid-template-columns: 1fr; }
             .cta-btns { flex-direction: column; }
+            .newsletter-wrap { flex-direction: column; align-items: flex-start; }
+            .newsletter-input { width: 100%; }
+            .trust-inner { gap: 20px; }
+            .floating-cta { bottom: 16px; right: 16px; }
         }
     </style>
 </head>
 <body>
 
+<!-- ─── HEADER (unchanged from original) ─────────────────────── -->
 <header>
     <div class="header-content">
-
-        <!-- Logo -->
         <a href="index.html" class="logo">
             <span class="logo-icon">📄</span>
             <span>ResumePro</span>
         </a>
-
-        <!-- Nav + Hamburger -->
         <div class="nav-container">
             <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">☰</button>
-
             <ul class="header-nav-menu" role="menubar">
-
                 <li class="header-nav-item" role="none">
                     <a href="index.html" class="header-nav-link" role="menuitem">Home</a>
                 </li>
-
                 <li class="header-nav-item header-dropdown" role="none">
                     <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
-                        Templates
-                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                        Templates <span class="header-dropdown-icon" aria-hidden="true">▼</span>
                     </a>
                     <div class="header-dropdown-content" role="menu">
-                        <a href="resume-templates.html"   class="header-dropdown-item" role="menuitem">Resume Templates</a>
+                        <a href="resume-templates.html" class="header-dropdown-item" role="menuitem">Resume Templates</a>
                         <a href="portfolio-templates.html" class="header-dropdown-item" role="menuitem">Portfolio Templates</a>
                     </div>
                 </li>
-
                 <li class="header-nav-item header-dropdown" role="none">
                     <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
-                        Apps
-                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                        Apps <span class="header-dropdown-icon" aria-hidden="true">▼</span>
                     </a>
                     <div class="header-dropdown-content" role="menu">
-                        <a href="android-applications.html"   class="header-dropdown-item" role="menuitem">Android Applications</a>
+                        <a href="android-applications.html" class="header-dropdown-item" role="menuitem">Android Applications</a>
                         <a href="family-connection-tools.html" class="header-dropdown-item" role="menuitem">Web Applications</a>
                     </div>
                 </li>
-
                 <li class="header-nav-item" role="none">
                     <a href="blog-list.html" class="header-nav-link" role="menuitem">Blog</a>
                 </li>
-
-                <li class="header-nav-item" role="none" style="display: none;">
-                    <a href="klaviyo-analytics.html" class="header-nav-link" role="menuitem">Klaviyo Analytics</a>
-                </li>
-
                 <li class="header-nav-item header-dropdown" role="none">
                     <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
-                        Tools
-                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                        Tools <span class="header-dropdown-icon" aria-hidden="true">▼</span>
                     </a>
                     <div class="header-dropdown-content" role="menu">
-                        <a href="email-builder.html"  class="header-dropdown-item" role="menuitem">Email Builder</a>
-                        <a href="inliner.html"              class="header-dropdown-item" role="menuitem">Inliner</a>
-                        <a href="klaviyo-tool.html"               class="header-dropdown-item" role="menuitem">Klaviyo Tool</a>
-                        <a href="omnisend.html"                   class="header-dropdown-item" role="menuitem">Omnisend Analytics</a>
-						<a href="adg-customer-service-agent.html"   class="header-dropdown-item" role="menuitem">CS Agent</a>
+                        <a href="email-builder.html" class="header-dropdown-item" role="menuitem">Email Builder</a>
+                        <a href="inliner.html" class="header-dropdown-item" role="menuitem">Inliner</a>
+                        <a href="klaviyo-tool.html" class="header-dropdown-item" role="menuitem">Klaviyo Tool</a>
+                        <a href="omnisend.html" class="header-dropdown-item" role="menuitem">Omnisend Analytics</a>
+                        <a href="adg-customer-service-agent.html" class="header-dropdown-item" role="menuitem">CS Agent ✦ New</a>
                     </div>
                 </li>
-
                 <li class="header-nav-item" role="none">
                     <a href="about.html" class="header-nav-link" role="menuitem">About</a>
                 </li>
-
                 <li class="header-nav-item" role="none">
                     <a href="contact.html" class="header-nav-link" role="menuitem">Contact</a>
                 </li>
-
             </ul>
         </div>
     </div>
 </header>
 
-
-<!-- ═══════════════════════════════════════════ HERO -->
+<!-- ═══════════════════════════════════════════════════ HERO -->
 <section class="hero">
     <div class="hero-left">
-        <span class="hero-eyebrow">Professional Templates</span>
+        <span class="hero-eyebrow">Solo-built. Production-ready.</span>
         <h1 class="hero-title">
             Stand out.<br>
             Get <em>noticed.</em><br>
             Land the role.
         </h1>
         <p class="hero-sub">
-            Beautifully crafted resume and portfolio templates that make your first impression unforgettable. No coding needed.
+            Professional resume &amp; portfolio templates plus free productivity tools — designed and built by one developer who actually cares about craft.
         </p>
         <div class="hero-actions">
-            <a href="resume-templates.html" class="btn-primary">Browse Resumes &rarr;</a>
-            <a href="portfolio-templates.html" class="btn-outline">See Portfolios</a>
+            <a href="resume-templates.html" class="btn-primary">Browse Templates →</a>
+            <a href="adg-customer-service-agent.html" class="btn-outline">Try CS Agent Free</a>
         </div>
+
         <div class="hero-stats">
             <div class="stat-item">
                 <span class="stat-num">20<span>+</span></span>
                 <span class="stat-label">Templates</span>
             </div>
             <div class="stat-item">
-                <span class="stat-num">100<span>%</span></span>
-                <span class="stat-label">Responsive</span>
+                <span class="stat-num">5<span>+</span></span>
+                <span class="stat-label">Free Tools</span>
             </div>
             <div class="stat-item">
                 <span class="stat-num">Free<span>*</span></span>
                 <span class="stat-label">To Host</span>
             </div>
         </div>
+
+        <div class="maker-badge">
+            <div class="maker-avatar">👤</div>
+            <div class="maker-info">
+                <div class="maker-name">Adolf de Guzman</div>
+                <div class="maker-role">Solo creator · designer · developer</div>
+            </div>
+        </div>
     </div>
 
     <div class="hero-right">
-        <p class="hero-right-label">Choose your template type</p>
+        <p class="hero-right-label">Choose your category</p>
         <div class="template-cards-stack">
             <a href="resume-templates.html" class="t-card">
                 <div class="t-card-icon">📝</div>
@@ -900,7 +1143,15 @@
                 <div class="t-card-icon">📱</div>
                 <div class="t-card-body">
                     <div class="t-card-title">Android Applications</div>
-                    <div class="t-card-desc">Productivity tools and utilities built with modern Material Design.</div>
+                    <div class="t-card-desc">Productivity tools and utilities built with Material Design 3.</div>
+                </div>
+                <span class="t-card-arrow">→</span>
+            </a>
+            <a href="adg-customer-service-agent.html" class="t-card">
+                <div class="t-card-icon">🤖</div>
+                <div class="t-card-body">
+                    <div class="t-card-title">CS Agent <span style="font-size:0.65rem;background:#eef1fd;color:#2d5be3;padding:2px 7px;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:600;vertical-align:middle;">NEW</span></div>
+                    <div class="t-card-desc">AI-powered customer service assistant — free to use, right in your browser.</div>
                 </div>
                 <span class="t-card-arrow">→</span>
             </a>
@@ -909,199 +1160,469 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════════ ANNOUNCEMENT -->
-<section class="announcement">
+<!-- ═══════════════════════════════════════════════════ TRUST STRIP -->
+<div class="trust-strip">
     <div class="container">
-        <div class="ann-inner reveal">
-            <div>
-                <span class="ann-badge">🚀 New &mdash; April 2025</span>
-                <h2 class="ann-title">Now building<br><em>Android</em> apps.</h2>
-                <p class="ann-desc">
-                    Expanding beyond web templates into native mobile development. 
-                    Crafting productivity tools and utilities for Android with Material Design 3 — 
-                    clean, fast, and purposeful.
-                </p>
-                <div class="ann-tags">
-                    <span class="ann-tag">🤖 Android Development</span>
-                    <span class="ann-tag">📱 Material Design 3</span>
-                    <span class="ann-tag">🚀 Coming to Play Store</span>
-                    <span class="ann-tag">🎯 Productivity Focus</span>
-                </div>
-                <a href="https://resumepro.pages.dev/android-applications" class="btn-gold">
-                    View All Android Apps &rarr;
-                </a>
-            </div>
+        <div class="trust-inner">
+            <div class="trust-item"><span>✅</span><span>100% Free to Host</span></div>
+            <div class="trust-item"><span>📱</span><span>Fully Responsive</span></div>
+            <div class="trust-item"><span>⚡</span><span>Fast Loading</span></div>
+            <div class="trust-item"><span>🎨</span><span>No Coding Required</span></div>
+            <div class="trust-item"><span>🔧</span><span>Works on GitHub Pages & Netlify</span></div>
+        </div>
+    </div>
+</div>
 
-            <div class="ann-apps">
-                <div class="ann-app-card">
-                    <div class="ann-app-icon">🚗</div>
-                    <div>
-                        <div class="ann-app-name">VoiceRide Driving Assistant</div>
-                        <div class="ann-app-sub">Voice-controlled navigation &amp; assistance</div>
+<!-- ═══════════════════════════════════════════════════ TEMPLATES -->
+<section class="templates-section">
+    <div class="container">
+        <div class="section-header reveal">
+            <div>
+                <p class="section-eyebrow">Featured Templates</p>
+                <h2 class="section-title">Designs that get you <em>hired</em></h2>
+            </div>
+            <a href="resume-templates.html" class="view-all-link">View All Templates →</a>
+        </div>
+
+        <div class="templates-grid reveal">
+            <a href="resume-templates.html" class="tmpl-card">
+                <div class="tmpl-preview tmpl-preview-dark">
+                    <span class="tmpl-badge badge-free">Free</span>
+                    <div class="preview-lines">
+                        <div class="prev-line h"></div>
+                        <div class="prev-line accent-line"></div>
+                        <div class="prev-line"></div>
+                        <div class="prev-line short"></div>
+                        <div class="prev-line"></div>
+                        <div class="prev-line short"></div>
+                        <div class="prev-line"></div>
                     </div>
-                    <span class="ann-app-pill">In Dev</span>
                 </div>
-                <div class="ann-app-card">
-                    <div class="ann-app-icon">📝</div>
-                    <div>
-                        <div class="ann-app-name">Notes &amp; Reminder App</div>
-                        <div class="ann-app-sub">Smart productivity &amp; task management</div>
+                <div class="tmpl-body">
+                    <div class="tmpl-category">Resume</div>
+                    <div class="tmpl-name">Executive Dark</div>
+                    <div class="tmpl-desc">Bold dark-themed layout that commands attention. Perfect for senior roles and creative industries.</div>
+                    <div class="tmpl-footer">
+                        <span class="tmpl-cta">Preview template →</span>
+                        <span style="font-size:0.78rem;color:var(--mid);">HTML / CSS</span>
                     </div>
-                    <span class="ann-app-pill">In Dev</span>
+                </div>
+            </a>
+
+            <a href="resume-templates.html" class="tmpl-card">
+                <div class="tmpl-preview" style="background:#f0ece3;">
+                    <span class="tmpl-badge badge-free">Free</span>
+                    <div class="preview-lines">
+                        <div class="prev-line h"></div>
+                        <div class="prev-line accent-line"></div>
+                        <div class="prev-line"></div>
+                        <div class="prev-line"></div>
+                        <div class="prev-line short"></div>
+                        <div class="prev-line"></div>
+                        <div class="prev-line short"></div>
+                    </div>
+                </div>
+                <div class="tmpl-body">
+                    <div class="tmpl-category">Resume</div>
+                    <div class="tmpl-name">Classic Warm</div>
+                    <div class="tmpl-desc">Clean, professional layout with warm tones. ATS-friendly and highly readable by recruiters.</div>
+                    <div class="tmpl-footer">
+                        <span class="tmpl-cta">Preview template →</span>
+                        <span style="font-size:0.78rem;color:var(--mid);">HTML / CSS</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="portfolio-templates.html" class="tmpl-card">
+                <div class="tmpl-preview tmpl-preview-blue">
+                    <span class="tmpl-badge badge-new">New</span>
+                    <div class="preview-lines">
+                        <div class="prev-line h"></div>
+                        <div class="prev-line" style="background:rgba(200,169,110,0.5);width:30%;"></div>
+                        <div class="prev-line"></div>
+                        <div class="prev-line short"></div>
+                        <div class="prev-line"></div>
+                        <div class="prev-line short"></div>
+                        <div class="prev-line"></div>
+                    </div>
+                </div>
+                <div class="tmpl-body">
+                    <div class="tmpl-category">Portfolio</div>
+                    <div class="tmpl-name">Developer Portfolio</div>
+                    <div class="tmpl-desc">Showcase your projects with a sleek, tech-forward layout. Includes project grid and skills section.</div>
+                    <div class="tmpl-footer">
+                        <span class="tmpl-cta">Preview template →</span>
+                        <span style="font-size:0.78rem;color:var(--mid);">HTML / CSS</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ FEATURED TOOL: CS AGENT -->
+<section class="featured-tool">
+    <div class="container">
+        <div class="ft-inner reveal">
+            <div>
+                <div class="ft-tag">✦ Featured Tool — Free to Use</div>
+                <h2 class="ft-title">Meet the <em>CS Agent</em> —<br>your AI support assistant</h2>
+                <p class="ft-desc">
+                    A ready-to-deploy AI customer service agent that handles inquiries, drafts responses, and keeps your support queue moving — all from your browser, no API key needed.
+                </p>
+                <ul class="ft-features">
+                    <li>Answer common customer questions instantly</li>
+                    <li>Draft professional email replies in seconds</li>
+                    <li>Tone-matching for your brand voice</li>
+                    <li>Works in any browser, zero setup</li>
+                </ul>
+                <a href="adg-customer-service-agent.html" class="btn-gold">Try CS Agent Free →</a>
+            </div>
+            <div class="ft-mockup">
+                <div class="ft-mock-bar">
+                    <div class="ft-mock-dot" style="background:#ff5f57;"></div>
+                    <div class="ft-mock-dot" style="background:#ffbd2e;"></div>
+                    <div class="ft-mock-dot" style="background:#28c840;"></div>
+                    <div class="ft-mock-title">CS Agent · ResumePro</div>
+                </div>
+                <div class="ft-mock-body">
+                    <div class="ft-msg ft-msg-user">
+                        Hi, my order hasn't arrived in 3 weeks. Can you help?
+                    </div>
+                    <div class="ft-msg ft-msg-agent">
+                        I'm sorry to hear about the delay! I can look into your order right away. Could you share your order number? I'll check the status and arrange a resolution within 24 hours.
+                    </div>
+                    <div class="ft-msg ft-msg-user">
+                        Order #RP-22941. Thanks!
+                    </div>
+                    <div class="ft-msg ft-msg-agent" style="opacity:0.5;">
+                        <span style="display:flex;gap:4px;align-items:center;"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.4s ease infinite;"></span><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.4s ease 0.25s infinite;"></span><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.4s ease 0.5s infinite;"></span></span>
+                    </div>
+                </div>
+                <div class="ft-mock-input">
+                    <span>Type your message…</span>
+                    <div class="ft-mock-send">↑</div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════════ FEATURES -->
-<section class="features">
+<!-- ═══════════════════════════════════════════════════ ALL TOOLS -->
+<section class="tools-section">
+    <div class="container">
+        <div class="section-header reveal">
+            <div>
+                <p class="section-eyebrow">Free Tools</p>
+                <h2 class="section-title">Practical tools for <em>builders</em></h2>
+            </div>
+            <a href="family-connection-tools.html" class="view-all-link">See All Tools →</a>
+        </div>
+        <div class="tools-grid reveal">
+            <a href="email-builder.html" class="tool-card">
+                <div class="tool-icon">✉️</div>
+                <div class="tool-name">Email Builder</div>
+                <div class="tool-desc">Design and export responsive HTML emails visually — no code editor needed.</div>
+                <div class="tool-link">Open tool →</div>
+            </a>
+            <a href="inliner.html" class="tool-card">
+                <div class="tool-icon">⚡</div>
+                <div class="tool-name">CSS Inliner</div>
+                <div class="tool-desc">Paste your HTML and get inline-styled output ready for any email client.</div>
+                <div class="tool-link">Open tool →</div>
+            </a>
+            <a href="klaviyo-tool.html" class="tool-card">
+                <div class="tool-icon">📊</div>
+                <div class="tool-name">Klaviyo Tool</div>
+                <div class="tool-desc">Analyze and visualize your Klaviyo email performance data in one place.</div>
+                <div class="tool-link">Open tool →</div>
+            </a>
+            <a href="omnisend.html" class="tool-card">
+                <div class="tool-icon">📈</div>
+                <div class="tool-name">Omnisend Analytics</div>
+                <div class="tool-desc">Pull campaign stats and track automation performance from Omnisend.</div>
+                <div class="tool-link">Open tool →</div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ ANDROID APPS -->
+<section class="android-section">
+    <div class="container">
+        <div class="android-inner reveal">
+            <div>
+                <div class="android-badge">🚀 New · April 2025</div>
+                <h2 class="android-title">Now building <em>Android</em> apps.</h2>
+                <p class="android-desc">
+                    Expanding beyond web into native mobile. Crafting purposeful productivity tools for Android using Material Design 3 — clean, fast, and useful.
+                </p>
+                <div class="android-tags">
+                    <span class="android-tag">🤖 Android Dev</span>
+                    <span class="android-tag">📱 Material Design 3</span>
+                    <span class="android-tag">🚀 Play Store</span>
+                    <span class="android-tag">🎯 Productivity</span>
+                </div>
+                <a href="android-applications.html" class="btn-gold">View All Android Apps →</a>
+            </div>
+            <div class="android-apps">
+                <div class="android-app-card">
+                    <div class="app-icon-wrap">🚗</div>
+                    <div class="app-info">
+                        <div class="app-name">VoiceRide Driving Assistant</div>
+                        <div class="app-sub">Voice-controlled navigation &amp; assistance</div>
+                    </div>
+                    <span class="app-pill">In Dev</span>
+                </div>
+                <div class="android-app-card">
+                    <div class="app-icon-wrap">📝</div>
+                    <div class="app-info">
+                        <div class="app-name">Notes &amp; Reminder App</div>
+                        <div class="app-sub">Smart productivity &amp; task management</div>
+                    </div>
+                    <span class="app-pill">In Dev</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ WHY RESUMEPRO (condensed to 4) -->
+<section class="features-section">
     <div class="container">
         <div class="section-header reveal">
             <div>
                 <p class="section-eyebrow">Why ResumePro</p>
-                <h2 class="section-title-lg">Everything you need<br>to stand out.</h2>
+                <h2 class="section-title">Everything you need to <em>stand out</em></h2>
             </div>
-            <p class="section-desc">
-                Each template is designed to be a polished, professional tool — not just a pretty layout. Built for real job seekers, by a developer who cares about craft.
-            </p>
         </div>
-
         <div class="features-grid reveal">
             <div class="feat-card">
-                <div class="feat-num">01</div>
                 <div class="feat-icon-wrap">🚀</div>
                 <h3 class="feat-title">Easy Customization</h3>
                 <p class="feat-desc">Change colors, fonts, and layouts with simple CSS edits. No coding experience needed.</p>
             </div>
             <div class="feat-card">
-                <div class="feat-num">02</div>
                 <div class="feat-icon-wrap">📱</div>
                 <h3 class="feat-title">Fully Responsive</h3>
                 <p class="feat-desc">Looks pixel-perfect on every device — from desktop to the smallest phone screen.</p>
             </div>
             <div class="feat-card">
-                <div class="feat-num">03</div>
-                <div class="feat-icon-wrap">⚡</div>
-                <h3 class="feat-title">Fast Loading</h3>
-                <p class="feat-desc">Optimized for performance so your content loads instantly for recruiters and clients.</p>
-            </div>
-            <div class="feat-card">
-                <div class="feat-num">04</div>
-                <div class="feat-icon-wrap">🎨</div>
-                <h3 class="feat-title">Modern Designs</h3>
-                <p class="feat-desc">Professionally crafted templates following current trends while remaining timeless.</p>
-            </div>
-            <div class="feat-card">
-                <div class="feat-num">05</div>
                 <div class="feat-icon-wrap">🔧</div>
-                <h3 class="feat-title">Easy Hosting</h3>
-                <p class="feat-desc">Works with GitHub Pages, Netlify, and other free hosting options with minimal setup.</p>
+                <h3 class="feat-title">Free Hosting</h3>
+                <p class="feat-desc">Deploy to GitHub Pages or Netlify in minutes. No server costs, no catch.</p>
             </div>
             <div class="feat-card">
-                <div class="feat-num">06</div>
                 <div class="feat-icon-wrap">📚</div>
-                <h3 class="feat-title">Detailed Guides</h3>
-                <p class="feat-desc">Step-by-step setup instructions included with every single template.</p>
+                <h3 class="feat-title">Step-by-Step Guides</h3>
+                <p class="feat-desc">Every template ships with detailed setup instructions and customization tips.</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════════ CTA -->
+<!-- ═══════════════════════════════════════════════════ TESTIMONIALS -->
+<section class="testimonials-section">
+    <div class="container">
+        <div class="section-header reveal">
+            <div>
+                <p class="section-eyebrow">What People Say</p>
+                <h2 class="section-title">Used by job seekers &amp; <em>builders</em></h2>
+            </div>
+        </div>
+        <div class="testimonials-grid reveal">
+            <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-quote">"Got three interview callbacks within a week of switching to a ResumePro template. The design genuinely makes a difference."</p>
+                <div class="testi-author">
+                    <div class="testi-avatar" style="background:#eef1fd;">👩‍💼</div>
+                    <div>
+                        <div class="testi-name">Maria S.</div>
+                        <div class="testi-role">Software Engineer · Hired at a startup</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-quote">"The CS Agent saved our small team hours every week. Clean, fast, and actually useful — rare for a free tool."</p>
+                <div class="testi-author">
+                    <div class="testi-avatar" style="background:#eaf4ee;">👨‍💻</div>
+                    <div>
+                        <div class="testi-name">James T.</div>
+                        <div class="testi-role">Operations Lead · E-commerce brand</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-quote">"I've tried many portfolio templates. ResumePro's stood out because it's minimal, fast, and didn't need a framework to run."</p>
+                <div class="testi-author">
+                    <div class="testi-avatar" style="background:#f4f1eb;">🎨</div>
+                    <div>
+                        <div class="testi-name">Aiko R.</div>
+                        <div class="testi-role">Freelance Designer</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ BLOG -->
+<section class="blog-section">
+    <div class="container">
+        <div class="section-header reveal">
+            <div>
+                <p class="section-eyebrow">From the Blog</p>
+                <h2 class="section-title">Tips for <em>job seekers</em> &amp; makers</h2>
+            </div>
+            <a href="blog-list.html" class="view-all-link">Read All Posts →</a>
+        </div>
+        <div class="blog-grid reveal">
+            <a href="blog-list.html" class="blog-card">
+                <div class="blog-thumb" style="background:var(--paper-warm);">✍️</div>
+                <div class="blog-body">
+                    <div class="blog-category">Job Search</div>
+                    <div class="blog-title">5 Resume Mistakes That Cost You Interviews</div>
+                    <div class="blog-excerpt">Simple, avoidable errors that recruiters notice immediately — and how to fix them before you apply.</div>
+                    <div class="blog-meta">📅 <span>June 2025</span> · <span>4 min read</span></div>
+                </div>
+            </a>
+            <a href="blog-list.html" class="blog-card">
+                <div class="blog-thumb" style="background:#eef1fd;">🚀</div>
+                <div class="blog-body">
+                    <div class="blog-category">Tools &amp; Productivity</div>
+                    <div class="blog-title">How to Deploy Your Portfolio for Free in 10 Minutes</div>
+                    <div class="blog-excerpt">A step-by-step guide to going live on GitHub Pages or Netlify — no experience needed.</div>
+                    <div class="blog-meta">📅 <span>May 2025</span> · <span>6 min read</span></div>
+                </div>
+            </a>
+            <a href="blog-list.html" class="blog-card">
+                <div class="blog-thumb" style="background:#eaf4ee;">🤖</div>
+                <div class="blog-body">
+                    <div class="blog-category">AI Tools</div>
+                    <div class="blog-title">Using AI to Handle Customer Support Without a Team</div>
+                    <div class="blog-excerpt">How solo builders and small businesses can automate first-line support using the CS Agent.</div>
+                    <div class="blog-meta">📅 <span>April 2025</span> · <span>5 min read</span></div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ FINAL CTA -->
 <section class="cta-section">
     <div class="container">
         <div class="cta-inner reveal">
             <div>
                 <h2 class="cta-title">Ready to build your<br><em>online presence?</em></h2>
-                <p class="cta-sub">
-                    Join professionals who've elevated their job search with templates that are as impressive as their work.
-                </p>
+                <p class="cta-sub">Browse templates, try the tools, or follow along as more products ship. Built by one person — made for everyone.</p>
             </div>
             <div class="cta-btns">
-                <a href="resume-templates.html" class="btn-dark">Browse Resumes</a>
-                <a href="portfolio-templates.html" class="btn-outline-dark">Browse Portfolios</a>
+                <a href="resume-templates.html" class="btn-gold">Browse Templates →</a>
+                <a href="adg-customer-service-agent.html" class="btn-gold-outline">Try CS Agent Free</a>
+            </div>
+        </div>
+
+        <div class="newsletter-wrap reveal">
+            <div class="newsletter-text">
+                <h3>Stay in the loop</h3>
+                <p>New templates, tools, and maker updates — no spam, ever.</p>
+            </div>
+            <div class="newsletter-form">
+                <input type="email" class="newsletter-input" placeholder="your@email.com">
+                <button class="btn-newsletter">Subscribe</button>
             </div>
         </div>
     </div>
 </section>
 
+<!-- ─── FOOTER ─────────────────────────────────────────────────── -->
 <footer>
     <div class="footer-content">
         <div class="footer-column">
             <h3>ResumePro</h3>
-            <p>Professional digital templates to showcase your career and work.</p>
+            <p>Professional digital templates, tools, and apps — built by Adolf de Guzman.</p>
         </div>
-        
         <div class="footer-column">
             <h3>Templates</h3>
             <ul class="footer-links">
                 <li><a href="resume-templates.html">Resume Templates</a></li>
                 <li><a href="portfolio-templates.html">Portfolio Templates</a></li>
-                <li><a href="#">All Templates</a></li>
             </ul>
         </div>
-        
         <div class="footer-column">
-            <h3>Resources</h3>
+            <h3>Tools</h3>
             <ul class="footer-links">
-                <li><a href="help.html#editing">How to Edit</a></li>
-                <li><a href="help.html#hosting">Hosting Guide</a></li>
-                <li><a href="help.html#tips">Tips & Examples</a></li>
+                <li><a href="adg-customer-service-agent.html">CS Agent ✦</a></li>
+                <li><a href="email-builder.html">Email Builder</a></li>
+                <li><a href="inliner.html">CSS Inliner</a></li>
+                <li><a href="klaviyo-tool.html">Klaviyo Tool</a></li>
             </ul>
         </div>
-        
         <div class="footer-column">
             <h3>Company</h3>
             <ul class="footer-links">
-                <li><a href="about.html">About Us</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="blog-list.html">Blog</a></li>
                 <li><a href="contact.html">Contact</a></li>
                 <li><a href="privacy.html">Privacy Policy</a></li>
                 <li><a href="terms.html">Terms of Service</a></li>
             </ul>
         </div>
     </div>
-    
     <div class="copyright">
-        <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
+        <p>&copy; 2025 Adolf de Guzman. All rights reserved.</p>
     </div>
 </footer>
+
+<!-- floating CTA button -->
+<a href="adg-customer-service-agent.html" class="floating-cta" id="floatingCta">
+    <div class="floating-dot"></div>
+    Try CS Agent Free
+</a>
 
 <script>
     // Scroll reveal
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry, i) => {
             if (entry.isIntersecting) {
-                entry.target.style.transitionDelay = (i * 0.05) + 's';
+                entry.target.style.transitionDelay = (i * 0.04) + 's';
                 entry.target.classList.add('visible');
             }
         });
-    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
-
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-    // Stagger feat cards
-    const featObserver = new IntersectionObserver((entries) => {
+    // Show floating CTA after scrolling past hero
+    const floatingCta = document.getElementById('floatingCta');
+    const hero = document.querySelector('.hero');
+    const heroObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.querySelectorAll('.feat-card').forEach((card, i) => {
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(20px)';
-                    card.style.transition = `opacity 0.5s ease ${i * 0.08}s, transform 0.5s ease ${i * 0.08}s`;
-                    requestAnimationFrame(() => {
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    });
-                });
+            if (!entry.isIntersecting) {
+                floatingCta.classList.add('show');
+            } else {
+                floatingCta.classList.remove('show');
             }
         });
     }, { threshold: 0.1 });
+    heroObserver.observe(hero);
 
-    document.querySelectorAll('.features-grid').forEach(el => featObserver.observe(el));
+    // Newsletter form feedback
+    const form = document.querySelector('.newsletter-form');
+    const btn = form.querySelector('.btn-newsletter');
+    btn.addEventListener('click', () => {
+        const input = form.querySelector('.newsletter-input');
+        if (input.value && input.value.includes('@')) {
+            btn.textContent = '✓ Subscribed!';
+            btn.style.background = '#2d7a4f';
+            input.value = '';
+            setTimeout(() => { btn.textContent = 'Subscribe'; btn.style.background = ''; }, 3000);
+        }
+    });
 </script>
 
 <script src="clean-urls.js"></script>
 <script src="header.js"></script>
-
 </body>
 </html>

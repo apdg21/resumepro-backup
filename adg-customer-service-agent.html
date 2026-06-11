@@ -386,7 +386,11 @@
     display: flex; align-items: center; justify-content: space-between;
     background: var(--bg2);
     flex-shrink: 0;
+    cursor: pointer;
+    user-select: none;
+    transition: background .15s;
   }
+  .chat-divider:hover { background: var(--bg3); }
   .chat-divider span {
     font-size: 11px; font-weight: 600; letter-spacing: .07em;
     text-transform: uppercase; color: var(--text3);
@@ -1328,13 +1332,13 @@
     </div>
 
     <!-- ── Chat with AI ── -->
-    <div class="chat-divider">
+    <div class="chat-divider" onclick="toggleChat()" style="cursor:pointer">
       <span><i class="ti ti-messages" style="font-size:12px;vertical-align:-1px"></i> Chat with AI</span>
-      <button class="chat-toggle-btn" id="chatToggleBtn" onclick="toggleChat()" title="Collapse chat">
-        <i class="ti ti-chevron-down" id="chatToggleIcon"></i>
+      <button class="chat-toggle-btn" id="chatToggleBtn" title="Expand chat">
+        <i class="ti ti-chevron-up" id="chatToggleIcon"></i>
       </button>
     </div>
-    <div class="chat-panel" id="chatPanel">
+    <div class="chat-panel collapsed" id="chatPanel">
       <div class="chat-thread" id="chatThread">
         <div class="chat-hint">Ask the AI to refine the response, explain its reasoning, try a different tone, or answer any follow-up questions.</div>
       </div>
@@ -2034,6 +2038,13 @@ function generate(quick) {
   document.getElementById('copyBtn').style.display  = 'none';
   document.getElementById('regenBtn').style.display = 'none';
 
+  // Reset chat history for this new generation
+  chatHistory = [];
+  var thread = document.getElementById('chatThread');
+  if (thread) {
+    thread.innerHTML = '<div class="chat-hint">Ask the AI to refine the response, explain its reasoning, try a different tone, or answer any follow-up questions.</div>';
+  }
+
   fetchAllLinks().then(function() {
     var system      = buildSystemPrompt();
     var userContent = buildUserContent(quick || false);
@@ -2053,7 +2064,7 @@ function generate(quick) {
 
 // ── Chat with AI ───────────────────────────────────────────────────────────
 var chatHistory = [];  // [{role:'user'|'assistant', content:'...'}]
-var chatOpen = true;
+var chatOpen = false;
 
 function toggleChat() {
   chatOpen = !chatOpen;
@@ -2167,17 +2178,6 @@ function sendChat() {
       sendBtn.disabled = false;
       document.getElementById('chatInput').focus();
     });
-}
-
-// Reset chat history when a new response is generated
-var _origGenerate = generate;
-function generate(quick) {
-  chatHistory = [];
-  var thread = document.getElementById('chatThread');
-  if (thread) {
-    thread.innerHTML = '<div class="chat-hint">Ask the AI to refine the response, explain its reasoning, try a different tone, or answer any follow-up questions.</div>';
-  }
-  _origGenerate(quick);
 }
 
 function showError(msg) {

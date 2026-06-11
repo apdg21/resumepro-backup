@@ -34,11 +34,6 @@
             --white: #ffffff;
             --green: #2d7a4f;
             --green-light: #eaf4ee;
-           --primary: #3a86ff;
-            --primary-dark: #2667cc;
-            --dark: #2b2d42;
-            --light: #f8f9fa;
-            --gray: #6c757d;
         }
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -852,12 +847,20 @@
         }
         .blog-card:hover { transform: translateY(-4px); box-shadow: 0 14px 36px rgba(0,0,0,0.09); border-color: var(--accent-light); }
         .blog-thumb {
-            height: 160px;
+            height: 180px;
             display: flex; align-items: center; justify-content: center;
             font-size: 2.8rem;
             position: relative;
             overflow: hidden;
         }
+        .blog-thumb img {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .blog-card:hover .blog-thumb img { transform: scale(1.04); }
         .blog-body { padding: 24px; }
         .blog-category {
             font-size: 0.7rem;
@@ -1479,38 +1482,51 @@
         <div class="section-header reveal">
             <div>
                 <p class="section-eyebrow">From the Blog</p>
-                <h2 class="section-title">Tips for <em>job seekers</em> &amp; makers</h2>
+                <h2 class="section-title">Ideas, guides &amp; <em>insights</em></h2>
             </div>
             <a href="blog-list.html" class="view-all-link">Read All Posts →</a>
         </div>
         <div class="blog-grid reveal">
-            <a href="blog-list.html" class="blog-card">
-                <div class="blog-thumb" style="background:var(--paper-warm);">✍️</div>
+
+            <!-- Post 1: Seasonality in Email Marketing — 2026-05-21 -->
+            <a href="seasonality-in-email-marketing.html" class="blog-card">
+                <div class="blog-thumb" style="background:#1a2e5e;">
+                    <img src="assets/blog/email-seasonality.jpg" alt="Seasonality in Email Marketing" loading="lazy">
+                </div>
                 <div class="blog-body">
-                    <div class="blog-category">Job Search</div>
-                    <div class="blog-title">5 Resume Mistakes That Cost You Interviews</div>
-                    <div class="blog-excerpt">Simple, avoidable errors that recruiters notice immediately — and how to fix them before you apply.</div>
-                    <div class="blog-meta">📅 <span>June 2025</span> · <span>4 min read</span></div>
+                    <div class="blog-category">Email Marketing</div>
+                    <div class="blog-title">Seasonality in Email Marketing: Why Your Numbers Are Lying to You</div>
+                    <div class="blog-excerpt">A performance dip doesn't always mean something is broken. Learn how seasonality silently shapes your email results — and how to stop fixing problems that were never there.</div>
+                    <div class="blog-meta">📅 <span>May 21, 2026</span></div>
                 </div>
             </a>
-            <a href="blog-list.html" class="blog-card">
-                <div class="blog-thumb" style="background:#eef1fd;">🚀</div>
+
+            <!-- Post 2: Balanced Image–Text Designs — 2026-03-13 -->
+            <a href="balanced-email-design.html" class="blog-card">
+                <div class="blog-thumb" style="background:#2d3a2e;">
+                    <img src="assets/blog/balanced-email-design.jpg" alt="Balanced Email Design" loading="lazy">
+                </div>
                 <div class="blog-body">
-                    <div class="blog-category">Tools &amp; Productivity</div>
-                    <div class="blog-title">How to Deploy Your Portfolio for Free in 10 Minutes</div>
-                    <div class="blog-excerpt">A step-by-step guide to going live on GitHub Pages or Netlify — no experience needed.</div>
-                    <div class="blog-meta">📅 <span>May 2025</span> · <span>6 min read</span></div>
+                    <div class="blog-category">Email Design</div>
+                    <div class="blog-title">Why Leading Email Platforms Favor Balanced Image–Text Designs</div>
+                    <div class="blog-excerpt">Discover why Klaviyo, Omnisend, and Figma use balanced text-image emails — improving deliverability, accessibility, and engagement while avoiding spam filters.</div>
+                    <div class="blog-meta">📅 <span>March 13, 2026</span></div>
                 </div>
             </a>
-            <a href="blog-list.html" class="blog-card">
-                <div class="blog-thumb" style="background:#eaf4ee;">🤖</div>
+
+            <!-- Post 3: Beyond Revenue — 2026-02-25 -->
+            <a href="true-email-success.html" class="blog-card">
+                <div class="blog-thumb" style="background:#3a1f1a;">
+                    <img src="assets/blog/email-trust-metrics.jpg" alt="True Email Marketing Success" loading="lazy">
+                </div>
                 <div class="blog-body">
-                    <div class="blog-category">AI Tools</div>
-                    <div class="blog-title">Using AI to Handle Customer Support Without a Team</div>
-                    <div class="blog-excerpt">How solo builders and small businesses can automate first-line support using the CS Agent.</div>
-                    <div class="blog-meta">📅 <span>April 2025</span> · <span>5 min read</span></div>
+                    <div class="blog-category">Email Marketing</div>
+                    <div class="blog-title">Beyond Revenue: How to Measure True Email Marketing Success</div>
+                    <div class="blog-excerpt">Revenue isn't everything. Learn to balance trust metrics like subscriber growth, engagement, and deliverability for lasting email success.</div>
+                    <div class="blog-meta">📅 <span>February 25, 2026</span></div>
                 </div>
             </a>
+
         </div>
     </div>
 </section>

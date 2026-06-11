@@ -311,7 +311,7 @@
     transition: all .15s;
   }
   .icon-btn:hover { border-color: var(--border2); color: var(--text); }
-  .resp-body { flex: 1; overflow-y: auto; padding: 1.25rem; }
+  .resp-body { flex: 1; overflow-y: auto; padding: 1.25rem; min-height: 80px; }
 
   /* ── Empty state ── */
   .empty {
@@ -378,6 +378,90 @@
   .hist-item:hover { border-color: var(--border2); }
   .hist-time { font-size: 11px; color: var(--text3); font-family: var(--mono); }
   .hist-preview { font-size: 12px; color: var(--text2); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ── Chat panel ── */
+  .chat-divider {
+    border-top: 1px solid var(--border);
+    padding: .5rem 1rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--bg2);
+    flex-shrink: 0;
+  }
+  .chat-divider span {
+    font-size: 11px; font-weight: 600; letter-spacing: .07em;
+    text-transform: uppercase; color: var(--text3);
+  }
+  .chat-toggle-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--text3); padding: 2px 4px; line-height: 1;
+    transition: color .15s;
+  }
+  .chat-toggle-btn:hover { color: var(--text2); }
+  .chat-panel {
+    display: flex; flex-direction: column;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+    height: 260px;
+    transition: height .2s ease;
+    overflow: hidden;
+  }
+  .chat-panel.collapsed { height: 0; border-top: none; }
+  .chat-thread {
+    flex: 1; overflow-y: auto; padding: .75rem 1rem;
+    display: flex; flex-direction: column; gap: .6rem;
+  }
+  .chat-hint {
+    font-size: 12px; color: var(--text3); line-height: 1.6;
+    text-align: center; padding: .5rem;
+  }
+  .chat-bubble {
+    max-width: 88%; padding: .55rem .85rem;
+    border-radius: 12px; font-size: 13px; line-height: 1.6;
+    word-break: break-word; white-space: pre-wrap;
+  }
+  .chat-bubble.user {
+    background: var(--accent-bg); border: 1px solid var(--accent-border);
+    color: var(--text); align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+  .chat-bubble.ai {
+    background: var(--bg3); border: 1px solid var(--border);
+    color: var(--text); align-self: flex-start;
+    border-bottom-left-radius: 4px;
+  }
+  .chat-bubble.ai.thinking-bubble {
+    color: var(--text3);
+  }
+  .chat-input-row {
+    display: flex; align-items: flex-end; gap: 6px;
+    padding: .6rem .85rem .75rem;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+    flex-shrink: 0;
+  }
+  .chat-input {
+    flex: 1; background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); color: var(--text);
+    font-family: var(--font); font-size: 13px;
+    padding: .55rem .75rem; resize: none; line-height: 1.5;
+    max-height: 120px; overflow-y: auto;
+    transition: border-color .15s;
+  }
+  .chat-input:focus { outline: none; border-color: var(--accent); }
+  .chat-input::placeholder { color: var(--text3); }
+  .chat-send-btn {
+    background: var(--accent); border: none; border-radius: var(--radius-sm);
+    color: #fff; cursor: pointer; padding: 8px 10px;
+    font-size: 15px; display: flex; align-items: center; justify-content: center;
+    transition: opacity .15s; flex-shrink: 0; height: 36px; width: 36px;
+  }
+  .chat-send-btn:hover { opacity: .85; }
+  .chat-send-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+  @media (max-width: 860px) {
+    .chat-panel { height: 240px; }
+    .resp-body { min-height: 160px; }
+  }
 
   /* ── Scrollbar ── */
   ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -1227,7 +1311,7 @@
     </div>
   </div>
 
-  <!-- RIGHT: Response -->
+  <!-- RIGHT: Response + Chat -->
   <div class="right">
     <div class="resp-header">
       <div class="resp-title"><i class="ti ti-message-check" style="font-size:13px"></i> Drafted response</div>
@@ -1240,6 +1324,25 @@
       <div class="empty">
         <i class="ti ti-message-dots"></i>
         <p>Your AI-drafted response will appear here.<br />Fill in the customer message and press <strong>Generate response</strong>.</p>
+      </div>
+    </div>
+
+    <!-- ── Chat with AI ── -->
+    <div class="chat-divider">
+      <span><i class="ti ti-messages" style="font-size:12px;vertical-align:-1px"></i> Chat with AI</span>
+      <button class="chat-toggle-btn" id="chatToggleBtn" onclick="toggleChat()" title="Collapse chat">
+        <i class="ti ti-chevron-down" id="chatToggleIcon"></i>
+      </button>
+    </div>
+    <div class="chat-panel" id="chatPanel">
+      <div class="chat-thread" id="chatThread">
+        <div class="chat-hint">Ask the AI to refine the response, explain its reasoning, try a different tone, or answer any follow-up questions.</div>
+      </div>
+      <div class="chat-input-row">
+        <textarea class="chat-input" id="chatInput" rows="1" placeholder="Ask a follow-up… e.g. &quot;Make it shorter&quot; or &quot;Add a discount offer&quot;" onkeydown="chatKeydown(event)" oninput="autoResizeChat(this)"></textarea>
+        <button class="chat-send-btn" id="chatSendBtn" onclick="sendChat()" title="Send message">
+          <i class="ti ti-send"></i>
+        </button>
       </div>
     </div>
   </div>
@@ -1797,7 +1900,14 @@ function buildUserContent(quick) {
 }
 
 // ── API callers ────────────────────────────────────────────────────────────
-function callAnthropic(apiKey, model, system, userContent) {
+function callAnthropic(apiKey, model, system, userContentOrMessages) {
+  // Support both single-turn (array of content blocks) and multi-turn (array of {role,content})
+  var messages;
+  if (Array.isArray(userContentOrMessages) && userContentOrMessages.length > 0 && userContentOrMessages[0].role) {
+    messages = userContentOrMessages;
+  } else {
+    messages = [{ role: 'user', content: userContentOrMessages }];
+  }
   return fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -1806,7 +1916,7 @@ function callAnthropic(apiKey, model, system, userContent) {
       'anthropic-version': '2023-06-01',
       'anthropic-dangerous-direct-browser-access': 'true',
     },
-    body: JSON.stringify({ model: model, max_tokens: 1800, system: system, messages: [{ role: 'user', content: userContent }] })
+    body: JSON.stringify({ model: model, max_tokens: 1800, system: system, messages: messages })
   }).then(function(resp) {
     return resp.json().then(function(data) {
       if (!resp.ok) throw new Error(data.error ? data.error.message : 'Anthropic error ' + resp.status);
@@ -1941,7 +2051,135 @@ function generate(quick) {
   });
 }
 
-// ── Helpers ────────────────────────────────────────────────────────────────
+// ── Chat with AI ───────────────────────────────────────────────────────────
+var chatHistory = [];  // [{role:'user'|'assistant', content:'...'}]
+var chatOpen = true;
+
+function toggleChat() {
+  chatOpen = !chatOpen;
+  var panel = document.getElementById('chatPanel');
+  var icon  = document.getElementById('chatToggleIcon');
+  panel.classList.toggle('collapsed', !chatOpen);
+  icon.className = chatOpen ? 'ti ti-chevron-down' : 'ti ti-chevron-up';
+}
+
+function autoResizeChat(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function chatKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChat();
+  }
+}
+
+function appendChatBubble(role, text, id) {
+  var thread = document.getElementById('chatThread');
+  // Remove hint on first message
+  var hint = thread.querySelector('.chat-hint');
+  if (hint) hint.remove();
+
+  var div = document.createElement('div');
+  div.className = 'chat-bubble ' + role;
+  if (id) div.id = id;
+  div.textContent = text;
+  thread.appendChild(div);
+  thread.scrollTop = thread.scrollHeight;
+  return div;
+}
+
+function sendChat() {
+  var input = document.getElementById('chatInput');
+  var msg   = input.value.trim();
+  if (!msg) return;
+
+  var apiKey = document.getElementById('apiKey').value.trim();
+  if (!apiKey) { alert('Please enter your API key in the left sidebar first.'); return; }
+
+  // Disable send while streaming
+  var sendBtn = document.getElementById('chatSendBtn');
+  sendBtn.disabled = true;
+  input.value = '';
+  input.style.height = 'auto';
+
+  // Show user bubble
+  appendChatBubble('user', msg);
+
+  // Add to history
+  chatHistory.push({ role: 'user', content: msg });
+
+  // Show thinking bubble
+  var thinkId = 'chat-think-' + Date.now();
+  var thinkBubble = appendChatBubble('ai thinking-bubble', 'Thinking…', thinkId);
+
+  // Build system prompt with current response context
+  var currentResp = '';
+  var respText = document.getElementById('respText');
+  if (respText) currentResp = respText.textContent || '';
+  var email   = document.getElementById('emailInput').value.trim();
+  var ctx     = document.getElementById('historyInput').value.trim();
+  var policy  = document.getElementById('policyInput').value.trim();
+
+  var chatSystem = buildSystemPrompt()
+    + '\n\nYou are in a follow-up chat session with the customer service agent operator (not the customer).'
+    + ' The operator may ask you to refine the drafted response, explain reasoning, try a different approach, answer questions, or provide additional help.'
+    + (currentResp ? '\n\nCURRENT DRAFTED RESPONSE:\n' + currentResp : '')
+    + (email   ? '\n\nORIGINAL CUSTOMER MESSAGE:\n' + email  : '')
+    + (ctx     ? '\n\nCONVERSATION CONTEXT:\n' + ctx         : '')
+    + (policy  ? '\n\nPOLICIES:\n' + policy                  : '')
+    + '\n\nRespond conversationally and helpfully. If the operator asks you to rewrite or modify the response, provide the full revised response.';
+
+  // Build messages array for multi-turn — convert chatHistory to Anthropic format
+  var messages = chatHistory.map(function(m) {
+    return { role: m.role, content: [{ type: 'text', text: m.content }] };
+  });
+
+  var apiKeyVal = apiKey;
+  var model     = document.getElementById('modelSelect').value;
+
+  callAnthropic(apiKeyVal, model, chatSystem, messages)
+    .then(function(raw) {
+      var reply = raw.trim();
+      // Remove thinking bubble, show real reply
+      thinkBubble.remove();
+      appendChatBubble('ai', reply);
+      chatHistory.push({ role: 'assistant', content: reply });
+
+      // If the reply looks like a full revised draft, update the response panel
+      if (reply.length > 120 && /dear|hi |hello|thank you for|i understand|apolog/i.test(reply)) {
+        var parsed = parseResponse(reply);
+        if (parsed.text.length > 80) {
+          renderResponse(parsed);
+          lastRawResponse = reply;
+          // Add a small "updated" note in the chat
+          appendChatBubble('ai', '↑ Response panel updated with the revised draft.');
+          chatHistory.push({ role: 'assistant', content: '↑ Response panel updated with the revised draft.' });
+        }
+      }
+    })
+    .catch(function(e) {
+      thinkBubble.remove();
+      appendChatBubble('ai', 'Error: ' + e.message);
+    })
+    .finally(function() {
+      sendBtn.disabled = false;
+      document.getElementById('chatInput').focus();
+    });
+}
+
+// Reset chat history when a new response is generated
+var _origGenerate = generate;
+function generate(quick) {
+  chatHistory = [];
+  var thread = document.getElementById('chatThread');
+  if (thread) {
+    thread.innerHTML = '<div class="chat-hint">Ask the AI to refine the response, explain its reasoning, try a different tone, or answer any follow-up questions.</div>';
+  }
+  _origGenerate(quick);
+}
+
 function showError(msg) {
   document.getElementById('respBody').innerHTML =
     '<div class="error-box"><i class="ti ti-alert-circle" style="font-size:18px;flex-shrink:0;margin-top:1px"></i>'

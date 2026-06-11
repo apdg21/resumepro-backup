@@ -1904,14 +1904,7 @@ function buildUserContent(quick) {
 }
 
 // ── API callers ────────────────────────────────────────────────────────────
-function callAnthropic(apiKey, model, system, userContentOrMessages) {
-  // Support both single-turn (array of content blocks) and multi-turn (array of {role,content})
-  var messages;
-  if (Array.isArray(userContentOrMessages) && userContentOrMessages.length > 0 && userContentOrMessages[0].role) {
-    messages = userContentOrMessages;
-  } else {
-    messages = [{ role: 'user', content: userContentOrMessages }];
-  }
+function callAnthropic(apiKey, model, system, userContent) {
   return fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -1920,7 +1913,7 @@ function callAnthropic(apiKey, model, system, userContentOrMessages) {
       'anthropic-version': '2023-06-01',
       'anthropic-dangerous-direct-browser-access': 'true',
     },
-    body: JSON.stringify({ model: model, max_tokens: 1800, system: system, messages: messages })
+    body: JSON.stringify({ model: model, max_tokens: 1800, system: system, messages: [{ role: 'user', content: userContent }] })
   }).then(function(resp) {
     return resp.json().then(function(data) {
       if (!resp.ok) throw new Error(data.error ? data.error.message : 'Anthropic error ' + resp.status);
@@ -2109,64 +2102,58 @@ function sendChat() {
   var apiKey = document.getElementById('apiKey').value.trim();
   if (!apiKey) { alert('Please enter your API key in the left sidebar first.'); return; }
 
-  // Disable send while streaming
   var sendBtn = document.getElementById('chatSendBtn');
   sendBtn.disabled = true;
   input.value = '';
   input.style.height = 'auto';
 
-  // Show user bubble
   appendChatBubble('user', msg);
-
-  // Add to history
   chatHistory.push({ role: 'user', content: msg });
 
-  // Show thinking bubble
   var thinkId = 'chat-think-' + Date.now();
-  var thinkBubble = appendChatBubble('ai thinking-bubble', 'Thinking…', thinkId);
+  var thinkBubble = appendChatBubble('ai thinking-bubble', 'Thinking\u2026', thinkId);
 
-  // Build system prompt with current response context
+  // Build system prompt with current draft context
   var currentResp = '';
   var respText = document.getElementById('respText');
   if (respText) currentResp = respText.textContent || '';
-  var email   = document.getElementById('emailInput').value.trim();
-  var ctx     = document.getElementById('historyInput').value.trim();
-  var policy  = document.getElementById('policyInput').value.trim();
+  var email  = document.getElementById('emailInput').value.trim();
+  var ctx    = document.getElementById('historyInput').value.trim();
+  var policy = document.getElementById('policyInput').value.trim();
 
   var chatSystem = buildSystemPrompt()
     + '\n\nYou are in a follow-up chat session with the customer service agent operator (not the customer).'
-    + ' The operator may ask you to refine the drafted response, explain reasoning, try a different approach, answer questions, or provide additional help.'
+    + ' The operator may ask you to refine the drafted response, explain reasoning, try a different approach, or answer questions.'
     + (currentResp ? '\n\nCURRENT DRAFTED RESPONSE:\n' + currentResp : '')
     + (email   ? '\n\nORIGINAL CUSTOMER MESSAGE:\n' + email  : '')
     + (ctx     ? '\n\nCONVERSATION CONTEXT:\n' + ctx         : '')
     + (policy  ? '\n\nPOLICIES:\n' + policy                  : '')
-    + '\n\nRespond conversationally and helpfully. If the operator asks you to rewrite or modify the response, provide the full revised response.';
+    + '\n\nRespond conversationally and helpfully. If asked to rewrite the response, provide the full revised version.';
 
-  // Build messages array for multi-turn — convert chatHistory to Anthropic format
-  var messages = chatHistory.map(function(m) {
-    return { role: m.role, content: [{ type: 'text', text: m.content }] };
-  });
+  // Build user content — include prior turns as context so all providers work
+  var historyText = '';
+  if (chatHistory.length > 1) {
+    historyText = chatHistory.slice(0, -1).map(function(m) {
+      return (m.role === 'user' ? 'Operator: ' : 'Assistant: ') + m.content;
+    }).join('\n\n') + '\n\n';
+  }
+  var userContent = [{ type: 'text', text: historyText + 'Operator: ' + msg }];
 
-  var apiKeyVal = apiKey;
-  var model     = document.getElementById('modelSelect').value;
-
-  callAnthropic(apiKeyVal, model, chatSystem, messages)
+  callProvider(chatSystem, userContent)
     .then(function(raw) {
       var reply = raw.trim();
-      // Remove thinking bubble, show real reply
       thinkBubble.remove();
       appendChatBubble('ai', reply);
       chatHistory.push({ role: 'assistant', content: reply });
 
-      // If the reply looks like a full revised draft, update the response panel
+      // If reply looks like a full revised draft, update the response panel
       if (reply.length > 120 && /dear|hi |hello|thank you for|i understand|apolog/i.test(reply)) {
         var parsed = parseResponse(reply);
         if (parsed.text.length > 80) {
           renderResponse(parsed);
           lastRawResponse = reply;
-          // Add a small "updated" note in the chat
-          appendChatBubble('ai', '↑ Response panel updated with the revised draft.');
-          chatHistory.push({ role: 'assistant', content: '↑ Response panel updated with the revised draft.' });
+          appendChatBubble('ai', '\u2191 Response panel updated with the revised draft.');
+          chatHistory.push({ role: 'assistant', content: '\u2191 Response panel updated with the revised draft.' });
         }
       }
     })

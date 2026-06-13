@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W52LYHBGZY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-W52LYHBGZY');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campfire</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../header.css">
+    <link rel="stylesheet" href="../footer.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0F0F14;--surface:#1A1A24;--surface2:#252535;--surface3:#2E2E42;
+  --accent:#6C63FF;--accent-dim:rgba(108,99,255,.15);
+  --green:#2ECC97;--red:#FF6B6B;--yellow:#FFB347;
+  --text:#F0EDFF;--text-muted:#8885A8;--text-dim:#5A5875;
+  --border:rgba(255,255,255,.07);--border-accent:rgba(108,99,255,.4);
+  --radius:12px;--radius-sm:8px;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;z-index:100}
+.logo{font-family:'DM Serif Display',serif;font-size:20px;color:var(--text);display:flex;align-items:center;gap:8px}
+.logo span{color:var(--accent)}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.month-badge{font-size:12px;font-weight:500;color:var(--text-muted);background:var(--surface2);padding:4px 12px;border-radius:20px;border:1px solid var(--border)}
+.btn{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;padding:7px 14px;border-radius:var(--radius-sm);border:none;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#7B73FF;transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--surface2);color:var(--text)}
+.btn-ai{background:linear-gradient(135deg,#6C63FF,#A78BFA);color:#fff}
+.btn-ai:hover{opacity:.9;transform:translateY(-1px)}
+.btn-danger{background:rgba(255,107,107,.12);color:var(--red);border:1px solid rgba(255,107,107,.25)}
+.btn-danger:hover{background:rgba(255,107,107,.2)}
+.btn-sm{font-size:12px;padding:5px 10px}
+.btn-icon{width:32px;height:32px;padding:0;justify-content:center;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-muted);font-size:15px}
+.btn-icon:hover{color:var(--text);background:var(--surface3)}
+.app-body{display:flex;flex:1;overflow:hidden}
+.sidebar{width:260px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+.sidebar-header{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sidebar-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim)}
+.sidebar-header-right{display:flex;align-items:center;gap:6px}
+.select-mode-btn{font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;font-family:'Inter',sans-serif;transition:all .12s}
+.select-mode-btn:hover,.select-mode-btn.active{background:var(--surface2);color:var(--text);border-color:var(--border-accent)}
+.bulk-bar{display:none;padding:8px 12px;background:var(--surface2);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:var(--text-muted)}
+.bulk-bar.visible{display:flex}
+.campaign-list{flex:1;overflow-y:auto;padding:8px}
+.campaign-list::-webkit-scrollbar{width:4px}
+.campaign-list::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:4px}
+.campaign-item{padding:10px 12px;border-radius:var(--radius-sm);cursor:pointer;margin-bottom:2px;transition:all .12s;border:1px solid transparent;display:flex;align-items:center;gap:8px}
+.campaign-item:hover{background:var(--surface2)}
+.campaign-item.active{background:var(--accent-dim);border-color:var(--border-accent)}
+.campaign-item.selected{background:rgba(255,107,107,.07);border-color:rgba(255,107,107,.2)}
+.ci-check{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border);background:transparent;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .12s}
+.ci-check.checked{background:var(--red);border-color:var(--red);color:#fff}
+.ci-content{flex:1;min-width:0}
+.ci-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci-meta{font-size:11px;color:var(--text-dim);display:flex;gap:8px}
+.ci-type::before{content:'✉';font-size:10px}
+.sidebar-footer{padding:10px 12px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:6px}
+.sidebar-footer .btn{width:100%;justify-content:center}
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.main::-webkit-scrollbar{width:5px}
+.main::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:4px}
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:var(--text-dim);padding:40px}
+.empty-icon{font-size:48px;opacity:.4}
+.empty-state h2{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text-muted);font-weight:400}
+.empty-state p{font-size:13px;text-align:center;max-width:300px;line-height:1.6}
+.campaign-detail{padding:28px;display:flex;flex-direction:column;gap:24px}
+.detail-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.detail-eyebrow{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:6px}
+.detail-title{font-family:'DM Serif Display',serif;font-size:28px;font-weight:400;color:var(--text)}
+.detail-meta{display:flex;gap:12px;margin-top:8px;font-size:12px;color:var(--text-muted);flex-wrap:wrap}
+.meta-chip{display:flex;align-items:center;gap:5px;background:var(--surface2);padding:3px 10px;border-radius:20px;border:1px solid var(--border)}
+.detail-actions{display:flex;gap:8px;flex-shrink:0}
+.signal-bars{display:flex;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;overflow-x:auto}
+.signal-bar{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:68px;flex:1}
+.signal-track{width:100%;height:6px;background:var(--surface3);border-radius:3px;overflow:hidden}
+.signal-fill{height:100%;border-radius:3px;transition:width .8s cubic-bezier(.34,1.56,.64,1)}
+.fill-green{background:var(--green)}.fill-accent{background:var(--accent)}.fill-yellow{background:var(--yellow)}.fill-red{background:var(--red)}
+.signal-val{font-size:14px;font-weight:700;color:var(--text)}
+.signal-label{font-size:10px;color:var(--text-dim);text-align:center;line-height:1.3}
+.section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.section-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.section-title{font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px}
+.section-icon{font-size:14px}
+.section-body{padding:18px}
+.copy-preview{font-size:13px;color:var(--text-muted);line-height:1.7;white-space:pre-wrap;background:var(--surface2);border-radius:var(--radius-sm);padding:14px;max-height:120px;overflow-y:auto}
+.copy-empty{font-size:13px;color:var(--text-dim);font-style:italic}
+.design-preview{background:var(--surface2);border-radius:var(--radius-sm);overflow:hidden}
+.design-preview img{width:100%;height:auto;display:block}
+.design-preview iframe{width:100%;border:none;pointer-events:none;display:block}
+.design-tabs{display:flex;gap:4px;margin-bottom:12px}
+.tab-btn{font-size:11px;font-weight:500;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;cursor:pointer;color:var(--text-dim);font-family:'Inter',sans-serif;transition:all .12s}
+.tab-btn.active{background:var(--surface3);color:var(--text);border-color:var(--border-accent)}
+.drop-zone{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:20px;text-align:center;cursor:pointer;transition:all .15s;color:var(--text-dim);font-size:12px}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--accent);background:var(--accent-dim);color:var(--text-muted)}
+.drop-zone .drop-icon{font-size:20px;margin-bottom:6px;display:block}
+.html-input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:monospace;font-size:11px;padding:10px;border-radius:var(--radius-sm);resize:none;height:80px;outline:none;transition:border-color .15s}
+.html-input:focus{border-color:var(--accent)}
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.metric-card{background:var(--surface2);border-radius:var(--radius-sm);padding:12px 14px;border:1px solid var(--border);transition:border-color .15s}
+.metric-card:hover{border-color:var(--border-accent)}
+.metric-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--text-dim);margin-bottom:6px;line-height:1.3}
+.metric-value{font-size:20px;font-weight:700;color:var(--text)}
+.metric-sub{font-size:10px;color:var(--text-dim);margin-top:2px}
+.metric-value.good{color:var(--green)}.metric-value.bad{color:var(--red)}.metric-value.neutral{color:var(--yellow)}
+.ai-section{background:linear-gradient(135deg,rgba(108,99,255,.08),rgba(167,139,250,.05));border:1px solid var(--border-accent);border-radius:var(--radius);overflow:hidden}
+.ai-section .section-head{background:transparent;border-bottom-color:var(--border-accent)}
+.ai-body{padding:18px}
+.ai-placeholder{text-align:center;padding:20px;color:var(--text-dim);font-size:13px}
+.ai-big-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#6C63FF,#A78BFA);color:#fff;border:none;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:10px 20px;cursor:pointer;margin-top:12px;transition:all .15s}
+.ai-big-btn:hover{opacity:.9;transform:translateY(-1px)}
+.ai-result{font-size:13px;color:var(--text-muted);line-height:1.8}
+.ai-result h4{font-size:12px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.07em;margin:14px 0 6px}
+.ai-result h4:first-child{margin-top:0}
+.ai-result ul{padding-left:16px}
+.ai-result li{margin-bottom:4px}
+.ai-thinking{display:flex;align-items:center;gap:8px;color:var(--text-dim);font-size:13px;padding:8px 0}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1s infinite}
+.ai-dot:nth-child(2){animation-delay:.2s}.ai-dot:nth-child(3){animation-delay:.4s}
+@keyframes pulse{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+.design-ai-bar{background:rgba(108,99,255,.06);border:1px solid rgba(108,99,255,.2);border-radius:var(--radius-sm);padding:10px 14px;margin-top:10px;font-size:12px;color:var(--text-muted);display:none}
+.design-ai-bar.visible{display:block}
+.design-ai-bar strong{color:var(--accent)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:1000;backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;width:480px;max-width:95vw;max-height:90vh;overflow-y:auto;transform:translateY(12px);transition:transform .2s}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-wide{width:680px}
+.modal-title{font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:4px}
+.modal-sub{font-size:12px;color:var(--text-dim);margin-bottom:20px}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+.form-group{margin-bottom:16px}
+.form-label{font-size:12px;font-weight:500;color:var(--text-muted);margin-bottom:6px;display:block}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:9px 12px;border-radius:var(--radius-sm);outline:none;transition:border-color .15s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent)}
+.form-select option{background:var(--surface2)}
+.form-textarea{resize:vertical;min-height:80px}
+.metrics-form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.metrics-form .form-group{margin-bottom:0}
+.metrics-form .full-width{grid-column:1/-1}
+.import-methods{display:flex;gap:10px;margin-bottom:16px}
+.import-method-btn{flex:1;padding:12px;border:1px solid var(--border);background:var(--surface2);border-radius:var(--radius-sm);cursor:pointer;text-align:center;transition:all .15s;color:var(--text-muted);font-size:12px;font-family:'Inter',sans-serif}
+.import-method-btn:hover,.import-method-btn.active{border-color:var(--accent);background:var(--accent-dim);color:var(--text)}
+.import-method-btn .im-icon{font-size:20px;display:block;margin-bottom:6px}
+.toast{position:fixed;bottom:84px;right:24px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:13px;padding:10px 16px;border-radius:var(--radius-sm);z-index:9999;transform:translateY(20px);opacity:0;transition:all .2s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500}
+.tag-email{background:rgba(108,99,255,.15);color:#A78BFA}
+.tag-sms{background:rgba(46,204,151,.12);color:var(--green)}
+.tag-push{background:rgba(255,179,71,.12);color:var(--yellow)}
+.no-campaigns-msg{padding:40px 16px;text-align:center;font-size:12px;color:var(--text-dim)}
+.no-campaigns-msg .nc-icon{font-size:28px;margin-bottom:8px}
+/* BRAND SWITCHER */
+.brand-switcher{position:relative;display:flex;align-items:center}
+.brand-btn{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:5px 12px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:var(--text);transition:all .15s;max-width:200px}
+.brand-btn:hover{background:var(--surface3);border-color:var(--border-accent)}
+.brand-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.brand-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px}
+.brand-arrow{font-size:10px;color:var(--text-dim);flex-shrink:0}
+.brand-dropdown{position:absolute;top:calc(100% + 6px);left:0;min-width:220px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 8px 32px rgba(0,0,0,.4);z-index:200;overflow:hidden;display:none}
+.brand-dropdown.open{display:block}
+.brand-dd-header{padding:10px 14px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);border-bottom:1px solid var(--border)}
+.brand-dd-item{padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:background .1s;font-size:13px;color:var(--text)}
+.brand-dd-item:hover{background:var(--surface2)}
+.brand-dd-item.active-brand{background:var(--accent-dim);color:var(--accent)}
+.brand-dd-item .bd-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.brand-dd-item .bd-name{flex:1}
+.brand-dd-item .bd-count{font-size:11px;color:var(--text-dim)}
+.brand-dd-divider{height:1px;background:var(--border);margin:4px 0}
+.brand-dd-action{padding:10px 14px;font-size:12px;color:var(--accent);cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .1s}
+.brand-dd-action:hover{background:var(--surface2)}
+/* COLOR SWATCHES */
+.color-swatches{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.color-swatch{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s;flex-shrink:0}
+.color-swatch:hover{transform:scale(1.15)}
+/* MANAGE BRANDS LIST */
+.manage-brands-list{display:flex;flex-direction:column;gap:8px;max-height:300px;overflow-y:auto}
+/* CHAT */
+.chat-fab{position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#6C63FF,#A78BFA);border:none;cursor:pointer;font-size:20px;z-index:500;box-shadow:0 4px 20px rgba(108,99,255,.4);transition:all .2s;display:flex;align-items:center;justify-content:center;color:#fff}
+.chat-fab:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(108,99,255,.5)}
+.chat-panel{position:fixed;bottom:84px;right:24px;width:380px;max-width:calc(100vw - 48px);height:520px;max-height:calc(100vh - 120px);background:var(--surface);border:1px solid var(--border-accent);border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.5);display:flex;flex-direction:column;z-index:499;transform:translateY(20px) scale(.97);opacity:0;pointer-events:none;transition:all .2s}
+.chat-panel.open{transform:translateY(0) scale(1);opacity:1;pointer-events:all}
+.chat-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.chat-header-left{display:flex;align-items:center;gap:10px}
+.chat-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#6C63FF,#A78BFA);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.chat-title{font-size:13px;font-weight:600;color:var(--text)}
+.chat-subtitle{font-size:11px;color:var(--text-dim)}
+.chat-close-btn{background:transparent;border:none;cursor:pointer;color:var(--text-dim);font-size:18px;padding:4px;line-height:1}
+.chat-close-btn:hover{color:var(--text)}
+.chat-context-bar{padding:8px 14px;background:rgba(108,99,255,.06);border-bottom:1px solid rgba(108,99,255,.1);font-size:11px;color:var(--accent);display:flex;align-items:center;gap:6px}
+.chat-context-bar.hidden{display:none}
+.chat-messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.chat-messages::-webkit-scrollbar{width:3px}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:2px}
+.chat-msg{display:flex;gap:8px;max-width:92%}
+.chat-msg.user{flex-direction:row-reverse;align-self:flex-end}
+.chat-msg.ai{align-self:flex-start}
+.msg-avatar{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:2px}
+.msg-avatar.ai-av{background:linear-gradient(135deg,#6C63FF,#A78BFA);color:#fff}
+.msg-avatar.user-av{background:var(--surface3);color:var(--text-muted)}
+.msg-bubble{font-size:12.5px;line-height:1.65;padding:9px 12px;border-radius:12px;word-break:break-word}
+.chat-msg.ai .msg-bubble{background:var(--surface2);color:var(--text-muted);border-radius:4px 12px 12px 12px}
+.chat-msg.user .msg-bubble{background:var(--accent);color:#fff;border-radius:12px 4px 12px 12px}
+.msg-bubble h4{font-size:11px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin:10px 0 4px}
+.chat-msg.user .msg-bubble h4{color:rgba(255,255,255,.7)}
+.msg-bubble ul{padding-left:14px}
+.msg-bubble li{margin-bottom:3px}
+.msg-bubble strong{font-weight:600}
+.chat-input-area{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end}
+.chat-input{flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Inter',sans-serif;font-size:12.5px;padding:8px 12px;border-radius:10px;outline:none;resize:none;max-height:90px;min-height:36px;transition:border-color .15s;line-height:1.5}
+.chat-input:focus{border-color:var(--accent)}
+.chat-send{width:34px;height:34px;border-radius:8px;background:var(--accent);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;flex-shrink:0;transition:all .15s}
+.chat-send:hover{background:#7B73FF}
+.chat-send:disabled{opacity:.4;cursor:default}
+.chat-suggestions{padding:0 14px 10px;display:flex;gap:6px;flex-wrap:wrap}
+.chat-suggest-btn{font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;font-family:'Inter',sans-serif;transition:all .12s}
+.chat-suggest-btn:hover{background:var(--surface2);color:var(--text);border-color:var(--border-accent)}
+.model-group{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+.model-chip{font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:var(--surface2);color:var(--text-dim);cursor:pointer;font-family:'Inter',sans-serif;transition:all .12s;user-select:none}
+.model-chip:hover{color:var(--text);border-color:var(--accent)}
+.model-chip.selected{background:var(--accent-dim);color:var(--accent);border-color:var(--accent)}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px}
+
+/* Mobile actions bar (hidden on desktop) */
+.mobile-actions{display:none;padding:6px 8px;border-top:1px solid var(--border);gap:6px;flex-wrap:wrap}
+/* ═══════════════════════════════════════════════
+   MOBILE RESPONSIVE  (≤ 640px)
+═══════════════════════════════════════════════ */
+@media (max-width: 640px) {
+
+  /* ── Body: allow scrolling on mobile ── */
+  body { height:100%; overflow:auto; }
+
+  /* ── Topbar: tighten up ── */
+  .topbar {
+    padding: 0 12px;
+    height: 52px;
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+  .logo { font-size: 17px; }
+  .month-badge { display: none; }
+
+  /* Hide secondary topbar buttons, keep only the main one */
+  .topbar-right .btn-ghost { display: none; }
+  #newCampaignTopBtn { font-size: 11px; padding: 5px 10px; }
+
+  /* Brand name shorter */
+  .brand-name { max-width: 80px; font-size: 12px; }
+  .brand-btn  { padding: 4px 8px; }
+
+  /* ── App body: stack sidebar + main vertically ── */
+  .app-body {
+    flex-direction: column;
+    overflow: visible;
+    height: auto;
+    min-height: calc(100vh - 52px);
+  }
+
+  /* ── Sidebar: horizontal scrolling campaign strip ── */
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    max-height: none;
+    overflow: visible;
+  }
+  .sidebar-header { padding: 8px 12px; }
+  .sidebar-footer { display: none; } /* overall analysis → moved to main action */
+  .mobile-actions { display: flex; }
+
+  /* Campaign list: horizontal scroll row */
+  .campaign-list {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 6px 8px;
+    gap: 6px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .campaign-list::-webkit-scrollbar { display: none; }
+
+  .campaign-item {
+    flex-shrink: 0;
+    width: 160px;
+    margin-bottom: 0;
+    padding: 8px 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .ci-name  { font-size: 12px; white-space: normal; line-height: 1.3; }
+  .ci-meta  { font-size: 10px; }
+  .no-campaigns-msg { padding: 16px; font-size: 11px; white-space: nowrap; }
+
+  /* Bulk bar */
+  .bulk-bar { padding: 6px 10px; font-size: 11px; }
+
+  /* ── Main: full width, scrollable ── */
+  .main {
+    flex: none;
+    width: 100%;
+    overflow-y: visible;
+    min-height: 60vh;
+  }
+
+  /* ── Campaign detail ── */
+  .campaign-detail { padding: 16px 14px; gap: 16px; }
+
+  .detail-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .detail-title  { font-size: 22px; }
+  .detail-eyebrow { font-size: 10px; }
+  .detail-actions {
+    flex-direction: row;
+    gap: 6px;
+  }
+  .detail-meta { gap: 6px; }
+  .meta-chip { font-size: 11px; padding: 2px 8px; }
+
+  /* Signal bars: horizontal scroll */
+  .signal-bars { padding: 12px; gap: 12px; }
+  .signal-bar  { min-width: 56px; }
+  .signal-val  { font-size: 12px; }
+  .signal-label { font-size: 9px; }
+
+  /* Sections */
+  .section-head { padding: 10px 14px; }
+  .section-body { padding: 14px; }
+  .section-title { font-size: 12px; }
+
+  /* Metrics grid: 2 cols on mobile */
+  .metrics-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .metric-value { font-size: 17px; }
+  .metric-label { font-size: 9px; }
+
+  /* AI section */
+  .ai-body { padding: 14px; }
+  .ai-big-btn { font-size: 12px; padding: 8px 16px; }
+  .ai-result { font-size: 12px; }
+
+  /* Empty state */
+  .empty-state { padding: 30px 20px; gap: 12px; }
+  .empty-icon  { font-size: 36px; }
+  .empty-state h2 { font-size: 18px; }
+
+  /* ── Modals: full screen sheet ── */
+  .modal-overlay {
+    align-items: flex-end;
+  }
+  .modal {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 16px 16px 0 0;
+    padding: 20px 16px;
+    max-height: 92vh;
+  }
+  .modal-wide { width: 100% !important; }
+  .modal-title { font-size: 18px; }
+
+  /* Metrics form: 1 col on small screens */
+  .metrics-form { grid-template-columns: 1fr; }
+
+  /* Import methods */
+  .import-method-btn { padding: 10px 8px; font-size: 11px; }
+
+  /* ── Chat panel: full width bottom sheet ── */
+  .chat-panel {
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 16px 16px 0 0;
+    height: 75vh;
+    max-height: 75vh;
+  }
+  .chat-fab {
+    bottom: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+
+  /* Toast */
+  .toast {
+    bottom: 80px;
+    right: 12px;
+    left: 12px;
+    text-align: center;
+  }
+
+  /* Brand dropdown: full width */
+  .brand-dropdown {
+    left: 0;
+    right: 0;
+    min-width: unset;
+    position: fixed;
+    top: 52px;
+  }
+
+  /* Design tabs */
+  .design-tabs { gap: 6px; }
+  .tab-btn { font-size: 11px; padding: 5px 10px; }
+
+  /* Copy preview */
+  .copy-preview { font-size: 12px; }
+}
+
+/* ── Medium screens 641–900px: sidebar narrower ── */
+@media (min-width: 641px) and (max-width: 900px) {
+  .sidebar { width: 200px; }
+  .campaign-detail { padding: 20px; }
+  .month-badge { display: none; }
+  .topbar-right .btn-ghost:not(#newCampaignTopBtn) { display: none; }
+  .modal-wide { width: 95vw; }
+}
+
+</style>
+</head>
+<body>
+<header>
+    <div class="header-content">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+
+        <!-- Nav + Hamburger -->
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+
+            <ul class="header-nav-menu" role="menubar">
+
+                <li class="header-nav-item" role="none">
+                    <a href="index.html" class="header-nav-link" role="menuitem">Home</a>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Templates
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                    </a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="resume-templates.html"   class="header-dropdown-item" role="menuitem">Resume Templates</a>
+                        <a href="portfolio-templates.html" class="header-dropdown-item" role="menuitem">Portfolio Templates</a>
+                    </div>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Apps
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                    </a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="android-applications.html"   class="header-dropdown-item" role="menuitem">Android Applications</a>
+                        <a href="family-connection-tools.html" class="header-dropdown-item" role="menuitem">Web Applications</a>
+                    </div>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="blog-list.html" class="header-nav-link" role="menuitem">Blog</a>
+                </li>
+
+                <li class="header-nav-item" role="none" style="display: none;">
+                    <a href="klaviyo-analytics.html" class="header-nav-link" role="menuitem">Klaviyo Analytics</a>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Tools
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                    </a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="email-builder.html"  class="header-dropdown-item" role="menuitem">Email Builder</a>
+                        <a href="inliner.html"              class="header-dropdown-item" role="menuitem">Inliner</a>
+                        <a href="klaviyo-tool.html"               class="header-dropdown-item" role="menuitem">Klaviyo Tool</a>
+                        <a href="omnisend.html"                   class="header-dropdown-item" role="menuitem">Omnisend Analytics</a>
+						<a href="adg-customer-service-agent.html"   class="header-dropdown-item" role="menuitem">CS Agent</a>
+						<a href="campfire.html"   class="header-dropdown-item" role="menuitem">Campfire🔥</a>
+                    </div>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="about.html" class="header-nav-link" role="menuitem">About</a>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="contact.html" class="header-nav-link" role="menuitem">Contact</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</header>
+
+
+<div class="topbar">
+  <div style="display:flex;align-items:center;gap:16px">
+    <div class="logo">🔥 <span>Campfire</span></div>
+    <div class="brand-switcher" id="brandSwitcher">
+      <button class="brand-btn" onclick="toggleBrandDropdown()" id="brandBtn">
+        <span class="brand-dot" id="brandDot" style="background:#6C63FF"></span>
+        <span class="brand-name" id="brandNameDisplay">No brand</span>
+        <span class="brand-arrow">▾</span>
+      </button>
+      <div class="brand-dropdown" id="brandDropdown">
+        <div class="brand-dd-header">Your Brands</div>
+        <div id="brandDropdownList"></div>
+        <div class="brand-dd-divider"></div>
+        <div class="brand-dd-action" onclick="openAddBrandModal()">＋ Add Brand</div>
+        <div class="brand-dd-action" onclick="openManageBrandsModal()">⚙ Manage Brands</div>
+      </div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="month-badge" id="currentMonth"></div>
+    <button class="btn btn-ghost btn-sm" onclick="openImportModal()">⬆ Import History</button>
+    <button class="btn btn-ghost btn-sm" onclick="openApiModal()">🔑 AI Settings</button>
+    <button class="btn btn-primary btn-sm" id="newCampaignTopBtn" onclick="openAddCampaignModal()">+ New Campaign</button>
+  </div>
+</div>
+
+<div class="app-body">
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">Campaigns</span>
+      <div class="sidebar-header-right">
+        <span id="campaignCount" style="font-size:11px;color:var(--text-dim)">0</span>
+        <button class="select-mode-btn" id="selectModeBtn" onclick="toggleSelectMode()">Select</button>
+      </div>
+    </div>
+    <div class="bulk-bar" id="bulkBar">
+      <span id="bulkCount">0 selected</span>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-danger btn-sm" onclick="deleteSelected()">🗑 Delete</button>
+        <button class="btn btn-ghost btn-sm" onclick="toggleSelectMode()">Cancel</button>
+      </div>
+    </div>
+    <div class="campaign-list" id="campaignList">
+      <div class="no-campaigns-msg"><div class="nc-icon">📭</div>No campaigns yet.<br>Add one to get started.</div>
+    </div>
+    <div class="sidebar-footer">
+      <button class="btn btn-ghost" style="font-size:12px" onclick="showOverallAnalysis()">📊 Overall Analysis</button>
+    </div>
+    <!-- Mobile-only action bar shown below campaign strip -->
+    <div class="mobile-actions" id="mobileActions">
+      <button class="btn btn-ghost btn-sm" onclick="showOverallAnalysis()">📊 Analysis</button>
+      <button class="btn btn-ghost btn-sm" onclick="openImportModal()">⬆ History</button>
+      <button class="btn btn-ghost btn-sm" onclick="openApiModal()">🔑 AI</button>
+    </div>
+  </div>
+  <div class="main" id="mainPanel">
+    <div class="empty-state">
+      <div class="empty-icon">📬</div>
+      <h2>Select a campaign</h2>
+      <p>Choose a campaign from the sidebar, or add a new one to start tracking performance.</p>
+      <button class="btn btn-primary" onclick="openAddCampaignModal()">+ Add Campaign</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHAT FAB -->
+<button class="chat-fab" id="chatFab" onclick="toggleChat()" title="Ask AI">✨</button>
+
+<!-- CHAT PANEL -->
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <div class="chat-header-left">
+      <div class="chat-avatar">✨</div>
+      <div>
+        <div class="chat-title">Campfire AI</div>
+        <div class="chat-subtitle" id="chatSubtitle">Ask anything about your campaigns</div>
+      </div>
+    </div>
+    <button class="chat-close-btn" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-context-bar hidden" id="chatContextBar">📌 Context: <span id="chatContextName"></span></div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="chat-msg ai">
+      <div class="msg-avatar ai-av">✨</div>
+      <div class="msg-bubble">Hi! I'm your Campfire AI analyst. I can see everything you've added to each campaign — names, dates, subject lines, full email body copy, HTML design code, and all performance metrics. Just ask!</div>
+    </div>
+  </div>
+  <div class="chat-suggestions" id="chatSuggestions">
+    <button class="chat-suggest-btn" onclick="sendSuggestion('How are my campaigns performing overall?')">Overall performance?</button>
+    <button class="chat-suggest-btn" onclick="sendSuggestion('What should I improve for the next campaign?')">Next campaign tips</button>
+    <button class="chat-suggest-btn" onclick="sendSuggestion('Which campaign performed best and why?')">Best campaign?</button>
+  </div>
+  <div class="chat-input-area">
+    <textarea class="chat-input" id="chatInput" placeholder="Ask about your campaigns..." rows="1" onkeydown="chatKeydown(event)" oninput="autoResizeChat(this)"></textarea>
+    <button class="chat-send" id="chatSendBtn" onclick="sendChat()">&#10148;</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════════════════════════ MODALS ═══ -->
+
+<!-- ADD BRAND MODAL -->
+<div class="modal-overlay" id="addBrandModal">
+  <div class="modal">
+    <div class="modal-title">New Brand</div>
+    <div class="modal-sub">Give your brand a name and pick a color.</div>
+    <div class="form-group">
+      <label class="form-label">Brand Name</label>
+      <input class="form-input" id="newBrandName" placeholder="e.g. Acme Store" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Brand Color</label>
+      <div class="color-swatches">
+        <div class="color-swatch" data-color="#6C63FF" style="background:#6C63FF;border-color:white"></div>
+        <div class="color-swatch" data-color="#2ECC97" style="background:#2ECC97"></div>
+        <div class="color-swatch" data-color="#FF6B6B" style="background:#FF6B6B"></div>
+        <div class="color-swatch" data-color="#FFB347" style="background:#FFB347"></div>
+        <div class="color-swatch" data-color="#A78BFA" style="background:#A78BFA"></div>
+        <div class="color-swatch" data-color="#38BDF8" style="background:#38BDF8"></div>
+        <div class="color-swatch" data-color="#FB7185" style="background:#FB7185"></div>
+        <div class="color-swatch" data-color="#34D399" style="background:#34D399"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('addBrandModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addBrand()">Create Brand</button>
+    </div>
+  </div>
+</div>
+
+<!-- MANAGE BRANDS MODAL -->
+<div class="modal-overlay" id="manageBrandsModal">
+  <div class="modal">
+    <div class="modal-title">Manage Brands</div>
+    <div class="modal-sub">Switch, open, or delete your brands.</div>
+    <div class="manage-brands-list" id="manageBrandsList"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('manageBrandsModal')">Close</button>
+      <button class="btn btn-primary" onclick="closeModal('manageBrandsModal');openAddBrandModal()">+ Add Brand</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD CAMPAIGN MODAL -->
+<div class="modal-overlay" id="addCampaignModal">
+  <div class="modal">
+    <div class="modal-title">New Campaign</div>
+    <div class="modal-sub">Give your campaign a name to get started.</div>
+    <div class="form-group"><label class="form-label">Campaign Name</label><input class="form-input" id="newCampaignName" placeholder="e.g. Summer Sale Newsletter" /></div>
+    <div class="form-group"><label class="form-label">Type</label>
+      <select class="form-select" id="newCampaignType">
+        <option value="Email">Email</option><option value="SMS">SMS</option><option value="Push">Push</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Send Date</label><input type="date" class="form-input" id="newCampaignDate" /></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('addCampaignModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addCampaign()">Create Campaign</button>
+    </div>
+  </div>
+</div>
+
+<!-- COPY MODAL -->
+<div class="modal-overlay" id="copyModal">
+  <div class="modal">
+    <div class="modal-title">Campaign Copy</div>
+    <div class="modal-sub">Paste or type the email body copy.</div>
+    <div class="form-group"><label class="form-label">Subject Line</label><input class="form-input" id="copySubject" placeholder="e.g. Don't miss out — 30% off ends tonight" /></div>
+    <div class="form-group"><label class="form-label">Email Body</label><textarea class="form-textarea" id="copyBody" rows="6" placeholder="Paste your email copy here..."></textarea></div>
+    <div class="form-group"><label class="form-label">Preheader</label><input class="form-input" id="copyPreheader" placeholder="Preview text shown in inbox..." /></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('copyModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveCopy()">Save Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- DESIGN MODAL -->
+<div class="modal-overlay" id="designModal">
+  <div class="modal modal-wide">
+    <div class="modal-title">Campaign Design</div>
+    <div class="modal-sub">Upload a screenshot or paste HTML code.</div>
+    <div class="design-tabs">
+      <button class="tab-btn active" onclick="switchDesignTab('upload',this)">📷 Upload Image</button>
+      <button class="tab-btn" onclick="switchDesignTab('html',this)">💻 HTML Code</button>
+    </div>
+    <div id="designUploadPane">
+      <div class="drop-zone" id="dropZone" onclick="document.getElementById('imgUpload').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleImageDrop(event)">
+        <span class="drop-icon">🖼</span>Drop image here or click to browse
+      </div>
+      <input type="file" id="imgUpload" accept="image/*" style="display:none" onchange="handleImageFile(this)" />
+      <div id="imgPreviewWrap" style="display:none;margin-top:10px"><img id="imgPreview" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px" /></div>
+    </div>
+    <div id="designHtmlPane" style="display:none">
+      <textarea class="html-input" id="htmlInput" rows="5" placeholder="Paste your email HTML here..."></textarea>
+      <div id="htmlPreviewContainer" style="margin-top:10px"></div>
+    </div>
+    <div id="designAiBar" class="design-ai-bar"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('designModal')">Cancel</button>
+      <button class="btn btn-ai" onclick="analyzeDesignWithAI()">✨ Analyze Design</button>
+      <button class="btn btn-primary" onclick="saveDesign()">Save Design</button>
+    </div>
+  </div>
+</div>
+
+<!-- METRICS MODAL -->
+<div class="modal-overlay" id="metricsModal">
+  <div class="modal modal-wide">
+    <div class="modal-title">Campaign Metrics</div>
+    <div class="modal-sub">Paste a row from your export, or fill in manually.</div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px">
+      <div style="font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:8px">📋 Paste from Klaviyo / export</div>
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;line-height:1.6">
+        Copy a data row (tab-separated) and paste it below. Format:<br>
+        <span style="color:var(--accent);font-family:monospace">Name · Type · Send date · Month · Messages sent · Open rate · Open qty · Click rate · Click qty · Order rate · Order qty · Revenue · Failed rate · Failed qty · Spam rate · Spam qty · Unsub rate · Unsub qty</span>
+      </div>
+      <textarea class="form-textarea" id="metricsPaste" rows="3" placeholder="May Final Hours: Clear the Cutting Table&#9;Email&#9;5/31/2026&#9;May&#9;1145&#9;60.00%&#9;688&#9;1.80%&#9;21&#9;0%&#9;1&#9;€26.85&#9;0.00%&#9;0&#9;0%&#9;0&#9;0%&#9;1" style="font-size:11px;font-family:monospace"></textarea>
+      <div id="parseStatus" style="font-size:11px;margin-top:6px;min-height:16px"></div>
+      <button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="parseMetricsRow()">🔍 Parse Row</button>
+    </div>
+    <div style="font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:10px">Or enter manually:</div>
+    <div class="metrics-form">
+      <div class="form-group"><label class="form-label">Messages Sent</label><input class="form-input" id="mSent" type="number" placeholder="1145" /></div>
+      <div class="form-group"><label class="form-label">Month</label><input class="form-input" id="mMonth" placeholder="May" /></div>
+      <div class="form-group"><label class="form-label">Open Rate (%)</label><input class="form-input" id="mOpen" type="number" step="0.01" placeholder="60.00" /></div>
+      <div class="form-group"><label class="form-label">Opens (qty)</label><input class="form-input" id="mOpenCount" type="number" placeholder="688" /></div>
+      <div class="form-group"><label class="form-label">Click Rate (%)</label><input class="form-input" id="mClick" type="number" step="0.01" placeholder="1.80" /></div>
+      <div class="form-group"><label class="form-label">Clicks (qty)</label><input class="form-input" id="mClickCount" type="number" placeholder="21" /></div>
+      <div class="form-group"><label class="form-label">Placed Order Rate (%)</label><input class="form-input" id="mOrder" type="number" step="0.01" placeholder="0" /></div>
+      <div class="form-group"><label class="form-label">Orders (qty)</label><input class="form-input" id="mOrderCount" type="number" placeholder="1" /></div>
+      <div class="form-group"><label class="form-label">Revenue</label><input class="form-input" id="mRevenue" placeholder="€26.85 or 26.85" /></div>
+      <div class="form-group"><label class="form-label">Failed Delivery (%)</label><input class="form-input" id="mFailed" type="number" step="0.01" placeholder="0.00" /></div>
+      <div class="form-group"><label class="form-label">Failed (qty)</label><input class="form-input" id="mFailedCount" type="number" placeholder="0" /></div>
+      <div class="form-group"><label class="form-label">Spam Rate (%)</label><input class="form-input" id="mSpam" type="number" step="0.01" placeholder="0" /></div>
+      <div class="form-group"><label class="form-label">Spam (qty)</label><input class="form-input" id="mSpamCount" type="number" placeholder="0" /></div>
+      <div class="form-group"><label class="form-label">Unsubscribe Rate (%)</label><input class="form-input" id="mUnsub" type="number" step="0.01" placeholder="0" /></div>
+      <div class="form-group"><label class="form-label">Unsubs (qty)</label><input class="form-input" id="mUnsubCount" type="number" placeholder="1" /></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('metricsModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveMetrics()">Save Metrics</button>
+    </div>
+  </div>
+</div>
+
+<!-- AI SETTINGS MODAL -->
+<div class="modal-overlay" id="apiModal">
+  <div class="modal modal-wide">
+    <div class="modal-title">AI Settings</div>
+    <div class="modal-sub">Choose your provider, model, and API key. Stored locally only.</div>
+    <div class="form-group">
+      <label class="form-label">Provider</label>
+      <select class="form-select" id="aiProviderSelect" onchange="updateApiKeySection()">
+        <option value="anthropic">Anthropic (Claude)</option>
+        <option value="openrouter">OpenRouter</option>
+        <option value="groq">Groq</option>
+        <option value="gemini">Google Gemini</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Model</label>
+      <div class="model-group" id="modelGroup"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">API Key</label>
+      <input class="form-input" id="apiKeyInput" type="password" placeholder="sk-ant-..." />
+    </div>
+    <div id="providerStatus" style="font-size:12px;color:var(--text-dim);margin-top:4px"></div>
+    <div id="activeSettingsBadge" style="display:none;margin-top:12px;padding:10px 14px;background:var(--surface2);border-radius:8px;font-size:12px;color:var(--text-muted)"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('apiModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveApiKey()">Save Settings</button>
+    </div>
+  </div>
+</div>
+
+<!-- IMPORT MODAL -->
+<div class="modal-overlay" id="importModal">
+  <div class="modal modal-wide">
+    <div class="modal-title">Import Historical Data</div>
+    <div class="modal-sub">Import past campaign data as AI context. Not displayed — used silently to improve analysis.</div>
+    <div style="padding:10px 14px;background:rgba(108,99,255,.07);border:1px solid rgba(108,99,255,.2);border-radius:8px;font-size:12px;color:var(--text-muted);margin-bottom:16px">
+      ✨ <strong>AI context only</strong> — this data feeds the AI understanding of past performance patterns.
+    </div>
+    <div class="import-methods">
+      <div class="import-method-btn active" id="im_paste" onclick="switchImport('paste')"><span class="im-icon">📋</span>Paste Text</div>
+      <div class="import-method-btn" id="im_file" onclick="switchImport('file')"><span class="im-icon">📄</span>Upload File</div>
+    </div>
+    <div id="importPastePane">
+      <div class="form-group">
+        <label class="form-label">Paste CSV or tab-separated data (with header row)</label>
+        <textarea class="form-textarea" id="importPasteData" rows="8" placeholder="Campaign name	Type	Send date	Messages sent	Open rate	Click rate	..."></textarea>
+      </div>
+    </div>
+    <div id="importFilePane" style="display:none">
+      <div class="drop-zone" onclick="document.getElementById('csvUpload').click()" style="padding:30px">
+        <span class="drop-icon">📊</span>Drop CSV / TXT file here or click to browse
+      </div>
+      <input type="file" id="csvUpload" accept=".csv,.txt,.tsv" style="display:none" onchange="handleCSVFile(this)" />
+      <div id="csvPreview" style="margin-top:10px"></div>
+    </div>
+    <div id="importStatus" style="margin-top:8px;font-size:12px;color:var(--text-dim)"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('importModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="importHistoricalData()">Save as AI Context</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STATE ──
+var brands         = JSON.parse(localStorage.getItem('cf_brands')   || '[]');
+var activeBrandId  = localStorage.getItem('cf_activeBrand')         || null;
+var campaigns      = [];
+var historicalData = '';
+var apiKeys        = JSON.parse(localStorage.getItem('cf_apikeys')  || '{}');
+var aiModels       = JSON.parse(localStorage.getItem('cf_aimodels') || '{}');
+var activeCampaignId  = null;
+var editingField      = null;
+var tempDesign        = null;
+var selectMode        = false;
+var selectedIds       = new Set();
+var chatOpen          = false;
+var chatHistory       = [];
+var chatBusy          = false;
+var selectedBrandColor = '#6C63FF';
+
+var MODELS = {
+  anthropic: [
+    {id:'claude-opus-4-5',   label:'Claude Opus 4.5'},
+    {id:'claude-sonnet-4-5', label:'Claude Sonnet 4.5', rec:true},
+    {id:'claude-haiku-4-5',  label:'Claude Haiku 4.5'}
+  ],
+  openrouter: [
+    {id:'openai/gpt-oss-120b:free',          label:'GPT OSS 120B (free)'},
+    {id:'openai/gpt-oss-20b:free',           label:'GPT OSS 20B (free)'},
+    {id:'qwen/qwen3-next-80b-a3b-instruct:free',       label:'Qwen3 80B (free)'},
+    {id:'liquid/lfm-2.5-1.2b-thinking:free', label:'LFM 2.5 Thinking (free)'},
+    {id:'qwen/qwen3-8b:free',                label:'Qwen3 8B (free)'},
+    {id:'mistralai/mistral-7b-instruct:free',label:'Mistral 7B (free)'}
+  ],
+  groq: [
+    {id:'llama-3.3-70b-versatile', label:'Llama 3.3 70B', rec:true},
+    {id:'llama-3.1-8b-instant',    label:'Llama 3.1 8B Fastest'},
+    {id:'mixtral-8x7b-32768',      label:'Mixtral 8x7B'},
+    {id:'gemma2-9b-it',            label:'Gemma 2 9B'}
+  ],
+  gemini: [
+    {id:'gemini-3.5-flash',               label:'Gemini 3.5 Flash', rec:true},
+    {id:'gemini-3.1-flash-lite',          label:'Gemini 3.1 Flash-Lite'},
+    {id:'gemma-4-26b-a4b-it',             label:'Gemma 4-26b'},
+    {id:'gemma-4-31b-it',                 label:'Gemma-4-31b-it'}
+  ]
+};
+
+// ── HELPERS ──
+function uid()  { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function avg(arr) { return arr.length ? arr.reduce(function(s,v){return s+v;},0)/arr.length : 0; }
+function brandKey(suffix) { return 'cf_brand_' + activeBrandId + '_' + suffix; }
+function save()        { if (activeBrandId) localStorage.setItem(brandKey('campaigns'), JSON.stringify(campaigns)); }
+function saveHistory() { if (activeBrandId) localStorage.setItem(brandKey('history'), historicalData); }
+function saveBrands()  { localStorage.setItem('cf_brands', JSON.stringify(brands)); }
+function loadBrand(id) {
+  activeBrandId  = id;
+  localStorage.setItem('cf_activeBrand', id);
+  campaigns      = JSON.parse(localStorage.getItem('cf_brand_' + id + '_campaigns') || '[]');
+  historicalData = localStorage.getItem('cf_brand_' + id + '_history') || '';
+  activeCampaignId = null;
+  if (selectMode) toggleSelectMode();
+  selectedIds.clear();
+}
+function parseNum(s)     { if (!s) return 0; return parseFloat(String(s).replace(/[%€$£¥,\s]/g,'')) || 0; }
+function parseRevenue(s) { if (!s) return 0; return parseFloat(String(s).replace(/[€$£¥,\s]/g,'')) || 0; }
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('currentMonth').textContent =
+    new Date().toLocaleDateString('en-US',{month:'long',year:'numeric'});
+  document.getElementById('newCampaignDate').valueAsDate = new Date();
+
+  // Iframe auto-resize listener (for HTML design previews)
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.iframeId && e.data.h) {
+      var el = document.getElementById(e.data.iframeId);
+      if (el) el.style.height = (e.data.h + 20) + 'px';
+    }
+  });
+
+  // Color swatches — set up click handlers
+  document.querySelectorAll('.color-swatch').forEach(function(sw) {
+    sw.addEventListener('click', function() {
+      document.querySelectorAll('.color-swatch').forEach(function(s){
+        s.style.borderColor = 'transparent';
+      });
+      sw.style.borderColor = 'white';
+      selectedBrandColor = sw.dataset.color;
+    });
+  });
+
+  // Close brand dropdown on outside click
+  document.addEventListener('click', function(e) {
+    var sw = document.getElementById('brandSwitcher');
+    if (sw && !sw.contains(e.target)) closeBrandDropdown();
+  });
+
+  // Brand dropdown delegation
+  document.getElementById('brandDropdownList').addEventListener('click', function(e) {
+    var item = e.target.closest('[data-brand-id]');
+    if (item) switchBrand(item.dataset.brandId);
+  });
+
+  // Manage brands list delegation
+  document.getElementById('manageBrandsList').addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    var action = btn.dataset.action;
+    var id     = btn.dataset.id;
+    if (action === 'open')   { switchBrand(id); closeModal('manageBrandsModal'); }
+    if (action === 'delete') deleteBrand(id);
+  });
+
+  // Campaign list delegation
+  document.getElementById('campaignList').addEventListener('click', function(e) {
+    var item = e.target.closest('[data-campaign-id]');
+    if (!item) return;
+    if (selectMode) toggleSelect(item.dataset.campaignId);
+    else selectCampaign(item.dataset.campaignId);
+  });
+
+  // Model group delegation
+  document.getElementById('modelGroup').addEventListener('click', function(e) {
+    var chip = e.target.closest('[data-model-id]');
+    if (!chip) return;
+    var prov = document.getElementById('aiProviderSelect').value;
+    selectModel(prov, chip.dataset.modelId, chip);
+  });
+
+  // Enter key for brand/campaign name inputs
+  document.getElementById('newCampaignName').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') addCampaign();
+  });
+  document.getElementById('newBrandName').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') addBrand();
+  });
+
+  document.getElementById('htmlInput').addEventListener('input', function() {
+    if (!this.value.trim()) return;
+    tempDesign = {type:'html', data:this.value.trim()};
+    document.getElementById('htmlPreviewContainer').innerHTML =
+      '<div style="font-size:11px;color:var(--green);margin-top:4px">HTML ready</div>';
+  });
+
+  // Modal overlay click-to-close
+  document.querySelectorAll('.modal-overlay').forEach(function(o) {
+    o.addEventListener('click', function(e){ if (e.target === o) o.classList.remove('open'); });
+  });
+
+  // Escape key closes modals
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape')
+      document.querySelectorAll('.modal-overlay.open').forEach(function(m){ m.classList.remove('open'); });
+  });
+
+  // Boot
+  if (brands.length === 0) {
+    showNoBrandScreen();
+  } else {
+    var target = brands.find(function(b){ return b.id === activeBrandId; }) || brands[0];
+    loadBrand(target.id);
+    renderBrandSwitcher();
+    renderSidebar();
+    showHomeScreen();
+  }
+});
+
+// ── NO BRAND SCREEN ──
+function showNoBrandScreen() {
+  document.getElementById('brandNameDisplay').textContent = 'No brand';
+  document.getElementById('brandDot').style.background = '#5A5875';
+  document.getElementById('newCampaignTopBtn').style.display = 'none';
+  document.getElementById('mainPanel').innerHTML =
+    '<div class="empty-state">' +
+      '<div class="empty-icon">🏷️</div>' +
+      '<h2>Add your first brand</h2>' +
+      '<p>Campfire organizes campaigns by brand. Create a brand to get started.</p>' +
+      '<button class="btn btn-primary" onclick="openAddBrandModal()">+ Add Brand</button>' +
+    '</div>';
+  document.getElementById('campaignList').innerHTML =
+    '<div class="no-campaigns-msg"><div class="nc-icon">🏷️</div>No brand selected.</div>';
+  document.getElementById('campaignCount').textContent = '0';
+}
+
+// ── BRANDS ──
+function openAddBrandModal() {
+  closeBrandDropdown();
+  closeModal('manageBrandsModal');
+  document.getElementById('newBrandName').value = '';
+  // Reset color selection
+  selectedBrandColor = '#6C63FF';
+  document.querySelectorAll('.color-swatch').forEach(function(s){
+    s.style.borderColor = 'transparent';
+  });
+  var first = document.querySelector('[data-color="#6C63FF"]');
+  if (first) first.style.borderColor = 'white';
+  openModal('addBrandModal');
+  setTimeout(function(){ document.getElementById('newBrandName').focus(); }, 120);
+}
+
+function addBrand() {
+  var name = document.getElementById('newBrandName').value.trim();
+  if (!name) { showToast('Enter a brand name'); return; }
+  var b = {id:uid(), name:name, color:selectedBrandColor};
+  brands.push(b);
+  saveBrands();
+  closeModal('addBrandModal');
+  switchBrand(b.id);
+  showToast('Brand created: ' + name);
+}
+
+function switchBrand(id) {
+  loadBrand(id);
+  renderBrandSwitcher();
+  renderSidebar();
+  showHomeScreen();
+  document.getElementById('newCampaignTopBtn').style.display = '';
+  closeBrandDropdown();
+  chatHistory = [];
+  updateChatContext();
+}
+
+function renderBrandSwitcher() {
+  var brand = brands.find(function(b){ return b.id === activeBrandId; });
+  if (!brand) return;
+  document.getElementById('brandNameDisplay').textContent = brand.name;
+  document.getElementById('brandDot').style.background = brand.color;
+  var list = document.getElementById('brandDropdownList');
+  var html = '';
+  brands.forEach(function(b) {
+    var isActive = b.id === activeBrandId;
+    var count = JSON.parse(localStorage.getItem('cf_brand_' + b.id + '_campaigns') || '[]').length;
+    html += '<div class="brand-dd-item' + (isActive ? ' active-brand' : '') + '" data-brand-id="' + esc(b.id) + '">' +
+      '<span class="bd-dot" style="background:' + esc(b.color) + '"></span>' +
+      '<span class="bd-name">' + esc(b.name) + '</span>' +
+      '<span class="bd-count">' + count + ' campaign' + (count !== 1 ? 's' : '') + '</span>' +
+    '</div>';
+  });
+  list.innerHTML = html;
+}
+
+function toggleBrandDropdown() {
+  var dd = document.getElementById('brandDropdown');
+  if (dd.classList.contains('open')) { dd.classList.remove('open'); return; }
+  renderBrandSwitcher();
+  dd.classList.add('open');
+}
+function closeBrandDropdown() {
+  document.getElementById('brandDropdown').classList.remove('open');
+}
+
+function openManageBrandsModal() {
+  closeBrandDropdown();
+  renderManageBrandsList();
+  openModal('manageBrandsModal');
+}
+function renderManageBrandsList() {
+  var list = document.getElementById('manageBrandsList');
+  if (!brands.length) {
+    list.innerHTML = '<div style="font-size:13px;color:var(--text-dim);padding:8px 0">No brands yet.</div>';
+    return;
+  }
+  var html = '';
+  brands.forEach(function(b) {
+    var isActive = b.id === activeBrandId;
+    var count = JSON.parse(localStorage.getItem('cf_brand_' + b.id + '_campaigns') || '[]').length;
+    html +=
+      '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border-radius:8px;border:1px solid ' +
+      (isActive ? 'var(--border-accent)' : 'var(--border)') + ';margin-bottom:6px">' +
+        '<span style="width:12px;height:12px;border-radius:50%;background:' + esc(b.color) + ';flex-shrink:0"></span>' +
+        '<div style="flex:1">' +
+          '<div style="font-size:13px;font-weight:500">' + esc(b.name) +
+          (isActive ? ' <span style="font-size:10px;color:var(--accent)">active</span>' : '') + '</div>' +
+          '<div style="font-size:11px;color:var(--text-dim)">' + count + ' campaign' + (count !== 1 ? 's' : '') + '</div>' +
+        '</div>' +
+        '<button class="btn btn-ghost btn-sm" data-action="open" data-id="' + esc(b.id) + '">Open</button>' +
+        '<button class="btn btn-icon" style="width:28px;height:28px;color:var(--red)" data-action="delete" data-id="' + esc(b.id) + '" title="Delete">🗑</button>' +
+      '</div>';
+  });
+  list.innerHTML = html;
+}
+function deleteBrand(id) {
+  var b = brands.find(function(x){ return x.id === id; });
+  if (!b) return;
+  var count = JSON.parse(localStorage.getItem('cf_brand_' + id + '_campaigns') || '[]').length;
+  var msg = 'Delete brand "' + b.name + '"?' + (count ? ' This removes its ' + count + ' campaign' + (count !== 1 ? 's' : '') + '.' : '');
+  if (!confirm(msg)) return;
+  localStorage.removeItem('cf_brand_' + id + '_campaigns');
+  localStorage.removeItem('cf_brand_' + id + '_history');
+  brands = brands.filter(function(x){ return x.id !== id; });
+  saveBrands();
+  if (activeBrandId === id) {
+    if (brands.length) { switchBrand(brands[0].id); }
+    else {
+      activeBrandId = null;
+      localStorage.removeItem('cf_activeBrand');
+      campaigns = []; historicalData = '';
+      showNoBrandScreen();
+    }
+  }
+  renderManageBrandsList();
+  showToast('Brand deleted');
+}
+
+// ── SIDEBAR ──
+function renderSidebar() {
+  var list = document.getElementById('campaignList');
+  document.getElementById('campaignCount').textContent = campaigns.length;
+  if (!campaigns.length) {
+    list.innerHTML = '<div class="no-campaigns-msg"><div class="nc-icon">📭</div>No campaigns yet.<br>Add one to get started.</div>';
+    return;
+  }
+  var html = '';
+  campaigns.forEach(function(c) {
+    var isSel    = selectedIds.has(c.id);
+    var checkHtml = selectMode
+      ? '<div class="ci-check' + (isSel ? ' checked' : '') + '">' + (isSel ? '✓' : '') + '</div>'
+      : '';
+    html += '<div class="campaign-item' + (c.id === activeCampaignId ? ' active' : '') + (isSel ? ' selected' : '') + '" data-campaign-id="' + esc(c.id) + '">' +
+      checkHtml +
+      '<div class="ci-content">' +
+        '<div class="ci-name">' + esc(c.name) + '</div>' +
+        '<div class="ci-meta"><span class="ci-type">' + esc(c.type) + '</span><span>' + esc(c.date || '') + '</span></div>' +
+      '</div>' +
+    '</div>';
+  });
+  list.innerHTML = html;
+}
+
+// ── SELECT MODE ──
+function toggleSelectMode() {
+  selectMode = !selectMode;
+  selectedIds.clear();
+  var btn = document.getElementById('selectModeBtn');
+  var bar = document.getElementById('bulkBar');
+  btn.textContent = selectMode ? 'Cancel' : 'Select';
+  if (selectMode) btn.classList.add('active'); else btn.classList.remove('active');
+  if (selectMode) bar.classList.add('visible'); else bar.classList.remove('visible');
+  updateBulkCount();
+  renderSidebar();
+}
+function toggleSelect(id) {
+  if (selectedIds.has(id)) selectedIds.delete(id); else selectedIds.add(id);
+  updateBulkCount();
+  renderSidebar();
+}
+function updateBulkCount() {
+  document.getElementById('bulkCount').textContent = selectedIds.size + ' selected';
+}
+function deleteSelected() {
+  if (!selectedIds.size) { showToast('No campaigns selected'); return; }
+  if (!confirm('Delete ' + selectedIds.size + ' campaign' + (selectedIds.size > 1 ? 's' : '') + '?')) return;
+  var count = selectedIds.size;
+  campaigns = campaigns.filter(function(c){ return !selectedIds.has(c.id); });
+  if (selectedIds.has(activeCampaignId)) { activeCampaignId = null; showHomeScreen(); }
+  save(); toggleSelectMode(); renderSidebar();
+  showToast('Deleted ' + count + ' campaign' + (count > 1 ? 's' : ''));
+}
+
+// ── ADD CAMPAIGN ──
+function openAddCampaignModal() {
+  if (!activeBrandId) { showToast('Create a brand first'); openAddBrandModal(); return; }
+  document.getElementById('newCampaignName').value = '';
+  openModal('addCampaignModal');
+  setTimeout(function(){ document.getElementById('newCampaignName').focus(); }, 120);
+}
+function addCampaign() {
+  var name = document.getElementById('newCampaignName').value.trim();
+  if (!name) { showToast('Please enter a campaign name'); return; }
+  var type = document.getElementById('newCampaignType').value;
+  var dr   = document.getElementById('newCampaignDate').value;
+  var date = dr ? new Date(dr).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
+  var c = {id:uid(), name:name, type:type, date:date, copy:null, design:null, metrics:null, analysis:null, designAnalysis:null};
+  campaigns.push(c);
+  save(); closeModal('addCampaignModal'); renderSidebar(); selectCampaign(c.id);
+  showToast('Campaign created');
+}
+
+// ── SELECT / RENDER ──
+function selectCampaign(id) {
+  activeCampaignId = id; renderSidebar();
+  var c = campaigns.find(function(x){ return x.id === id; });
+  if (c) renderCampaignDetail(c);
+  updateChatContext();
+  // On mobile, scroll main panel into view
+  if (window.innerWidth <= 640) {
+    var main = document.getElementById('mainPanel');
+    if (main) setTimeout(function(){ main.scrollIntoView({behavior:'smooth', block:'start'}); }, 80);
+  }
+}
+function closeCampaign() {
+  activeCampaignId = null; renderSidebar(); showHomeScreen(); updateChatContext();
+}
+function showHomeScreen() {
+  var brand = brands.find(function(b){ return b.id === activeBrandId; });
+  if (window.innerWidth <= 640) window.scrollTo({top:0, behavior:'smooth'});
+  document.getElementById('mainPanel').innerHTML =
+    '<div class="empty-state">' +
+      (brand ? '<div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:4px">' + esc(brand.name) + '</div>' : '') +
+      '<div class="empty-icon">📋</div>' +
+      '<h2>Select a campaign</h2>' +
+      '<p>Choose a campaign from the sidebar, or add a new one to start tracking performance.</p>' +
+      '<button class="btn btn-primary" onclick="openAddCampaignModal()">+ Add Campaign</button>' +
+    '</div>';
+}
+
+function renderCampaignDetail(c) {
+  var main    = document.getElementById('mainPanel');
+  var metrics = c.metrics;
+  var signalHtml  = metrics ? buildSignalBars(metrics) : '';
+  var metricsHtml = metrics ? buildMetricsGrid(metrics) : '';
+  var brand   = brands.find(function(b){ return b.id === activeBrandId; });
+
+  var html = '<div class="campaign-detail">';
+  html += '<div class="detail-header"><div class="detail-title-wrap">';
+  html += '<div class="detail-eyebrow">' + (brand ? esc(brand.name) + ' · ' : '') + 'Campaign</div>';
+  html += '<div class="detail-title">' + esc(c.name) + '</div>';
+  html += '<div class="detail-meta">';
+  html += '<div class="meta-chip"><span class="tag tag-' + c.type.toLowerCase() + '">' + esc(c.type) + '</span></div>';
+  if (c.date) html += '<div class="meta-chip">📅 ' + esc(c.date) + '</div>';
+  if (metrics) html += '<div class="meta-chip">📨 ' + metrics.sent.toLocaleString() + ' sent</div>';
+  html += '</div></div>';
+  html += '<div class="detail-actions">';
+  html += '<button class="btn btn-ghost btn-sm" onclick="closeCampaign()">✕ Close</button>';
+  html += '<button class="btn btn-icon" title="Delete" onclick="deleteCampaign(\'' + esc(c.id) + '\')">🗑</button>';
+  html += '</div></div>';
+
+  if (signalHtml) html += '<div class="signal-bars" id="signalBars">' + signalHtml + '</div>';
+
+  // COPY
+  html += '<div class="section"><div class="section-head">';
+  html += '<div class="section-title"><span class="section-icon">✏️</span> Copy</div>';
+  html += '<button class="btn btn-ghost btn-sm" onclick="openCopyModal(\'' + esc(c.id) + '\')">' + (c.copy ? 'Edit' : '+ Add Copy') + '</button>';
+  html += '</div><div class="section-body">';
+  if (c.copy) {
+    html += '<div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-dim);margin-bottom:6px">Subject</div>';
+    html += '<div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:12px">' + esc(c.copy.subject || '') + '</div>';
+    if (c.copy.preheader) html += '<div style="font-size:11px;color:var(--text-dim);margin-bottom:10px">Preheader: ' + esc(c.copy.preheader) + '</div>';
+    html += '<div class="copy-preview">' + esc(c.copy.body || '') + '</div>';
+  } else { html += '<div class="copy-empty">No copy added yet.</div>'; }
+  html += '</div></div>';
+
+  // DESIGN
+  html += '<div class="section"><div class="section-head">';
+  html += '<div class="section-title"><span class="section-icon">🎨</span> Design</div>';
+  html += '<button class="btn btn-ghost btn-sm" onclick="openDesignModal(\'' + esc(c.id) + '\')">' + (c.design ? 'Edit' : '+ Add Design') + '</button>';
+  html += '</div><div class="section-body">';
+  html += c.design ? buildDesignPreview(c.design) : '<div class="copy-empty">No design added.</div>';
+  if (c.designAnalysis) html += '<div class="design-ai-bar visible"><strong>✨ AI Design Note:</strong> ' + esc(c.designAnalysis) + '</div>';
+  html += '</div></div>';
+
+  // METRICS
+  html += '<div class="section"><div class="section-head">';
+  html += '<div class="section-title"><span class="section-icon">📊</span> Metrics</div>';
+  html += '<button class="btn btn-ghost btn-sm" onclick="openMetricsModal(\'' + esc(c.id) + '\')">' + (metrics ? 'Edit' : '+ Add Metrics') + '</button>';
+  html += '</div><div class="section-body">' + (metricsHtml || '<div class="copy-empty">No metrics yet.</div>') + '</div></div>';
+
+  // AI ANALYSIS
+  html += '<div class="ai-section"><div class="section-head">';
+  html += '<div class="section-title"><span class="section-icon">✨</span> AI Campaign Analysis</div>';
+  if (c.analysis) html += '<button class="btn btn-ai btn-sm" onclick="analyzeCampaign(\'' + esc(c.id) + '\')">Re-analyze</button>';
+  html += '</div><div class="ai-body" id="aiBody_' + esc(c.id) + '">';
+  if (c.analysis) {
+    html += '<div class="ai-result">' + c.analysis + '</div>';
+  } else {
+    html += '<div class="ai-placeholder"><div style="font-size:13px;color:var(--text-dim)">Run AI analysis to get performance insights.</div>' +
+      '<button class="ai-big-btn" onclick="analyzeCampaign(\'' + esc(c.id) + '\')">✨ Analyze This Campaign</button></div>';
+  }
+  html += '</div></div></div>';
+  main.innerHTML = html;
+
+  if (metrics) {
+    setTimeout(function(){
+      document.querySelectorAll('.signal-fill').forEach(function(el){ el.style.width = el.dataset.w + '%'; });
+    }, 80);
+  }
+}
+
+function buildDesignPreview(design) {
+  if (design.type === 'image') return '<div class="design-preview"><img src="' + design.data + '" alt="Email design" /></div>';
+  if (design.type === 'html') {
+    var iframeId = 'dframe_' + uid();
+    var blob = new Blob([design.data], {type:'text/html'});
+    var url  = URL.createObjectURL(blob);
+    // Use srcdoc so we can inject auto-resize script
+    var srcdoc = design.data + '<script>window.onload=function(){parent.postMessage({iframeId:"' + iframeId + '",h:document.body.scrollHeight},"*");}<\/script>';
+    setTimeout(function(){
+      var el = document.getElementById(iframeId);
+      if (el) el.srcdoc = srcdoc;
+    }, 0);
+    return '<div class="design-preview"><iframe id="' + iframeId + '" style="width:100%;border:none;display:block;min-height:200px" sandbox="allow-same-origin allow-scripts"></iframe></div>';
+  }
+  return '';
+}
+
+function buildSignalBars(m) {
+  var bars = [
+    {label:'Open Rate',   val:(m.openRate||0),   unit:'%', color:'fill-green',  max:60},
+    {label:'Click Rate',  val:(m.clickRate||0),  unit:'%', color:'fill-accent', max:10},
+    {label:'Order Rate',  val:(m.orderRate||0),  unit:'%', color:'fill-accent', max:5},
+    {label:'Unsub Rate',  val:(m.unsubRate||0),  unit:'%', color:'fill-yellow', max:2},
+    {label:'Spam Rate',   val:(m.spamRate||0),   unit:'%', color:'fill-red',    max:1},
+    {label:'Failed Del.', val:(m.failedRate||0), unit:'%', color:'fill-red',    max:5}
+  ];
+  var html = '';
+  bars.forEach(function(b) {
+    var pct = Math.min(100, (b.val / b.max) * 100) || 0;
+    html += '<div class="signal-bar">' +
+      '<div class="signal-val">' + b.val + b.unit + '</div>' +
+      '<div class="signal-track"><div class="signal-fill ' + b.color + '" data-w="' + pct + '" style="width:0%"></div></div>' +
+      '<div class="signal-label">' + b.label + '</div>' +
+    '</div>';
+  });
+  return html;
+}
+
+function buildMetricsGrid(m) {
+  function fmtRev(m) { return m.revenueFmt || ('$' + parseFloat(m.revenue || 0).toFixed(2)); }
+  var cards = [
+    {label:'Messages Sent',    val:m.sent.toLocaleString(),     sub:m.month||'',                                 cls:''},
+    {label:'Open Rate',        val:m.openRate+'%',              sub:m.openCount?'('+m.openCount+' opens)':'',    cls:m.openRate>=20?'good':m.openRate>=10?'neutral':'bad'},
+    {label:'Click Rate',       val:m.clickRate+'%',             sub:m.clickCount?'('+m.clickCount+' clicks)':'', cls:m.clickRate>=2?'good':m.clickRate>=.5?'neutral':''},
+    {label:'Placed Orders',    val:m.orderRate+'%',             sub:m.orderCount?'('+m.orderCount+' orders)':'', cls:m.orderRate>0?'good':''},
+    {label:'Revenue',          val:fmtRev(m),                   sub:'',                                          cls:m.revenue>0?'good':''},
+    {label:'Failed Delivery',  val:m.failedRate+'%',            sub:m.failedCount?'('+m.failedCount+')':'',      cls:m.failedRate>2?'bad':m.failedRate>0?'neutral':'good'},
+    {label:'Marked as Spam',   val:m.spamRate+'%',              sub:m.spamCount?'('+m.spamCount+')':'',          cls:m.spamRate>.1?'bad':'good'},
+    {label:'Unsubscribes',     val:m.unsubRate+'%',             sub:m.unsubCount?'('+m.unsubCount+' unsubs)':'', cls:m.unsubRate>.5?'bad':'good'}
+  ];
+  var html = '<div class="metrics-grid">';
+  cards.forEach(function(c) {
+    html += '<div class="metric-card">' +
+      '<div class="metric-label">' + c.label + '</div>' +
+      '<div class="metric-value ' + c.cls + '">' + c.val + '</div>' +
+      (c.sub ? '<div class="metric-sub">' + c.sub + '</div>' : '') +
+    '</div>';
+  });
+  return html + '</div>';
+}
+
+// ── COPY ──
+function openCopyModal(id) {
+  editingField = id;
+  var c = campaigns.find(function(x){ return x.id === id; });
+  document.getElementById('copySubject').value   = (c.copy && c.copy.subject)   || '';
+  document.getElementById('copyBody').value      = (c.copy && c.copy.body)      || '';
+  document.getElementById('copyPreheader').value = (c.copy && c.copy.preheader) || '';
+  openModal('copyModal');
+}
+function saveCopy() {
+  var c = campaigns.find(function(x){ return x.id === editingField; });
+  c.copy = {
+    subject:   document.getElementById('copySubject').value.trim(),
+    body:      document.getElementById('copyBody').value.trim(),
+    preheader: document.getElementById('copyPreheader').value.trim()
+  };
+  save(); closeModal('copyModal'); renderCampaignDetail(c); showToast('Copy saved');
+}
+
+// ── DESIGN ──
+function openDesignModal(id) {
+  editingField = id; tempDesign = null;
+  var c = campaigns.find(function(x){ return x.id === id; });
+  // Reset upload pane
+  document.getElementById('imgPreviewWrap').style.display = 'none';
+  document.getElementById('dropZone').style.display = 'block';
+  document.getElementById('designAiBar').className = 'design-ai-bar';
+
+  // Restore previous design if it exists
+  if (c && c.design) {
+    if (c.design.type === 'html') {
+      // Switch to HTML tab and restore code
+      document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn')[1].classList.add('active');
+      document.getElementById('designUploadPane').style.display = 'none';
+      document.getElementById('designHtmlPane').style.display = 'block';
+      document.getElementById('htmlInput').value = c.design.data;
+      document.getElementById('htmlPreviewContainer').innerHTML =
+        '<div style="font-size:11px;color:var(--green);margin-top:4px">✓ Previous HTML loaded — edit or replace below</div>';
+      tempDesign = {type:'html', data:c.design.data};
+    } else if (c.design.type === 'image') {
+      // Switch to upload tab and show previous image
+      document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn')[0].classList.add('active');
+      document.getElementById('designUploadPane').style.display = 'block';
+      document.getElementById('designHtmlPane').style.display = 'none';
+      document.getElementById('htmlInput').value = '';
+      document.getElementById('htmlPreviewContainer').innerHTML = '';
+      document.getElementById('imgPreview').src = c.design.data;
+      document.getElementById('imgPreviewWrap').style.display = 'block';
+      document.getElementById('dropZone').style.display = 'none';
+      tempDesign = {type:'image', data:c.design.data};
+    }
+  } else {
+    // No existing design — reset to upload tab
+    document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('.tab-btn')[0].classList.add('active');
+    document.getElementById('designUploadPane').style.display = 'block';
+    document.getElementById('designHtmlPane').style.display = 'none';
+    document.getElementById('htmlInput').value = '';
+    document.getElementById('htmlPreviewContainer').innerHTML = '';
+  }
+  openModal('designModal');
+}
+function switchDesignTab(tab, el) {
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('designUploadPane').style.display = tab === 'upload' ? 'block' : 'none';
+  document.getElementById('designHtmlPane').style.display   = tab === 'html'   ? 'block' : 'none';
+}
+function handleImageDrop(e) {
+  e.preventDefault(); e.currentTarget.classList.remove('drag-over');
+  var f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('image/')) loadImageFile(f);
+}
+function handleImageFile(input) { if (input.files[0]) loadImageFile(input.files[0]); }
+function loadImageFile(file) {
+  var r = new FileReader();
+  r.onload = function(e) {
+    tempDesign = {type:'image', data:e.target.result};
+    document.getElementById('imgPreview').src = e.target.result;
+    document.getElementById('imgPreviewWrap').style.display = 'block';
+    document.getElementById('dropZone').style.display = 'none';
+  };
+  r.readAsDataURL(file);
+}
+async function analyzeDesignWithAI() {
+  var keyObj = getActiveApiKey();
+  if (!keyObj) { showToast('Add an API key first'); openApiModal(); return; }
+  var c   = campaigns.find(function(x){ return x.id === editingField; });
+  var bar = document.getElementById('designAiBar');
+  var messages;
+  if (tempDesign && tempDesign.type === 'image') {
+    messages = [{role:'user',content:[
+      {type:'image',source:{type:'base64',media_type:'image/jpeg',data:tempDesign.data.split(',')[1]}},
+      {type:'text',text:'You are an email design expert. Analyze this email design and give 2-3 concise improvement recommendations for: visual hierarchy, CTA placement, readability. Under 80 words.'}
+    ]}];
+  } else if (tempDesign && tempDesign.type === 'html') {
+    messages = [{role:'user',content:'Analyze this email HTML and give 2-3 improvement recommendations for visual hierarchy, CTA, accessibility, email client compatibility. Under 80 words.\n\n' + tempDesign.data.slice(0,2000)}];
+  } else { showToast('Add a design first'); return; }
+  bar.className = 'design-ai-bar visible';
+  bar.innerHTML = '<span style="color:var(--accent)">Analyzing...</span>';
+  try {
+    var result = await callAI(messages, keyObj, 300);
+    bar.innerHTML = '<strong>AI Design Insight:</strong> ' + result;
+    if (c) { c.designAnalysis = result; save(); }
+  } catch(e) { bar.innerHTML = '<span style="color:var(--red)">Error: ' + e.message + '</span>'; }
+}
+function saveDesign() {
+  var c   = campaigns.find(function(x){ return x.id === editingField; });
+  var htm = document.getElementById('htmlInput').value.trim();
+  if (htm) tempDesign = {type:'html', data:htm};
+  if (!tempDesign && !c.design) { showToast('No design to save'); return; }
+  if (tempDesign) c.design = tempDesign;
+  save(); closeModal('designModal'); renderCampaignDetail(c); showToast('Design saved');
+}
+
+// ── METRICS ──
+function fillMetricsFields(m) {
+  document.getElementById('mSent').value        = m.sent       || '';
+  document.getElementById('mMonth').value       = m.month      || '';
+  document.getElementById('mOpen').value        = m.openRate   != null ? m.openRate   : '';
+  document.getElementById('mOpenCount').value   = m.openCount  || '';
+  document.getElementById('mClick').value       = m.clickRate  != null ? m.clickRate  : '';
+  document.getElementById('mClickCount').value  = m.clickCount || '';
+  document.getElementById('mOrder').value       = m.orderRate  != null ? m.orderRate  : '';
+  document.getElementById('mOrderCount').value  = m.orderCount || '';
+  document.getElementById('mRevenue').value     = m.revenueFmt || (m.revenue != null ? m.revenue : '');
+  document.getElementById('mFailed').value      = m.failedRate != null ? m.failedRate : '';
+  document.getElementById('mFailedCount').value = m.failedCount|| '';
+  document.getElementById('mSpam').value        = m.spamRate   != null ? m.spamRate   : '';
+  document.getElementById('mSpamCount').value   = m.spamCount  || '';
+  document.getElementById('mUnsub').value       = m.unsubRate  != null ? m.unsubRate  : '';
+  document.getElementById('mUnsubCount').value  = m.unsubCount || '';
+  document.getElementById('metricsPaste').value = '';
+  document.getElementById('parseStatus').innerHTML = '';
+}
+function openMetricsModal(id) {
+  editingField = id;
+  var c = campaigns.find(function(x){ return x.id === id; });
+  fillMetricsFields(c.metrics || {});
+  openModal('metricsModal');
+}
+function parseMetricsRow() {
+  var raw    = document.getElementById('metricsPaste').value.trim();
+  var status = document.getElementById('parseStatus');
+  if (!raw) { status.innerHTML = '<span style="color:var(--red)">Nothing pasted.</span>'; return; }
+  var parts = raw.split('\t');
+  if (parts.length < 5) {
+    status.innerHTML = '<span style="color:var(--red)">Need tab-separated data with at least 5 columns. Got ' + parts.length + '.</span>';
+    return;
+  }
+  var first = (parts[0] || '').toLowerCase();
+  if (first.indexOf('campaign') >= 0 || first === 'name') {
+    status.innerHTML = '<span style="color:var(--yellow)">Looks like a header row. Paste a data row instead.</span>';
+    return;
+  }
+  var m = {
+    sent:        parseInt(parts[4])         || 0,
+    month:       (parts[3] || '').trim(),
+    openRate:    parseNum(parts[5]),
+    openCount:   parseInt(parts[6])         || 0,
+    clickRate:   parseNum(parts[7]),
+    clickCount:  parseInt(parts[8])         || 0,
+    orderRate:   parseNum(parts[9]),
+    orderCount:  parseInt(parts[10])        || 0,
+    revenue:     parseRevenue(parts[11]),
+    revenueFmt:  (parts[11] || '').trim(),
+    failedRate:  parseNum(parts[12]),
+    failedCount: parseInt(parts[13])        || 0,
+    spamRate:    parseNum(parts[14]),
+    spamCount:   parseInt(parts[15])        || 0,
+    unsubRate:   parseNum(parts[16]),
+    unsubCount:  parseInt(parts[17])        || 0
+  };
+  fillMetricsFields(m);
+  status.innerHTML = '<span style="color:var(--green)">Parsed ' + parts.length + ' columns — Campaign: "' + esc((parts[0]||'').trim()) + '" | Date: ' + esc((parts[2]||'').trim()) + '</span>';
+}
+function saveMetrics() {
+  var c       = campaigns.find(function(x){ return x.id === editingField; });
+  var revRaw  = document.getElementById('mRevenue').value.trim();
+  c.metrics = {
+    sent:        parseInt(document.getElementById('mSent').value)        || 0,
+    month:       document.getElementById('mMonth').value.trim(),
+    openRate:    parseFloat(document.getElementById('mOpen').value)      || 0,
+    openCount:   parseInt(document.getElementById('mOpenCount').value)   || 0,
+    clickRate:   parseFloat(document.getElementById('mClick').value)     || 0,
+    clickCount:  parseInt(document.getElementById('mClickCount').value)  || 0,
+    orderRate:   parseFloat(document.getElementById('mOrder').value)     || 0,
+    orderCount:  parseInt(document.getElementById('mOrderCount').value)  || 0,
+    revenue:     parseRevenue(revRaw),
+    revenueFmt:  revRaw,
+    failedRate:  parseFloat(document.getElementById('mFailed').value)    || 0,
+    failedCount: parseInt(document.getElementById('mFailedCount').value) || 0,
+    spamRate:    parseFloat(document.getElementById('mSpam').value)      || 0,
+    spamCount:   parseInt(document.getElementById('mSpamCount').value)   || 0,
+    unsubRate:   parseFloat(document.getElementById('mUnsub').value)     || 0,
+    unsubCount:  parseInt(document.getElementById('mUnsubCount').value)  || 0
+  };
+  save(); closeModal('metricsModal'); renderCampaignDetail(c); showToast('Metrics saved');
+}
+
+// ── AI PROVIDER ──
+function getActiveApiKey() {
+  var providers = ['anthropic','openrouter','groq','gemini'];
+  for (var i = 0; i < providers.length; i++) {
+    var p = providers[i];
+    if (apiKeys[p]) {
+      var mlist    = MODELS[p];
+      var defModel = aiModels[p] || (mlist.find(function(m){ return m.rec; }) || mlist[0]).id;
+      return {provider:p, key:apiKeys[p], model:defModel};
+    }
+  }
+  return null;
+}
+function openApiModal() {
+  updateApiKeySection();
+  updateActiveSettingsBadge();
+  openModal('apiModal');
+}
+function updateApiKeySection() {
+  var prov = document.getElementById('aiProviderSelect').value;
+  var ph   = {anthropic:'sk-ant-api03-...',openrouter:'sk-or-v1-...',groq:'gsk_...',gemini:'AIzaSy...'};
+  document.getElementById('apiKeyInput').placeholder = ph[prov] || 'API key...';
+  document.getElementById('apiKeyInput').value = apiKeys[prov] ? '............' + apiKeys[prov].slice(-4) : '';
+  document.getElementById('providerStatus').innerHTML = apiKeys[prov]
+    ? '<span style="color:var(--green)">Key saved for ' + prov + '</span>'
+    : '<span style="color:var(--text-dim)">No key saved for ' + prov + '</span>';
+  var mg     = document.getElementById('modelGroup');
+  var models = MODELS[prov] || [];
+  var selModel = aiModels[prov] || (models.find(function(m){ return m.rec; }) || models[0] || {}).id;
+  var html = '';
+  models.forEach(function(m) {
+    html += '<div class="model-chip' + (m.id === selModel ? ' selected' : '') + '" data-model-id="' + esc(m.id) + '">' + esc(m.label) + (m.rec ? ' ★' : '') + '</div>';
+  });
+  mg.innerHTML = html;
+}
+function selectModel(prov, modelId, el) {
+  aiModels[prov] = modelId;
+  localStorage.setItem('cf_aimodels', JSON.stringify(aiModels));
+  document.querySelectorAll('#modelGroup .model-chip').forEach(function(c){ c.classList.remove('selected'); });
+  el.classList.add('selected');
+}
+function updateActiveSettingsBadge() {
+  var badge  = document.getElementById('activeSettingsBadge');
+  if (!badge) return;
+  var keyObj = getActiveApiKey();
+  if (keyObj) {
+    var ml = (MODELS[keyObj.provider].find(function(m){ return m.id === keyObj.model; }) || {label:keyObj.model}).label;
+    badge.innerHTML = 'Active: <strong>' + keyObj.provider + '</strong> · ' + ml;
+    badge.style.display = 'block';
+  } else {
+    badge.innerHTML = 'No API key configured yet.';
+    badge.style.display = 'block';
+  }
+}
+function saveApiKey() {
+  var prov = document.getElementById('aiProviderSelect').value;
+  var key  = document.getElementById('apiKeyInput').value.trim();
+  if (!key || key.startsWith('....')) { showToast('Enter a valid key'); return; }
+  apiKeys[prov] = key;
+  localStorage.setItem('cf_apikeys', JSON.stringify(apiKeys));
+  closeModal('apiModal');
+  showToast(prov + ' settings saved');
+  updateActiveSettingsBadge();
+}
+
+// ── callAI ──
+async function callAI(messages, keyObj, maxTokens) {
+  maxTokens = maxTokens || 800;
+  var provider = keyObj.provider, key = keyObj.key, model = keyObj.model;
+  var resp, data;
+  if (provider === 'anthropic') {
+    resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},
+      body:JSON.stringify({model:model, max_tokens:maxTokens, messages:messages})
+    });
+    data = await resp.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.content.map(function(b){ return b.text || ''; }).join('');
+  }
+  if (provider === 'openrouter') {
+    var msgs = messages.map(function(m){
+      return {role:m.role, content:typeof m.content === 'string' ? m.content : m.content.map(function(b){ return b.text || ''; }).join(' ')};
+    });
+    resp = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+      body:JSON.stringify({model:model, max_tokens:maxTokens, messages:msgs})
+    });
+    data = await resp.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.choices[0].message.content;
+  }
+  if (provider === 'groq') {
+    var msgs2 = messages.map(function(m){
+      return {role:m.role, content:typeof m.content === 'string' ? m.content : m.content.map(function(b){ return b.text || ''; }).join(' ')};
+    });
+    resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+      body:JSON.stringify({model:model, max_tokens:maxTokens, messages:msgs2})
+    });
+    data = await resp.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.choices[0].message.content;
+  }
+  if (provider === 'gemini') {
+    var gc = messages.map(function(m){
+      var txt = typeof m.content === 'string' ? m.content : m.content.map(function(b){ return b.text || ''; }).join(' ');
+      return {role:m.role === 'assistant' ? 'model' : 'user', parts:[{text:txt}]};
+    });
+    resp = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + key, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:gc})
+    });
+    data = await resp.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.candidates[0].content.parts.map(function(p){ return p.text; }).join('');
+  }
+  throw new Error('Unknown provider: ' + provider);
+}
+
+function formatAI(text) {
+  return text
+    .replace(/^#{1,3} (.+)$/gm, '<h4>$1</h4>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^[\-\*] (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>[^]*?<\/li>(\s*<li>[^]*?<\/li>)*)/g, '<ul>$1</ul>')
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>');
+}
+
+function buildHistoricalContext() {
+  if (!historicalData) return '';
+  return '\n\nHISTORICAL CAMPAIGN DATA (past reference, context only):\n' + historicalData.slice(0, 3000);
+}
+function buildCampaignsContext() {
+  var brand      = brands.find(function(b){ return b.id === activeBrandId; });
+  var brandLabel = brand ? brand.name : 'Unknown Brand';
+  if (!campaigns.length) return 'Brand: ' + brandLabel + ' — No campaigns added yet.';
+  var lines = ['Brand: ' + brandLabel, 'Total campaigns: ' + campaigns.length, ''];
+  campaigns.forEach(function(c, i) {
+    var m = c.metrics;
+    lines.push('--- Campaign ' + (i+1) + ': "' + c.name + '" ---');
+    lines.push('Type: ' + c.type + ' | Date: ' + (c.date || 'not set') + (m && m.month ? ' | Month: ' + m.month : ''));
+    // Copy text
+    if (c.copy) {
+      lines.push('Subject: ' + (c.copy.subject || '(none)'));
+      if (c.copy.preheader) lines.push('Preheader: ' + c.copy.preheader);
+      if (c.copy.body) lines.push('Full body copy:\n' + c.copy.body);
+    } else {
+      lines.push('Copy: not added');
+    }
+    // HTML design code
+    if (c.design) {
+      if (c.design.type === 'html' && c.design.data) {
+        lines.push('HTML design code (full):\n' + c.design.data);
+      } else if (c.design.type === 'image') {
+        lines.push('Design: image uploaded (not readable as text)');
+      }
+    } else {
+      lines.push('Design: not added');
+    }
+    // Metrics
+    if (m) {
+      lines.push(
+        'Metrics: Sent=' + m.sent +
+        ' | Open=' + m.openRate + '% (' + (m.openCount||0) + ')' +
+        ' | Click=' + m.clickRate + '% (' + (m.clickCount||0) + ')' +
+        ' | Orders=' + m.orderRate + '% (' + (m.orderCount||0) + ')' +
+        ' | Revenue=' + (m.revenueFmt || ('$' + m.revenue)) +
+        ' | Failed=' + m.failedRate + '%' +
+        ' | Spam=' + m.spamRate + '%' +
+        ' | Unsub=' + m.unsubRate + '%'
+      );
+    } else {
+      lines.push('Metrics: not added yet');
+    }
+    lines.push('');
+  });
+  return lines.join('\n');
+}
+
+// ── AI ANALYSIS ──
+async function analyzeCampaign(id) {
+  var keyObj = getActiveApiKey();
+  if (!keyObj) { showToast('Add an API key first'); openApiModal(); return; }
+  var c    = campaigns.find(function(x){ return x.id === id; });
+  var body = document.getElementById('aiBody_' + id);
+  if (!body) return;
+  body.innerHTML = '<div class="ai-thinking"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span style="margin-left:8px">Analyzing...</span></div>';
+  var m = c.metrics;
+  var mTxt = m
+    ? 'Sent:' + m.sent + ' Open:' + m.openRate + '% (' + (m.openCount||0) + ') Click:' + m.clickRate + '% (' + (m.clickCount||0) + ') Orders:' + m.orderRate + '% (' + (m.orderCount||0) + ') Revenue:' + (m.revenueFmt||('$'+m.revenue)) + ' Failed:' + m.failedRate + '% Spam:' + m.spamRate + '% Unsub:' + m.unsubRate + '%'
+    : 'No metrics.';
+  var copyTxt = c.copy ? 'Subject: ' + c.copy.subject + '\nPreheader: ' + c.copy.preheader + '\nBody: ' + (c.copy.body || '').slice(0, 500) : 'No copy.';
+  var prompt = 'You are an expert email marketing analyst.\n\nCampaign: "' + c.name + '" (' + c.type + ', ' + (c.date || 'no date') + ')\nCOPY: ' + copyTxt + '\nMETRICS: ' + mTxt + buildHistoricalContext() + '\n\nAnalyze with:\n### Performance Summary\n### Key Strengths\n### Areas for Improvement\n### Specific Recommendations (3-5 steps)\n### Risk Flags\n\nBe specific and concise. Use bullet points.';
+  try {
+    var result = await callAI([{role:'user',content:prompt}], keyObj, 900);
+    c.analysis = formatAI(result); save();
+    body.innerHTML = '<div class="ai-result">' + c.analysis + '</div>';
+  } catch(e) {
+    body.innerHTML = '<div style="color:var(--red);font-size:13px">Error: ' + e.message + '</div>' +
+      '<div class="ai-placeholder" style="margin-top:12px"><button class="ai-big-btn" onclick="analyzeCampaign(\'' + esc(id) + '\')">Retry</button></div>';
+  }
+}
+
+// ── OVERALL ANALYSIS ──
+function showOverallAnalysis() {
+  activeCampaignId = null; renderSidebar();
+  var main  = document.getElementById('mainPanel');
+  var brand = brands.find(function(b){ return b.id === activeBrandId; });
+  if (!campaigns.length) {
+    main.innerHTML = '<div class="empty-state"><div class="empty-icon">📊</div><h2>No campaigns yet</h2><p>Add campaigns first.</p></div>';
+    return;
+  }
+  var withM     = campaigns.filter(function(c){ return c.metrics; });
+  var avgOpen   = avg(withM.map(function(c){ return c.metrics.openRate; }));
+  var avgClick  = avg(withM.map(function(c){ return c.metrics.clickRate; }));
+  var totalRev  = withM.reduce(function(s,c){ return s + (c.metrics.revenue||0); }, 0);
+  var totalSent = withM.reduce(function(s,c){ return s + (c.metrics.sent||0); }, 0);
+
+  var html = '<div class="campaign-detail">';
+  html += '<div class="detail-header"><div class="detail-title-wrap">';
+  html += '<div class="detail-eyebrow">' + (brand ? esc(brand.name) + ' · ' : '') + 'Overview</div>';
+  html += '<div class="detail-title">All Campaigns</div>';
+  html += '<div class="detail-meta">';
+  html += '<div class="meta-chip">📋 ' + campaigns.length + ' campaigns</div>';
+  html += '<div class="meta-chip">📨 ' + totalSent.toLocaleString() + ' sent</div>';
+  if (totalRev > 0) html += '<div class="meta-chip">💰 $' + totalRev.toFixed(2) + '</div>';
+  if (historicalData) html += '<div class="meta-chip" style="color:var(--accent)">📁 Historical loaded</div>';
+  html += '</div></div>';
+  html += '<div class="detail-actions"><button class="btn btn-ghost btn-sm" onclick="closeCampaign()">✕ Close</button></div></div>';
+
+  html += '<div class="section"><div class="section-head"><div class="section-title">📊 Aggregate Performance</div></div><div class="section-body"><div class="metrics-grid">';
+  html += '<div class="metric-card"><div class="metric-label">Campaigns</div><div class="metric-value">' + campaigns.length + '</div></div>';
+  html += '<div class="metric-card"><div class="metric-label">Total Sent</div><div class="metric-value">' + totalSent.toLocaleString() + '</div></div>';
+  html += '<div class="metric-card"><div class="metric-label">Avg Open Rate</div><div class="metric-value ' + (avgOpen>=20?'good':avgOpen>=10?'neutral':'bad') + '">' + avgOpen.toFixed(1) + '%</div></div>';
+  html += '<div class="metric-card"><div class="metric-label">Avg Click Rate</div><div class="metric-value ' + (avgClick>=2?'good':'neutral') + '">' + avgClick.toFixed(1) + '%</div></div>';
+  html += '<div class="metric-card"><div class="metric-label">Total Revenue</div><div class="metric-value ' + (totalRev>0?'good':'') + '">$' + totalRev.toFixed(2) + '</div></div>';
+  html += '</div></div></div>';
+
+  html += '<div class="section"><div class="section-head"><div class="section-title">📋 Campaign Breakdown</div></div><div class="section-body"><div style="display:flex;flex-direction:column;gap:8px">';
+  campaigns.forEach(function(c) {
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--surface2);border-radius:8px;cursor:pointer" onclick="selectCampaign(\'' + esc(c.id) + '\')">';
+    html += '<div><div style="font-size:13px;font-weight:500">' + esc(c.name) + '</div><div style="font-size:11px;color:var(--text-dim)">' + esc(c.type) + ' · ' + esc(c.date||'No date') + '</div></div>';
+    html += '<div style="display:flex;gap:12px;font-size:12px">';
+    if (c.metrics) html += '<span style="color:var(--green)">' + c.metrics.openRate + '% open</span><span style="color:var(--accent)">' + c.metrics.clickRate + '% click</span>';
+    else html += '<span style="color:var(--text-dim)">No metrics</span>';
+    html += '<span style="color:var(--text-dim)">→</span></div></div>';
+  });
+  html += '</div></div></div>';
+
+  html += '<div class="ai-section"><div class="section-head"><div class="section-title">✨ Overall AI Analysis &amp; Recommendations</div></div>';
+  html += '<div class="ai-body" id="overallAiBody">';
+  html += '<div class="ai-placeholder"><div style="font-size:13px;color:var(--text-dim)">Get a holistic view with strategic recommendations.' + (historicalData ? '<br><span style="color:var(--accent);font-size:11px">Historical data included.</span>' : '') + '</div>';
+  html += '<button class="ai-big-btn" onclick="analyzeOverall()">✨ Analyze All Campaigns</button></div>';
+  html += '</div></div></div>';
+  main.innerHTML = html;
+  updateChatContext();
+}
+
+async function analyzeOverall() {
+  var keyObj = getActiveApiKey();
+  if (!keyObj) { showToast('Add an API key first'); openApiModal(); return; }
+  var body = document.getElementById('overallAiBody');
+  body.innerHTML = '<div class="ai-thinking"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span style="margin-left:8px">Analyzing all campaigns...</span></div>';
+  var brandName = (brands.find(function(b){return b.id===activeBrandId;})||{name:'this brand'}).name;
+  var prompt = 'You are a senior email marketing strategist. Analyze these ' + campaigns.length + ' campaigns for ' + brandName + ' holistically.\n\n' + buildCampaignsContext() + buildHistoricalContext() + '\n\nProvide:\n### Overall Performance Assessment\n### Top Performing Campaigns\n### Patterns & Trends\n### Critical Issues\n### Strategic Recommendations for Next Month (5-7 actions)\n### Quick Wins (2-3 immediate improvements)\n\nReference campaign names and numbers. Use bullet points.';
+  try {
+    var result = await callAI([{role:'user',content:prompt}], keyObj, 1200);
+    document.getElementById('overallAiBody').innerHTML = '<div class="ai-result">' + formatAI(result) + '</div>';
+  } catch(e) {
+    document.getElementById('overallAiBody').innerHTML = '<div style="color:var(--red);font-size:13px">Error: ' + e.message + '</div>' +
+      '<div class="ai-placeholder" style="margin-top:12px"><button class="ai-big-btn" onclick="analyzeOverall()">Retry</button></div>';
+  }
+}
+
+// ── IMPORT ──
+function openImportModal() { openModal('importModal'); }
+function switchImport(mode) {
+  document.getElementById('importPastePane').style.display = mode === 'paste' ? 'block' : 'none';
+  document.getElementById('importFilePane').style.display  = mode === 'file'  ? 'block' : 'none';
+  document.getElementById('im_paste').classList.toggle('active', mode === 'paste');
+  document.getElementById('im_file').classList.toggle('active', mode !== 'paste');
+}
+function handleCSVFile(input) {
+  var file = input.files[0]; if (!file) return;
+  var r = new FileReader();
+  r.onload = function(e) {
+    document.getElementById('csvPreview').innerHTML = '<div style="font-size:12px;color:var(--green);padding:8px">Loaded: ' + file.name + '</div>';
+    document.getElementById('importPasteData').value = e.target.result;
+    switchImport('paste');
+  };
+  r.readAsText(file);
+}
+function importHistoricalData() {
+  var raw = document.getElementById('importPasteData').value.trim();
+  if (!raw) { showToast('No data to import'); return; }
+  historicalData = raw; saveHistory();
+  var rows = raw.split('\n').filter(function(l){ return l.trim(); }).length - 1;
+  document.getElementById('importStatus').innerHTML = '<span style="color:var(--green)">' + rows + ' rows saved as AI context</span>';
+  setTimeout(function(){ closeModal('importModal'); showToast('Historical data saved'); }, 600);
+}
+
+// ── DELETE ──
+function deleteCampaign(id) {
+  if (!confirm('Delete this campaign?')) return;
+  campaigns = campaigns.filter(function(c){ return c.id !== id; });
+  save(); activeCampaignId = null; renderSidebar(); showHomeScreen();
+  showToast('Campaign deleted');
+}
+
+// ── CHAT ──
+function toggleChat() {
+  chatOpen = !chatOpen;
+  var panel = document.getElementById('chatPanel');
+  if (chatOpen) {
+    panel.classList.add('open');
+    updateChatContext();
+    setTimeout(function(){ document.getElementById('chatInput').focus(); }, 200);
+  } else {
+    panel.classList.remove('open');
+  }
+}
+function updateChatContext() {
+  var bar    = document.getElementById('chatContextBar');
+  var nameEl = document.getElementById('chatContextName');
+  var sub    = document.getElementById('chatSubtitle');
+  var brand  = brands.find(function(b){ return b.id === activeBrandId; });
+  var bl     = brand ? brand.name + ' — ' : '';
+
+  if (activeCampaignId) {
+    var c = campaigns.find(function(x){ return x.id === activeCampaignId; });
+    if (c) {
+      var parts = [];
+      if (c.copy) parts.push('copy');
+      if (c.metrics) parts.push('metrics');
+      var detail = parts.length ? ' (has: ' + parts.join(', ') + ')' : ' (no data yet)';
+      bar.classList.remove('hidden');
+      nameEl.textContent = bl + c.name + detail;
+      sub.textContent = 'Focused on: ' + c.name;
+      return;
+    }
+  }
+  if (campaigns.length) {
+    var withCopy    = campaigns.filter(function(c){ return c.copy; }).length;
+    var withMetrics = campaigns.filter(function(c){ return c.metrics; }).length;
+    bar.classList.remove('hidden');
+    nameEl.textContent = bl + campaigns.length + ' campaigns | ' + withCopy + ' with copy, ' + withMetrics + ' with metrics';
+    sub.textContent = 'I can see all ' + campaigns.length + ' campaigns';
+  } else if (brand) {
+    bar.classList.remove('hidden');
+    nameEl.textContent = brand.name + ' — no campaigns yet';
+    sub.textContent = 'Add campaigns to get started';
+  } else {
+    bar.classList.add('hidden');
+    sub.textContent = 'Ask anything about your campaigns';
+  }
+}
+function autoResizeChat(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 90) + 'px';
+}
+function chatKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+}
+function sendSuggestion(text) {
+  document.getElementById('chatInput').value = text;
+  sendChat();
+}
+async function sendChat() {
+  if (chatBusy) return;
+  var input = document.getElementById('chatInput');
+  var msg   = input.value.trim();
+  if (!msg) return;
+  var keyObj = getActiveApiKey();
+  if (!keyObj) { addChatMsg('ai', 'Please add an API key — click <strong>AI Settings</strong> in the top bar.'); openApiModal(); return; }
+  addChatMsg('user', esc(msg));
+  input.value = ''; input.style.height = '36px';
+  chatHistory.push({role:'user', content:msg});
+  chatBusy = true;
+  document.getElementById('chatSendBtn').disabled = true;
+  var brand      = brands.find(function(b){ return b.id === activeBrandId; });
+  var activeName = '';
+  if (activeCampaignId) { var ac = campaigns.find(function(x){ return x.id === activeCampaignId; }); if (ac) activeName = ac.name; }
+  var sysCtx = 'You are Campfire AI, an expert email marketing analyst for ' + (brand ? brand.name : 'this brand') + '. You have FULL access to all campaign data below — names, dates, copy (subject lines and full email body text), HTML design code, and performance metrics. Use this data to give specific, accurate answers. When HTML is provided you can analyze its structure, content, links, CTAs, and layout. Never say you cannot see campaign data or HTML.\n\n' + buildCampaignsContext() + (activeName ? '\n\nCURRENT FOCUS: User is currently viewing campaign "' + activeName + '". Prioritize answering about this campaign unless asked otherwise.' : '') + buildHistoricalContext() + '\n\nBe concise and specific. Reference campaign names and actual numbers from the data. Use ### headers and bullet points when helpful.';
+  var thinkId = 'think_' + uid();
+  var msgs = document.getElementById('chatMessages');
+  msgs.innerHTML += '<div class="chat-msg ai" id="' + thinkId + '"><div class="msg-avatar ai-av">✨</div><div class="msg-bubble"><div class="ai-thinking"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div></div></div>';
+  msgs.scrollTop = msgs.scrollHeight;
+  try {
+    var recent = chatHistory.slice(-12);
+    var result;
+    if (keyObj.provider === 'anthropic') {
+      var r = await fetch('https://api.anthropic.com/v1/messages', {
+        method:'POST',
+        headers:{'Content-Type':'application/json','x-api-key':keyObj.key,'anthropic-version':'2023-06-01'},
+        body:JSON.stringify({model:keyObj.model, max_tokens:600, system:sysCtx, messages:recent})
+      });
+      var d = await r.json();
+      if (d.error) throw new Error(d.error.message);
+      result = d.content.map(function(b){ return b.text || ''; }).join('');
+    } else {
+      // For non-Anthropic providers, inject system context as the first user/assistant exchange
+      var apiMsgs = [
+        {role:'user', content:'SYSTEM CONTEXT (campaign data & instructions):\n' + sysCtx},
+        {role:'assistant', content:'Understood. I have full access to all campaign data and will use it to answer accurately.'}
+      ].concat(recent);
+      result = await callAI(apiMsgs, keyObj, 600);
+    }
+    var th = document.getElementById(thinkId); if (th) th.remove();
+    chatHistory.push({role:'assistant', content:result});
+    addChatMsg('ai', formatAI(result));
+  } catch(e) {
+    var th2 = document.getElementById(thinkId); if (th2) th2.remove();
+    addChatMsg('ai', '<span style="color:var(--red)">Error: ' + e.message + '. Check your API key.</span>');
+  }
+  chatBusy = false;
+  document.getElementById('chatSendBtn').disabled = false;
+  document.getElementById('chatSuggestions').style.display = 'none';
+}
+function addChatMsg(role, html) {
+  var msgs = document.getElementById('chatMessages');
+  var isAi = role === 'ai';
+  msgs.innerHTML += '<div class="chat-msg ' + role + '"><div class="msg-avatar ' + (isAi?'ai-av':'user-av') + '">' + (isAi?'✨':'👤') + '</div><div class="msg-bubble">' + html + '</div></div>';
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// ── MODALS ──
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.remove('open');
+}
+
+// ── TOAST ──
+var toastTimer;
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2500);
+}
+</script>
+<script src="header.js"></script>
+
+</body>
+</html>

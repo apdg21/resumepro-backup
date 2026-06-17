@@ -172,14 +172,22 @@
   .fcw-sidebar-list::-webkit-scrollbar{width:3px}
   .fcw-sidebar-list::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
   .fcw-hist-item{
-    padding:.5rem .65rem;border-radius:8px;cursor:pointer;
+    padding:.45rem .6rem;border-radius:8px;cursor:pointer;
     font-size:11.5px;color:var(--text2);line-height:1.45;
     border:1px solid transparent;margin-bottom:3px;
-    transition:all .13s;word-break:break-word;
+    transition:all .13s;word-break:break-word;position:relative;
   }
   .fcw-hist-item:hover{background:var(--bg3);border-color:var(--border);color:var(--text);}
   .fcw-hist-item.active{background:var(--accent-bg);border-color:var(--accent-border);color:var(--accent2);}
   .fcw-hist-item-time{font-size:10px;color:var(--text3);margin-top:2px;font-family:var(--mono);}
+  .fcw-hist-del{
+    opacity:0;transition:opacity .13s;
+    background:none;border:none;cursor:pointer;
+    color:var(--text3);font-size:12px;padding:2px 3px;
+    border-radius:4px;line-height:1;flex-shrink:0;
+  }
+  .fcw-hist-item:hover .fcw-hist-del{opacity:1;}
+  .fcw-hist-del:hover{color:var(--red)!important;}
   .fcw-new-btn{
     margin:.5rem;background:none;border:1px dashed var(--border2);border-radius:8px;
     padding:.45rem;font-size:11.5px;color:var(--text3);cursor:pointer;
@@ -748,6 +756,7 @@
   <div class="fcw-sidebar">
     <div class="fcw-sidebar-header">
       <span><i class="ti ti-history" style="font-size:11px;vertical-align:-1px;margin-right:3px"></i> History</span>
+      <button onclick="fcwClearAll()" title="Clear all history" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:11px;padding:2px 4px;border-radius:4px;font-family:var(--font);transition:color .13s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text3)'">Clear all</button>
     </div>
     <div class="fcw-sidebar-list" id="fcwHistList">
       <div class="fcw-empty-hist">No conversations yet.<br>Start chatting below.</div>
@@ -1046,8 +1055,8 @@ function fcwSaveHistory(){
     sess.preview=fcwHistory[0]?fcwHistory[0].content.slice(0,50):'...';
     sess.updated=Date.now();
   }
-  // Keep max 30 sessions
-  if(fcwSessions.length>30)fcwSessions=fcwSessions.slice(-30);
+  // Keep max 50 sessions
+  if(fcwSessions.length>50)fcwSessions=fcwSessions.slice(-50);
   localStorage.setItem(FCW_HIST_KEY,JSON.stringify(fcwSessions));
   renderFcwHistList();
 }
@@ -1089,7 +1098,7 @@ function fcwLoadSession(id){
   renderFcwHistList();
 }
 function fcwDeleteSession(id,e){
-  e.stopPropagation();
+  if(e)e.stopPropagation();
   fcwSessions=fcwSessions.filter(function(s){return s.id!==id;});
   localStorage.setItem(FCW_HIST_KEY,JSON.stringify(fcwSessions));
   if(fcwCurrentSession===id){
@@ -1097,6 +1106,15 @@ function fcwDeleteSession(id,e){
     var thread=document.getElementById('fcwThread');
     if(thread)thread.innerHTML='<div class="fcw-hint">Ask me to refine the draft, adjust tone, add an offer, summarize issues, or check KB policies.</div>';
   }
+  renderFcwHistList();
+}
+function fcwClearAll(){
+  if(!fcwSessions.length)return;
+  if(!confirm('Delete all '+fcwSessions.length+' conversation'+(fcwSessions.length!==1?'s':'')+' from history?'))return;
+  fcwSessions=[];fcwCurrentSession=null;fcwHistory=[];
+  localStorage.removeItem(FCW_HIST_KEY);
+  var thread=document.getElementById('fcwThread');
+  if(thread)thread.innerHTML='<div class="fcw-hint">Ask me to refine the draft, adjust tone, add an offer, summarize issues, or check KB policies.</div>';
   renderFcwHistList();
 }
 function renderFcwHistList(){
@@ -1112,14 +1130,13 @@ function renderFcwHistList(){
     var preview=sess.preview||'Chat session';
     if(preview.length>45)preview=preview.slice(0,43)+'…';
     // Build item using DOM to avoid quote nesting issues
-    var previewSpan=document.createElement('span');previewSpan.style.flex='1';previewSpan.textContent=preview;
+    var previewSpan=document.createElement('span');previewSpan.style.cssText='flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';previewSpan.textContent=preview;
     var delBtnEl=document.createElement('button');
-    delBtnEl.style.cssText='background:none;border:none;cursor:pointer;color:var(--text3);font-size:13px;padding:0;flex-shrink:0;line-height:1;margin-top:-1px;transition:color .13s';
+    delBtnEl.className='fcw-hist-del';
+    delBtnEl.title='Delete';
     delBtnEl.innerHTML='<i class="ti ti-x"></i>';
-    delBtnEl.onmouseover=function(){this.style.color='var(--red)';};
-    delBtnEl.onmouseout=function(){this.style.color='var(--text3)';};
     (function(sid){delBtnEl.onclick=function(e){e.stopPropagation();fcwDeleteSession(sid,e);};})(sess.id);
-    var topRow=document.createElement('div');topRow.style.cssText='display:flex;align-items:flex-start;justify-content:space-between;gap:4px';
+    var topRow=document.createElement('div');topRow.style.cssText='display:flex;align-items:center;gap:4px;';
     topRow.appendChild(previewSpan);topRow.appendChild(delBtnEl);
     var timeDiv=document.createElement('div');timeDiv.className='fcw-hist-item-time';timeDiv.textContent=dateStr+' '+timeStr;
     item.appendChild(topRow);item.appendChild(timeDiv);

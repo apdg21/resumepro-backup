@@ -175,21 +175,20 @@
     padding:.45rem .6rem;border-radius:8px;cursor:pointer;
     font-size:11.5px;color:var(--text2);line-height:1.45;
     border:1px solid transparent;margin-bottom:3px;
-    transition:all .13s;word-break:break-word;position:relative;
+    transition:all .13s;
   }
   .fcw-hist-item:hover{background:var(--bg3);border-color:var(--border);color:var(--text);}
   .fcw-hist-item.active{background:var(--accent-bg);border-color:var(--accent-border);color:var(--accent2);}
   .fcw-hist-item-time{font-size:10px;color:var(--text3);margin-top:2px;font-family:var(--mono);}
   .fcw-hist-del{
-    opacity:0;transition:opacity .13s;
+    visibility:hidden;
     background:none;border:none;cursor:pointer;
-    color:var(--text3);font-size:12px;padding:2px 3px;
-    border-radius:4px;line-height:1;flex-shrink:0;
-    pointer-events:all;
+    color:var(--text3);font-size:11px;
+    width:16px;height:16px;border-radius:3px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;transition:color .13s,background .13s;
   }
-  .fcw-hist-item:hover .fcw-hist-del,
-  .fcw-hist-item:focus-within .fcw-hist-del{opacity:1;}
-  .fcw-hist-del:hover{color:var(--red)!important;opacity:1!important;}
+  .fcw-hist-del:hover{color:var(--red)!important;background:var(--red-bg);}
   .fcw-new-btn{
     margin:.5rem;background:none;border:1px dashed var(--border2);border-radius:8px;
     padding:.45rem;font-size:11.5px;color:var(--text3);cursor:pointer;
@@ -1132,18 +1131,21 @@ function renderFcwHistList(){
     var preview=sess.preview||'Chat session';
     if(preview.length>45)preview=preview.slice(0,43)+'…';
     // Build item using DOM to avoid quote nesting issues
-    var previewSpan=document.createElement('span');previewSpan.style.cssText='flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';previewSpan.textContent=preview;
+    var previewSpan=document.createElement('span');
+    previewSpan.style.cssText='flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;';
+    previewSpan.textContent=preview;
     var delBtnEl=document.createElement('button');
     delBtnEl.className='fcw-hist-del';
     delBtnEl.title='Delete';
     delBtnEl.innerHTML='<i class="ti ti-x"></i>';
     (function(sid){delBtnEl.onclick=function(e){e.stopPropagation();fcwDeleteSession(sid,e);};})(sess.id);
-    var topRow=document.createElement('div');topRow.style.cssText='display:flex;align-items:center;gap:4px;';
+    var topRow=document.createElement('div');
+    topRow.style.cssText='display:flex;align-items:center;gap:4px;overflow:visible;';
     topRow.appendChild(previewSpan);topRow.appendChild(delBtnEl);
     var timeDiv=document.createElement('div');timeDiv.className='fcw-hist-item-time';timeDiv.textContent=dateStr+' '+timeStr;
     item.appendChild(topRow);item.appendChild(timeDiv);
-    item.onmouseenter=function(){delBtnEl.style.opacity='1';};
-    item.onmouseleave=function(){delBtnEl.style.opacity='0';};
+    item.onmouseenter=function(){delBtnEl.style.visibility='visible';};
+    item.onmouseleave=function(){delBtnEl.style.visibility='hidden';};
     item.onclick=function(){fcwLoadSession(sess.id);};
     list.appendChild(item);
   });

@@ -126,7 +126,7 @@
 
   /* ── FLOATING CHAT BUBBLE ── */
   .float-chat-btn{
-    position:fixed;bottom:28px;right:28px;
+    position:fixed;bottom:24px;right:24px;
     width:56px;height:56px;border-radius:50%;
     background:linear-gradient(135deg,#7b6ef6,#9b6ef6);
     border:none;cursor:pointer;
@@ -146,15 +146,15 @@
     display:none;align-items:center;justify-content:center;
   }
   .float-chat-window{
-    position:fixed;bottom:96px;right:28px;
-    width:700px;max-height:580px;
+    position:fixed;bottom:0;right:0;
+    width:min(820px,72vw);height:90vh;max-height:90vh;
     background:var(--bg2);border:1px solid var(--border2);
-    border-radius:18px;
-    box-shadow:0 20px 60px rgba(0,0,0,.55),0 4px 16px rgba(0,0,0,.3);
+    border-radius:18px 0 0 0;
+    box-shadow:-8px -8px 40px rgba(0,0,0,.5),0 4px 16px rgba(0,0,0,.3);
     display:flex;flex-direction:row;overflow:hidden;
     z-index:899;
-    opacity:0;transform:translateY(16px) scale(.97);pointer-events:none;
-    transition:opacity .22s cubic-bezier(.4,0,.2,1),transform .22s cubic-bezier(.34,1.2,.64,1);
+    opacity:0;transform:translateY(24px) scale(.98);pointer-events:none;
+    transition:opacity .25s cubic-bezier(.4,0,.2,1),transform .25s cubic-bezier(.34,1.2,.64,1);
   }
   .float-chat-window.open{opacity:1;transform:translateY(0) scale(1);pointer-events:all}
   /* History sidebar */
@@ -199,13 +199,13 @@
   .fcw-empty-hist{font-size:11px;color:var(--text3);text-align:center;padding:1rem .5rem;line-height:1.6;}
   /* Main chat area */
   .fcw-main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
-  @media(max-width:760px){
-    .float-chat-window{right:0;bottom:0;width:100vw;max-height:80vh;border-radius:20px 20px 0 0;border-bottom:none;}
+  @media(max-width:900px){
+    .float-chat-window{width:100vw;height:85vh;max-height:85vh;border-radius:16px 16px 0 0;right:0;bottom:0;}
     .fcw-sidebar{width:160px;}
   }
   @media(max-width:520px){
     .fcw-sidebar{display:none;}
-    .float-chat-window{width:100vw;}
+    .float-chat-window{width:100vw;height:80vh;max-height:80vh;}
   }
   .fcw-header{
     padding:1rem 1.1rem .85rem;
@@ -1001,21 +1001,53 @@ function callProvider(sys,uc){
 
 // ── Parse & render response ────────────────────────────────────────────────
 function parseResponse(raw){
-  var text=raw.trim(),confidence=null,tags=[];
+  var text=raw.trim(),confidence=null,tags=[],extraCtx='';
+  // Extract machine-readable tags
   var cm=text.match(/CONFIDENCE:\s*(\d+)/i),tm=text.match(/TAGS:\s*([^\n]+)/i);
   if(cm)confidence=Math.min(100,Math.max(0,parseInt(cm[1])));
   if(tm)tags=tm[1].split(',').map(function(t){return t.trim();}).filter(Boolean);
   text=text.replace(/\nCONFIDENCE:\s*\d+/gi,'').replace(/\nTAGS:\s*[^\n]+/gi,'').trim();
-  return{text:text,confidence:confidence,tags:tags};
+  // No separate Confidence label - handled by CONFIDENCE:[0-100] bar
+  // Strip any stray Confidence: label line
+  text=text.replace(/\nConfidence:\s*(High|Medium|Low)[^\n]*/gi,'').trim();
+  // Extract Recommended Additional Context section
+  var ctxMatch=text.match(/\n?---\n🔍 Recommended Additional Context[\s\S]*/i);
+  if(ctxMatch){extraCtx=ctxMatch[0].trim();text=text.replace(ctxMatch[0],'').trim();}
+  return{text:text,confidence:confidence,tags:tags,extraCtx:extraCtx};
 }
 function renderResponse(parsed){
   var cc=parsed.confidence>75?'#3dd68c':parsed.confidence>50?'#f5a623':'#f56565';
   var cp=parsed.confidence!==null?parsed.confidence+'%':'--';
+
+  // Confidence bar block
   var ch='';
   if(parsed.confidence!==null){
     ch='<div class="conf-block"><div class="conf-row"><span class="conf-label">Confidence</span><div class="bar-track"><div class="bar-fill" id="confBar" style="width:0%;background:'+cc+'"></div></div><span class="conf-pct" id="confPct" style="color:'+cc+'">--</span></div>'+(parsed.tags.length?'<div class="tags">'+parsed.tags.map(function(t){return '<span class="tag">'+escHtml(t)+'</span>';}).join('')+'</div>':'')+'</div>';
   }
-  document.getElementById('respBody').innerHTML='<div class="resp-content" id="respText">'+escHtml(parsed.text)+'</div>'+ch;
+
+  // Recommended Additional Context block
+  var ctxHtml='';
+  if(parsed.extraCtx){
+    // Format the context section nicely
+    var ctxLines=parsed.extraCtx.replace(/^---\n/,'').split('\n');
+    var ctxFormatted='';
+    ctxLines.forEach(function(line){
+      line=line.trim();
+      if(!line)return;
+      if(line.startsWith('🔍')){
+        ctxFormatted+='<div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:.6rem;display:flex;align-items:center;gap:5px;">'+escHtml(line)+'</div>';
+      } else if(line.startsWith('-')){
+        ctxFormatted+='<div style="display:flex;gap:8px;margin-bottom:.45rem;font-size:12.5px;color:var(--text2);line-height:1.55"><span style="color:var(--accent2);flex-shrink:0;margin-top:1px">•</span><span>'+escHtml(line.replace(/^-\s*/,''))+'</span></div>';
+      } else if(/^Confidence:/i.test(line)){
+        // skip - handled separately
+      } else if(line.length>3){
+        ctxFormatted+='<div style="font-size:12.5px;color:var(--text2);margin-bottom:.35rem;line-height:1.55">'+escHtml(line)+'</div>';
+      }
+    });
+    ctxHtml='<div style="margin-top:1rem;padding:1rem;background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius-sm)">'+ctxFormatted+'</div>';
+  }
+
+  document.getElementById('respBody').innerHTML='<div class="resp-content" id="respText">'+escHtml(parsed.text)+'</div>'+ch+ctxHtml;
   if(parsed.confidence!==null){setTimeout(function(){var b=document.getElementById('confBar'),p=document.getElementById('confPct');if(b)b.style.width=cp;if(p)p.textContent=cp;},80);}
   document.getElementById('copyBtn').style.display='flex';document.getElementById('regenBtn').style.display='flex';
   updateCtxStrip();

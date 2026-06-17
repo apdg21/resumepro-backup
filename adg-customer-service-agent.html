@@ -796,10 +796,35 @@ var EMOJI_OPTIONS=['🛍️','📦','🌐','📱','💻','🏪','🎯','⚡','�
 var KB_KEY='csagent_kb';
 
 var MODELS={
-  anthropic:[{v:'claude-sonnet-4-20250514',l:'Claude Sonnet 4 ✦ Recommended'},{v:'claude-opus-4-20250514',l:'Claude Opus 4 — Most capable'},{v:'claude-haiku-4-5-20251001',l:'Claude Haiku 4.5 — Fastest'}],
-  gemini:[{v:'gemini-2.5-flash-preview-05-20',l:'Gemini 2.5 Flash ✦ Recommended'},{v:'gemini-2.0-flash',l:'Gemini 2.0 Flash'},{v:'gemma-3-27b-it',l:'Gemma 3 27B'}],
-  groq:[{v:'llama-3.3-70b-versatile',l:'Llama 3.3 70B ✦ Recommended'},{v:'llama-3.1-8b-instant',l:'Llama 3.1 8B — Fastest'},{v:'mixtral-8x7b-32768',l:'Mixtral 8x7B'},{v:'gemma2-9b-it',l:'Gemma 2 9B'}],
-  openrouter:[{v:'openai/gpt-4o-mini:free',l:'GPT-4o Mini (free) ✦'},{v:'openai/gpt-oss-120b:free',l:'GPT OSS 120B (free)'},{v:'qwen/qwen3-next-80b-a3b-instruct:free',l:'Qwen3 80B (free)'},{v:'arcee-ai/trinity-large-preview:free',l:'Arcee Trinity Large (free)'}]
+  anthropic: [
+    { v: 'claude-sonnet-4-20250514', l: 'Claude Sonnet 4 \u2736 Recommended' },
+    { v: 'claude-opus-4-20250514',   l: 'Claude Opus 4 \u2014 Most capable' },
+    { v: 'claude-haiku-4-5-20251001',l: 'Claude Haiku 4.5 \u2014 Fastest' },
+  ],
+  gemini: [
+    { v: 'gemini-3.5-flash', l: 'Gemini 3.5 Flash ✦ Recommended' },
+    { v: 'gemini-3.1-flash-lite', l: 'Gemini-3.1-flash-lite' },
+    { v: 'gemma-4-31b-it', l: 'Gemma-4-31b-it' },
+	  { v: 'gemma-4-26b-a4b-it', l: 'Gemma-4-26b-a4b-it' },
+  ],
+  groq: [
+    { v: 'llama-3.3-70b-versatile', l: 'Llama 3.3 70B \u2736 Recommended' },
+    { v: 'llama-3.1-8b-instant',    l: 'Llama 3.1 8B \u2014 Fastest' },
+    { v: 'mixtral-8x7b-32768',      l: 'Mixtral 8x7B' },
+    { v: 'gemma2-9b-it',            l: 'Gemma 2 9B' },
+  ],
+  openrouter: [
+    { v: 'openai/gpt-4o-mini:free',                  l: 'GPT-4o Mini (free) \u2736 Recommended' },
+    { v: 'openai/gpt-oss-120b:free',                 l: 'GPT OSS 120B (free)' },
+    { v: 'openai/gpt-oss-20b:free',                  l: 'GPT OSS 20B (free)' },
+    { v: 'qwen/qwen3-next-80b-a3b-instruct:free',    l: 'Qwen3 80B (free)' },
+    { v: 'arcee-ai/trinity-large-preview:free',      l: 'Arcee Trinity Large (free)' },
+    { v: 'liquid/lfm-2.5-1.2b-thinking:free',        l: 'LFM 2.5 Thinking (free)' },
+    { v: 'liquid/lfm-2.5-1.2b-instruct:free',        l: 'LFM 2.5 Instruct (free)' },
+    { v: 'nvidia/nemotron-3-nano-30b-a3b:free',      l: 'Nemotron Nano 30B (free)' },
+    { v: 'nvidia/nemotron-nano-12b-v2-vl:free',      l: 'Nemotron Nano 12B (free)' },
+    { v: 'nvidia/nemotron-nano-9b-v2:free',          l: 'Nemotron Nano 9B (free)' },
+  ],
 };
 var KEY_HINTS={anthropic:'Get your key at console.anthropic.com',gemini:'Get your key at aistudio.google.com',groq:'Get your key at console.groq.com',openrouter:'Get your key at openrouter.ai/keys'};
 

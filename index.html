@@ -34,12 +34,6 @@
             --white: #ffffff;
             --green: #2d7a4f;
             --green-light: #eaf4ee;
-           --primary: #3a86ff;
-            --primary-dark: #2667cc;
-            --dark: #2b2d42;
-            --light: #f8f9fa;
-            --gray: #6c757d;
-            --success: #28a745;
         }
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1039,76 +1033,55 @@
 <!-- ─── HEADER (unchanged from original) ─────────────────────── -->
 <header>
     <div class="header-content">
-
-        <!-- Logo -->
         <a href="index.html" class="logo">
             <span class="logo-icon">📄</span>
             <span>ResumePro</span>
         </a>
-
-        <!-- Nav + Hamburger -->
         <div class="nav-container">
             <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">☰</button>
-
             <ul class="header-nav-menu" role="menubar">
-
                 <li class="header-nav-item" role="none">
                     <a href="index.html" class="header-nav-link" role="menuitem">Home</a>
                 </li>
-
                 <li class="header-nav-item header-dropdown" role="none">
                     <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
-                        Templates
-                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                        Templates <span class="header-dropdown-icon" aria-hidden="true">▼</span>
                     </a>
                     <div class="header-dropdown-content" role="menu">
-                        <a href="resume-templates.html"   class="header-dropdown-item" role="menuitem">Resume Templates</a>
+                        <a href="resume-templates.html" class="header-dropdown-item" role="menuitem">Resume Templates</a>
                         <a href="portfolio-templates.html" class="header-dropdown-item" role="menuitem">Portfolio Templates</a>
                     </div>
                 </li>
-
                 <li class="header-nav-item header-dropdown" role="none">
                     <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
-                        Apps
-                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                        Apps <span class="header-dropdown-icon" aria-hidden="true">▼</span>
                     </a>
                     <div class="header-dropdown-content" role="menu">
-                        <a href="android-applications.html"   class="header-dropdown-item" role="menuitem">Android Applications</a>
+                        <a href="android-applications.html" class="header-dropdown-item" role="menuitem">Android Applications</a>
                         <a href="family-connection-tools.html" class="header-dropdown-item" role="menuitem">Web Applications</a>
                     </div>
                 </li>
-
                 <li class="header-nav-item" role="none">
                     <a href="blog-list.html" class="header-nav-link" role="menuitem">Blog</a>
                 </li>
-
-                <li class="header-nav-item" role="none" style="display: none;">
-                    <a href="klaviyo-analytics.html" class="header-nav-link" role="menuitem">Klaviyo Analytics</a>
-                </li>
-
                 <li class="header-nav-item header-dropdown" role="none">
                     <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
-                        Tools
-                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                        Tools <span class="header-dropdown-icon" aria-hidden="true">▼</span>
                     </a>
                     <div class="header-dropdown-content" role="menu">
-                        <a href="email-builder.html"  class="header-dropdown-item" role="menuitem">Email Builder</a>
-                        <a href="inliner.html"              class="header-dropdown-item" role="menuitem">Inliner</a>
-                        <a href="klaviyo-tool.html"               class="header-dropdown-item" role="menuitem">Klaviyo Tool</a>
-                        <a href="omnisend.html"                   class="header-dropdown-item" role="menuitem">Omnisend Analytics</a>
-						<a href="adg-customer-service-agent.html"   class="header-dropdown-item" role="menuitem">CS Agent</a>
-						<a href="campfire.html"   class="header-dropdown-item" role="menuitem">Campfire🔥</a>
+                        <a href="email-builder.html" class="header-dropdown-item" role="menuitem">Email Builder</a>
+                        <a href="inliner.html" class="header-dropdown-item" role="menuitem">Inliner</a>
+                        <a href="klaviyo-tool.html" class="header-dropdown-item" role="menuitem">Klaviyo Tool</a>
+                        <a href="omnisend.html" class="header-dropdown-item" role="menuitem">Omnisend Analytics</a>
+                        <a href="adg-customer-service-agent.html" class="header-dropdown-item" role="menuitem">CS Agent ✦ New</a>
                     </div>
                 </li>
-
                 <li class="header-nav-item" role="none">
                     <a href="about.html" class="header-nav-link" role="menuitem">About</a>
                 </li>
-
                 <li class="header-nav-item" role="none">
                     <a href="contact.html" class="header-nav-link" role="menuitem">Contact</a>
                 </li>
-
             </ul>
         </div>
     </div>
@@ -1577,54 +1550,54 @@
                 <h3>Stay in the loop</h3>
                 <p>New templates, tools, and maker updates — no spam, ever.</p>
             </div>
-            <div class="newsletter-form">
-                <input type="email" class="newsletter-input" placeholder="your@email.com">
-                <button class="btn-newsletter">Subscribe</button>
+            <div id="newsletterForm" class="newsletter-form">
+                <input id="newsletterEmail" type="email" class="newsletter-input" placeholder="your@email.com" autocomplete="email">
+                <button id="newsletterBtn" class="btn-newsletter">Subscribe</button>
+                <span id="newsletterMsg" style="display:none;font-size:0.82rem;margin-left:6px;"></span>
             </div>
         </div>
     </div>
 </section>
 
+<!-- ─── FOOTER ─────────────────────────────────────────────────── -->
 <footer>
     <div class="footer-content">
         <div class="footer-column">
             <h3>ResumePro</h3>
-            <p>Professional digital templates to showcase your career and work.</p>
+            <p>Professional digital templates, tools, and apps — built by Adolf de Guzman.</p>
         </div>
-        
         <div class="footer-column">
             <h3>Templates</h3>
             <ul class="footer-links">
                 <li><a href="resume-templates.html">Resume Templates</a></li>
                 <li><a href="portfolio-templates.html">Portfolio Templates</a></li>
-                <li><a href="#">All Templates</a></li>
             </ul>
         </div>
-        
         <div class="footer-column">
-            <h3>Resources</h3>
+            <h3>Tools</h3>
             <ul class="footer-links">
-                <li><a href="help.html#editing">How to Edit</a></li>
-                <li><a href="help.html#hosting">Hosting Guide</a></li>
-                <li><a href="help.html#tips">Tips & Examples</a></li>
+                <li><a href="adg-customer-service-agent.html">CS Agent ✦</a></li>
+                <li><a href="email-builder.html">Email Builder</a></li>
+                <li><a href="inliner.html">CSS Inliner</a></li>
+                <li><a href="klaviyo-tool.html">Klaviyo Tool</a></li>
             </ul>
         </div>
-        
         <div class="footer-column">
             <h3>Company</h3>
             <ul class="footer-links">
-                <li><a href="about.html">About Us</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="blog-list.html">Blog</a></li>
                 <li><a href="contact.html">Contact</a></li>
                 <li><a href="privacy.html">Privacy Policy</a></li>
                 <li><a href="terms.html">Terms of Service</a></li>
             </ul>
         </div>
     </div>
-    
     <div class="copyright">
-        <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
+        <p>&copy; 2025 Adolf de Guzman. All rights reserved.</p>
     </div>
 </footer>
+
 <!-- floating CTA button -->
 <a href="adg-customer-service-agent.html" class="floating-cta" id="floatingCta">
     <div class="floating-dot"></div>
@@ -1657,17 +1630,78 @@
     }, { threshold: 0.1 });
     heroObserver.observe(hero);
 
-    // Newsletter form feedback
-    const form = document.querySelector('.newsletter-form');
-    const btn = form.querySelector('.btn-newsletter');
-    btn.addEventListener('click', () => {
-        const input = form.querySelector('.newsletter-input');
-        if (input.value && input.value.includes('@')) {
-            btn.textContent = '✓ Subscribed!';
-            btn.style.background = '#2d7a4f';
-            input.value = '';
-            setTimeout(() => { btn.textContent = 'Subscribe'; btn.style.background = ''; }, 3000);
+    // ─── NEWSLETTER → GOOGLE SHEETS ───────────────────────────────
+    // 1. Deploy your Apps Script as a Web App (see newsletter-setup.md)
+    // 2. Paste the Web App URL below
+    const SHEET_ENDPOINT = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+
+    const newsletterBtn   = document.getElementById('newsletterBtn');
+    const newsletterEmail = document.getElementById('newsletterEmail');
+    const newsletterMsg   = document.getElementById('newsletterMsg');
+
+    function showMsg(text, color) {
+        newsletterMsg.textContent = text;
+        newsletterMsg.style.color = color;
+        newsletterMsg.style.display = 'inline';
+    }
+
+    newsletterBtn.addEventListener('click', async () => {
+        const email = newsletterEmail.value.trim();
+
+        // Basic validation
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showMsg('Please enter a valid email.', '#e05252');
+            newsletterEmail.focus();
+            return;
         }
+
+        // Check endpoint is configured
+        if (SHEET_ENDPOINT === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+            showMsg('⚠ Endpoint not configured yet.', '#c8a96e');
+            return;
+        }
+
+        // Loading state
+        newsletterBtn.textContent = 'Sending…';
+        newsletterBtn.disabled = true;
+        newsletterMsg.style.display = 'none';
+
+        try {
+            // Google Apps Script requires no-cors for cross-origin POST from static sites
+            await fetch(SHEET_ENDPOINT, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email,
+                    source: 'homepage',
+                    timestamp: new Date().toISOString()
+                })
+            });
+
+            // no-cors means we can't read the response — treat reaching here as success
+            newsletterBtn.textContent = '✓ Subscribed!';
+            newsletterBtn.style.background = '#2d7a4f';
+            newsletterEmail.value = '';
+            showMsg('Thanks! You\'re on the list.', '#2d7a4f');
+
+            setTimeout(() => {
+                newsletterBtn.textContent = 'Subscribe';
+                newsletterBtn.style.background = '';
+                newsletterBtn.disabled = false;
+                newsletterMsg.style.display = 'none';
+            }, 4000);
+
+        } catch (err) {
+            newsletterBtn.textContent = 'Subscribe';
+            newsletterBtn.disabled = false;
+            showMsg('Something went wrong. Please try again.', '#e05252');
+        }
+    });
+
+    // Allow Enter key to submit
+    newsletterEmail.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') newsletterBtn.click();
     });
 </script>
 

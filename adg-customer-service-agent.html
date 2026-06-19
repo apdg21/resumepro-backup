@@ -420,32 +420,191 @@
   <button class="tab-btn" id="tab-kb" onclick="switchTab('kb')"><i class="ti ti-book" style="font-size:14px"></i> Knowledge Base</button>
 </div>
 
-<!-- Help Modal -->
+<!-- ── Help Modal ── -->
 <div id="helpOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;backdrop-filter:blur(4px)" onclick="closeHelp(event)">
-  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#17171b;border:1px solid #2e2e38;border-radius:16px;width:min(560px,94vw);max-height:88vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.6)">
-    <div style="padding:1.2rem 1.4rem;border-bottom:1px solid #2e2e38;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#17171b;border-radius:16px 16px 0 0;z-index:1">
+  <div id="helpModal" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#17171b;border:1px solid #2e2e38;border-radius:16px;width:min(680px,96vw);max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.6)">
+
+    <!-- Modal header -->
+    <div style="padding:1.4rem 1.6rem;border-bottom:1px solid #2e2e38;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#17171b;z-index:1;border-radius:16px 16px 0 0">
       <div style="display:flex;align-items:center;gap:10px">
         <div style="width:32px;height:32px;background:linear-gradient(135deg,#7b6ef6,#b06ef6);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px"><i class="ti ti-help"></i></div>
-        <div><div style="font-size:15px;font-weight:600;color:#e8e8f0">How to use CS Agent</div><div style="font-size:12px;color:#5a5a72;margin-top:1px">Setup guide & tips</div></div>
+        <div>
+          <div style="font-size:15px;font-weight:600;color:#e8e8f0">How to use CS Agent</div>
+          <div style="font-size:12px;color:#5a5a72;margin-top:1px">Setup guide &amp; provider comparison</div>
+        </div>
       </div>
       <button onclick="closeHelp()" style="background:none;border:1px solid #2e2e38;border-radius:8px;padding:6px 10px;color:#9898b0;cursor:pointer;font-size:18px;line-height:1"><i class="ti ti-x"></i></button>
     </div>
-    <div style="padding:1.4rem">
-      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5a5a72;margin-bottom:.9rem">Quick start</div>
-      <div style="display:flex;flex-direction:column;gap:.55rem;margin-bottom:1.4rem">
-        <div style="display:flex;gap:12px;align-items:flex-start"><div style="width:22px;height:22px;border-radius:50%;background:#1e1a3a;border:1px solid #3d3470;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#9b8ff8;flex-shrink:0">1</div><div style="font-size:13px;color:#9898b0;padding-top:2px">Pick an <strong style="color:#e8e8f0">AI Provider</strong> and paste your API key in the left sidebar.</div></div>
-        <div style="display:flex;gap:12px;align-items:flex-start"><div style="width:22px;height:22px;border-radius:50%;background:#1e1a3a;border:1px solid #3d3470;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#9b8ff8;flex-shrink:0">2</div><div style="font-size:13px;color:#9898b0;padding-top:2px">Paste the <strong style="color:#e8e8f0">full customer email thread</strong> in the middle panel and add context.</div></div>
-        <div style="display:flex;gap:12px;align-items:flex-start"><div style="width:22px;height:22px;border-radius:50%;background:#1e1a3a;border:1px solid #3d3470;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#9b8ff8;flex-shrink:0">3</div><div style="font-size:13px;color:#9898b0;padding-top:2px">Hit <strong style="color:#e8e8f0">Generate response</strong> (or <kbd style="background:#26262e;border:1px solid #3a3a48;border-radius:4px;padding:1px 5px;font-size:11px;font-family:monospace">Ctrl+Enter</kbd>).</div></div>
-        <div style="display:flex;gap:12px;align-items:flex-start"><div style="width:22px;height:22px;border-radius:50%;background:#1e1a3a;border:1px solid #3d3470;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#9b8ff8;flex-shrink:0">4</div><div style="font-size:13px;color:#9898b0;padding-top:2px">Use the <strong style="color:#e8e8f0">💬 chat bubble</strong> (bottom-right) to refine, shorten, adjust tone, or ask about your KB &amp; QA.</div></div>
+
+    <div style="padding:1.6rem">
+
+      <!-- Quick start -->
+      <div style="margin-bottom:1.8rem">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5a5a72;margin-bottom:1rem">Quick start</div>
+        <div style="display:flex;flex-direction:column;gap:.6rem">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:24px;height:24px;border-radius:50%;background:#1e1a3a;border:1px solid #3d3470;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#9b8ff8;flex-shrink:0">1</div>
+            <div style="font-size:13.5px;color:#9898b0;padding-top:3px">Choose your <strong style="color:#e8e8f0">AI Provider</strong> from the left sidebar and paste your API key. It saves automatically.</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:24px;height:24px;border-radius:50%;background:#1e1a3a;border:1px solid #3d3470;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#9b8ff8;flex-shrink:0">2</div>
+            <div style="font-size:13.5px;color:#9898b0;padding-top:3px">Paste the <strong style="color:#e8e8f0">full customer email thread</strong> — not just the latest message. The more history, the better the reply.</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:24px;height:24px;border-radius:50%;background:#1e1a3a;border:1px solid #3d3470;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#9b8ff8;flex-shrink:0">3</div>
+            <div style="font-size:13.5px;color:#9898b0;padding-top:3px">Add <strong style="color:#e8e8f0">context</strong> — order numbers, account info, prior complaints, product details. Attach screenshots or photos if relevant.</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:24px;height:24px;border-radius:50%;background:#1e1a3a;border:1px solid #3d3470;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#9b8ff8;flex-shrink:0">4</div>
+            <div style="font-size:13.5px;color:#9898b0;padding-top:3px">Hit <strong style="color:#e8e8f0">Generate response</strong> (or press <kbd style="background:#26262e;border:1px solid #3a3a48;border-radius:4px;padding:1px 6px;font-size:11px;font-family:monospace">Ctrl+Enter</kbd>) and copy the drafted reply.</div>
+          </div>
+        </div>
       </div>
-      <div style="height:1px;background:#2e2e38;margin-bottom:1.2rem"></div>
-      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5a5a72;margin-bottom:.9rem">Tips for better results</div>
-      <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.4rem">
-        <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.7rem .9rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">📋 Paste the full thread</strong> — not just the latest message. Prior replies help the AI avoid contradictions.</div>
-        <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.7rem .9rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">🖼 Upload screenshots</strong> — Anthropic Claude can analyze product photos and defect images.</div>
-        <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.7rem .9rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">🔐 API key stays on your device</strong> — saved in browser localStorage, never sent to our servers.</div>
+
+      <!-- Divider -->
+      <div style="height:1px;background:#2e2e38;margin-bottom:1.8rem"></div>
+
+      <!-- Provider cards -->
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5a5a72;margin-bottom:1rem">AI Providers — which one to choose?</div>
+
+      <!-- Anthropic -->
+      <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.75rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:20px">🟣</span>
+            <span style="font-size:14px;font-weight:600;color:#e8e8f0">Anthropic — Claude</span>
+          </div>
+          <span style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:#2a1e0a;color:#f5a623;border:1px solid #3a2808">Paid — free trial credits</span>
+        </div>
+        <p style="font-size:13px;color:#9898b0;line-height:1.7;margin-bottom:.8rem">The most capable option for customer service work. Excellent at reading long conversation histories, analyzing images (screenshots, product photos), and writing nuanced, context-aware replies. Recommended if you want the best quality responses.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+          <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:#9b8ff8;background:#1e1a3a;border:1px solid #3d3470;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-external-link" style="font-size:12px"></i> Get API key — console.anthropic.com</a>
+          <a href="https://www.anthropic.com/pricing" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#5a5a72;background:#26262e;border:1px solid #2e2e38;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-currency-dollar" style="font-size:12px"></i> View pricing</a>
+        </div>
+        <p style="font-size:11.5px;color:#5a5a72;margin-top:.7rem;line-height:1.5">💡 New accounts get free credits to start. After that, pay-as-you-go. Claude Sonnet 4 is the sweet spot of cost vs quality.</p>
       </div>
-      <div style="text-align:center"><button onclick="closeHelp()" style="background:linear-gradient(135deg,#7b6ef6,#b06ef6);color:#fff;border:none;border-radius:8px;padding:10px 28px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer">Got it →</button></div>
+
+      <!-- Gemini -->
+      <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.75rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:20px">🔵</span>
+            <span style="font-size:14px;font-weight:600;color:#e8e8f0">Google — Gemini</span>
+          </div>
+          <span style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:#0d2a1e;color:#3dd68c;border:1px solid #1a4a30">Free tier available</span>
+        </div>
+        <p style="font-size:13px;color:#9898b0;line-height:1.7;margin-bottom:.8rem">Google's AI with a generous free tier. Gemini 2.0 Flash is fast and capable — great for most customer service tasks. Free usage has rate limits (requests per minute/day) but is more than enough for testing and low-to-medium volume use.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+          <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:#3dd68c;background:#0d2a1e;border:1px solid #1a4a30;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-external-link" style="font-size:12px"></i> Get API key — aistudio.google.com</a>
+          <a href="https://ai.google.dev/pricing" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#5a5a72;background:#26262e;border:1px solid #2e2e38;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-currency-dollar" style="font-size:12px"></i> View pricing</a>
+        </div>
+        <p style="font-size:11.5px;color:#5a5a72;margin-top:.7rem;line-height:1.5">💡 Gemini 2.0 Flash is free up to 1,500 requests/day — ideal for getting started at zero cost.</p>
+      </div>
+
+      <!-- Groq -->
+      <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.75rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:20px">⚡</span>
+            <span style="font-size:14px;font-weight:600;color:#e8e8f0">Groq</span>
+          </div>
+          <span style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:#0d2a1e;color:#3dd68c;border:1px solid #1a4a30">Free tier available</span>
+        </div>
+        <p style="font-size:13px;color:#9898b0;line-height:1.7;margin-bottom:.8rem">Groq runs open-source models (Llama, Mixtral) on custom hardware — the result is extremely fast responses, often 5–10× faster than other providers. Great for quick drafts. Free tier has daily token limits. Uses open-source models which are slightly less polished than Claude or Gemini for nuanced writing.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+          <a href="https://console.groq.com/keys" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:#3dd68c;background:#0d2a1e;border:1px solid #1a4a30;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-external-link" style="font-size:12px"></i> Get API key — console.groq.com</a>
+          <a href="https://groq.com/pricing" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#5a5a72;background:#26262e;border:1px solid #2e2e38;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-currency-dollar" style="font-size:12px"></i> View pricing</a>
+        </div>
+        <p style="font-size:11.5px;color:#5a5a72;margin-top:.7rem;line-height:1.5">💡 Best if speed is the priority. Llama 3.3 70B is the recommended model — open-source but surprisingly capable for CS work.</p>
+      </div>
+
+      <!-- OpenRouter -->
+      <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.75rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:20px">🔀</span>
+            <span style="font-size:14px;font-weight:600;color:#e8e8f0">OpenRouter</span>
+          </div>
+          <span style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:#0d2a1e;color:#3dd68c;border:1px solid #1a4a30">Free models available</span>
+        </div>
+        <p style="font-size:13px;color:#9898b0;line-height:1.7;margin-bottom:.8rem">A marketplace that gives you access to many AI models through a single API key — including free community-hosted models. This app currently uses only free models for OpenRouter, making it perfect for testing at zero cost. Quality varies per model; GPT-4o Mini is a reliable starting point.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+          <a href="https://openrouter.ai/keys" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:#9b8ff8;background:#1e1a3a;border:1px solid #3d3470;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-external-link" style="font-size:12px"></i> Get API key — openrouter.ai/keys</a>
+          <a href="https://openrouter.ai/models?q=free" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#5a5a72;background:#26262e;border:1px solid #2e2e38;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-list" style="font-size:12px"></i> Browse free models</a>
+        </div>
+        <p style="font-size:11.5px;color:#5a5a72;margin-top:.7rem;line-height:1.5">💡 Sign up is free, no credit card needed for free models. Good for exploring different models before committing to a paid provider.</p>
+      </div>
+
+      <!-- Divider -->
+      <div style="height:1px;background:#2e2e38;margin:1.5rem 0"></div>
+
+      <!-- Comparison table -->
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5a5a72;margin-bottom:.9rem">Quick comparison</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+          <thead>
+            <tr style="border-bottom:1px solid #2e2e38">
+              <th style="text-align:left;padding:8px 10px;color:#5a5a72;font-weight:500">Provider</th>
+              <th style="text-align:left;padding:8px 10px;color:#5a5a72;font-weight:500">Cost</th>
+              <th style="text-align:left;padding:8px 10px;color:#5a5a72;font-weight:500">Speed</th>
+              <th style="text-align:left;padding:8px 10px;color:#5a5a72;font-weight:500">Quality</th>
+              <th style="text-align:left;padding:8px 10px;color:#5a5a72;font-weight:500">Images</th>
+              <th style="text-align:left;padding:8px 10px;color:#5a5a72;font-weight:500">Best for</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #1e1e24">
+              <td style="padding:9px 10px;color:#e8e8f0;font-weight:500">🟣 Anthropic</td>
+              <td style="padding:9px 10px;color:#f5a623">Paid</td>
+              <td style="padding:9px 10px;color:#9898b0">Fast</td>
+              <td style="padding:9px 10px;color:#3dd68c">★★★★★</td>
+              <td style="padding:9px 10px;color:#3dd68c">✓ Full</td>
+              <td style="padding:9px 10px;color:#9898b0">Production use</td>
+            </tr>
+            <tr style="border-bottom:1px solid #1e1e24">
+              <td style="padding:9px 10px;color:#e8e8f0;font-weight:500">🔵 Gemini</td>
+              <td style="padding:9px 10px;color:#3dd68c">Free tier</td>
+              <td style="padding:9px 10px;color:#9898b0">Fast</td>
+              <td style="padding:9px 10px;color:#3dd68c">★★★★☆</td>
+              <td style="padding:9px 10px;color:#f5a623">✓ Limited</td>
+              <td style="padding:9px 10px;color:#9898b0">Free daily use</td>
+            </tr>
+            <tr style="border-bottom:1px solid #1e1e24">
+              <td style="padding:9px 10px;color:#e8e8f0;font-weight:500">⚡ Groq</td>
+              <td style="padding:9px 10px;color:#3dd68c">Free tier</td>
+              <td style="padding:9px 10px;color:#3dd68c">⚡ Fastest</td>
+              <td style="padding:9px 10px;color:#f5a623">★★★☆☆</td>
+              <td style="padding:9px 10px;color:#f56565">✗ No</td>
+              <td style="padding:9px 10px;color:#9898b0">Speed priority</td>
+            </tr>
+            <tr>
+              <td style="padding:9px 10px;color:#e8e8f0;font-weight:500">🔀 OpenRouter</td>
+              <td style="padding:9px 10px;color:#3dd68c">Free models</td>
+              <td style="padding:9px 10px;color:#9898b0">Varies</td>
+              <td style="padding:9px 10px;color:#f5a623">★★★☆☆</td>
+              <td style="padding:9px 10px;color:#f56565">✗ No</td>
+              <td style="padding:9px 10px;color:#9898b0">Testing &amp; exploring</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Divider -->
+      <div style="height:1px;background:#2e2e38;margin:1.5rem 0"></div>
+
+      <!-- Tips -->
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5a5a72;margin-bottom:.9rem">Tips for better responses</div>
+      <div style="display:flex;flex-direction:column;gap:.6rem">
+        <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">📋 Paste the full email thread</strong> — not just the latest message. Include every previous reply so the AI sees all prior commitments and won't contradict them.</div>
+        <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">🖼 Upload product photos or screenshots</strong> — if the customer sent an image of a "defect", paste it here. The AI will analyze it and may find it's normal behavior, saving you a wrong escalation.</div>
+        <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">📄 Paste your policies in the constraints field</strong> — refund windows, escalation rules, what's covered under warranty. The AI will work within them instead of making promises you can't keep.</div>
+        <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">🔐 Your API key stays on your device</strong> — it is saved in your browser's local storage and is never sent to any server other than the AI provider you choose.</div>
+      </div>
+
+      <div style="margin-top:1.5rem;text-align:center">
+        <button onclick="closeHelp()" style="background:linear-gradient(135deg,#7b6ef6,#b06ef6);color:#fff;border:none;border-radius:8px;padding:10px 28px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer">Got it, let's go →</button>
+      </div>
+
     </div>
   </div>
 </div>

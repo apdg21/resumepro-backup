@@ -83,6 +83,13 @@
       "date": "2026-06-19",
       "excerpt": "Brands that constantly guess and experiment don't just make bad decisions — they unknowingly destroy the very data that would reveal their seasonal patterns.",
       "image": "assets/blog/guessing-vs-strategy.jpg"
-    }  
+    },
+	{
+     "title": "The Email Marketing Mirage: Why Early Success Fades and How to Recover",
+     "url": "email-marketing-mirage.html",
+     "date": "2026-07-07",
+     "excerpt": "That early spike in revenue and open rates isn't built to last on its own. Learn why email programs decline after the honeymoon phase — and how to recover before it's too late.",
+     "image": "assets/blog/email-marketing-mirage.jpg"
+   }
   ]
 }

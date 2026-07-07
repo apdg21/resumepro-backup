@@ -454,10 +454,49 @@
             <div style="width:24px;height:24px;border-radius:50%;background:#1e1a3a;border:1px solid #3d3470;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#9b8ff8;flex-shrink:0">3</div>
             <div style="font-size:13.5px;color:#9898b0;padding-top:3px">Add <strong style="color:#e8e8f0">context</strong> — order numbers, account info, prior complaints, product details. Attach screenshots or photos if relevant.</div>
           </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;background:#2a1e0a;border:1px solid #3a2808;border-radius:8px;padding:.7rem .8rem;margin:.2rem 0">
+            <div style="width:24px;height:24px;border-radius:50%;background:#3a2808;border:1px solid #5a3f0c;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#f5a623;flex-shrink:0">!</div>
+            <div style="font-size:13.5px;color:#e8c896;padding-top:3px">If you've set up a <strong style="color:#f5a623">Knowledge Base</strong> platform (links, docs, or notes), that info is <strong style="color:#f5a623">not used automatically</strong>. You must select that platform's chip in the platform bar above the message box (Draft tab) or conversation box (QA tab). If nothing is selected, the AI won't see it and may give a generic or "wrong" answer — even though the info is saved.</div>
+          </div>
           <div style="display:flex;gap:12px;align-items:flex-start">
             <div style="width:24px;height:24px;border-radius:50%;background:#1e1a3a;border:1px solid #3d3470;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#9b8ff8;flex-shrink:0">4</div>
             <div style="font-size:13.5px;color:#9898b0;padding-top:3px">Hit <strong style="color:#e8e8f0">Generate response</strong> (or press <kbd style="background:#26262e;border:1px solid #3a3a48;border-radius:4px;padding:1px 6px;font-size:11px;font-family:monospace">Ctrl+Enter</kbd>) and copy the drafted reply.</div>
           </div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div style="height:1px;background:#2e2e38;margin-bottom:1.8rem"></div>
+
+      <!-- Understanding the tabs -->
+      <div style="margin-bottom:1.8rem">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5a5a72;margin-bottom:1rem">Understanding the tabs</div>
+        <div style="display:flex;flex-direction:column;gap:.75rem">
+
+          <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:12px;padding:1rem 1.1rem">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:.5rem">
+              <i class="ti ti-pencil" style="font-size:15px;color:#9b8ff8"></i>
+              <span style="font-size:13.5px;font-weight:600;color:#e8e8f0">Draft Response</span>
+            </div>
+            <p style="font-size:13px;color:#9898b0;line-height:1.65">Where you write replies. Paste the customer's message and any context, then generate a ready-to-send draft. If you've added a platform in the Knowledge Base, use the platform bar just above the message box to select it — that's what tells the AI to actually use that platform's saved policies and info.</p>
+          </div>
+
+          <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:12px;padding:1rem 1.1rem">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:.5rem">
+              <i class="ti ti-shield-check" style="font-size:15px;color:#9b8ff8"></i>
+              <span style="font-size:13.5px;font-weight:600;color:#e8e8f0">QA Review</span>
+            </div>
+            <p style="font-size:13px;color:#9898b0;line-height:1.65">Where you check a conversation after the fact — your own reply, or one written by another agent. Paste the full back-and-forth thread and the AI scores it for accuracy, tone, completeness, and risk, then flags specific issues. Just like the Draft tab, select the relevant platform chip here so the AI checks the reply against that platform's actual policies instead of general best practices.</p>
+          </div>
+
+          <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:12px;padding:1rem 1.1rem">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:.5rem">
+              <i class="ti ti-book" style="font-size:15px;color:#9b8ff8"></i>
+              <span style="font-size:13.5px;font-weight:600;color:#e8e8f0">Knowledge Base</span>
+            </div>
+            <p style="font-size:13px;color:#9898b0;line-height:1.65">Where you store reference info per platform (e.g. Shopify, Amazon, TikTok Shop) — reference links, uploaded documents, and text notes like policies or FAQs. <strong style="color:#e8e8f0">Adding info here only saves it — it doesn't automatically get used.</strong> You still need to go to the Draft or QA tab and select that platform's chip in the platform bar for the AI to actually read it.</p>
+          </div>
+
         </div>
       </div>
 
@@ -598,6 +637,7 @@
         <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">📋 Paste the full email thread</strong> — not just the latest message. Include every previous reply so the AI sees all prior commitments and won't contradict them.</div>
         <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">🖼 Upload product photos or screenshots</strong> — if the customer sent an image of a "defect", paste it here. The AI will analyze it and may find it's normal behavior, saving you a wrong escalation.</div>
         <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">📄 Paste your policies in the constraints field</strong> — refund windows, escalation rules, what's covered under warranty. The AI will work within them instead of making promises you can't keep.</div>
+        <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">🏬 Select the right platform chip</strong> — if you've built up a Knowledge Base for a platform, click its chip in the platform bar on the Draft or QA tab before generating. Without this step, that saved info is ignored, even though it's stored.</div>
         <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">🔐 Your API key stays on your device</strong> — it is saved in your browser's local storage and is never sent to any server other than the AI provider you choose.</div>
       </div>
 

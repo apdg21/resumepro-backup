@@ -24,13 +24,41 @@
     --border:#2e2e38;--border2:#3a3a48;
     --text:#e8e8f0;--text2:#9898b0;--text3:#5a5a72;
     --accent:#7b6ef6;--accent2:#9b8ff8;--accent-bg:#1e1a3a;--accent-border:#3d3470;
-    --green:#3dd68c;--green-bg:#0d2a1e;
-    --amber:#f5a623;--amber-bg:#2a1e0a;
-    --red:#f56565;--red-bg:#2a0f0f;
+    --green:#3dd68c;--green-bg:#0d2a1e;--green-border:#1a4a30;
+    --amber:#f5a623;--amber-bg:#2a1e0a;--amber-border:#3a2808;
+    --red:#f56565;--red-bg:#2a0f0f;--red-border:#3a1010;
+    --blue:#60a5fa;--blue-bg:#0d1a2a;--blue-border:#1a2a3a;
+    --orange:#f97316;--orange-bg:#2a1208;--orange-border:#3a1c08;
     --radius:10px;--radius-sm:6px;--radius-lg:14px;
     --font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
     --chrome-height:98px;--nav-top:56px;
+    --shadow-modal:0 20px 60px rgba(0,0,0,.5);
+    --shadow-help:0 24px 80px rgba(0,0,0,.6);
+    --overlay-bg:rgba(0,0,0,.65);
+    --overlay-bg2:rgba(0,0,0,.7);
   }
+  /* ── LIGHT THEME ── */
+  html[data-theme="light"] {
+    --bg:#f7f7fa;--bg2:#ffffff;--bg3:#f0f0f5;--bg4:#e7e7ef;
+    --border:#e0e0ea;--border2:#cccbdb;
+    --text:#1c1c26;--text2:#5c5c72;--text3:#8b8ba0;
+    --accent:#6a5cf0;--accent2:#5645d9;--accent-bg:#efecff;--accent-border:#cfc6fb;
+    --green:#0f9d63;--green-bg:#e6f7ef;--green-border:#b7ead1;
+    --amber:#b9750a;--amber-bg:#fdf1dd;--amber-border:#f2d9a5;
+    --red:#d6414c;--red-bg:#fdeaec;--red-border:#f5c1c6;
+    --blue:#2b6cd4;--blue-bg:#e8f0fd;--blue-border:#bcd6f9;
+    --orange:#c05a10;--orange-bg:#fdece0;--orange-border:#f5c6a0;
+    --shadow-modal:0 20px 60px rgba(30,30,50,.15);
+    --shadow-help:0 24px 80px rgba(30,30,50,.2);
+    --overlay-bg:rgba(20,20,30,.35);
+    --overlay-bg2:rgba(20,20,30,.4);
+  }
+  html[data-theme="light"] .float-chat-window,
+  html[data-theme="light"] #helpModal{box-shadow:var(--shadow-help)}
+  html[data-theme="light"] .fcw-hist-del:hover{background:var(--red-bg)!important}
+  html[data-theme="light"] .fcw-header{background:linear-gradient(135deg,#efecff 0%,#ffffff 100%)}
+  .theme-toggle{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:6px;font-family:var(--font);transition:all .15s}
+  .theme-toggle:hover{border-color:var(--border2);color:var(--text)}
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   html{font-size:15px}
   html,body{height:100%;overflow:hidden}
@@ -41,9 +69,9 @@
   .nav p{font-size:12px;color:var(--text3);margin-top:1px}
   .header-right{margin-left:auto;display:flex;align-items:center;gap:.5rem}
   .pill{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:5px}
-  .pill-green{background:var(--green-bg);color:var(--green);border:1px solid #1a4a30}
-  .pill-amber{background:var(--amber-bg);color:var(--amber);border:1px solid #3a2808}
-  .pill-red{background:var(--red-bg);color:var(--red);border:1px solid #3a1010}
+  .pill-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+  .pill-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+  .pill-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
   .pill-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
   .app{flex:1;display:grid;grid-template-columns:300px 1fr 340px;gap:0;height:calc(100vh - var(--chrome-height));overflow:hidden}
   .panel{border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
@@ -122,13 +150,13 @@
   .conf-pct{font-size:12px;font-weight:500;font-family:var(--mono);min-width:30px;text-align:right}
   .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
   .tag{font-size:11px;padding:3px 9px;border-radius:20px;background:var(--bg3);border:1px solid var(--border);color:var(--text2)}
-  .error-box{background:var(--red-bg);border:1px solid #3a1010;border-radius:var(--radius-sm);padding:12px;color:var(--red);font-size:13px;display:flex;gap:8px;align-items:flex-start}
+  .error-box{background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--radius-sm);padding:12px;color:var(--red);font-size:13px;display:flex;gap:8px;align-items:flex-start}
 
   /* ── FLOATING CHAT BUBBLE ── */
   .float-chat-btn{
     position:fixed;bottom:24px;right:24px;
     width:56px;height:56px;border-radius:50%;
-    background:linear-gradient(135deg,#7b6ef6,#9b6ef6);
+    background:linear-gradient(135deg,var(--accent),#9b6ef6);
     border:none;cursor:pointer;
     display:flex;align-items:center;justify-content:center;
     box-shadow:0 4px 24px rgba(123,110,246,.45),0 2px 8px rgba(0,0,0,.4);
@@ -138,6 +166,7 @@
   }
   .float-chat-btn:hover{transform:scale(1.08);box-shadow:0 6px 30px rgba(123,110,246,.6),0 2px 10px rgba(0,0,0,.4)}
   .float-chat-btn:active{transform:scale(.96)}
+  .float-chat-btn.is-open{opacity:0;transform:scale(.7);pointer-events:none}
   .float-badge{
     position:absolute;top:-2px;right:-2px;
     width:18px;height:18px;border-radius:50%;
@@ -188,7 +217,7 @@
     display:flex;align-items:center;justify-content:center;
     flex-shrink:0;transition:color .13s,background .13s;
   }
-  .fcw-hist-del:hover{color:var(--red)!important;background:white;}
+  .fcw-hist-del:hover{color:var(--red)!important;background:var(--red-bg);}
   .fcw-new-btn{
     margin:.5rem;background:none;border:1px dashed var(--border2);border-radius:8px;
     padding:.45rem;font-size:11.5px;color:var(--text3);cursor:pointer;
@@ -209,17 +238,18 @@
   }
   .fcw-header{
     padding:1rem 1.1rem .85rem;
-    background:linear-gradient(135deg,#1e1a3a 0%,#17171b 100%);
+    background:linear-gradient(135deg,var(--accent-bg) 0%,var(--bg2) 100%);
     border-bottom:1px solid var(--border);
     display:flex;align-items:center;gap:10px;flex-shrink:0;
   }
-  .fcw-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7b6ef6,#b06ef6);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 0 0 2px rgba(123,110,246,.3)}
+  .fcw-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#b06ef6);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;box-shadow:0 0 0 2px rgba(123,110,246,.3)}
   .fcw-header-info{flex:1}
-  .fcw-header-name{font-size:13.5px;font-weight:600;color:var(--text)}
+  .fcw-header-name{font-size:13.5px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px}
+  .ai-badge{font-size:9.5px;font-weight:700;letter-spacing:.04em;color:#fff;background:linear-gradient(135deg,var(--accent),#b06ef6);padding:1px 6px;border-radius:8px;line-height:1.5}
   .fcw-header-sub{font-size:11px;color:var(--text3);margin-top:1px;display:flex;align-items:center;gap:5px}
   .fcw-online-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
-  .fcw-close-btn{background:none;border:none;cursor:pointer;color:var(--text3);font-size:18px;padding:4px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:color .15s,background .15s;flex-shrink:0}
-  .fcw-close-btn:hover{color:var(--text2);background:var(--bg3)}
+  .fcw-close-btn{background:var(--bg3);border:1px solid var(--border);cursor:pointer;color:var(--text2);font-size:16px;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:color .15s,background .15s,border-color .15s;flex-shrink:0}
+  .fcw-close-btn:hover{color:var(--text);background:var(--red-bg);border-color:var(--red-border)}
   .fcw-ctx{
     padding:.45rem 1rem;background:var(--accent-bg);border-bottom:1px solid var(--accent-border);
     font-size:11px;color:var(--accent2);display:flex;align-items:center;gap:6px;flex-shrink:0;
@@ -284,10 +314,12 @@
   .kb-status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
   .kb-status-ok{background:var(--green)}.kb-status-err{background:var(--red)}.kb-status-pending{background:var(--text3)}.kb-status-fetching{background:var(--amber);animation:pulse-dot .8s ease-in-out infinite}
   @keyframes pulse-dot{0%,100%{opacity:.4}50%{opacity:1}}
-  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;backdrop-filter:blur(3px);align-items:center;justify-content:center}
+  .modal-overlay{display:none;position:fixed;inset:0;background:var(--overlay-bg);z-index:500;backdrop-filter:blur(3px);align-items:center;justify-content:center}
   .modal-overlay.open{display:flex}
-  .modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:1.5rem;width:min(420px,92vw);box-shadow:0 20px 60px rgba(0,0,0,.5)}
-  .modal-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+  .modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:1.5rem;width:min(420px,92vw);box-shadow:var(--shadow-modal);position:relative}
+  .modal-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:1rem;display:flex;align-items:center;gap:8px;padding-right:1.6rem}
+  .modal-x-btn{position:absolute;top:.9rem;right:.9rem;background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:28px;height:28px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s}
+  .modal-x-btn:hover{color:var(--text);background:var(--red-bg);border-color:var(--red-border)}
   .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:1.1rem}
   .emoji-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-top:.5rem}
   .emoji-opt{background:none;border:1px solid var(--border);border-radius:var(--radius-sm);padding:5px;font-size:18px;cursor:pointer;transition:all .15s;text-align:center}
@@ -315,10 +347,10 @@
   .issue-body.open{display:block}
   .issue-title{font-size:13px;font-weight:500;color:var(--text);flex:1}
   .sev{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px}
-  .sev-critical{background:#2a0f0f;color:#f56565;border:1px solid #3a1010}
-  .sev-moderate{background:var(--amber-bg);color:var(--amber);border:1px solid #3a2808}
-  .sev-minor{background:#0d2a1e;color:#3dd68c;border:1px solid #1a4a30}
-  .sev-positive{background:#0d1a2a;color:#60a5fa;border:1px solid #1a2a3a}
+  .sev-critical{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+  .sev-moderate{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+  .sev-minor{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+  .sev-positive{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)}
   .issue-icon{font-size:16px;flex-shrink:0}
   .chevron{font-size:14px;color:var(--text3);transition:transform .2s;flex-shrink:0}.chevron.open{transform:rotate(90deg)}
   .summary-row{display:flex;align-items:center;gap:1rem;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.2rem;margin-bottom:1rem}
@@ -409,6 +441,7 @@
   <div><h1>CS Agent</h1><p>AI-powered customer service drafting</p></div>
   <div class="header-right">
     <span class="pill pill-green" id="statusPill"><span class="pill-dot"></span> Ready</span>
+    <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" title="Switch theme"><i class="ti ti-sun" id="themeToggleIcon"></i> <span id="themeToggleLabel">Light</span></button>
     <button class="btn-ghost" onclick="openHelp()" style="padding:6px 12px;font-size:12px"><i class="ti ti-help-circle"></i> Help</button>
     <button class="btn-ghost" onclick="clearAll()" style="padding:6px 12px;font-size:12px"><i class="ti ti-refresh"></i> Clear all</button>
   </div>
@@ -421,228 +454,228 @@
 </div>
 
 <!-- ── Help Modal ── -->
-<div id="helpOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;backdrop-filter:blur(4px)" onclick="closeHelp(event)">
-  <div id="helpModal" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#17171b;border:1px solid #2e2e38;border-radius:16px;width:min(680px,96vw);max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.6)">
+<div id="helpOverlay" style="display:none;position:fixed;inset:0;background:var(--overlay-bg2);z-index:1000;backdrop-filter:blur(4px)" onclick="closeHelp(event)">
+  <div id="helpModal" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg2);border:1px solid var(--border);border-radius:16px;width:min(680px,96vw);max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-help)">
 
     <!-- Modal header -->
-    <div style="padding:1.4rem 1.6rem;border-bottom:1px solid #2e2e38;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#17171b;z-index:1;border-radius:16px 16px 0 0">
+    <div style="padding:1.4rem 1.6rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg2);z-index:1;border-radius:16px 16px 0 0">
       <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:32px;height:32px;background:linear-gradient(135deg,#7b6ef6,#b06ef6);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px"><i class="ti ti-help"></i></div>
+        <div style="width:32px;height:32px;background:linear-gradient(135deg,var(--accent),#b06ef6);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px"><i class="ti ti-help"></i></div>
         <div>
-          <div style="font-size:15px;font-weight:600;color:#e8e8f0">How to use CS Agent</div>
-          <div style="font-size:12px;color:#5a5a72;margin-top:1px">Setup guide &amp; provider comparison</div>
+          <div style="font-size:15px;font-weight:600;color:var(--text)">How to use CS Agent</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:1px">Setup guide &amp; provider comparison</div>
         </div>
       </div>
-      <button onclick="closeHelp()" style="background:none;border:1px solid #946EF6;border-radius:8px;padding:6px 10px;color:#9898b0;cursor:pointer;font-size:18px;line-height:1"><i class="ti ti-x"></i></button>
+      <button onclick="closeHelp()" title="Close" style="background:var(--bg3);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;color:var(--text2);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .15s" onmouseover="this.style.background='var(--red-bg)';this.style.borderColor='var(--red-border)';this.style.color='var(--text)'" onmouseout="this.style.background='var(--bg3)';this.style.borderColor='var(--border)';this.style.color='var(--text2)'"><i class="ti ti-x"></i></button>
     </div>
 
     <div style="padding:1.6rem">
 
       <!-- Quick start -->
       <div style="margin-bottom:1.8rem">
-        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5a5a72;margin-bottom:1rem">Quick start</div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:1rem">Quick start</div>
         <div style="display:flex;flex-direction:column;gap:.6rem">
           <div style="display:flex;gap:12px;align-items:flex-start">
-            <div style="width:24px;height:24px;border-radius:50%;background:#1e1a3a;border:1px solid #3d3470;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#9b8ff8;flex-shrink:0">1</div>
-            <div style="font-size:13.5px;color:#9898b0;padding-top:3px">Choose your <strong style="color:#e8e8f0">AI Provider</strong> from the left sidebar and paste your API key. It saves automatically.</div>
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--accent-bg);border:1px solid var(--accent-border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--accent2);flex-shrink:0">1</div>
+            <div style="font-size:13.5px;color:var(--text2);padding-top:3px">Choose your <strong style="color:var(--text)">AI Provider</strong> from the left sidebar and paste your API key. It saves automatically.</div>
           </div>
           <div style="display:flex;gap:12px;align-items:flex-start">
-            <div style="width:24px;height:24px;border-radius:50%;background:#1e1a3a;border:1px solid #3d3470;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#9b8ff8;flex-shrink:0">2</div>
-            <div style="font-size:13.5px;color:#9898b0;padding-top:3px">Paste the <strong style="color:#e8e8f0">full customer email thread</strong> — not just the latest message. The more history, the better the reply.</div>
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--accent-bg);border:1px solid var(--accent-border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--accent2);flex-shrink:0">2</div>
+            <div style="font-size:13.5px;color:var(--text2);padding-top:3px">Paste the <strong style="color:var(--text)">full customer email thread</strong> — not just the latest message. The more history, the better the reply.</div>
           </div>
           <div style="display:flex;gap:12px;align-items:flex-start">
-            <div style="width:24px;height:24px;border-radius:50%;background:#1e1a3a;border:1px solid #3d3470;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#9b8ff8;flex-shrink:0">3</div>
-            <div style="font-size:13.5px;color:#9898b0;padding-top:3px">Add <strong style="color:#e8e8f0">context</strong> — order numbers, account info, prior complaints, product details. Attach screenshots or photos if relevant.</div>
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--accent-bg);border:1px solid var(--accent-border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--accent2);flex-shrink:0">3</div>
+            <div style="font-size:13.5px;color:var(--text2);padding-top:3px">Add <strong style="color:var(--text)">context</strong> — order numbers, account info, prior complaints, product details. Attach screenshots or photos if relevant.</div>
           </div>
-          <div style="display:flex;gap:12px;align-items:flex-start;background:#2a1e0a;border:1px solid #3a2808;border-radius:8px;padding:.7rem .8rem;margin:.2rem 0">
-            <div style="width:24px;height:24px;border-radius:50%;background:#3a2808;border:1px solid #5a3f0c;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#f5a623;flex-shrink:0">!</div>
-            <div style="font-size:13.5px;color:#e8c896;padding-top:3px">If you've set up a <strong style="color:#f5a623">Knowledge Base</strong> platform (links, docs, or notes), that info is <strong style="color:#f5a623">not used automatically</strong>. You must select that platform's chip in the platform bar above the message box (Draft tab) or conversation box (QA tab). If nothing is selected, the AI won't see it and may give a generic or "wrong" answer — even though the info is saved.</div>
+          <div style="display:flex;gap:12px;align-items:flex-start;background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:8px;padding:.7rem .8rem;margin:.2rem 0">
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--amber-border);border:1px solid var(--amber-border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--amber);flex-shrink:0">!</div>
+            <div style="font-size:13.5px;color:var(--amber);padding-top:3px">If you've set up a <strong style="color:var(--amber)">Knowledge Base</strong> platform (links, docs, or notes), that info is <strong style="color:var(--amber)">not used automatically</strong>. You must select that platform's chip in the platform bar above the message box (Draft tab) or conversation box (QA tab). If nothing is selected, the AI won't see it and may give a generic or "wrong" answer — even though the info is saved.</div>
           </div>
           <div style="display:flex;gap:12px;align-items:flex-start">
-            <div style="width:24px;height:24px;border-radius:50%;background:#1e1a3a;border:1px solid #3d3470;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#9b8ff8;flex-shrink:0">4</div>
-            <div style="font-size:13.5px;color:#9898b0;padding-top:3px">Hit <strong style="color:#e8e8f0">Generate response</strong> (or press <kbd style="background:#26262e;border:1px solid #3a3a48;border-radius:4px;padding:1px 6px;font-size:11px;font-family:monospace">Ctrl+Enter</kbd>) and copy the drafted reply.</div>
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--accent-bg);border:1px solid var(--accent-border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--accent2);flex-shrink:0">4</div>
+            <div style="font-size:13.5px;color:var(--text2);padding-top:3px">Hit <strong style="color:var(--text)">Generate response</strong> (or press <kbd style="background:var(--bg4);border:1px solid var(--border2);border-radius:4px;padding:1px 6px;font-size:11px;font-family:monospace">Ctrl+Enter</kbd>) and copy the drafted reply.</div>
           </div>
         </div>
       </div>
 
       <!-- Divider -->
-      <div style="height:1px;background:#2e2e38;margin-bottom:1.8rem"></div>
+      <div style="height:1px;background:var(--border);margin-bottom:1.8rem"></div>
 
       <!-- Understanding the tabs -->
       <div style="margin-bottom:1.8rem">
-        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5a5a72;margin-bottom:1rem">Understanding the tabs</div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:1rem">Understanding the tabs</div>
         <div style="display:flex;flex-direction:column;gap:.75rem">
 
-          <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:12px;padding:1rem 1.1rem">
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:.5rem">
-              <i class="ti ti-pencil" style="font-size:15px;color:#9b8ff8"></i>
-              <span style="font-size:13.5px;font-weight:600;color:#e8e8f0">Draft Response</span>
+              <i class="ti ti-pencil" style="font-size:15px;color:var(--accent2)"></i>
+              <span style="font-size:13.5px;font-weight:600;color:var(--text)">Draft Response</span>
             </div>
-            <p style="font-size:13px;color:#9898b0;line-height:1.65">Where you write replies. Paste the customer's message and any context, then generate a ready-to-send draft. If you've added a platform in the Knowledge Base, use the platform bar just above the message box to select it — that's what tells the AI to actually use that platform's saved policies and info.</p>
+            <p style="font-size:13px;color:var(--text2);line-height:1.65">Where you write replies. Paste the customer's message and any context, then generate a ready-to-send draft. If you've added a platform in the Knowledge Base, use the platform bar just above the message box to select it — that's what tells the AI to actually use that platform's saved policies and info.</p>
           </div>
 
-          <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:12px;padding:1rem 1.1rem">
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:.5rem">
-              <i class="ti ti-shield-check" style="font-size:15px;color:#9b8ff8"></i>
-              <span style="font-size:13.5px;font-weight:600;color:#e8e8f0">QA Review</span>
+              <i class="ti ti-shield-check" style="font-size:15px;color:var(--accent2)"></i>
+              <span style="font-size:13.5px;font-weight:600;color:var(--text)">QA Review</span>
             </div>
-            <p style="font-size:13px;color:#9898b0;line-height:1.65">Where you check a conversation after the fact — your own reply, or one written by another agent. Paste the full back-and-forth thread and the AI scores it for accuracy, tone, completeness, and risk, then flags specific issues. Just like the Draft tab, select the relevant platform chip here so the AI checks the reply against that platform's actual policies instead of general best practices.</p>
+            <p style="font-size:13px;color:var(--text2);line-height:1.65">Where you check a conversation after the fact — your own reply, or one written by another agent. Paste the full back-and-forth thread and the AI scores it for accuracy, tone, completeness, and risk, then flags specific issues. Just like the Draft tab, select the relevant platform chip here so the AI checks the reply against that platform's actual policies instead of general best practices.</p>
           </div>
 
-          <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:12px;padding:1rem 1.1rem">
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:.5rem">
-              <i class="ti ti-book" style="font-size:15px;color:#9b8ff8"></i>
-              <span style="font-size:13.5px;font-weight:600;color:#e8e8f0">Knowledge Base</span>
+              <i class="ti ti-book" style="font-size:15px;color:var(--accent2)"></i>
+              <span style="font-size:13.5px;font-weight:600;color:var(--text)">Knowledge Base</span>
             </div>
-            <p style="font-size:13px;color:#9898b0;line-height:1.65">Where you store reference info per platform (e.g. Shopify, Amazon, TikTok Shop) — reference links, uploaded documents, and text notes like policies or FAQs. <strong style="color:#e8e8f0">Adding info here only saves it — it doesn't automatically get used.</strong> You still need to go to the Draft or QA tab and select that platform's chip in the platform bar for the AI to actually read it.</p>
+            <p style="font-size:13px;color:var(--text2);line-height:1.65">Where you store reference info per platform (e.g. Shopify, Amazon, TikTok Shop) — reference links, uploaded documents, and text notes like policies or FAQs. <strong style="color:var(--text)">Adding info here only saves it — it doesn't automatically get used.</strong> You still need to go to the Draft or QA tab and select that platform's chip in the platform bar for the AI to actually read it.</p>
           </div>
 
         </div>
       </div>
 
       <!-- Divider -->
-      <div style="height:1px;background:#2e2e38;margin-bottom:1.8rem"></div>
+      <div style="height:1px;background:var(--border);margin-bottom:1.8rem"></div>
 
       <!-- Provider cards -->
-      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5a5a72;margin-bottom:1rem">AI Providers — which one to choose?</div>
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:1rem">AI Providers — which one to choose?</div>
 
       <!-- Anthropic -->
-      <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.75rem">
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.75rem">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
           <div style="display:flex;align-items:center;gap:8px">
             <span style="font-size:20px">🟣</span>
-            <span style="font-size:14px;font-weight:600;color:#e8e8f0">Anthropic — Claude</span>
+            <span style="font-size:14px;font-weight:600;color:var(--text)">Anthropic — Claude</span>
           </div>
-          <span style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:#2a1e0a;color:#f5a623;border:1px solid #3a2808">Paid — free trial credits</span>
+          <span style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)">Paid — free trial credits</span>
         </div>
-        <p style="font-size:13px;color:#9898b0;line-height:1.7;margin-bottom:.8rem">The most capable option for customer service work. Excellent at reading long conversation histories, analyzing images (screenshots, product photos), and writing nuanced, context-aware replies. Recommended if you want the best quality responses.</p>
+        <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:.8rem">The most capable option for customer service work. Excellent at reading long conversation histories, analyzing images (screenshots, product photos), and writing nuanced, context-aware replies. Recommended if you want the best quality responses.</p>
         <div style="display:flex;flex-wrap:wrap;gap:.5rem">
-          <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:#9b8ff8;background:#1e1a3a;border:1px solid #3d3470;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-external-link" style="font-size:12px"></i> Get API key — console.anthropic.com</a>
-          <a href="https://www.anthropic.com/pricing" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#5a5a72;background:#26262e;border:1px solid #2e2e38;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-currency-dollar" style="font-size:12px"></i> View pricing</a>
+          <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--accent2);background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-external-link" style="font-size:12px"></i> Get API key — console.anthropic.com</a>
+          <a href="https://www.anthropic.com/pricing" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--text3);background:var(--bg4);border:1px solid var(--border);border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-currency-dollar" style="font-size:12px"></i> View pricing</a>
         </div>
-        <p style="font-size:11.5px;color:#5a5a72;margin-top:.7rem;line-height:1.5">💡 New accounts get free credits to start. After that, pay-as-you-go. Claude Sonnet 4 is the sweet spot of cost vs quality.</p>
+        <p style="font-size:11.5px;color:var(--text3);margin-top:.7rem;line-height:1.5">💡 New accounts get free credits to start. After that, pay-as-you-go. Claude Sonnet 4 is the sweet spot of cost vs quality.</p>
       </div>
 
       <!-- Gemini -->
-      <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.75rem">
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.75rem">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
           <div style="display:flex;align-items:center;gap:8px">
             <span style="font-size:20px">🔵</span>
-            <span style="font-size:14px;font-weight:600;color:#e8e8f0">Google — Gemini</span>
+            <span style="font-size:14px;font-weight:600;color:var(--text)">Google — Gemini</span>
           </div>
-          <span style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:#0d2a1e;color:#3dd68c;border:1px solid #1a4a30">Free tier available</span>
+          <span style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)">Free tier available</span>
         </div>
-        <p style="font-size:13px;color:#9898b0;line-height:1.7;margin-bottom:.8rem">Google's AI with a generous free tier. Gemini 2.0 Flash is fast and capable — great for most customer service tasks. Free usage has rate limits (requests per minute/day) but is more than enough for testing and low-to-medium volume use.</p>
+        <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:.8rem">Google's AI with a generous free tier. Gemini 2.0 Flash is fast and capable — great for most customer service tasks. Free usage has rate limits (requests per minute/day) but is more than enough for testing and low-to-medium volume use.</p>
         <div style="display:flex;flex-wrap:wrap;gap:.5rem">
-          <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:#3dd68c;background:#0d2a1e;border:1px solid #1a4a30;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-external-link" style="font-size:12px"></i> Get API key — aistudio.google.com</a>
-          <a href="https://ai.google.dev/pricing" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#5a5a72;background:#26262e;border:1px solid #2e2e38;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-currency-dollar" style="font-size:12px"></i> View pricing</a>
+          <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--green);background:var(--green-bg);border:1px solid var(--green-border);border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-external-link" style="font-size:12px"></i> Get API key — aistudio.google.com</a>
+          <a href="https://ai.google.dev/pricing" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--text3);background:var(--bg4);border:1px solid var(--border);border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-currency-dollar" style="font-size:12px"></i> View pricing</a>
         </div>
-        <p style="font-size:11.5px;color:#5a5a72;margin-top:.7rem;line-height:1.5">💡 Gemini 2.0 Flash is free up to 1,500 requests/day — ideal for getting started at zero cost.</p>
+        <p style="font-size:11.5px;color:var(--text3);margin-top:.7rem;line-height:1.5">💡 Gemini 2.0 Flash is free up to 1,500 requests/day — ideal for getting started at zero cost.</p>
       </div>
 
       <!-- Groq -->
-      <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.75rem">
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.75rem">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
           <div style="display:flex;align-items:center;gap:8px">
             <span style="font-size:20px">⚡</span>
-            <span style="font-size:14px;font-weight:600;color:#e8e8f0">Groq</span>
+            <span style="font-size:14px;font-weight:600;color:var(--text)">Groq</span>
           </div>
-          <span style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:#0d2a1e;color:#3dd68c;border:1px solid #1a4a30">Free tier available</span>
+          <span style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)">Free tier available</span>
         </div>
-        <p style="font-size:13px;color:#9898b0;line-height:1.7;margin-bottom:.8rem">Groq runs open-source models (Llama, Mixtral) on custom hardware — the result is extremely fast responses, often 5–10× faster than other providers. Great for quick drafts. Free tier has daily token limits. Uses open-source models which are slightly less polished than Claude or Gemini for nuanced writing.</p>
+        <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:.8rem">Groq runs open-source models (Llama, Mixtral) on custom hardware — the result is extremely fast responses, often 5–10× faster than other providers. Great for quick drafts. Free tier has daily token limits. Uses open-source models which are slightly less polished than Claude or Gemini for nuanced writing.</p>
         <div style="display:flex;flex-wrap:wrap;gap:.5rem">
-          <a href="https://console.groq.com/keys" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:#3dd68c;background:#0d2a1e;border:1px solid #1a4a30;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-external-link" style="font-size:12px"></i> Get API key — console.groq.com</a>
-          <a href="https://groq.com/pricing" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#5a5a72;background:#26262e;border:1px solid #2e2e38;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-currency-dollar" style="font-size:12px"></i> View pricing</a>
+          <a href="https://console.groq.com/keys" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--green);background:var(--green-bg);border:1px solid var(--green-border);border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-external-link" style="font-size:12px"></i> Get API key — console.groq.com</a>
+          <a href="https://groq.com/pricing" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--text3);background:var(--bg4);border:1px solid var(--border);border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-currency-dollar" style="font-size:12px"></i> View pricing</a>
         </div>
-        <p style="font-size:11.5px;color:#5a5a72;margin-top:.7rem;line-height:1.5">💡 Best if speed is the priority. Llama 3.3 70B is the recommended model — open-source but surprisingly capable for CS work.</p>
+        <p style="font-size:11.5px;color:var(--text3);margin-top:.7rem;line-height:1.5">💡 Best if speed is the priority. Llama 3.3 70B is the recommended model — open-source but surprisingly capable for CS work.</p>
       </div>
 
       <!-- OpenRouter -->
-      <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.75rem">
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.75rem">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
           <div style="display:flex;align-items:center;gap:8px">
             <span style="font-size:20px">🔀</span>
-            <span style="font-size:14px;font-weight:600;color:#e8e8f0">OpenRouter</span>
+            <span style="font-size:14px;font-weight:600;color:var(--text)">OpenRouter</span>
           </div>
-          <span style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:#0d2a1e;color:#3dd68c;border:1px solid #1a4a30">Free models available</span>
+          <span style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)">Free models available</span>
         </div>
-        <p style="font-size:13px;color:#9898b0;line-height:1.7;margin-bottom:.8rem">A marketplace that gives you access to many AI models through a single API key — including free community-hosted models. This app currently uses only free models for OpenRouter, making it perfect for testing at zero cost. Quality varies per model; GPT-4o Mini is a reliable starting point.</p>
+        <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:.8rem">A marketplace that gives you access to many AI models through a single API key — including free community-hosted models. This app currently uses only free models for OpenRouter, making it perfect for testing at zero cost. Quality varies per model; GPT-4o Mini is a reliable starting point.</p>
         <div style="display:flex;flex-wrap:wrap;gap:.5rem">
-          <a href="https://openrouter.ai/keys" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:#9b8ff8;background:#1e1a3a;border:1px solid #3d3470;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-external-link" style="font-size:12px"></i> Get API key — openrouter.ai/keys</a>
-          <a href="https://openrouter.ai/models?q=free" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#5a5a72;background:#26262e;border:1px solid #2e2e38;border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-list" style="font-size:12px"></i> Browse free models</a>
+          <a href="https://openrouter.ai/keys" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--accent2);background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-external-link" style="font-size:12px"></i> Get API key — openrouter.ai/keys</a>
+          <a href="https://openrouter.ai/models?q=free" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--text3);background:var(--bg4);border:1px solid var(--border);border-radius:6px;padding:5px 12px;text-decoration:none"><i class="ti ti-list" style="font-size:12px"></i> Browse free models</a>
         </div>
-        <p style="font-size:11.5px;color:#5a5a72;margin-top:.7rem;line-height:1.5">💡 Sign up is free, no credit card needed for free models. Good for exploring different models before committing to a paid provider.</p>
+        <p style="font-size:11.5px;color:var(--text3);margin-top:.7rem;line-height:1.5">💡 Sign up is free, no credit card needed for free models. Good for exploring different models before committing to a paid provider.</p>
       </div>
 
       <!-- Divider -->
-      <div style="height:1px;background:#2e2e38;margin:1.5rem 0"></div>
+      <div style="height:1px;background:var(--border);margin:1.5rem 0"></div>
 
       <!-- Comparison table -->
-      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5a5a72;margin-bottom:.9rem">Quick comparison</div>
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:.9rem">Quick comparison</div>
       <div style="overflow-x:auto">
         <table style="width:100%;border-collapse:collapse;font-size:12.5px">
           <thead>
-            <tr style="border-bottom:1px solid #2e2e38">
-              <th style="text-align:left;padding:8px 10px;color:#5a5a72;font-weight:500">Provider</th>
-              <th style="text-align:left;padding:8px 10px;color:#5a5a72;font-weight:500">Cost</th>
-              <th style="text-align:left;padding:8px 10px;color:#5a5a72;font-weight:500">Speed</th>
-              <th style="text-align:left;padding:8px 10px;color:#5a5a72;font-weight:500">Quality</th>
-              <th style="text-align:left;padding:8px 10px;color:#5a5a72;font-weight:500">Images</th>
-              <th style="text-align:left;padding:8px 10px;color:#5a5a72;font-weight:500">Best for</th>
+            <tr style="border-bottom:1px solid var(--border)">
+              <th style="text-align:left;padding:8px 10px;color:var(--text3);font-weight:500">Provider</th>
+              <th style="text-align:left;padding:8px 10px;color:var(--text3);font-weight:500">Cost</th>
+              <th style="text-align:left;padding:8px 10px;color:var(--text3);font-weight:500">Speed</th>
+              <th style="text-align:left;padding:8px 10px;color:var(--text3);font-weight:500">Quality</th>
+              <th style="text-align:left;padding:8px 10px;color:var(--text3);font-weight:500">Images</th>
+              <th style="text-align:left;padding:8px 10px;color:var(--text3);font-weight:500">Best for</th>
             </tr>
           </thead>
           <tbody>
-            <tr style="border-bottom:1px solid #1e1e24">
-              <td style="padding:9px 10px;color:#e8e8f0;font-weight:500">🟣 Anthropic</td>
-              <td style="padding:9px 10px;color:#f5a623">Paid</td>
-              <td style="padding:9px 10px;color:#9898b0">Fast</td>
-              <td style="padding:9px 10px;color:#3dd68c">★★★★★</td>
-              <td style="padding:9px 10px;color:#3dd68c">✓ Full</td>
-              <td style="padding:9px 10px;color:#9898b0">Production use</td>
+            <tr style="border-bottom:1px solid var(--bg3)">
+              <td style="padding:9px 10px;color:var(--text);font-weight:500">🟣 Anthropic</td>
+              <td style="padding:9px 10px;color:var(--amber)">Paid</td>
+              <td style="padding:9px 10px;color:var(--text2)">Fast</td>
+              <td style="padding:9px 10px;color:var(--green)">★★★★★</td>
+              <td style="padding:9px 10px;color:var(--green)">✓ Full</td>
+              <td style="padding:9px 10px;color:var(--text2)">Production use</td>
             </tr>
-            <tr style="border-bottom:1px solid #1e1e24">
-              <td style="padding:9px 10px;color:#e8e8f0;font-weight:500">🔵 Gemini</td>
-              <td style="padding:9px 10px;color:#3dd68c">Free tier</td>
-              <td style="padding:9px 10px;color:#9898b0">Fast</td>
-              <td style="padding:9px 10px;color:#3dd68c">★★★★☆</td>
-              <td style="padding:9px 10px;color:#f5a623">✓ Limited</td>
-              <td style="padding:9px 10px;color:#9898b0">Free daily use</td>
+            <tr style="border-bottom:1px solid var(--bg3)">
+              <td style="padding:9px 10px;color:var(--text);font-weight:500">🔵 Gemini</td>
+              <td style="padding:9px 10px;color:var(--green)">Free tier</td>
+              <td style="padding:9px 10px;color:var(--text2)">Fast</td>
+              <td style="padding:9px 10px;color:var(--green)">★★★★☆</td>
+              <td style="padding:9px 10px;color:var(--amber)">✓ Limited</td>
+              <td style="padding:9px 10px;color:var(--text2)">Free daily use</td>
             </tr>
-            <tr style="border-bottom:1px solid #1e1e24">
-              <td style="padding:9px 10px;color:#e8e8f0;font-weight:500">⚡ Groq</td>
-              <td style="padding:9px 10px;color:#3dd68c">Free tier</td>
-              <td style="padding:9px 10px;color:#3dd68c">⚡ Fastest</td>
-              <td style="padding:9px 10px;color:#f5a623">★★★☆☆</td>
-              <td style="padding:9px 10px;color:#f56565">✗ No</td>
-              <td style="padding:9px 10px;color:#9898b0">Speed priority</td>
+            <tr style="border-bottom:1px solid var(--bg3)">
+              <td style="padding:9px 10px;color:var(--text);font-weight:500">⚡ Groq</td>
+              <td style="padding:9px 10px;color:var(--green)">Free tier</td>
+              <td style="padding:9px 10px;color:var(--green)">⚡ Fastest</td>
+              <td style="padding:9px 10px;color:var(--amber)">★★★☆☆</td>
+              <td style="padding:9px 10px;color:var(--red)">✗ No</td>
+              <td style="padding:9px 10px;color:var(--text2)">Speed priority</td>
             </tr>
             <tr>
-              <td style="padding:9px 10px;color:#e8e8f0;font-weight:500">🔀 OpenRouter</td>
-              <td style="padding:9px 10px;color:#3dd68c">Free models</td>
-              <td style="padding:9px 10px;color:#9898b0">Varies</td>
-              <td style="padding:9px 10px;color:#f5a623">★★★☆☆</td>
-              <td style="padding:9px 10px;color:#f56565">✗ No</td>
-              <td style="padding:9px 10px;color:#9898b0">Testing &amp; exploring</td>
+              <td style="padding:9px 10px;color:var(--text);font-weight:500">🔀 OpenRouter</td>
+              <td style="padding:9px 10px;color:var(--green)">Free models</td>
+              <td style="padding:9px 10px;color:var(--text2)">Varies</td>
+              <td style="padding:9px 10px;color:var(--amber)">★★★☆☆</td>
+              <td style="padding:9px 10px;color:var(--red)">✗ No</td>
+              <td style="padding:9px 10px;color:var(--text2)">Testing &amp; exploring</td>
             </tr>
           </tbody>
         </table>
       </div>
 
       <!-- Divider -->
-      <div style="height:1px;background:#2e2e38;margin:1.5rem 0"></div>
+      <div style="height:1px;background:var(--border);margin:1.5rem 0"></div>
 
       <!-- Tips -->
-      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5a5a72;margin-bottom:.9rem">Tips for better responses</div>
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:.9rem">Tips for better responses</div>
       <div style="display:flex;flex-direction:column;gap:.6rem">
-        <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">📋 Paste the full email thread</strong> — not just the latest message. Include every previous reply so the AI sees all prior commitments and won't contradict them.</div>
-        <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">🖼 Upload product photos or screenshots</strong> — if the customer sent an image of a "defect", paste it here. The AI will analyze it and may find it's normal behavior, saving you a wrong escalation.</div>
-        <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">📄 Paste your policies in the constraints field</strong> — refund windows, escalation rules, what's covered under warranty. The AI will work within them instead of making promises you can't keep.</div>
-        <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">🏬 Select the right platform chip</strong> — if you've built up a Knowledge Base for a platform, click its chip in the platform bar on the Draft or QA tab before generating. Without this step, that saved info is ignored, even though it's stored.</div>
-        <div style="background:#1e1e24;border:1px solid #2e2e38;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#9898b0;line-height:1.6"><strong style="color:#e8e8f0">🔐 Your API key stays on your device</strong> — it is saved in your browser's local storage and is never sent to any server other than the AI provider you choose.</div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;font-size:13px;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">📋 Paste the full email thread</strong> — not just the latest message. Include every previous reply so the AI sees all prior commitments and won't contradict them.</div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;font-size:13px;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">🖼 Upload product photos or screenshots</strong> — if the customer sent an image of a "defect", paste it here. The AI will analyze it and may find it's normal behavior, saving you a wrong escalation.</div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;font-size:13px;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">📄 Paste your policies in the constraints field</strong> — refund windows, escalation rules, what's covered under warranty. The AI will work within them instead of making promises you can't keep.</div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;font-size:13px;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">🏬 Select the right platform chip</strong> — if you've built up a Knowledge Base for a platform, click its chip in the platform bar on the Draft or QA tab before generating. Without this step, that saved info is ignored, even though it's stored.</div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;font-size:13px;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">🔐 Your API key stays on your device</strong> — it is saved in your browser's local storage and is never sent to any server other than the AI provider you choose.</div>
       </div>
 
       <div style="margin-top:1.5rem;text-align:center">
-        <button onclick="closeHelp()" style="background:linear-gradient(135deg,#7b6ef6,#b06ef6);color:#fff;border:none;border-radius:8px;padding:10px 28px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer">Got it, let's go →</button>
+        <button onclick="closeHelp()" style="background:linear-gradient(135deg,var(--accent),#b06ef6);color:#fff;border:none;border-radius:8px;padding:10px 28px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer">Got it, let's go →</button>
       </div>
 
     </div>
@@ -911,6 +944,7 @@
 <!-- Modals -->
 <div class="modal-overlay" id="wsModal" onclick="closeWsModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
+    <button class="modal-x-btn" onclick="closeWsModal()" title="Close"><i class="ti ti-x"></i></button>
     <div class="modal-title"><i class="ti ti-building-store"></i> <span id="wsModalTitle">Add platform</span></div>
     <div class="field" style="margin-bottom:.75rem"><label>Platform name</label><input type="text" id="wsNameInput" placeholder="e.g. Shopify, Amazon, TikTok Shop" maxlength="40" /></div>
     <div class="field"><label>Icon</label><div class="emoji-grid" id="emojiGrid"></div></div>
@@ -922,6 +956,7 @@
 </div>
 <div class="modal-overlay" id="addLinkModal" onclick="closeAddLinkModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
+    <button class="modal-x-btn" onclick="closeAddLinkModal()" title="Close"><i class="ti ti-x"></i></button>
     <div class="modal-title"><i class="ti ti-link"></i> Add reference link</div>
     <div class="field" style="margin-bottom:.75rem"><label>Label</label><input type="text" id="addLinkLabel" placeholder="e.g. Return Policy, Product Manual" /></div>
     <div class="field"><label>URL</label><input type="text" id="addLinkUrl" placeholder="https://…" /></div>
@@ -933,6 +968,7 @@
 </div>
 <div class="modal-overlay" id="addSnippetModal" onclick="closeAddSnippetModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
+    <button class="modal-x-btn" onclick="closeAddSnippetModal()" title="Close"><i class="ti ti-x"></i></button>
     <div class="modal-title"><i class="ti ti-notes"></i> Add text note</div>
     <div class="field" style="margin-bottom:.75rem"><label>Label</label><input type="text" id="addSnippetLabel" placeholder="e.g. March Promo Rules" /></div>
     <div class="field"><label>Content</label><textarea id="addSnippetContent" rows="5" placeholder="Paste your policy text or notes here…" style="min-height:110px"></textarea></div>
@@ -968,12 +1004,12 @@
   <!-- Main chat area -->
   <div class="fcw-main">
     <div class="fcw-header">
-      <div class="fcw-avatar">✦</div>
+      <div class="fcw-avatar">🤖</div>
       <div class="fcw-header-info">
-        <div class="fcw-header-name">CS Assistant</div>
+        <div class="fcw-header-name">CS Assistant <span class="ai-badge">AI</span></div>
         <div class="fcw-header-sub"><span class="fcw-online-dot"></span> Sees all tabs &amp; context</div>
       </div>
-      <button class="fcw-close-btn" onclick="toggleChat()"><i class="ti ti-x"></i></button>
+      <button class="fcw-close-btn" onclick="toggleChat()" title="Close chat"><i class="ti ti-x"></i></button>
     </div>
     <div class="fcw-ctx" id="fcwCtx"><i class="ti ti-database" style="font-size:12px"></i> <span id="fcwCtxLabel">Generate a response first for full context</span></div>
     <div class="fcw-thread" id="fcwThread">
@@ -1216,7 +1252,7 @@ function parseResponse(raw){
   return{text:text,confidence:confidence,tags:tags,extraCtx:extraCtx};
 }
 function renderResponse(parsed){
-  var cc=parsed.confidence>75?'#3dd68c':parsed.confidence>50?'#f5a623':'#f56565';
+  var cc=parsed.confidence>75?'var(--green)':parsed.confidence>50?'var(--amber)':'var(--red)';
   var cp=parsed.confidence!==null?parsed.confidence+'%':'--';
 
   // Confidence bar block
@@ -1385,8 +1421,9 @@ function renderFcwHistList(){
 
 function toggleChat(){
   fcwOpen=!fcwOpen;
-  var win=document.getElementById('floatChatWin'),icon=document.getElementById('floatChatIcon');
+  var win=document.getElementById('floatChatWin'),icon=document.getElementById('floatChatIcon'),btn=document.getElementById('floatChatBtn');
   win.classList.toggle('open',fcwOpen);
+  btn.classList.toggle('is-open',fcwOpen);
   icon.className=fcwOpen?'ti ti-x':'ti ti-messages';
   if(fcwOpen){
     hideBadge();updateCtxStrip();
@@ -1552,25 +1589,25 @@ function runQA(){
 }
 function renderQAResult(r){
   var score=r.overall_score||0;
-  var vc={'Excellent':{ring:'#3dd68c',bg:'#0d2a1e',text:'#3dd68c',border:'#1a4a30'},'Good':{ring:'#60a5fa',bg:'#0d1a2a',text:'#60a5fa',border:'#1a2a3a'},'Needs Improvement':{ring:'#f5a623',bg:'#2a1e0a',text:'#f5a623',border:'#3a2808'},'Poor':{ring:'#f97316',bg:'#2a1208',text:'#f97316',border:'#3a1c08'},'Critical Issues':{ring:'#f56565',bg:'#2a0f0f',text:'#f56565',border:'#3a1010'}}[r.verdict]||{ring:'#f5a623',bg:'#2a1e0a',text:'#f5a623',border:'#3a2808'};
+  var vc={'Excellent':{ring:'var(--green)',bg:'var(--green-bg)',text:'var(--green)',border:'var(--green-border)'},'Good':{ring:'var(--blue)',bg:'var(--blue-bg)',text:'var(--blue)',border:'var(--blue-border)'},'Needs Improvement':{ring:'var(--amber)',bg:'var(--amber-bg)',text:'var(--amber)',border:'var(--amber-border)'},'Poor':{ring:'var(--orange)',bg:'var(--orange-bg)',text:'var(--orange)',border:'var(--orange-border)'},'Critical Issues':{ring:'var(--red)',bg:'var(--red-bg)',text:'var(--red)',border:'var(--red-border)'}}[r.verdict]||{ring:'var(--amber)',bg:'var(--amber-bg)',text:'var(--amber)',border:'var(--amber-border)'};
   var circ=2*Math.PI*30,dash=(score/100)*circ;
   var issues=r.issues||[];
   var si={'critical':'ti-alert-octagon','moderate':'ti-alert-triangle','minor':'ti-info-circle','positive':'ti-thumb-up'};
   var sl={'critical':'Critical','moderate':'Moderate','minor':'Minor','positive':'Positive'};
-  var sc={'critical':'#f56565','moderate':'#f5a623','minor':'#3dd68c','positive':'#60a5fa'};
+  var sc={'critical':'var(--red)','moderate':'var(--amber)','minor':'var(--green)','positive':'var(--blue)'};
   var ih='';
   issues.forEach(function(issue,idx){
-    ih+='<div class="issue-card"><div class="issue-header" onclick="toggleIssue('+idx+')"><i class="ti '+(si[issue.severity]||'ti-circle')+' issue-icon" style="color:'+(sc[issue.severity]||'#9898b0')+'"></i><span class="issue-title">'+escHtml(issue.title)+'</span><span class="sev sev-'+issue.severity+'">'+(sl[issue.severity]||issue.severity)+'</span><span style="font-size:11px;color:var(--text3);margin-left:4px;font-family:var(--mono)">'+escHtml(issue.category)+'</span><i class="ti ti-chevron-right chevron" id="chev-'+idx+'"></i></div><div class="issue-body" id="ibody-'+idx+'"><p>'+escHtml(issue.detail)+'</p>'+(issue.location?'<p style="margin-top:.6rem;padding:.5rem .7rem;background:var(--bg3);border-left:2px solid var(--border2);border-radius:0 4px 4px 0;font-size:12.5px;color:var(--text3)">'+escHtml(issue.location)+'</p>':'')+(issue.suggestion?'<div class="suggestion-box"><strong>Suggestion:</strong> '+escHtml(issue.suggestion)+'</div>':'')+'</div></div>';
+    ih+='<div class="issue-card"><div class="issue-header" onclick="toggleIssue('+idx+')"><i class="ti '+(si[issue.severity]||'ti-circle')+' issue-icon" style="color:'+(sc[issue.severity]||'var(--text2)')+'"></i><span class="issue-title">'+escHtml(issue.title)+'</span><span class="sev sev-'+issue.severity+'">'+(sl[issue.severity]||issue.severity)+'</span><span style="font-size:11px;color:var(--text3);margin-left:4px;font-family:var(--mono)">'+escHtml(issue.category)+'</span><i class="ti ti-chevron-right chevron" id="chev-'+idx+'"></i></div><div class="issue-body" id="ibody-'+idx+'"><p>'+escHtml(issue.detail)+'</p>'+(issue.location?'<p style="margin-top:.6rem;padding:.5rem .7rem;background:var(--bg3);border-left:2px solid var(--border2);border-radius:0 4px 4px 0;font-size:12.5px;color:var(--text3)">'+escHtml(issue.location)+'</p>':'')+(issue.suggestion?'<div class="suggestion-box"><strong>Suggestion:</strong> '+escHtml(issue.suggestion)+'</div>':'')+'</div></div>';
   });
   var crit=issues.filter(function(i){return i.severity==='critical';}).length;
   var mod=issues.filter(function(i){return i.severity==='moderate';}).length;
   var min=issues.filter(function(i){return i.severity==='minor';}).length;
   var pos=issues.filter(function(i){return i.severity==='positive';}).length;
   var sh='';
-  if(crit)sh+='<div class="stat-item"><div class="stat-num" style="color:#f56565">'+crit+'</div><div class="stat-lbl">Critical</div></div>';
-  if(mod)sh+='<div class="stat-item"><div class="stat-num" style="color:#f5a623">'+mod+'</div><div class="stat-lbl">Moderate</div></div>';
-  if(min)sh+='<div class="stat-item"><div class="stat-num" style="color:#3dd68c">'+min+'</div><div class="stat-lbl">Minor</div></div>';
-  if(pos)sh+='<div class="stat-item"><div class="stat-num" style="color:#60a5fa">'+pos+'</div><div class="stat-lbl">Positive</div></div>';
+  if(crit)sh+='<div class="stat-item"><div class="stat-num" style="color:var(--red)">'+crit+'</div><div class="stat-lbl">Critical</div></div>';
+  if(mod)sh+='<div class="stat-item"><div class="stat-num" style="color:var(--amber)">'+mod+'</div><div class="stat-lbl">Moderate</div></div>';
+  if(min)sh+='<div class="stat-item"><div class="stat-num" style="color:var(--green)">'+min+'</div><div class="stat-lbl">Minor</div></div>';
+  if(pos)sh+='<div class="stat-item"><div class="stat-num" style="color:var(--blue)">'+pos+'</div><div class="stat-lbl">Positive</div></div>';
   var qw=(r.quick_wins||[]).map(function(w){return '<li style="margin-bottom:.4rem">'+escHtml(w)+'</li>';}).join('');
   var st=(r.strengths||[]).map(function(s){return '<li style="margin-bottom:.4rem">'+escHtml(s)+'</li>';}).join('');
   document.getElementById('qaResultBody').innerHTML=
@@ -1743,6 +1780,24 @@ function getQaKbContext(){
   var ctx='\n\nKNOWLEDGE BASE — '+ws.icon+' '+ws.name.toUpperCase()+' (use as ground truth for QA):';
   loaded.forEach(function(ref,i){ctx+='\n\n--- ['+(i+1)+'] '+ref.label+(ref.url?' ('+ref.url+')':'')+' ---\n'+ref.content;});return ctx;
 }
+
+// ── Theme ──────────────────────────────────────────────────────────────────
+function applyTheme(mode){
+  document.documentElement.setAttribute('data-theme',mode);
+  var icon=document.getElementById('themeToggleIcon'),label=document.getElementById('themeToggleLabel');
+  if(icon)icon.className=mode==='light'?'ti ti-moon':'ti ti-sun';
+  if(label)label.textContent=mode==='light'?'Dark':'Light';
+  try{localStorage.setItem('csAgentTheme',mode);}catch(e){}
+}
+function toggleTheme(){
+  var cur=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+  applyTheme(cur);
+}
+(function(){
+  var saved=null;
+  try{saved=localStorage.getItem('csAgentTheme');}catch(e){}
+  applyTheme(saved||'light');
+})();
 
 // ── Init ───────────────────────────────────────────────────────────────────
 kbLoad();renderWsList();if(kbWorkspaces.length>0)kbActiveWsId=kbWorkspaces[0].id;renderKbMain();renderPlatformBar();renderQaPlatformBar();

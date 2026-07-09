@@ -20,52 +20,54 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css" />
 <style>
   :root {
-    --bg:#0e0e10;--bg2:#17171b;--bg3:#1e1e24;--bg4:#26262e;
-    --border:#2e2e38;--border2:#3a3a48;
-    --text:#e8e8f0;--text2:#9898b0;--text3:#5a5a72;
-    --accent:#7b6ef6;--accent2:#9b8ff8;--accent-bg:#1e1a3a;--accent-border:#3d3470;
-    --green:#3dd68c;--green-bg:#0d2a1e;--green-border:#1a4a30;
-    --amber:#f5a623;--amber-bg:#2a1e0a;--amber-border:#3a2808;
-    --red:#f56565;--red-bg:#2a0f0f;--red-border:#3a1010;
-    --blue:#60a5fa;--blue-bg:#0d1a2a;--blue-border:#1a2a3a;
-    --orange:#f97316;--orange-bg:#2a1208;--orange-border:#3a1c08;
-    --radius:10px;--radius-sm:6px;--radius-lg:14px;
+    /* Dark theme — deep warm ink, not pure black, higher-contrast text */
+    --bg:#15151a;--bg2:#1c1c23;--bg3:#24242d;--bg4:#2e2e39;
+    --border:#38384a;--border2:#4a4a5c;
+    --text:#f3f3f7;--text2:#b7b7c8;--text3:#83839a;
+    --accent:#5b6ef8;--accent2:#8b98ff;--accent-bg:#23274a;--accent-border:#454e93;
+    --green:#3ddc8f;--green-bg:#123527;--green-border:#1f5a3d;
+    --amber:#ffb444;--amber-bg:#3a2b0c;--amber-border:#5c4514;
+    --red:#ff6b6f;--red-bg:#3a1417;--red-border:#642227;
+    --red-solid:#e8484d;
+    --blue:#6fb2ff;--blue-bg:#122236;--blue-border:#1f3c5c;
+    --orange:#ff9152;--orange-bg:#3a1f0c;--orange-border:#5c3414;
+    --radius:10px;--radius-sm:8px;--radius-lg:16px;
     --font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
     --chrome-height:98px;--nav-top:56px;
-    --shadow-modal:0 20px 60px rgba(0,0,0,.5);
-    --shadow-help:0 24px 80px rgba(0,0,0,.6);
-    --overlay-bg:rgba(0,0,0,.65);
-    --overlay-bg2:rgba(0,0,0,.7);
+    --shadow-modal:0 24px 70px rgba(0,0,0,.55);
+    --shadow-help:0 28px 90px rgba(0,0,0,.6);
+    --overlay-bg:rgba(8,8,12,.7);
+    --overlay-bg2:rgba(8,8,12,.75);
   }
-  /* ── LIGHT THEME ── */
+  /* ── LIGHT THEME — warm paper background, near-black ink, confident indigo accent ── */
   html[data-theme="light"] {
-    --bg:#f7f7fa;--bg2:#ffffff;--bg3:#f0f0f5;--bg4:#e7e7ef;
-    --border:#e0e0ea;--border2:#cccbdb;
-    --text:#1c1c26;--text2:#5c5c72;--text3:#8b8ba0;
-    --accent:#6a5cf0;--accent2:#5645d9;--accent-bg:#efecff;--accent-border:#cfc6fb;
-    --green:#0f9d63;--green-bg:#e6f7ef;--green-border:#b7ead1;
-    --amber:#b9750a;--amber-bg:#fdf1dd;--amber-border:#f2d9a5;
-    --red:#d6414c;--red-bg:#fdeaec;--red-border:#f5c1c6;
-    --blue:#2b6cd4;--blue-bg:#e8f0fd;--blue-border:#bcd6f9;
-    --orange:#c05a10;--orange-bg:#fdece0;--orange-border:#f5c6a0;
-    --shadow-modal:0 20px 60px rgba(30,30,50,.15);
-    --shadow-help:0 24px 80px rgba(30,30,50,.2);
-    --overlay-bg:rgba(20,20,30,.35);
-    --overlay-bg2:rgba(20,20,30,.4);
+    --bg:#faf9f6;--bg2:#ffffff;--bg3:#f3f1eb;--bg4:#e9e6dd;
+    --border:#e2ded2;--border2:#cfc9b8;
+    --text:#181818;--text2:#48453e;--text3:#7c7869;
+    --accent:#4338ca;--accent2:#3730a3;--accent-bg:#eceafd;--accent-border:#c7c2f5;
+    --green:#0e7a4f;--green-bg:#e5f6ee;--green-border:#a8e0c4;
+    --amber:#9a5b05;--amber-bg:#fdf1da;--amber-border:#efce8e;
+    --red:#c22a34;--red-bg:#fdeced;--red-border:#f0b8bd;
+    --red-solid:#c22a34;
+    --blue:#1d5fc2;--blue-bg:#e9f1fd;--blue-border:#b7d3f7;
+    --orange:#a2510c;--orange-bg:#fdecdd;--orange-border:#f0c298;
+    --shadow-modal:0 24px 70px rgba(30,25,10,.14);
+    --shadow-help:0 28px 90px rgba(30,25,10,.18);
+    --overlay-bg:rgba(24,20,10,.4);
+    --overlay-bg2:rgba(24,20,10,.45);
   }
   html[data-theme="light"] .float-chat-window,
   html[data-theme="light"] #helpModal{box-shadow:var(--shadow-help)}
-  html[data-theme="light"] .fcw-hist-del:hover{background:var(--red-bg)!important}
-  html[data-theme="light"] .fcw-header{background:linear-gradient(135deg,#efecff 0%,#ffffff 100%)}
-  .theme-toggle{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:6px;font-family:var(--font);transition:all .15s}
-  .theme-toggle:hover{border-color:var(--border2);color:var(--text)}
+  html[data-theme="light"] .fcw-header{background:linear-gradient(135deg,#eceafd 0%,#ffffff 100%)}
+  .theme-toggle{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:6px;font-family:var(--font);transition:all .15s;font-weight:500}
+  .theme-toggle:hover{border-color:var(--border2);color:var(--text);background:var(--bg4)}
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   html{font-size:15px}
   html,body{height:100%;overflow:hidden}
   body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
   @media(max-width:860px){html,body{height:auto;overflow-y:auto;overflow-x:hidden}body{height:auto;min-height:100vh}}
   .nav{border-bottom:1px solid var(--border);padding:.85rem 2rem;display:flex;align-items:center;gap:.75rem;background:var(--bg);position:sticky;top:0;z-index:100}
-  .nav h1{font-size:15px;font-weight:600;color:var(--text)}
+  .nav h1{font-size:16px;font-weight:700;color:var(--text);letter-spacing:-.01em}
   .nav p{font-size:12px;color:var(--text3);margin-top:1px}
   .header-right{margin-left:auto;display:flex;align-items:center;gap:.5rem}
   .pill{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:5px}
@@ -112,14 +114,14 @@
   .upload-zone i{font-size:22px;color:var(--text3);display:block;margin-bottom:5px}
   .upload-zone p{font-size:12px;color:var(--text3)}
   .attachments{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-  .att-chip{display:flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:12px;color:var(--text2)}
-  .att-chip button{background:none;border:none;cursor:pointer;color:var(--text3);font-size:14px;line-height:1;padding:0}
-  .att-chip button:hover{color:var(--red)}
+  .att-chip{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:3px 4px 3px 10px;font-size:12px;color:var(--text2)}
+  .att-chip button{background:var(--red-bg);border:1px solid var(--red-border);border-radius:50%;cursor:pointer;color:var(--red);font-size:12px;line-height:1;padding:0;width:18px;height:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+  .att-chip button:hover{background:var(--red);color:#fff;border-color:var(--red)}
   .action-bar{border-top:1px solid var(--border);padding:.85rem 1.5rem;display:flex;align-items:center;justify-content:space-between;background:var(--bg);flex-shrink:0}
   .char-count{font-size:12px;color:var(--text3);font-family:var(--mono)}
   .btn-row{display:flex;gap:8px}
-  .btn-primary{background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);padding:9px 20px;font-family:var(--font);font-size:13.5px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:7px;transition:opacity .15s,transform .1s}
-  .btn-primary:hover{opacity:.9}
+  .btn-primary{background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);padding:9px 20px;font-family:var(--font);font-size:13.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:7px;transition:opacity .15s,transform .1s,box-shadow .15s;box-shadow:0 2px 10px rgba(67,56,202,.25)}
+  .btn-primary:hover{opacity:.92;box-shadow:0 4px 14px rgba(67,56,202,.32)}
   .btn-primary:active{transform:scale(.98)}
   .btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none}
   .btn-ghost{background:transparent;border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 14px;font-family:var(--font);font-size:13px;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:6px;transition:border-color .15s,color .15s}
@@ -129,8 +131,10 @@
   .resp-header{padding:.85rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
   .resp-title{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);display:flex;align-items:center;gap:6px}
   .resp-actions{display:flex;gap:6px}
-  .icon-btn{background:none;border:1px solid var(--border);border-radius:var(--radius-sm);padding:5px 8px;font-size:13px;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s}
-  .icon-btn:hover{border-color:var(--border2);color:var(--text)}
+  .icon-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:5px 10px;font-size:12.5px;font-weight:500;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s}
+  .icon-btn:hover{border-color:var(--accent-border);color:var(--accent2);background:var(--accent-bg)}
+  .icon-btn.danger{background:var(--red-bg);border-color:var(--red-border);color:var(--red)}
+  .icon-btn.danger:hover{background:var(--red);border-color:var(--red);color:#fff}
   .resp-body{flex:1;overflow-y:auto;padding:1.25rem;min-height:80px}
   .empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;color:var(--text3);text-align:center;padding:2rem}
   .empty i{font-size:36px;opacity:.3}
@@ -210,14 +214,14 @@
   .fcw-hist-item.active{background:var(--accent-bg);border-color:var(--accent-border);color:var(--accent2);}
   .fcw-hist-item-time{font-size:10px;color:var(--text3);margin-top:2px;font-family:var(--mono);}
   .fcw-hist-del{
-    visibility:hidden;
-    background:none;border:none;cursor:pointer;
-    color:var(--text3);font-size:11px;
-    width:16px;height:16px;border-radius:3px;
+    background:var(--red-bg);border:1px solid var(--red-border);cursor:pointer;
+    color:var(--red);font-size:11px;
+    width:20px;height:20px;border-radius:5px;
     display:flex;align-items:center;justify-content:center;
-    flex-shrink:0;transition:color .13s,background .13s;
+    flex-shrink:0;transition:all .13s;opacity:.75;
   }
-  .fcw-hist-del:hover{color:var(--red)!important;background:var(--red-bg);}
+  .fcw-hist-item:hover .fcw-hist-del{opacity:1}
+  .fcw-hist-del:hover{color:#fff!important;background:var(--red);border-color:var(--red);}
   .fcw-new-btn{
     margin:.5rem;background:none;border:1px dashed var(--border2);border-radius:8px;
     padding:.45rem;font-size:11.5px;color:var(--text3);cursor:pointer;
@@ -248,8 +252,8 @@
   .ai-badge{font-size:9.5px;font-weight:700;letter-spacing:.04em;color:#fff;background:linear-gradient(135deg,var(--accent),#b06ef6);padding:1px 6px;border-radius:8px;line-height:1.5}
   .fcw-header-sub{font-size:11px;color:var(--text3);margin-top:1px;display:flex;align-items:center;gap:5px}
   .fcw-online-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
-  .fcw-close-btn{background:var(--bg3);border:1px solid var(--border);cursor:pointer;color:var(--text2);font-size:16px;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:color .15s,background .15s,border-color .15s;flex-shrink:0}
-  .fcw-close-btn:hover{color:var(--text);background:var(--red-bg);border-color:var(--red-border)}
+  .fcw-close-btn{background:var(--bg4);border:1px solid var(--border2);cursor:pointer;color:var(--text2);font-size:16px;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:color .15s,background .15s,border-color .15s;flex-shrink:0}
+  .fcw-close-btn:hover{color:var(--text);background:var(--bg3);border-color:var(--text3)}
   .fcw-ctx{
     padding:.45rem 1rem;background:var(--accent-bg);border-bottom:1px solid var(--accent-border);
     font-size:11px;color:var(--accent2);display:flex;align-items:center;gap:6px;flex-shrink:0;
@@ -282,8 +286,8 @@
   .link-row input{flex:1;height:34px;font-size:12.5px}
   .link-status{font-size:11px;display:flex;align-items:center;gap:4px;white-space:nowrap;min-width:70px}
   .link-status.fetching{color:var(--amber)}.link-status.ok{color:var(--green)}.link-status.err{color:var(--red)}
-  .link-remove{background:none;border:1px solid var(--border);border-radius:var(--radius-sm);width:28px;height:34px;cursor:pointer;color:var(--text3);font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
-  .link-remove:hover{border-color:var(--red);color:var(--red)}
+  .link-remove{background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--radius-sm);width:34px;height:34px;cursor:pointer;color:var(--red);font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+  .link-remove:hover{background:var(--red);border-color:var(--red);color:#fff}
   .link-add{background:none;border:1px dashed var(--border2);border-radius:var(--radius-sm);padding:6px 12px;font-size:12px;color:var(--text3);cursor:pointer;font-family:var(--font);width:100%;margin-top:5px;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px}
   .link-add:hover{border-color:var(--accent-border);color:var(--accent2);background:var(--accent-bg)}
   .kb-layout{grid-template-columns:260px 1fr;height:calc(100vh - var(--chrome-height));overflow:hidden}
@@ -309,8 +313,10 @@
   .kb-item-name{font-size:13px;color:var(--text);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .kb-item-meta{font-size:11px;color:var(--text3);margin-top:2px}
   .kb-item-actions{display:flex;gap:5px;flex-shrink:0}
-  .kb-action-btn{background:none;border:1px solid var(--border);border-radius:var(--radius-sm);width:26px;height:26px;cursor:pointer;color:var(--text3);font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .15s}
-  .kb-action-btn:hover{border-color:var(--border2);color:var(--text)}.kb-action-btn.danger:hover{border-color:var(--red);color:var(--red)}
+  .kb-action-btn{background:var(--bg4);border:1px solid var(--border2);border-radius:var(--radius-sm);width:28px;height:28px;cursor:pointer;color:var(--text2);font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+  .kb-action-btn:hover{border-color:var(--accent-border);color:var(--accent2);background:var(--accent-bg)}
+  .kb-action-btn.danger{background:var(--red-bg);border-color:var(--red-border);color:var(--red)}
+  .kb-action-btn.danger:hover{background:var(--red);border-color:var(--red);color:#fff}
   .kb-status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
   .kb-status-ok{background:var(--green)}.kb-status-err{background:var(--red)}.kb-status-pending{background:var(--text3)}.kb-status-fetching{background:var(--amber);animation:pulse-dot .8s ease-in-out infinite}
   @keyframes pulse-dot{0%,100%{opacity:.4}50%{opacity:1}}
@@ -318,8 +324,8 @@
   .modal-overlay.open{display:flex}
   .modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:1.5rem;width:min(420px,92vw);box-shadow:var(--shadow-modal);position:relative}
   .modal-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:1rem;display:flex;align-items:center;gap:8px;padding-right:1.6rem}
-  .modal-x-btn{position:absolute;top:.9rem;right:.9rem;background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:28px;height:28px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s}
-  .modal-x-btn:hover{color:var(--text);background:var(--red-bg);border-color:var(--red-border)}
+  .modal-x-btn{position:absolute;top:.9rem;right:.9rem;background:var(--bg4);border:1px solid var(--border2);color:var(--text2);width:30px;height:30px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s}
+  .modal-x-btn:hover{color:var(--text);background:var(--bg3);border-color:var(--text3)}
   .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:1.1rem}
   .emoji-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-top:.5rem}
   .emoji-opt{background:none;border:1px solid var(--border);border-radius:var(--radius-sm);padding:5px;font-size:18px;cursor:pointer;transition:all .15s;text-align:center}
@@ -708,7 +714,7 @@
           <p class="hint" id="keyHint" style="margin:0">Get your key from console.anthropic.com</p>
           <span id="saveIndicator" style="font-size:11px;color:var(--text3);display:none"><i class="ti ti-device-floppy" style="font-size:12px;vertical-align:-1px"></i> Saved</span>
         </div>
-        <button onclick="clearSavedKey()" id="clearKeyBtn" style="display:none;margin-top:6px;background:none;border:1px solid var(--border);border-radius:var(--radius-sm);padding:4px 10px;font-size:11px;color:var(--text3);cursor:pointer;font-family:var(--font)"><i class="ti ti-trash" style="font-size:11px"></i> Clear saved key</button>
+        <button onclick="clearSavedKey()" id="clearKeyBtn" style="display:none;margin-top:6px;background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--radius-sm);padding:4px 10px;font-size:11px;color:var(--red);cursor:pointer;font-family:var(--font);font-weight:500" onmouseover="this.style.background='var(--red)';this.style.color='#fff'" onmouseout="this.style.background='var(--red-bg)';this.style.color='var(--red)'"><i class="ti ti-trash" style="font-size:11px"></i> Clear saved key</button>
       </div>
       <div class="field">
         <label>Model</label>
@@ -931,7 +937,7 @@
       <span id="kbMainTitle" style="display:flex;align-items:center;gap:7px"><i class="ti ti-book" style="font-size:14px"></i> Select a platform</span>
       <div style="display:flex;gap:6px">
         <button class="icon-btn" id="kbRenameBtn" onclick="openWsModal('rename')" style="display:none"><i class="ti ti-edit"></i> Rename</button>
-        <button class="icon-btn" id="kbDeleteBtn" onclick="deleteWorkspace()" style="display:none"><i class="ti ti-trash"></i> Delete</button>
+        <button class="icon-btn danger" id="kbDeleteBtn" onclick="deleteWorkspace()" style="display:none"><i class="ti ti-trash"></i> Delete</button>
       </div>
     </div>
     <div class="kb-main-body" id="kbMainBody">
@@ -957,24 +963,24 @@
 <div class="modal-overlay" id="addLinkModal" onclick="closeAddLinkModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <button class="modal-x-btn" onclick="closeAddLinkModal()" title="Close"><i class="ti ti-x"></i></button>
-    <div class="modal-title"><i class="ti ti-link"></i> Add reference link</div>
+    <div class="modal-title"><i class="ti ti-link"></i> <span id="addLinkModalTitle">Add reference link</span></div>
     <div class="field" style="margin-bottom:.75rem"><label>Label</label><input type="text" id="addLinkLabel" placeholder="e.g. Return Policy, Product Manual" /></div>
     <div class="field"><label>URL</label><input type="text" id="addLinkUrl" placeholder="https://…" /></div>
     <div class="modal-actions">
       <button class="btn-ghost" onclick="closeAddLinkModal()">Cancel</button>
-      <button class="btn-primary" onclick="confirmAddLink()"><i class="ti ti-plus"></i> Add link</button>
+      <button class="btn-primary" onclick="confirmAddLink()"><i class="ti ti-check" id="addLinkModalIcon"></i> <span id="addLinkModalBtnLabel">Add link</span></button>
     </div>
   </div>
 </div>
 <div class="modal-overlay" id="addSnippetModal" onclick="closeAddSnippetModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <button class="modal-x-btn" onclick="closeAddSnippetModal()" title="Close"><i class="ti ti-x"></i></button>
-    <div class="modal-title"><i class="ti ti-notes"></i> Add text note</div>
+    <div class="modal-title"><i class="ti ti-notes"></i> <span id="addSnippetModalTitle">Add text note</span></div>
     <div class="field" style="margin-bottom:.75rem"><label>Label</label><input type="text" id="addSnippetLabel" placeholder="e.g. March Promo Rules" /></div>
     <div class="field"><label>Content</label><textarea id="addSnippetContent" rows="5" placeholder="Paste your policy text or notes here…" style="min-height:110px"></textarea></div>
     <div class="modal-actions">
       <button class="btn-ghost" onclick="closeAddSnippetModal()">Cancel</button>
-      <button class="btn-primary" onclick="confirmAddSnippet()"><i class="ti ti-plus"></i> Add note</button>
+      <button class="btn-primary" onclick="confirmAddSnippet()"><i class="ti ti-check" id="addSnippetModalIcon"></i> <span id="addSnippetModalBtnLabel">Add note</span></button>
     </div>
   </div>
 </div>
@@ -993,7 +999,7 @@
   <div class="fcw-sidebar">
     <div class="fcw-sidebar-header">
       <span><i class="ti ti-history" style="font-size:11px;vertical-align:-1px;margin-right:3px"></i> History</span>
-      <button onclick="fcwClearAll()" title="Clear all history" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:11px;padding:2px 4px;border-radius:4px;font-family:var(--font);transition:color .13s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text3)'">Clear all</button>
+      <button onclick="fcwClearAll()" title="Delete all conversation history" style="background:var(--red-bg);border:1px solid var(--red-border);cursor:pointer;color:var(--red);font-size:10.5px;font-weight:500;padding:3px 7px;border-radius:5px;font-family:var(--font);transition:all .13s" onmouseover="this.style.background='var(--red)';this.style.color='#fff'" onmouseout="this.style.background='var(--red-bg)';this.style.color='var(--red)'">Clear all</button>
     </div>
     <div class="fcw-sidebar-list" id="fcwHistList">
       <div class="fcw-empty-hist">No conversations yet.<br>Start chatting below.</div>
@@ -1038,6 +1044,7 @@ var FCW_HIST_KEY='csagent_fcw_history';
 var refLinks=[],linkCounter=0;
 var kbWorkspaces=[],kbActiveWsId=null,activePlatformId=null,qaActivePlatformId=null;
 var wsModalMode='add',wsSelectedEmoji='🛍️';
+var editingLinkRef=null,editingSnippetRef=null;
 var EMOJI_OPTIONS=['🛍️','📦','🌐','📱','💻','🏪','🎯','⚡','🔵','🟣','🟠','🟢','🔴','⭐','🎁','📋','📄','🔗','🏬','🛒'];
 var KB_KEY='csagent_kb';
 
@@ -1692,26 +1699,54 @@ function renderKbMain(){
   // Links
   html+='<div class="kb-section"><div class="kb-section-header"><span class="kb-section-title"><i class="ti ti-link"></i> Reference links ('+links.length+')</span><button class="icon-btn" onclick="openAddLinkModal()"><i class="ti ti-plus"></i> Add link</button></div>';
   if(!links.length)html+='<p style="font-size:12.5px;color:var(--text3);padding:.5rem 0">No links yet.</p>';
-  else links.forEach(function(ref){var sc={ok:'kb-status-ok',err:'kb-status-err',fetching:'kb-status-fetching',pending:'kb-status-pending'}[ref.status]||'kb-status-pending';html+='<div class="kb-item"><div class="kb-status-dot '+sc+'"></div><div class="kb-item-body"><div class="kb-item-name">'+escHtml(ref.label)+'</div><div class="kb-item-meta">'+escHtml(ref.url||'')+(ref.content?' · '+Math.round(ref.content.length/100)/10+'k chars':'')+'</div></div><div class="kb-item-actions"><button class="kb-action-btn" onclick="refetchRef(\''+ws.id+'\',\''+ref.id+'\')"><i class="ti ti-refresh"></i></button><button class="kb-action-btn danger" onclick="deleteRef(\''+ws.id+'\',\''+ref.id+'\')"><i class="ti ti-trash"></i></button></div></div>';});
+  else links.forEach(function(ref){var sc={ok:'kb-status-ok',err:'kb-status-err',fetching:'kb-status-fetching',pending:'kb-status-pending'}[ref.status]||'kb-status-pending';html+='<div class="kb-item"><div class="kb-status-dot '+sc+'"></div><div class="kb-item-body"><div class="kb-item-name">'+escHtml(ref.label)+'</div><div class="kb-item-meta">'+escHtml(ref.url||'')+(ref.content?' · '+Math.round(ref.content.length/100)/10+'k chars':'')+'</div></div><div class="kb-item-actions"><button class="kb-action-btn" title="Edit link" onclick="openEditLinkModal(\''+ws.id+'\',\''+ref.id+'\')"><i class="ti ti-edit"></i></button><button class="kb-action-btn" title="Re-fetch page" onclick="refetchRef(\''+ws.id+'\',\''+ref.id+'\')"><i class="ti ti-refresh"></i></button><button class="kb-action-btn danger" title="Delete link" onclick="deleteRef(\''+ws.id+'\',\''+ref.id+'\')"><i class="ti ti-trash"></i></button></div></div>';});
   html+='</div>';
   // Docs
   html+='<div class="kb-section"><div class="kb-section-header"><span class="kb-section-title"><i class="ti ti-file-text"></i> Uploaded documents ('+docs.length+')</span><label class="icon-btn" style="cursor:pointer"><i class="ti ti-upload"></i> Upload<input type="file" accept=".txt,.pdf,.md" style="display:none" onchange="handleDocUpload(event,\''+ws.id+'\')" multiple /></label></div>';
   if(!docs.length)html+='<p style="font-size:12.5px;color:var(--text3);padding:.5rem 0">No documents yet.</p>';
-  else docs.forEach(function(ref){html+='<div class="kb-item"><i class="ti ti-file-text kb-item-icon"></i><div class="kb-item-body"><div class="kb-item-name">'+escHtml(ref.label)+'</div><div class="kb-item-meta">'+(ref.size||'')+(ref.content?' · '+Math.round(ref.content.length/100)/10+'k chars':'')+'</div></div><div class="kb-item-actions"><button class="kb-action-btn danger" onclick="deleteRef(\''+ws.id+'\',\''+ref.id+'\')"><i class="ti ti-trash"></i></button></div></div>';});
+  else docs.forEach(function(ref){html+='<div class="kb-item"><i class="ti ti-file-text kb-item-icon"></i><div class="kb-item-body"><div class="kb-item-name">'+escHtml(ref.label)+'</div><div class="kb-item-meta">'+(ref.size||'')+(ref.content?' · '+Math.round(ref.content.length/100)/10+'k chars':'')+'</div></div><div class="kb-item-actions"><button class="kb-action-btn danger" title="Delete document" onclick="deleteRef(\''+ws.id+'\',\''+ref.id+'\')"><i class="ti ti-trash"></i></button></div></div>';});
   html+='</div>';
   // Snippets
   html+='<div class="kb-section"><div class="kb-section-header"><span class="kb-section-title"><i class="ti ti-notes"></i> Text notes ('+snips.length+')</span><button class="icon-btn" onclick="openAddSnippetModal()"><i class="ti ti-plus"></i> Add note</button></div>';
   if(!snips.length)html+='<p style="font-size:12.5px;color:var(--text3);padding:.5rem 0">No notes yet.</p>';
-  else snips.forEach(function(ref){html+='<div class="kb-item"><i class="ti ti-notes kb-item-icon"></i><div class="kb-item-body"><div class="kb-item-name">'+escHtml(ref.label)+'</div><div class="kb-item-meta">'+(ref.content?ref.content.slice(0,80).replace(/\n/g,' ')+(ref.content.length>80?'…':''):'')+'</div></div><div class="kb-item-actions"><button class="kb-action-btn danger" onclick="deleteRef(\''+ws.id+'\',\''+ref.id+'\')"><i class="ti ti-trash"></i></button></div></div>';});
+  else snips.forEach(function(ref){html+='<div class="kb-item"><i class="ti ti-notes kb-item-icon"></i><div class="kb-item-body"><div class="kb-item-name">'+escHtml(ref.label)+'</div><div class="kb-item-meta">'+(ref.content?ref.content.slice(0,80).replace(/\n/g,' ')+(ref.content.length>80?'…':''):'')+'</div></div><div class="kb-item-actions"><button class="kb-action-btn" title="Edit note" onclick="openEditSnippetModal(\''+ws.id+'\',\''+ref.id+'\')"><i class="ti ti-edit"></i></button><button class="kb-action-btn danger" title="Delete note" onclick="deleteRef(\''+ws.id+'\',\''+ref.id+'\')"><i class="ti ti-trash"></i></button></div></div>';});
   html+='</div>';
   be.innerHTML=html;
 }
-function openAddLinkModal(){document.getElementById('addLinkLabel').value='';document.getElementById('addLinkUrl').value='';document.getElementById('addLinkModal').classList.add('open');setTimeout(function(){document.getElementById('addLinkLabel').focus();},80);}
-function closeAddLinkModal(e){if(!e||e.target===document.getElementById('addLinkModal'))document.getElementById('addLinkModal').classList.remove('open');}
+function openAddLinkModal(){
+  editingLinkRef=null;
+  document.getElementById('addLinkModalTitle').textContent='Add reference link';
+  document.getElementById('addLinkModalBtnLabel').textContent='Add link';
+  document.getElementById('addLinkModalIcon').className='ti ti-plus';
+  document.getElementById('addLinkLabel').value='';document.getElementById('addLinkUrl').value='';
+  document.getElementById('addLinkModal').classList.add('open');setTimeout(function(){document.getElementById('addLinkLabel').focus();},80);
+}
+function openEditLinkModal(wsId,refId){
+  var ws=kbGetWs(wsId),ref=ws?ws.refs.find(function(r){return r.id===refId;}):null;if(!ref)return;
+  editingLinkRef={wsId:wsId,refId:refId};
+  document.getElementById('addLinkModalTitle').textContent='Edit reference link';
+  document.getElementById('addLinkModalBtnLabel').textContent='Save changes';
+  document.getElementById('addLinkModalIcon').className='ti ti-check';
+  document.getElementById('addLinkLabel').value=ref.label;document.getElementById('addLinkUrl').value=ref.url||'';
+  document.getElementById('addLinkModal').classList.add('open');setTimeout(function(){document.getElementById('addLinkLabel').focus();},80);
+}
+function closeAddLinkModal(e){if(!e||e.target===document.getElementById('addLinkModal')){document.getElementById('addLinkModal').classList.remove('open');editingLinkRef=null;}}
 function confirmAddLink(){
   var label=document.getElementById('addLinkLabel').value.trim(),url=document.getElementById('addLinkUrl').value.trim();
   if(!label||!url){alert('Please fill in both fields.');return;}
   if(!/^https?:\/\//i.test(url))url='https://'+url;
+  if(editingLinkRef){
+    var ews=kbGetWs(editingLinkRef.wsId),eref=ews?ews.refs.find(function(r){return r.id===editingLinkRef.refId;}):null;
+    if(!eref){editingLinkRef=null;document.getElementById('addLinkModal').classList.remove('open');return;}
+    var urlChanged=eref.url!==url;
+    eref.label=label;eref.url=url;
+    if(urlChanged){eref.status='pending';eref.content='';eref.title='';}
+    kbSave();document.getElementById('addLinkModal').classList.remove('open');
+    renderKbMain();renderWsList();renderPlatformBar();
+    if(urlChanged)fetchKbLink(editingLinkRef.wsId,editingLinkRef.refId);
+    editingLinkRef=null;
+    return;
+  }
   var ws=kbGetWs(kbActiveWsId);if(!ws)return;
   var ref={id:'ref_'+Date.now(),type:'link',label:label,url:url,content:'',status:'pending'};
   ws.refs.push(ref);kbSave();document.getElementById('addLinkModal').classList.remove('open');
@@ -1732,11 +1767,35 @@ function handleDocUpload(event,wsId){
   Array.prototype.forEach.call(files,function(file){var reader=new FileReader();reader.onload=function(e){var c=e.target.result||'';if(c.length>8000)c=c.slice(0,8000)+'\n[truncated…]';ws.refs.push({id:'ref_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),type:'doc',label:file.name,content:c,status:'ok',size:file.size>1024?Math.round(file.size/1024)+' KB':file.size+' B'});kbSave();renderKbMain();renderWsList();renderPlatformBar();};reader.readAsText(file);});
   event.target.value='';
 }
-function openAddSnippetModal(){document.getElementById('addSnippetLabel').value='';document.getElementById('addSnippetContent').value='';document.getElementById('addSnippetModal').classList.add('open');setTimeout(function(){document.getElementById('addSnippetLabel').focus();},80);}
-function closeAddSnippetModal(e){if(!e||e.target===document.getElementById('addSnippetModal'))document.getElementById('addSnippetModal').classList.remove('open');}
+function openAddSnippetModal(){
+  editingSnippetRef=null;
+  document.getElementById('addSnippetModalTitle').textContent='Add text note';
+  document.getElementById('addSnippetModalBtnLabel').textContent='Add note';
+  document.getElementById('addSnippetModalIcon').className='ti ti-plus';
+  document.getElementById('addSnippetLabel').value='';document.getElementById('addSnippetContent').value='';
+  document.getElementById('addSnippetModal').classList.add('open');setTimeout(function(){document.getElementById('addSnippetLabel').focus();},80);
+}
+function openEditSnippetModal(wsId,refId){
+  var ws=kbGetWs(wsId),ref=ws?ws.refs.find(function(r){return r.id===refId;}):null;if(!ref)return;
+  editingSnippetRef={wsId:wsId,refId:refId};
+  document.getElementById('addSnippetModalTitle').textContent='Edit text note';
+  document.getElementById('addSnippetModalBtnLabel').textContent='Save changes';
+  document.getElementById('addSnippetModalIcon').className='ti ti-check';
+  document.getElementById('addSnippetLabel').value=ref.label;document.getElementById('addSnippetContent').value=ref.content||'';
+  document.getElementById('addSnippetModal').classList.add('open');setTimeout(function(){document.getElementById('addSnippetLabel').focus();},80);
+}
+function closeAddSnippetModal(e){if(!e||e.target===document.getElementById('addSnippetModal')){document.getElementById('addSnippetModal').classList.remove('open');editingSnippetRef=null;}}
 function confirmAddSnippet(){
   var label=document.getElementById('addSnippetLabel').value.trim(),content=document.getElementById('addSnippetContent').value.trim();
   if(!label||!content){alert('Please fill in both fields.');return;}
+  if(editingSnippetRef){
+    var ews=kbGetWs(editingSnippetRef.wsId),eref=ews?ews.refs.find(function(r){return r.id===editingSnippetRef.refId;}):null;
+    if(eref){eref.label=label;eref.content=content;kbSave();}
+    document.getElementById('addSnippetModal').classList.remove('open');
+    renderKbMain();renderWsList();renderPlatformBar();renderQaPlatformBar();
+    editingSnippetRef=null;
+    return;
+  }
   var ws=kbGetWs(kbActiveWsId);if(!ws)return;
   ws.refs.push({id:'ref_'+Date.now(),type:'snippet',label:label,content:content,status:'ok'});kbSave();
   document.getElementById('addSnippetModal').classList.remove('open');renderKbMain();renderWsList();renderPlatformBar();renderQaPlatformBar();

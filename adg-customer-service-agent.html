@@ -133,6 +133,7 @@
   .resp-actions{display:flex;gap:6px}
   .icon-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:5px 10px;font-size:12.5px;font-weight:500;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s}
   .icon-btn:hover{border-color:var(--accent-border);color:var(--accent2);background:var(--accent-bg)}
+  .icon-btn:disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
   .icon-btn.danger{background:var(--red-bg);border-color:var(--red-border);color:var(--red)}
   .icon-btn.danger:hover{background:var(--red);border-color:var(--red);color:#fff}
   .resp-body{flex:1;overflow-y:auto;padding:1.25rem;min-height:80px}
@@ -872,10 +873,12 @@
   <!-- RIGHT: Response (full height — chat is now floating) -->
   <div class="right">
     <div class="resp-header">
-      <div class="resp-title"><i class="ti ti-message-check" style="font-size:13px"></i> Drafted response</div>
+      <div class="resp-title"><i class="ti ti-message-check" style="font-size:13px"></i> Drafted response <span id="draftVersionLabel" style="font-weight:400;color:var(--text3);text-transform:none;letter-spacing:0;margin-left:4px"></span></div>
       <div class="resp-actions">
+        <button class="icon-btn" id="undoBtn" onclick="undoDraft()" title="Undo — see the previous version" style="display:none"><i class="ti ti-arrow-back-up"></i> Undo</button>
+        <button class="icon-btn" id="redoBtn" onclick="redoDraft()" title="Redo — go forward to a newer version" style="display:none"><i class="ti ti-arrow-forward-up"></i> Redo</button>
         <button class="icon-btn" id="copyBtn" onclick="copyResp()" style="display:none"><i class="ti ti-copy"></i> Copy</button>
-        <button class="icon-btn" id="regenBtn" onclick="generate(false)" style="display:none"><i class="ti ti-refresh"></i> Redo</button>
+        <button class="icon-btn" id="regenBtn" onclick="generate(false)" style="display:none"><i class="ti ti-refresh"></i> Regenerate</button>
       </div>
     </div>
     <div class="resp-body" id="respBody">
@@ -1081,6 +1084,7 @@
 <script>
 // ── Core state ──────────────────────────────────────────────────────────────
 var provider='anthropic',tone='Professional & Empathetic',attachedFiles=[],lastRawResponse='';
+var draftHistory=[],draftHistoryIndex=-1;var DRAFT_HISTORY_MAX=30;
 var fcwOpen=false,fcwHistory=[],lastQAResult=null;
 var fcwSessions=[],fcwCurrentSession=null;
 var fcwMode='ask',fcwPendingDrafts={};
@@ -1211,7 +1215,7 @@ function clearAll(){
   document.getElementById('attachments').innerHTML='';updateCount();
   document.getElementById('respBody').innerHTML='<div class="empty"><i class="ti ti-message-dots"></i><p>Your AI-drafted response will appear here.<br/>Fill in the customer message and press <strong>Generate response</strong>.</p></div>';
   document.getElementById('copyBtn').style.display='none';document.getElementById('regenBtn').style.display='none';
-  setStatus('Ready','green');lastRawResponse='';
+  setStatus('Ready','green');lastRawResponse='';resetDraftHistory();
   // Chat history holds the same customer message content — clear it too, not just the in-memory session
   fcwHistory=[];fcwCurrentSession=null;fcwPendingDrafts={};fcwSessions=[];
   localStorage.removeItem(FCW_HIST_KEY);
@@ -1380,6 +1384,43 @@ function renderResponse(parsed){
   updateCtxStrip();
 }
 
+// ── Undo / Redo history for the drafted response ─────────────────────────
+// setDraft() is the single entry point for putting a new draft on screen —
+// call this instead of setting lastRawResponse directly, so every version
+// (initial generate, regenerate, or an accepted chat edit) lands in the
+// undo/redo stack automatically.
+function setDraft(raw){
+  // If we'd undone some steps and then create a new version, drop the redo branch —
+  // same behavior people expect from undo/redo in a text editor.
+  if(draftHistoryIndex<draftHistory.length-1)draftHistory=draftHistory.slice(0,draftHistoryIndex+1);
+  draftHistory.push(raw);
+  if(draftHistory.length>DRAFT_HISTORY_MAX)draftHistory=draftHistory.slice(draftHistory.length-DRAFT_HISTORY_MAX);
+  draftHistoryIndex=draftHistory.length-1;
+  lastRawResponse=raw;
+  renderResponse(parseResponse(raw));
+  updateDraftHistoryUI();
+}
+function goToDraftHistory(index){
+  if(index<0||index>=draftHistory.length)return;
+  draftHistoryIndex=index;
+  lastRawResponse=draftHistory[index];
+  renderResponse(parseResponse(lastRawResponse));
+  updateDraftHistoryUI();
+}
+function undoDraft(){if(draftHistoryIndex>0)goToDraftHistory(draftHistoryIndex-1);}
+function redoDraft(){if(draftHistoryIndex<draftHistory.length-1)goToDraftHistory(draftHistoryIndex+1);}
+function resetDraftHistory(){draftHistory=[];draftHistoryIndex=-1;updateDraftHistoryUI();}
+function updateDraftHistoryUI(){
+  var ub=document.getElementById('undoBtn'),rb=document.getElementById('redoBtn'),lbl=document.getElementById('draftVersionLabel');
+  if(!ub||!rb)return;
+  var hasHistory=draftHistory.length>1;
+  ub.style.display=hasHistory?'flex':'none';
+  rb.style.display=hasHistory?'flex':'none';
+  ub.disabled=draftHistoryIndex<=0;
+  rb.disabled=draftHistoryIndex>=draftHistory.length-1;
+  if(lbl)lbl.textContent=hasHistory?('· version '+(draftHistoryIndex+1)+' of '+draftHistory.length):'';
+}
+
 // ── Generate ───────────────────────────────────────────────────────────────
 function generate(quick){
   var email=document.getElementById('emailInput').value.trim();
@@ -1390,7 +1431,7 @@ function generate(quick){
   document.getElementById('copyBtn').style.display='none';document.getElementById('regenBtn').style.display='none';
   fcwHistory=[];fcwCurrentSession=null;
   fetchAllLinks().then(function(){return callProvider(buildSystemPrompt(),buildUserContent(quick||false));})
-    .then(function(raw){lastRawResponse=raw;renderResponse(parseResponse(raw));setStatus('Done','green');showBadge();})
+    .then(function(raw){setDraft(raw);setStatus('Done','green');showBadge();})
     .catch(function(e){showError(e.message);setStatus('Error','red');})
     .finally(function(){gb.disabled=db.disabled=false;});
 }
@@ -1622,8 +1663,7 @@ function fcwResize(el){el.style.height='auto';el.style.height=Math.min(el.scroll
 function fcwQuick(msg,mode){if(mode)fcwSetMode(mode);if(!fcwOpen)toggleChat();setTimeout(function(){document.getElementById('fcwInput').value=msg;fcwSend();},60);}
 function fcwAcceptDraft(pid){
   var pending=fcwPendingDrafts[pid];if(!pending)return;
-  lastRawResponse=pending.newDraft;
-  renderResponse(parseResponse(pending.newDraft));
+  setDraft(pending.newDraft);
   var note=document.createElement('div');
   note.style.cssText='margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border);font-size:11.5px;color:var(--text3);display:flex;align-items:center;gap:5px';
   note.innerHTML='<i class="ti ti-message-2" style="font-size:13px"></i> Edited via chat just now — no auto-confidence score for chat edits.';

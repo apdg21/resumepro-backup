@@ -147,12 +147,14 @@
   .dots span:nth-child(3){animation-delay:.4s}
   @keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:.9}}
   .resp-content{font-size:13.5px;line-height:1.8;color:var(--text);white-space:pre-wrap;word-break:break-word}
-  .conf-block{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)}
-  .conf-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-  .conf-label{font-size:11px;color:var(--text3);min-width:60px}
-  .bar-track{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
-  .bar-fill{height:100%;border-radius:2px;transition:width .7s cubic-bezier(.4,0,.2,1)}
-  .conf-pct{font-size:12px;font-weight:500;font-family:var(--mono);min-width:30px;text-align:right}
+  .ground-block{margin-top:1.1rem;padding:.9rem 1rem;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm)}
+  .ground-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;flex-wrap:wrap;gap:6px}
+  .ground-title{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);display:flex;align-items:center;gap:6px}
+  .ground-score{font-size:11.5px;font-weight:600;font-family:var(--mono)}
+  .ground-row{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(--text2);line-height:1.55;margin-bottom:.45rem}
+  .ground-row:last-of-type{margin-bottom:0}
+  .ground-row i{font-size:15px;flex-shrink:0;margin-top:1px}
+  .ground-footnote{font-size:10.5px;color:var(--text3);margin-top:.65rem;padding-top:.5rem;border-top:1px solid var(--border);line-height:1.5}
   .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
   .tag{font-size:11px;padding:3px 9px;border-radius:20px;background:var(--bg3);border:1px solid var(--border);color:var(--text2)}
   .error-box{background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--radius-sm);padding:12px;color:var(--red);font-size:13px;display:flex;gap:8px;align-items:flex-start}
@@ -291,6 +293,8 @@
   .fcw-bubble.user{background:var(--accent);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
   .fcw-bubble.ai{background:var(--bg3);border:1px solid var(--border);color:var(--text);align-self:flex-start;border-bottom-left-radius:4px}
   .fcw-bubble.ai.thinking-bubble{color:var(--text3);font-style:italic}
+  .fcw-promote-btn{background:none;border:1px dashed var(--accent-border);color:var(--accent2);font-size:11px;font-weight:500;padding:5px 9px;border-radius:7px;cursor:pointer;font-family:var(--font);display:inline-flex;align-items:center;gap:5px;transition:all .15s}
+  .fcw-promote-btn:hover{background:var(--accent-bg);border-style:solid;color:var(--accent)}
   .fcw-hint{font-size:12px;color:var(--text3);line-height:1.65;text-align:center;padding:.5rem;align-self:center}
   .fcw-input-row{display:flex;align-items:flex-end;gap:8px;padding:.75rem 1rem .9rem;border-top:1px solid var(--border);background:var(--bg);flex-shrink:0}
   .fcw-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:20px;color:var(--text);font-family:var(--font);font-size:13px;padding:.55rem 1rem;resize:none;line-height:1.5;max-height:100px;overflow-y:auto;transition:border-color .15s}
@@ -305,14 +309,7 @@
   }
 
   /* KB / QA / misc */
-  .link-row{display:flex;gap:6px;align-items:center}
-  .link-row input{flex:1;height:34px;font-size:12.5px}
-  .link-status{font-size:11px;display:flex;align-items:center;gap:4px;white-space:nowrap;min-width:70px}
-  .link-status.fetching{color:var(--amber)}.link-status.ok{color:var(--green)}.link-status.err{color:var(--red)}
-  .link-remove{background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--radius-sm);width:34px;height:34px;cursor:pointer;color:var(--red);font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
-  .link-remove:hover{background:var(--red);border-color:var(--red);color:#fff}
-  .link-add{background:none;border:1px dashed var(--border2);border-radius:var(--radius-sm);padding:6px 12px;font-size:12px;color:var(--text3);cursor:pointer;font-family:var(--font);width:100%;margin-top:5px;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px}
-  .link-add:hover{border-color:var(--accent-border);color:var(--accent2);background:var(--accent-bg)}
+  /* Draft-tab ephemeral reference links removed — KB tab (persistent, per-platform) is the one source now */
   .kb-layout{grid-template-columns:260px 1fr;height:calc(100vh - var(--chrome-height));overflow:hidden}
   .kb-sidebar{border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;height:100%}
   .kb-sidebar-body{flex:1;overflow-y:auto;padding:.75rem}
@@ -829,18 +826,12 @@
       </div>
       <div class="field">
         <label><i class="ti ti-history" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Conversation history & context</label>
-        <textarea id="historyInput" rows="4" placeholder="Previous exchanges, order #, account tier, product model, purchase date, prior complaints…" oninput="updateCount()"></textarea>
-        <p class="hint">The more context, the more specific the reply will be.</p>
+        <textarea id="historyInput" rows="5" placeholder="Previous exchanges, order #, account tier, product model, purchase date, prior complaints…" oninput="updateCount()"></textarea>
+        <p class="hint">The more context, the more specific the reply will be. Need a product page, manual, or FAQ link? Add it once in the <strong>Knowledge Base</strong> tab so it's reused on every future ticket for this platform.</p>
       </div>
       <div class="field">
         <label><i class="ti ti-shield-check" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Policies / constraints</label>
         <textarea id="policyInput" rows="2" placeholder="e.g. Refund window is 30 days. No replacements on consumables."></textarea>
-      </div>
-      <div class="field" id="refLinksField">
-        <label><i class="ti ti-link" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Reference links <span style="color:var(--text3);font-weight:400">(product pages, manuals, FAQs…)</span></label>
-        <div id="linksList"></div>
-        <button class="link-add" onclick="addLinkRow()"><i class="ti ti-plus" style="font-size:13px"></i> Add reference link</button>
-        <p class="hint">AI will fetch and read each page as context.</p>
       </div>
       <div class="field">
         <label><i class="ti ti-photo" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Attachments <span style="color:var(--text3);font-weight:400">(images for context)</span></label>
@@ -1090,7 +1081,7 @@ var fcwSessions=[],fcwCurrentSession=null;
 var fcwMode='ask',fcwPendingDrafts={};
 var FCW_HIST_KEY='csagent_fcw_history';
 var FCW_TTL_DAYS=14;
-var refLinks=[],linkCounter=0;
+// Draft-tab ephemeral reference links removed — the KB tab (persistent, per-platform) is the single source now
 var kbWorkspaces=[],kbActiveWsId=null,activePlatformId=null,qaActivePlatformId=null;
 var wsModalMode='add',wsSelectedEmoji='🛍️';
 var editingLinkRef=null,editingSnippetRef=null;
@@ -1211,7 +1202,7 @@ function removeFile(i){attachedFiles.splice(i,1);renderChips();}
 
 function clearAll(){
   ['emailInput','historyInput','policyInput'].forEach(function(id){document.getElementById(id).value='';});
-  attachedFiles=[];refLinks=[];linkCounter=0;renderLinkRows();
+  attachedFiles=[];
   document.getElementById('attachments').innerHTML='';updateCount();
   document.getElementById('respBody').innerHTML='<div class="empty"><i class="ti ti-message-dots"></i><p>Your AI-drafted response will appear here.<br/>Fill in the customer message and press <strong>Generate response</strong>.</p></div>';
   document.getElementById('copyBtn').style.display='none';document.getElementById('regenBtn').style.display='none';
@@ -1225,49 +1216,7 @@ function clearAll(){
   updateCtxStrip();
 }
 
-// ── Reference links ────────────────────────────────────────────────────────
-function addLinkRow(url){linkCounter++;var id=linkCounter;refLinks.push({id:id,url:url||'',status:'idle',content:'',title:''});renderLinkRows();}
-function removeLinkRow(id){refLinks=refLinks.filter(function(l){return l.id!==id;});renderLinkRows();}
-function onLinkInput(id,val){var l=refLinks.find(function(x){return x.id===id;});if(l){l.url=val.trim();l.status='idle';l.content='';l.title='';}renderLinkRows();}
-function renderLinkRows(){
-  var box=document.getElementById('linksList');if(!box)return;box.innerHTML='';
-  refLinks.forEach(function(link){
-    var row=document.createElement('div');row.className='link-row';row.style.marginBottom='6px';
-    var sh='';
-    if(link.status==='fetching')sh='<span class="link-status fetching"><i class="ti ti-loader" style="animation:spin .8s linear infinite"></i> Fetching…</span>';
-    else if(link.status==='ok'){var t=link.title?link.title.slice(0,18)+(link.title.length>18?'…':''):'Loaded';sh='<span class="link-status ok"><i class="ti ti-check"></i> '+escHtml(t)+'</span>';}
-    else if(link.status==='err')sh='<span class="link-status err"><i class="ti ti-alert-circle"></i> Failed</span>';
-    row.innerHTML='<input type="text" placeholder="https://…" value="'+escHtml(link.url)+'" oninput="onLinkInput('+link.id+',this.value)" onblur="fetchLinkContent('+link.id+')" onkeydown="if(event.key===\'Enter\'){event.preventDefault();fetchLinkContent('+link.id+')}" style="font-size:12.5px;height:34px"/>'+sh+'<button class="link-remove" onclick="removeLinkRow('+link.id+')"><i class="ti ti-x"></i></button>';
-    box.appendChild(row);
-  });
-}
-function fetchLinkContent(id){
-  var link=refLinks.find(function(l){return l.id===id;});
-  if(!link||!link.url||link.status==='fetching'||link.status==='ok')return;
-  var url=link.url;if(!/^https?:\/\//i.test(url))url='https://'+url;
-  link.url=url;link.status='fetching';renderLinkRows();
-  fetch('https://api.allorigins.win/get?url='+encodeURIComponent(url))
-    .then(function(r){if(!r.ok)throw new Error('fail');return r.json();})
-    .then(function(d){
-      if(!d.contents)throw new Error('empty');
-      var div=document.createElement('div');div.innerHTML=d.contents;
-      div.querySelectorAll('script,style,nav,footer,header').forEach(function(el){el.remove();});
-      var tm=d.contents.match(/<title[^>]*>([^<]+)<\/title>/i);
-      link.title=tm?tm[1].trim():url;
-      link.content=(div.innerText||div.textContent||'').replace(/\s+/g,' ').trim().slice(0,4000);
-      link.status='ok';renderLinkRows();
-    })
-    .catch(function(){link.status='err';link.content='';renderLinkRows();});
-}
-function fetchAllLinks(){
-  var pending=refLinks.filter(function(l){return l.url&&l.status==='idle';});
-  return Promise.all(pending.map(function(l){
-    return new Promise(function(resolve){
-      fetchLinkContent(l.id);
-      var check=setInterval(function(){var lnk=refLinks.find(function(x){return x.id===l.id;});if(!lnk||lnk.status==='ok'||lnk.status==='err'){clearInterval(check);resolve();}},300);
-    });
-  }));
-}
+// Ephemeral Draft-tab reference-link fetching removed — KB tab links (fetchKbLink/refetchRef) are the single source now.
 
 // ── Prompts ────────────────────────────────────────────────────────────────
 function buildSystemPrompt(){
@@ -1280,7 +1229,7 @@ function buildSystemPrompt(){
   var uNotes={normal:'',high:'NOTE: Customer is frustrated/escalating — prioritize de-escalation first.',vip:'NOTE: VIP/premium customer — prioritize satisfaction.',legal:'NOTE: Legal/complaint risk — be factual, avoid liability admissions.'};
   var lNote=length==='concise'?'Keep it short, 2-3 paragraphs max.':length==='detailed'?'Be thorough and detailed.':'Standard length — balanced and complete.';
   var platNote=activePlatformId&&kbGetWs(activePlatformId)?' You are handling a customer from the '+kbGetWs(activePlatformId).name+' platform.':'';
-  return 'You are an expert '+dept+' representative for '+company+(rep?', your name is '+rep:'')+'. Write a '+tone.toLowerCase()+' customer service reply in '+lang+'.'+platNote+'\n\n'+(uNotes[urgency]?uNotes[urgency]+'\n\n':'')+'CRITICAL RULES:\n1. Analyze the SPECIFIC problem — never give a generic answer.\n2. Reference specific details (names, dates, order numbers).\n3. Acknowledge prior interactions if history is provided.\n4. Work within stated policies.\n5. Address EVERY issue raised.\n6. Reference any attached images.\n7. End with a clear next step.\n8. '+lNote+'\n9. Never open with "I hope this email finds you well." Start directly.\n10. Sign off as '+(rep||'the support team')+' from '+company+'.\n\nAfter the response body write exactly:\nCONFIDENCE:[0-100]\nTAGS:[comma-separated issue tags]';
+  return 'You are an expert '+dept+' representative for '+company+(rep?', your name is '+rep:'')+'. Write a '+tone.toLowerCase()+' customer service reply in '+lang+'.'+platNote+'\n\n'+(uNotes[urgency]?uNotes[urgency]+'\n\n':'')+'CRITICAL RULES:\n1. Analyze the SPECIFIC problem — never give a generic answer.\n2. Reference specific details (names, dates, order numbers).\n3. Acknowledge prior interactions if history is provided.\n4. Work within stated policies.\n5. Address EVERY issue raised.\n6. Reference any attached images.\n7. End with a clear next step.\n8. '+lNote+'\n9. Never open with "I hope this email finds you well." Start directly.\n10. Sign off as '+(rep||'the support team')+' from '+company+'.\n\nAfter the response body write exactly:\nTAGS:[comma-separated short topic labels, e.g. billing, shipping-delay, refund-request — NOT a confidence or quality score]';
 }
 function buildUserContent(quick){
   var email=document.getElementById('emailInput').value.trim();
@@ -1291,10 +1240,6 @@ function buildUserContent(quick){
   if(ctx)text+='\n\nCONVERSATION HISTORY & CONTEXT:\n'+ctx;
   if(policy)text+='\n\nPOLICIES / CONSTRAINTS:\n'+policy;
   if(kbCtx)text+=kbCtx;
-  var loaded=refLinks.filter(function(l){return l.status==='ok'&&l.content;});
-  if(loaded.length){text+='\n\nREFERENCE DOCUMENTS:';loaded.forEach(function(l,i){text+='\n\n--- Ref '+(i+1)+': '+l.title+' ('+l.url+') ---\n'+l.content;});}
-  var failed=refLinks.filter(function(l){return l.status==='err';});
-  if(failed.length)text+='\n\nCould not fetch: '+failed.map(function(l){return l.url;}).join(', ');
   if(attachedFiles.length)text+='\n\nATTACHMENTS: '+attachedFiles.map(function(f){return f.name;}).join(', ');
   if(quick)text+='\n\n[QUICK DRAFT - shorter first pass]';
   var content=[];
@@ -1332,29 +1277,109 @@ function callProvider(sys,uc){
 
 // ── Parse & render response ────────────────────────────────────────────────
 function parseResponse(raw){
-  var text=raw.trim(),confidence=null,tags=[],extraCtx='';
-  // Extract machine-readable tags
-  var cm=text.match(/CONFIDENCE:\s*(\d+)/i),tm=text.match(/TAGS:\s*([^\n]+)/i);
-  if(cm)confidence=Math.min(100,Math.max(0,parseInt(cm[1])));
+  var text=raw.trim(),tags=[],extraCtx='';
+  // Extract machine-readable tags. Any stray CONFIDENCE:NN line (legacy, or a model
+  // that adds one unprompted) is stripped but intentionally never displayed —
+  // it's an unverified self-report, not a real measurement. See computeGroundingChecks().
+  var tm=text.match(/TAGS:\s*([^\n]+)/i);
   if(tm)tags=tm[1].split(',').map(function(t){return t.trim();}).filter(Boolean);
   text=text.replace(/\nCONFIDENCE:\s*\d+/gi,'').replace(/\nTAGS:\s*[^\n]+/gi,'').trim();
-  // No separate Confidence label - handled by CONFIDENCE:[0-100] bar
-  // Strip any stray Confidence: label line
   text=text.replace(/\nConfidence:\s*(High|Medium|Low)[^\n]*/gi,'').trim();
   // Extract Recommended Additional Context section
   var ctxMatch=text.match(/\n?---\n🔍 Recommended Additional Context[\s\S]*/i);
   if(ctxMatch){extraCtx=ctxMatch[0].trim();text=text.replace(ctxMatch[0],'').trim();}
-  return{text:text,confidence:confidence,tags:tags,extraCtx:extraCtx};
+  return{text:text,tags:tags,extraCtx:extraCtx};
+}
+// Rules-based "grounding check" — computed by the app from real, verifiable signals,
+// not asked of the model. Each item is either satisfied or not; nothing here is a guess.
+function computeGroundingChecks(replyText){
+  var checks=[];
+  var email=document.getElementById('emailInput')?document.getElementById('emailInput').value.trim():'';
+  var histTxt=document.getElementById('historyInput')?document.getElementById('historyInput').value.trim():'';
+  var policyTxt=document.getElementById('policyInput')?document.getElementById('policyInput').value.trim():'';
+  var urgency=document.getElementById('urgencySelect')?document.getElementById('urgencySelect').value:'normal';
+
+  // 1 & 2. History/policy presence — purely informational (FYI), not scored.
+  // Skipping these is completely normal for a quick reply, so it shouldn't read as a "failure."
+  checks.push(histTxt
+    ? {status:'info',label:'Conversation history & context was provided'}
+    : {status:'info',label:'No conversation history given (optional) — reply is based on the message alone'});
+  checks.push(policyTxt
+    ? {status:'info',label:'Policies / constraints were provided'}
+    : {status:'info',label:'No policy text given (optional)'});
+
+  // 3. KB platform selection — SCORED. This is the one real footgun: KB content silently not used.
+  if(kbWorkspaces.length){
+    if(activePlatformId){
+      var ws=kbGetWs(activePlatformId);
+      var loadedRefs=ws?ws.refs.filter(function(r){return r.content&&r.content.length>0;}):[];
+      if(loadedRefs.length){
+        checks.push({status:'pass',label:'Used "'+ws.icon+' '+ws.name+'" KB — '+loadedRefs.length+' reference'+(loadedRefs.length!==1?'s':'')+' loaded'});
+      } else {
+        checks.push({status:'warn',label:'"'+(ws?ws.name:'Selected platform')+'" is selected but has no loaded reference content'});
+      }
+    } else {
+      checks.push({status:'warn',label:'No KB platform selected — saved policies/FAQs were not used'});
+    }
+  }
+
+  // 4. Reference link fetch failures within the active KB platform — SCORED (a real technical failure, not a preference).
+  if(activePlatformId){
+    var wsForLinks=kbGetWs(activePlatformId);
+    var platLinks=wsForLinks?wsForLinks.refs.filter(function(r){return r.type==='link';}):[];
+    var failedPlatLinks=platLinks.filter(function(l){return l.status==='err';});
+    if(platLinks.length){
+      checks.push(failedPlatLinks.length
+        ? {status:'warn',label:failedPlatLinks.length+' KB reference link'+(failedPlatLinks.length!==1?'s':'')+' failed to fetch — re-check them in the Knowledge Base tab'}
+        : {status:'pass',label:'All KB reference links for this platform fetched successfully'});
+    }
+  }
+
+  // 5. Order/ticket-style number in the customer message carried into the reply — SCORED, only when applicable.
+  var numMatches=(email.match(/#\s?\d{3,}|\border[\s#:]*\d{3,}\b|\b\d{5,}\b/gi)||[]).map(function(s){return s.replace(/\D/g,'');}).filter(function(s){return s.length>=3;});
+  if(numMatches.length){
+    var found=numMatches.some(function(n){return replyText.indexOf(n)!==-1;});
+    checks.push(found
+      ? {status:'pass',label:'Reply references the order/ticket number from the customer message'}
+      : {status:'warn',label:'Customer message includes a number (order/ticket?) that the reply doesn\'t mention'});
+  }
+
+  // 6. Attachments present — SCORED, only when applicable.
+  if(attachedFiles.length){
+    var mentionsAttachment=/\b(image|photo|picture|screenshot|attach(ed|ment)?)\b/i.test(replyText);
+    checks.push(mentionsAttachment
+      ? {status:'pass',label:attachedFiles.length+' attachment'+(attachedFiles.length!==1?'s':'')+' provided and referenced in the reply'}
+      : {status:'warn',label:attachedFiles.length+' attachment'+(attachedFiles.length!==1?'s':'')+' provided, but the reply doesn\'t seem to reference '+(attachedFiles.length!==1?'them':'it')});
+    if(provider!=='anthropic')checks.push({status:'warn',label:'Current provider doesn\'t support image analysis — attachments were not actually seen by the model'});
+  }
+
+  // 7. Legal/escalation risk — SCORED as a standing flag for human review, only when applicable.
+  if(urgency==='legal')checks.push({status:'warn',label:'Marked as legal/complaint risk — recommend a human review before sending'});
+
+  // Only "pass"/"warn" are real graded signals. "info" and "na" are shown for transparency but never scored,
+  // so a bare-bones draft (just a customer message, nothing else) doesn't get an artificially low score.
+  var applicable=checks.filter(function(c){return c.status==='pass'||c.status==='warn';});
+  var passed=applicable.filter(function(c){return c.status==='pass';}).length;
+  var score=applicable.length?Math.round(100*passed/applicable.length):null;
+  return{checks:checks,score:score,passed:passed,total:applicable.length};
 }
 function renderResponse(parsed){
-  var cc=parsed.confidence>75?'var(--green)':parsed.confidence>50?'var(--amber)':'var(--red)';
-  var cp=parsed.confidence!==null?parsed.confidence+'%':'--';
+  var ground=computeGroundingChecks(parsed.text);
 
-  // Confidence bar block
-  var ch='';
-  if(parsed.confidence!==null){
-    ch='<div class="conf-block"><div class="conf-row"><span class="conf-label">Confidence</span><div class="bar-track"><div class="bar-fill" id="confBar" style="width:0%;background:'+cc+'"></div></div><span class="conf-pct" id="confPct" style="color:'+cc+'">--</span></div>'+(parsed.tags.length?'<div class="tags">'+parsed.tags.map(function(t){return '<span class="tag">'+escHtml(t)+'</span>';}).join('')+'</div>':'')+'</div>';
+  // Grounding checklist block — computed by the app from real signals, not a model guess.
+  var gh='';
+  if(ground.checks.length){
+    var sc=ground.score===null?'var(--text3)':ground.score>=85?'var(--green)':ground.score>=60?'var(--amber)':'var(--red)';
+    var iconMap={pass:'ti-circle-check-filled',warn:'ti-alert-triangle-filled',info:'ti-info-circle',na:'ti-minus'};
+    var colorMap={pass:'var(--green)',warn:'var(--amber)',info:'var(--text3)',na:'var(--text3)'};
+    var rows=ground.checks.map(function(c){
+      return '<div class="ground-row"><i class="ti '+(iconMap[c.status]||'ti-minus')+'" style="color:'+(colorMap[c.status]||'var(--text3)')+'"></i><span>'+escHtml(c.label)+'</span></div>';
+    }).join('');
+    var scoreLabel=ground.score===null?'':'<span class="ground-score" style="color:'+sc+'">'+ground.passed+'/'+ground.total+' checks passed</span>';
+    gh='<div class="ground-block"><div class="ground-head"><span class="ground-title"><i class="ti ti-list-check"></i> Grounding checklist</span>'+scoreLabel+'</div>'+rows+
+       '<p class="ground-footnote">Computed from what was actually provided — not the AI\'s self-reported confidence.</p></div>';
   }
+  var tagsHtml=parsed.tags.length?'<div class="tags" style="margin-top:.7rem">'+parsed.tags.map(function(t){return '<span class="tag">'+escHtml(t)+'</span>';}).join('')+'</div>':'';
 
   // Recommended Additional Context block
   var ctxHtml='';
@@ -1378,8 +1403,7 @@ function renderResponse(parsed){
     ctxHtml='<div style="margin-top:1rem;padding:1rem;background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius-sm)">'+ctxFormatted+'</div>';
   }
 
-  document.getElementById('respBody').innerHTML='<div class="resp-content" id="respText">'+escHtml(parsed.text)+'</div>'+ch+ctxHtml;
-  if(parsed.confidence!==null){setTimeout(function(){var b=document.getElementById('confBar'),p=document.getElementById('confPct');if(b)b.style.width=cp;if(p)p.textContent=cp;},80);}
+  document.getElementById('respBody').innerHTML='<div class="resp-content" id="respText">'+escHtml(parsed.text)+'</div>'+tagsHtml+gh+ctxHtml;
   document.getElementById('copyBtn').style.display='flex';document.getElementById('regenBtn').style.display='flex';
   updateCtxStrip();
 }
@@ -1430,7 +1454,7 @@ function generate(quick){
   document.getElementById('respBody').innerHTML='<div class="thinking"><div class="dots"><span></span><span></span><span></span></div>Analyzing message and context…</div>';
   document.getElementById('copyBtn').style.display='none';document.getElementById('regenBtn').style.display='none';
   fcwHistory=[];fcwCurrentSession=null;
-  fetchAllLinks().then(function(){return callProvider(buildSystemPrompt(),buildUserContent(quick||false));})
+  callProvider(buildSystemPrompt(),buildUserContent(quick||false))
     .then(function(raw){setDraft(raw);setStatus('Done','green');showBadge();})
     .catch(function(e){showError(e.message);setStatus('Error','red');})
     .finally(function(){gb.disabled=db.disabled=false;});
@@ -1621,8 +1645,6 @@ function fcwBuildCtx(isFirstTurn,mode){
       });
       parts.push(kbs);
     }
-    var loaded=refLinks.filter(function(l){return l.status==='ok'&&l.content;});
-    if(loaded.length){var rc='REFERENCE LINKS:';loaded.forEach(function(l,i){rc+='\n['+(i+1)+'] '+l.title+': '+l.content.slice(0,400);});parts.push(rc);}
     var qc=document.getElementById('qaConversation'),qctx=document.getElementById('qaContext'),qpol=document.getElementById('qaPolicies');
     if(qc&&qc.value.trim())parts.push('QA CONVERSATION:\n'+qc.value.trim());
     if(qctx&&qctx.value.trim())parts.push('QA CONTEXT:\n'+qctx.value.trim());
@@ -1649,8 +1671,32 @@ function fcwBuildCtx(isFirstTurn,mode){
 function fcwAppend(role,text,id){
   var thread=document.getElementById('fcwThread');
   var hint=thread.querySelector('.fcw-hint');if(hint)hint.remove();
-  var d=document.createElement('div');d.className='fcw-bubble '+role;if(id)d.id=id;d.textContent=text;
+  var d=document.createElement('div');d.className='fcw-bubble '+role;if(id)d.id=id;
+  if(role==='ai'){
+    // Fallback safety net: even if the model didn't use [DRAFT_UPDATE] tags (wrong mode,
+    // or a weaker model ignoring the instruction), the operator can still manually promote
+    // any reply into a reviewable Accept/Discard draft update — never stuck with no way to apply it.
+    var srcId='fcw-src-'+Date.now()+'-'+Math.floor(Math.random()*10000);
+    fcwPendingDrafts[srcId]={oldDraft:lastRawResponse?parseResponse(lastRawResponse).text:'(no previous draft)',newDraft:text};
+    d.innerHTML=escHtml(text)+'<div style="margin-top:.5rem"><button class="fcw-promote-btn" onclick="fcwPromoteToDraftUpdate(\''+srcId+'\')"><i class="ti ti-arrow-big-right-lines"></i> Use this as the draft</button></div>';
+  } else {
+    d.textContent=text;
+  }
   thread.appendChild(d);thread.scrollTop=thread.scrollHeight;return d;
+}
+function fcwPromoteToDraftUpdate(srcId){
+  var src=fcwPendingDrafts[srcId];if(!src)return;
+  var pid='fcw-diff-'+Date.now();
+  fcwPendingDrafts[pid]={oldDraft:src.oldDraft,newDraft:src.newDraft};
+  var cardHtml='<div class="fcw-diff-card">'+
+    '<div class="fcw-diff-label"><i class="ti ti-git-compare"></i> Apply this message as the draft — review before applying</div>'+
+    '<div class="fcw-diff-block"><div class="fcw-diff-block-title">Current</div><div class="fcw-diff-text old">'+escHtml(src.oldDraft)+'</div></div>'+
+    '<div class="fcw-diff-block"><div class="fcw-diff-block-title">Proposed</div><div class="fcw-diff-text new">'+escHtml(src.newDraft)+'</div></div>'+
+    '<div class="fcw-diff-actions"><button class="fcw-diff-accept" onclick="fcwAcceptDraft(\''+pid+'\')"><i class="ti ti-check"></i> Accept</button><button class="fcw-diff-discard" onclick="fcwDiscardDraft(\''+pid+'\')"><i class="ti ti-x"></i> Discard</button></div>'+
+  '</div>';
+  fcwAppendHTML('ai',cardHtml,pid);
+  fcwHistory.push({role:'assistant',content:'[Offered to apply the previous message as a draft update]',pendingId:pid,remainder:''});
+  fcwSaveHistory();
 }
 function fcwAppendHTML(role,html,id){
   var thread=document.getElementById('fcwThread');
@@ -1666,7 +1712,7 @@ function fcwAcceptDraft(pid){
   setDraft(pending.newDraft);
   var note=document.createElement('div');
   note.style.cssText='margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border);font-size:11.5px;color:var(--text3);display:flex;align-items:center;gap:5px';
-  note.innerHTML='<i class="ti ti-message-2" style="font-size:13px"></i> Edited via chat just now — no auto-confidence score for chat edits.';
+  note.innerHTML='<i class="ti ti-message-2" style="font-size:13px"></i> Edited via chat just now — the grounding checklist above was recomputed for this version.';
   document.getElementById('respBody').appendChild(note);
   var card=document.getElementById(pid);
   if(card){

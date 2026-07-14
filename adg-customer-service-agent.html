@@ -753,7 +753,7 @@
       </div>
       <div class="field">
         <label>Model</label>
-        <select id="modelSelect">
+        <select id="modelSelect" onchange="onModelSelectChange()">
           <option value="claude-sonnet-4-20250514">Claude Sonnet 4 ✦ Recommended</option>
           <option value="claude-opus-4-20250514">Claude Opus 4 — Most capable</option>
           <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 — Fastest</option>
@@ -1156,15 +1156,21 @@ function onSessionOnlyToggle(){
   if(k)keyStore().setItem(storeName,k);
   updateSaveIndicator();
 }
-function setProvider(btn){
+function setProvider(btn,skipModelReset){
   document.querySelectorAll('.prov-btn').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');provider=btn.dataset.provider;
+  localStorage.setItem('csagent_last_provider',provider);
   var sel=document.getElementById('modelSelect');
   sel.innerHTML=MODELS[provider].map(function(m){return '<option value="'+m.v+'">'+m.l+'</option>';}).join('');
+  var savedModel=localStorage.getItem('csagent_last_model_'+provider);
+  if(savedModel&&MODELS[provider].some(function(m){return m.v===savedModel;}))sel.value=savedModel;
   document.getElementById('keyHint').textContent=KEY_HINTS[provider];
   document.getElementById('apiKey').value=loadKey(provider);
   document.getElementById('apiKey').placeholder=provider==='openrouter'?'sk-or-…':'API key…';
   updateSaveIndicator();
+}
+function onModelSelectChange(){
+  localStorage.setItem('csagent_last_model_'+provider,document.getElementById('modelSelect').value);
 }
 function setTone(btn){document.querySelectorAll('.tone-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');tone=btn.dataset.tone;}
 function toggleKey(){var i=document.getElementById('apiKey'),ic=document.getElementById('eyeIcon');if(i.type==='password'){i.type='text';ic.className='ti ti-eye-off';}else{i.type='password';ic.className='ti ti-eye';}}
@@ -2113,7 +2119,19 @@ kbLoad();renderWsList();if(kbWorkspaces.length>0)kbActiveWsId=kbWorkspaces[0].id
 })();
 renderKbMain();renderPlatformBar();renderQaPlatformBar();
 fcwLoadHistory();renderFcwHistList();
-(function(){document.getElementById('sessionOnlyToggle').checked=sessionOnlyKeys;var saved=loadKey(provider);if(saved){document.getElementById('apiKey').value=saved;updateSaveIndicator();}})();
+(function(){
+  document.getElementById('sessionOnlyToggle').checked=sessionOnlyKeys;
+  // Restore the last-used provider so the person doesn't have to re-pick it every visit
+  var lastProvider=localStorage.getItem('csagent_last_provider');
+  if(lastProvider&&lastProvider!==provider){
+    var btn=document.querySelector('.prov-btn[data-provider="'+lastProvider+'"]');
+    if(btn)setProvider(btn);
+  } else {
+    var savedModel=localStorage.getItem('csagent_last_model_'+provider);
+    if(savedModel){var sel=document.getElementById('modelSelect');if([].some.call(sel.options,function(o){return o.value===savedModel;}))sel.value=savedModel;}
+  }
+  var saved=loadKey(provider);if(saved){document.getElementById('apiKey').value=saved;updateSaveIndicator();}
+})();
 </script>
 <script src="header.js"></script>
 </body>

@@ -726,7 +726,7 @@
           <button class="prov-btn" data-provider="openrouter" onclick="setProvider(this)"><span class="prov-icon">🔀</span><span class="prov-name">OpenRouter</span></button>
         </div>
       </div>
-      <div class="field">
+      <div class="field" id="byokSection">
         <label>API Key</label>
         <div class="input-wrap">
           <input type="password" id="apiKey" placeholder="Paste your API key…" autocomplete="off" spellcheck="false" oninput="saveKey();updateSaveIndicator()" onpaste="setTimeout(function(){var el=document.getElementById('apiKey');el.value=el.value.trim();saveKey();updateSaveIndicator();},0)" />
@@ -745,9 +745,16 @@
           <i class="ti ti-shield-exclamation" style="color:var(--amber);font-size:15px;flex-shrink:0;margin-top:1px"></i>
           <p style="font-size:11px;color:var(--amber);line-height:1.6;margin:0">
             <strong>Set a spending cap.</strong> A browser-stored key can't be made 100% unstealable, so cap the damage at the provider instead:
-            Anthropic → <a href="https://console.anthropic.com/settings/limits" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">console.anthropic.com/settings/limits</a> ·
-            OpenRouter → <a href="https://openrouter.ai/settings/credits" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">openrouter.ai/settings/credits</a> (add credits in small amounts instead of a large balance) ·
-            Groq / Gemini currently free-tier rate-limited by default. Set a low monthly budget so a leaked key can only cost a few dollars, not your whole balance.
+            <a href="https://console.anthropic.com/settings/limits" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">console.anthropic.com/settings/limits</a> —
+            set a low monthly budget so a leaked key can only cost a few dollars, not your whole balance.
+          </p>
+        </div>
+      </div>
+      <div class="field" id="managedProviderNote" style="display:none">
+        <div style="display:flex;gap:9px;align-items:flex-start;background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--radius-sm);padding:10px 12px">
+          <i class="ti ti-circle-check" style="color:var(--green);font-size:16px;flex-shrink:0;margin-top:1px"></i>
+          <p style="font-size:12px;color:var(--green);line-height:1.6;margin:0">
+            <strong>No API key needed</strong> — this provider is already set up for you. Requests are routed through a server-side proxy, so nothing is billed to you and no key is exposed in your browser.
           </p>
         </div>
       </div>
@@ -1164,10 +1171,15 @@ function setProvider(btn,skipModelReset){
   sel.innerHTML=MODELS[provider].map(function(m){return '<option value="'+m.v+'">'+m.l+'</option>';}).join('');
   var savedModel=localStorage.getItem('csagent_last_model_'+provider);
   if(savedModel&&MODELS[provider].some(function(m){return m.v===savedModel;}))sel.value=savedModel;
-  document.getElementById('keyHint').textContent=KEY_HINTS[provider];
-  document.getElementById('apiKey').value=loadKey(provider);
-  document.getElementById('apiKey').placeholder=provider==='openrouter'?'sk-or-…':'API key…';
-  updateSaveIndicator();
+  var isManaged=!!MANAGED_PROVIDERS[provider];
+  document.getElementById('byokSection').style.display=isManaged?'none':'flex';
+  document.getElementById('managedProviderNote').style.display=isManaged?'flex':'none';
+  if(!isManaged){
+    document.getElementById('keyHint').textContent=KEY_HINTS[provider];
+    document.getElementById('apiKey').value=loadKey(provider);
+    document.getElementById('apiKey').placeholder=provider==='openrouter'?'sk-or-…':'API key…';
+    updateSaveIndicator();
+  }
 }
 function onModelSelectChange(){
   localStorage.setItem('csagent_last_model_'+provider,document.getElementById('modelSelect').value);
@@ -1255,29 +1267,33 @@ function buildUserContent(quick){
 }
 
 // ── API calls ──────────────────────────────────────────────────────────────
+// ── Which providers are "managed" (server pays via Cloudflare Function + secret)
+// vs "BYOK" (person supplies their own key, used directly from the browser).
+var MANAGED_PROVIDERS={gemini:'/api/gemini',groq:'/api/groq',openrouter:'/api/openrouter'};
+
 function callAnthropic(key,model,sys,uc){
   return fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:model,max_tokens:1800,system:sys,messages:[{role:'user',content:uc}]})})
     .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.error?d.error.message:'Error '+r.status);return d.content.map(function(c){return c.text||'';}).join('');});});
 }
-function callOAI(url,key,model,sys,uc,extra){
+function callManaged(endpoint,model,sys,uc){
   var txt='';uc.forEach(function(c){if(c.type==='text')txt+=c.text;});
-  var headers=Object.assign({'Content-Type':'application/json','Authorization':'Bearer '+key},extra||{});
-  return fetch(url,{method:'POST',headers:headers,body:JSON.stringify({model:model,max_tokens:1800,messages:[{role:'system',content:sys},{role:'user',content:txt}]})})
-    .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error((d.error&&d.error.message)||d.message||'Error '+r.status);return d.choices[0].message.content||'';});});
-}
-function callGemini(key,model,sys,uc){
-  var txt='';uc.forEach(function(c){if(c.type==='text')txt+=c.text;});
-  return fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent?key='+key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system_instruction:{parts:[{text:sys}]},contents:[{role:'user',parts:[{text:txt}]}],generationConfig:{maxOutputTokens:1800}})})
-    .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error((d.error&&d.error.message)||'Gemini error '+r.status);return d.candidates[0].content.parts.map(function(p){return p.text||'';}).join('');});});
+  return fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:model,system:sys,text:txt})})
+    .then(function(r){return r.json().then(function(d){
+      if(!r.ok)throw new Error((d.error&&d.error.message)||'Error '+r.status);
+      // Normalize both Gemini-shaped and OpenAI-shaped responses to plain text
+      if(d.candidates)return d.candidates[0].content.parts.map(function(p){return p.text||'';}).join('');
+      if(d.choices)return d.choices[0].message.content||'';
+      throw new Error('Unexpected response shape from managed provider.');
+    });});
 }
 function callProvider(sys,uc){
-  var key=document.getElementById('apiKey').value.trim();
   var model=document.getElementById('modelSelect').value;
-  if(!key)return Promise.reject(new Error('Please enter your API key in the left sidebar.'));
-  if(provider==='anthropic')return callAnthropic(key,model,sys,uc);
-  if(provider==='gemini')return callGemini(key,model,sys,uc);
-  if(provider==='groq')return callOAI('https://api.groq.com/openai/v1/chat/completions',key,model,sys,uc);
-  if(provider==='openrouter')return callOAI('https://openrouter.ai/api/v1/chat/completions',key,model,sys,uc,{'HTTP-Referer':window.location.href,'X-Title':'CS Agent'});
+  if(provider==='anthropic'){
+    var key=document.getElementById('apiKey').value.trim();
+    if(!key)return Promise.reject(new Error('Please enter your Anthropic API key in the left sidebar.'));
+    return callAnthropic(key,model,sys,uc);
+  }
+  if(MANAGED_PROVIDERS[provider])return callManaged(MANAGED_PROVIDERS[provider],model,sys,uc);
   return Promise.reject(new Error('Unknown provider'));
 }
 
@@ -1745,8 +1761,10 @@ function fcwDiscardDraft(pid){
 }
 function fcwSend(){
   var input=document.getElementById('fcwInput'),msg=input.value.trim();if(!msg)return;
-  var key=document.getElementById('apiKey').value.trim();
-  if(!key){alert('Please enter your API key in the Draft tab settings first.');return;}
+  if(!MANAGED_PROVIDERS[provider]){
+    var key=document.getElementById('apiKey').value.trim();
+    if(!key){alert('Please enter your API key in the Draft tab settings first.');return;}
+  }
   var mode=fcwMode;
   var sb=document.getElementById('fcwSendBtn');sb.disabled=true;
   input.value='';input.style.height='auto';
@@ -1822,7 +1840,9 @@ function buildQAPrompt(){
 }
 function runQA(){
   var conv=document.getElementById('qaConversation').value.trim();if(!conv){alert('Please paste a conversation first.');return;}
-  var key=document.getElementById('apiKey').value.trim();if(!key){alert('Please enter your API key first.');switchTab('draft');return;}
+  if(!MANAGED_PROVIDERS[provider]){
+    var key=document.getElementById('apiKey').value.trim();if(!key){alert('Please enter your API key first.');switchTab('draft');return;}
+  }
   var btn=document.getElementById('qaBtn');btn.disabled=true;setStatus('Reviewing…','amber');
   document.getElementById('qaResultBody').innerHTML='<div class="thinking"><div class="dots"><span></span><span></span><span></span></div>Analyzing conversation…</div>';
   document.getElementById('qaExportBtn').style.display='none';document.getElementById('qaRerunBtn').style.display='none';
@@ -2130,7 +2150,7 @@ fcwLoadHistory();renderFcwHistList();
     var savedModel=localStorage.getItem('csagent_last_model_'+provider);
     if(savedModel){var sel=document.getElementById('modelSelect');if([].some.call(sel.options,function(o){return o.value===savedModel;}))sel.value=savedModel;}
   }
-  var saved=loadKey(provider);if(saved){document.getElementById('apiKey').value=saved;updateSaveIndicator();}
+  if(!MANAGED_PROVIDERS[provider]){var saved=loadKey(provider);if(saved){document.getElementById('apiKey').value=saved;updateSaveIndicator();}}
 })();
 </script>
 <script src="header.js"></script>

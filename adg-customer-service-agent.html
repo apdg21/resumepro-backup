@@ -81,6 +81,10 @@
   .panel-header{padding:.85rem 1.25rem;border-bottom:1px solid var(--border);font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);display:flex;align-items:center;gap:7px;position:sticky;top:0;background:var(--bg);z-index:10;flex-shrink:0}
   .panel-body{padding:1.1rem 1.25rem;display:flex;flex-direction:column;gap:1.1rem;flex:1}
   label{display:block;font-size:11.5px;font-weight:500;color:var(--text2);margin-bottom:5px}
+  .field-label-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .field-clear-btn{background:none;border:none;color:var(--text3);font-size:11px;font-weight:500;font-family:var(--font);cursor:pointer;display:flex;align-items:center;gap:4px;padding:2px 5px;border-radius:5px;transition:all .15s;flex-shrink:0}
+  .field-clear-btn i{font-size:12px}
+  .field-clear-btn:hover{color:var(--text);background:var(--bg3)}
   .field{display:flex;flex-direction:column}
   .hint{font-size:11px;color:var(--text3);margin-top:4px;line-height:1.5}
   input[type=text],input[type=password],select,textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font);font-size:13px;padding:8px 10px;transition:border-color .15s;-webkit-appearance:none;appearance:none}
@@ -311,6 +315,8 @@
   /* KB / QA / misc */
   /* Draft-tab ephemeral reference links removed — KB tab (persistent, per-platform) is the one source now */
   .kb-layout{grid-template-columns:260px 1fr;height:calc(100vh - var(--chrome-height));overflow:hidden}
+  .translate-layout{grid-template-columns:1fr 1fr;height:calc(100vh - var(--chrome-height));overflow:hidden}
+  .mini-select{width:auto;height:30px;font-size:12px;padding:0 8px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text2);cursor:pointer}
   .kb-sidebar{border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;height:100%}
   .kb-sidebar-body{flex:1;overflow-y:auto;padding:.75rem}
   .ws-btn{width:100%;text-align:left;background:none;border:1px solid transparent;border-radius:var(--radius-sm);padding:.55rem .75rem;font-family:var(--font);font-size:13px;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .15s;margin-bottom:3px}
@@ -398,7 +404,7 @@
     .tab-bar{padding:0 .75rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
     .tab-bar::-webkit-scrollbar{display:none}
     .tab-btn{padding:.55rem .9rem;font-size:12px;white-space:nowrap;flex-shrink:0}
-    .qa-layout,.kb-layout{height:auto!important;overflow:visible!important}
+    .qa-layout,.kb-layout,.translate-layout{height:auto!important;overflow:visible!important}
     .kb-sidebar,.kb-main{overflow:visible!important;height:auto!important}
     .platform-bar{padding:.5rem 1rem;flex-wrap:wrap;gap:.4rem}
     .resp-body{min-height:200px}.action-bar{flex-wrap:wrap;gap:8px}.btn-row{flex-wrap:wrap}
@@ -479,6 +485,7 @@
   <button class="tab-btn active" id="tab-draft" onclick="switchTab('draft')"><i class="ti ti-pencil" style="font-size:14px"></i> Draft Response</button>
   <button class="tab-btn" id="tab-qa" onclick="switchTab('qa')"><i class="ti ti-shield-check" style="font-size:14px"></i> QA Review</button>
   <button class="tab-btn" id="tab-kb" onclick="switchTab('kb')"><i class="ti ti-book" style="font-size:14px"></i> Knowledge Base</button>
+  <button class="tab-btn" id="tab-translate" onclick="switchTab('translate')"><i class="ti ti-language" style="font-size:14px"></i> Translate</button>
 </div>
 
 <!-- ── Help Modal ── -->
@@ -828,16 +835,16 @@
     <div class="platform-warn-bar" id="platformWarnBar" style="display:none"><i class="ti ti-alert-triangle"></i> No platform selected — your saved Knowledge Base won't be used for this reply.</div>
     <div class="middle-body">
       <div class="field">
-        <label><i class="ti ti-mail" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Customer email / message <span style="color:var(--red)">*</span></label>
+        <label class="field-label-row"><span><i class="ti ti-mail" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Customer email / message <span style="color:var(--red)">*</span></span><button type="button" class="field-clear-btn" onclick="clearField('emailInput')" title="Clear this field"><i class="ti ti-eraser"></i> Clear</button></label>
         <textarea id="emailInput" rows="6" placeholder="Paste the customer's email, chat message, or support ticket here…" oninput="updateCount()"></textarea>
       </div>
       <div class="field">
-        <label><i class="ti ti-history" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Conversation history & context</label>
+        <label class="field-label-row"><span><i class="ti ti-history" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Conversation history & context</span><button type="button" class="field-clear-btn" onclick="clearField('historyInput')" title="Clear this field"><i class="ti ti-eraser"></i> Clear</button></label>
         <textarea id="historyInput" rows="5" placeholder="Previous exchanges, order #, account tier, product model, purchase date, prior complaints…" oninput="updateCount()"></textarea>
         <p class="hint">The more context, the more specific the reply will be. Need a product page, manual, or FAQ link? Add it once in the <strong>Knowledge Base</strong> tab so it's reused on every future ticket for this platform.</p>
       </div>
       <div class="field">
-        <label><i class="ti ti-shield-check" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Policies / constraints</label>
+        <label class="field-label-row"><span><i class="ti ti-shield-check" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Policies / constraints</span><button type="button" class="field-clear-btn" onclick="clearField('policyInput')" title="Clear this field"><i class="ti ti-eraser"></i> Clear</button></label>
         <textarea id="policyInput" rows="2" placeholder="e.g. Refund window is 30 days. No replacements on consumables."></textarea>
       </div>
       <div class="field">
@@ -982,6 +989,53 @@
     </div>
     <div class="kb-main-body" id="kbMainBody">
       <div class="kb-empty"><i class="ti ti-building-store"></i><p>Add a platform on the left<br>(e.g. Shopify, Amazon, TikTok Shop)</p></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Tab: Translate -->
+<div class="tab-pane" id="pane-translate">
+<div class="app translate-layout">
+  <div class="middle">
+    <div class="panel-header">
+      <i class="ti ti-message-2" style="font-size:14px"></i> Source text
+      <select id="translateSourceLang" class="mini-select" title="Source language"></select>
+      <button class="icon-btn" id="translateSwapBtn" onclick="swapTranslateLangs()" title="Swap source & target, and reuse the translation as new input" style="margin-left:auto"><i class="ti ti-arrows-left-right"></i></button>
+    </div>
+    <div class="middle-body">
+      <div class="field">
+        <label class="field-label-row"><span><i class="ti ti-file-text" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Text to translate</span><button type="button" class="field-clear-btn" onclick="clearTranslateInput()" title="Clear this field"><i class="ti ti-eraser"></i> Clear</button></label>
+        <textarea id="translateInput" rows="16" placeholder="Paste the customer's message in any language…" oninput="updateTranslateCount()"></textarea>
+      </div>
+    </div>
+    <div class="action-bar">
+      <span class="char-count" id="translateCharCount">0 chars</span>
+      <button class="btn-primary" id="translateBtn" onclick="runTranslate()"><i class="ti ti-language"></i> Translate</button>
+    </div>
+  </div>
+  <div class="right">
+    <div class="resp-header">
+      <div class="resp-title"><i class="ti ti-message-check" style="font-size:13px"></i> Translation <span id="detectedLangLabel" style="font-weight:400;color:var(--text3);text-transform:none;letter-spacing:0;margin-left:4px"></span></div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <select id="translateTargetLang" class="mini-select" title="Target language"></select>
+        <div class="resp-actions">
+          <button class="icon-btn" id="translateCopyBtn" onclick="copyTranslation()" style="display:none"><i class="ti ti-copy"></i> Copy</button>
+        </div>
+      </div>
+    </div>
+    <div class="resp-body" id="translateResultBody">
+      <div class="empty">
+        <i class="ti ti-language"></i>
+        <p>Paste text on the left and press <strong>Translate</strong>.<br/>Works both ways — translate an incoming message to understand it, or translate your reply before sending it.</p>
+      </div>
+    </div>
+    <div class="action-bar" id="translateUseBar" style="display:none">
+      <span class="hint" style="margin:0">Use this translation:</span>
+      <div class="btn-row">
+        <button class="btn-ghost" onclick="sendTranslationToDraft('email')"><i class="ti ti-inbox"></i> Send to Customer message</button>
+        <button class="btn-ghost" onclick="sendTranslationToDraft('history')"><i class="ti ti-history"></i> Add to Context</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1191,6 +1245,12 @@ function updateCount(){
   document.getElementById('charCount').textContent=n.toLocaleString()+' chars';
   document.getElementById('draftBtn').style.display=document.getElementById('emailInput').value.trim().length>20?'flex':'none';
   updateCtxStrip();
+}
+function clearField(id){
+  var el=document.getElementById(id);if(!el||!el.value)return;
+  el.value='';
+  el.focus();
+  updateCount();
 }
 function setStatus(t,type){var p=document.getElementById('statusPill');p.className='pill pill-'+type;p.innerHTML='<span class="pill-dot"></span> '+t;}
 function updateSaveIndicator(){
@@ -1900,6 +1960,106 @@ function exportQA(){
   var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/plain'}));a.download='qa-review-'+new Date().toISOString().slice(0,10)+'.txt';a.click();
 }
 
+// ── Translate ────────────────────────────────────────────────────────────
+// Uses the same provider/model/API key already set up on the Draft tab — no separate setup needed.
+var TRANSLATE_LANGS=[
+  'English','Filipino / Tagalog','Spanish','French','German','Dutch / Nederlands','Portuguese','Italian',
+  'Japanese','Korean','Mandarin Chinese','Arabic','Hindi','Indonesian','Vietnamese','Thai','Polish',
+  'Russian','Turkish','Swedish','Norwegian','Danish','Greek','Hebrew','Ukrainian','Czech','Romanian'
+];
+var lastTranslation='';
+function populateTranslateLangs(){
+  var src=document.getElementById('translateSourceLang'),tgt=document.getElementById('translateTargetLang');
+  if(!src||!tgt)return;
+  src.innerHTML='<option value="auto">Auto-detect</option>'+TRANSLATE_LANGS.map(function(l){return '<option value="'+l+'">'+l+'</option>';}).join('');
+  tgt.innerHTML=TRANSLATE_LANGS.map(function(l){return '<option value="'+l+'">'+l+'</option>';}).join('');
+  tgt.value='English';
+}
+function updateTranslateCount(){
+  var n=document.getElementById('translateInput').value.length;
+  document.getElementById('translateCharCount').textContent=n.toLocaleString()+' chars';
+}
+function clearTranslateInput(){clearField('translateInput');updateTranslateCount();}
+function parseTranslation(raw){
+  var text=raw.trim(),detected='';
+  var dm=text.match(/DETECTED_LANG:\s*([^\n]+)/i);
+  if(dm)detected=dm[1].trim();
+  text=text.replace(/DETECTED_LANG:\s*[^\n]+/i,'').trim();
+  text=text.replace(/^-{2,}\s*/,'').trim();
+  return{text:text,detected:detected};
+}
+function runTranslate(){
+  var text=document.getElementById('translateInput').value.trim();
+  if(!text){alert('Please paste some text to translate first.');return;}
+  if(!MANAGED_PROVIDERS[provider]){
+    var key=document.getElementById('apiKey').value.trim();
+    if(!key){alert('Please enter your API key in the Draft tab settings first.');switchTab('draft');return;}
+  }
+  var srcLang=document.getElementById('translateSourceLang').value;
+  var tgtLang=document.getElementById('translateTargetLang').value;
+  var btn=document.getElementById('translateBtn');btn.disabled=true;setStatus('Translating…','amber');
+  document.getElementById('translateResultBody').innerHTML='<div class="thinking"><div class="dots"><span></span><span></span><span></span></div>Translating…</div>';
+  document.getElementById('translateCopyBtn').style.display='none';
+  document.getElementById('translateUseBar').style.display='none';
+  document.getElementById('detectedLangLabel').textContent='';
+  var sys='You are a professional translator for customer service communications. Translate the given text into '+tgtLang+'.'+
+    (srcLang!=='auto'?' The source text is written in '+srcLang+'.':' Detect the source language yourself.')+
+    ' Preserve the tone, meaning, paragraph breaks, and any names, order numbers, or product names exactly as written.'+
+    ' If the text is already in '+tgtLang+', say so via DETECTED_LANG and return it unchanged.\n\n'+
+    'Respond in exactly this format, nothing else:\nDETECTED_LANG:[name of the language the source text is actually written in]\n---\n[translated text only — no notes, no explanations, no quotation marks around it]';
+  callProvider(sys,[{type:'text',text:text}])
+    .then(function(raw){
+      var parsed=parseTranslation(raw);
+      lastTranslation=parsed.text;
+      document.getElementById('translateResultBody').innerHTML='<div class="resp-content">'+escHtml(parsed.text)+'</div>';
+      document.getElementById('detectedLangLabel').textContent=parsed.detected?('· detected: '+parsed.detected):'';
+      document.getElementById('translateCopyBtn').style.display='flex';
+      document.getElementById('translateUseBar').style.display='flex';
+      setStatus('Done','green');
+    })
+    .catch(function(e){
+      document.getElementById('translateResultBody').innerHTML='<div class="error-box"><i class="ti ti-alert-circle" style="font-size:18px;flex-shrink:0;margin-top:1px"></i><div><strong>Error</strong><br>'+escHtml(e.message)+'</div></div>';
+      setStatus('Error','red');
+    })
+    .finally(function(){btn.disabled=false;});
+}
+function copyTranslation(){
+  if(!lastTranslation)return;
+  navigator.clipboard.writeText(lastTranslation).then(function(){
+    var btn=document.getElementById('translateCopyBtn');btn.innerHTML='<i class="ti ti-check"></i> Copied!';
+    setTimeout(function(){btn.innerHTML='<i class="ti ti-copy"></i> Copy';},2000);
+  }).catch(function(){
+    var ta=document.createElement('textarea');ta.value=lastTranslation;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();
+  });
+}
+function swapTranslateLangs(){
+  var srcSel=document.getElementById('translateSourceLang'),tgtSel=document.getElementById('translateTargetLang');
+  var s=srcSel.value,t=tgtSel.value;
+  srcSel.value=t;
+  tgtSel.value=(s==='auto')?'English':s;
+  // If a translation already exists, reuse it as the new input so you can quickly translate back the other way
+  if(lastTranslation){
+    document.getElementById('translateInput').value=lastTranslation;
+    updateTranslateCount();
+    lastTranslation='';
+    document.getElementById('translateResultBody').innerHTML='<div class="empty"><i class="ti ti-language"></i><p>Swapped. Press <strong>Translate</strong> to translate it back.</p></div>';
+    document.getElementById('translateCopyBtn').style.display='none';
+    document.getElementById('translateUseBar').style.display='none';
+    document.getElementById('detectedLangLabel').textContent='';
+  }
+}
+function sendTranslationToDraft(target){
+  if(!lastTranslation)return;
+  switchTab('draft');
+  if(target==='email'){
+    document.getElementById('emailInput').value=lastTranslation;
+  } else {
+    var el=document.getElementById('historyInput');
+    el.value=(el.value.trim()?el.value.trim()+'\n\n':'')+lastTranslation;
+  }
+  updateCount();
+}
+
 // ── Help ───────────────────────────────────────────────────────────────────
 function openHelp(){document.getElementById('helpOverlay').style.display='block';document.body.style.overflow='hidden';}
 function closeHelp(e){if(!e||e.target===document.getElementById('helpOverlay')){document.getElementById('helpOverlay').style.display='none';document.body.style.overflow='';}}
@@ -2132,6 +2292,7 @@ function toggleTheme(){
 })();
 
 // ── Init ───────────────────────────────────────────────────────────────────
+populateTranslateLangs();
 kbLoad();renderWsList();if(kbWorkspaces.length>0)kbActiveWsId=kbWorkspaces[0].id;
 (function(){
   var lastP=localStorage.getItem('csagent_last_platform');if(lastP&&kbGetWs(lastP))activePlatformId=lastP;

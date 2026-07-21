@@ -97,6 +97,13 @@
       "date": "2026-07-07",
       "excerpt": "Eighteen months of real data show what guessing brands never see: a repeatable seasonal rhythm, sharpened rather than hidden by disciplined list hygiene.",
       "image": "assets/blog/seasonality-revealed.jpg"
-    }
+    },
+	{
+  "title": "Built, Not Spliced: What Good Email Design Actually Means",
+  "url": "built-not-spliced-email-design.html",
+  "date": "2026-07-21",
+  "excerpt": "An all-image email isn't a design upgrade — it's a picture wearing an email costume. Learn why coded, section-based emails outperform sliced image layouts on searchability, accessibility, and mobile reflow.",
+  "image": "assets/blog/built-not-spliced-email-design.jpg"
+   }
   ]
 }

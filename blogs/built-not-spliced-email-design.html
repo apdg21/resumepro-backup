@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W52LYHBGZY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-W52LYHBGZY');
+</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../header.css">
+    <link rel="stylesheet" href="../footer.css">
+    <title>Built, Not Spliced: What Good Email Design Actually Means | ResumePro Blog</title>
+    <style>
+        /* === exact styles from sample blog, kept verbatim === */
+        :root {
+            --primary: #3a86ff;
+            --primary-dark: #2667cc;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .blog-container {
+            max-width: 800px;
+            margin: 5rem auto 3rem auto;
+            padding: 0 2rem;
+        }
+        
+        .blog-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            margin-top: 150px;
+        }
+        
+        .blog-meta {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+        
+        .blog-image {
+            width: 100%;
+            height: 400px;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            object-fit: fill;
+        }
+        
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+        }
+        
+        .blog-content {
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .blog-content h2 {
+            font-size: 1.8rem;
+            margin: 2.5rem 0 1.5rem;
+            color: var(--primary);
+        }
+        
+        .blog-content h3 {
+            font-size: 1.4rem;
+            margin: 2rem 0 1rem;
+            color: var(--dark);
+        }
+        
+        .blog-content p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .blog-content ul, .blog-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+        
+        .blog-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .tip-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* === added: comparison table styling, kept consistent with existing theme === */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 2rem 0;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            min-width: 560px;
+        }
+
+        .data-table caption {
+            text-align: left;
+            font-size: 0.9rem;
+            color: var(--gray);
+            padding: 0.75rem 1rem 0;
+            caption-side: top;
+        }
+
+        .data-table thead th {
+            background-color: var(--dark);
+            color: #fff;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .data-table tbody td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .data-table tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .data-table tbody tr:hover {
+            background-color: #eef4ff;
+        }
+
+        .status-healthy { color: var(--success); font-weight: 600; }
+        .status-declining { color: #d9534f; font-weight: 600; }
+        
+        @media (max-width: 768px) {
+            .blog-container {
+                margin: 4rem auto 2rem auto;
+            }
+            
+            .blog-title {
+                font-size: 1.8rem;
+            }
+            
+            .blog-meta {
+                font-size: 0.9rem;
+            }
+            
+            .blog-image {
+                height: 200px;
+            }
+            
+            .blog-content {
+                font-size: 1rem;
+            }
+            
+            .blog-content h2 {
+                font-size: 1.5rem;
+            }
+            
+            .blog-content h3 {
+                font-size: 1.2rem;
+            }
+            
+            .tip-box {
+                padding: 1rem;
+            }
+
+            .cta-button {
+                font-size: 0.95rem;
+            }
+
+            .data-table {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+    <div class="header-content">
+
+        <!-- Logo -->
+        <a href="../index.html" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+
+        <!-- Nav + Hamburger -->
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+
+            <ul class="header-nav-menu" role="menubar">
+
+                <li class="header-nav-item" role="none">
+                    <a href="../index.html" class="header-nav-link" role="menuitem">Home</a>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Templates
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                    </a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="../resume-templates.html"   class="header-dropdown-item" role="menuitem">Resume Templates</a>
+                        <a href="../portfolio-templates.html" class="header-dropdown-item" role="menuitem">Portfolio Templates</a>
+                    </div>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Apps
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                    </a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="../android-applications.html"   class="header-dropdown-item" role="menuitem">Android Applications</a>
+                        <a href="../family-connection-tools.html" class="header-dropdown-item" role="menuitem">Web Applications</a>
+                    </div>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="../blog-list.html" class="header-nav-link" role="menuitem">Blog</a>
+                </li>
+
+                <li class="header-nav-item" role="none" style="display: none;">
+                    <a href="../klaviyo-analytics.html" class="header-nav-link" role="menuitem">Klaviyo Analytics</a>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Tools
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                    </a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="../email-builder.html"  class="header-dropdown-item" role="menuitem">Email Builder</a>
+                        <a href="../inliner.html"              class="header-dropdown-item" role="menuitem">Inliner</a>
+                        <a href="../klaviyo-tool.html"               class="header-dropdown-item" role="menuitem">Klaviyo Tool</a>
+                        <a href="../omnisend.html"                   class="header-dropdown-item" role="menuitem">Omnisend Analytics</a>
+						<a href="../adg-customer-service-agent.html"   class="header-dropdown-item" role="menuitem">CS Agent</a>
+						<a href="../campfire.html"   class="header-dropdown-item" role="menuitem">Campfire🔥</a>
+                    </div>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="../about.html" class="header-nav-link" role="menuitem">About</a>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="../contact.html" class="header-nav-link" role="menuitem">Contact</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</header>
+
+
+    <main class="blog-container">
+        <div class="blog-header">
+            <h1 class="blog-title">Built, Not Spliced: What Good Email Design Actually Means</h1>
+            <div class="blog-meta">Posted on July 21, 2026 | 6 min read</div>
+            
+            <div class="blog-image">
+                <img src="../assets/blog/built-not-spliced-email-design.jpg" alt="Side-by-side comparison of a coded email template with live text blocks versus a flattened image-based email layout">
+                <div style="display: none;">Featured image: coded, section-based email layout next to a sliced, image-based email layout</div>
+            </div>
+        </div>
+        
+        <article class="blog-content">
+            <p>There's a popular take going around email marketing circles: stop treating email as a work of art, treat it as functional architecture, make it clean instead of fancy. It's not wrong exactly, but it's aimed at the wrong target. The problem was never good design. The problem is a specific production shortcut that gets mistaken for design.</p>
+
+            <h2>🖼️ The Real Dividing Line</h2>
+            <p>Good design and spliced design aren't points on the same scale. They're different categories of thing entirely:</p>
+            <ul>
+                <li><strong>Good design</strong> is a balance of real text, real images, and real layout — built with HTML tables and inline CSS, or a proper email builder, so every element exists as markup.</li>
+                <li><strong>Spliced design</strong> is a finished visual composition, cut into pieces — a header image, a hero image, an offer image, a footer image — with each slice dropped into its own row and wrapped in its own link, so different sections can point to different places.</li>
+            </ul>
+            <p>That's worth being precise about, because it's not the same as an image-map, where one single image has invisible coordinate-based hotspots layered on top. Image-maps have their own history of being unreliable in email specifically — coordinates can shift or fail to register depending on the client's rendering engine, so a tap meant for the button ends up missing or landing in the wrong zone. Slicing per section sidesteps that: each piece is its own image and its own link, so at least the links are honest and clickable.</p>
+            <p>A spliced email can look more polished than a coded one. That's exactly what makes it a trap — it looks like a design upgrade while quietly removing everything that makes an email work.</p>
+
+            <h3>Why the Splice Breaks Things</h3>
+            <p>Slicing per section fixes some problems, but the deeper ones remain — and a few only become visible once you look closely at how each slice behaves on its own.</p>
+
+            <div class="tip-box">
+                <h3>📵 Images Off, Message Gone</h3>
+                <p>Outlook doesn't load images by default. Plenty of Gmail users haven't turned on "always display images." If a whole section is one slice, that section becomes a blank box — the header slice, the offer slice, the footer slice each disappear independently. A coded section still delivers its message in plain text with images off.</p>
+            </div>
+
+            <p><strong>Screen readers can't read it.</strong> Text baked into a picture is invisible to assistive technology. Slicing per section doesn't fix this — it just means the failure happens section by section instead of all at once. Every slice is still a flattened picture underneath.</p>
+
+            <p><strong>It's unsearchable, even for the reader themselves.</strong> This is a different problem from the screen-reader one, not the same one restated. Gmail, Outlook, and Apple Mail all index the text of an email so people can search their inbox later — for a discount code, a shipping confirmation, a product name. If that text only exists as pixels, there's nothing for the search index to match against. Someone trying to Ctrl+F inside the opened email hits the same wall. And if the email ever gets archived to a "view in browser" page, image-only content won't get picked up by search engines either, since there's no text for them to crawl.</p>
+
+            <p><strong>It can't reflow, it can only resize.</strong> This is the point that ties everything together: if an email looks exactly the same on desktop and mobile, it was never mobile-optimized, it just shrank. A real two-column desktop layout, built in code, restacks into a single column on a phone. A sliced section that contains a two-column comparison can only scale that whole slice down as one unit — the columns get smaller together instead of stacking, until the type is unreadable and the tap targets are the size of a grain of rice.</p>
+
+            <p><strong>It ignores the "peephole" reality of how email actually gets read.</strong> Nobody sees an email the way they see a finished poster. Gmail's preview pane shows a few hundred pixels. Mobile shows one or two sections at a time. Slicing preserves a top-to-bottom visual composition for a view the reader will never actually get in one piece anyway.</p>
+
+            <p><strong>Seams become a real bug source.</strong> Adjacent slices stacked in separate table rows can show a hairline gap or misalignment between them depending on the email client's rendering quirks — something that doesn't happen when a section is genuinely one coded block.</p>
+
+            <p><strong>It doesn't survive dark mode or font scaling.</strong> Live text can invert color, respect a user's font-size settings, and get selected or copied. A picture of text is stuck exactly as exported, in every setting, for every reader.</p>
+
+            <h2>📋 Built vs. Spliced, Side by Side</h2>
+            <p>Laid out plainly, the practical differences show up in almost every dimension that matters for whether an email actually performs:</p>
+
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <caption>Comparison: Coded Sections vs. Image Slices</caption>
+                    <thead>
+                        <tr>
+                            <th>Factor</th>
+                            <th>Built (Coded)</th>
+                            <th>Spliced (Image)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Images off</td><td class="status-healthy">Message still readable</td><td class="status-declining">Section goes blank</td></tr>
+                        <tr><td>Screen readers</td><td class="status-healthy">Text is accessible</td><td class="status-declining">Text is invisible</td></tr>
+                        <tr><td>Mobile behavior</td><td class="status-healthy">Reflows / restacks</td><td class="status-declining">Only resizes</td></tr>
+                        <tr><td>Per-link tracking</td><td class="status-healthy">Accurate</td><td class="status-healthy">Accurate (per slice)</td></tr>
+                        <tr><td>Dark mode / font scaling</td><td class="status-healthy">Adapts</td><td class="status-declining">Fixed at export</td></tr>
+                        <tr><td>Rendering seams</td><td class="status-healthy">None</td><td class="status-declining">Possible gaps between slices</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>🎨 What a Built Email Actually Allows</h2>
+            <p>None of this is an argument for boring, gray, plain-text email. A properly coded email can still have custom web fonts with sane fallbacks, rounded buttons and cards, deliberate use of photography, and a distinct, on-brand visual identity. The difference is that every piece of it is still markup. The text is text. The button is a link. The layout reflows because it was actually told how to reflow at different widths, instead of just being scaled down as a single unit.</p>
+
+            <div class="tip-box">
+                <h3>💡 Pro Tip</h3>
+                <p>Ask yourself two questions about any email before it sends: if you took the images out, would the message still exist? And if you opened it on a phone, would the layout actually change shape, or just shrink? If the answer to either is no, it's spliced, not built.</p>
+            </div>
+
+            <h2>🌟 Closing Thought</h2>
+            <p>Forget "simple vs. fancy" as the deciding line. Good design and spliced design were never on the same axis to begin with. A coded email can be just as visually distinctive as a spliced one — the difference only shows up the moment images are off, the screen reader runs, or the phone comes out. That's the moment that actually matters, and it's the one splicing quietly fails.</p>
+
+            <p style="margin-top:2rem;">
+                <a href="https://resumepro.pages.dev/omnisend" class="cta-button">See how your own emails perform →</a>
+            </p>
+            <p style="font-size:0.95rem; color: var(--gray);">No credit card required. Upload your Omnisend export and see your full-year performance picture.</p>
+        </article>
+    </main>
+
+    <footer>
+    <div class="footer-content">
+        <div class="footer-column">
+            <h3>ResumePro</h3>
+            <p>Professional digital templates to showcase your career and work.</p>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Templates</h3>
+            <ul class="footer-links">
+                <li><a href="../resume-templates.html">Resume Templates</a></li>
+                <li><a href="../portfolio-templates.html">Portfolio Templates</a></li>
+                <li><a href="#">All Templates</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Resources</h3>
+            <ul class="footer-links">
+                <li><a href="help.html#editing">How to Edit</a></li>
+                <li><a href="help.html#hosting">Hosting Guide</a></li>
+                <li><a href="help.html#tips">Tips & Examples</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Company</h3>
+            <ul class="footer-links">
+                <li><a href="../about.html">About Us</a></li>
+                <li><a href="../contact.html">Contact</a></li>
+                <li><a href="../privacy.html">Privacy Policy</a></li>
+                <li><a href="../terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="copyright">
+        <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
+    </div>
+</footer>
+
+    <script src="../clean-urls.js"></script>
+    <script src="../header.js"></script>
+    <script src="../footer.js"></script>
+</body>
+</html>

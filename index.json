@@ -104,6 +104,13 @@
   "date": "2026-07-21",
   "excerpt": "An all-image email isn't a design upgrade — it's a picture wearing an email costume. Learn why coded, section-based emails outperform sliced image layouts on searchability, accessibility, and mobile reflow.",
   "image": "assets/blog/built-not-spliced-email-design.jpg"
-   }
+   },
+	{
+  "title": "How to Answer Support Tickets 3x Faster (Without Making Expensive Mistakes)",
+  "url": "cs-agent-support-tickets.html",
+  "date": "2026-07-22",
+  "excerpt": "Speed versus accuracy doesn't have to be a tradeoff. See the 4-step workflow that grounds every support reply in the full conversation history, live order status, and your store policies.",
+  "image": "assets/blog/cs-agent-support-tickets.jpg"
+}
   ]
 }

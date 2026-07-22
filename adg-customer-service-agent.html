@@ -840,12 +840,18 @@
       </div>
       <div class="field">
         <label class="field-label-row"><span><i class="ti ti-history" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Conversation history & context</span><button type="button" class="field-clear-btn" onclick="clearField('historyInput')" title="Clear this field"><i class="ti ti-eraser"></i> Clear</button></label>
-        <textarea id="historyInput" rows="5" placeholder="Previous exchanges, order #, account tier, product model, purchase date, prior complaints…" oninput="updateCount()"></textarea>
-        <p class="hint">The more context, the more specific the reply will be. Need a product page, manual, or FAQ link? Add it once in the <strong>Knowledge Base</strong> tab so it's reused on every future ticket for this platform.</p>
+        <textarea id="historyInput" rows="4" placeholder="Previous exchanges, prior complaints, account tier, product model, purchase date…" oninput="updateCount()"></textarea>
+        <p class="hint">What was already said or previously known. Need a product page, manual, or FAQ link? Add it once in the <strong>Knowledge Base</strong> tab so it's reused on every future ticket for this platform.</p>
+      </div>
+      <div class="field">
+        <label class="field-label-row"><span><i class="ti ti-receipt" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Order / account status <span style="color:var(--text3);font-weight:400">(optional)</span></span><button type="button" class="field-clear-btn" onclick="clearField('orderStatusInput')" title="Clear this field"><i class="ti ti-eraser"></i> Clear</button></label>
+        <textarea id="orderStatusInput" rows="2" placeholder="Paste order status, refund status, tracking info, or account details straight from your platform dashboard — e.g. Order #4092 Status: FULLY REFUNDED ($45.00) on 07/20. Reason: Damaged Item." oninput="updateCount()"></textarea>
+        <p class="hint">Current facts from your system, not conversation — treated as ground truth, and checked against the reply in the grounding checklist.</p>
       </div>
       <div class="field">
         <label class="field-label-row"><span><i class="ti ti-shield-check" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Policies / constraints</span><button type="button" class="field-clear-btn" onclick="clearField('policyInput')" title="Clear this field"><i class="ti ti-eraser"></i> Clear</button></label>
-        <textarea id="policyInput" rows="2" placeholder="e.g. Refund window is 30 days. No replacements on consumables."></textarea>
+        <textarea id="policyInput" rows="2" placeholder="One-off note for THIS ticket only, e.g. an exception you're approving just this once."></textarea>
+        <p class="hint">For standing, reusable policies (refund window, warranty terms), add them once in the <strong>Knowledge Base</strong> tab instead — this field is for one-off exceptions specific to this ticket.</p>
       </div>
       <div class="field">
         <label><i class="ti ti-photo" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i> Attachments <span style="color:var(--text3);font-weight:400">(images for context)</span></label>
@@ -1241,7 +1247,7 @@ function onModelSelectChange(){
 function setTone(btn){document.querySelectorAll('.tone-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');tone=btn.dataset.tone;}
 function toggleKey(){var i=document.getElementById('apiKey'),ic=document.getElementById('eyeIcon');if(i.type==='password'){i.type='text';ic.className='ti ti-eye-off';}else{i.type='password';ic.className='ti ti-eye';}}
 function updateCount(){
-  var n=document.getElementById('emailInput').value.length+document.getElementById('historyInput').value.length+document.getElementById('policyInput').value.length;
+  var n=document.getElementById('emailInput').value.length+document.getElementById('historyInput').value.length+document.getElementById('orderStatusInput').value.length+document.getElementById('policyInput').value.length;
   document.getElementById('charCount').textContent=n.toLocaleString()+' chars';
   document.getElementById('draftBtn').style.display=document.getElementById('emailInput').value.trim().length>20?'flex':'none';
   updateCtxStrip();
@@ -1279,7 +1285,7 @@ function renderChips(){
 function removeFile(i){attachedFiles.splice(i,1);renderChips();}
 
 function clearAll(){
-  ['emailInput','historyInput','policyInput'].forEach(function(id){document.getElementById(id).value='';});
+  ['emailInput','historyInput','orderStatusInput','policyInput'].forEach(function(id){document.getElementById(id).value='';});
   attachedFiles=[];
   document.getElementById('attachments').innerHTML='';updateCount();
   document.getElementById('respBody').innerHTML='<div class="empty"><i class="ti ti-message-dots"></i><p>Your AI-drafted response will appear here.<br/>Fill in the customer message and press <strong>Generate response</strong>.</p></div>';
@@ -1307,16 +1313,18 @@ function buildSystemPrompt(){
   var uNotes={normal:'',high:'NOTE: Customer is frustrated/escalating — prioritize de-escalation first.',vip:'NOTE: VIP/premium customer — prioritize satisfaction.',legal:'NOTE: Legal/complaint risk — be factual, avoid liability admissions.'};
   var lNote=length==='concise'?'Keep it short, 2-3 paragraphs max.':length==='detailed'?'Be thorough and detailed.':'Standard length — balanced and complete.';
   var platNote=activePlatformId&&kbGetWs(activePlatformId)?' You are handling a customer from the '+kbGetWs(activePlatformId).name+' platform.':'';
-  return 'You are an expert '+dept+' representative for '+company+(rep?', your name is '+rep:'')+'. Write a '+tone.toLowerCase()+' customer service reply in '+lang+'.'+platNote+'\n\n'+(uNotes[urgency]?uNotes[urgency]+'\n\n':'')+'CRITICAL RULES:\n1. Analyze the SPECIFIC problem — never give a generic answer.\n2. Reference specific details (names, dates, order numbers).\n3. Acknowledge prior interactions if history is provided.\n4. Work within stated policies.\n5. Address EVERY issue raised.\n6. Reference any attached images.\n7. End with a clear next step.\n8. '+lNote+'\n9. Never open with "I hope this email finds you well." Start directly.\n10. Sign off as '+(rep||'the support team')+' from '+company+'.\n\nAfter the response body write exactly:\nTAGS:[comma-separated short topic labels, e.g. billing, shipping-delay, refund-request — NOT a confidence or quality score]';
+  return 'You are an expert '+dept+' representative for '+company+(rep?', your name is '+rep:'')+'. Write a '+tone.toLowerCase()+' customer service reply in '+lang+'.'+platNote+'\n\n'+(uNotes[urgency]?uNotes[urgency]+'\n\n':'')+'CRITICAL RULES:\n1. Analyze the SPECIFIC problem — never give a generic answer.\n2. Reference specific details (names, dates, order numbers).\n3. Acknowledge prior interactions if history is provided.\n4. If ORDER / ACCOUNT STATUS is provided, treat it as the current, authoritative fact — state it plainly and don\'t contradict it (e.g. don\'t offer a refund that\'s already been issued).\n5. Work within stated policies — both the one-off note for this ticket and anything in the Knowledge Base.\n6. Address EVERY issue raised.\n7. Reference any attached images.\n8. End with a clear next step.\n9. '+lNote+'\n10. Never open with "I hope this email finds you well." Start directly.\n11. Sign off as '+(rep||'the support team')+' from '+company+'.\n\nAfter the response body write exactly:\nTAGS:[comma-separated short topic labels, e.g. billing, shipping-delay, refund-request — NOT a confidence or quality score]';
 }
 function buildUserContent(quick){
   var email=document.getElementById('emailInput').value.trim();
   var ctx=document.getElementById('historyInput').value.trim();
+  var orderStatus=document.getElementById('orderStatusInput').value.trim();
   var policy=document.getElementById('policyInput').value.trim();
   var kbCtx=getKbContext();
   var text='CUSTOMER MESSAGE:\n'+email;
   if(ctx)text+='\n\nCONVERSATION HISTORY & CONTEXT:\n'+ctx;
-  if(policy)text+='\n\nPOLICIES / CONSTRAINTS:\n'+policy;
+  if(orderStatus)text+='\n\nORDER / ACCOUNT STATUS (authoritative — current fact, not history):\n'+orderStatus;
+  if(policy)text+='\n\nONE-OFF POLICY NOTE FOR THIS TICKET:\n'+policy;
   if(kbCtx)text+=kbCtx;
   if(attachedFiles.length)text+='\n\nATTACHMENTS: '+attachedFiles.map(function(f){return f.name;}).join(', ');
   if(quick)text+='\n\n[QUICK DRAFT - shorter first pass]';
@@ -1378,6 +1386,7 @@ function computeGroundingChecks(replyText){
   var checks=[];
   var email=document.getElementById('emailInput')?document.getElementById('emailInput').value.trim():'';
   var histTxt=document.getElementById('historyInput')?document.getElementById('historyInput').value.trim():'';
+  var orderStatusTxt=document.getElementById('orderStatusInput')?document.getElementById('orderStatusInput').value.trim():'';
   var policyTxt=document.getElementById('policyInput')?document.getElementById('policyInput').value.trim():'';
   var urgency=document.getElementById('urgencySelect')?document.getElementById('urgencySelect').value:'normal';
 
@@ -1386,9 +1395,12 @@ function computeGroundingChecks(replyText){
   checks.push(histTxt
     ? {status:'info',label:'Conversation history & context was provided'}
     : {status:'info',label:'No conversation history given (optional) — reply is based on the message alone'});
+  checks.push(orderStatusTxt
+    ? {status:'info',label:'Order/account status was provided'}
+    : {status:'info',label:'No order/account status given (optional)'});
   checks.push(policyTxt
-    ? {status:'info',label:'Policies / constraints were provided'}
-    : {status:'info',label:'No policy text given (optional)'});
+    ? {status:'info',label:'A one-off policy note was provided for this ticket'}
+    : {status:'info',label:'No one-off policy note given (optional)'});
 
   // 3. KB platform selection — SCORED. This is the one real footgun: KB content silently not used.
   if(kbWorkspaces.length){
@@ -1417,13 +1429,28 @@ function computeGroundingChecks(replyText){
     }
   }
 
-  // 5. Order/ticket-style number in the customer message carried into the reply — SCORED, only when applicable.
-  var numMatches=(email.match(/#\s?\d{3,}|\border[\s#:]*\d{3,}\b|\b\d{5,}\b/gi)||[]).map(function(s){return s.replace(/\D/g,'');}).filter(function(s){return s.length>=3;});
+  // 5. Order/ticket-style number — checked against the customer message AND the order/account status field
+  // (previously this only looked at the customer message, so a number pasted only in the status field was invisible to this check).
+  var numSource=email+' '+orderStatusTxt;
+  var numMatches=(numSource.match(/#\s?\d{3,}|\border[\s#:]*\d{3,}\b|\b\d{5,}\b/gi)||[]).map(function(s){return s.replace(/\D/g,'');}).filter(function(s){return s.length>=3;});
   if(numMatches.length){
     var found=numMatches.some(function(n){return replyText.indexOf(n)!==-1;});
     checks.push(found
-      ? {status:'pass',label:'Reply references the order/ticket number from the customer message'}
-      : {status:'warn',label:'Customer message includes a number (order/ticket?) that the reply doesn\'t mention'});
+      ? {status:'pass',label:'Reply references the order/ticket number provided'}
+      : {status:'warn',label:'An order/ticket number was provided, but the reply doesn\'t seem to mention it'});
+  }
+
+  // 6. Basic contradiction guard: if the status field says something is already resolved,
+  // flag it if the reply's wording sounds like it's proposing that same action again.
+  if(orderStatusTxt){
+    var statusLower=orderStatusTxt.toLowerCase(),replyLower=replyText.toLowerCase();
+    if(/refunded/.test(statusLower)&&/(will refund|we('| )?ll refund|process(ing)? (a |the )?refund|issue (a |the )?refund)/.test(replyLower)){
+      checks.push({status:'warn',label:'Status says already refunded, but the reply\'s wording sounds like it\'s offering a new refund — double-check for contradiction'});
+    } else if(/cancel(l)?ed/.test(statusLower)&&/(will ship|shipping (it|your order) out|on its way)/.test(replyLower)){
+      checks.push({status:'warn',label:'Status says cancelled, but the reply\'s wording sounds like it\'s still shipping — double-check for contradiction'});
+    } else {
+      checks.push({status:'pass',label:'No obvious contradiction detected between the order status and the reply'});
+    }
   }
 
   // 6. Attachments present — SCORED, only when applicable.
@@ -1689,6 +1716,7 @@ function updateCtxStrip(){
   var lbl=document.getElementById('fcwCtxLabel');if(!lbl)return;
   var parts=[];
   if(document.getElementById('emailInput')&&document.getElementById('emailInput').value.trim())parts.push('customer message');
+  if(document.getElementById('orderStatusInput')&&document.getElementById('orderStatusInput').value.trim())parts.push('order/account status');
   if(lastRawResponse)parts.push('draft response');
   var kw=kbGetWs(activePlatformId);if(kw)parts.push(kw.name+' KB');
   var qc=document.getElementById('qaConversation');if(qc&&qc.value.trim())parts.push('QA thread');
@@ -1712,10 +1740,12 @@ function fcwBuildCtx(isFirstTurn,mode){
     // Full context — only sent once, on the first message of a session
     var email=document.getElementById('emailInput').value.trim();
     var ctx=document.getElementById('historyInput').value.trim();
+    var orderStatus=document.getElementById('orderStatusInput').value.trim();
     var policy=document.getElementById('policyInput').value.trim();
     if(email)parts.push('CUSTOMER MESSAGE:\n'+email);
     if(ctx)parts.push('CONVERSATION CONTEXT:\n'+ctx);
-    if(policy)parts.push('POLICIES:\n'+policy);
+    if(orderStatus)parts.push('ORDER / ACCOUNT STATUS (authoritative — current fact):\n'+orderStatus);
+    if(policy)parts.push('ONE-OFF POLICY NOTE FOR THIS TICKET:\n'+policy);
     var kbCtx=getKbContext();if(kbCtx)parts.push(kbCtx);
     if(kbWorkspaces.length){
       var kbs='ALL KB PLATFORMS:\n';

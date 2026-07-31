@@ -111,6 +111,13 @@
   "date": "2026-07-22",
   "excerpt": "Speed versus accuracy doesn't have to be a tradeoff. See the 4-step workflow that grounds every support reply in the full conversation history, live order status, and your store policies.",
   "image": "assets/blog/cs-agent-support-tickets.jpg"
-}
+   },
+   {
+  "title": "The Email Revenue Trap: Why High Email Sales Can Signal Low Total Brand Growth",
+  "url": "email-revenue-trap.html",
+  "date": "2026-07-31",
+  "excerpt": "Rising email revenue while total store revenue falls isn't always the trap it looks like. Learn how to tell real channel cannibalization apart from an unrelated acquisition problem — using only the numbers already in your ESP.",
+  "image": "assets/blog/email-revenue-trap.jpg"
+   }
   ]
 }

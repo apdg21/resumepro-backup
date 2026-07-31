@@ -427,6 +427,63 @@
 
         .read-more:hover .arrow { transform: translateX(3px); }
 
+        /* ── PAGINATION ── */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 56px;
+            flex-wrap: wrap;
+        }
+
+        .page-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
+            height: 40px;
+            padding: 0 12px;
+            border-radius: 8px;
+            border: 1.5px solid var(--border);
+            background: var(--white);
+            color: var(--ink);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.86rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .page-btn:hover:not(:disabled):not(.active) {
+            border-color: var(--accent);
+            color: var(--accent-dark);
+            transform: translateY(-1px);
+        }
+
+        .page-btn.active {
+            background: var(--ink);
+            border-color: var(--ink);
+            color: var(--white);
+            cursor: default;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .page-ellipsis {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 24px;
+            height: 40px;
+            color: var(--mid);
+            font-size: 0.86rem;
+            user-select: none;
+        }
+
         /* ── ANIMATIONS ── */
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(20px); }
@@ -445,6 +502,7 @@
             .page-hero { padding: 80px 0 60px; }
             .blog-grid { grid-template-columns: 1fr; }
             .blog-section { padding: 48px 0 64px; }
+            .page-btn { min-width: 36px; height: 36px; padding: 0 10px; }
         }
     </style>
 </head>
@@ -557,6 +615,7 @@
                 <p>Loading posts…</p>
             </div>
         </div>
+        <nav class="pagination" id="pagination" aria-label="Blog pagination" style="display:none;"></nav>
     </div>
 </section>
 
@@ -608,8 +667,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const blogContainer = document.getElementById('blog-posts');
     const countBadge    = document.getElementById('post-count-badge');
     const countEl       = document.getElementById('post-count');
+    const paginationEl  = document.getElementById('pagination');
 
     const jsonPaths = ['index.json', './index.json', '/index.json'];
+
+    const POSTS_PER_PAGE = 9;
+    let allBlogs = [];
+    let currentPage = 1;
 
     function tryFetch(index) {
         if (index >= jsonPaths.length) {
@@ -645,61 +709,173 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Sort newest first
                 data.blogs.sort((a, b) => new Date(b.date) - new Date(a.date));
 
+                allBlogs = data.blogs;
+
                 // Update post count badge
-                countEl.textContent = data.blogs.length;
+                countEl.textContent = allBlogs.length;
                 countBadge.style.display = 'inline-flex';
 
-                // Render cards
-                blogContainer.innerHTML = '';
+                // Determine current page from URL (?page=N), clamp to valid range
+                const totalPages = Math.max(1, Math.ceil(allBlogs.length / POSTS_PER_PAGE));
+                const params = new URLSearchParams(window.location.search);
+                let requestedPage = parseInt(params.get('page'), 10);
+                if (!Number.isInteger(requestedPage) || requestedPage < 1) requestedPage = 1;
+                if (requestedPage > totalPages) requestedPage = totalPages;
+                currentPage = requestedPage;
 
-                data.blogs.forEach((blog, i) => {
-                    const article = document.createElement('article');
-                    article.className = 'blog-card';
-
-                    const formattedDate = new Date(blog.date).toLocaleDateString('en-US', {
-                        year: 'numeric', month: 'long', day: 'numeric'
-                    });
-
-                    // Image or placeholder
-                    let imageBlock = '';
-                    if (blog.image) {
-                        imageBlock = `
-                            <div class="card-image-wrap">
-                                <img src="${blog.image}"
-                                     alt="${blog.title}"
-                                     loading="lazy"
-                                     onerror="this.closest('.card-image-wrap').replaceWith(makePlaceholder('${blog.title}'))">
-                            </div>`;
-                    } else {
-                        const initial = blog.title ? blog.title.charAt(0).toUpperCase() : '?';
-                        imageBlock = `
-                            <div class="card-image-wrap">
-                                <div class="card-image-placeholder" data-initial="${initial}">
-                                    <span class="placeholder-icon">📄</span>
-                                </div>
-                            </div>`;
-                    }
-
-                    article.innerHTML = `
-                        ${imageBlock}
-                        <div class="card-body">
-                            <span class="card-date">${formattedDate}</span>
-                            <a href="blogs/${blog.url}" class="card-title">${blog.title}</a>
-                            <p class="card-excerpt">${blog.excerpt || ''}</p>
-                        </div>
-                        <div class="card-footer">
-                            <a href="blogs/${blog.url}" class="read-more">
-                                Read Article <span class="arrow">→</span>
-                            </a>
-                        </div>`;
-
-                    blogContainer.appendChild(article);
-                });
+                renderPage(currentPage);
             })
             .catch(err => {
                 console.warn(`Failed [${jsonPaths[index]}]:`, err);
                 tryFetch(index + 1);
             });
+    }
+
+    function renderPage(page) {
+        const totalPages = Math.max(1, Math.ceil(allBlogs.length / POSTS_PER_PAGE));
+        page = Math.min(Math.max(1, page), totalPages);
+        currentPage = page;
+
+        const start = (page - 1) * POSTS_PER_PAGE;
+        const pageBlogs = allBlogs.slice(start, start + POSTS_PER_PAGE);
+
+        blogContainer.innerHTML = '';
+
+        pageBlogs.forEach((blog) => {
+            const article = document.createElement('article');
+            article.className = 'blog-card';
+
+            const formattedDate = new Date(blog.date).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+
+            // Image or placeholder
+            let imageBlock = '';
+            if (blog.image) {
+                imageBlock = `
+                    <div class="card-image-wrap">
+                        <img src="${blog.image}"
+                             alt="${blog.title}"
+                             loading="lazy"
+                             onerror="this.closest('.card-image-wrap').replaceWith(makePlaceholder('${blog.title}'))">
+                    </div>`;
+            } else {
+                const initial = blog.title ? blog.title.charAt(0).toUpperCase() : '?';
+                imageBlock = `
+                    <div class="card-image-wrap">
+                        <div class="card-image-placeholder" data-initial="${initial}">
+                            <span class="placeholder-icon">📄</span>
+                        </div>
+                    </div>`;
+            }
+
+            article.innerHTML = `
+                ${imageBlock}
+                <div class="card-body">
+                    <span class="card-date">${formattedDate}</span>
+                    <a href="blogs/${blog.url}" class="card-title">${blog.title}</a>
+                    <p class="card-excerpt">${blog.excerpt || ''}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="blogs/${blog.url}" class="read-more">
+                        Read Article <span class="arrow">→</span>
+                    </a>
+                </div>`;
+
+            blogContainer.appendChild(article);
+        });
+
+        renderPagination(totalPages);
+
+        // Keep the URL in sync (?page=N) without adding to browser history
+        const url = new URL(window.location.href);
+        if (page > 1) {
+            url.searchParams.set('page', page);
+        } else {
+            url.searchParams.delete('page');
+        }
+        window.history.replaceState({}, '', url);
+    }
+
+    function renderPagination(totalPages) {
+        if (totalPages <= 1) {
+            paginationEl.style.display = 'none';
+            paginationEl.innerHTML = '';
+            return;
+        }
+
+        paginationEl.style.display = 'flex';
+        paginationEl.innerHTML = '';
+
+        const makeBtn = (label, page, opts = {}) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'page-btn' + (opts.active ? ' active' : '');
+            btn.textContent = label;
+            if (opts.disabled) btn.disabled = true;
+            if (opts.active) btn.setAttribute('aria-current', 'page');
+            btn.addEventListener('click', () => {
+                if (opts.disabled || opts.active) return;
+                renderPage(page);
+                document.querySelector('.blog-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+            return btn;
+        };
+
+        const makeEllipsis = () => {
+            const span = document.createElement('span');
+            span.className = 'page-ellipsis';
+            span.textContent = '…';
+            return span;
+        };
+
+        // Prev
+        paginationEl.appendChild(
+            makeBtn('← Prev', currentPage - 1, { disabled: currentPage === 1 })
+        );
+
+        // Page numbers with ellipsis for large ranges
+        const pageNumbers = getPageRange(currentPage, totalPages);
+        pageNumbers.forEach((p) => {
+            if (p === '...') {
+                paginationEl.appendChild(makeEllipsis());
+            } else {
+                paginationEl.appendChild(makeBtn(String(p), p, { active: p === currentPage }));
+            }
+        });
+
+        // Next
+        paginationEl.appendChild(
+            makeBtn('Next →', currentPage + 1, { disabled: currentPage === totalPages })
+        );
+    }
+
+    // Builds a compact page list like: 1 … 4 5 [6] 7 8 … 12
+    function getPageRange(current, total) {
+        const delta = 1;
+        const range = [];
+        const rangeWithDots = [];
+        let l;
+
+        for (let i = 1; i <= total; i++) {
+            if (i === 1 || i === total || (i >= current - delta && i <= current + delta)) {
+                range.push(i);
+            }
+        }
+
+        range.forEach((i) => {
+            if (l) {
+                if (i - l === 2) {
+                    rangeWithDots.push(l + 1);
+                } else if (i - l !== 1) {
+                    rangeWithDots.push('...');
+                }
+            }
+            rangeWithDots.push(i);
+            l = i;
+        });
+
+        return rangeWithDots;
     }
 
     // Helper for onerror placeholder (called inline)

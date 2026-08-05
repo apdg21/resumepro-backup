@@ -63,7 +63,7 @@
             padding: 0 40px;
         }
 
-        /* ─── PAGE HERO ──────────────────────────────────── */
+        /* PAGE HERO */
         .page-hero {
             background: var(--ink);
             padding: 100px 0 80px;
@@ -172,7 +172,7 @@
             font-weight: 500;
         }
 
-        /* ─── SECTION HEADER ─────────────────────────────── */
+        /* SECTION HEADER */
         .section-lead {
             display: flex;
             justify-content: space-between;
@@ -224,7 +224,7 @@
             line-height: 1;
         }
 
-        /* ─── TEMPLATE GRID ──────────────────────────────── */
+        /* TEMPLATE GRID */
         .templates-section { padding-bottom: 80px; }
 
         .template-grid {
@@ -273,6 +273,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            background: var(--paper-warm);
         }
 
         .template-preview::after {
@@ -291,11 +292,29 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             backdrop-filter: blur(3px);
+            z-index: 5;
         }
 
         .template-preview:hover::after { opacity: 1; }
 
-        /* ─── STYLE CARDS ─────────────────────────────── */
+        /* REAL SCREENSHOT THUMBNAIL */
+        .template-preview .thumb-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2;
+            background: var(--paper-warm);
+        }
+
+        .template-preview:hover .thumb-img {
+            transform: scale(1.05);
+        }
+
+        /* STYLE CARDS (fallback mock, shown only if screenshot fails to load) */
         .style-card {
             width: 100%;
             height: 100%;
@@ -304,6 +323,8 @@
             padding: 22px 20px 16px;
             gap: 10px;
             transition: transform 0.4s ease;
+            position: relative;
+            z-index: 1;
         }
         .template-preview:hover .style-card { transform: scale(1.03); }
 
@@ -334,13 +355,13 @@
         .sc-tag.w70 { width: 70%; }
         .sc-tag.w40 { width: 40%; }
 
-        /* Style 1 – Timeless: white/charcoal, serif classic */
+        /* Style 1 - Timeless: white/charcoal, serif classic */
         .s1 { background: #f9f7f4; }
         .s1 .sc-avatar { background: #2a2a2a; }
         .s1 .sc-bar, .s1 .sc-label, .s1 .sc-line, .s1 .sc-tag { background: #2a2a2a; }
         .s1 .sc-divider { background: #2a2a2a; }
 
-        /* Style 2 – Sleek: dark sidebar, electric blue */
+        /* Style 2 - Sleek: dark sidebar, electric blue */
         .s2 { background: #1a1f2e; flex-direction: row; align-items: stretch; padding: 0; }
         .s2 .sc-sidebar-strip { width: 36%; background: #131720; padding: 18px 12px; display: flex; flex-direction: column; gap: 7px; }
         .s2 .sc-main-area { flex: 1; padding: 18px 14px; display: flex; flex-direction: column; gap: 8px; }
@@ -349,14 +370,14 @@
         .s2 .sc-bar.title, .s2 .sc-line { background: rgba(255,255,255,0.3); }
         .s2 .sc-divider { background: rgba(61,142,240,0.4); }
 
-        /* Style 3 – Executive: navy with gold rule */
+        /* Style 3 - Executive: navy with gold rule */
         .s3 { background: #fff; border-top: 6px solid #1a2744; }
         .s3 .sc-avatar { background: #1a2744; border-radius: 0; }
         .s3 .sc-bar, .s3 .sc-label, .s3 .sc-tag { background: #1a2744; }
         .s3 .sc-line { background: #c8a040; }
         .s3 .sc-divider { background: #c8a040; }
 
-        /* Style 4 – Vivid: coral/teal creative */
+        /* Style 4 - Vivid: coral/teal creative */
         .s4 { background: linear-gradient(135deg, #fff5f3 0%, #f0fafa 100%); }
         .s4 .sc-avatar { background: #ff6b6b; }
         .s4 .sc-bar { background: #ff6b6b; }
@@ -366,14 +387,14 @@
         .s4 .sc-divider { background: linear-gradient(90deg, #ff6b6b, #00b4a6); height: 2px; border-radius: 1px; }
         .s4 .sc-tag { background: #ff6b6b; }
 
-        /* Style 5 – Pure: stark white, single color */
+        /* Style 5 - Pure: stark white, single color */
         .s5 { background: #fff; }
         .s5 .sc-avatar { background: #111; border-radius: 2px; }
         .s5 .sc-bar, .s5 .sc-label, .s5 .sc-line, .s5 .sc-tag { background: #111; }
         .s5 .sc-bar.title, .s5 .sc-line { background: #ccc; }
         .s5 .sc-divider { background: #111; height: 2px; }
 
-        /* Style 6 – Refined: blush/rose gold */
+        /* Style 6 - Refined: blush/rose gold */
         .s6 { background: #fdf8f5; }
         .s6 .sc-avatar { background: #b57b6a; }
         .s6 .sc-bar { background: #3a2e2a; }
@@ -382,7 +403,7 @@
         .s6 .sc-divider { background: #b57b6a; }
         .s6 .sc-tag { background: #b57b6a; }
 
-        /* Style 7 – Dynamic: bold black/yellow */
+        /* Style 7 - Dynamic: bold black/yellow */
         .s7 { background: #111; }
         .s7 .sc-avatar { background: #f5d000; border-radius: 0; }
         .s7 .sc-bar { background: #f5d000; }
@@ -392,7 +413,7 @@
         .s7 .sc-divider { background: #f5d000; height: 2px; }
         .s7 .sc-tag { background: #f5d000; }
 
-        /* Style 8 – SkillFocus: teal/skill bars */
+        /* Style 8 - SkillFocus: teal/skill bars */
         .s8 { background: #f4fbfa; }
         .s8 .sc-avatar { background: #00897b; }
         .s8 .sc-bar { background: #00897b; }
@@ -401,7 +422,7 @@
         .s8 .sc-divider { background: #b2dfdb; }
         .s8 .sc-tag { background: #00897b; }
 
-        /* Style 9 – Corporate: slate grey */
+        /* Style 9 - Corporate: slate grey */
         .s9 { background: #f5f6f8; }
         .s9 .sc-avatar { background: #374264; }
         .s9 .sc-bar { background: #374264; }
@@ -410,7 +431,7 @@
         .s9 .sc-divider { background: #374264; }
         .s9 .sc-tag { background: #374264; }
 
-        /* Style 10 – Trendy: pastel purple/pink */
+        /* Style 10 - Trendy: pastel purple/pink */
         .s10 { background: #faf5ff; }
         .s10 .sc-avatar { background: #7c3aed; }
         .s10 .sc-bar { background: #7c3aed; }
@@ -419,7 +440,7 @@
         .s10 .sc-divider { background: linear-gradient(90deg, #7c3aed, #db2777); height: 2px; border-radius: 1px; }
         .s10 .sc-tag { background: #7c3aed; }
 
-        /* Style 11 – Horizon: olive/sage */
+        /* Style 11 - Horizon: olive/sage */
         .s11 { background: #f3f5f0; }
         .s11 .sc-avatar { background: #4a5c3a; }
         .s11 .sc-bar { background: #4a5c3a; }
@@ -428,7 +449,7 @@
         .s11 .sc-divider { background: #4a5c3a; }
         .s11 .sc-tag { background: #7d9668; }
 
-        /* Style 12 – Midnight: deep navy/silver */
+        /* Style 12 - Midnight: deep navy/silver */
         .s12 { background: #0d1b2a; }
         .s12 .sc-avatar { background: #c0cfe0; }
         .s12 .sc-bar { background: #c0cfe0; }
@@ -438,7 +459,7 @@
         .s12 .sc-divider { background: #5b8fc4; }
         .s12 .sc-tag { background: #5b8fc4; }
 
-        /* Style 13 – Ember: deep red/charcoal */
+        /* Style 13 - Ember: deep red/charcoal */
         .s13 { background: #1c1211; }
         .s13 .sc-avatar { background: #e05c3a; border-radius: 0; }
         .s13 .sc-bar { background: #e05c3a; }
@@ -448,7 +469,7 @@
         .s13 .sc-divider { background: #e05c3a; }
         .s13 .sc-tag { background: #e05c3a; }
 
-        /* Style 14 – Canvas: warm tan/terracotta */
+        /* Style 14 - Canvas: warm tan/terracotta */
         .s14 { background: #fdf3e7; }
         .s14 .sc-avatar { background: #c6603a; }
         .s14 .sc-bar { background: #3d2b1f; }
@@ -457,7 +478,7 @@
         .s14 .sc-divider { background: #c6603a; }
         .s14 .sc-tag { background: #c6603a; }
 
-        /* Style 15 – Graphite: charcoal/mint */
+        /* Style 15 - Graphite: charcoal/mint */
         .s15 { background: #2b2d2f; }
         .s15 .sc-avatar { background: #5df0c0; border-radius: 2px; }
         .s15 .sc-bar { background: #5df0c0; }
@@ -467,7 +488,7 @@
         .s15 .sc-divider { background: #5df0c0; }
         .s15 .sc-tag { background: #5df0c0; }
 
-        /* Style 16 – Ivory: clean cream/bronze */
+        /* Style 16 - Ivory: clean cream/bronze */
         .s16 { background: #fffdf5; border-left: 5px solid #9a7a3f; }
         .s16 .sc-avatar { background: #9a7a3f; }
         .s16 .sc-bar { background: #1f1a10; }
@@ -476,7 +497,7 @@
         .s16 .sc-divider { background: #9a7a3f; }
         .s16 .sc-tag { background: #9a7a3f; }
 
-        /* Style 17 – Storm: indigo/ice */
+        /* Style 17 - Storm: indigo/ice */
         .s17 { background: #1e2140; }
         .s17 .sc-avatar { background: #a5b4e8; }
         .s17 .sc-bar { background: #a5b4e8; }
@@ -486,7 +507,7 @@
         .s17 .sc-divider { background: #6a7fd4; }
         .s17 .sc-tag { background: #6a7fd4; }
 
-        /* Style 18 – Linen: soft neutral/ink */
+        /* Style 18 - Linen: soft neutral/ink */
         .s18 { background: #f8f4ef; }
         .s18 .sc-avatar { background: #1a1610; border-radius: 50% 0 50% 50%; }
         .s18 .sc-bar { background: #1a1610; }
@@ -495,7 +516,7 @@
         .s18 .sc-divider { background: #1a1610; }
         .s18 .sc-tag { background: #8c7b60; }
 
-        /* Style 19 – Prism: white/rainbow accent */
+        /* Style 19 - Prism: white/rainbow accent */
         .s19 { background: #fff; border-top: 4px solid transparent; border-image: linear-gradient(90deg,#f00,#f90,#ff0,#0f0,#0cf,#00f,#90f) 1; }
         .s19 .sc-avatar { background: linear-gradient(135deg,#f00,#f90,#ff0,#0f0,#0cf,#00f); }
         .s19 .sc-bar { background: #111; }
@@ -504,7 +525,7 @@
         .s19 .sc-divider { background: linear-gradient(90deg,#f00,#f90,#ff0,#0f0,#0cf,#00f); height: 2px; }
         .s19 .sc-tag { background: #111; }
 
-        /* Style 20 – Obsidian: deep black/gold luxury */
+        /* Style 20 - Obsidian: deep black/gold luxury */
         .s20 { background: #090909; }
         .s20 .sc-avatar { background: #c8a040; }
         .s20 .sc-bar { background: #c8a040; }
@@ -607,7 +628,7 @@
             transform: translateY(-1px);
         }
 
-        /* ─── PAGINATION ─────────────────────────────────── */
+        /* PAGINATION */
         .pagination-wrap {
             display: flex;
             justify-content: center;
@@ -648,7 +669,7 @@
         .page { display: none; }
         .page.active { display: grid; }
 
-        /* ─── BENEFITS ───────────────────────────────────── */
+        /* BENEFITS */
         .benefits-section {
             background: var(--ink);
             padding: 80px 0;
@@ -733,7 +754,7 @@
             line-height: 1.7;
         }
 
-        /* ─── TESTIMONIALS ───────────────────────────────── */
+        /* TESTIMONIALS */
         .testimonials-section {
             padding: 80px 0;
             background: var(--paper-warm);
@@ -816,7 +837,7 @@
             color: var(--mid);
         }
 
-        /* ─── FAQ ────────────────────────────────────────── */
+        /* FAQ */
         .faq-section {
             padding: 80px 0;
             background: var(--white);
@@ -925,7 +946,7 @@
 
         .faq-answer li { margin-bottom: 4px; }
 
-        /* ─── BOTTOM CTA ─────────────────────────────────── */
+        /* BOTTOM CTA */
         .bottom-cta {
             background: var(--paper-warm);
             padding: 80px 0;
@@ -988,7 +1009,7 @@
 
         .btn-dark:hover { background: var(--ink-soft); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
 
-        /* ─── MESSENGER FLOAT ────────────────────────────── */
+        /* MESSENGER FLOAT */
         .messenger-float {
             position: fixed;
             bottom: 28px;
@@ -1057,7 +1078,7 @@
 
         .messenger-btn svg { width: 34px; height: 34px; fill: white; }
 
-        /* ─── MODAL ──────────────────────────────────────── */
+        /* MODAL */
         .modal {
             display: none;
             position: fixed;
@@ -1180,7 +1201,7 @@
             overflow: hidden;
         }
 
-        /* ─── ANIMATIONS ─────────────────────────────────── */
+        /* ANIMATIONS */
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -1198,7 +1219,7 @@
 
         .reveal.visible { opacity: 1; transform: translateY(0); }
 
-        /* ─── RESPONSIVE ─────────────────────────────────── */
+        /* RESPONSIVE */
         @media (max-width: 960px) {
             .hero-inner { grid-template-columns: 1fr; }
             .hero-meta p { text-align: left; }
@@ -1226,23 +1247,16 @@
 
 <header>
     <div class="header-content">
-
-        <!-- Logo -->
         <a href="index.html" class="logo">
             <span class="logo-icon">📄</span>
             <span>ResumePro</span>
         </a>
-
-        <!-- Nav + Hamburger -->
         <div class="nav-container">
             <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">☰</button>
-
             <ul class="header-nav-menu" role="menubar">
-
                 <li class="header-nav-item" role="none">
                     <a href="index.html" class="header-nav-link" role="menuitem">Home</a>
                 </li>
-
                 <li class="header-nav-item header-dropdown" role="none">
                     <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                         Templates
@@ -1253,7 +1267,6 @@
                         <a href="portfolio-templates.html" class="header-dropdown-item" role="menuitem">Portfolio Templates</a>
                     </div>
                 </li>
-
                 <li class="header-nav-item header-dropdown" role="none">
                     <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                         Apps
@@ -1264,15 +1277,12 @@
                         <a href="family-connection-tools.html" class="header-dropdown-item" role="menuitem">Web Applications</a>
                     </div>
                 </li>
-
                 <li class="header-nav-item" role="none">
                     <a href="blog-list.html" class="header-nav-link" role="menuitem">Blog</a>
                 </li>
-
                 <li class="header-nav-item" role="none" style="display: none;">
                     <a href="klaviyo-analytics.html" class="header-nav-link" role="menuitem">Klaviyo Analytics</a>
                 </li>
-
                 <li class="header-nav-item header-dropdown" role="none">
                     <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                         Tools
@@ -1286,22 +1296,17 @@
 						<a href="adg-customer-service-agent.html"   class="header-dropdown-item" role="menuitem">CS Agent</a>
                     </div>
                 </li>
-
                 <li class="header-nav-item" role="none">
                     <a href="about.html" class="header-nav-link" role="menuitem">About</a>
                 </li>
-
                 <li class="header-nav-item" role="none">
                     <a href="contact.html" class="header-nav-link" role="menuitem">Contact</a>
                 </li>
-
             </ul>
         </div>
     </div>
 </header>
 
-
-<!-- ═══════════════════════════════════════ PAGE HERO -->
 <section class="page-hero">
     <div class="container">
         <div class="hero-inner">
@@ -1322,7 +1327,6 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════ TEMPLATES -->
 <section class="templates-section">
     <div class="container">
         <div class="section-lead reveal">
@@ -1336,11 +1340,11 @@
             </div>
         </div>
 
-        <!-- PAGE 1 -->
         <div class="template-grid page active" id="page1">
 
             <div class="template-card reveal">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style1/" data-name="Timeless">
+                    <img class="thumb-img" src="thumbnails/style1.jpg" alt="Timeless resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s1">
                         <div class="sc-header">
                             <div class="sc-avatar"></div>
@@ -1384,6 +1388,7 @@
 
             <div class="template-card reveal">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style2/" data-name="Sleek">
+                    <img class="thumb-img" src="thumbnails/style2.jpg" alt="Sleek resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s2">
                         <div class="sc-sidebar-strip">
                             <div class="sc-avatar"></div>
@@ -1427,6 +1432,7 @@
             <div class="template-card reveal">
                 <span class="card-badge">Popular</span>
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style3/" data-name="Executive">
+                    <img class="thumb-img" src="thumbnails/style3.jpg" alt="Executive resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s3">
                         <div class="sc-header">
                             <div class="sc-avatar"></div>
@@ -1469,6 +1475,7 @@
 
             <div class="template-card reveal">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style4/" data-name="Vivid">
+                    <img class="thumb-img" src="thumbnails/style4.jpg" alt="Vivid resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s4">
                         <div class="sc-header">
                             <div class="sc-avatar"></div>
@@ -1509,6 +1516,7 @@
 
             <div class="template-card reveal">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style5/" data-name="Pure">
+                    <img class="thumb-img" src="thumbnails/style5.jpg" alt="Pure resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s5">
                         <div class="sc-header">
                             <div class="sc-avatar"></div>
@@ -1551,6 +1559,7 @@
 
             <div class="template-card reveal">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style6/" data-name="Refined">
+                    <img class="thumb-img" src="thumbnails/style6.jpg" alt="Refined resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s6">
                         <div class="sc-header">
                             <div class="sc-avatar"></div>
@@ -1593,11 +1602,11 @@
 
         </div>
 
-        <!-- PAGE 2 -->
         <div class="template-grid page" id="page2">
 
             <div class="template-card reveal">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style7/" data-name="Dynamic">
+                    <img class="thumb-img" src="thumbnails/style7.jpg" alt="Dynamic resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s7">
                         <div class="sc-header">
                             <div class="sc-avatar"></div>
@@ -1635,6 +1644,7 @@
 
             <div class="template-card reveal">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style8/" data-name="SkillFocus">
+                    <img class="thumb-img" src="thumbnails/style8.jpg" alt="SkillFocus resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s8">
                         <div class="sc-header">
                             <div class="sc-avatar"></div>
@@ -1683,6 +1693,7 @@
 
             <div class="template-card reveal">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style9/" data-name="Corporate">
+                    <img class="thumb-img" src="thumbnails/style9.jpg" alt="Corporate resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s9">
                         <div class="sc-header">
                             <div class="sc-avatar"></div>
@@ -1725,6 +1736,7 @@
 
             <div class="template-card reveal">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style10/" data-name="Trendy">
+                    <img class="thumb-img" src="thumbnails/style10.jpg" alt="Trendy resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s10">
                         <div class="sc-header">
                             <div class="sc-avatar"></div>
@@ -1766,6 +1778,7 @@
             <div class="template-card reveal">
                 <span class="card-badge">New</span>
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style11/" data-name="Horizon">
+                    <img class="thumb-img" src="thumbnails/style11.jpg" alt="Horizon resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s11">
                         <div class="sc-header">
                             <div class="sc-avatar"></div>
@@ -1804,6 +1817,7 @@
             <div class="template-card reveal">
                 <span class="card-badge">New</span>
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style12/" data-name="Midnight">
+                    <img class="thumb-img" src="thumbnails/style12.jpg" alt="Midnight resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s12">
                         <div class="sc-header">
                             <div class="sc-avatar"></div>
@@ -1841,12 +1855,12 @@
 
         </div>
 
-        <!-- PAGE 3 -->
         <div class="template-grid page" id="page3">
 
             <div class="template-card reveal">
                 <span class="card-badge">New</span>
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style13/" data-name="Ember">
+                    <img class="thumb-img" src="thumbnails/style13.jpg" alt="Ember resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s13">
                         <div class="sc-header">
                             <div class="sc-avatar"></div>
@@ -1885,6 +1899,7 @@
             <div class="template-card reveal">
                 <span class="card-badge">New</span>
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style14/" data-name="Canvas">
+                    <img class="thumb-img" src="thumbnails/style14.jpg" alt="Canvas resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s14">
                         <div class="sc-header">
                             <div class="sc-avatar"></div>
@@ -1923,6 +1938,7 @@
             <div class="template-card reveal">
                 <span class="card-badge">New</span>
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style15/" data-name="Graphite">
+                    <img class="thumb-img" src="thumbnails/style15.jpg" alt="Graphite resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s15">
                         <div class="sc-header">
                             <div class="sc-avatar"></div>
@@ -1961,6 +1977,7 @@
             <div class="template-card reveal">
                 <span class="card-badge">New</span>
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style16/" data-name="Ivory">
+                    <img class="thumb-img" src="thumbnails/style16.jpg" alt="Ivory resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s16">
                         <div class="sc-header">
                             <div class="sc-avatar"></div>
@@ -1999,6 +2016,7 @@
             <div class="template-card reveal">
                 <span class="card-badge">New</span>
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style17/" data-name="Storm">
+                    <img class="thumb-img" src="thumbnails/style17.jpg" alt="Storm resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s17">
                         <div class="sc-header">
                             <div class="sc-avatar"></div>
@@ -2037,6 +2055,7 @@
             <div class="template-card reveal">
                 <span class="card-badge">New</span>
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style18/" data-name="Linen">
+                    <img class="thumb-img" src="thumbnails/style18.jpg" alt="Linen resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s18">
                         <div class="sc-header">
                             <div class="sc-avatar"></div>
@@ -2075,6 +2094,7 @@
             <div class="template-card reveal">
                 <span class="card-badge">New</span>
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style19/" data-name="Prism">
+                    <img class="thumb-img" src="thumbnails/style19.jpg" alt="Prism resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s19">
                         <div class="sc-header">
                             <div class="sc-avatar" style="background:linear-gradient(135deg,#f00,#f90,#ff0,#0f0,#0cf,#00f)"></div>
@@ -2113,6 +2133,7 @@
             <div class="template-card reveal">
                 <span class="card-badge">New</span>
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableresume/style20/" data-name="Obsidian">
+                    <img class="thumb-img" src="thumbnails/style20.jpg" alt="Obsidian resume template preview" loading="lazy" onerror="this.remove()">
                     <div class="style-card s20">
                         <div class="sc-header">
                             <div class="sc-avatar"></div>
@@ -2150,7 +2171,6 @@
 
         </div>
 
-        <!-- PAGINATION -->
         <div class="pagination-wrap reveal">
             <button class="page-btn active" data-page="1">1</button>
             <button class="page-btn" data-page="2">2</button>
@@ -2159,7 +2179,6 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════ BENEFITS -->
 <section class="benefits-section">
     <div class="container">
         <div class="benefits-header reveal">
@@ -2192,7 +2211,6 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════ TESTIMONIALS -->
 <section class="testimonials-section">
     <div class="container">
         <div class="testimonials-header reveal">
@@ -2228,7 +2246,6 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════ FAQ -->
 <section class="faq-section">
     <div class="container">
         <div class="faq-header reveal">
@@ -2292,7 +2309,6 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════ BOTTOM CTA -->
 <section class="bottom-cta">
     <div class="container">
         <div class="cta-inner reveal">
@@ -2313,7 +2329,6 @@
             <h3>ResumePro</h3>
             <p>Professional digital templates to showcase your career and work.</p>
         </div>
-        
         <div class="footer-column">
             <h3>Templates</h3>
             <ul class="footer-links">
@@ -2322,7 +2337,6 @@
                 <li><a href="#">All Templates</a></li>
             </ul>
         </div>
-        
         <div class="footer-column">
             <h3>Resources</h3>
             <ul class="footer-links">
@@ -2331,7 +2345,6 @@
                 <li><a href="help.html#tips">Tips & Examples</a></li>
             </ul>
         </div>
-        
         <div class="footer-column">
             <h3>Company</h3>
             <ul class="footer-links">
@@ -2342,13 +2355,11 @@
             </ul>
         </div>
     </div>
-    
     <div class="copyright">
         <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
     </div>
 </footer>
 
-<!-- ═══════════════════════════════════════ MESSENGER -->
 <div class="messenger-float" id="messengerFloat">
     <div class="float-badge" id="floatBadge">
         ⚡ No tech skills? No problem!
@@ -2361,7 +2372,6 @@
     </a>
 </div>
 
-<!-- ═══════════════════════════════════════ MODAL -->
 <div class="modal" id="previewModal">
     <div class="modal-content" id="modalContent">
         <div class="modal-header">
@@ -2392,7 +2402,6 @@
 </div>
 
 <script>
-    // ── SCROLL REVEAL
     const revealObs = new IntersectionObserver((entries) => {
         entries.forEach((entry, i) => {
             if (entry.isIntersecting) {
@@ -2403,7 +2412,6 @@
     }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
-    // ── MESSENGER FLOAT — show after 200px scroll, hide near bottom
     const floatBadge = document.getElementById('floatBadge');
     const messengerBtn = document.getElementById('messengerBtn');
 
@@ -2423,7 +2431,6 @@
 
     window.addEventListener('scroll', updateFloat, { passive: true });
 
-    // ── PAGINATION
     document.querySelectorAll('.page-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const pageNum = this.dataset.page;
@@ -2435,7 +2442,6 @@
         });
     });
 
-    // ── MODAL
     const modal = document.getElementById('previewModal');
     const modalContent = document.getElementById('modalContent');
     const modalIframe = document.getElementById('modalIframe');
@@ -2504,7 +2510,6 @@
         }
     });
 
-    // ── FAQ
     document.querySelectorAll('.faq-question').forEach(q => {
         q.addEventListener('click', () => {
             const item = q.parentElement;

@@ -67,7 +67,6 @@
             padding: 0 40px;
         }
 
-        /* ─── PAGE HERO ──────────────────────────────────── */
         .page-hero {
             background: var(--ink);
             padding: 100px 0 80px;
@@ -177,7 +176,6 @@
             font-weight: 500;
         }
 
-        /* ─── SECTION LEAD ───────────────────────────────── */
         .section-lead {
             display: flex;
             justify-content: space-between;
@@ -228,7 +226,6 @@
             line-height: 1;
         }
 
-        /* ─── TEMPLATE GRID ──────────────────────────────── */
         .templates-section { padding-bottom: 80px; }
 
         .template-grid {
@@ -275,6 +272,7 @@
             cursor: pointer;
             display: flex;
             align-items: stretch;
+            background: var(--paper-warm);
         }
 
         .template-preview::after {
@@ -293,21 +291,40 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             backdrop-filter: blur(3px);
+            z-index: 5;
         }
 
         .template-preview:hover::after { opacity: 1; }
 
-        /* ─── PORTFOLIO STYLE CARDS ──────────────────────── */
+        /* REAL SCREENSHOT THUMBNAIL */
+        .template-preview .thumb-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2;
+            background: var(--paper-warm);
+        }
+
+        .template-preview:hover .thumb-img {
+            transform: scale(1.05);
+        }
+
+        /* PORTFOLIO STYLE CARDS (fallback mock, shown only if screenshot fails to load) */
         .pc {
             width: 100%;
             display: flex;
             flex-direction: column;
             transition: transform 0.4s ease;
             overflow: hidden;
+            position: relative;
+            z-index: 1;
         }
         .template-preview:hover .pc { transform: scale(1.03); }
 
-        /* Shared nav bar element */
         .pc-nav {
             display: flex;
             align-items: center;
@@ -320,7 +337,6 @@
         .pc-nav-links { display: flex; gap: 6px; margin-left: auto; }
         .pc-nav-link { width: 22px; height: 4px; border-radius: 2px; opacity: 0.45; }
 
-        /* Hero area */
         .pc-hero {
             display: flex;
             flex-direction: column;
@@ -333,7 +349,6 @@
         .pc-hero-sub2 { height: 6px; border-radius: 3px; width: 38%; opacity: 0.35; margin-top: 4px; }
         .pc-cta { height: 20px; width: 70px; border-radius: 4px; margin-top: 10px; }
 
-        /* Grid of project thumbnails */
         .pc-grid {
             display: grid;
             gap: 5px;
@@ -348,7 +363,6 @@
         }
         .pc-thumb.tall { min-height: 54px; }
 
-        /* Sidebar layout */
         .pc-split {
             display: grid;
             grid-template-columns: 38% 1fr;
@@ -381,7 +395,6 @@
         .pc-bar.w55 { width: 55%; }
         .pc-bar.w40 { width: 40%; opacity: 0.5; }
 
-        /* ── Style 1: Modern Minimalist — white/charcoal, clean grid */
         .p1 { background: #fff; }
         .p1 .pc-nav { background: #0e0e12; }
         .p1 .pc-logo, .p1 .pc-nav-link { background: #c8a96e; }
@@ -392,7 +405,6 @@
         .p1 .pc-thumb { background: #e2e0d8; }
         .p1 .pc-thumb:nth-child(odd) { background: #d0cdc3; }
 
-        /* ── Style 2: Simple Profile — light grey/blue accent */
         .p2 { background: #f8f9fc; }
         .p2 .pc-nav { background: #fff; border-bottom: 1px solid #e5e7eb; }
         .p2 .pc-logo { background: #3a86ff; }
@@ -406,7 +418,6 @@
         .p2 .pc-thumb:nth-child(2) { background: #d6ddf5; }
         .p2 .pc-thumb:nth-child(3) { background: #c3cdee; }
 
-        /* ── Style 3: Clean & Focused — white/emerald */
         .p3 { background: #fff; }
         .p3 .pc-nav { background: #fff; border-bottom: 2px solid #10b981; }
         .p3 .pc-logo { background: #10b981; }
@@ -418,7 +429,6 @@
         .p3 .pc-thumb { background: #d1fae5; }
         .p3 .pc-thumb:nth-child(odd) { background: #a7f3d0; }
 
-        /* ── Style 4: Dynamic Showcase — dark/orange */
         .p4 { background: #18181b; }
         .p4 .pc-nav { background: #09090b; }
         .p4 .pc-logo { background: #f97316; }
@@ -430,7 +440,6 @@
         .p4 .pc-thumb { background: #27272a; }
         .p4 .pc-thumb:nth-child(odd) { background: #3f3f46; }
 
-        /* ── Style 5: Structured Layout — warm sand/rust */
         .p5 { background: #fdf6ee; }
         .p5 .pc-nav { background: #fdf6ee; border-bottom: 1px solid #e8d5b7; }
         .p5 .pc-logo { background: #c2410c; }
@@ -442,7 +451,6 @@
         .p5 .pc-thumb { background: #fed7aa; }
         .p5 .pc-thumb:nth-child(odd) { background: #fdba74; }
 
-        /* ── Style 6: Photography Portfolio — black/white dramatic */
         .p6 { background: #0a0a0a; }
         .p6 .pc-nav { background: #000; }
         .p6 .pc-logo { background: #fff; }
@@ -455,7 +463,6 @@
         .p6 .pc-thumb:nth-child(even) { background: #2e2e2e; }
         .p6 .pc-thumb:nth-child(3n) { background: #3d3d3d; }
 
-        /* ── Style 7: Modern Grid — slate/violet */
         .p7 { background: #f8f8ff; }
         .p7 .pc-nav { background: #1e1b4b; }
         .p7 .pc-logo { background: #a78bfa; }
@@ -467,7 +474,6 @@
         .p7 .pc-thumb { background: #ddd6fe; }
         .p7 .pc-thumb:nth-child(odd) { background: #c4b5fd; }
 
-        /* ── Style 8: Elegant Gallery — blush/gold */
         .p8 { background: #fdf8f5; }
         .p8 .pc-nav { background: #fdf8f5; border-bottom: 1px solid #e8cdb5; }
         .p8 .pc-logo { background: #9a7a3f; }
@@ -479,7 +485,6 @@
         .p8 .pc-thumb { background: #ead5bc; }
         .p8 .pc-thumb:nth-child(even) { background: #d4b896; }
 
-        /* ── Style 9: Professional & Interactive — dark/teal toggle */
         .p9 { background: #0f172a; }
         .p9 .pc-nav { background: #020617; }
         .p9 .pc-logo { background: #14b8a6; }
@@ -491,7 +496,6 @@
         .p9 .pc-thumb { background: #1e293b; }
         .p9 .pc-thumb:nth-child(odd) { background: #293548; }
 
-        /* ── Style 10: Minimalist & Adaptable — white/ink */
         .p10 { background: #fff; }
         .p10 .pc-nav { background: #fff; border-bottom: 1px solid #e5e7eb; }
         .p10 .pc-logo { background: #111; }
@@ -595,7 +599,6 @@
             transform: translateY(-1px);
         }
 
-        /* ─── PAGINATION ─────────────────────────────────── */
         .pagination-wrap {
             display: flex;
             justify-content: center;
@@ -626,7 +629,6 @@
         .page { display: none; }
         .page.active { display: grid; }
 
-        /* ─── BENEFITS ───────────────────────────────────── */
         .benefits-section {
             background: var(--ink);
             padding: 80px 0;
@@ -711,7 +713,6 @@
             line-height: 1.7;
         }
 
-        /* ─── TESTIMONIALS ───────────────────────────────── */
         .testimonials-section {
             padding: 80px 0;
             background: var(--paper-warm);
@@ -794,7 +795,6 @@
             color: var(--mid);
         }
 
-        /* ─── FAQ ────────────────────────────────────────── */
         .faq-section {
             padding: 80px 0;
             background: var(--white);
@@ -899,7 +899,6 @@
 
         .faq-answer li { margin-bottom: 4px; }
 
-        /* ─── BOTTOM CTA ─────────────────────────────────── */
         .bottom-cta {
             background: var(--paper-warm);
             padding: 80px 0;
@@ -962,7 +961,6 @@
 
         .btn-dark:hover { background: var(--ink-soft); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
 
-        /* ─── MESSENGER FLOAT ────────────────────────────── */
         .messenger-float {
             position: fixed;
             bottom: 28px;
@@ -985,7 +983,6 @@
             max-width: 240px;
             border-left: 4px solid #0084ff;
             line-height: 1.4;
-            /* Hidden by default — shown via JS on scroll */
             opacity: 0;
             transform: translateY(16px);
             pointer-events: none;
@@ -1032,7 +1029,6 @@
 
         .messenger-btn svg { width: 32px; height: 32px; fill: white; }
 
-        /* ─── MODAL ──────────────────────────────────────── */
         .modal {
             display: none;
             position: fixed;
@@ -1147,7 +1143,6 @@
             overflow: hidden;
         }
 
-        /* ─── ANIMATIONS ─────────────────────────────────── */
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -1161,7 +1156,6 @@
 
         .reveal.visible { opacity: 1; transform: translateY(0); }
 
-        /* ─── RESPONSIVE ─────────────────────────────────── */
         @media (max-width: 960px) {
             .hero-inner { grid-template-columns: 1fr; }
             .hero-meta p { text-align: left; }
@@ -1189,23 +1183,16 @@
 
 <header>
     <div class="header-content">
-
-        <!-- Logo -->
         <a href="index.html" class="logo">
             <span class="logo-icon">📄</span>
             <span>ResumePro</span>
         </a>
-
-        <!-- Nav + Hamburger -->
         <div class="nav-container">
             <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">☰</button>
-
             <ul class="header-nav-menu" role="menubar">
-
                 <li class="header-nav-item" role="none">
                     <a href="index.html" class="header-nav-link" role="menuitem">Home</a>
                 </li>
-
                 <li class="header-nav-item header-dropdown" role="none">
                     <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                         Templates
@@ -1216,7 +1203,6 @@
                         <a href="portfolio-templates.html" class="header-dropdown-item" role="menuitem">Portfolio Templates</a>
                     </div>
                 </li>
-
                 <li class="header-nav-item header-dropdown" role="none">
                     <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                         Apps
@@ -1227,15 +1213,12 @@
                         <a href="family-connection-tools.html" class="header-dropdown-item" role="menuitem">Web Applications</a>
                     </div>
                 </li>
-
                 <li class="header-nav-item" role="none">
                     <a href="blog-list.html" class="header-nav-link" role="menuitem">Blog</a>
                 </li>
-
                 <li class="header-nav-item" role="none" style="display: none;">
                     <a href="klaviyo-analytics.html" class="header-nav-link" role="menuitem">Klaviyo Analytics</a>
                 </li>
-
                 <li class="header-nav-item header-dropdown" role="none">
                     <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                         Tools
@@ -1250,22 +1233,17 @@
 						<a href="campfire.html"   class="header-dropdown-item" role="menuitem">Campfire🔥</a>
                     </div>
                 </li>
-
                 <li class="header-nav-item" role="none">
                     <a href="about.html" class="header-nav-link" role="menuitem">About</a>
                 </li>
-
                 <li class="header-nav-item" role="none">
                     <a href="contact.html" class="header-nav-link" role="menuitem">Contact</a>
                 </li>
-
             </ul>
         </div>
     </div>
 </header>
 
-
-<!-- ═══════════════════════════════════════ PAGE HERO -->
 <section class="page-hero">
     <div class="container">
         <div class="hero-inner">
@@ -1286,7 +1264,6 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════ TEMPLATES -->
 <section class="templates-section" id="templates">
     <div class="container">
         <div class="section-lead reveal">
@@ -1300,12 +1277,12 @@
             </div>
         </div>
 
-        <!-- PAGE 1 -->
         <div class="template-grid page active" id="page1">
 
             <div class="template-card">
                 <span class="card-badge">Popular</span>
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style1/" data-name="Modern Minimalist">
+                    <img class="thumb-img" src="thumbnails/portfolio-style1.jpg" alt="Modern Minimalist portfolio template preview" loading="lazy" onerror="this.remove()">
                     <div class="pc p1">
                         <div class="pc-nav">
                             <div class="pc-logo"></div>
@@ -1344,6 +1321,7 @@
 
             <div class="template-card">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style2" data-name="Simple Profile">
+                    <img class="thumb-img" src="thumbnails/portfolio-style2.jpg" alt="Simple Profile portfolio template preview" loading="lazy" onerror="this.remove()">
                     <div class="pc p2">
                         <div class="pc-nav">
                             <div class="pc-logo"></div>
@@ -1383,6 +1361,7 @@
 
             <div class="template-card">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style3" data-name="Clean & Focused">
+                    <img class="thumb-img" src="thumbnails/portfolio-style3.jpg" alt="Clean & Focused portfolio template preview" loading="lazy" onerror="this.remove()">
                     <div class="pc p3">
                         <div class="pc-nav">
                             <div class="pc-logo"></div>
@@ -1421,6 +1400,7 @@
 
             <div class="template-card">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style4" data-name="Dynamic Showcase">
+                    <img class="thumb-img" src="thumbnails/portfolio-style4.jpg" alt="Dynamic Showcase portfolio template preview" loading="lazy" onerror="this.remove()">
                     <div class="pc p4">
                         <div class="pc-nav">
                             <div class="pc-logo"></div>
@@ -1458,6 +1438,7 @@
 
             <div class="template-card">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style5" data-name="Structured Layout">
+                    <img class="thumb-img" src="thumbnails/portfolio-style5.jpg" alt="Structured Layout portfolio template preview" loading="lazy" onerror="this.remove()">
                     <div class="pc p5">
                         <div class="pc-nav">
                             <div class="pc-logo"></div>
@@ -1505,6 +1486,7 @@
 
             <div class="template-card">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style6" data-name="Photography Portfolio">
+                    <img class="thumb-img" src="thumbnails/portfolio-style6.jpg" alt="Photography Portfolio portfolio template preview" loading="lazy" onerror="this.remove()">
                     <div class="pc p6">
                         <div class="pc-nav">
                             <div class="pc-logo"></div>
@@ -1543,11 +1525,11 @@
 
         </div>
 
-        <!-- PAGE 2 -->
         <div class="template-grid page" id="page2">
 
             <div class="template-card">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style7" data-name="Modern Grid">
+                    <img class="thumb-img" src="thumbnails/portfolio-style7.jpg" alt="Modern Grid portfolio template preview" loading="lazy" onerror="this.remove()">
                     <div class="pc p7">
                         <div class="pc-nav">
                             <div class="pc-logo"></div>
@@ -1586,6 +1568,7 @@
             <div class="template-card">
                 <span class="card-badge">Editor's Pick</span>
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style8" data-name="Elegant Gallery">
+                    <img class="thumb-img" src="thumbnails/portfolio-style8.jpg" alt="Elegant Gallery portfolio template preview" loading="lazy" onerror="this.remove()">
                     <div class="pc p8">
                         <div class="pc-nav">
                             <div class="pc-logo"></div>
@@ -1624,13 +1607,13 @@
 
             <div class="template-card">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style9" data-name="Professional & Interactive">
+                    <img class="thumb-img" src="thumbnails/portfolio-style9.jpg" alt="Professional & Interactive portfolio template preview" loading="lazy" onerror="this.remove()">
                     <div class="pc p9">
                         <div class="pc-nav">
                             <div class="pc-logo"></div>
                             <div class="pc-nav-links">
                                 <div class="pc-nav-link"></div>
                                 <div class="pc-nav-link"></div>
-                                <!-- dark mode toggle hint -->
                                 <div style="width:22px;height:11px;background:#14b8a6;border-radius:6px;opacity:0.9"></div>
                             </div>
                         </div>
@@ -1671,6 +1654,7 @@
 
             <div class="template-card">
                 <div class="template-preview preview-btn" data-url="https://apdg21.github.io/editableportfolio/style10" data-name="Minimalist & Adaptable">
+                    <img class="thumb-img" src="thumbnails/portfolio-style10.jpg" alt="Minimalist & Adaptable portfolio template preview" loading="lazy" onerror="this.remove()">
                     <div class="pc p10">
                         <div class="pc-nav">
                             <div class="pc-logo"></div>
@@ -1708,7 +1692,6 @@
 
         </div>
 
-        <!-- PAGINATION -->
         <div class="pagination-wrap reveal">
             <button class="page-btn active" data-page="1">1</button>
             <button class="page-btn" data-page="2">2</button>
@@ -1716,7 +1699,6 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════ BENEFITS -->
 <section class="benefits-section">
     <div class="container">
         <div class="benefits-header reveal">
@@ -1749,7 +1731,6 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════ TESTIMONIALS -->
 <section class="testimonials-section">
     <div class="container">
         <div class="testimonials-header reveal">
@@ -1785,7 +1766,6 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════ FAQ -->
 <section class="faq-section">
     <div class="container">
         <div class="faq-header reveal">
@@ -1862,7 +1842,6 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════ BOTTOM CTA -->
 <section class="bottom-cta">
     <div class="container">
         <div class="cta-inner reveal">
@@ -1883,7 +1862,6 @@
             <h3>ResumePro</h3>
             <p>Professional digital templates to showcase your career and work.</p>
         </div>
-        
         <div class="footer-column">
             <h3>Templates</h3>
             <ul class="footer-links">
@@ -1892,7 +1870,6 @@
                 <li><a href="#">All Templates</a></li>
             </ul>
         </div>
-        
         <div class="footer-column">
             <h3>Resources</h3>
             <ul class="footer-links">
@@ -1901,7 +1878,6 @@
                 <li><a href="help.html#tips">Tips & Examples</a></li>
             </ul>
         </div>
-        
         <div class="footer-column">
             <h3>Company</h3>
             <ul class="footer-links">
@@ -1912,13 +1888,11 @@
             </ul>
         </div>
     </div>
-    
     <div class="copyright">
         <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
     </div>
 </footer>
 
-<!-- ═══════════════════════════════════════ MESSENGER -->
 <div class="messenger-float" id="messengerFloat">
     <div class="float-badge" id="floatBadge">
         ⚡ No tech skills? No problem!
@@ -1931,7 +1905,6 @@
     </a>
 </div>
 
-<!-- ═══════════════════════════════════════ MODAL -->
 <div class="modal" id="previewModal">
     <div class="modal-content" id="modalContent">
         <div class="modal-header">
@@ -1962,7 +1935,6 @@
 </div>
 
 <script>
-    // ── SCROLL REVEAL
     const revealObs = new IntersectionObserver((entries) => {
         entries.forEach((entry, i) => {
             if (entry.isIntersecting) {
@@ -1973,7 +1945,6 @@
     }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
-    // ── MESSENGER FLOAT — show after 200px scroll, hide near bottom
     const floatBadge = document.getElementById('floatBadge');
     const messengerBtn = document.getElementById('messengerBtn');
 
@@ -1993,7 +1964,6 @@
 
     window.addEventListener('scroll', updateFloat, { passive: true });
 
-    // ── PAGINATION
     document.querySelectorAll('.page-btn').forEach(btn => {
         btn.addEventListener('click', function () {
             const pageNum = this.dataset.page;
@@ -2005,7 +1975,6 @@
         });
     });
 
-    // ── MODAL
     const modal = document.getElementById('previewModal');
     const modalContent = document.getElementById('modalContent');
     const modalIframe = document.getElementById('modalIframe');
@@ -2074,7 +2043,6 @@
         }
     });
 
-    // ── FAQ
     document.querySelectorAll('.faq-question').forEach(q => {
         q.addEventListener('click', () => {
             const item = q.parentElement;

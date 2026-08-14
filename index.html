@@ -432,6 +432,20 @@
             position: relative;
             overflow: hidden;
         }
+        /* Thumbnail overlay for real screenshots */
+        .tmpl-thumb-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            z-index: 2;
+            background: var(--paper-warm);
+            transition: transform 0.5s ease;
+        }
+        .tmpl-card:hover .tmpl-thumb-img { transform: scale(1.05); }
+
         /* Decorative preview grid lines */
         .tmpl-preview::before {
             content: '';
@@ -461,6 +475,64 @@
         .tmpl-preview-dark .prev-line { background: rgba(255,255,255,0.15); }
         .tmpl-preview:not(.tmpl-preview-dark):not(.tmpl-preview-blue) .prev-line { background: rgba(14,14,18,0.12); }
         .tmpl-preview:not(.tmpl-preview-dark):not(.tmpl-preview-blue) .prev-line.accent-line { background: var(--accent); opacity: 0.6; }
+
+        /* ─── STYLE CARD PREVIEWS ──────────────────────────────── */
+        .style-card {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 22px 20px 16px;
+            gap: 10px;
+            transition: transform 0.4s ease;
+            position: relative;
+            z-index: 1;
+        }
+        .tmpl-preview:hover .style-card { transform: scale(1.03); }
+        .sc-header { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+        .sc-avatar { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; }
+        .sc-name-block { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+        .sc-bar { height: 6px; border-radius: 3px; }
+        .sc-bar.name { width: 70%; }
+        .sc-bar.title { width: 45%; opacity: 0.5; }
+        .sc-divider { height: 1px; width: 100%; flex-shrink: 0; }
+        .sc-section { display: flex; flex-direction: column; gap: 5px; }
+        .sc-label { height: 5px; border-radius: 2px; width: 35%; opacity: 0.7; }
+        .sc-line { height: 4px; border-radius: 2px; }
+        .sc-line.l90 { width: 90%; }
+        .sc-line.l75 { width: 75%; }
+        .sc-line.l60 { width: 60%; }
+        .sc-line.l50 { width: 50%; }
+        .sc-line.l40 { width: 40%; }
+        .sc-tag { height: 14px; border-radius: 7px; }
+        .sc-tag.w50 { width: 50%; }
+        .sc-tag.w70 { width: 70%; }
+        .sc-tag.w40 { width: 40%; }
+        /* Style 18 - Linen: soft neutral/ink */
+        .s18 { background: #f8f4ef; }
+        .s18 .sc-avatar { background: #1a1610; border-radius: 50% 0 50% 50%; }
+        .s18 .sc-bar { background: #1a1610; }
+        .s18 .sc-label { background: #8c7b60; }
+        .s18 .sc-line { background: #d9cebd; }
+        .s18 .sc-divider { background: #1a1610; }
+        .s18 .sc-tag { background: #8c7b60; }
+        /* Style 19 - Prism: white/rainbow accent */
+        .s19 { background: #fff; border-top: 4px solid transparent; border-image: linear-gradient(90deg,#f00,#f90,#ff0,#0f0,#0cf,#00f,#90f) 1; }
+        .s19 .sc-avatar { background: linear-gradient(135deg,#f00,#f90,#ff0,#0f0,#0cf,#00f); }
+        .s19 .sc-bar { background: #111; }
+        .s19 .sc-label { background: #555; }
+        .s19 .sc-line { background: #ddd; }
+        .s19 .sc-divider { background: linear-gradient(90deg,#f00,#f90,#ff0,#0f0,#0cf,#00f); height: 2px; }
+        .s19 .sc-tag { background: #111; }
+        /* Style 20 - Obsidian: deep black/gold luxury */
+        .s20 { background: #090909; }
+        .s20 .sc-avatar { background: #c8a040; }
+        .s20 .sc-bar { background: #c8a040; }
+        .s20 .sc-bar.title { background: rgba(200,160,64,0.4); }
+        .s20 .sc-label { background: #c8a040; }
+        .s20 .sc-line { background: rgba(200,160,64,0.25); }
+        .s20 .sc-divider { background: #c8a040; }
+        .s20 .sc-tag { background: #c8a040; }
 
         .tmpl-badge {
             position: absolute;
@@ -1220,77 +1292,121 @@
         </div>
 
         <div class="templates-grid reveal">
-            <a href="resume-templates.html" class="tmpl-card">
-                <div class="tmpl-preview tmpl-preview-dark">
-                    <span class="tmpl-badge badge-free">Free</span>
-                    <div class="preview-lines">
-                        <div class="prev-line h"></div>
-                        <div class="prev-line accent-line"></div>
-                        <div class="prev-line"></div>
-                        <div class="prev-line short"></div>
-                        <div class="prev-line"></div>
-                        <div class="prev-line short"></div>
-                        <div class="prev-line"></div>
-                    </div>
-                </div>
-                <div class="tmpl-body">
-                    <div class="tmpl-category">Resume</div>
-                    <div class="tmpl-name">Executive Dark</div>
-                    <div class="tmpl-desc">Bold dark-themed layout that commands attention. Perfect for senior roles and creative industries.</div>
-                    <div class="tmpl-footer">
-                        <span class="tmpl-cta">Preview template →</span>
-                        <span style="font-size:0.78rem;color:var(--mid);">HTML / CSS</span>
-                    </div>
-                </div>
-            </a>
 
-            <a href="resume-templates.html" class="tmpl-card">
-                <div class="tmpl-preview" style="background:#f0ece3;">
-                    <span class="tmpl-badge badge-free">Free</span>
-                    <div class="preview-lines">
-                        <div class="prev-line h"></div>
-                        <div class="prev-line accent-line"></div>
-                        <div class="prev-line"></div>
-                        <div class="prev-line"></div>
-                        <div class="prev-line short"></div>
-                        <div class="prev-line"></div>
-                        <div class="prev-line short"></div>
-                    </div>
-                </div>
-                <div class="tmpl-body">
-                    <div class="tmpl-category">Resume</div>
-                    <div class="tmpl-name">Classic Warm</div>
-                    <div class="tmpl-desc">Clean, professional layout with warm tones. ATS-friendly and highly readable by recruiters.</div>
-                    <div class="tmpl-footer">
-                        <span class="tmpl-cta">Preview template →</span>
-                        <span style="font-size:0.78rem;color:var(--mid);">HTML / CSS</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="portfolio-templates.html" class="tmpl-card">
-                <div class="tmpl-preview tmpl-preview-blue">
+            <!-- Linen (Style 18) -->
+            <div class="tmpl-card">
+                <div class="tmpl-preview">
                     <span class="tmpl-badge badge-new">New</span>
-                    <div class="preview-lines">
-                        <div class="prev-line h"></div>
-                        <div class="prev-line" style="background:rgba(200,169,110,0.5);width:30%;"></div>
-                        <div class="prev-line"></div>
-                        <div class="prev-line short"></div>
-                        <div class="prev-line"></div>
-                        <div class="prev-line short"></div>
-                        <div class="prev-line"></div>
+                    <img class="tmpl-thumb-img" src="thumbnails/style18.jpg" alt="Linen resume template preview" loading="lazy" onerror="this.style.display='none'">
+                    <div class="style-card s18">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l50"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="tmpl-body">
-                    <div class="tmpl-category">Portfolio</div>
-                    <div class="tmpl-name">Developer Portfolio</div>
-                    <div class="tmpl-desc">Showcase your projects with a sleek, tech-forward layout. Includes project grid and skills section.</div>
+                    <div class="tmpl-category">Resume · Style 18</div>
+                    <div class="tmpl-name">Linen</div>
+                    <div class="tmpl-desc">Soft neutral tones with organic warmth. A gentle yet professional aesthetic for writers, researchers, and educators.</div>
                     <div class="tmpl-footer">
-                        <span class="tmpl-cta">Preview template →</span>
-                        <span style="font-size:0.78rem;color:var(--mid);">HTML / CSS</span>
+                        <span class="tmpl-cta"><a href="https://apdg21.github.io/editableresume/style18/" target="_blank" style="color:inherit;text-decoration:none;">Preview →</a></span>
+                        <a href="https://resumepro-templates.lemonsqueezy.com/checkout/buy/84a9bd5f-be0c-4a8e-b097-f0c1a70fc89f?logo=0" target="_blank" style="font-size:0.78rem;font-weight:600;color:var(--ink);background:var(--accent);padding:5px 12px;border-radius:4px;text-decoration:none;">$10 · Buy</a>
                     </div>
                 </div>
-            </a>
+            </div>
+
+            <!-- Prism (Style 19) -->
+            <div class="tmpl-card">
+                <div class="tmpl-preview">
+                    <span class="tmpl-badge badge-new">New</span>
+                    <img class="tmpl-thumb-img" src="thumbnails/style19.jpg" alt="Prism resume template preview" loading="lazy" onerror="this.style.display='none'">
+                    <div class="style-card s19">
+                        <div class="sc-header">
+                            <div class="sc-avatar" style="background:linear-gradient(135deg,#f00,#f90,#ff0,#0f0,#0cf,#00f)"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-tag w50"></div>
+                            <div class="sc-tag w40"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tmpl-body">
+                    <div class="tmpl-category">Resume · Style 19</div>
+                    <div class="tmpl-name">Prism</div>
+                    <div class="tmpl-desc">Clean white canvas with a subtle rainbow spectrum accent. A standout choice for creative technologists and multidisciplinary professionals.</div>
+                    <div class="tmpl-footer">
+                        <span class="tmpl-cta"><a href="https://apdg21.github.io/editableresume/style19/" target="_blank" style="color:inherit;text-decoration:none;">Preview →</a></span>
+                        <a href="https://resumepro-templates.lemonsqueezy.com/checkout/buy/6459ced0-7e02-4af1-8873-62086d2222d3?logo=0" target="_blank" style="font-size:0.78rem;font-weight:600;color:var(--ink);background:var(--accent);padding:5px 12px;border-radius:4px;text-decoration:none;">$10 · Buy</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Obsidian (Style 20) -->
+            <div class="tmpl-card">
+                <div class="tmpl-preview">
+                    <span class="tmpl-badge badge-new">New</span>
+                    <img class="tmpl-thumb-img" src="thumbnails/style20.jpg" alt="Obsidian resume template preview" loading="lazy" onerror="this.style.display='none'">
+                    <div class="style-card s20">
+                        <div class="sc-header">
+                            <div class="sc-avatar"></div>
+                            <div class="sc-name-block">
+                                <div class="sc-bar name"></div>
+                                <div class="sc-bar title"></div>
+                            </div>
+                        </div>
+                        <div class="sc-divider"></div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-line l90"></div>
+                            <div class="sc-line l75"></div>
+                            <div class="sc-line l60"></div>
+                        </div>
+                        <div class="sc-section">
+                            <div class="sc-label"></div>
+                            <div class="sc-tag w50"></div>
+                            <div class="sc-tag w70"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tmpl-body">
+                    <div class="tmpl-category">Resume · Style 20</div>
+                    <div class="tmpl-name">Obsidian</div>
+                    <div class="tmpl-desc">Deep black with pure gold accents — the pinnacle of luxury branding. For C-suite executives and senior leaders who demand presence.</div>
+                    <div class="tmpl-footer">
+                        <span class="tmpl-cta"><a href="https://apdg21.github.io/editableresume/style20/" target="_blank" style="color:inherit;text-decoration:none;">Preview →</a></span>
+                        <a href="https://resumepro-templates.lemonsqueezy.com/checkout/buy/3caef98f-b84c-43b6-8ad3-62c2d8d679d5?logo=0" target="_blank" style="font-size:0.78rem;font-weight:600;color:var(--ink);background:var(--accent);padding:5px 12px;border-radius:4px;text-decoration:none;">$10 · Buy</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>

@@ -11,10 +11,10 @@
 //   Then run: wrangler pages dev public
 
 const ALLOWED_MODELS = new Set([
-  "gemini-1.5-flash",     // fast, free-tier friendly — recommended default
-  "gemini-2.0-flash",     // latest flash model
-  "gemini-1.5-flash-8b",  // fastest / cheapest
-  "gemini-1.5-pro"        // most capable
+  "gemini-3.5-flash",     // fast, free-tier friendly — recommended default
+  "gemini-3.1-flash-lite",     // latest flash model
+  "gemini-3.5-flash-8b",  // fastest / cheapest
+  "gemini-3.5-pro"        // most capable
 ]);
 
 const DEFAULT_MODEL = "gemini-1.5-flash";

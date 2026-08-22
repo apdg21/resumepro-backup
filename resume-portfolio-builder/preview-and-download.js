@@ -17,7 +17,7 @@
   portfolio/style1 — see README for how to add the rest.
 */
 
-const TEMPLATES_BASE = '/templates'; // absolute path — works no matter where index.html lives
+const TEMPLATES_BASE = 'templates'; // relative to this page's own location — works no matter what subfolder the site is served from
 
 let manifestsCache = null;
 

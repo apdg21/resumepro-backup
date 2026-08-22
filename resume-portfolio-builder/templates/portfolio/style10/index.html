@@ -1,0 +1,140 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js" defer></script>
+</head>
+<body>
+     <button class="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+    <div class="sidebar" id="main-nav">
+        <div class="sidebar-header">
+            <span id="logo">Portfolio</span>            
+        </div>
+        <div class="sidebar-image">
+            <img id="about-image" src="assets/profile.jpg" alt="About">
+        </div>
+        <ul>
+            <!-- Navigation items will be populated by JavaScript -->
+        </ul>
+    </div>
+
+    <main class="main-content">
+        <section class="hero" id="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1 id="hero-title">My Portfolio</h1>
+                        <p id="hero-subtitle">Content will appear here once loaded</p>
+                        <a href="#work" class="btn" id="hero-button-text">View My Work</a>
+                    </div>
+                    <div class="hero-image">
+                        <img id="profile-image" src="assets/profile.jpg" alt="Profile">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="work" id="work">
+            <div class="container">
+                <h2 id="work-title">My Work</h2>
+                <div id="loader" class="hidden">Loading...</div>
+                <div class="projects-grid" id="projects-grid">
+                    <p class="empty-state">No projects loaded</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="about" id="about">
+            <div class="container">
+                <h2 id="about-title">About Me</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p id="about-content">About content will appear here.</p>
+                        <div class="skills-list" id="skills-list"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials" id="testimonials">
+            <div class="container">
+                <h2 id="testimonials-title">Testimonials</h2>
+                <div class="testimonials-grid" id="testimonials-grid"></div>
+            </div>
+        </section>
+
+        <section class="contact-section" id="contact">
+            <div class="container">
+                <h2>Contact Me</h2>
+                <p>Feel free to reach out!</p>
+                <div id="contact-form">
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="email" placeholder="Your Email" required>
+                    <textarea placeholder="Your Message" required></textarea>
+                    <button type="submit" class="btn">Send Message</button>
+                    <p class="success-message hidden">Message sent successfully!</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content" id="footer-content"></div>
+            <div class="social-links" id="social-links"></div>
+            <p id="copyright"></p>
+            <a href="form.html" class="btn edit-btn hidden" id="edit-portfolio">Edit Portfolio</a>
+            <label class="btn load-btn hidden" id="load-json">Load JSON File</label>
+            <input type="file" id="json-upload" accept=".json" class="hidden">
+        </div>
+    </footer>
+</body>
+</html>

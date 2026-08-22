@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Video Editor Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 id="portfolioLogo">Video Editor Portfolio</h1>
+            <div class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </div>
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="#hero">Home</a></li>
+                    <li><a href="#work">Work</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="admin-controls">
+                <a href="form.html" class="button">Edit Portfolio</a>
+                <label for="jsonUpload" class="button">Load JSON</label>
+                <input type="file" id="jsonUpload" accept=".json" style="display: none;">
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="hero-section">
+            <div class="container">
+                <h2 id="heroTitle">Welcome to My Portfolio</h2>
+                <p id="heroSubtitle">Showcasing my video editing work</p>
+            </div>
+        </section>
+
+        <section id="work" class="work-section container">
+            <h2 class="section-title">My Work</h2>
+            <div id="project-grid" class="project-grid">
+                </div>
+            <div id="pagination" class="pagination hidden">
+                <button id="prevPage" class="button" disabled>Previous</button>
+                <span id="pageInfo"></span>
+                <button id="nextPage" class="button">Next</button>
+            </div>
+        </section>
+
+        <section id="about" class="about-section container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <img id="profileImage" src="assets/placeholder-profile.jpg" alt="Profile Image">
+                <p id="aboutText">Description about the professional.</p>
+                <div class="skills-list">
+                    <h3>Skills:</h3>
+                    <ul id="aboutSkills">
+                        </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="testimonials-section">
+            <div class="container">
+                <h2 class="section-title">Testimonials</h2>
+                <div id="testimonialsContainer" class="testimonials-grid">
+                    </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact-section">
+            <div class="container">
+                <h2 class="section-title">Contact Me</h2>
+                <form id="contactForm" target="_blank" method="POST">
+                    <input type="hidden" name="_subject" value="New Portfolio Contact">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="email" name="_replyto" id="formEmail" value="videoeditor@example.com" style="display: none;">
+
+                    <div class="form-group">
+                        <label for="name" class="sr-only">Name:</label>
+                        <input type="text" id="name" name="name" placeholder="Your Name" required aria-label="Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="sr-only">Email:</label>
+                        <input type="email" id="email" name="email" placeholder="Your Email" required aria-label="Email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject" class="sr-only">Subject:</label>
+                        <input type="text" id="subject" name="subject" placeholder="Subject" required aria-label="Subject">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message" class="sr-only">Message:</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Your Message" required aria-label="Message"></textarea>
+                    </div>
+
+                    <button type="submit" class="button">Send Message</button>
+                    <div id="formSuccessMessage" class="success-message hidden"></div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p id="footerText"></p>
+            <div class="social-links" id="socialLinks">
+                </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photography Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="#" class="logo">Elena Ray</a>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="#work">Work</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="form.html" target="_blank" class="edit-btn">Edit Content</a></li>
+                </ul>
+                <button class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Capturing Life's Beautiful Moments</h1>
+            <p>Professional photography for portraits, landscapes, and special events</p>
+            <a href="#work" class="btn">View My Work</a>
+        </div>
+    </section>
+
+    <section id="work" class="section work">
+        <div class="container">
+            <h2 class="section-title">My Portfolio</h2>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="portrait">Portraits</button>
+                <button class="filter-btn" data-filter="landscape">Landscapes</button>
+                <button class="filter-btn" data-filter="product">Product</button>
+                <button class="filter-btn" data-filter="event">Events</button>
+            </div>
+            <div class="projects-grid"></div>
+            <div class="pagination">
+                <button class="pagination-btn prev" disabled>Previous</button>
+                <div class="page-numbers"></div>
+                <button class="pagination-btn next">Next</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="section about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <div class="bio-text"></div>
+                    <div class="skills">
+                        <h3>My Skills</h3>
+                        <ul class="skills-list"></ul>
+                    </div>
+                </div>
+                <div class="profile-image">
+                    <img id="profile-img" src="" alt="Profile Image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="section testimonials">
+        <div class="container">
+            <h2 class="section-title">Client Testimonials</h2>
+            <div class="testimonials-grid"></div>
+        </div>
+    </section>
+
+    <section id="contact" class="section contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <form id="contact-form" class="contact-form">
+                <div class="form-group">
+                    <input type="text" id="name" name="name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" name="email" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="subject" name="subject" placeholder="Subject" required>
+                </div>
+                <div class="form-group">
+                    <textarea id="message" name="message" placeholder="Your Message" required></textarea>
+                </div>
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+            <div class="social-links">
+                <a href="#" class="social-link" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link" target="_blank"><i class="fab fa-500px"></i></a>
+                <a href="#" class="social-link" target="_blank"><i class="fab fa-flickr"></i></a>
+                <a href="#" class="social-link" target="_blank"><i class="fab fa-behance"></i></a>
+            </div>
+        </div>
+    </section>
+
+     <footer class="footer">
+        <div class="container">
+            <p class="copyright">&copy; <span id="year"></span> Elena Ray Photography. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div class="lightbox">
+        <div class="lightbox-content">
+            <span class="close-lightbox">&times;</span>
+            <img src="" alt="" class="lightbox-img">
+            <div class="lightbox-caption"></div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

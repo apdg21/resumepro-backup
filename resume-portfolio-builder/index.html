@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Resume / Portfolio Builder Prototype</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>  
 <style>
   :root {
     --primary-color: #3a86ff;
@@ -88,6 +89,11 @@
     <div class="sub">This is the filled data.json — in production this gets written into a copy of the template and rendered/downloaded as the finished site.</div>
     <div class="json-box" id="jsonBox">Nothing generated yet.</div>
     <button id="downloadBtn" class="secondary" style="display:none;">⬇ Download data.json</button>
+    <button id="previewBtn">Live preview</button>
+    <button id="downloadSiteBtn" class="secondary">⬇ Download full site (.zip)</button>
+    <div class="status" id="previewStatus"></div>
+    <div id="previewContainer" style="margin-top:12px;"></div>
+
   </div>
 
 </div>
@@ -269,5 +275,6 @@ downloadBtn.addEventListener('click', () => {
   URL.revokeObjectURL(url);
 });
 </script>
+<script src="preview-and-download.js"></script>  
 </body>
 </html>

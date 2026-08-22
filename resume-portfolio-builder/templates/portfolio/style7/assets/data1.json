@@ -1,0 +1,122 @@
+{
+  "logo": "Alexandra Carter",
+  "hero": {
+    "title": "Email Copywriting That Boosts Conversions",
+    "subtitle": "Crafting high-converting email sequences that turn subscribers into customers"
+  },
+  "projects": [
+    {
+      "title": "Welcome Series for SaaS Company",
+      "description": "Developed a 5-email onboarding sequence that increased trial-to-paid conversion by 42% through strategic storytelling and clear CTAs.",
+      "image": "assets/saas_welcome.jpg",
+      "link": "samples/saas_welcome.txt"
+    },
+    {
+      "title": "Black Friday Campaign for E-commerce",
+      "description": "Created a complete 12-email holiday campaign generating $250k+ in revenue with urgency-driven copy and segmented messaging.",
+      "image": "assets/black_friday.jpg",
+      "link": "samples/black_friday.txt"
+    },
+    {
+      "title": "Lead Nurture Sequence for B2B",
+      "description": "Designed a 7-email nurture flow that improved lead qualification by 35% using pain-point focused storytelling and educational content.",
+      "image": "assets/b2b_nurture.jpg",
+      "link": "samples/b2b_nurture.txt"
+    },
+    {
+      "title": "Re-engagement Campaign for Fitness App",
+      "description": "Wrote a win-back series that reactivated 28% of dormant users with personalized subject lines and benefit-driven copy.",
+      "image": "assets/fitness_reengage.jpg",
+      "link": "samples/fitness_reengage.txt"
+    },
+    {
+      "title": "VIP Launch Sequence for Course Creator",
+      "description": "Crafted a high-touch 10-email launch sequence that sold out a $2,000 course in 72 hours using scarcity and social proof.",
+      "image": "assets/vip_launch.jpg",
+      "link": "samples/vip_launch.txt"
+    },
+    {
+      "title": "Cart Abandonment Series for Retail",
+      "description": "Developed a 3-email abandonment flow that recovered 19% of lost sales through strategic timing and incentive offers.",
+      "image": "assets/cart_abandonment.jpg",
+      "link": "samples/cart_abandonment.txt"
+    },
+    {
+      "title": "Weekly Newsletter for Finance Brand",
+      "description": "Transformed a boring financial newsletter into an engaging must-read with a 58% open rate through conversational storytelling.",
+      "image": "assets/finance_newsletter.jpg",
+      "link": "samples/finance_newsletter.txt"
+    },
+    {
+      "title": "Upsell Sequence for Subscription Service",
+      "description": "Created a tiered upgrade path that increased ARPU by 22% through benefit-focused email copy and strategic timing.",
+      "image": "assets/upsell_sequence.jpg",
+      "link": "samples/upsell_sequence.txt"
+    },
+    {
+      "title": "Post-Purchase Follow-up Series",
+      "description": "Designed a customer delight sequence that boosted repeat purchases by 31% through educational content and surprise offers.",
+      "image": "assets/post_purchase.jpg",
+      "link": "samples/post_purchase.txt"
+    },
+    {
+      "title": "Cold Outreach Campaign for Agency",
+      "description": "Wrote a personalized outreach sequence that booked 15 discovery calls per week with a 38% response rate.",
+      "image": "assets/cold_outreach.jpg",
+      "link": "samples/cold_outreach.txt"
+    },
+    {
+      "title": "Event Promotion Emails for Conference",
+      "description": "Crafted urgency-driven emails that sold out a 500-person event 3 weeks early through tiered pricing and FOMO tactics.",
+      "image": "assets/event_promotion.jpg",
+      "link": "samples/event_promotion.txt"
+    },
+    {
+      "title": "Survey Invitation Sequence",
+      "description": "Increased survey completion rate from 8% to 34% by reframing the value proposition and simplifying the ask.",
+      "image": "assets/survey_emails.jpg",
+      "link": "samples/survey_emails.txt"
+    }
+  ],
+  "about": {
+    "text": "I'm a conversion-focused email copywriter with 7 years of experience crafting email sequences that consistently outperform industry benchmarks. Specializing in the complete customer journey - from first welcome to loyal advocate - I combine psychological triggers with compelling storytelling to create emails that get opened, read, and acted upon. My approach blends data-driven optimization with creative messaging that resonates on a human level. I've helped SaaS companies, e-commerce brands, and service providers generate millions in additional revenue through strategic email copy that builds relationships while driving measurable business results.",
+    "skills": [
+      "Email Sequence Strategy",
+      "Conversion Copywriting",
+      "A/B Testing & Optimization",
+      "Customer Journey Mapping",
+      "Behavioral Psychology",
+      "CRM Platform Expertise",
+      "Segmentation Strategy",
+      "Lead Nurturing",
+      "Automation Workflows"
+    ]
+  },
+  "testimonials": [
+    {
+      "text": "Alexandra's email sequences transformed our business. She took our 12% conversion rate to 28% in just three months. Her ability to understand our audience and craft messages that resonate is unparalleled. We've hired many copywriters over the years, but none have delivered results like this.",
+      "author": "Michael Chen, VP Marketing at GrowthLabs"
+    },
+    {
+      "text": "Working with Alexandra was a game-changer for our email program. She doesn't just write copy - she develops complete email ecosystems that work together to guide subscribers toward conversion. Our revenue from email has increased 3x since implementing her sequences, and we continue to see improvement months later.",
+      "author": "Sarah Johnson, Director of E-commerce at StyleHaven"
+    },
+    {
+      "text": "As a SaaS founder, I was skeptical about hiring a specialist email copywriter. Alexandra proved me wrong within weeks. Her welcome sequence alone increased our trial-to-paid conversion by 18 percentage points. She has an uncanny ability to translate complex features into compelling benefits that drive action.",
+      "author": "David Park, CEO at CloudTask"
+    }
+  ],
+  "contact": {
+    "email": "alexandra@emailcopypro.com",
+    "successMessage": "Thanks for your message! I'll respond within 24 hours. For immediate assistance, you can also text me at (555) 123-4567."
+  },
+  "footer": {
+    "text": "© 2025 Alexandra Carter Email Copywriting. All rights reserved."
+  },
+  "social": {
+    "linkedin": "https://linkedin.com/in/alexandracarter-email",
+    "twitter": "https://twitter.com/emailcopyalex",
+    "instagram": "https://instagram.com/emailcopywritertips",
+    "github": ""
+  }
+}

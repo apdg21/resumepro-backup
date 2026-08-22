@@ -1,0 +1,182 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Email Designer Portfolio</title>
+    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="logo"></div>
+            <button class="hamburger" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav id="main-nav"></nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 id="hero-title"></h1>
+                    <p id="hero-subtitle"></p>
+                    <a href="#work" class="btn" id="hero-button-text"></a>
+                </div>
+                <div class="hero-image">
+                    <img id="profile-image" src="" alt="Profile Image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="work" class="work">
+        <div class="container">
+            <h2 id="work-title"></h2>
+            <div id="projects-grid" class="projects-grid"></div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-image">
+                    <img id="about-image" src="" alt="About Image">
+                </div>
+                <div class="about-text">
+                    <h2 id="about-title"></h2>
+                    <p id="about-content"></p>
+                    <div id="skills-list" class="skills-list"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <h2 id="testimonials-title"></h2>
+            <div id="testimonials-grid" class="testimonials-grid"></div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+    <div class="container">
+        <h2>Contact Me</h2>
+        <p>Feel free to reach out!</p>
+        <form id="contact-form" action="https://formsubmit.co/reload.adolf2023@gmail.com" method="POST">
+            <input type="hidden" name="_subject" value="New Portfolio Message!">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="message" placeholder="Your Message" required></textarea>
+            <button type="submit" class="btn">Send Message</button>
+            <p id="form-success" class="success-message" style="display:none;"></p>
+        </form>
+    </div>
+</section>
+
+    <footer>
+        <div class="container">
+            <div id="footer-content" class="footer-content"></div>
+            <div id="social-links" class="social-links"></div>
+            <p id="copyright"></p>
+            <button id="edit-portfolio" class="btn edit-btn">Edit Portfolio</button>
+            <button id="load-json" class="btn load-btn">Load JSON File</button>
+            <input type="file" id="json-upload" accept=".json" style="display: none;">
+        </div>
+    </footer>
+    <script>
+    document.getElementById('contact-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const form = this;
+        const successMessage = document.getElementById('form-success');
+        console.log('Form submission started to:', form.action);
+        console.log('Form data:', Object.fromEntries(new FormData(form)));
+
+        fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' },
+            redirect: 'follow'
+        })
+        .then(response => {
+            console.log(`Response status: ${response.status}, ok: ${response.ok}, redirected: ${response.redirected}, url: ${response.url}`);
+            return response.text().then(text => {
+                console.log('Response body:', text);
+                try {
+                    return { data: JSON.parse(text), status: response.status, ok: response.ok };
+                } catch (e) {
+                    return { data: text, status: response.status, ok: response.ok };
+                }
+            });
+        })
+        .then(({ data, status, ok }) => {
+            if (ok || status === 200 || status === 201 || status === 302) {
+                successMessage.style.display = 'block';
+                successMessage.textContent = 'Message sent successfully!';
+                successMessage.style.color = 'green';
+                form.reset();
+                console.log('Form submission successful:', data);
+            } else {
+                throw new Error(`Unexpected response status: ${status}`);
+            }
+        })
+        .catch(error => {
+            successMessage.style.display = 'block';
+            successMessage.textContent = 'Error sending message. Please try again.';
+            successMessage.style.color = 'red';
+            console.error('Form submission error:', error);
+        });
+    });
+</script>
+    
+    <script src="main.js?v=3"></script>
+</body>
+</html>

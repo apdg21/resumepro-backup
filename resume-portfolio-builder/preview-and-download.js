@@ -29,7 +29,12 @@ async function getManifests() {
 }
 
 function templateKey() {
-  const cat = categorySelect.value === 'resume_templates' ? 'resume' : 'portfolio';
+  // categorySelect only exists on the paste/upload page (resume vs portfolio
+  // picker). resume-form.html has no category dropdown since it's resume-only
+  // for now — fall back to 'resume' in that case rather than erroring.
+  const cat = (typeof categorySelect !== 'undefined' && categorySelect)
+    ? (categorySelect.value === 'resume_templates' ? 'resume' : 'portfolio')
+    : 'resume';
   const style = templateSelect.value; // e.g. "style1"
   return `${cat}/${style}`;
 }

@@ -1,0 +1,104 @@
+{
+  "style1": {
+    "scalar": {
+      "fullName": "name",
+      "jobTitle": "title",
+      "summary": "about",
+      "profileImage": "profile.image",
+      "contact.email": "contact.email",
+      "contact.phone": "contact.phone",
+      "contact.location": "contact.address"
+    },
+    "arrays": {
+      "skills": { "targetPath": "skills", "itemMap": { "name": "name", "level": "level" } },
+      "languages": { "targetPath": "languages", "itemMap": { "name": "name", "level": "level" } },
+      "experience": { "targetPath": "experience", "itemMap": { "jobTitle": "role", "company": "company", "startDate": "start", "endDate": "end", "bullets": "details" } },
+      "education": { "targetPath": "education", "itemMap": { "degree": "degree", "institution": "institution", "startDate": "start", "endDate": "end", "description": "description" } },
+      "projects": { "targetPath": "projects", "itemMap": { "name": "name", "description": "description", "liveUrl": "liveUrl", "codeUrl": "codeUrl" } },
+      "references": { "targetPath": "references", "itemMap": { "name": "name", "title": "role", "phone": "phone", "email": "email" } }
+    }
+  },
+
+  "style2": {
+    "_note": "skills/languages in this template are plain string arrays, not objects — see scalarFromItem below.",
+    "scalar": {
+      "fullName": "name",
+      "jobTitle": "title",
+      "summary": "about",
+      "profileImage": "profile.image",
+      "contact.email": "contact.email",
+      "contact.phone": "contact.phone",
+      "contact.location": "contact.address"
+    },
+    "arrays": {
+      "skills": { "targetPath": "skills", "scalarFromItem": "name" },
+      "languages": { "targetPath": "languages", "scalarFromItem": "name" },
+      "experience": { "targetPath": "experience", "itemMap": { "jobTitle": "role", "company": "company", "startDate": "start", "endDate": "end", "bullets": "details" } },
+      "education": { "targetPath": "education", "itemMap": { "degree": "degree", "institution": "institution", "startDate": "start", "endDate": "end", "description": "description" } },
+      "references": { "targetPath": "references", "itemMap": { "name": "name", "title": "role", "phone": "phone", "email": "email" } }
+    }
+  },
+
+  "style11": {
+    "_note": "no profile image field exists in this template's data.json at all — omit profileImage mapping. Name is split via splitName below, not scalar mapping.",
+    "scalar": {
+      "jobTitle": "personalInfo.jobTitle",
+      "summary": "about",
+      "contact.email": "personalInfo.email",
+      "contact.phone": "personalInfo.phone",
+      "contact.location": "personalInfo.location"
+    },
+    "splitName": {
+      "sourcePath": "fullName",
+      "firstNameTarget": "personalInfo.firstName",
+      "lastNameTarget": "personalInfo.lastName"
+    },
+    "arrays": {
+      "skills": { "targetPath": "skills", "itemMap": { "name": "name", "level": "level" } },
+      "languages": { "targetPath": "languages", "itemMap": { "name": "name", "level": "level" } },
+      "experience": { "targetPath": "experience", "itemMap": { "jobTitle": "position", "company": "company", "startDate": "startDate", "endDate": "endDate", "bullets": "details" } },
+      "education": { "targetPath": "education", "itemMap": { "degree": "degree", "institution": "institution", "endDate": "year" } },
+      "projects": { "targetPath": "projects", "itemMap": { "name": "name", "description": "description", "liveUrl": "liveUrl", "codeUrl": "codeUrl" } },
+      "socialLinks": { "targetPath": "socialLinks", "itemMap": { "platform": "name", "url": "url" } }
+    }
+  },
+
+  "style17": {
+    "scalar": {
+      "fullName": "name",
+      "jobTitle": "title",
+      "summary": "summary",
+      "profileImage": "profile_image",
+      "contact.email": "email",
+      "contact.phone": "phone",
+      "contact.location": "location"
+    },
+    "arrays": {
+      "skills": { "targetPath": "skills", "itemMap": { "name": "name", "level": "level" } },
+      "languages": { "targetPath": "languages", "scalarFromItem": "name" },
+      "experience": { "targetPath": "experience", "itemMap": { "jobTitle": "role", "company": "company", "bullets": "description", "joinBulletsAs": "paragraph" }, "_note": "this template's experience has a single 'description' string, not bullets — bullets get joined into one paragraph" },
+      "education": { "targetPath": "education", "itemMap": { "degree": "degree", "institution": "institution", "endDate": "year" } }
+    }
+  },
+
+  "style20": {
+    "scalar": {
+      "fullName": "profile.name",
+      "jobTitle": "profile.title",
+      "summary": "about",
+      "profileImage": "profile.photo",
+      "contact.email": "contact.Email",
+      "contact.phone": "contact.Phone"
+    },
+    "arrays": {
+      "skills": { "targetPath": "skills", "scalarFromItem": "name" },
+      "languages": { "targetPath": "languages", "scalarFromItem": "name" },
+      "experience": { "targetPath": "experience", "itemMap": { "jobTitle": "position", "company": "company", "startDate": "date", "bullets": "description", "joinBulletsAs": "paragraph" } },
+      "education": { "targetPath": "education", "itemMap": { "degree": "degree", "institution": "institution", "startDate": "date" } },
+      "references": { "targetPath": "references", "itemMap": { "name": "name", "title": "position", "company": "company", "email": "contact" } }
+    },
+    "objectMap": {
+      "socialLinks": { "targetPath": "socials", "keyFrom": "platform", "valueFrom": "url" }
+    }
+  }
+}

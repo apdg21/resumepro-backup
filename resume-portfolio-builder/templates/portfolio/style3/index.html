@@ -1,0 +1,121 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copywriter Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="main.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo" id="logo">Your Name</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#work">Work</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="admin-controls">
+                <button class="edit-btn"><a href="form.html">Edit Portfolio</a></button>
+                <button id="load-json">Load JSON</button>
+                <input type="file" id="json-file" accept=".json" style="display:none;">
+            </div>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <h1 id="hero-title">Creative Copywriting That Converts</h1>
+        <p id="hero-subtitle">Crafting compelling stories that engage and persuade.</p>
+        <a href="#contact" class="cta-btn">Hire Me</a>
+    </section>
+
+    <section id="work" class="work">
+        <h2>Featured Copywriting Samples</h2>
+        <div class="project-grid" id="projects"></div>
+        <div class="pagination">
+            <button id="prev-page" class="pagination-btn" disabled>Previous</button>
+            <span id="page-info"></span>
+            <button id="next-page" class="pagination-btn">Next</button>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <h2>About Me</h2>
+        <div class="about-content">
+            <img src="assets/profile.jpg" alt="Profile picture" class="profile-img">
+            <div>
+                <p id="about-text">I'm a passionate copywriter with 5+ years of experience creating persuasive content for brands worldwide.</p>
+                <h3>Skills</h3>
+                <ul id="skills-list" class="skills"></ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="testimonials">
+        <h2>Client Testimonials</h2>
+        <div class="testimonial-grid" id="testimonials-list"></div>
+    </section>
+
+    <section id="contact" class="contact">
+        <h2>Contact Me</h2>
+        <form action="https://formsubmit.co/your-email@example.com" method="POST" id="contact-form">
+            <input type="hidden" name="_subject" value="New Portfolio Contact">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="text" name="name" placeholder="Your Name" required aria-label="Name">
+            <input type="email" name="email" placeholder="Your Email" required aria-label="Email">
+            <input type="text" name="subject" placeholder="Subject" required aria-label="Subject">
+            <textarea name="message" placeholder="Your Message" required aria-label="Message"></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+        <p id="form-success" class="success-message hidden">Thank you for your message! I'll get back to you soon.</p>
+    </section>
+
+    <footer>
+        <p id="footer-text">© 2025 Your Name. All rights reserved.</p>
+        <div class="social-links" id="social-links"></div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,423 @@
+/* ===== Global Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', Arial, sans-serif;
+  line-height: 1.8;
+  background: #f8fafc;
+  color: #1e293b;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+/* ===== Header and Navigation ===== */
+header {
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  color: #ffffff;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+nav {
+  position: relative;
+}
+
+nav ul {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  list-style: none;
+  flex-wrap: wrap;
+}
+
+nav a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.1rem;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+nav a:hover {
+  color: #bae6fd;
+  transform: translateY(-2px);
+}
+
+/* ===== Hamburger Menu ===== */
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1100;
+  padding: 0.5rem;
+}
+
+.hamburger svg {
+  width: 2rem;
+  height: 2rem;
+  fill: #ffffff;
+}
+
+nav.active ul {
+  display: flex;
+}
+
+/* ===== Main Content ===== */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+section {
+  margin-bottom: 4rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.8s ease forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* ===== Hero Section ===== */
+#hero {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+#hero p {
+  font-size: 1.2rem;
+  color: #475569;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===== About Section with Profile Image ===== */
+#about {
+  text-align: center;
+}
+
+#about img.profile-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1.5rem;
+  border: 3px solid #3b82f6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#about p {
+  font-size: 1.1rem;
+  color: #475569;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* ===== Samples Grid ===== */
+.grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.sample-card {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.sample-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.sample-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+  aspect-ratio: 16 / 9;
+}
+
+.sample-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e3a8a;
+  margin: 1rem 0 0.5rem;
+}
+
+.sample-card p {
+  font-size: 0.95rem;
+  color: #64748b;
+}
+
+/* ===== Pagination ===== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.pagination button {
+  background: #3b82f6;
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.pagination button:hover {
+  background: #2563eb;
+}
+
+.pagination button:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+#page-info {
+  font-size: 1rem;
+  color: #475569;
+}
+
+/* ===== Testimonials ===== */
+.testimonial {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.testimonial blockquote {
+  font-size: 1.1rem;
+  color: #475569;
+  margin-bottom: 0.5rem;
+  font-style: italic;
+}
+
+.testimonial p {
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+/* ===== Contact Form ===== */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+form fieldset {
+  border: none;
+  padding: 0;
+}
+
+form input,
+form textarea {
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  width: 100%;
+  transition: border-color 0.3s ease;
+}
+
+form input:focus,
+form textarea:focus {
+  border-color: #3b82f6;
+  outline: none;
+}
+
+form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+form button {
+  background: #3b82f6;
+  color: #ffffff;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+
+form button:hover {
+  background: #2563eb;
+}
+
+#success-msg {
+  color: #10b981;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* ===== Footer ===== */
+footer {
+  background: #1e293b;
+  color: #ffffff;
+  padding: 2rem;
+  text-align: center;
+}
+
+#social-links a {
+  margin: 0 1rem;
+  color: #ffffff;
+  font-size: 1.75rem;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+#social-links a:hover {
+  color: #bae6fd;
+  transform: scale(1.1);
+}
+
+/* ===== Offline Controls ===== */
+.offline-only {
+  display: none !important;
+}
+
+.admin.offline .offline-only {
+  display: block !important;
+  text-align: center;
+  margin: 1.5rem auto;
+}
+
+.admin button {
+  background: #3b82f6;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+}
+
+.admin button:hover {
+  background: #2563eb;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 2rem;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  nav ul {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #1e3a8a;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  nav.active ul {
+    display: flex;
+  }
+
+  nav a {
+    padding: 0.5rem;
+    font-size: 1.2rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  form {
+    padding: 1.5rem;
+  }
+
+  #about img.profile-img {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  main {
+    padding: 1rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .sample-card {
+    padding: 1rem;
+  }
+
+  #about img.profile-img {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+/* ===== Google Fonts ===== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* ===== Font Awesome ===== */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css');

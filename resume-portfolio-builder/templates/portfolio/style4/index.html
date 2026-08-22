@@ -1,0 +1,126 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VideoEditPro Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1 id="logo">VideoEditPro</h1>
+    <nav>
+      <button class="hamburger" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+        <svg class="fallback" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/>
+        </svg>
+      </button>
+      <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#samples">Work</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="hero">
+      <p>Crafting compelling stories through dynamic video editing. Let your vision come to life with professional precision.</p>
+    </section>
+
+    <section id="samples">
+      <h2>My Work</h2>
+      <div id="samples-grid" class="grid"></div>
+      <div class="pagination">
+        <button id="prev">Previous</button>
+        <span id="page-info">Page 1 of X</span>
+        <button id="next">Next</button>
+      </div>
+    </section>
+
+    <section id="about">
+      <h2>About</h2>
+      <img src="assets/profile.jpg" alt="Profile Image" class="profile-img">
+      <p>I’m a freelance video editor with 5+ years of experience turning raw footage into polished productions. Whether it's social media clips, documentaries, or promotional videos, I bring clarity and creativity to every cut.</p>
+    </section>
+
+    <section id="testimonials">
+      <h2>Testimonials</h2>
+      <div id="testimonial-list"></div>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <form>
+        <fieldset>
+          <legend>Contact Form</legend>
+          <input type="text" name="name" placeholder="Name" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="text" name="subject" placeholder="Subject" required>
+          <textarea name="message" placeholder="Message" required></textarea>
+          <div class="buttons">
+            <button type="submit">Send</button>
+          </div>
+          <p id="success-msg" hidden>Message sent successfully!</p>
+        </fieldset>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div id="social-links"></div>
+    <p id="footer-text">© 2025 VideoEditPro. All rights reserved.</p>
+  </footer>
+
+  <div class="admin offline">
+    <div class="offline-only">
+      <button id="load-json">Edit Portfolio</button>
+      <input type="file" id="json-file" accept=".json" hidden>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

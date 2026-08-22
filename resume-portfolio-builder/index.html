@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Resume / Portfolio Builder Prototype</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>  
 <style>
   :root {
     --primary-color: #3a86ff;
@@ -45,10 +44,6 @@
 </head>
 <body>
 
-<!--
-  Add this near the top of index.html, above your existing "1. Pick a
-  template category" panel, so both pages link to each other.
--->
 <div class="wrap">
   <div class="panel" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
     <div>
@@ -61,11 +56,10 @@
 
 <div class="wrap">
   <div class="panel">
-    <h1>1. Pick a template category</h1>
-    <div class="sub">In the real product this comes from the gallery page selection.</div>
-    <select id="categorySelect" style="margin-bottom:12px;">
-      <option value="resume_templates">Resume templates</option>
-      <option value="portfolio_templates">Portfolio templates</option>
+    <h1>1. Pick a template</h1>
+    <div class="sub">Resume templates only — portfolios need multiple images, so use the form instead for those.</div>
+    <select id="categorySelect" style="display:none;">
+      <option value="resume_templates" selected>Resume templates</option>
     </select>
     <select id="templateSelect"></select>
   </div>
@@ -94,6 +88,11 @@
       <textarea id="rawInput" placeholder="Paste resume text, LinkedIn export, or rough notes here..."></textarea>
     </div>
 
+    <label style="font-size:13px; font-weight:600; display:block; margin:12px 0 6px;">Profile photo (optional)</label>
+    <input type="file" id="profilePhotoInput" accept="image/*">
+    <img id="profilePhotoPreview" style="width:56px; height:56px; border-radius:8px; object-fit:cover; background:#eee; border:1px solid #ddd; margin-top:8px; display:none;">
+
+    <br>
     <button id="genBtn">Generate →</button>
     <div class="status" id="status"></div>
   </div>
@@ -103,17 +102,20 @@
     <div class="sub">This is the filled data.json — in production this gets written into a copy of the template and rendered/downloaded as the finished site.</div>
     <div class="json-box" id="jsonBox">Nothing generated yet.</div>
     <button id="downloadBtn" class="secondary" style="display:none;">⬇ Download data.json</button>
-    <button id="previewBtn">Live preview</button>
-    <button id="downloadSiteBtn" class="secondary">⬇ Download full site (.zip)</button>
+
+    <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
+      <button id="previewBtn" type="button">Live preview</button>
+      <button id="downloadSiteBtn" class="secondary" type="button">⬇ Download full site (.zip)</button>
+    </div>
     <div class="status" id="previewStatus"></div>
     <div id="previewContainer" style="margin-top:12px;"></div>
-
   </div>
 
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth.js/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
 pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
@@ -131,11 +133,27 @@ const genBtn = document.getElementById('genBtn');
 const statusEl = document.getElementById('status');
 const jsonBox = document.getElementById('jsonBox');
 const downloadBtn = document.getElementById('downloadBtn');
+const profilePhotoInput = document.getElementById('profilePhotoInput');
+const profilePhotoPreview = document.getElementById('profilePhotoPreview');
 
 let allSchemas = null;
 let extractedFileText = '';
 let activeMode = 'upload';
 let lastResult = null;
+let profilePhotoDataUri = '';
+
+profilePhotoInput.addEventListener('change', async () => {
+  const file = profilePhotoInput.files[0];
+  if (!file) return;
+  profilePhotoDataUri = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+  profilePhotoPreview.src = profilePhotoDataUri;
+  profilePhotoPreview.style.display = 'block';
+});
 
 // --- Load real schemas (in production: fetched per-template from your storage) ---
 fetch('all_template_schemas.json')
@@ -248,7 +266,7 @@ genBtn.addEventListener('click', async () => {
       body: JSON.stringify({
         schema,
         rawText: inputText,
-        model: 'gemini-3.1-flash-lite'
+        model: 'gemini-3.5-flash'
       })
     });
 
@@ -258,8 +276,8 @@ genBtn.addEventListener('click', async () => {
       throw new Error(result.error || 'Request failed');
     }
 
-    lastResult = result.data;
-    jsonBox.textContent = JSON.stringify(result.data, null, 2);
+    lastResult = mergeProfilePhoto(result.data, schema, profilePhotoDataUri);
+    jsonBox.textContent = JSON.stringify(lastResult, null, 2);
     downloadBtn.style.display = 'inline-block';
 
     if (result.keysMatch) {
@@ -289,6 +307,6 @@ downloadBtn.addEventListener('click', () => {
   URL.revokeObjectURL(url);
 });
 </script>
-<script src="preview-and-download.js"></script>  
+<script src="preview-and-download.js"></script>
 </body>
 </html>

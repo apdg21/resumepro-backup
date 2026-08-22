@@ -28,6 +28,57 @@ async function getManifests() {
   return manifestsCache;
 }
 
+// --- PROFILE PHOTO FIELD DETECTION -------------------------------------
+// Every real template that supports a custom profile photo defaults that
+// field to the exact literal "assets/profile.jpg" (confirmed across all 20
+// resume templates). Decorative/hero images use a different filename, and
+// reference-contact photos are external randomuser.me URLs — so matching
+// this exact literal reliably finds ONLY the user's own profile photo field,
+// never a hero image or a reference's stock avatar, without needing a
+// hand-written mapping for every template.
+function findProfileImagePath(schemaObj, path = '') {
+  if (schemaObj && typeof schemaObj === 'object' && !Array.isArray(schemaObj)) {
+    for (const [key, value] of Object.entries(schemaObj)) {
+      const newPath = path ? `${path}.${key}` : key;
+      if (typeof value === 'string' && value === 'assets/profile.jpg') {
+        return newPath;
+      }
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        const found = findProfileImagePath(value, newPath);
+        if (found) return found;
+      }
+      // Deliberately does NOT recurse into arrays — this avoids ever
+      // matching a reference's photo or a per-item project image.
+    }
+  }
+  return null;
+}
+
+function setPathGeneric(obj, path, value) {
+  const keys = path.split('.');
+  let cur = obj;
+  for (let i = 0; i < keys.length - 1; i++) {
+    if (cur[keys[i]] == null || typeof cur[keys[i]] !== 'object') cur[keys[i]] = {};
+    cur = cur[keys[i]];
+  }
+  cur[keys[keys.length - 1]] = value;
+}
+
+/**
+ * Merges an uploaded profile photo (as a data URI) into a generated data.json,
+ * using the ORIGINAL template schema (with its default "assets/profile.jpg"
+ * placeholder still intact) to find the correct field to overwrite.
+ * Returns the same object with the photo merged in, or unchanged if the
+ * template has no photo field, or if no photo was provided.
+ */
+function mergeProfilePhoto(generatedData, originalTemplateSchema, photoDataUri) {
+  if (!photoDataUri) return generatedData;
+  const imagePath = findProfileImagePath(originalTemplateSchema);
+  if (!imagePath) return generatedData; // this template has no photo slot
+  setPathGeneric(generatedData, imagePath, photoDataUri);
+  return generatedData;
+}
+
 function templateKey() {
   // categorySelect only exists on the paste/upload page (resume vs portfolio
   // picker). resume-form.html has no category dropdown since it's resume-only

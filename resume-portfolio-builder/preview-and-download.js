@@ -111,44 +111,55 @@ async function renderPreview(dataObj) {
   const htmlRes = await fetch(indexUrl);
   let html = await htmlRes.text();
 
-  // Inject <base> so relative CSS/JS/asset links resolve to the real hosted
-  // template files, and inject a fetch-override so the template's own
-  // `fetch('data.json')` (or similar) call receives OUR generated data
-  // instead of hitting the network. This works regardless of how each
-  // individual template's main.js is written internally.
-  //
-  // The data is placed in a <script type="application/json"> block rather
-  // than interpolated into a JS template literal — a JSON string can
-  // legally contain backticks or "${" sequences (e.g. in a bio someone
-  // typed), which would otherwise break out of a template literal and
-  // silently corrupt the injected script.
-  const dataJsonText = JSON.stringify(dataObj)
-    .replace(/</g, '\\u003c')   // guard against "</script>" appearing in any text field
-    .replace(/-->/g, '--\\u003e');
+  // The generated data (which can be several MB once a photo is embedded)
+  // is put into its own Blob and served via a blob: URL, rather than being
+  // written directly into the HTML markup. Large inline <script> content
+  // has proven unreliable via iframe.srcdoc in practice — a separate Blob
+  // avoids that entirely, since the iframe just fetches it like any other
+  // URL instead of the browser having to parse a multi-megabyte string as
+  // part of the document itself.
+  if (window.__lastPreviewBlobUrls) {
+    window.__lastPreviewBlobUrls.forEach(u => URL.revokeObjectURL(u));
+  }
+  window.__lastPreviewBlobUrls = [];
 
+  const dataBlob = new Blob([JSON.stringify(dataObj)], { type: 'application/json' });
+  const dataBlobUrl = URL.createObjectURL(dataBlob);
+  window.__lastPreviewBlobUrls.push(dataBlobUrl);
+
+  // Must be an ABSOLUTE URL: a blob: document has no meaningful "directory"
+  // of its own, so a relative <base href> (which worked fine under the old
+  // srcdoc approach, which inherits the parent page's location) would fail
+  // to resolve CSS/JS/asset links correctly here.
+  const absoluteTemplateBase = new URL(`${TEMPLATES_BASE}/${key}/`, window.location.href).href;
+
+  // Small, fixed-size bootstrap script — never contains the large data
+  // itself, just a pointer to the Blob above. This is injected so the
+  // template's own `fetch('data.json')` (or similar) call receives our
+  // generated data instead of hitting the network, regardless of how
+  // each individual template's main.js is written internally.
   const injection = `
-    <base href="${TEMPLATES_BASE}/${key}/">
-    <script type="application/json" id="__generated_data__">${dataJsonText}</script>
+    <base href="${absoluteTemplateBase}">
     <script>
       (function() {
-        const GENERATED_DATA = JSON.parse(document.getElementById('__generated_data__').textContent);
-        const realFetch = window.fetch;
+        var DATA_BLOB_URL = ${JSON.stringify(dataBlobUrl)};
+        var realFetch = window.fetch;
         window.fetch = function(input, init) {
-          const url = typeof input === 'string' ? input : (input && input.url) || '';
-          if (url.includes('data.json')) {
-            return Promise.resolve(new Response(JSON.stringify(GENERATED_DATA), {
-              status: 200,
-              headers: { 'Content-Type': 'application/json' }
-            }));
+          var url = typeof input === 'string' ? input : (input && input.url) || '';
+          if (url.indexOf('data.json') !== -1) {
+            return realFetch(DATA_BLOB_URL);
           }
           return realFetch.apply(this, arguments);
         };
       })();
-
     </script>
   `;
 
   html = html.replace(/<head>/i, `<head>${injection}`);
+
+  const htmlBlob = new Blob([html], { type: 'text/html' });
+  const htmlBlobUrl = URL.createObjectURL(htmlBlob);
+  window.__lastPreviewBlobUrls.push(htmlBlobUrl);
 
   const iframe = document.createElement('iframe');
   iframe.style.width = '100%';
@@ -156,7 +167,7 @@ async function renderPreview(dataObj) {
   iframe.style.border = '1px solid #e2e2e2';
   iframe.style.borderRadius = '8px';
   iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms');
-  iframe.srcdoc = html;
+  iframe.src = htmlBlobUrl;
 
   previewContainer.innerHTML = '';
   previewContainer.appendChild(iframe);

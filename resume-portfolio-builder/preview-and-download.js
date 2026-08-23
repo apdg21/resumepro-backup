@@ -91,37 +91,12 @@ function templateKey() {
 }
 
 // --- LIVE PREVIEW -----------------------------------------------------
-
-// --- CONVERT EMBEDDED DATA-URI IMAGES TO SHORT BLOB URLS (preview only) ---
-// A base64 data: URI for a photo can be 1-3MB of raw text sitting inline in
-// the JSON. Some templates' own JS (aspect-ratio math, canvas operations,
-// validation regexes) appears to handle a giant inline string inconsistently.
-// A blob: URL is a ~60-character reference to the same image data, behaving
-// like any other URL — much closer to what templates actually expect (their
-// own default is a normal relative path like "assets/profile.jpg").
-// This conversion is PREVIEW-ONLY: the object passed to downloadFullSite
-// keeps the original self-contained data: URI, since blob: URLs are only
-// valid within the browser tab that created them and would break once the
-// downloaded file is opened later or on a different device.
-async function convertDataUrisToBlobUrls(node) {
-  if (typeof node === 'string' && node.startsWith('data:image/')) {
-    const res = await fetch(node);
-    const blob = await res.blob();
-    const blobUrl = URL.createObjectURL(blob);
-    window.__lastPreviewBlobUrls.push(blobUrl);
-    return blobUrl;
-  }
-  if (Array.isArray(node)) {
-    return Promise.all(node.map(convertDataUrisToBlobUrls));
-  }
-  if (node && typeof node === 'object') {
-    const entries = await Promise.all(
-      Object.entries(node).map(async ([k, v]) => [k, await convertDataUrisToBlobUrls(v)])
-    );
-    return Object.fromEntries(entries);
-  }
-  return node;
-}
+// (Note: an earlier version of this file converted embedded data:image/...
+// strings to blob: URLs before preview, to avoid a large inline string in
+// the HTML. That approach is no longer used — see the comment inside
+// renderPreview for why postMessage made it unnecessary, and why blob: URLs
+// specifically would be unreliable now that the iframe runs without
+// allow-same-origin.)
 
 async function renderPreview(dataObj) {
   const key = templateKey();
@@ -142,23 +117,21 @@ async function renderPreview(dataObj) {
   const htmlRes = await fetch(indexUrl);
   let html = await htmlRes.text();
 
-  // The generated data (which can be several MB once a photo is embedded)
-  // is put into its own Blob and served via a blob: URL, rather than being
-  // written directly into the HTML markup. Large inline <script> content
-  // has proven unreliable via iframe.srcdoc in practice — a separate Blob
-  // avoids that entirely, since the iframe just fetches it like any other
-  // URL instead of the browser having to parse a multi-megabyte string as
-  // part of the document itself.
+  // NOTE on why images are NOT converted to blob: URLs here: blob URLs are
+  // origin-scoped, and this iframe now runs with an opaque origin (no
+  // allow-same-origin — see below). A blob: URL created by the parent page
+  // would likely fail to load inside it. postMessage's structured-clone
+  // transport handles the original data (including large embedded
+  // data:image/... strings) directly into the iframe's JS context without
+  // ever writing it into the HTML/script text — which was the actual source
+  // of the earlier cross-template inconsistency, not the string length
+  // itself. So no conversion is needed once postMessage is used.
   if (window.__lastPreviewBlobUrls) {
     window.__lastPreviewBlobUrls.forEach(u => URL.revokeObjectURL(u));
   }
   window.__lastPreviewBlobUrls = [];
 
-  const previewData = await convertDataUrisToBlobUrls(dataObj);
-
-  const dataBlob = new Blob([JSON.stringify(previewData)], { type: 'application/json' });
-  const dataBlobUrl = URL.createObjectURL(dataBlob);
-  window.__lastPreviewBlobUrls.push(dataBlobUrl);
+  const previewData = dataObj;
 
   // Must be an ABSOLUTE URL: a blob: document has no meaningful "directory"
   // of its own, so a relative <base href> (which worked fine under the old
@@ -166,21 +139,37 @@ async function renderPreview(dataObj) {
   // to resolve CSS/JS/asset links correctly here.
   const absoluteTemplateBase = new URL(`${TEMPLATES_BASE}/${key}/`, window.location.href).href;
 
-  // Small, fixed-size bootstrap script — never contains the large data
-  // itself, just a pointer to the Blob above. This is injected so the
-  // template's own `fetch('data.json')` (or similar) call receives our
-  // generated data instead of hitting the network, regardless of how
-  // each individual template's main.js is written internally.
+  // Data reaches the iframe via postMessage, NOT via a fetched blob: URL.
+  // This matters for security: postMessage is the correct, spec-designed way
+  // to talk to a sandboxed iframe, and works WITHOUT the "allow-same-origin"
+  // sandbox flag. Fetching a separate blob: URL from inside the iframe would
+  // require allow-same-origin — but combining allow-same-origin with
+  // allow-scripts is a well-known way for a sandboxed iframe to escape its
+  // sandbox (regain the real origin's cookies/storage/DOM access while still
+  // running script). Since this iframe may render user-supplied text, it
+  // must stay properly sandboxed — so allow-same-origin is deliberately
+  // NOT included below.
   const injection = `
     <base href="${absoluteTemplateBase}">
     <script>
       (function() {
-        var DATA_BLOB_URL = ${JSON.stringify(dataBlobUrl)};
+        var resolveData;
+        var dataPromise = new Promise(function(resolve) { resolveData = resolve; });
+        window.addEventListener('message', function(event) {
+          if (event.data && event.data.__previewData) {
+            resolveData(event.data.__previewData);
+          }
+        });
         var realFetch = window.fetch;
         window.fetch = function(input, init) {
           var url = typeof input === 'string' ? input : (input && input.url) || '';
           if (url.indexOf('data.json') !== -1) {
-            return realFetch(DATA_BLOB_URL);
+            return dataPromise.then(function(data) {
+              return new Response(JSON.stringify(data), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' }
+              });
+            });
           }
           return realFetch.apply(this, arguments);
         };
@@ -199,7 +188,14 @@ async function renderPreview(dataObj) {
   iframe.style.height = '700px';
   iframe.style.border = '1px solid #e2e2e2';
   iframe.style.borderRadius = '8px';
-  iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms');
+  // Deliberately no "allow-same-origin" — see the note above the injection
+  // script for why. The iframe can run scripts and submit forms (some
+  // templates need this for menus/contact forms), but stays properly
+  // sandboxed from the real page origin.
+  iframe.setAttribute('sandbox', 'allow-scripts allow-popups allow-forms');
+  iframe.addEventListener('load', () => {
+    iframe.contentWindow.postMessage({ __previewData: previewData }, '*');
+  });
   iframe.src = htmlBlobUrl;
 
   previewContainer.innerHTML = '';

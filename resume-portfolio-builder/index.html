@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Resume / Portfolio Builder Prototype</title>
-<script src="compress-image.js"></script>
 <style>
   :root {
     --primary-color: #3a86ff;
@@ -144,16 +143,18 @@ let lastResult = null;
 let profilePhotoDataUri = '';
 
 profilePhotoInput.addEventListener('change', async () => {
-     const file = profilePhotoInput.files[0];
-     if (!file) return;
-     profilePhotoDataUri = await compressImageToDataUri(file, {
-       maxDim: 500,
-       quality: 0.82
-     });
-     profilePhotoPreview.src = profilePhotoDataUri;
-     profilePhotoPreview.style.display = 'block';
-   });
-  
+  const file = profilePhotoInput.files[0];
+  if (!file) return;
+  profilePhotoDataUri = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+  profilePhotoPreview.src = profilePhotoDataUri;
+  profilePhotoPreview.style.display = 'block';
+});
+
 // --- Load real schemas (in production: fetched per-template from your storage) ---
 fetch('all_template_schemas.json')
   .then(r => r.json())
@@ -307,6 +308,5 @@ downloadBtn.addEventListener('click', () => {
 });
 </script>
 <script src="preview-and-download.js"></script>
-  
 </body>
 </html>

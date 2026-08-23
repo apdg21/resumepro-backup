@@ -92,6 +92,37 @@ function templateKey() {
 
 // --- LIVE PREVIEW -----------------------------------------------------
 
+// --- CONVERT EMBEDDED DATA-URI IMAGES TO SHORT BLOB URLS (preview only) ---
+// A base64 data: URI for a photo can be 1-3MB of raw text sitting inline in
+// the JSON. Some templates' own JS (aspect-ratio math, canvas operations,
+// validation regexes) appears to handle a giant inline string inconsistently.
+// A blob: URL is a ~60-character reference to the same image data, behaving
+// like any other URL — much closer to what templates actually expect (their
+// own default is a normal relative path like "assets/profile.jpg").
+// This conversion is PREVIEW-ONLY: the object passed to downloadFullSite
+// keeps the original self-contained data: URI, since blob: URLs are only
+// valid within the browser tab that created them and would break once the
+// downloaded file is opened later or on a different device.
+async function convertDataUrisToBlobUrls(node) {
+  if (typeof node === 'string' && node.startsWith('data:image/')) {
+    const res = await fetch(node);
+    const blob = await res.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    window.__lastPreviewBlobUrls.push(blobUrl);
+    return blobUrl;
+  }
+  if (Array.isArray(node)) {
+    return Promise.all(node.map(convertDataUrisToBlobUrls));
+  }
+  if (node && typeof node === 'object') {
+    const entries = await Promise.all(
+      Object.entries(node).map(async ([k, v]) => [k, await convertDataUrisToBlobUrls(v)])
+    );
+    return Object.fromEntries(entries);
+  }
+  return node;
+}
+
 async function renderPreview(dataObj) {
   const key = templateKey();
   const manifests = await getManifests();
@@ -123,7 +154,9 @@ async function renderPreview(dataObj) {
   }
   window.__lastPreviewBlobUrls = [];
 
-  const dataBlob = new Blob([JSON.stringify(dataObj)], { type: 'application/json' });
+  const previewData = await convertDataUrisToBlobUrls(dataObj);
+
+  const dataBlob = new Blob([JSON.stringify(previewData)], { type: 'application/json' });
   const dataBlobUrl = URL.createObjectURL(dataBlob);
   window.__lastPreviewBlobUrls.push(dataBlobUrl);
 

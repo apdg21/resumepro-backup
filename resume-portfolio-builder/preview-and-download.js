@@ -116,11 +116,22 @@ async function renderPreview(dataObj) {
   // `fetch('data.json')` (or similar) call receives OUR generated data
   // instead of hitting the network. This works regardless of how each
   // individual template's main.js is written internally.
+  //
+  // The data is placed in a <script type="application/json"> block rather
+  // than interpolated into a JS template literal — a JSON string can
+  // legally contain backticks or "${" sequences (e.g. in a bio someone
+  // typed), which would otherwise break out of a template literal and
+  // silently corrupt the injected script.
+  const dataJsonText = JSON.stringify(dataObj)
+    .replace(/</g, '\\u003c')   // guard against "</script>" appearing in any text field
+    .replace(/-->/g, '--\\u003e');
+
   const injection = `
     <base href="${TEMPLATES_BASE}/${key}/">
+    <script type="application/json" id="__generated_data__">${dataJsonText}</script>
     <script>
       (function() {
-        const GENERATED_DATA = ${JSON.stringify(dataObj)};
+        const GENERATED_DATA = JSON.parse(document.getElementById('__generated_data__').textContent);
         const realFetch = window.fetch;
         window.fetch = function(input, init) {
           const url = typeof input === 'string' ? input : (input && input.url) || '';
@@ -133,6 +144,7 @@ async function renderPreview(dataObj) {
           return realFetch.apply(this, arguments);
         };
       })();
+
     </script>
   `;
 

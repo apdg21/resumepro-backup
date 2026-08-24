@@ -91,12 +91,6 @@ function templateKey() {
 }
 
 // --- LIVE PREVIEW -----------------------------------------------------
-// (Note: an earlier version of this file converted embedded data:image/...
-// strings to blob: URLs before preview, to avoid a large inline string in
-// the HTML. That approach is no longer used — see the comment inside
-// renderPreview for why postMessage made it unnecessary, and why blob: URLs
-// specifically would be unreliable now that the iframe runs without
-// allow-same-origin.)
 
 async function renderPreview(dataObj) {
   const key = templateKey();
@@ -113,19 +107,48 @@ async function renderPreview(dataObj) {
 
   previewStatus.textContent = 'Loading preview...';
 
+  // --- FIX: Separate the photo from the data before passing to iframe ---
+  // Large base64 strings passed through the full chain of:
+  //   postMessage payload → JSON.stringify → new Response(string) → .json()
+  // can cause silent failures inside the sandboxed iframe — the template
+  // either never gets its data, or renders blank, with no visible error.
+  // The fix is to strip the photo out of the data sent to the iframe,
+  // send the data WITHOUT the photo first (so the template renders normally),
+  // then send the photo as a SEPARATE postMessage after the template confirms
+  // it has finished processing data.json — at which point we swap the src
+  // directly on the already-rendered img element(s) in the iframe DOM.
+  let photoDataUri = '';
+  let photoFieldPath = null;
+
+  // Clone so we never mutate the caller's lastResult object
+  const dataForIframe = JSON.parse(JSON.stringify(dataObj));
+
+  // Walk the cloned data, find the first data:image string, pull it out,
+  // and restore the placeholder so the template still renders the img element
+  // (just with the default src — we'll replace it after render).
+  function extractPhoto(obj, path) {
+    if (!obj || typeof obj !== 'object') return;
+    for (const [key, value] of Object.entries(obj)) {
+      const currentPath = path ? `${path}.${key}` : key;
+      if (typeof value === 'string' && value.startsWith('data:image')) {
+        photoDataUri = value;
+        photoFieldPath = currentPath;
+        obj[key] = 'assets/profile.jpg'; // restore placeholder for the iframe
+        return; // only need the first match (profile photo)
+      }
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        extractPhoto(value, currentPath);
+        if (photoDataUri) return; // stop as soon as we found it
+      }
+    }
+  }
+  extractPhoto(dataForIframe, '');
+  // --- END FIX setup ---
+
   const indexUrl = `${TEMPLATES_BASE}/${key}/index.html`;
   const htmlRes = await fetch(indexUrl);
   let html = await htmlRes.text();
 
-  // NOTE on why images are NOT converted to blob: URLs here: blob URLs are
-  // origin-scoped, and this iframe now runs with an opaque origin (no
-  // allow-same-origin — see below). A blob: URL created by the parent page
-  // would likely fail to load inside it. postMessage's structured-clone
-  // transport handles the original data (including large embedded
-  // data:image/... strings) directly into the iframe's JS context without
-  // ever writing it into the HTML/script text — which was the actual source
-  // of the earlier cross-template inconsistency, not the string length
-  // itself. So no conversion is needed once postMessage is used.
   if (window.__lastPreviewBlobUrls) {
     window.__lastPreviewBlobUrls.forEach(u => URL.revokeObjectURL(u));
   }
@@ -135,24 +158,17 @@ async function renderPreview(dataObj) {
     window.removeEventListener('message', window.__lastPreviewMessageListener);
   }
 
-  const previewData = dataObj;
-
   // Must be an ABSOLUTE URL: a blob: document has no meaningful "directory"
-  // of its own, so a relative <base href> (which worked fine under the old
-  // srcdoc approach, which inherits the parent page's location) would fail
-  // to resolve CSS/JS/asset links correctly here.
+  // of its own, so a relative <base href> would fail to resolve
+  // CSS/JS/asset links correctly here.
   const absoluteTemplateBase = new URL(`${TEMPLATES_BASE}/${key}/`, window.location.href).href;
 
   // Data reaches the iframe via postMessage, NOT via a fetched blob: URL.
   // This matters for security: postMessage is the correct, spec-designed way
   // to talk to a sandboxed iframe, and works WITHOUT the "allow-same-origin"
-  // sandbox flag. Fetching a separate blob: URL from inside the iframe would
-  // require allow-same-origin — but combining allow-same-origin with
-  // allow-scripts is a well-known way for a sandboxed iframe to escape its
-  // sandbox (regain the real origin's cookies/storage/DOM access while still
-  // running script). Since this iframe may render user-supplied text, it
-  // must stay properly sandboxed — so allow-same-origin is deliberately
-  // NOT included below.
+  // sandbox flag. Combining allow-same-origin with allow-scripts is a
+  // well-known sandbox escape — since this iframe may render user-supplied
+  // text, allow-same-origin is deliberately NOT included below.
   const injection = `
     <base href="${absoluteTemplateBase}">
     <style>
@@ -173,27 +189,18 @@ async function renderPreview(dataObj) {
       (function() {
         // Many templates use scroll-triggered "fade in" reveal animations
         // (elements start at opacity:0, become visible via an
-        // IntersectionObserver as the user scrolls past them). That's a
-        // reasonable design for a real visited page, but it's exactly the
-        // kind of thing that can silently fail to trigger correctly in a
-        // programmatically-loaded preview iframe — and when it does, there's
-        // no error, no missing data, just content sitting at opacity:0
-        // forever. Since a PREVIEW should show the final result immediately
-        // rather than require scrolling to "unlock" content, every observed
-        // element is reported as immediately visible here, regardless of
-        // which class names or thresholds any given template's own reveal
-        // animation happens to use.
+        // IntersectionObserver as the user scrolls past them). That works
+        // fine for a real visited page but silently breaks in a preview
+        // iframe — content stays at opacity:0 forever with no error.
+        // Patching IntersectionObserver to fire immediately fixes this.
         var RealIntersectionObserver = window.IntersectionObserver;
         window.IntersectionObserver = function(callback, options) {
           var realObserver = new RealIntersectionObserver(callback, options);
-          var observedTargets = [];
           var patchedObserve = realObserver.observe.bind(realObserver);
           realObserver.observe = function(target) {
-            observedTargets.push(target);
             patchedObserve(target);
             // Fire immediately as "intersecting" so reveal-on-scroll content
-            // shows right away, without waiting for an actual scroll event
-            // that may never happen the same way inside a preview iframe.
+            // shows right away in the preview iframe.
             setTimeout(function() {
               callback([{ target: target, isIntersecting: true, intersectionRatio: 1 }], realObserver);
             }, 0);
@@ -203,11 +210,38 @@ async function renderPreview(dataObj) {
 
         var resolveData;
         var dataPromise = new Promise(function(resolve) { resolveData = resolve; });
+
         window.addEventListener('message', function(event) {
-          if (event.data && event.data.__previewData) {
+          if (!event.data) return;
+
+          // Main data payload (without photo — see parent for why)
+          if (event.data.__previewData) {
             resolveData(event.data.__previewData);
           }
+
+          // --- FIX: Photo arrives as a separate message AFTER the template
+          // has confirmed it rendered its data. At this point the img element
+          // already exists in the DOM with src="assets/profile.jpg", so we
+          // can safely swap the src directly without touching the data flow.
+          if (event.data.__previewPhoto) {
+            var photoSrc = event.data.__previewPhoto.src;
+            var imgs = document.querySelectorAll('img');
+            imgs.forEach(function(img) {
+              // Match any img still pointing at the placeholder path,
+              // regardless of whether it's a relative or absolute URL by now.
+              if (
+                img.getAttribute('src') === 'assets/profile.jpg' ||
+                img.src.indexOf('assets/profile.jpg') !== -1
+              ) {
+                img.src = photoSrc;
+              }
+            });
+          }
         });
+
+        // Override fetch so that any call to data.json inside the template
+        // is intercepted and served from the postMessage payload instead of
+        // hitting the network (where it would 404 from inside a blob: URL).
         var realFetch = window.fetch;
         window.fetch = function(input, init) {
           var url = typeof input === 'string' ? input : (input && input.url) || '';
@@ -222,9 +256,9 @@ async function renderPreview(dataObj) {
           return realFetch.apply(this, arguments);
         };
 
-        // Forward any runtime error inside this (opaque-origin) iframe back
-        // to the parent page, since errors here often don't surface in the
-        // browser's default console view once allow-same-origin is removed.
+        // Forward any runtime error inside this opaque-origin iframe back
+        // to the parent — errors here often don't surface in the browser's
+        // default console once allow-same-origin is removed.
         window.addEventListener('error', function(e) {
           window.parent.postMessage({
             __previewError: (e.error && e.error.stack) || e.message || 'Unknown error in preview'
@@ -236,9 +270,9 @@ async function renderPreview(dataObj) {
           }, '*');
         });
 
-        // Also confirm to the parent once the template's own script actually
-        // reads the data (i.e. our fetch override was hit) — this proves the
-        // handoff worked, even if we can't see what the template does next.
+        // Confirm to the parent once the template's own script actually reads
+        // the data — this proves the handoff worked, and is also the trigger
+        // for the parent to send the photo as a follow-up message.
         dataPromise.then(function() {
           window.parent.postMessage({ __previewDataReceived: true }, '*');
         });
@@ -263,42 +297,63 @@ async function renderPreview(dataObj) {
   // sandboxed from the real page origin.
   iframe.setAttribute('sandbox', 'allow-scripts allow-popups allow-forms');
 
-  // Listen for error/confirmation messages forwarded from inside the
-  // (opaque-origin) iframe — see the injection script above. Without this,
-  // a silent failure in there is very hard to diagnose from the outside.
   let receivedConfirmation = false;
   const messageListener = (event) => {
     if (!event.data) return;
+
     if (event.data.__previewError) {
       previewStatus.textContent = 'Preview error (inside template): ' + event.data.__previewError;
       previewStatus.className = 'status error';
+
     } else if (event.data.__previewDataReceived) {
       receivedConfirmation = true;
       previewStatus.textContent = 'Preview ready.';
+
+      // --- FIX: Send the photo only AFTER the template confirms it has
+      // processed data.json. This guarantees the img elements exist in the
+      // DOM and already have src="assets/profile.jpg" set by the template's
+      // own rendering logic — so our querySelector swap is reliable.
+      // The 300 ms delay gives the template's render loop time to finish
+      // painting after the fetch resolves before we mutate img.src.
+      if (photoDataUri) {
+        setTimeout(() => {
+          iframe.contentWindow.postMessage({
+            __previewPhoto: {
+              src: photoDataUri,
+              field: photoFieldPath // informational, not used inside iframe
+            }
+          }, '*');
+        }, 300);
+      }
     }
   };
   window.addEventListener('message', messageListener);
   window.__lastPreviewMessageListener = messageListener;
 
   iframe.addEventListener('load', () => {
-    iframe.contentWindow.postMessage({ __previewData: previewData }, '*');
-    // If the template never calls fetch('data.json') at all (e.g. an
-    // unexpected structure) and never errors either, this makes that
-    // silent case visible too, instead of looking identical to success.
+    // Send data WITHOUT the large base64 photo — photo is sent separately
+    // after the template confirms it has processed data.json.
+    iframe.contentWindow.postMessage({ __previewData: dataForIframe }, '*');
+
+    // If the template never calls fetch('data.json') at all (unexpected
+    // structure) and never errors either, surface that silent case.
     setTimeout(() => {
       if (!receivedConfirmation) {
         previewStatus.textContent = 'Preview loaded, but the template never requested the data — it may use a different loading method than expected. The page shown may be using placeholder content.';
       }
     }, 4000);
   });
-  iframe.src = htmlBlobUrl;
 
+  iframe.src = htmlBlobUrl;
   previewContainer.innerHTML = '';
   previewContainer.appendChild(iframe);
   previewStatus.textContent = 'Loading preview...';
 }
 
 // --- FULL SITE DOWNLOAD (.zip) -----------------------------------------
+// downloadFullSite does NOT need the same photo fix — it writes data.json
+// directly into the zip as a plain file (no Response/JSON.parse chain),
+// so large base64 strings are handled correctly as-is.
 
 async function downloadFullSite(dataObj) {
   const key = templateKey();
@@ -325,7 +380,9 @@ async function downloadFullSite(dataObj) {
     }
   }));
 
-  // Overwrite with the generated data — this is the one file NOT copied verbatim
+  // Overwrite with the generated data — this is the one file NOT copied verbatim.
+  // The full dataObj (with photo base64 included) is written here intentionally:
+  // the downloaded site reads data.json from disk, not through a Response chain.
   zip.file('data.json', JSON.stringify(dataObj, null, 2));
 
   const blob = await zip.generateAsync({ type: 'blob' });

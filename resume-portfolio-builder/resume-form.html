@@ -69,8 +69,16 @@
     <div class="prefill-box">
       <label style="margin-top:0;">✨ Auto-fill from text (optional)</label>
       <textarea id="prefillInput" placeholder="Paste your LinkedIn summary, old resume text, or rough notes here — this fills the form below, which you can then review and edit."></textarea>
+      <label style="font-size:12px;">AI model</label>
+      <select id="modelSelect" style="margin-bottom:8px;">
+        <option value="gemini-3.5-flash">Gemini 3.5 Flash (recommended)</option>
+        <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash-Lite</option>
+        <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+        <option value="gemini-2.5-flash-lite">Gemini 2.5 Flash-Lite</option>
+      </select>
       <button class="secondary" id="prefillBtn" type="button">Auto-fill form</button>
       <div class="status" id="prefillStatus"></div>
+      <div class="sub" style="margin:4px 0 0;">Hit a quota error? Each model has its own separate daily limit — just switch and try again.</div>
     </div>
 
     <form id="resumeForm"></form>
@@ -303,7 +311,7 @@ document.getElementById('prefillBtn').addEventListener('click', async () => {
     const res = await fetch('/api/prefill', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ rawText, model: 'gemini-3.5-flash' })
+      body: JSON.stringify({ rawText, model: document.getElementById('modelSelect').value })
     });
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Prefill failed');

@@ -287,7 +287,7 @@ async function renderPreview(dataObj) {
   window.__lastPreviewBlobUrls.push(htmlBlobUrl);
 
   const iframe = document.createElement('iframe');
-  iframe.style.width = '100%';
+  iframe.style.width = '900px';
   iframe.style.height = '700px';
   iframe.style.border = '1px solid #e2e2e2';
   iframe.style.borderRadius = '8px';

@@ -11,13 +11,13 @@
 //   Then run: wrangler pages dev public
 
 const ALLOWED_MODELS = new Set([
-  "gemini-3.5-flash",     // fast, free-tier friendly — recommended default
-  "gemini-3.1-flash-lite",     // latest flash model
-  "gemini-3.5-flash-8b",  // fastest / cheapest
-  "gemini-3.5-pro"        // most capable
+  "gemini-3.5-flash",       // newest, most capable — verify exact id in your AI Studio dashboard
+  "gemini-3.1-flash-lite",  // fastest / cheapest of the 3.x line
+  "gemini-2.5-flash",       // separate quota bucket from the 3.x models — good fallback when 3.5 is rate-limited
+  "gemini-2.5-flash-lite"   // separate quota bucket, fastest fallback option
 ]);
 
-const DEFAULT_MODEL = "gemini-1.5-flash";
+const DEFAULT_MODEL = "gemini-3.5-flash";
 
 function buildSystemPrompt(schemaJsonText) {
   return `You are filling in a website template's data file with a real person's information.

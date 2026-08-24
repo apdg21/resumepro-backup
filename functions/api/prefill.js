@@ -31,7 +31,12 @@ Rules:
 - Order experience and education most-recent first if determinable.
 - Respond with ONLY the JSON object. No markdown fences, no preamble.`;
 
-const ALLOWED_MODELS = new Set(["gemini-3.5-flash", "gemini-3.1-flash-lite"]);
+const ALLOWED_MODELS = new Set([
+  "gemini-3.5-flash",
+  "gemini-3.1-flash-lite",
+  "gemini-2.5-flash",
+  "gemini-2.5-flash-lite"
+]);
 const DEFAULT_MODEL = "gemini-3.5-flash";
 
 export async function onRequestPost(context) {

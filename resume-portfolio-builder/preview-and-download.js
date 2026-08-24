@@ -155,8 +155,52 @@ async function renderPreview(dataObj) {
   // NOT included below.
   const injection = `
     <base href="${absoluteTemplateBase}">
+    <style>
+      /* Defensive constraint: an uploaded photo has no guaranteed size or
+         aspect ratio, unlike each template's own pre-sized default image.
+         Without this, a large/oddly-shaped photo can render at full
+         resolution and push all other content out of view, looking
+         identical to a blank/broken preview. This targets any image whose
+         src is a data: URI (i.e. an uploaded photo, not a bundled asset)
+         so template-default images are left completely untouched. */
+      img[src^="data:image"] {
+        max-width: 100% !important;
+        max-height: 400px !important;
+        object-fit: cover !important;
+      }
+    </style>
     <script>
       (function() {
+        // Many templates use scroll-triggered "fade in" reveal animations
+        // (elements start at opacity:0, become visible via an
+        // IntersectionObserver as the user scrolls past them). That's a
+        // reasonable design for a real visited page, but it's exactly the
+        // kind of thing that can silently fail to trigger correctly in a
+        // programmatically-loaded preview iframe — and when it does, there's
+        // no error, no missing data, just content sitting at opacity:0
+        // forever. Since a PREVIEW should show the final result immediately
+        // rather than require scrolling to "unlock" content, every observed
+        // element is reported as immediately visible here, regardless of
+        // which class names or thresholds any given template's own reveal
+        // animation happens to use.
+        var RealIntersectionObserver = window.IntersectionObserver;
+        window.IntersectionObserver = function(callback, options) {
+          var realObserver = new RealIntersectionObserver(callback, options);
+          var observedTargets = [];
+          var patchedObserve = realObserver.observe.bind(realObserver);
+          realObserver.observe = function(target) {
+            observedTargets.push(target);
+            patchedObserve(target);
+            // Fire immediately as "intersecting" so reveal-on-scroll content
+            // shows right away, without waiting for an actual scroll event
+            // that may never happen the same way inside a preview iframe.
+            setTimeout(function() {
+              callback([{ target: target, isIntersecting: true, intersectionRatio: 1 }], realObserver);
+            }, 0);
+          };
+          return realObserver;
+        };
+
         var resolveData;
         var dataPromise = new Promise(function(resolve) { resolveData = resolve; });
         window.addEventListener('message', function(event) {

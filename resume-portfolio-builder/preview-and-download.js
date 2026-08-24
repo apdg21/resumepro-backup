@@ -131,6 +131,10 @@ async function renderPreview(dataObj) {
   }
   window.__lastPreviewBlobUrls = [];
 
+  if (window.__lastPreviewMessageListener) {
+    window.removeEventListener('message', window.__lastPreviewMessageListener);
+  }
+
   const previewData = dataObj;
 
   // Must be an ABSOLUTE URL: a blob: document has no meaningful "directory"
@@ -173,6 +177,27 @@ async function renderPreview(dataObj) {
           }
           return realFetch.apply(this, arguments);
         };
+
+        // Forward any runtime error inside this (opaque-origin) iframe back
+        // to the parent page, since errors here often don't surface in the
+        // browser's default console view once allow-same-origin is removed.
+        window.addEventListener('error', function(e) {
+          window.parent.postMessage({
+            __previewError: (e.error && e.error.stack) || e.message || 'Unknown error in preview'
+          }, '*');
+        });
+        window.addEventListener('unhandledrejection', function(e) {
+          window.parent.postMessage({
+            __previewError: 'Unhandled promise rejection: ' + (e.reason && (e.reason.stack || e.reason.message || e.reason))
+          }, '*');
+        });
+
+        // Also confirm to the parent once the template's own script actually
+        // reads the data (i.e. our fetch override was hit) — this proves the
+        // handoff worked, even if we can't see what the template does next.
+        dataPromise.then(function() {
+          window.parent.postMessage({ __previewDataReceived: true }, '*');
+        });
       })();
     </script>
   `;
@@ -193,14 +218,40 @@ async function renderPreview(dataObj) {
   // templates need this for menus/contact forms), but stays properly
   // sandboxed from the real page origin.
   iframe.setAttribute('sandbox', 'allow-scripts allow-popups allow-forms');
+
+  // Listen for error/confirmation messages forwarded from inside the
+  // (opaque-origin) iframe — see the injection script above. Without this,
+  // a silent failure in there is very hard to diagnose from the outside.
+  let receivedConfirmation = false;
+  const messageListener = (event) => {
+    if (!event.data) return;
+    if (event.data.__previewError) {
+      previewStatus.textContent = 'Preview error (inside template): ' + event.data.__previewError;
+      previewStatus.className = 'status error';
+    } else if (event.data.__previewDataReceived) {
+      receivedConfirmation = true;
+      previewStatus.textContent = 'Preview ready.';
+    }
+  };
+  window.addEventListener('message', messageListener);
+  window.__lastPreviewMessageListener = messageListener;
+
   iframe.addEventListener('load', () => {
     iframe.contentWindow.postMessage({ __previewData: previewData }, '*');
+    // If the template never calls fetch('data.json') at all (e.g. an
+    // unexpected structure) and never errors either, this makes that
+    // silent case visible too, instead of looking identical to success.
+    setTimeout(() => {
+      if (!receivedConfirmation) {
+        previewStatus.textContent = 'Preview loaded, but the template never requested the data — it may use a different loading method than expected. The page shown may be using placeholder content.';
+      }
+    }, 4000);
   });
   iframe.src = htmlBlobUrl;
 
   previewContainer.innerHTML = '';
   previewContainer.appendChild(iframe);
-  previewStatus.textContent = 'Preview ready.';
+  previewStatus.textContent = 'Loading preview...';
 }
 
 // --- FULL SITE DOWNLOAD (.zip) -----------------------------------------

@@ -29,6 +29,16 @@
   .status.error { color:#dc2626; } .status.success { color:#16a34a; }
   .prefill-box { background:#fffbea; border:1px solid #fde68a; border-radius:8px; padding:14px; margin-bottom:20px; }
   .prefill-box textarea { min-height:100px; margin-bottom:8px; }
+  .file-drop {
+    border: 2px dashed #d1d5db; border-radius: 10px; padding: 16px; text-align: center;
+    font-size: 13px; color: var(--muted-color); cursor: pointer; margin-bottom: 10px; transition: border-color 0.15s;
+  }
+  .file-drop.dragover { border-color: var(--primary-color); background: #eef4ff; }
+  .file-drop strong { color: var(--primary-color); }
+  .filename-tag { font-size: 12px; background: #eef2ff; color: var(--primary-color); padding: 4px 10px; border-radius: 999px; display: inline-block; margin-top: 8px; }
+  .tab-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .tab-btn { flex: 1; padding: 7px; border-radius: 8px; border: 1px solid #e2e2e2; background: white; cursor: pointer; font-size: 12px; font-weight: 600; color: var(--muted-color); }
+  .tab-btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
   .img-upload { display:flex; align-items:center; gap:12px; margin-top:6px; }
   .img-preview { width:64px; height:64px; border-radius:8px; object-fit:cover; background:#eee; border:1px solid #ddd; }
   .json-box { background:#0f172a; color:#7ee787; font-family:'Courier New',monospace; font-size:12px; padding:12px; border-radius:8px; max-height:480px; overflow:auto; white-space:pre-wrap; }
@@ -67,8 +77,25 @@
     <div class="sub">Fill in the form, or auto-fill it from a pasted/uploaded resume first.</div>
 
     <div class="prefill-box">
-      <label style="margin-top:0;">✨ Auto-fill from text (optional)</label>
-      <textarea id="prefillInput" placeholder="Paste your LinkedIn summary, old resume text, or rough notes here — this fills the form below, which you can then review and edit."></textarea>
+      <label style="margin-top:0;">✨ Auto-fill (optional)</label>
+
+      <div class="tab-row">
+        <button type="button" class="tab-btn active" id="tabUpload">Upload file</button>
+        <button type="button" class="tab-btn" id="tabPaste">Paste text</button>
+      </div>
+
+      <div id="uploadPane">
+        <div class="file-drop" id="dropZone">
+          <div>📄 Drop a <strong>PDF, Word (.docx), or .txt</strong> file here, or click to browse</div>
+          <input type="file" id="fileInput" accept=".pdf,.docx,.txt" style="display:none;">
+          <div id="fileTag"></div>
+        </div>
+      </div>
+
+      <div id="pastePane" style="display:none;">
+        <textarea id="prefillInput" placeholder="Paste your LinkedIn summary, old resume text, or rough notes here — this fills the form below, which you can then review and edit."></textarea>
+      </div>
+
       <label style="font-size:12px;">AI model</label>
       <select id="modelSelect" style="margin-bottom:8px;">
         <option value="gemini-3.5-flash">Gemini 3.5 Flash (recommended)</option>
@@ -103,8 +130,13 @@
 
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth.js/1.6.0/mammoth.browser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="mapping-engine.js"></script>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+</script>
 <script>
 let MASTER_SCHEMA = null;
 let MAPPINGS = null;
@@ -299,10 +331,84 @@ function collectFormData() {
 }
 
 // --- Prefill from AI ---
+// --- File upload + extraction (mirrors index.html's quick-fill logic) ---
+const tabUpload = document.getElementById('tabUpload');
+const tabPaste = document.getElementById('tabPaste');
+const uploadPane = document.getElementById('uploadPane');
+const pastePane = document.getElementById('pastePane');
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const fileTag = document.getElementById('fileTag');
+
+let activeMode = 'upload';
+let extractedFileText = '';
+
+tabUpload.addEventListener('click', () => setMode('upload'));
+tabPaste.addEventListener('click', () => setMode('paste'));
+function setMode(mode) {
+  activeMode = mode;
+  tabUpload.classList.toggle('active', mode === 'upload');
+  tabPaste.classList.toggle('active', mode === 'paste');
+  uploadPane.style.display = mode === 'upload' ? 'block' : 'none';
+  pastePane.style.display = mode === 'paste' ? 'block' : 'none';
+}
+
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', e => {
+  if (e.target.files.length) handleFile(e.target.files[0]);
+});
+
+async function handleFile(file) {
+  fileTag.innerHTML = `<span class="filename-tag">${file.name} — extracting text...</span>`;
+  extractedFileText = '';
+  try {
+    if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+      extractedFileText = await extractPdfText(file);
+    } else if (file.name.toLowerCase().endsWith('.docx')) {
+      extractedFileText = await extractDocxText(file);
+    } else {
+      extractedFileText = await file.text();
+    }
+    fileTag.innerHTML = `<span class="filename-tag">✓ ${file.name} (${extractedFileText.length.toLocaleString()} chars extracted)</span>`;
+  } catch (err) {
+    console.error(err);
+    fileTag.innerHTML = `<span class="filename-tag" style="background:#fee2e2; color:#dc2626;">Failed to read ${file.name}</span>`;
+  }
+}
+
+async function extractPdfText(file) {
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+  let text = '';
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    text += content.items.map(item => item.str).join(' ') + '\n';
+  }
+  return text.trim();
+}
+
+async function extractDocxText(file) {
+  const buf = await file.arrayBuffer();
+  const result = await mammoth.extractRawText({ arrayBuffer: buf });
+  return result.value.trim();
+}
+
 document.getElementById('prefillBtn').addEventListener('click', async () => {
-  const rawText = document.getElementById('prefillInput').value.trim();
+  const rawText = activeMode === 'upload' ? extractedFileText : document.getElementById('prefillInput').value.trim();
   const statusEl = document.getElementById('prefillStatus');
-  if (!rawText) { statusEl.textContent = 'Paste something first.'; statusEl.className = 'status error'; return; }
+  if (!rawText) {
+    statusEl.textContent = activeMode === 'upload' ? 'Upload a file first.' : 'Paste something first.';
+    statusEl.className = 'status error';
+    return;
+  }
 
   statusEl.textContent = 'Auto-filling...';
   statusEl.className = 'status';

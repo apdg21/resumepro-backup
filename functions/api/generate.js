@@ -19,6 +19,7 @@ const ALLOWED_MODELS = new Set([
 
 const DEFAULT_MODEL = "gemini-3.5-flash";
 
+// --- buildSystemPrompt with stronger instructions ---
 function buildSystemPrompt(schemaJsonText) {
   return `You are filling in a website template's data file with a real person's information.
 
@@ -32,14 +33,45 @@ Task: using the person's raw input (provided as the user message — this may be
 - For arrays of objects (e.g. "experience", "education", "skills"), keep each item's shape (same fields per item), but adjust the NUMBER of items to match what's actually in the person's input (don't pad with fake entries, don't invent facts).
 - Never add new keys that weren't in the schema. Never remove required top-level keys — if the person didn't give that info, use an empty string, empty array, or reasonable neutral default.
 - Rewrite prose fields (like "about"/"summary" or experience descriptions) in clean, professional language based only on what the person actually said — do not invent achievements, numbers, or dates.
-- **CRITICAL: The response must be a single JSON object, NOT an array. Do not wrap the output in [ ]. Start with { and end with }.**
+- **CRITICAL: The response must be a SINGLE JSON object, NOT an array, and NOT multiple objects. Start with { and end with }. Do not include any text outside the JSON.**
+- **For the "image" field: always output it as a simple string (e.g., "assets/profile.jpg" or an empty string). Do not include any data URL or extra characters.**
 - Respond with ONLY the JSON object.`;
 }
+
+// --- Helper: extract all JSON objects from a string ---
+function extractAllJSONObjects(text) {
+  // Remove markdown code fences
+  let cleaned = text.replace(/^```json\s*/i, "").replace(/```\s*$/, "").trim();
+  
+  // Find all JSON objects using a simple regex (non-greedy from { to })
+  // This handles concatenated objects without commas
+  const objects = [];
+  let depth = 0;
+  let start = -1;
+  for (let i = 0; i < cleaned.length; i++) {
+    if (cleaned[i] === '{') {
+      if (depth === 0) start = i;
+      depth++;
+    } else if (cleaned[i] === '}') {
+      depth--;
+      if (depth === 0 && start !== -1) {
+        const objStr = cleaned.substring(start, i + 1);
+        try {
+          const parsed = JSON.parse(objStr);
+          objects.push(parsed);
+        } catch (e) {
+          // ignore invalid object
+        }
+        start = -1;
+      }
+    }
+  }
+  return objects;
+}
+
+// --- onRequestPost with fallback parsing ---
 export async function onRequestPost(context) {
   const { request, env } = context;
-
-  // CORS for same-origin use is implicit; these headers help if you ever call
-  // this endpoint from a different origin during local development.
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -79,7 +111,6 @@ export async function onRequestPost(context) {
   }
 
   const chosenModel = ALLOWED_MODELS.has(model) ? model : DEFAULT_MODEL;
-
   const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${chosenModel}:generateContent?key=${env.GEMINI_API_KEY}`;
 
   try {
@@ -95,7 +126,7 @@ export async function onRequestPost(context) {
         ],
         generationConfig: {
           responseMimeType: "application/json",
-          temperature: 0.4
+          temperature: 0.2  // Lower temperature to reduce variability
         }
       })
     });
@@ -112,36 +143,76 @@ export async function onRequestPost(context) {
     const candidate = result.candidates && result.candidates[0];
     const text = candidate?.content?.parts?.map(p => p.text || "").join("") || "";
 
-    let cleaned = text.trim().replace(/^```json\s*/i, "").replace(/```\s*$/, "").trim();
+    // Attempt to parse the response
+    let filledData = null;
+    const objects = extractAllJSONObjects(text);
 
-    let filledData;
-    try {
-      filledData = JSON.parse(cleaned);
-    } catch (e) {
+    if (objects.length === 0) {
+      // If no object found, maybe the response is a single object but with invalid JSON? Try direct parse.
+      try {
+        const cleaned = text.trim().replace(/^```json\s*/i, "").replace(/```\s*$/, "").trim();
+        filledData = JSON.parse(cleaned);
+      } catch (e) {
+        return new Response(
+          JSON.stringify({ error: "Model did not return valid JSON", raw: text }),
+          { status: 502, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        );
+      }
+    } else if (objects.length === 1) {
+      // Single object – use it directly
+      filledData = objects[0];
+    } else {
+      // Multiple objects – merge them (deep merge) or take the first one
+      // Here we'll merge: top-level keys from later objects override earlier ones, and arrays are concatenated
+      const merged = objects.reduce((acc, obj) => {
+        for (const key of Object.keys(obj)) {
+          if (Array.isArray(obj[key]) && Array.isArray(acc[key])) {
+            acc[key] = acc[key].concat(obj[key]);
+          } else if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key]) && 
+                     typeof acc[key] === 'object' && acc[key] !== null && !Array.isArray(acc[key])) {
+            // Merge nested objects (shallow)
+            acc[key] = { ...acc[key], ...obj[key] };
+          } else {
+            acc[key] = obj[key];
+          }
+        }
+        return acc;
+      }, {});
+      filledData = merged;
+    }
+
+    // If filledData is still null (shouldn't happen), error out
+    if (!filledData) {
       return new Response(
-        JSON.stringify({ error: "Model did not return valid JSON", raw: cleaned }),
+        JSON.stringify({ error: "Could not extract valid JSON from model response", raw: text }),
         { status: 502, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
-    // ---------- INSERTED ARRAY VALIDATION ----------
-    // If the model returned an array, handle it gracefully
+    // --- Array validation (if it's an array, handle it) ---
     if (Array.isArray(filledData)) {
       if (filledData.length === 1) {
-        // Unwrap the single-element array (common when the model mistakenly wraps the object)
         filledData = filledData[0];
       } else {
-        // Reject arrays with multiple items – they are erroneous for this use case
-        return new Response(
-          JSON.stringify({ error: "Model returned an array of objects, but expected a single object. Please try again with a different model or refine the input." }),
-          { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
-        );
+        // If multiple items, merge them into one object (treat each as a record)
+        const merged = filledData.reduce((acc, obj) => {
+          for (const key of Object.keys(obj)) {
+            if (Array.isArray(obj[key]) && Array.isArray(acc[key])) {
+              acc[key] = acc[key].concat(obj[key]);
+            } else if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key]) && 
+                       typeof acc[key] === 'object' && acc[key] !== null && !Array.isArray(acc[key])) {
+              acc[key] = { ...acc[key], ...obj[key] };
+            } else {
+              acc[key] = obj[key];
+            }
+          }
+          return acc;
+        }, {});
+        filledData = merged;
       }
     }
-    // ---------- END INSERTION ----------
 
-
-    // Basic schema-conformance check: same top-level key set as the input schema.
+    // Schema conformance check
     const expectedKeys = Object.keys(schema).sort().join(",");
     const gotKeys = Object.keys(filledData).sort().join(",");
     const keysMatch = expectedKeys === gotKeys;
@@ -157,7 +228,6 @@ export async function onRequestPost(context) {
     });
   }
 }
-
 export async function onRequestOptions() {
   return new Response(null, {
     headers: {

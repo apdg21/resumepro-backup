@@ -1,25 +1,16 @@
 // Cloudflare Pages Function
 // Route: POST /api/generate
-// Keeps the Gemini API key server-side (set as a secret, never shipped to the browser).
-//
-// Setup (once, from your project root, after `wrangler pages project create`):
-//   wrangler pages secret put GEMINI_API_KEY
-// (paste your free key from https://aistudio.google.com/apikey when prompted)
-//
-// Local dev:
-//   Create a `.dev.vars` file (gitignored) with: GEMINI_API_KEY=your_key_here
-//   Then run: wrangler pages dev public
 
 const ALLOWED_MODELS = new Set([
-  "gemini-3.5-flash",       // newest, most capable — verify exact id in your AI Studio dashboard
-  "gemini-3.1-flash-lite",  // fastest / cheapest of the 3.x line
-  "gemini-2.5-flash",       // separate quota bucket from the 3.x models — good fallback when 3.5 is rate-limited
-  "gemini-2.5-flash-lite"   // separate quota bucket, fastest fallback option
+  "gemini-3.5-flash",
+  "gemini-3.1-flash-lite",
+  "gemini-2.5-flash",
+  "gemini-2.5-flash-lite"
 ]);
 
 const DEFAULT_MODEL = "gemini-3.5-flash";
 
-// --- buildSystemPrompt with stronger instructions ---
+// ---- STRONGER PROMPT (explicitly forbids image data URL and multiple objects) ----
 function buildSystemPrompt(schemaJsonText) {
   return `You are filling in a website template's data file with a real person's information.
 
@@ -29,22 +20,18 @@ ${schemaJsonText}
 
 Task: using the person's raw input (provided as the user message — this may be messy text extracted from a resume/CV file, a LinkedIn export, or free-form notes), produce a NEW JSON object with:
 - The EXACT SAME top-level keys as the schema above, in the same structure.
-- For nested objects (e.g. "theme", "contact", "profile"), keep the same sub-keys unless they are purely cosmetic/design values (like theme colors, image paths) — in that case, keep the original values unchanged since they are template styling/assets, not personal data.
-- For arrays of objects (e.g. "experience", "education", "skills"), keep each item's shape (same fields per item), but adjust the NUMBER of items to match what's actually in the person's input (don't pad with fake entries, don't invent facts).
+- For nested objects (e.g. "theme", "contact", "profile"), keep the same sub-keys. DO NOT flatten them.
+- For arrays of objects (e.g. "experience", "education", "skills"): the output MUST be an ARRAY. Even if there is only one item, wrap it in square brackets [ ].
 - Never add new keys that weren't in the schema. Never remove required top-level keys — if the person didn't give that info, use an empty string, empty array, or reasonable neutral default.
 - Rewrite prose fields (like "about"/"summary" or experience descriptions) in clean, professional language based only on what the person actually said — do not invent achievements, numbers, or dates.
+- **CRITICAL for the "image" field inside "profile": DO NOT change it. Keep it exactly as shown in the schema (e.g., "assets/profile.jpg"). DO NOT add any data URL, DO NOT add extra keys starting with "data:image". Leave it unchanged.**
 - **CRITICAL: The response must be a SINGLE JSON object, NOT an array, and NOT multiple objects. Start with { and end with }. Do not include any text outside the JSON.**
-- **For the "image" field: always output it as a simple string (e.g., "assets/profile.jpg" or an empty string). Do not include any data URL or extra characters.**
 - Respond with ONLY the JSON object.`;
 }
 
-// --- Helper: extract all JSON objects from a string ---
+// ---- HELPER: extract all valid JSON objects from a string ----
 function extractAllJSONObjects(text) {
-  // Remove markdown code fences
   let cleaned = text.replace(/^```json\s*/i, "").replace(/```\s*$/, "").trim();
-  
-  // Find all JSON objects using a simple regex (non-greedy from { to })
-  // This handles concatenated objects without commas
   const objects = [];
   let depth = 0;
   let start = -1;
@@ -60,7 +47,7 @@ function extractAllJSONObjects(text) {
           const parsed = JSON.parse(objStr);
           objects.push(parsed);
         } catch (e) {
-          // ignore invalid object
+          // ignore invalid objects
         }
         start = -1;
       }
@@ -69,7 +56,90 @@ function extractAllJSONObjects(text) {
   return objects;
 }
 
-// --- onRequestPost with fallback parsing ---
+// ---- HELPER: clean invalid keys (data URLs, base64 garbage) ----
+function cleanInvalidKeys(obj) {
+  if (Array.isArray(obj)) {
+    for (const item of obj) {
+      cleanInvalidKeys(item);
+    }
+  } else if (typeof obj === 'object' && obj !== null) {
+    for (const key of Object.keys(obj)) {
+      if (key.includes('data:image') || key.includes('base64') || key.includes('*/')) {
+        delete obj[key];
+      } else {
+        cleanInvalidKeys(obj[key]);
+      }
+    }
+  }
+}
+
+// ---- HELPER: smart merge multiple objects ----
+function smartMerge(objects, schema) {
+  if (objects.length === 0) return null;
+  if (objects.length === 1) return objects[0];
+
+  // Find the main object (the one with the most keys matching schema keys)
+  let mainObj = null;
+  let maxScore = -1;
+  const schemaKeys = Object.keys(schema);
+
+  for (const obj of objects) {
+    const objKeys = Object.keys(obj);
+    let score = 0;
+    for (const key of objKeys) {
+      if (schemaKeys.includes(key)) score++;
+    }
+    // Prefer objects with 'profile', 'contact', 'experience', 'education'
+    if (obj.profile || obj.contact || obj.experience || obj.education) {
+      score += 10;
+    }
+    if (score > maxScore) {
+      maxScore = score;
+      mainObj = obj;
+    }
+  }
+
+  if (!mainObj) mainObj = objects[0];
+
+  // Process other objects to extract skills/experience/education
+  for (const obj of objects) {
+    if (obj === mainObj) continue;
+
+    // If it looks like a skill item (name + level, no company/role)
+    if (obj.name && obj.level !== undefined && !obj.company && !obj.role) {
+      if (!mainObj.skills) mainObj.skills = [];
+      mainObj.skills.push({ name: obj.name, level: obj.level });
+      continue;
+    }
+    // If it looks like an experience item (role + company)
+    if (obj.role && obj.company) {
+      if (!mainObj.experience) mainObj.experience = [];
+      mainObj.experience.push(obj);
+      continue;
+    }
+    // If it looks like an education item (degree + institution)
+    if (obj.degree && obj.institution) {
+      if (!mainObj.education) mainObj.education = [];
+      mainObj.education.push(obj);
+      continue;
+    }
+    // Otherwise, shallow merge any missing keys (but don't overwrite existing ones)
+    for (const key of Object.keys(obj)) {
+      if (!(key in mainObj)) {
+        mainObj[key] = obj[key];
+      } else if (Array.isArray(mainObj[key]) && Array.isArray(obj[key])) {
+        mainObj[key] = mainObj[key].concat(obj[key]);
+      } else if (typeof mainObj[key] === 'object' && typeof obj[key] === 'object' && 
+                 !Array.isArray(mainObj[key]) && !Array.isArray(obj[key])) {
+        mainObj[key] = { ...mainObj[key], ...obj[key] };
+      }
+    }
+  }
+
+  return mainObj;
+}
+
+// ---- MAIN REQUEST HANDLER ----
 export async function onRequestPost(context) {
   const { request, env } = context;
   const corsHeaders = {
@@ -126,7 +196,7 @@ export async function onRequestPost(context) {
         ],
         generationConfig: {
           responseMimeType: "application/json",
-          temperature: 0.2  // Lower temperature to reduce variability
+          temperature: 0.2  // Lower temperature = more deterministic
         }
       })
     });
@@ -143,12 +213,13 @@ export async function onRequestPost(context) {
     const candidate = result.candidates && result.candidates[0];
     const text = candidate?.content?.parts?.map(p => p.text || "").join("") || "";
 
-    // Attempt to parse the response
-    let filledData = null;
+    // Extract all valid JSON objects
     const objects = extractAllJSONObjects(text);
 
+    let filledData = null;
+
     if (objects.length === 0) {
-      // If no object found, maybe the response is a single object but with invalid JSON? Try direct parse.
+      // Fallback: try direct parse
       try {
         const cleaned = text.trim().replace(/^```json\s*/i, "").replace(/```\s*$/, "").trim();
         filledData = JSON.parse(cleaned);
@@ -158,30 +229,11 @@ export async function onRequestPost(context) {
           { status: 502, headers: { "Content-Type": "application/json", ...corsHeaders } }
         );
       }
-    } else if (objects.length === 1) {
-      // Single object – use it directly
-      filledData = objects[0];
     } else {
-      // Multiple objects – merge them (deep merge) or take the first one
-      // Here we'll merge: top-level keys from later objects override earlier ones, and arrays are concatenated
-      const merged = objects.reduce((acc, obj) => {
-        for (const key of Object.keys(obj)) {
-          if (Array.isArray(obj[key]) && Array.isArray(acc[key])) {
-            acc[key] = acc[key].concat(obj[key]);
-          } else if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key]) && 
-                     typeof acc[key] === 'object' && acc[key] !== null && !Array.isArray(acc[key])) {
-            // Merge nested objects (shallow)
-            acc[key] = { ...acc[key], ...obj[key] };
-          } else {
-            acc[key] = obj[key];
-          }
-        }
-        return acc;
-      }, {});
-      filledData = merged;
+      // Use smart merge
+      filledData = smartMerge(objects, schema);
     }
 
-    // If filledData is still null (shouldn't happen), error out
     if (!filledData) {
       return new Response(
         JSON.stringify({ error: "Could not extract valid JSON from model response", raw: text }),
@@ -189,26 +241,39 @@ export async function onRequestPost(context) {
       );
     }
 
-    // --- Array validation (if it's an array, handle it) ---
+    // ---- FINAL CLEANUP: remove hallucinated keys, fix image ----
+    // 1. Remove any top-level keys not in the schema
+    for (const key of Object.keys(filledData)) {
+      if (!(key in schema)) {
+        delete filledData[key];
+      }
+    }
+
+    // 2. Clean profile.image: force it to the schema value, remove extra keys inside profile
+    if (filledData.profile && typeof filledData.profile === 'object') {
+      // Reset image to schema default (or empty string)
+      filledData.profile.image = schema.profile?.image || "";
+      // Delete any extra keys inside profile that aren't in schema.profile
+      if (schema.profile) {
+        for (const key of Object.keys(filledData.profile)) {
+          if (!(key in schema.profile)) {
+            delete filledData.profile[key];
+          }
+        }
+      }
+    }
+
+    // 3. Remove any leftover keys with data:image, base64, etc. (just in case)
+    cleanInvalidKeys(filledData);
+
+    // If the result is still an array (shouldn't happen after cleanup), unwrap or merge
     if (Array.isArray(filledData)) {
       if (filledData.length === 1) {
         filledData = filledData[0];
       } else {
-        // If multiple items, merge them into one object (treat each as a record)
-        const merged = filledData.reduce((acc, obj) => {
-          for (const key of Object.keys(obj)) {
-            if (Array.isArray(obj[key]) && Array.isArray(acc[key])) {
-              acc[key] = acc[key].concat(obj[key]);
-            } else if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key]) && 
-                       typeof acc[key] === 'object' && acc[key] !== null && !Array.isArray(acc[key])) {
-              acc[key] = { ...acc[key], ...obj[key] };
-            } else {
-              acc[key] = obj[key];
-            }
-          }
-          return acc;
-        }, {});
-        filledData = merged;
+        filledData = smartMerge(filledData, schema);
+        if (Array.isArray(filledData)) filledData = filledData[0] || {};
+        cleanInvalidKeys(filledData);
       }
     }
 
@@ -228,6 +293,7 @@ export async function onRequestPost(context) {
     });
   }
 }
+
 export async function onRequestOptions() {
   return new Response(null, {
     headers: {

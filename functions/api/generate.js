@@ -124,6 +124,23 @@ export async function onRequestPost(context) {
       );
     }
 
+    // ---------- INSERTED ARRAY VALIDATION ----------
+    // If the model returned an array, handle it gracefully
+    if (Array.isArray(filledData)) {
+      if (filledData.length === 1) {
+        // Unwrap the single-element array (common when the model mistakenly wraps the object)
+        filledData = filledData[0];
+      } else {
+        // Reject arrays with multiple items – they are erroneous for this use case
+        return new Response(
+          JSON.stringify({ error: "Model returned an array of objects, but expected a single object. Please try again with a different model or refine the input." }),
+          { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        );
+      }
+    }
+    // ---------- END INSERTION ----------
+
+
     // Basic schema-conformance check: same top-level key set as the input schema.
     const expectedKeys = Object.keys(schema).sort().join(",");
     const gotKeys = Object.keys(filledData).sort().join(",");

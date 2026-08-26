@@ -32,9 +32,9 @@ Task: using the person's raw input (provided as the user message — this may be
 - For arrays of objects (e.g. "experience", "education", "skills"), keep each item's shape (same fields per item), but adjust the NUMBER of items to match what's actually in the person's input (don't pad with fake entries, don't invent facts).
 - Never add new keys that weren't in the schema. Never remove required top-level keys — if the person didn't give that info, use an empty string, empty array, or reasonable neutral default.
 - Rewrite prose fields (like "about"/"summary" or experience descriptions) in clean, professional language based only on what the person actually said — do not invent achievements, numbers, or dates.
+- **CRITICAL: The response must be a single JSON object, NOT an array. Do not wrap the output in [ ]. Start with { and end with }.**
 - Respond with ONLY the JSON object.`;
 }
-
 export async function onRequestPost(context) {
   const { request, env } = context;
 

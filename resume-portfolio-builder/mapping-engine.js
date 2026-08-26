@@ -47,13 +47,20 @@ function applyMapping(masterData, originalTemplateData, mapping) {
     setPath(result, mapping.splitName.lastNameTarget, lastName);
   }
 
-  // 2. Scalar field mapping
+  // 2. Scalar field mapping. Normally targetPath is a plain string. It can
+  // also be an object { path, wrapInArray: true } for templates that expect
+  // a single-paragraph field as a one-element array of paragraphs instead
+  // of a plain string.
   if (mapping.scalar) {
-    for (const [masterPath, targetPath] of Object.entries(mapping.scalar)) {
+    for (const [masterPath, targetSpec] of Object.entries(mapping.scalar)) {
       if (masterPath.startsWith('_')) continue; // skip note/comment keys
       const value = getPath(masterData, masterPath);
       if (value !== undefined && value !== null && value !== '') {
-        setPath(result, targetPath, value);
+        if (typeof targetSpec === 'object' && targetSpec.path) {
+          setPath(result, targetSpec.path, targetSpec.wrapInArray ? [value] : value);
+        } else {
+          setPath(result, targetSpec, value);
+        }
       }
     }
   }
@@ -79,7 +86,20 @@ function applyMapping(masterData, originalTemplateData, mapping) {
             }
             if (value !== undefined) obj[targetField] = value;
           }
+          // joinFields: combine two or more master item fields into a single
+          // target string (e.g. startDate + endDate -> one "period" field),
+          // for templates that store a date range as one string rather than
+          // separate start/end fields.
+          if (arrCfg.joinFields) {
+            arrCfg.joinFields.forEach(rule => {
+              const parts = rule.sourceFields.map(f => item[f]).filter(Boolean);
+              if (parts.length > 0) {
+                obj[rule.targetField] = parts.join(rule.separator || ' ');
+              }
+            });
+          }
           return obj;
+
         });
       } else {
         newArr = sourceArr;
@@ -101,6 +121,83 @@ function applyMapping(masterData, originalTemplateData, mapping) {
         if (key) obj[key] = value;
       });
       setPath(result, objCfg.targetPath, obj);
+    }
+  }
+
+  // 5. Compose: build a single formatted string from multiple master
+  // fields, for templates that display a combined value (e.g. one
+  // "contact" string containing email/phone/location together, rather
+  // than separate fields) instead of a structured object.
+  if (mapping.compose) {
+    for (const [targetPath, composeCfg] of Object.entries(mapping.compose)) {
+      const rendered = composeCfg.template.replace(/\{([^}]+)\}/g, (match, token) => {
+        if (token === 'year') return String(new Date().getFullYear());
+        const value = getPath(masterData, token);
+        return value !== undefined && value !== null ? value : '';
+      });
+      setPath(result, targetPath, rendered);
+    }
+  }
+
+  // 6. labelValueArray: build an array of {label, value} pairs from a
+  // fixed list of master field paths — for templates that display personal
+  // info as a generic "definition list" rather than named fields (e.g.
+  // [{label:"Email", value:"..."}] instead of a plain contact.email field).
+  // Entries whose source value is missing/empty are skipped entirely.
+  if (mapping.labelValueArray) {
+    for (const [targetPath, cfg] of Object.entries(mapping.labelValueArray)) {
+      const items = cfg.items
+        .map(def => ({ label: def.label, value: getPath(masterData, def.sourcePath) }))
+        .filter(entry => entry.value !== undefined && entry.value !== null && entry.value !== '');
+      setPath(result, targetPath, items);
+    }
+  }
+
+  // 7. contactItemsArray: build an array of {icon, text, link} objects from
+  // a fixed list of master field paths — for templates that render contact
+  // methods as a generic icon-linked list rather than named fields. Each
+  // definition's linkTemplate supports a {value} placeholder.
+  if (mapping.contactItemsArray) {
+    for (const [targetPath, cfg] of Object.entries(mapping.contactItemsArray)) {
+      const items = cfg.items
+        .map(def => {
+          const value = getPath(masterData, def.sourcePath);
+          if (!value) return null;
+          return {
+            icon: def.icon,
+            text: value,
+            link: def.linkTemplate ? def.linkTemplate.replace('{value}', value) : value
+          };
+        })
+        .filter(Boolean);
+      setPath(result, targetPath, items);
+    }
+  }
+
+  // 8. groupedArrays: wrap mapped array items inside a single synthetic
+  // parent object — for templates that group items under a category (e.g.
+  // skills displayed as [{category:"...", items:[...]}] rather than a flat
+  // list). Supports multiple source arrays (e.g. master's separate "skills"
+  // and "languages") each becoming their own group within the same output
+  // array, since some templates fold both into one grouped structure.
+  if (mapping.groupedArrays) {
+    for (const [key, cfg] of Object.entries(mapping.groupedArrays)) {
+      const groupsOutput = [];
+      cfg.groups.forEach(groupDef => {
+        const sourceArr = getPath(masterData, groupDef.sourcePath);
+        if (!Array.isArray(sourceArr) || sourceArr.length === 0) return;
+        const items = sourceArr.map(item => {
+          const obj = {};
+          for (const [masterField, targetField] of Object.entries(groupDef.itemMap)) {
+            if (item[masterField] !== undefined) obj[targetField] = item[masterField];
+          }
+          return obj;
+        });
+        groupsOutput.push({ [cfg.groupField]: groupDef.groupValue, [cfg.itemsField]: items });
+      });
+      if (groupsOutput.length > 0) {
+        setPath(result, cfg.targetPath, groupsOutput);
+      }
     }
   }
 

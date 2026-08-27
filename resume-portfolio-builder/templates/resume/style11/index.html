@@ -868,6 +868,11 @@ function populateResume(data) {
   const p = data.personalInfo;
   const fullName = `${p.firstName} ${p.lastName}`;
 
+  if (p.profileImage) {
+    const profileImageEl = document.getElementById('profileImage');
+    if (profileImageEl) profileImageEl.src = p.profileImage;
+  }
+
   document.getElementById('fullName').textContent = fullName;
   document.getElementById('jobTitle').textContent = p.jobTitle;
   document.getElementById('emailVal').textContent = p.email;

@@ -570,6 +570,12 @@
   /* ── Render ── */
   function render(data) {
     document.title = `${data.name} — Resume`;
+
+    if (data.profile && data.profile.image) {
+      const profilePhotoEl = document.getElementById('profile-photo');
+      if (profilePhotoEl) profilePhotoEl.src = data.profile.image;
+    }
+
     document.getElementById('nav-brand').textContent = data.name;
     document.getElementById('name').textContent = data.name;
     document.getElementById('job-title').textContent = data.title;

@@ -613,6 +613,11 @@
     document.title = `${d.name} — Resume`;
     applyTheme(d.theme);
 
+    if (d.profile && d.profile.image) {
+      const profileImgEl = document.getElementById('profile-img');
+      if (profileImgEl) profileImgEl.src = d.profile.image;
+    }
+
     document.getElementById('nav-brand').textContent   = d.name;
     document.getElementById('name').textContent        = d.name;
     document.getElementById('job-title').textContent   = d.title;

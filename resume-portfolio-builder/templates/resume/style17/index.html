@@ -836,6 +836,11 @@
     function renderResume(data) {
       if (data.theme) applyTheme(data.theme);
 
+      if (data.profile_image) {
+        const profileStampEl = document.getElementById('profile-stamp');
+        if (profileStampEl) profileStampEl.src = data.profile_image;
+      }
+
       const name = data.name || 'Resume';
       document.title = name;
       document.getElementById('nav-brand').textContent = name;

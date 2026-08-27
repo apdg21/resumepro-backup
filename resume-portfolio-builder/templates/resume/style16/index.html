@@ -1023,6 +1023,11 @@
     function renderResume(data) {
       if (data.theme) applyTheme(data.theme);
 
+      if (data.profile && data.profile.image) {
+        const profileImgEl = document.getElementById('profile-img');
+        if (profileImgEl) profileImgEl.src = data.profile.image;
+      }
+
       const name = data.name || 'Resume';
       document.title = name;
       document.getElementById('site-title').textContent = name;

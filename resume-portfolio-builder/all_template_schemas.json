@@ -1365,7 +1365,8 @@
         "jobTitle": "Senior UX / Product Designer",
         "email": "sofia.reyes@designfolio.io",
         "phone": "+63 917 845 3021",
-        "location": "Manila, Philippines"
+        "location": "Manila, Philippines",
+        "profileImage": "assets/profile.jpg"
       },
       "about": "Product designer with 8 years of experience crafting digital experiences that sit at the intersection of user empathy and business clarity. I lead design systems, conduct in-depth research, and translate complex problems into interfaces that feel effortless. I believe the best design is the kind users never notice — because everything just works.",
       "skills": [
@@ -1607,6 +1608,9 @@
             "icon": "twitter.svg"
           }
         ]
+      },
+      "profile": {
+        "image": "assets/profile.jpg"
       }
     },
     "style13": {
@@ -1718,6 +1722,9 @@
             "icon": "twitter"
           }
         ]
+      },
+      "profile": {
+        "image": "assets/profile.jpg"
       }
     },
     "style14": {
@@ -2019,6 +2026,9 @@
             "url": "https://twitter.com/marcusreyes_cfa"
           }
         ]
+      },
+      "profile": {
+        "image": "assets/profile.jpg"
       }
     },
     "style16": {
@@ -2113,6 +2123,9 @@
         "gradientStart": "#0a0e1a",
         "gradientEnd": "#0d1f3c",
         "accentColor": "#00e5ff"
+      },
+      "profile": {
+        "image": "assets/profile.jpg"
       }
     },
     "style17": {

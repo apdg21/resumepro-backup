@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResumePro — Resume Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1B2333;
+    --ink-soft: #5B6478;
+    --primary: #2952E3;
+    --primary-dark: #1F3FB8;
+    --primary-tint: #EBF0FE;
+    --accent: #D98E3F;
+    --accent-tint: #FBF0E1;
+    --paper: #FAF8F4;
+    --card: #FFFFFF;
+    --border: #E8E4DC;
+    --success: #1E8E5A;
+    --error: #C0392B;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: var(--font-body);
+    background: var(--paper);
+    color: var(--ink);
+    margin: 0;
+    padding: 32px 24px 60px;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto 24px; display: grid; grid-template-columns: 1fr; gap: 24px; }
+  @media (min-width: 900px) { .wrap.two-col { grid-template-columns: 440px 1fr; } }
+
+  .brand-bar {
+    max-width: 1200px; margin: 0 auto 28px; display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .brand-mark { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 20px; color: var(--ink); }
+  .brand-mark .doc-icon {
+    width: 30px; height: 30px; border-radius: 7px; background: var(--primary);
+    display: flex; align-items: center; justify-content: center; color: white; font-size: 15px; flex-shrink: 0;
+  }
+
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 1px 2px rgba(27,35,51,0.04), 0 8px 24px rgba(27,35,51,0.04);
+  }
+
+  .step-head { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; }
+  .step-badge {
+    width: 36px; height: 36px; border-radius: 50%; background: var(--primary-tint); color: var(--primary);
+    font-family: var(--font-display); font-weight: 700; font-size: 17px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    border: 1px solid rgba(41,82,227,0.18);
+  }
+  h1 { font-family: var(--font-display); font-size: 20px; font-weight: 700; margin: 0; color: var(--ink); letter-spacing: -0.01em; }
+  .sub { color: var(--ink-soft); font-size: 13px; margin: 10px 0 16px; line-height: 1.5; }
+
+  textarea { width: 100%; min-height: 200px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; font-family: var(--font-body); font-size: 14px; resize: vertical; background: var(--paper); color: var(--ink); }
+  textarea:focus, select:focus, input:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+  input[type="text"], input[type="password"], select {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px;
+    font-family: var(--font-body); background: var(--paper); color: var(--ink);
+  }
+
+  button {
+    margin-top: 12px; background: var(--primary); color: white; border: none; padding: 11px 20px;
+    border-radius: 10px; font-size: 14px; cursor: pointer; font-weight: 600; font-family: var(--font-body);
+    transition: background 0.15s, transform 0.1s;
+  }
+  button:hover:not(:disabled) { background: var(--primary-dark); }
+  button:active:not(:disabled) { transform: scale(0.98); }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  button.secondary { background: var(--card); color: var(--ink); border: 1px solid var(--border); }
+  button.secondary:hover:not(:disabled) { background: var(--paper); }
+
+  .status { font-size: 13px; color: var(--ink-soft); margin-top: 10px; min-height: 18px; }
+  .status.error { color: var(--error); }
+  .status.success { color: var(--success); }
+
+  .json-box { background: #17203A; color: #8FE3B0; font-family: 'Courier New', monospace; font-size: 12px; padding: 14px; border-radius: 10px; max-height: 480px; width: 600px; max-width: 100%; overflow: auto; white-space: pre-wrap; min-width: 0; }
+
+  .file-drop {
+    border: 2px dashed var(--border); border-radius: 12px; padding: 22px; text-align: center;
+    font-size: 13px; color: var(--ink-soft); cursor: pointer; margin-bottom: 14px; transition: border-color 0.15s, background 0.15s;
+    background: var(--paper);
+  }
+  .file-drop.dragover { border-color: var(--primary); background: var(--primary-tint); }
+  .file-drop strong { color: var(--primary); }
+  .filename-tag { font-size: 12px; background: var(--primary-tint); color: var(--primary-dark); padding: 5px 12px; border-radius: 999px; display: inline-block; margin-top: 8px; font-weight: 500; }
+
+  .tab-row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .tab-btn { flex: 1; padding: 9px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); cursor: pointer; font-size: 13px; font-weight: 600; color: var(--ink-soft); font-family: var(--font-body); transition: all 0.15s; }
+  .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+  .badge-pill {
+    display: inline-flex; align-items: center; gap: 6px; background: var(--accent-tint); color: var(--accent);
+    font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 999px;
+  }
+  a.cta-link {
+    background: var(--primary); color: white; text-decoration: none; padding: 10px 18px; border-radius: 10px;
+    font-size: 13px; font-weight: 600; white-space: nowrap; font-family: var(--font-body); transition: background 0.15s;
+  }
+  a.cta-link:hover { background: var(--primary-dark); }
+  a.cta-link.ghost { background: var(--card); color: var(--ink); border: 1px solid var(--border); }
+  a.cta-link.ghost:hover { background: var(--paper); }
+</style>
+</head>
+<body>
+
+<div class="brand-bar">
+  <div class="brand-mark"><span class="doc-icon">📄</span> ResumePro <span style="color:var(--ink-soft); font-weight:400; font-size:14px; margin-left:4px;">/ Builder</span></div>
+  <span class="badge-pill">✨ AI-assisted</span>
+</div>
+
+<div class="wrap">
+  <div class="panel" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
+    <div>
+      <h1>Quick fill</h1>
+      <div class="sub" style="margin:6px 0 0;">Want more control, or need to add a profile photo? Fill using the form instead.</div>
+    </div>
+    <a href="resume-form.html" class="cta-link">📝 Fill using form →</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="panel">
+    <div class="step-head"><span class="step-badge">1</span><h1>Pick a template</h1></div>
+    <div class="sub">Resume templates only — portfolios need multiple images, so use the form instead for those.</div>
+    <select id="categorySelect" style="display:none;">
+      <option value="resume_templates" selected>Resume templates</option>
+    </select>
+    <select id="templateSelect"></select>
+    <label style="font-size:13px; font-weight:600; display:block; margin:14px 0 6px; color:var(--ink);">AI model</label>
+    <select id="modelSelect">
+      <option value="gemini-3.5-flash">Gemini 3.5 Flash (recommended)</option>
+      <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash-Lite</option>
+      <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite</option>
+      <option value="gemini-3.7-flash">Gemini 3.7 Flash</option>
+    </select>
+    <div class="sub" style="margin-top:6px; margin-bottom:0;">Hit a quota error? Each model has its own separate daily limit — just switch and try again.</div>
+  </div>
+</div>
+
+<div class="wrap two-col">
+
+  <div class="panel">
+    <div class="step-head"><span class="step-badge">2</span><h1>Your info</h1></div>
+    <div class="sub">Upload a resume/CV file, or paste text directly.</div>
+
+    <div class="tab-row">
+      <button type="button" class="tab-btn active" id="tabUpload">Upload file</button>
+      <button type="button" class="tab-btn" id="tabPaste">Paste text</button>
+    </div>
+
+    <div id="uploadPane">
+      <div class="file-drop" id="dropZone">
+        <div>📄 Drop a <strong>PDF, Word (.docx), or .txt</strong> file here, or click to browse</div>
+        <input type="file" id="fileInput" accept=".pdf,.docx,.txt" style="display:none;">
+        <div id="fileTag"></div>
+      </div>
+    </div>
+
+    <div id="pastePane" style="display:none;">
+      <textarea id="rawInput" placeholder="Paste resume text, LinkedIn export, or rough notes here..."></textarea>
+    </div>
+
+    <label style="font-size:13px; font-weight:600; display:block; margin:14px 0 6px; color:var(--ink);">Profile photo (optional)</label>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <input type="file" id="profilePhotoInput" accept="image/*">
+      <img id="profilePhotoPreview" style="width:48px; height:48px; border-radius:10px; object-fit:cover; background:var(--paper); border:1px solid var(--border); display:none; flex-shrink:0;">
+    </div>
+
+    <button id="genBtn">Generate →</button>
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="panel">
+    <div class="step-head"><span class="step-badge">3</span><h1>Result</h1></div>
+    <div class="sub">This is the filled data.json — in production this gets written into a copy of the template and rendered/downloaded as the finished site.</div>
+    <div class="json-box" id="jsonBox">Nothing generated yet.</div>
+    <button id="downloadBtn" class="secondary" style="display:none;">⬇ Download data.json</button>
+
+    <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
+      <button id="previewBtn" type="button">Live preview</button>
+      <button id="downloadSiteBtn" class="secondary" type="button">⬇ Download full site (.zip)</button>
+    </div>
+    <div class="status" id="previewStatus"></div>
+    <div id="previewContainer" style="margin-top:12px;"></div>
+  </div>
+
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth.js/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+const categorySelect = document.getElementById('categorySelect');
+const templateSelect = document.getElementById('templateSelect');
+const modelSelect = document.getElementById('modelSelect');
+const tabUpload = document.getElementById('tabUpload');
+const tabPaste = document.getElementById('tabPaste');
+const uploadPane = document.getElementById('uploadPane');
+const pastePane = document.getElementById('pastePane');
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const fileTag = document.getElementById('fileTag');
+const rawInput = document.getElementById('rawInput');
+const genBtn = document.getElementById('genBtn');
+const statusEl = document.getElementById('status');
+const jsonBox = document.getElementById('jsonBox');
+const downloadBtn = document.getElementById('downloadBtn');
+const profilePhotoInput = document.getElementById('profilePhotoInput');
+const profilePhotoPreview = document.getElementById('profilePhotoPreview');
+
+let allSchemas = null;
+let extractedFileText = '';
+let activeMode = 'upload';
+let lastResult = null;
+let profilePhotoDataUri = '';
+
+profilePhotoInput.addEventListener('change', async () => {
+  const file = profilePhotoInput.files[0];
+  if (!file) return;
+  profilePhotoDataUri = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+  profilePhotoPreview.src = profilePhotoDataUri;
+  profilePhotoPreview.style.display = 'block';
+});
+
+// --- Load real schemas (in production: fetched per-template from your storage) ---
+fetch('all_template_schemas.json')
+  .then(r => r.json())
+  .then(data => {
+    allSchemas = data;
+    populateTemplates();
+  })
+  .catch(() => {
+    statusEl.textContent = 'Could not load template schemas (all_template_schemas.json).';
+    statusEl.className = 'status error';
+  });
+
+function populateTemplates() {
+  const cat = categorySelect.value;
+  const styles = Object.keys(allSchemas[cat] || {});
+  templateSelect.innerHTML = styles.map(s => `<option value="${s}">${cat === 'resume_templates' ? 'Resume' : 'Portfolio'} — ${s}</option>`).join('');
+}
+categorySelect.addEventListener('change', populateTemplates);
+
+// --- Tabs ---
+tabUpload.addEventListener('click', () => setMode('upload'));
+tabPaste.addEventListener('click', () => setMode('paste'));
+function setMode(mode) {
+  activeMode = mode;
+  tabUpload.classList.toggle('active', mode === 'upload');
+  tabPaste.classList.toggle('active', mode === 'paste');
+  uploadPane.style.display = mode === 'upload' ? 'block' : 'none';
+  pastePane.style.display = mode === 'paste' ? 'block' : 'none';
+}
+
+// --- File drop / picker ---
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', e => {
+  if (e.target.files.length) handleFile(e.target.files[0]);
+});
+
+async function handleFile(file) {
+  fileTag.innerHTML = `<span class="filename-tag">${file.name} — extracting text...</span>`;
+  extractedFileText = '';
+  try {
+    if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+      extractedFileText = await extractPdfText(file);
+    } else if (file.name.toLowerCase().endsWith('.docx')) {
+      extractedFileText = await extractDocxText(file);
+    } else {
+      extractedFileText = await file.text();
+    }
+    fileTag.innerHTML = `<span class="filename-tag">✓ ${file.name} (${extractedFileText.length.toLocaleString()} chars extracted)</span>`;
+  } catch (err) {
+    console.error(err);
+    fileTag.innerHTML = `<span class="filename-tag" style="background:#fee2e2; color:#dc2626;">Failed to read ${file.name}</span>`;
+  }
+}
+
+async function extractPdfText(file) {
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+  let text = '';
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    text += content.items.map(item => item.str).join(' ') + '\n';
+  }
+  return text.trim();
+}
+
+async function extractDocxText(file) {
+  const buf = await file.arrayBuffer();
+  const result = await mammoth.extractRawText({ arrayBuffer: buf });
+  return result.value.trim();
+}
+
+// --- Generate ---
+genBtn.addEventListener('click', async () => {
+  const inputText = activeMode === 'upload' ? extractedFileText : rawInput.value.trim();
+
+  if (!inputText) {
+    statusEl.textContent = activeMode === 'upload' ? 'Upload a file first.' : 'Paste some text first.';
+    statusEl.className = 'status error';
+    return;
+  }
+  if (!allSchemas) {
+    statusEl.textContent = 'Template schemas not loaded yet.';
+    statusEl.className = 'status error';
+    return;
+  }
+
+  const cat = categorySelect.value;
+  const styleKey = templateSelect.value;
+  const schema = allSchemas[cat][styleKey];
+
+  genBtn.disabled = true;
+  downloadBtn.style.display = 'none';
+  jsonBox.textContent = '';
+  statusEl.textContent = 'Generating...';
+  statusEl.className = 'status';
+
+  try {
+    const response = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        schema,
+        rawText: inputText,
+        model: modelSelect.value
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || 'Request failed');
+    }
+
+    lastResult = mergeProfilePhoto(result.data, schema, profilePhotoDataUri);
+    jsonBox.textContent = JSON.stringify(lastResult, null, 2);
+    downloadBtn.style.display = 'inline-block';
+
+    if (result.keysMatch) {
+      statusEl.textContent = 'Done — output matches the template schema exactly.';
+      statusEl.className = 'status success';
+    } else {
+      statusEl.textContent = 'Done, but the output keys drifted from the schema — review before using.';
+      statusEl.className = 'status error';
+    }
+  } catch (err) {
+    console.error(err);
+    statusEl.textContent = 'Error: ' + err.message;
+    statusEl.className = 'status error';
+  } finally {
+    genBtn.disabled = false;
+  }
+});
+
+downloadBtn.addEventListener('click', () => {
+  if (!lastResult) return;
+  const blob = new Blob([JSON.stringify(lastResult, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'data.json';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+</script>
+<script src="preview-and-download.js"></script>
+</body>
+</html>

@@ -120,7 +120,7 @@ function ensurePreviewModal() {
 
   const title = document.createElement('div');
   title.id = 'previewModalStatus';
-  title.style.cssText = 'font-size: 13px; color: #6b7280;';
+  title.style.cssText = 'font-size: 13px; color: #6b7280; flex: 1; min-width: 0; margin-right: 12px; overflow-wrap: break-word;';
   title.textContent = 'Loading preview...';
 
   const closeBtn = document.createElement('button');
@@ -134,6 +134,7 @@ function ensurePreviewModal() {
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
+    flex-shrink: 0;
   `;
   closeBtn.addEventListener('click', closePreviewModal);
 
@@ -322,7 +323,7 @@ async function renderPreview(dataObj) {
   // itself already provides the room; this avoids relying on percentage
   // sizing resolving correctly on first paint inside a freshly-inserted,
   // dynamically-created container.
-  iframe.style.cssText = 'width: 1200px; height: 100%; border: none; display: block; margin: 0 auto;';
+  iframe.style.cssText = 'width: 100%; height: 100%; border: none; display: block;';
   iframe.setAttribute('sandbox', 'allow-scripts allow-popups allow-forms');
 
   let receivedConfirmation = false;

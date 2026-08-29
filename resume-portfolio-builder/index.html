@@ -4,10 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ResumePro — Resume Builder</title>
-<link rel="icon" href="../favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../header.css">
-<link rel="stylesheet" href="../footer.css">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -34,8 +30,9 @@
     color: var(--ink);
     margin: 0;
     padding: 32px 24px 60px;
+    overflow-x: hidden;
   }
-  .wrap { max-width: 1200px; margin: 0 auto 24px; display: grid; grid-template-columns: 1fr; gap: 24px; }
+  .wrap { max-width: 1200px; margin: 0 auto 24px; display: grid; grid-template-columns: 1fr; gap: 24px; min-width: 0; }
   @media (min-width: 900px) { .wrap.two-col { grid-template-columns: 440px 1fr; } }
 
   .brand-bar {
@@ -54,6 +51,7 @@
     border-radius: 14px;
     padding: 24px;
     box-shadow: 0 1px 2px rgba(27,35,51,0.04), 0 8px 24px rgba(27,35,51,0.04);
+    min-width: 0;
   }
 
   .step-head { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; }
@@ -117,61 +115,6 @@
 </style>
 </head>
 <body>
-<header>
-    <div class="header-content">
-        <a href="../index.html" class="logo">
-            <span class="logo-icon">📄</span>
-            <span>ResumePro</span>
-        </a>
-        
-        <div class="nav-container">
-            <button class="hamburger" aria-label="Toggle navigation">☰</button>
-            <ul class="header-nav-menu">
-                <li class="header-nav-item"><a href="../index.html" class="header-nav-link">Home</a></li>
-                <li class="header-nav-item header-dropdown">
-                    <a href="#" class="header-nav-link">
-                        Templates
-                        <span class="header-dropdown-icon">▼</span>
-                    </a>
-                    <div class="header-dropdown-content">
-                        <a href="../resume-templates.html" class="header-dropdown-item">Resume Templates</a>
-                        <a href="../portfolio-templates.html" class="header-dropdown-item">Portfolio Templates</a>
-                    </div>
-                </li>
-                
-                <!-- My Apps Menu Item -->
-                <li class="header-nav-item header-dropdown">
-                    <a href="#" class="header-nav-link">
-                        My Apps
-                        <span class="header-dropdown-icon">▼</span>
-                    </a>
-                    <div class="header-dropdown-content">
-                        <a href="../android-applications.html" class="header-dropdown-item">Android Applications</a>
-                        <a href="../family-connection-tools.html" class="header-dropdown-item">Web Applications</a>
-                      </div>
-                </li>
-                
-                <!-- UPDATED: Blog link now points to blog-list.html -->
-                <li class="header-nav-item"><a href="../blog-list.html" class="header-nav-link">Blog</a></li>
-                
-                <li class="header-nav-item"><a href="../klaviyo-analytics.html" class="header-nav-link">Klaviyo Analytics</a></li>
-                <li class="header-nav-item header-dropdown">
-                    <a href="#" class="header-nav-link">
-                        Productivity Tools
-                        <span class="header-dropdown-icon">▼</span>
-                    </a>
-                    <div class="header-dropdown-content">
-                        <a href="../email-builder.html" class="header-dropdown-item">Email Builder</a>
-                        <a href="../enhanced-todo.html" class="header-dropdown-item">Enhanced To-Do & Notes</a>
-                        <a href="../klaviyo-tool.html" class="header-dropdown-item">Klaviyo Tool</a>
-                    </div>
-                </li>
-                <li class="header-nav-item"><a href="../about.html" class="header-nav-link">About</a></li>
-                <li class="header-nav-item"><a href="../contact.html" class="header-nav-link">Contact</a></li>
-            </ul>
-        </div>
-    </div>
-</header>
 
 <div class="brand-bar">
   <div class="brand-mark"><span class="doc-icon">📄</span> ResumePro <span style="color:var(--ink-soft); font-weight:400; font-size:14px; margin-left:4px;">/ Builder</span></div>
@@ -453,6 +396,5 @@ downloadBtn.addEventListener('click', () => {
 });
 </script>
 <script src="preview-and-download.js"></script>
-<script src="header.js"></script>
 </body>
 </html>

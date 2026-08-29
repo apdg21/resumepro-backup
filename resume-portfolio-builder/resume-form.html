@@ -29,8 +29,8 @@
     --bg-color: var(--paper);
   }
   * { box-sizing: border-box; }
-  body { font-family: var(--font-body); background: var(--paper); color: var(--ink); margin:0; padding:32px 24px 60px; }
-  .wrap { max-width: 1200px; margin: 0 auto; display:grid; gap:24px; grid-template-columns: 1fr; }
+  body { font-family: var(--font-body); background: var(--paper); color: var(--ink); margin:0; padding:32px 24px 60px; overflow-x: hidden; }
+  .wrap { max-width: 1200px; margin: 0 auto; display:grid; gap:24px; grid-template-columns: 1fr; min-width: 0; }
   @media (min-width:1000px){ .wrap.two-col { grid-template-columns: 480px 1fr; } }
 
   .brand-bar { max-width:1200px; margin:0 auto 28px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
@@ -38,7 +38,7 @@
   .brand-mark .doc-icon { width:30px; height:30px; border-radius:7px; background:var(--primary); display:flex; align-items:center; justify-content:center; color:white; font-size:15px; flex-shrink:0; }
   .badge-pill { display:inline-flex; align-items:center; gap:6px; background:var(--accent-tint); color:var(--accent); font-size:12px; font-weight:600; padding:5px 12px; border-radius:999px; }
 
-  .panel { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:24px; box-shadow:0 1px 2px rgba(27,35,51,0.04), 0 8px 24px rgba(27,35,51,0.04); }
+  .panel { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:24px; box-shadow:0 1px 2px rgba(27,35,51,0.04), 0 8px 24px rgba(27,35,51,0.04); min-width: 0; }
   .step-head { display:flex; align-items:center; gap:14px; margin-bottom:4px; }
   .step-badge { width:36px; height:36px; border-radius:50%; background:var(--primary-tint); color:var(--primary); font-family:var(--font-display); font-weight:700; font-size:17px; display:flex; align-items:center; justify-content:center; flex-shrink:0; border:1px solid rgba(41,82,227,0.18); }
   h1 { font-family: var(--font-display); font-size:19px; font-weight:700; margin:0; color:var(--ink); letter-spacing:-0.01em; }

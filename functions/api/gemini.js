@@ -3,6 +3,7 @@
 // The key never reaches the browser. Only same-origin requests from this site can reach it.
 
 const ALLOWED_MODELS = [
+  'gemini-3.5-flash-lite',
   'gemini-3.5-flash',
   'gemini-3.1-flash-lite',
   'gemma-4-31b-it',

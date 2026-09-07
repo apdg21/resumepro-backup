@@ -4,7 +4,7 @@
 // Restricted to OpenRouter's free-tier models to avoid any surprise cost.
 
 const ALLOWED_MODELS = [
-  'openai/gpt-4o-mini:free',
+  'openrouter/free',
   'openai/gpt-oss-120b:free',
   'openai/gpt-oss-20b:free',
   'qwen/qwen3-next-80b-a3b-instruct:free',

@@ -3,11 +3,11 @@
 // The key never reaches the browser. Only same-origin requests from this site can reach it.
 
 const ALLOWED_MODELS = [
-  'llama-3.3-70b-versatile',
-  'llama-3.1-8b-instant',
-  'mixtral-8x7b-32768',
-  'gemma2-9b-it',
-  'deepseek-r1-distill-llama-70b',
+  'openai/gpt-oss-120b',
+  'openai/gpt-oss-20b',
+  'qwen/qwen3.6-27b',
+  'groq/compound',
+  'groq/compound-mini'
 ];
 const MAX_OUTPUT_TOKENS = 1800;
 const MAX_INPUT_CHARS = 60000;

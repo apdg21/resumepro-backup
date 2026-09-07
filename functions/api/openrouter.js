@@ -5,15 +5,13 @@
 
 const ALLOWED_MODELS = [
   'openrouter/free',
-  'openai/gpt-oss-120b:free',
-  'openai/gpt-oss-20b:free',
-  'qwen/qwen3-next-80b-a3b-instruct:free',
-  'arcee-ai/trinity-large-preview:free',
-  'liquid/lfm-2.5-1.2b-thinking:free',
-  'liquid/lfm-2.5-1.2b-instruct:free',
-  'nvidia/nemotron-3-nano-30b-a3b:free',
-  'nvidia/nemotron-nano-12b-v2-vl:free',
-  'nvidia/nemotron-nano-9b-v2:free',
+  'google/gemini-2.0-flash-exp:free',
+  'meta-llama/llama-3.3-70b-instruct:free',
+  'qwen/qwen-2.5-72b-instruct:free',
+  'deepseek/deepseek-r1:free',
+  'deepseek/deepseek-chat:free',
+  'mistralai/mistral-small-24b-instruct-2501:free',
+  'nvidia/nemotron-4-70b-instruct:free',
 ];
 const MAX_OUTPUT_TOKENS = 1800;
 const MAX_INPUT_CHARS = 60000;

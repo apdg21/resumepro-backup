@@ -5,13 +5,11 @@
 
 const ALLOWED_MODELS = [
   'openrouter/free',
-  'google/gemini-2.0-flash-exp:free',
-  'meta-llama/llama-3.3-70b-instruct:free',
-  'qwen/qwen-2.5-72b-instruct:free',
-  'deepseek/deepseek-r1:free',
-  'deepseek/deepseek-chat:free',
-  'mistralai/mistral-small-24b-instruct-2501:free',
-  'nvidia/nemotron-4-70b-instruct:free',
+  'minimax/minimax-m3:free',
+  'nvidia/nemotron-3-ultra:free',
+  'nvidia/nemotron-3.5-lightning:free',
+  'poolside/laguna-s-2.1:free',
+  'inclusionai/ling-3.0-flash-fin:free',
 ];
 const MAX_OUTPUT_TOKENS = 1800;
 const MAX_INPUT_CHARS = 60000;

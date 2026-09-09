@@ -459,7 +459,7 @@ function ensureLicenseModal() {
 
   const sub = document.createElement('div');
   sub.style.cssText = 'font-size: 13px; color: var(--ink-soft, #6b7280); margin-bottom: 16px; line-height: 1.5;';
-  sub.innerHTML = 'Enter the license key from your purchase receipt email. Don\'t have one yet? <a href="#" id="licenseGumroadLink" style="color: var(--primary, #2952E3); font-weight: 600;" target="_blank" rel="noopener">Buy on Gumroad →</a>';
+  sub.innerHTML = 'Enter the license key from your purchase receipt email. Don\'t have one yet? <a href="https://resumeprotemplate.gumroad.com/l/generated-resume" id="licenseGumroadLink" style="color: var(--primary, #2952E3); font-weight: 600;" target="_blank" rel="noopener">Buy on Gumroad →</a>';
 
   const input = document.createElement('input');
   input.type = 'text';

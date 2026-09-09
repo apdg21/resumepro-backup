@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ResumePro — Resume Builder</title>
+link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../header.css"
+<link rel="stylesheet" href="../footer.css">  
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -20,6 +23,7 @@
     --border: #E8E4DC;
     --success: #1E8E5A;
     --error: #C0392B;
+    --dark: #2b2d42;
     --font-display: 'Playfair Display', Georgia, serif;
     --font-body: 'Poppins', 'Segoe UI', system-ui, sans-serif;
     /* legacy aliases so nothing else needs renaming */
@@ -83,6 +87,83 @@
 </style>
 </head>
 <body>
+<header>
+    <div class="header-content">
+
+        <!-- Logo -->
+        <a href="../index.html" class="logo">
+            <span class="logo-icon">📄</span>
+            <span>ResumePro</span>
+        </a>
+
+        <!-- Nav + Hamburger -->
+        <div class="nav-container">
+            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+
+            <ul class="header-nav-menu" role="menubar">
+
+                <li class="header-nav-item" role="none">
+                    <a href="../index.html" class="header-nav-link" role="menuitem">Home</a>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Templates
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                    </a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="../resume-templates.html"   class="header-dropdown-item" role="menuitem">Resume Templates</a>
+                        <a href="../portfolio-templates.html" class="header-dropdown-item" role="menuitem">Portfolio Templates</a>
+                    </div>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Apps
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                    </a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="../android-applications.html"   class="header-dropdown-item" role="menuitem">Android Applications</a>
+                        <a href="../family-connection-tools.html" class="header-dropdown-item" role="menuitem">Web Applications</a>
+                    </div>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="../blog-list.html" class="header-nav-link" role="menuitem">Blog</a>
+                </li>
+
+                <li class="header-nav-item" role="none" style="display: none;">
+                    <a href="../klaviyo-analytics.html" class="header-nav-link" role="menuitem">Klaviyo Analytics</a>
+                </li>
+
+                <li class="header-nav-item header-dropdown" role="none">
+                    <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                        Tools
+                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                    </a>
+                    <div class="header-dropdown-content" role="menu">
+                        <a href="../email-builder.html"  class="header-dropdown-item" role="menuitem">Email Builder</a>
+                        <a href="../inliner.html"              class="header-dropdown-item" role="menuitem">Inliner</a>
+                        <a href="../klaviyo-tool.html"               class="header-dropdown-item" role="menuitem">Klaviyo Tool</a>
+                        <a href="../omnisend.html"                   class="header-dropdown-item" role="menuitem">Omnisend Analytics</a>
+						<a href="../adg-customer-service-agent.html"   class="header-dropdown-item" role="menuitem">CS Agent</a>
+						<a href="../campfire.html"   class="header-dropdown-item" role="menuitem">Campfire🔥</a>
+                    </div>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="../about.html" class="header-nav-link" role="menuitem">About</a>
+                </li>
+
+                <li class="header-nav-item" role="none">
+                    <a href="../contact.html" class="header-nav-link" role="menuitem">Contact</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</header>
+  
 
 <div class="brand-bar">
   <div class="brand-mark"><span class="doc-icon">📄</span> ResumePro <span style="color:var(--ink-soft); font-weight:400; font-size:14px; margin-left:4px;">/ Builder</span></div>
@@ -188,6 +269,46 @@
   </div>
 
 </div>
+<footer>
+    <div class="footer-content">
+        <div class="footer-column">
+            <h3>ResumePro</h3>
+            <p>Professional digital templates to showcase your career and work.</p>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Templates</h3>
+            <ul class="footer-links">
+                <li><a href="../resume-templates.html">Resume Templates</a></li>
+                <li><a href="../portfolio-templates.html">Portfolio Templates</a></li>
+                <li><a href="#">All Templates</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Resources</h3>
+            <ul class="footer-links">
+                <li><a href="help.html#editing">How to Edit</a></li>
+                <li><a href="help.html#hosting">Hosting Guide</a></li>
+                <li><a href="help.html#tips">Tips & Examples</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Company</h3>
+            <ul class="footer-links">
+                <li><a href="../about.html">About Us</a></li>
+                <li><a href="../contact.html">Contact</a></li>
+                <li><a href="../privacy.html">Privacy Policy</a></li>
+                <li><a href="../terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="copyright">
+        <p>&copy; 2023 Adolf de Guzman. All rights reserved.</p>
+    </div>
+</footer>  
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth.js/1.6.0/mammoth.browser.min.js"></script>
@@ -546,6 +667,7 @@ document.getElementById('downloadJsonBtn').addEventListener('click', () => {
   });
 });
 </script>
+<script src="../header.js"></script>  
 <script src="preview-and-download.js"></script>
 </body>
 </html>

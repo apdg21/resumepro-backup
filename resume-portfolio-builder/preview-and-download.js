@@ -403,15 +403,161 @@ async function downloadFullSite(dataObj) {
   if (downloadStatus) downloadStatus.textContent = 'Downloaded — unzip and open index.html, or host the folder anywhere.';
 }
 
+// --- LICENSE GATE -------------------------------------------------------
+// Gates downloads (not preview) behind a valid Gumroad license key. Two
+// paths to unlock:
+//   1. Automatic — Gumroad's post-purchase redirect appends ?license_key=...
+//      to the URL. Detected and verified silently on page load.
+//   2. Manual fallback — a small modal with an input field, for anyone
+//      returning later without that URL (using the key from their Gumroad
+//      receipt email instead).
+// Once verified, unlocked for the rest of the page visit — no re-prompting
+// per download.
+
+window.__licenseVerified = false;
+window.__licenseEmail = null;
+
+async function verifyLicenseKey(key) {
+  try {
+    const res = await fetch('/api/verify-license', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ licenseKey: key })
+    });
+    const result = await res.json();
+    if (result.valid) {
+      window.__licenseVerified = true;
+      window.__licenseEmail = result.email || null;
+    }
+    return result;
+  } catch (err) {
+    return { valid: false, reason: 'Could not reach the verification server. Check your connection and try again.' };
+  }
+}
+
+let licenseModalEls = null;
+let pendingAfterVerify = null;
+
+function ensureLicenseModal() {
+  if (licenseModalEls) return licenseModalEls;
+
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6);
+    z-index: 10000; align-items: center; justify-content: center; padding: 24px;
+  `;
+
+  const box = document.createElement('div');
+  box.style.cssText = `
+    background: var(--card, white); border-radius: 14px; width: 100%; max-width: 420px;
+    padding: 28px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); font-family: var(--font-body, inherit);
+  `;
+
+  const heading = document.createElement('div');
+  heading.style.cssText = 'font-family: var(--font-display, inherit); font-size: 18px; font-weight: 700; color: var(--ink, #1B2333); margin-bottom: 6px;';
+  heading.textContent = 'Unlock your download';
+
+  const sub = document.createElement('div');
+  sub.style.cssText = 'font-size: 13px; color: var(--ink-soft, #6b7280); margin-bottom: 16px; line-height: 1.5;';
+  sub.innerHTML = 'Enter the license key from your purchase receipt email. Don\'t have one yet? <a href="#" id="licenseGumroadLink" style="color: var(--primary, #2952E3); font-weight: 600;" target="_blank" rel="noopener">Buy on Gumroad →</a>';
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = 'e.g. A1B2C3D4-E5F6G7H8-...';
+  input.style.cssText = 'width: 100%; padding: 10px 12px; border: 1px solid var(--border, #e2e2e2); border-radius: 8px; font-size: 14px; margin-bottom: 10px; box-sizing: border-box;';
+
+  const status = document.createElement('div');
+  status.style.cssText = 'font-size: 13px; margin-bottom: 12px; min-height: 18px;';
+
+  const unlockBtn = document.createElement('button');
+  unlockBtn.type = 'button';
+  unlockBtn.textContent = 'Unlock download';
+  unlockBtn.style.cssText = 'width: 100%; background: var(--primary, #2952E3); color: white; border: none; padding: 11px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer;';
+
+  const cancelBtn = document.createElement('button');
+  cancelBtn.type = 'button';
+  cancelBtn.textContent = 'Cancel';
+  cancelBtn.style.cssText = 'width: 100%; background: transparent; color: var(--ink-soft, #6b7280); border: none; padding: 8px; font-size: 13px; cursor: pointer; margin-top: 6px;';
+  cancelBtn.addEventListener('click', () => { overlay.style.display = 'none'; pendingAfterVerify = null; });
+
+  unlockBtn.addEventListener('click', async () => {
+    const key = input.value.trim();
+    if (!key) { status.textContent = 'Enter a license key first.'; status.style.color = '#C0392B'; return; }
+    unlockBtn.disabled = true;
+    status.textContent = 'Checking...';
+    status.style.color = 'var(--ink-soft, #6b7280)';
+
+    const result = await verifyLicenseKey(key);
+    unlockBtn.disabled = false;
+
+    if (result.valid) {
+      status.textContent = 'Unlocked!';
+      status.style.color = '#1E8E5A';
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        if (pendingAfterVerify) { pendingAfterVerify(); pendingAfterVerify = null; }
+      }, 400);
+    } else {
+      status.textContent = result.reason || 'Invalid license key.';
+      status.style.color = '#C0392B';
+    }
+  });
+
+  box.appendChild(heading);
+  box.appendChild(sub);
+  box.appendChild(input);
+  box.appendChild(status);
+  box.appendChild(unlockBtn);
+  box.appendChild(cancelBtn);
+  overlay.appendChild(box);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.style.display = 'none'; });
+  document.body.appendChild(overlay);
+
+  licenseModalEls = { overlay, input, status };
+  return licenseModalEls;
+}
+
+// Call as requireLicense(() => { ...actual download logic... }). Runs the
+// callback immediately if already verified this visit; otherwise shows the
+// gate modal and runs it after a successful check.
+function requireLicense(onVerified) {
+  if (window.__licenseVerified) { onVerified(); return; }
+  const { overlay, input, status } = ensureLicenseModal();
+  status.textContent = '';
+  input.value = '';
+  pendingAfterVerify = onVerified;
+  overlay.style.display = 'flex';
+  input.focus();
+}
+
+// Automatic path: Gumroad's post-purchase redirect can append
+// ?license_key=... to the URL. Check for it once on load, verify silently,
+// then strip it from the visible URL so it doesn't linger in the address
+// bar or browser history longer than necessary.
+(function checkUrlForLicenseKey() {
+  const params = new URLSearchParams(window.location.search);
+  const keyFromUrl = params.get('license_key');
+  if (keyFromUrl) {
+    verifyLicenseKey(keyFromUrl).then(result => {
+      if (result.valid) {
+        params.delete('license_key');
+        const cleanUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+        window.history.replaceState({}, '', cleanUrl);
+      }
+    });
+  }
+})();
+
+
 // Wire these up to buttons in your existing page:
 //   <button id="previewBtn">Live preview</button>
 //   <button id="downloadSiteBtn">Download full site (.zip)</button>
 //   <div id="previewStatus"></div>
 document.getElementById('previewBtn')?.addEventListener('click', () => {
   if (!lastResult) { alert('Generate first.'); return; }
-  renderPreview(lastResult);
+  renderPreview(lastResult); // preview stays free, no license check
 });
 document.getElementById('downloadSiteBtn')?.addEventListener('click', () => {
   if (!lastResult) { alert('Generate first.'); return; }
-  downloadFullSite(lastResult);
+  requireLicense(() => downloadFullSite(lastResult));
 });

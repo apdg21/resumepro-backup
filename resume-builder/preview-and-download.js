@@ -415,19 +415,42 @@ async function downloadFullSite(dataObj) {
 // per download.
 
 window.__licenseVerified = false;
+window.__licenseVerifiedTemplate = null; // which template the current __licenseVerified=true actually covers
 window.__licenseEmail = null;
 
+// Each gated style has its OWN Gumroad product, so it needs its own checkout
+// link too -- mirrors PRODUCT_ID_ENV_BY_TEMPLATE on the backend. Add a line
+// here every time a new style gets its own product.
+const CHECKOUT_URL_BY_TEMPLATE = {
+  "resume/style1": "https://resumeprotemplate.gumroad.com/l/generated-resume-timeless",
+  "resume/style4": "https://resumeprotemplate.gumroad.com/l/generated-resume-vivid",
+};
+const DEFAULT_CHECKOUT_URL = "https://resumeprotemplate.gumroad.com/l/generated-resume";
+
+// NOTE: requireLicense() below checks window.__licenseVerifiedTemplate
+// against the currently selected template before skipping re-verification.
+// This still matters with one-Gumroad-product-per-template, because it's
+// what triggers a fresh /api/verify-license call (and therefore a fresh
+// check against the correct per-template product) whenever someone switches
+// templates mid-session -- without it, a session that unlocked "modern"
+// would never re-ask the server after switching to "classic".
 async function verifyLicenseKey(key) {
   try {
+    const currentTemplate = templateKey();
     const res = await fetch('/api/verify-license', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ licenseKey: key, templateKey: templateKey() })
+      body: JSON.stringify({ licenseKey: key, templateKey: currentTemplate })
     });
     const result = await res.json();
     if (result.valid) {
       window.__licenseVerified = true;
+      window.__licenseVerifiedTemplate = currentTemplate;
       window.__licenseEmail = result.email || null;
+    }
+    // surface server-side errors distinctly instead of masking them as "invalid key"
+    if (result.error && !result.reason) {
+      result.reason = `Server error: ${result.error}`;
     }
     return result;
   } catch (err) {
@@ -513,7 +536,7 @@ function ensureLicenseModal() {
   overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.style.display = 'none'; });
   document.body.appendChild(overlay);
 
-  licenseModalEls = { overlay, input, status };
+  licenseModalEls = { overlay, input, status, gumroadLink: sub.querySelector('#licenseGumroadLink') };
   return licenseModalEls;
 }
 
@@ -526,7 +549,14 @@ function ensureLicenseModal() {
 //      key rather than verifying it immediately on load.
 //   3. Neither -> show the manual entry modal.
 function requireLicense(onVerified) {
-  if (window.__licenseVerified) { onVerified(); return; }
+  // Only skip re-verification if we already unlocked THIS SAME template.
+  // Switching the template dropdown means a different template is now being
+  // requested, which the backend needs to re-check against the one-key-one-
+  // template lock -- a prior success for a different template doesn't count.
+  if (window.__licenseVerified && window.__licenseVerifiedTemplate === templateKey()) {
+    onVerified();
+    return;
+  }
 
   if (window.__pendingUrlLicenseKey) {
     const key = window.__pendingUrlLicenseKey;
@@ -548,11 +578,14 @@ function requireLicense(onVerified) {
 }
 
 function showLicenseModal(onVerified, prefilledError) {
-  const { overlay, input, status } = ensureLicenseModal();
+  const { overlay, input, status, gumroadLink } = ensureLicenseModal();
   status.textContent = prefilledError || '';
   status.style.color = '#C0392B';
   input.value = '';
   pendingAfterVerify = onVerified;
+  if (gumroadLink) {
+    gumroadLink.href = CHECKOUT_URL_BY_TEMPLATE[templateKey()] || DEFAULT_CHECKOUT_URL;
+  }
   overlay.style.display = 'flex';
   input.focus();
 }

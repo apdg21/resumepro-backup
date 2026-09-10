@@ -422,7 +422,7 @@ async function verifyLicenseKey(key) {
     const res = await fetch('/api/verify-license', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ licenseKey: key })
+      body: JSON.stringify({ licenseKey: key, templateKey: templateKey() })
     });
     const result = await res.json();
     if (result.valid) {
@@ -517,13 +517,40 @@ function ensureLicenseModal() {
   return licenseModalEls;
 }
 
-// Call as requireLicense(() => { ...actual download logic... }). Runs the
-// callback immediately if already verified this visit; otherwise shows the
-// gate modal and runs it after a successful check.
+// Call as requireLicense(() => { ...actual download logic... }). Three paths:
+//   1. Already verified this visit -> run immediately.
+//   2. A key arrived via Gumroad's redirect URL but hasn't been verified yet
+//      -> verify it NOW, using the template the user has actually selected
+//      at this moment (not whatever was selected on page load, which may
+//      have been the default). This is why the URL-check below stores the
+//      key rather than verifying it immediately on load.
+//   3. Neither -> show the manual entry modal.
 function requireLicense(onVerified) {
   if (window.__licenseVerified) { onVerified(); return; }
+
+  if (window.__pendingUrlLicenseKey) {
+    const key = window.__pendingUrlLicenseKey;
+    verifyLicenseKey(key).then(result => {
+      if (result.valid) {
+        onVerified();
+      } else {
+        // The URL-provided key didn't work for this template (e.g. it's
+        // already locked to a different one) — fall back to the manual
+        // modal so the person can see why and decide what to do.
+        window.__pendingUrlLicenseKey = null;
+        showLicenseModal(onVerified, result.reason);
+      }
+    });
+    return;
+  }
+
+  showLicenseModal(onVerified);
+}
+
+function showLicenseModal(onVerified, prefilledError) {
   const { overlay, input, status } = ensureLicenseModal();
-  status.textContent = '';
+  status.textContent = prefilledError || '';
+  status.style.color = '#C0392B';
   input.value = '';
   pendingAfterVerify = onVerified;
   overlay.style.display = 'flex';
@@ -531,20 +558,20 @@ function requireLicense(onVerified) {
 }
 
 // Automatic path: Gumroad's post-purchase redirect can append
-// ?license_key=... to the URL. Check for it once on load, verify silently,
-// then strip it from the visible URL so it doesn't linger in the address
-// bar or browser history longer than necessary.
+// ?license_key=... to the URL. The key is stored for use at the actual
+// moment of download (see requireLicense above) rather than verified here
+// immediately — verifying now would lock it to whatever template happens
+// to be selected by default on page load, before the customer has actually
+// chosen what they want. The URL itself is still cleaned up right away so
+// the key doesn't linger visibly in the address bar or browser history.
 (function checkUrlForLicenseKey() {
   const params = new URLSearchParams(window.location.search);
   const keyFromUrl = params.get('license_key');
   if (keyFromUrl) {
-    verifyLicenseKey(keyFromUrl).then(result => {
-      if (result.valid) {
-        params.delete('license_key');
-        const cleanUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
-        window.history.replaceState({}, '', cleanUrl);
-      }
-    });
+    window.__pendingUrlLicenseKey = keyFromUrl;
+    params.delete('license_key');
+    const cleanUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+    window.history.replaceState({}, '', cleanUrl);
   }
 })();
 

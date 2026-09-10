@@ -14,8 +14,8 @@
 // e.g. "resume/style1" -- NOT plain names like "modern" or "classic".
 // Add a new line here every time you gate a new style with its own product.
 const PRODUCT_ID_ENV_BY_TEMPLATE = {
-  "resume/style4": "GUMROAD_PRODUCT_ID_MODERN",  // Vivid
-  "resume/style1": "GUMROAD_PRODUCT_ID_CLASSIC", // Timeless
+  "resume/style4": "GUMROAD_PRODUCT_ID_VIVID",
+  "resume/style1": "GUMROAD_PRODUCT_ID_TIMELESS",
 };
 
 export async function onRequestPost(context) {

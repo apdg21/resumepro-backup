@@ -14,7 +14,7 @@
 // e.g. "resume/style1" -- NOT plain names like "modern" or "classic".
 // Add a new line here every time you gate a new style with its own product.
 const PRODUCT_ID_ENV_BY_TEMPLATE = {
-  "resume/style1": "GUMROAD_PRODUCT_ID_TIMELESS",
+"resume/style1": "GUMROAD_PRODUCT_ID_TIMELESS",
 "resume/style4": "GUMROAD_PRODUCT_ID_VIVID",
 "resume/style2": "GUMROAD_PRODUCT_ID_SLEEK",
 "resume/style3": "GUMROAD_PRODUCT_ID_EXECUTIVE",
@@ -26,7 +26,14 @@ const PRODUCT_ID_ENV_BY_TEMPLATE = {
 "resume/style10": "GUMROAD_PRODUCT_ID_TRENDY",
 "resume/style11": "GUMROAD_PRODUCT_ID_HORIZON",
 "resume/style12": "GUMROAD_PRODUCT_ID_MIDNIGHT",
-"resume/style13": "GUMROAD_PRODUCT_ID_EMBER",  
+"resume/style13": "GUMROAD_PRODUCT_ID_EMBER",
+"resume/style14": "GUMROAD_PRODUCT_ID_CANVAS",
+"resume/style15": "GUMROAD_PRODUCT_ID_GRAPHITE",
+"resume/style16": "GUMROAD_PRODUCT_ID_IVORY",
+"resume/style17": "GUMROAD_PRODUCT_ID_STORM",
+"resume/style18": "GUMROAD_PRODUCT_ID_LINEN",
+"resume/style19": "GUMROAD_PRODUCT_ID_PRISM",
+"resume/style20": "GUMROAD_PRODUCT_ID_OBSIDIAN",  
 };
 
 export async function onRequestPost(context) {

@@ -423,7 +423,18 @@ window.__licenseEmail = null;
 // here every time a new style gets its own product.
 const CHECKOUT_URL_BY_TEMPLATE = {
   "resume/style1": "https://resumeprotemplate.gumroad.com/l/generated-resume-timeless",
-  "resume/style4": "https://resumeprotemplate.gumroad.com/l/generated-resume-vivid",
+"resume/style4": "https://resumeprotemplate.gumroad.com/l/generated-resume-vivid",
+"resume/style2": "https://resumeprotemplate.gumroad.com/l/generated-resume-sleek",
+"resume/style3": "https://resumeprotemplate.gumroad.com/l/generated-resume-executive",
+"resume/style5": "https://resumeprotemplate.gumroad.com/l/generated-resume-pure",
+"resume/style6": "https://resumeprotemplate.gumroad.com/l/generated-resume-refined",
+"resume/style7": "https://resumeprotemplate.gumroad.com/l/generated-resume-dynamic",
+"resume/style8": "https://resumeprotemplate.gumroad.com/l/generated-resume-skillfocus",
+"resume/style9": "https://resumeprotemplate.gumroad.com/l/generated-resume-corporate",
+"resume/style10": "https://resumeprotemplate.gumroad.com/l/generated-resume-trendy",
+"resume/style11": "https://resumeprotemplate.gumroad.com/l/generated-resume-horizon",
+"resume/style12": "https://resumeprotemplate.gumroad.com/l/generated-resume-midnight",
+"resume/style13": "https://resumeprotemplate.gumroad.com/l/generated-resume-ember",
 };
 const DEFAULT_CHECKOUT_URL = "https://resumeprotemplate.gumroad.com/l/generated-resume";
 

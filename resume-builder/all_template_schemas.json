@@ -1358,7 +1358,7 @@
         ]
       }
     },
-    "style11": {
+    "HORIZON": {
       "personalInfo": {
         "firstName": "Sofia",
         "lastName": "Reyes",
@@ -1501,7 +1501,7 @@
         }
       ]
     },
-    "style12": {
+    "MIDNIGHT": {
       "name": "Maya Dela Cruz",
       "title": "Environmental Scientist & Climate Researcher",
       "theme": {
@@ -1613,7 +1613,7 @@
         "image": "assets/profile.jpg"
       }
     },
-    "style13": {
+    "EMBER": {
       "name": "Andrei Villanueva",
       "title": "Aerospace Engineer",
       "theme": {
@@ -1727,7 +1727,7 @@
         "image": "assets/profile.jpg"
       }
     },
-    "style14": {
+    "CANVAS": {
       "title": "Isabelle Santos | Registered Dietitian",
       "theme": {
         "gradientStart": "#fdf6ee",
@@ -1917,7 +1917,7 @@
         "copyright": "© {year} Isabelle Santos, RDN. All rights reserved."
       }
     },
-    "style15": {
+    "GRAPHITE": {
       "name": "Marcus Reyes",
       "title": "Senior Financial Analyst",
       "theme": {
@@ -2031,7 +2031,7 @@
         "image": "assets/profile.jpg"
       }
     },
-    "style16": {
+    "IVORY": {
       "name": "Marcus Delgado",
       "title": "Senior Cybersecurity Engineer",
       "aboutMe": "I'm a cybersecurity engineer with over 8 years of experience protecting enterprise systems, leading incident response operations, and building resilient security architectures. I specialize in threat intelligence, penetration testing, and cloud security — translating complex risks into actionable defenses. Based in Berlin, I've worked across fintech, healthcare, and critical infrastructure sectors, and I'm passionate about making digital systems safer for everyone.",
@@ -2128,7 +2128,7 @@
         "image": "assets/profile.jpg"
       }
     },
-    "style17": {
+    "STORM": {
       "profile_image": "assets/profile.jpg",
       "name": "Priya Venkataraman",
       "title": "Marine Biologist & Ocean Conservation Lead",
@@ -2239,7 +2239,7 @@
         "accentColor": "#c0392b"
       }
     },
-    "style18": {
+    "LINEN": {
       "pageTitle": "Isadora Kuznetsova — Concert Pianist",
       "logoText": "IK",
       "navigation": [
@@ -2456,7 +2456,7 @@
         "accentColor": "#c9a84c"
       }
     },
-    "style19": {
+    "PRISM": {
       "htmlTitle": "Sigríður Björnsdóttir — Marine Biologist",
       "header": "Sigríður Björnsdóttir",
       "about": "I am a marine biologist and ocean researcher specializing in deep-sea biodiversity and Arctic ecosystem dynamics. With over a decade of fieldwork across the North Atlantic, I combine rigorous scientific methodology with a deep respect for the natural world. My research focuses on how warming ocean temperatures are reshaping the vertical migration patterns of deep-sea organisms — work that has direct implications for global carbon cycling and fisheries policy. I collaborate with international research institutions, publish in peer-reviewed journals, and am passionate about translating complex science into actionable conservation strategies.",
@@ -2559,7 +2559,7 @@
         "accentColor": "#d4894a"
       }
     },
-    "style20": {
+    "OBSIDIAN": {
       "title": "Valentina Cruz Monteiro — Architect",
       "header": {
         "title": "VCM"

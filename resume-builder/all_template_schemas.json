@@ -1,6 +1,6 @@
 {
   "resume_templates": {
-    "style1": {
+    "TIMELESS": {
       "name": "John Doe",
       "title": "Senior Web Developer",
       "about": "Experienced web developer with over 7 years of expertise in building responsive, user-friendly websites and applications. Specialized in JavaScript frameworks and modern CSS techniques. Passionate about creating efficient, scalable solutions and mentoring junior developers.",
@@ -145,7 +145,7 @@
         ]
       }
     },
-    "style2": {
+    "SLEEK": {
       "name": "RICHARD SANCHEZ",
       "title": "Marketing Manager",
       "about": "Experienced Marketing Manager skilled in developing and executing comprehensive marketing strategies. Adept at leading teams, managing budgets, and delivering measurable results for diverse clients.",
@@ -263,7 +263,7 @@
         ]
       }
     },
-    "style3": {
+    "EXECUTIVE": {
       "name": "Morgan Maxwell",
       "title": "Graphic Designer",
       "about": "Creative and detail-oriented graphic designer with 4 years of experience in developing visually compelling designs for print and digital media. Adept at collaborating with cross-functional teams and managing multiple projects to deliver high-quality results on time and within budget.",
@@ -391,7 +391,7 @@
         ]
       }
     },
-    "style4": {
+    "VIVID": {
       "name": "Morgan Maxwell",
       "title": "Graphic Designer & Brand Specialist",
       "about": "Creative and detail-oriented graphic designer with 4 years of experience in developing visually compelling designs for print and digital media. Adept at collaborating with cross-functional teams and managing multiple projects to deliver high-quality results on time and within budget.",
@@ -552,7 +552,7 @@
         ]
       }
     },
-    "style5": {
+    "PURE": {
       "name": "DONNA STROUPE",
       "title": "Sales Representative",
       "about": "I am a Sales Representative who initializes and manages relationships with customers. I serve as their point of contact and lead from initial outreach through the making of the final purchase by them or someone in their household.",
@@ -664,7 +664,7 @@
         ]
       }
     },
-    "style6": {
+    "REFINED": {
       "name": "Isabel Schumacher",
       "title": "Graphics Designer",
       "about": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pharetra in lorem at laoreet. Donec hendrerit libero eget est tempor, quis tempus arcu elementum. Passionate about creating visual experiences that communicate clearly and beautifully.",
@@ -767,7 +767,7 @@
         ]
       }
     },
-    "style7": {
+    "DYNAMIC": {
       "name": "John Doe",
       "title": "Web Developer & Designer",
       "about": "Passionate web developer with 5+ years of experience creating responsive and user-friendly websites. Specialized in JavaScript frameworks and UI/UX design.",
@@ -903,7 +903,7 @@
         ]
       }
     },
-    "style8": {
+    "SKILLFOCUS": {
       "name": "John Doe",
       "title": "Senior Web Developer",
       "about": "I am a dedicated web developer with extensive experience in creating efficient, scalable, and user-friendly web applications. My expertise includes front-end development with React and Vue.js, back-end development with Node.js, and database management with MongoDB and PostgreSQL. I'm committed to writing clean, maintainable code and staying up-to-date with the latest web technologies.",
@@ -1064,7 +1064,7 @@
         ]
       }
     },
-    "style9": {
+    "CORPORATE": {
       "name": "John Doe",
       "title": "Full Stack Developer",
       "about": "I am an experienced software developer with a strong background in building scalable and user-friendly web applications. My passion lies in crafting robust solutions that not only meet business requirements but also provide seamless experiences for end users. I thrive in collaborative environments and enjoy working closely with cross-functional teams to deliver high-quality software products.",
@@ -1206,7 +1206,7 @@
         ]
       }
     },
-    "style10": {
+    "TRENDY": {
       "name": "John Doe",
       "title": "Software Engineer",
       "about": "A passionate and results-driven software engineer with over 7 years of hands-on experience in full-stack web development. I excel at building scalable, high-performance applications from conception to deployment. My expertise spans across various technologies including modern JavaScript frameworks, backend services, and database management. I am adept at collaborating with cross-functional teams to deliver innovative solutions that meet business objectives and enhance user experience.",

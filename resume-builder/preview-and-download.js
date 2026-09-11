@@ -422,7 +422,7 @@ window.__licenseEmail = null;
 // link too -- mirrors PRODUCT_ID_ENV_BY_TEMPLATE on the backend. Add a line
 // here every time a new style gets its own product.
 const CHECKOUT_URL_BY_TEMPLATE = {
-  "resume/style1": "https://resumeprotemplate.gumroad.com/l/generated-resume-timeless",
+"resume/style1": "https://resumeprotemplate.gumroad.com/l/generated-resume-timeless",
 "resume/style4": "https://resumeprotemplate.gumroad.com/l/generated-resume-vivid",
 "resume/style2": "https://resumeprotemplate.gumroad.com/l/generated-resume-sleek",
 "resume/style3": "https://resumeprotemplate.gumroad.com/l/generated-resume-executive",
@@ -435,6 +435,13 @@ const CHECKOUT_URL_BY_TEMPLATE = {
 "resume/style11": "https://resumeprotemplate.gumroad.com/l/generated-resume-horizon",
 "resume/style12": "https://resumeprotemplate.gumroad.com/l/generated-resume-midnight",
 "resume/style13": "https://resumeprotemplate.gumroad.com/l/generated-resume-ember",
+"resume/style14": "https://resumeprotemplate.gumroad.com/l/generated-resume-canvas",
+"resume/style15": "https://resumeprotemplate.gumroad.com/l/generated-resume-graphite",
+"resume/style16": "https://resumeprotemplate.gumroad.com/l/generated-resume-ivory",
+"resume/style17": "https://resumeprotemplate.gumroad.com/l/generated-resume-storm",
+"resume/style18": "https://resumeprotemplate.gumroad.com/l/generated-resume-linen",
+"resume/style19": "https://resumeprotemplate.gumroad.com/l/generated-resume-prism",
+"resume/style20": "https://resumeprotemplate.gumroad.com/l/generated-resume-obsidian",
 };
 const DEFAULT_CHECKOUT_URL = "https://resumeprotemplate.gumroad.com/l/generated-resume";
 

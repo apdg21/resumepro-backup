@@ -64,11 +64,44 @@ function mergeProfilePhoto(generatedData, originalTemplateSchema, photoDataUri) 
   return generatedData;
 }
 
+// index.html's dropdown is populated from all_template_schemas.json, whose
+// keys are ALL-CAPS display names (TIMELESS, VIVID, ...) -- NOT the style1..
+// style20 folder names used on disk and by resume-form.html. Without this
+// map, templateKey() would return "resume/VIVID" on index.html but
+// "resume/style4" on resume-form.html for the exact same template, breaking
+// both the preview file lookup and license verification on whichever page
+// isn't using the style1..style20 form.
+const NAME_TO_STYLE_KEY = {
+  TIMELESS: "style1",
+  SLEEK: "style2",
+  EXECUTIVE: "style3",
+  VIVID: "style4",
+  PURE: "style5",
+  REFINED: "style6",
+  DYNAMIC: "style7",
+  SKILLFOCUS: "style8",
+  CORPORATE: "style9",
+  TRENDY: "style10",
+  HORIZON: "style11",
+  MIDNIGHT: "style12",
+  EMBER: "style13",
+  CANVAS: "style14",
+  GRAPHITE: "style15",
+  IVORY: "style16",
+  STORM: "style17",
+  LINEN: "style18",
+  PRISM: "style19",
+  OBSIDIAN: "style20",
+};
+
 function templateKey() {
   const cat = (typeof categorySelect !== 'undefined' && categorySelect)
     ? (categorySelect.value === 'resume_templates' ? 'resume' : 'portfolio')
     : 'resume';
-  const style = templateSelect.value;
+  const rawStyle = templateSelect.value;
+  // Normalize display-name keys (VIVID, TIMELESS, ...) down to the folder
+  // name (style4, style1, ...) so both pages always agree on the same key.
+  const style = NAME_TO_STYLE_KEY[rawStyle] || rawStyle;
   return `${cat}/${style}`;
 }
 

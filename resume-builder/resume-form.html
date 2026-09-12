@@ -34,6 +34,7 @@
   }
    * { box-sizing: border-box; }
   body { font-family: var(--font-body); background: var(--paper); color: var(--ink); margin:0; padding:0; overflow-x: hidden; }
+  .page-content {padding: 32px 24px 60px;}
   .wrap { max-width: 1200px; margin: 0 auto; display:grid; gap:24px; grid-template-columns: 1fr; min-width: 0; }
   @media (min-width:1000px){ .wrap.two-col { grid-template-columns: 480px 1fr; } }
 
@@ -164,7 +165,7 @@
     </div>
 </header>
   
-
+<div class="page-content">
 <div class="brand-bar">
   <div class="brand-mark"><span class="doc-icon">📄</span> ResumePro <span style="color:var(--ink-soft); font-weight:400; font-size:14px; margin-left:4px;">/ Builder</span></div>
   <span class="badge-pill">✨ AI-assisted</span>
@@ -267,7 +268,7 @@
     <div class="status" id="previewStatus"></div>
     <div id="previewContainer" style="margin-top:12px;"></div>
   </div>
-
+</div>
 </div>
 <footer>
     <div class="footer-content">

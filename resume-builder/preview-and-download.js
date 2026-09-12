@@ -6,19 +6,57 @@
   the /api/generate response). It expects these globals to already exist from
   your current page:
     - lastResult        (the filled data.json object returned by /api/generate)
-    - categorySelect     (the <select> for resume/portfolio)
-    - templateSelect     (the <select> for style1..style20 etc.)
+    - templateSelect    (the <select> for TIMELESS/VIVID/... etc.)
 
   It adds two things to the page automatically: a live preview (opens in a
   full-screen modal) and a "Download full site (.zip)" button, both driven
   by TEMPLATES_BASE + manifests.json.
 
   IMPORTANT: templates only exist for combos present in
-  /templates/manifests.json. Right now that's resume/style1 and
-  portfolio/style1 — see README for how to add the rest.
+  /templates/manifests.json. Resume-only (portfolio removed from the
+  frontend flow, but its manifest entries are still present/untouched).
+
+  FOLDER MAPPING NOTE: the physical folders on disk are still named
+  style1..style20 (never renamed). TEMPLATE_FOLDER_BY_KEY below maps each
+  human-readable template name (used in manifests.json keys,
+  CHECKOUT_URL_BY_TEMPLATE, PRODUCT_ID_ENV_BY_TEMPLATE, and templateSelect's
+  values) to its real folder. Only file-fetching code needs to know about
+  the styleN naming — everything else uses the friendly name.
+
+  ⚠️ DOUBLE-CHECK this mapping against what's actually inside each styleN
+  folder before relying on it — an incorrect line here means one template's
+  preview/download will silently serve a different template's files.
 */
 
 const TEMPLATES_BASE = 'templates'; // relative to this page's own location — works no matter what subfolder the site is served from
+
+// Physical folder is still styleN; this maps the friendly key to it.
+const TEMPLATE_FOLDER_BY_KEY = {
+  "resume/TIMELESS": "resume/style1",
+  "resume/VIVID": "resume/style2",
+  "resume/SLEEK": "resume/style3",
+  "resume/EXECUTIVE": "resume/style4",
+  "resume/PURE": "resume/style5",
+  "resume/REFINED": "resume/style6",
+  "resume/DYNAMIC": "resume/style7",
+  "resume/SKILLFOCUS": "resume/style8",
+  "resume/CORPORATE": "resume/style9",
+  "resume/TRENDY": "resume/style10",
+  "resume/HORIZON": "resume/style11",
+  "resume/MIDNIGHT": "resume/style12",
+  "resume/EMBER": "resume/style13",
+  "resume/CANVAS": "resume/style14",
+  "resume/GRAPHITE": "resume/style15",
+  "resume/IVORY": "resume/style16",
+  "resume/STORM": "resume/style17",
+  "resume/LINEN": "resume/style18",
+  "resume/PRISM": "resume/style19",
+  "resume/OBSIDIAN": "resume/style20",
+};
+
+function templateFolder(key) {
+  return TEMPLATE_FOLDER_BY_KEY[key] || key; // fallback: assume key == folder if not mapped
+}
 
 let manifestsCache = null;
 
@@ -65,11 +103,8 @@ function mergeProfilePhoto(generatedData, originalTemplateSchema, photoDataUri) 
 }
 
 function templateKey() {
-  const cat = (typeof categorySelect !== 'undefined' && categorySelect)
-    ? (categorySelect.value === 'resume_templates' ? 'resume' : 'portfolio')
-    : 'resume';
   const style = templateSelect.value;
-  return `${cat}/${style}`;
+  return `resume/${style}`;
 }
 
 // --- MODAL SCAFFOLDING ---------------------------------------------------
@@ -179,6 +214,7 @@ function closePreviewModal() {
 
 async function renderPreview(dataObj) {
   const key = templateKey();
+  const folder = templateFolder(key);
   const manifests = await getManifests();
   const { overlay, iframeWrap, title } = ensurePreviewModal();
 
@@ -220,7 +256,7 @@ async function renderPreview(dataObj) {
   }
   extractPhoto(dataForIframe, '');
 
-  const indexUrl = `${TEMPLATES_BASE}/${key}/index.html`;
+  const indexUrl = `${TEMPLATES_BASE}/${folder}/index.html`;
   const htmlRes = await fetch(indexUrl);
   let html = await htmlRes.text();
 
@@ -233,7 +269,7 @@ async function renderPreview(dataObj) {
     window.removeEventListener('message', window.__lastPreviewMessageListener);
   }
 
-  const absoluteTemplateBase = new URL(`${TEMPLATES_BASE}/${key}/`, window.location.href).href;
+  const absoluteTemplateBase = new URL(`${TEMPLATES_BASE}/${folder}/`, window.location.href).href;
 
   const injection = `
     <base href="${absoluteTemplateBase}">
@@ -374,6 +410,8 @@ async function downloadFullSite(dataObj) {
     return;
   }
 
+  const folder = templateFolder(key);
+
   const downloadStatus = document.getElementById('previewStatus');
   if (downloadStatus) downloadStatus.textContent = 'Packaging your site...';
 
@@ -381,7 +419,7 @@ async function downloadFullSite(dataObj) {
   const files = manifests[key];
 
   await Promise.all(files.map(async (relPath) => {
-    const url = `${TEMPLATES_BASE}/${key}/${relPath}`;
+    const url = `${TEMPLATES_BASE}/${folder}/${relPath}`;
     const res = await fetch(url);
     if (relPath.match(/\.(jpg|jpeg|png|gif|webp|ico)$/i)) {
       zip.file(relPath, await res.blob());
@@ -450,8 +488,8 @@ const DEFAULT_CHECKOUT_URL = "https://resumeprotemplate.gumroad.com/l/generated-
 // This still matters with one-Gumroad-product-per-template, because it's
 // what triggers a fresh /api/verify-license call (and therefore a fresh
 // check against the correct per-template product) whenever someone switches
-// templates mid-session -- without it, a session that unlocked "modern"
-// would never re-ask the server after switching to "classic".
+// templates mid-session -- without it, a session that unlocked one template
+// would never re-ask the server after switching to another.
 async function verifyLicenseKey(key) {
   try {
     const currentTemplate = templateKey();

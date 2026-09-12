@@ -1,11 +1,11 @@
 {
-  "resume/TIMELESS": [
+  "resume/style1": [
     "assets/profile.jpg",
     "index.html",
     "main.js",
     "style.css"
   ],
-  "resume/VIVID": [
+  "resume/style4": [
     "assets/facebook.svg",
     "assets/instagram.svg",
     "assets/linkedin.svg",
@@ -15,20 +15,20 @@
     "main.js",
     "style.css"
   ],
-  "resume/SLEEK": [
+  "resume/style2": [
     "assets/profile.jpg",
     "index.html",
     "main.js",
     "style.css"
   ],
-  "resume/EXECUTIVE": [
+  "resume/style3": [
     "assets/designer-work.jpg",
     "assets/profile.jpg",
     "index.html",
     "main.js",
     "style.css"
   ],
-  "resume/PURE": [
+  "resume/style5": [
     "assets/facebook.svg",
     "assets/linkedin.svg",
     "assets/profile.jpg",
@@ -37,43 +37,43 @@
     "main.js",
     "style.css"
   ],
-  "resume/REFINED": [
+  "resume/style6": [
     "assets/profile.jpg",
     "index.html",
     "main.js",
     "style.css"
   ],
-  "resume/DYNAMIC": [
+  "resume/style7": [
     "assets/designer-work.jpg",
     "assets/profile.jpg",
     "index.html",
     "main.js",
     "style.css"
   ],
-  "resume/SKILLFOCUS": [
+  "resume/style8": [
     "assets/designer-work.jpg",
     "assets/profile.jpg",
     "index.html",
     "main.js",
     "style.css"
   ],
-  "resume/CORPORATE": [
+  "resume/style9": [
     "assets/profile.jpg",
     "index.html",
     "main.js",
     "style.css"
   ],
-  "resume/TRENDY": [
+  "resume/style10": [
     "assets/profile.jpg",
     "index.html",
     "main.js",
     "style.css"
   ],
-  "resume/HORIZON": [
+  "resume/style11": [
     "assets/profile.jpg",
     "index.html"
   ],
-  "resume/MIDNIGHT": [
+  "resume/style12": [
     "assets/facebook.svg",
     "assets/instagram.svg",
     "assets/linkedin.svg",
@@ -81,36 +81,36 @@
     "assets/twitter.svg",
     "index.html"
   ],
-  "resume/EMBER": [
+  "resume/style13": [
     "assets/profile.jpg",
     "index.html"
   ],
-  "resume/CANVAS": [
+  "resume/style14": [
     "assets/designer-work.jpg",
     "assets/profile.jpg",
     "index.html"
   ],
-  "resume/GRAPHITE": [
+  "resume/style15": [
     "assets/profile.jpg",
     "index.html"
   ],
-  "resume/IVORY": [
+  "resume/style16": [
     "assets/profile.jpg",
     "index.html"
   ],
-  "resume/STORM": [
+  "resume/style17": [
     "assets/profile.jpg",
     "index.html"
   ],
-  "resume/LINEN": [
+  "resume/style18": [
     "assets/profile.jpg",
     "index.html"
   ],
-  "resume/PRISM": [
+  "resume/style19": [
     "assets/profile.jpg",
     "index.html"
   ],
-  "resume/OBSIDIAN": [
+  "resume/style20": [
     "assets/profile.jpg",
     "index.html"
   ],

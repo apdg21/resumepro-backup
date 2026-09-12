@@ -376,10 +376,37 @@ fetch('all_template_schemas.json')
     statusEl.className = 'status error';
   });
 
+// Friendly display names for the resume template styles -- keys stay as
+// "style1".."style20" internally (used in templateKey() for license checks),
+// only the visible dropdown label changes.
+const STYLE_DISPLAY_NAMES = {
+  style1: "Timeless",
+  style2: "Sleek",
+  style3: "Executive",
+  style4: "Vivid",
+  style5: "Pure",
+  style6: "Refined",
+  style7: "Dynamic",
+  style8: "SkillFocus",
+  style9: "Corporate",
+  style10: "Trendy",
+  style11: "Horizon",
+  style12: "Midnight",
+  style13: "Ember",
+  style14: "Canvas",
+  style15: "Graphite",
+  style16: "Ivory",
+  style17: "Storm",
+  style18: "Linen",
+  style19: "Prism",
+  style20: "Obsidian",
+};
+
 function populateTemplates() {
   const cat = categorySelect.value;
   const styles = Object.keys(allSchemas[cat] || {});
-  templateSelect.innerHTML = styles.map(s => `<option value="${s}">${cat === 'resume_templates' ? 'Resume' : 'Portfolio'} — ${s}</option>`).join('');
+  const catLabel = cat === 'resume_templates' ? 'Resume' : 'Portfolio';
+  templateSelect.innerHTML = styles.map(s => `<option value="${s}">${catLabel} — ${STYLE_DISPLAY_NAMES[s] || s}</option>`).join('');
 }
 categorySelect.addEventListener('change', populateTemplates);
 

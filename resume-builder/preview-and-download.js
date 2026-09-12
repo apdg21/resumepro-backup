@@ -6,57 +6,19 @@
   the /api/generate response). It expects these globals to already exist from
   your current page:
     - lastResult        (the filled data.json object returned by /api/generate)
-    - templateSelect    (the <select> for TIMELESS/VIVID/... etc.)
+    - categorySelect     (the <select> for resume/portfolio)
+    - templateSelect     (the <select> for style1..style20 etc.)
 
   It adds two things to the page automatically: a live preview (opens in a
   full-screen modal) and a "Download full site (.zip)" button, both driven
   by TEMPLATES_BASE + manifests.json.
 
   IMPORTANT: templates only exist for combos present in
-  /templates/manifests.json. Resume-only (portfolio removed from the
-  frontend flow, but its manifest entries are still present/untouched).
-
-  FOLDER MAPPING NOTE: the physical folders on disk are still named
-  style1..style20 (never renamed). TEMPLATE_FOLDER_BY_KEY below maps each
-  human-readable template name (used in manifests.json keys,
-  CHECKOUT_URL_BY_TEMPLATE, PRODUCT_ID_ENV_BY_TEMPLATE, and templateSelect's
-  values) to its real folder. Only file-fetching code needs to know about
-  the styleN naming — everything else uses the friendly name.
-
-  ⚠️ DOUBLE-CHECK this mapping against what's actually inside each styleN
-  folder before relying on it — an incorrect line here means one template's
-  preview/download will silently serve a different template's files.
+  /templates/manifests.json. Right now that's resume/style1 and
+  portfolio/style1 — see README for how to add the rest.
 */
 
 const TEMPLATES_BASE = 'templates'; // relative to this page's own location — works no matter what subfolder the site is served from
-
-// Physical folder is still styleN; this maps the friendly key to it.
-const TEMPLATE_FOLDER_BY_KEY = {
-  "resume/TIMELESS": "resume/style1",
-  "resume/VIVID": "resume/style2",
-  "resume/SLEEK": "resume/style3",
-  "resume/EXECUTIVE": "resume/style4",
-  "resume/PURE": "resume/style5",
-  "resume/REFINED": "resume/style6",
-  "resume/DYNAMIC": "resume/style7",
-  "resume/SKILLFOCUS": "resume/style8",
-  "resume/CORPORATE": "resume/style9",
-  "resume/TRENDY": "resume/style10",
-  "resume/HORIZON": "resume/style11",
-  "resume/MIDNIGHT": "resume/style12",
-  "resume/EMBER": "resume/style13",
-  "resume/CANVAS": "resume/style14",
-  "resume/GRAPHITE": "resume/style15",
-  "resume/IVORY": "resume/style16",
-  "resume/STORM": "resume/style17",
-  "resume/LINEN": "resume/style18",
-  "resume/PRISM": "resume/style19",
-  "resume/OBSIDIAN": "resume/style20",
-};
-
-function templateFolder(key) {
-  return TEMPLATE_FOLDER_BY_KEY[key] || key; // fallback: assume key == folder if not mapped
-}
 
 let manifestsCache = null;
 
@@ -103,8 +65,11 @@ function mergeProfilePhoto(generatedData, originalTemplateSchema, photoDataUri) 
 }
 
 function templateKey() {
+  const cat = (typeof categorySelect !== 'undefined' && categorySelect)
+    ? (categorySelect.value === 'resume_templates' ? 'resume' : 'portfolio')
+    : 'resume';
   const style = templateSelect.value;
-  return `resume/${style}`;
+  return `${cat}/${style}`;
 }
 
 // --- MODAL SCAFFOLDING ---------------------------------------------------
@@ -214,7 +179,6 @@ function closePreviewModal() {
 
 async function renderPreview(dataObj) {
   const key = templateKey();
-  const folder = templateFolder(key);
   const manifests = await getManifests();
   const { overlay, iframeWrap, title } = ensurePreviewModal();
 
@@ -256,7 +220,7 @@ async function renderPreview(dataObj) {
   }
   extractPhoto(dataForIframe, '');
 
-  const indexUrl = `${TEMPLATES_BASE}/${folder}/index.html`;
+  const indexUrl = `${TEMPLATES_BASE}/${key}/index.html`;
   const htmlRes = await fetch(indexUrl);
   let html = await htmlRes.text();
 
@@ -269,7 +233,7 @@ async function renderPreview(dataObj) {
     window.removeEventListener('message', window.__lastPreviewMessageListener);
   }
 
-  const absoluteTemplateBase = new URL(`${TEMPLATES_BASE}/${folder}/`, window.location.href).href;
+  const absoluteTemplateBase = new URL(`${TEMPLATES_BASE}/${key}/`, window.location.href).href;
 
   const injection = `
     <base href="${absoluteTemplateBase}">
@@ -410,8 +374,6 @@ async function downloadFullSite(dataObj) {
     return;
   }
 
-  const folder = templateFolder(key);
-
   const downloadStatus = document.getElementById('previewStatus');
   if (downloadStatus) downloadStatus.textContent = 'Packaging your site...';
 
@@ -419,7 +381,7 @@ async function downloadFullSite(dataObj) {
   const files = manifests[key];
 
   await Promise.all(files.map(async (relPath) => {
-    const url = `${TEMPLATES_BASE}/${folder}/${relPath}`;
+    const url = `${TEMPLATES_BASE}/${key}/${relPath}`;
     const res = await fetch(url);
     if (relPath.match(/\.(jpg|jpeg|png|gif|webp|ico)$/i)) {
       zip.file(relPath, await res.blob());
@@ -460,26 +422,26 @@ window.__licenseEmail = null;
 // link too -- mirrors PRODUCT_ID_ENV_BY_TEMPLATE on the backend. Add a line
 // here every time a new style gets its own product.
 const CHECKOUT_URL_BY_TEMPLATE = {
-"resume/TIMELESS": "https://resumeprotemplate.gumroad.com/l/generated-resume-timeless",
-"resume/VIVID": "https://resumeprotemplate.gumroad.com/l/generated-resume-vivid",
-"resume/SLEEK": "https://resumeprotemplate.gumroad.com/l/generated-resume-sleek",
-"resume/EXECUTIVE": "https://resumeprotemplate.gumroad.com/l/generated-resume-executive",
-"resume/PURE": "https://resumeprotemplate.gumroad.com/l/generated-resume-pure",
-"resume/REFINED": "https://resumeprotemplate.gumroad.com/l/generated-resume-refined",
-"resume/DYNAMIC": "https://resumeprotemplate.gumroad.com/l/generated-resume-dynamic",
-"resume/SKILLFOCUS": "https://resumeprotemplate.gumroad.com/l/generated-resume-skillfocus",
-"resume/CORPORATE": "https://resumeprotemplate.gumroad.com/l/generated-resume-corporate",
-"resume/TRENDY": "https://resumeprotemplate.gumroad.com/l/generated-resume-trendy",
-"resume/HORIZON": "https://resumeprotemplate.gumroad.com/l/generated-resume-horizon",
-"resume/MIDNIGHT": "https://resumeprotemplate.gumroad.com/l/generated-resume-midnight",
-"resume/EMBER": "https://resumeprotemplate.gumroad.com/l/generated-resume-ember",
-"resume/CANVAS": "https://resumeprotemplate.gumroad.com/l/generated-resume-canvas",
-"resume/GRAPHITE": "https://resumeprotemplate.gumroad.com/l/generated-resume-graphite",
-"resume/IVORY": "https://resumeprotemplate.gumroad.com/l/generated-resume-ivory",
-"resume/STORM": "https://resumeprotemplate.gumroad.com/l/generated-resume-storm",
-"resume/LINEN": "https://resumeprotemplate.gumroad.com/l/generated-resume-linen",
-"resume/PRISM": "https://resumeprotemplate.gumroad.com/l/generated-resume-prism",
-"resume/OBSIDIAN": "https://resumeprotemplate.gumroad.com/l/generated-resume-obsidian",
+  "resume/style1": "https://resumeprotemplate.gumroad.com/l/generated-resume-timeless",
+  "resume/style2": "https://resumeprotemplate.gumroad.com/l/generated-resume-sleek",
+  "resume/style3": "https://resumeprotemplate.gumroad.com/l/generated-resume-executive",
+  "resume/style4": "https://resumeprotemplate.gumroad.com/l/generated-resume-vivid",
+  "resume/style5": "https://resumeprotemplate.gumroad.com/l/generated-resume-pure",
+  "resume/style6": "https://resumeprotemplate.gumroad.com/l/generated-resume-refined",
+  "resume/style7": "https://resumeprotemplate.gumroad.com/l/generated-resume-dynamic",
+  "resume/style8": "https://resumeprotemplate.gumroad.com/l/generated-resume-skillfocus",
+  "resume/style9": "https://resumeprotemplate.gumroad.com/l/generated-resume-corporate",
+  "resume/style10": "https://resumeprotemplate.gumroad.com/l/generated-resume-trendy",
+  "resume/style11": "https://resumeprotemplate.gumroad.com/l/generated-resume-horizon",
+  "resume/style12": "https://resumeprotemplate.gumroad.com/l/generated-resume-midnight",
+  "resume/style13": "https://resumeprotemplate.gumroad.com/l/generated-resume-ember",
+  "resume/style14": "https://resumeprotemplate.gumroad.com/l/generated-resume-canvas",
+  "resume/style15": "https://resumeprotemplate.gumroad.com/l/generated-resume-graphite",
+  "resume/style16": "https://resumeprotemplate.gumroad.com/l/generated-resume-ivory",
+  "resume/style17": "https://resumeprotemplate.gumroad.com/l/generated-resume-storm",
+  "resume/style18": "https://resumeprotemplate.gumroad.com/l/generated-resume-linen",
+  "resume/style19": "https://resumeprotemplate.gumroad.com/l/generated-resume-prism",
+  "resume/style20": "https://resumeprotemplate.gumroad.com/l/generated-resume-obsidian",
 };
 const DEFAULT_CHECKOUT_URL = "https://resumeprotemplate.gumroad.com/l/generated-resume";
 
@@ -488,8 +450,8 @@ const DEFAULT_CHECKOUT_URL = "https://resumeprotemplate.gumroad.com/l/generated-
 // This still matters with one-Gumroad-product-per-template, because it's
 // what triggers a fresh /api/verify-license call (and therefore a fresh
 // check against the correct per-template product) whenever someone switches
-// templates mid-session -- without it, a session that unlocked one template
-// would never re-ask the server after switching to another.
+// templates mid-session -- without it, a session that unlocked "modern"
+// would never re-ask the server after switching to "classic".
 async function verifyLicenseKey(key) {
   try {
     const currentTemplate = templateKey();

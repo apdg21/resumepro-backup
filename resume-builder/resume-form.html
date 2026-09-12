@@ -32,7 +32,9 @@
     --muted-color: var(--ink-soft);
     --bg-color: var(--paper);
   }
- 
+   * { box-sizing: border-box; }
+  body { font-family: var(--font-body); background: var(--paper); color: var(--ink); margin:0; padding:32px 0px 0px; overflow-x: hidden; }
+  .wrap { max-width: 1200px; margin: 0 auto; display:grid; gap:24px; grid-template-columns: 1fr; min-width: 0; }
   @media (min-width:1000px){ .wrap.two-col { grid-template-columns: 480px 1fr; } }
 
   .brand-bar { max-width:1200px; margin:60px auto 28px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }

@@ -631,27 +631,51 @@ function populateFormFromData(data) {
   });
 }
 
+// resume-mappings.json is keyed by style1..style20 (matches the dropdown),
+// but all_template_schemas.json is keyed by the ALL-CAPS display names
+// (TIMELESS, VIVID, ...) -- these are NOT the same key space, so we need to
+// translate before looking up the schema.
+const STYLE_KEY_TO_SCHEMA_NAME = {
+  style1: "TIMELESS", style2: "SLEEK", style3: "EXECUTIVE", style4: "VIVID",
+  style5: "PURE", style6: "REFINED", style7: "DYNAMIC", style8: "SKILLFOCUS",
+  style9: "CORPORATE", style10: "TRENDY", style11: "HORIZON", style12: "MIDNIGHT",
+  style13: "EMBER", style14: "CANVAS", style15: "GRAPHITE", style16: "IVORY",
+  style17: "STORM", style18: "LINEN", style19: "PRISM", style20: "OBSIDIAN",
+};
+
 // --- Generate final data.json via mapping engine (no AI, deterministic) ---
 document.getElementById('generateBtn').addEventListener('click', () => {
   const statusEl = document.getElementById('genStatus');
   const styleKey = templateSelect.value;
   const mapping = MAPPINGS[styleKey];
-  const originalTemplateData = ALL_TEMPLATE_SCHEMAS.resume_templates[styleKey];
+  const schemaName = STYLE_KEY_TO_SCHEMA_NAME[styleKey] || styleKey;
+  const originalTemplateData = ALL_TEMPLATE_SCHEMAS.resume_templates[schemaName];
 
   if (!mapping) {
     statusEl.textContent = `No mapping config yet for ${styleKey}.`;
     statusEl.className = 'status error';
     return;
   }
+  if (!originalTemplateData) {
+    statusEl.textContent = `No template schema found for ${styleKey} (looked up as "${schemaName}").`;
+    statusEl.className = 'status error';
+    return;
+  }
 
-  const masterData = collectFormData();
-  const result = applyMapping(masterData, originalTemplateData, mapping);
+  try {
+    const masterData = collectFormData();
+    const result = applyMapping(masterData, originalTemplateData, mapping);
 
-  lastResult = result;
-  document.getElementById('resultBox').textContent = JSON.stringify(result, null, 2);
-  document.getElementById('downloadJsonBtn').style.display = 'inline-block';
-  statusEl.textContent = 'Done — mapped instantly, no AI call needed for this step.';
-  statusEl.className = 'status success';
+    lastResult = result;
+    document.getElementById('resultBox').textContent = JSON.stringify(result, null, 2);
+    document.getElementById('downloadJsonBtn').style.display = 'inline-block';
+    statusEl.textContent = 'Done — mapped instantly, no AI call needed for this step.';
+    statusEl.className = 'status success';
+  } catch (err) {
+    statusEl.textContent = 'Generate failed: ' + err.message;
+    statusEl.className = 'status error';
+    console.error(err);
+  }
 });
 
 document.getElementById('downloadJsonBtn').addEventListener('click', () => {

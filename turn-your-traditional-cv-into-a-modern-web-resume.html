@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResumePro — Build it free. Preview it live. Unlock to download.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F1E6;
+    --paper-raised:#FDFBF6;
+    --ink:#232622;
+    --ink-soft:#54544d;
+    --tan:#a9a08a;
+    --rule:#ddd4c0;
+    --teal:#1F3D3A;
+    --teal-light:#2C5551;
+    --rust:#B23A2E;
+    --rust-dark:#8C2C22;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.55;
+  }
+  h1,h2,.display{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    letter-spacing:-0.01em;
+    margin:0;
+    color:var(--ink);
+  }
+  .mono{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+  .wrap{
+    max-width:960px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+  a{color:inherit;}
+  button{font-family:inherit;}
+
+  /* header */
+  header{
+    padding:22px 0;
+    border-bottom:1px solid var(--rule);
+  }
+  header .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .logo{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:19px;
+  }
+  .logo span{color:var(--rust);}
+  header .trust{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+
+  /* hero */
+  .hero{padding:60px 0 50px;}
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:56px;
+    align-items:center;
+  }
+  h1{font-size:42px;line-height:1.14;}
+  .hero-sub{
+    margin:20px 0 0;
+    font-size:16.5px;
+    color:var(--ink-soft);
+    max-width:46ch;
+  }
+  .price-note{
+    margin-top:20px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .pill{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    padding:6px 11px;
+    border:1px solid var(--rule);
+    background:var(--paper-raised);
+    color:var(--ink-soft);
+  }
+  .pill.free{border-color:var(--teal);color:var(--teal);}
+  .pill.paid{border-color:var(--rust);color:var(--rust-dark);}
+  .cta-row{
+    margin-top:28px;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--rust);
+    color:var(--paper-raised);
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:16px;
+    padding:15px 26px;
+    border-radius:3px;
+    text-decoration:none;
+    border:1px solid var(--rust-dark);
+    cursor:pointer;
+    transition:background .15s ease;
+  }
+  .btn:hover{background:var(--rust-dark);}
+  .btn-outline{
+    background:transparent;
+    color:var(--ink);
+    border:1px solid var(--ink);
+    font-size:14px;
+    padding:10px 18px;
+  }
+  .btn-outline:hover{background:var(--ink);color:var(--paper);}
+  .microcopy{font-size:13px;color:var(--tan);margin-top:12px;}
+
+  .visual{position:relative;height:360px;}
+  .sheet{
+    position:absolute;
+    width:220px;
+    height:290px;
+    background:var(--paper-raised);
+    border:1px solid var(--rule);
+    box-shadow:0 18px 30px -18px rgba(35,38,34,0.35);
+    padding:20px;
+  }
+  .sheet.before{top:8px;left:0;transform:rotate(-6deg);}
+  .sheet.after{top:42px;right:0;transform:rotate(4deg);background:var(--teal);border-color:var(--teal-light);}
+  .sheet .ln{height:7px;background:var(--rule);margin-bottom:10px;border-radius:1px;}
+  .sheet.before .ln:nth-child(1){width:55%;height:11px;background:var(--ink-soft);}
+  .sheet.before .ln:nth-child(2){width:90%;}
+  .sheet.before .ln:nth-child(3){width:75%;}
+  .sheet.before .ln:nth-child(4){width:82%;}
+  .sheet.before .ln:nth-child(5){width:40%;}
+  .sheet.after .ln{background:rgba(246,241,230,0.16);}
+  .sheet.after .ln:nth-child(1){width:60%;height:13px;background:var(--rust);}
+  .sheet.after .ln:nth-child(2){width:85%;}
+  .sheet.after .ln:nth-child(3){width:70%;}
+  .sheet.after .block{margin-top:16px;height:56px;background:rgba(246,241,230,0.1);border:1px solid rgba(246,241,230,0.2);}
+  .lockbadge{
+    position:absolute;
+    bottom:6px;right:14px;
+    background:var(--rust);
+    color:var(--paper-raised);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    padding:5px 9px;
+    display:flex;align-items:center;gap:5px;
+    z-index:3;
+  }
+  .arrow{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:44px;height:44px;border-radius:50%;
+    background:var(--paper);border:1px solid var(--rule);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'IBM Plex Mono',monospace;font-size:18px;z-index:2;
+  }
+
+  /* steps */
+  .steps{background:var(--paper-raised);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:56px 0;}
+  .steps h2{font-size:27px;margin-bottom:36px;}
+  .step-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;}
+  .step{padding-top:14px;border-top:2px solid var(--ink);}
+  .step.locked{border-top-color:var(--rust);}
+  .step .num{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--rust);display:block;margin-bottom:10px;}
+  .step h3{font-family:'Fraunces',serif;font-weight:500;font-size:16.5px;margin:0 0 6px;}
+  .step p{font-size:13px;color:var(--ink-soft);margin:0;}
+  .step .tag{
+    display:inline-block;margin-top:8px;
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;
+    padding:2px 7px;
+  }
+  .tag.free{background:rgba(31,61,58,0.08);color:var(--teal);}
+  .tag.paid{background:rgba(178,58,46,0.09);color:var(--rust-dark);}
+
+  /* templates */
+  .templates{padding:60px 0;}
+  .templates h2{font-size:27px;margin-bottom:8px;}
+  .templates .sub{color:var(--ink-soft);font-size:15px;margin:0 0 30px;}
+  .tpl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .tpl-card{
+    background:var(--paper-raised);
+    border:1px solid var(--rule);
+    overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .tpl-thumb{
+    height:210px;
+    position:relative;
+    background:var(--teal) center top / cover no-repeat;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    padding:14px;
+    cursor:pointer;
+  }
+  .tpl-thumb .bar{height:5px;background:rgba(246,241,230,0.25);margin-bottom:7px;border-radius:1px;}
+  .tpl-thumb .bar.head{width:55%;height:9px;background:var(--rust);}
+  .tpl-thumb::after{
+    content:"Preview";
+    position:absolute;top:12px;right:12px;
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;
+    color:var(--paper);
+    border:1px solid rgba(246,241,230,0.4);
+    padding:4px 8px;
+  }
+  .tpl-body{padding:14px 16px 16px;}
+  .tpl-body .name{font-family:'Fraunces',serif;font-size:16px;margin:0 0 4px;}
+  .tpl-body .desc{font-size:12.5px;color:var(--ink-soft);margin:0 0 12px;}
+  .tpl-actions{display:flex;gap:8px;}
+  .tpl-actions .btn-outline{flex:1;text-align:center;justify-content:center;font-size:12.5px;padding:9px 10px;}
+  .tpl-note{
+    margin-top:26px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    color:var(--teal);
+    background:rgba(31,61,58,0.07);
+    border:1px solid rgba(31,61,58,0.18);
+    padding:12px 16px;
+    display:inline-block;
+  }
+
+  /* final cta */
+  .final{background:var(--teal);color:var(--paper);padding:66px 0;text-align:center;}
+  .final h2{color:var(--paper);font-size:30px;max-width:22ch;margin:0 auto 12px;}
+  .final p{color:#cfded9;font-size:15px;margin:0 0 28px;}
+  .final .btn{background:var(--rust);border-color:var(--rust-dark);}
+
+  footer{padding:26px 0;text-align:center;}
+  footer p{font-size:12.5px;color:var(--tan);margin:0;}
+
+  /* modal */
+  .modal-overlay{
+    display:none;
+    position:fixed;inset:0;
+    background:rgba(20,22,19,0.72);
+    z-index:100;
+    align-items:center;justify-content:center;
+    padding:28px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal{
+    background:var(--paper-raised);
+    width:min(1000px,100%);
+    height:min(720px,90vh);
+    display:flex;
+    flex-direction:column;
+    border:1px solid var(--rule);
+  }
+  .modal-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 18px;border-bottom:1px solid var(--rule);
+  }
+  .modal-head .title{font-family:'Fraunces',serif;font-size:16px;}
+  .modal-head .meta{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft);margin-top:2px;}
+  .modal-actions{display:flex;gap:10px;align-items:center;}
+  .modal-close{
+    background:none;border:none;font-size:20px;line-height:1;
+    cursor:pointer;color:var(--ink-soft);padding:4px 6px;
+  }
+  .modal-close:hover{color:var(--ink);}
+  .modal iframe{flex:1;border:none;width:100%;}
+
+  @media (max-width:760px){
+    h1{font-size:30px;}
+    .hero-grid{grid-template-columns:1fr;gap:36px;}
+    .visual{height:290px;}
+    .sheet{width:180px;height:240px;}
+    .step-grid{grid-template-columns:1fr 1fr;}
+    .tpl-grid{grid-template-columns:1fr;}
+    .final h2{font-size:24px;}
+    .modal-overlay{padding:0;}
+    .modal{height:100vh;width:100vw;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="logo">ResumePro<span>.</span></div>
+    <div class="trust">Free to build — pay only to download</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="mono">Pick a template. Fill it in. See it live.</span>
+      <h1 style="margin-top:14px;">Build your resume site free. Unlock it when you're ready to download.</h1>
+      <p class="hero-sub">Choose a template, upload your resume or fill in a quick form, and generate your page. Preview it exactly as it will look — no charge, no signup. You only pay when you want the files to keep.</p>
+      <div class="price-note">
+        <span class="pill free">Build — free</span>
+        <span class="pill free">Preview — free</span>
+        <span class="pill paid">Download — one-time key</span>
+      </div>
+      <div class="cta-row">
+        <a class="btn" href="https://resumepro.pages.dev/resume-builder/">Start building →</a>
+      </div>
+      <p class="microcopy">No account needed to build or preview. You'll be asked to unlock only at the download step.</p>
+    </div>
+    <div class="visual">
+      <div class="sheet before">
+        <div class="ln"></div><div class="ln"></div><div class="ln"></div><div class="ln"></div><div class="ln"></div>
+      </div>
+      <div class="sheet after">
+        <div class="ln"></div><div class="ln"></div><div class="ln"></div>
+        <div class="block"></div>
+        <div class="lockbadge">🔒 unlock to download</div>
+      </div>
+      <div class="arrow">→</div>
+    </div>
+  </div>
+</section>
+
+<section class="steps">
+  <div class="wrap">
+    <h2>How it works</h2>
+    <div class="step-grid">
+      <div class="step">
+        <span class="num">01</span>
+        <h3>Pick a template</h3>
+        <p>Browse live samples and choose the layout that fits you.</p>
+        <span class="tag free">free</span>
+      </div>
+      <div class="step">
+        <span class="num">02</span>
+        <h3>Add your info</h3>
+        <p>Upload a resume file, or fill in the form by hand.</p>
+        <span class="tag free">free</span>
+      </div>
+      <div class="step">
+        <span class="num">03</span>
+        <h3>Generate</h3>
+        <p>Your info drops into the template automatically.</p>
+        <span class="tag free">free</span>
+      </div>
+      <div class="step">
+        <span class="num">04</span>
+        <h3>Preview it live</h3>
+        <p>See the real, finished page and decide if it's right.</p>
+        <span class="tag free">free</span>
+      </div>
+      <div class="step locked">
+        <span class="num">05</span>
+        <h3>Download</h3>
+        <p>Buy a one-time key to unlock and keep the files. That key gives you unlimited regenerations of that specific template, so future resume updates are free.</p>
+        <span class="tag paid">key required</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="templates">
+  <div class="wrap">
+    <h2>Try a sample template</h2>
+    <p class="sub">These are live, working examples — open one in a preview to see it in full before you build your own.</p>
+    <div class="tpl-grid">
+
+      <div class="tpl-card">
+        <div class="tpl-thumb" style="background-image:url('https://resumepro.pages.dev/thumbnails/style18.jpg');" data-preview-url="https://editableresume.dolfean214.workers.dev/style18/" data-preview-name="Linen" data-preview-desc="Portrait-led layout with a formal, editorial tone"></div>
+        <div class="tpl-body">
+          <p class="name">Linen</p>
+          <p class="desc">Large portrait header, formal section dividers. Suited to creative and performance careers.</p>
+          <div class="tpl-actions">
+            <button class="btn-outline" data-preview-url="https://editableresume.dolfean214.workers.dev/style18/" data-preview-name="Linen" data-preview-desc="Portrait-led layout with a formal, editorial tone">Preview</button>
+            <a class="btn-outline" href="https://resumepro.pages.dev/resume-builder/" style="text-decoration:none;">Use this</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tpl-card">
+        <div class="tpl-thumb" style="background-image:url('https://resumepro.pages.dev/thumbnails/style13.jpg');" data-preview-url="https://editableresume.dolfean214.workers.dev/style13/" data-preview-name="Ember" data-preview-desc="Clean nav-bar layout for corporate and office roles"></div>
+        <div class="tpl-body">
+          <p class="name">Ember</p>
+          <p class="desc">Straightforward nav and sections. Suited to corporate, admin, and office-based roles.</p>
+          <div class="tpl-actions">
+            <button class="btn-outline" data-preview-url="https://editableresume.dolfean214.workers.dev/style13/" data-preview-name="Ember" data-preview-desc="Clean nav-bar layout for corporate and office roles">Preview</button>
+            <a class="btn-outline" href="https://resumepro.pages.dev/resume-builder/" style="text-decoration:none;">Use this</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tpl-card">
+        <div class="tpl-thumb" style="background-image:url('https://resumepro.pages.dev/thumbnails/style16.jpg');" data-preview-url="https://editableresume.dolfean214.workers.dev/style16/" data-preview-name="Ivory" data-preview-desc="Numbered, monospace-accented layout for technical roles"></div>
+        <div class="tpl-body">
+          <p class="name">Ivory</p>
+          <p class="desc">Numbered sections, monospace accents, stat highlights. Suited to engineering and technical roles.</p>
+          <div class="tpl-actions">
+            <button class="btn-outline" data-preview-url="https://editableresume.dolfean214.workers.dev/style16/" data-preview-name="Ivory" data-preview-desc="Numbered, monospace-accented layout for technical roles">Preview</button>
+            <a class="btn-outline" href="https://resumepro.pages.dev/resume-builder/" style="text-decoration:none;">Use this</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <p class="tpl-note">🔑 Buy a key for a template once, and you get unlimited regenerations for that specific template — so if you need to update your resume later, you won't have to pay again.</p>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <h2>Build it free. Only pay if you love it.</h2>
+    <p>Templates, uploads, and previews cost nothing. A key is only needed to download your finished files.</p>
+    <a class="btn" href="https://resumepro.pages.dev/resume-builder/">Start building →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 ResumePro</p>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="title" id="modalTitle">Template preview</div>
+        <div class="meta" id="modalDesc"></div>
+      </div>
+      <div class="modal-actions">
+        <a class="btn-outline" id="modalUseBtn" href="https://resumepro.pages.dev/resume-builder/" style="text-decoration:none;">Use this template</a>
+        <button class="modal-close" id="modalClose" aria-label="Close preview">✕</button>
+      </div>
+    </div>
+    <iframe id="modalFrame" src="" title="Template preview"></iframe>
+  </div>
+</div>
+
+<script>
+  var overlay = document.getElementById('modalOverlay');
+  var frame = document.getElementById('modalFrame');
+  var titleEl = document.getElementById('modalTitle');
+  var descEl = document.getElementById('modalDesc');
+
+  function openPreview(url, name, desc){
+    titleEl.textContent = name || 'Template preview';
+    descEl.textContent = desc || '';
+    frame.src = url;
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closePreview(){
+    overlay.classList.remove('open');
+    frame.src = '';
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('[data-preview-url]').forEach(function(el){
+    el.addEventListener('click', function(){
+      openPreview(el.getAttribute('data-preview-url'), el.getAttribute('data-preview-name'), el.getAttribute('data-preview-desc'));
+    });
+  });
+  document.getElementById('modalClose').addEventListener('click', closePreview);
+  overlay.addEventListener('click', function(e){
+    if(e.target === overlay) closePreview();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closePreview();
+  });
+</script>
+
+</body>
+</html>

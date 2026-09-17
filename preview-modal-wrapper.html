@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResumePro Template Live Preview</title>
+  <style>
+    :root {
+      --navy: #0f172a;
+      --navy-dark: #090d16;
+      --gold: #f59e0b;
+      --accent: #38bdf8;
+      --white: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body, html {
+      width: 100%; height: 100%; overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--navy-dark); color: #fff;
+    }
+
+    /* Modal Wrapper Shell */
+    .preview-modal-shell {
+      display: flex; flex-direction: column;
+      width: 100vw; height: 100vh;
+      background: var(--navy-dark);
+    }
+
+    /* Top Toolbar */
+    .modal-toolbar {
+      height: 52px; background: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: space-between; px: 16px; padding: 0 16px;
+      flex-shrink: 0; z-index: 10;
+    }
+    .toolbar-title {
+      display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600; color: #fff;
+    }
+    .view-toggle {
+      display: inline-flex; background: rgba(255,255,255,0.06); border-radius: 8px; padding: 3px; border: 1px solid rgba(255,255,255,0.1);
+    }
+    .view-btn {
+      background: transparent; border: none; color: rgba(255,255,255,0.6); font-size: 0.78rem; font-weight: 500;
+      padding: 5px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .view-btn.active { background: rgba(255,255,255,0.15); color: #fff; }
+    .tb-btn {
+      background: var(--gold); color: #0f172a; font-weight: 600; font-size: 0.8rem;
+      padding: 6px 14px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+      transition: opacity 0.2s;
+    }
+    .tb-btn:hover { opacity: 0.9; }
+
+    /* Content Area */
+    .modal-content-area {
+      flex: 1; position: relative; width: 100%; height: calc(100vh - 52px);
+      display: flex; align-items: center; justify-content: center; background: #0b1120;
+      overflow: hidden;
+    }
+
+    /* Desktop View */
+    .iframe-desktop {
+      width: 100%; height: 100%; border: none; display: block;
+    }
+
+    /* Mobile Frame View */
+    .mobile-mode .iframe-desktop { display: none; }
+    .mobile-mode .iframe-mobile-wrapper { display: flex !important; }
+
+    .iframe-mobile-wrapper {
+      display: none; flex-direction: column; width: 390px; height: 92%; max-height: 840px;
+      background: #1e293b; border-radius: 36px; padding: 12px; border: 3px solid rgba(255,255,255,0.15);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); position: relative;
+    }
+    .phone-notch {
+      width: 130px; height: 20px; background: #0f172a; border-radius: 0 0 14px 14px;
+      margin: 0 auto 10px auto; flex-shrink: 0;
+    }
+    .phone-screen {
+      flex: 1; border-radius: 22px; overflow: hidden; background: #fff; width: 100%; height: 100%;
+    }
+    .phone-screen iframe {
+      width: 100%; height: 100%; border: none; display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="preview-modal-shell">
+    <div class="modal-toolbar">
+      <div class="toolbar-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18M3 12h18"/></svg>
+        <span id="template-title">ResumePro Live Preview</span>
+      </div>
+
+      <div class="view-toggle">
+        <button class="view-btn active" id="btn-desktop">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          Desktop
+        </button>
+        <button class="view-btn" id="btn-mobile">
+          <svg width="11" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01"/></svg>
+          Mobile
+        </button>
+      </div>
+
+      <a id="buy-link" href="https://resumeprotemplate.gumroad.com" target="_blank" class="tb-btn">
+        <span>Get Template</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <div class="modal-content-area" id="content-area">
+      <iframe id="iframe-desktop" class="iframe-desktop" src="" title="Desktop preview"></iframe>
+      
+      <div class="iframe-mobile-wrapper">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <iframe id="iframe-mobile" src="" title="Mobile preview"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      let styleParam = params.get('style') || 'style1';
+      if (!styleParam.startsWith('style') && !styleParam.startsWith('http')) {
+        styleParam = 'style' + styleParam;
+      }
+      
+      const targetUrl = styleParam.startsWith('http') 
+        ? styleParam 
+        : 'https://editableresume.dolfean214.workers.dev/' + styleParam + '/';
+
+      const iframeDesktop = document.getElementById('iframe-desktop');
+      const iframeMobile = document.getElementById('iframe-mobile');
+      const contentArea = document.getElementById('content-area');
+      const btnDesktop = document.getElementById('btn-desktop');
+      const btnMobile = document.getElementById('btn-mobile');
+      const templateTitle = document.getElementById('template-title');
+
+      templateTitle.innerText = 'ResumePro Template Preview (' + styleParam.replace('/','') + ')';
+      iframeDesktop.src = targetUrl;
+      iframeMobile.src = targetUrl;
+
+      btnDesktop.addEventListener('click', function () {
+        contentArea.classList.remove('mobile-mode');
+        btnDesktop.classList.add('active');
+        btnMobile.classList.remove('active');
+      });
+
+      btnMobile.addEventListener('click', function () {
+        contentArea.classList.add('mobile-mode');
+        btnMobile.classList.add('active');
+        btnDesktop.classList.remove('active');
+      });
+    })();
+  </script>
+</body>
+</html>

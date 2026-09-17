@@ -118,7 +118,7 @@
       </div>
 
       <div class="toolbar-right">
-        <a id="buy-link" href="https://resumeprotemplate.gumroad.com/resume-collection" target="_blank" class="tb-btn">
+        <a id="buy-link" href="https://resumeprotemplate.gumroad.com" target="_blank" class="tb-btn">
           <span>Get Template</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
@@ -145,13 +145,23 @@
     (function () {
       const params = new URLSearchParams(window.location.search);
       let styleParam = params.get('style') || 'style1';
+      let typeParam = params.get('type') || 'resume';
+
       if (!styleParam.startsWith('style') && !styleParam.startsWith('http')) {
         styleParam = 'style' + styleParam;
       }
       
+      const domain = typeParam === 'portfolio' ? 'editableportfolio.dolfean214.workers.dev' : 'editableresume.dolfean214.workers.dev';
       const targetUrl = styleParam.startsWith('http') 
         ? styleParam 
-        : 'https://editableresume.dolfean214.workers.dev/' + styleParam + '/';
+        : 'https://' + domain + '/' + styleParam + '/';
+
+      const buyLink = document.getElementById('buy-link');
+      if (typeParam === 'portfolio') {
+        buyLink.href = 'https://resumeprotemplate.gumroad.com/portfolio-collection';
+      } else {
+        buyLink.href = 'https://resumeprotemplate.gumroad.com/resume-collection';
+      }
 
       const iframeDesktop = document.getElementById('iframe-desktop');
       const iframeMobile = document.getElementById('iframe-mobile');
@@ -160,7 +170,9 @@
       const btnMobile = document.getElementById('btn-mobile');
       const templateTitle = document.getElementById('template-title');
 
-      templateTitle.innerText = 'ResumePro Template Preview (' + styleParam.replace('/','') + ')';
+      const categoryLabel = typeParam === 'portfolio' ? 'Portfolio' : 'Resume';
+      templateTitle.innerText = 'ResumePro ' + categoryLabel + ' Preview (' + styleParam.replace('/','') + ')';
+      
       iframeDesktop.src = targetUrl;
       iframeMobile.src = targetUrl;
 

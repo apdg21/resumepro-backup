@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResumePro — Two ways to write a resume that gets read</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F6F4EE;
+    --paper-raised: #FFFFFF;
+    --ink: #1B1B18;
+    --ink-soft: #55534C;
+    --rule: #D9D4C6;
+    --rule-strong: #B9B29E;
+    --pen: #B33F2E;
+    --pen-dark: #8F311F;
+    --pen-tint: #F1D9D2;
+    --focus: #2B5FAD;
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --paper: #17160F;
+      --paper-raised: #201F17;
+      --ink: #F1EEE4;
+      --ink-soft: #B8B3A2;
+      --rule: #3A3826;
+      --rule-strong: #4E4B34;
+      --pen: #E2694F;
+      --pen-dark: #F08165;
+      --pen-tint: #3A241E;
+      --focus: #7FAAFF;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #17160F;
+    --paper-raised: #201F17;
+    --ink: #F1EEE4;
+    --ink-soft: #B8B3A2;
+    --rule: #3A3826;
+    --rule-strong: #4E4B34;
+    --pen: #E2694F;
+    --pen-dark: #F08165;
+    --pen-tint: #3A241E;
+    --focus: #7FAAFF;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  img { max-width: 100%; display: block; }
+
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  /* ---------- Header ---------- */
+  header {
+    border-bottom: 1px solid var(--rule);
+    position: sticky;
+    top: 0;
+    background: var(--paper);
+    z-index: 20;
+  }
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+  }
+  .logo {
+    font-family: 'Special Elite', cursive;
+    font-size: 1.25rem;
+    letter-spacing: 0.02em;
+  }
+  .logo span { color: var(--pen); }
+  nav.primary-nav {
+    display: flex;
+    gap: 28px;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+  nav.primary-nav a { text-decoration: none; }
+  nav.primary-nav a:hover { color: var(--ink); }
+  .header-cta {
+    display: inline-flex;
+    padding: 9px 18px;
+    border: 1px solid var(--ink);
+    border-radius: 3px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .header-cta:hover { background: var(--ink); color: var(--paper); }
+
+  @media (max-width: 760px) {
+    nav.primary-nav { display: none; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding: 76px 0 88px;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 48px;
+    align-items: center;
+  }
+  @media (max-width: 860px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero { padding: 48px 0 56px; }
+  }
+  .hero-kicker {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--pen);
+    margin: 0 0 18px;
+  }
+  h1 {
+    font-family: 'Special Elite', cursive;
+    font-weight: 400;
+    font-size: clamp(2.1rem, 4.2vw, 3.15rem);
+    line-height: 1.18;
+    margin: 0 0 22px;
+    max-width: 15ch;
+  }
+  .hero-sub {
+    font-size: 1.08rem;
+    color: var(--ink-soft);
+    max-width: 46ch;
+    margin: 0 0 30px;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 22px;
+    border-radius: 3px;
+    font-size: 0.98rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--pen);
+    color: #fff;
+  }
+  .btn-primary:hover { background: var(--pen-dark); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+  .btn-secondary:hover { background: var(--ink); color: var(--paper); }
+
+  /* Hero placeholder image */
+  .hero-visual {
+    position: relative;
+  }
+  .hero-visual .placeholder-frame {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border: 1px dashed var(--rule-strong);
+    border-radius: 6px;
+    background:
+      repeating-linear-gradient(135deg, transparent, transparent 10px, var(--rule) 10px, var(--rule) 11px),
+      var(--paper-raised);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .placeholder-inner {
+    text-align: center;
+    max-width: 280px;
+  }
+  .placeholder-inner .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    background: var(--paper);
+    border: 1px solid var(--rule-strong);
+    border-radius: 20px;
+    padding: 5px 12px;
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+  .placeholder-inner p {
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+  .placeholder-inner svg { margin: 0 auto 14px; opacity: 0.85; }
+
+  .hero-visual img {
+    width: 100%;
+    height: 100%;
+    min-height: 420px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 18px 40px -14px rgba(27, 27, 24, 0.35);
+  }
+  @media (max-width: 860px) {
+    .hero-visual img { min-height: 280px; }
+  }
+
+  /* ---------- Products ---------- */
+  .products {
+    padding: 8px 0 96px;
+  }
+  .section-head {
+    max-width: 56ch;
+    margin: 0 0 44px;
+  }
+  .section-head h2 {
+    font-family: 'Special Elite', cursive;
+    font-weight: 400;
+    font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+    margin: 0 0 10px;
+  }
+  .section-head p {
+    color: var(--ink-soft);
+    margin: 0;
+    font-size: 1.02rem;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  @media (max-width: 780px) {
+    .product-grid { grid-template-columns: 1fr; }
+  }
+
+  .doc-card {
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 34px 30px 30px;
+    position: relative;
+    box-shadow: 0 1px 0 var(--rule);
+  }
+  .doc-card::before {
+    content: "";
+    position: absolute;
+    top: 22px;
+    right: 24px;
+    width: 34px;
+    height: 34px;
+    border: 2px solid var(--rule-strong);
+    border-radius: 50%;
+    opacity: 0.55;
+  }
+  .doc-card .price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .doc-card .price {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 2.1rem;
+    font-weight: 500;
+    color: var(--pen);
+  }
+  .doc-card .price-unit {
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+  }
+  .doc-card h3 {
+    font-size: 1.32rem;
+    margin: 4px 0 12px;
+    max-width: 20ch;
+  }
+  .doc-card .desc {
+    color: var(--ink-soft);
+    margin: 0 0 22px;
+    font-size: 0.98rem;
+  }
+  .doc-card ul {
+    list-style: none;
+    margin: 0 0 28px;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+    padding-top: 18px;
+  }
+  .doc-card li {
+    display: flex;
+    gap: 10px;
+    padding: 7px 0;
+    font-size: 0.95rem;
+  }
+  .doc-card li::before {
+    content: "—";
+    color: var(--pen);
+    flex-shrink: 0;
+  }
+  .doc-card .btn { width: 100%; justify-content: center; }
+
+  .doc-card.builder { border-color: var(--pen); }
+  .doc-card.builder .price { color: var(--pen-dark); }
+
+  /* ---------- How it works ---------- */
+  .how {
+    padding: 0 0 100px;
+  }
+  .how-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+  @media (max-width: 780px) {
+    .how-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+  .how-col h4 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--pen);
+    margin: 0 0 18px;
+    text-transform: none;
+  }
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-left: 1px solid var(--rule);
+  }
+  .steps li {
+    position: relative;
+    padding: 0 0 26px 26px;
+  }
+  .steps li:last-child { padding-bottom: 0; }
+  .steps li::before {
+    content: attr(data-n);
+    position: absolute;
+    left: -11px;
+    top: 0;
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 1px solid var(--rule-strong);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-soft);
+  }
+  .steps li strong { display: block; margin-bottom: 3px; font-size: 1rem; }
+  .steps li span { color: var(--ink-soft); font-size: 0.92rem; }
+
+  /* ---------- Popup ad banner ---------- */
+  .promo-popup {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    max-width: 320px;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule-strong);
+    border-radius: 8px;
+    box-shadow: 0 20px 44px -18px rgba(27, 27, 24, 0.45);
+    padding: 20px 20px 18px;
+    z-index: 50;
+    transform: translateY(20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.35s ease, opacity 0.35s ease;
+  }
+  .promo-popup.show {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .promo-popup .promo-close {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    line-height: 1;
+    color: var(--ink-soft);
+    cursor: pointer;
+    padding: 4px;
+  }
+  .promo-popup .promo-close:hover { color: var(--ink); }
+  .promo-popup .promo-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--pen);
+    letter-spacing: 0.04em;
+    margin: 0 0 8px;
+  }
+  .promo-popup h5 {
+    margin: 0 0 6px;
+    font-size: 1.02rem;
+  }
+  .promo-popup p {
+    margin: 0 0 14px;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+  }
+  .promo-popup .btn {
+    padding: 9px 16px;
+    font-size: 0.88rem;
+    width: 100%;
+    justify-content: center;
+  }
+  @media (max-width: 480px) {
+    .promo-popup { left: 16px; right: 16px; max-width: none; bottom: 16px; }
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    border-top: 1px solid var(--rule);
+    padding: 30px 0;
+  }
+  .footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-row">
+    <div class="logo">Resume<span>Pro</span></div>
+    <nav class="primary-nav">
+      <a href="#templates">Templates</a>
+      <a href="#builder">AI Builder</a>
+      <a href="#how">How it works</a>
+    </nav>
+    <a class="header-cta" href="https://resumepro.pages.dev/resume-builder/">Get started</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="hero-kicker">// resume tools for job seekers</p>
+      <h1>Write it yourself. Or let AI write it for you.</h1>
+      <p class="hero-sub">Download a template and fill it in on your own terms, or upload what you've already got and let AI turn it into a polished resume in the template you pick. Either way, you walk away with a resume worth sending.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="https://resumepro.pages.dev/resume-builder/">Try the AI builder — $15</a>
+        <a class="btn btn-secondary" href="https://resumeprotemplate.gumroad.com/resume-collection" target="_blank" rel="noopener">Browse templates — $10</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+         <img src="hero.webp">
+    </div>
+  </div>
+</section>
+
+<section class="products wrap">
+  <div class="section-head">
+    <h2>Choose your path</h2>
+    <p>Two ways to end up with a finished resume. Pick the one that matches how much time you want to spend on it.</p>
+  </div>
+
+  <div class="product-grid">
+
+    <div class="doc-card" id="templates">
+      <div class="price-row">
+        <span class="price">$10</span>
+        <span class="price-unit">one-time</span>
+      </div>
+      <h3>Resume templates</h3>
+      <p class="desc">Download a professionally designed template and fill it in yourself, at your own pace, using the built-in form.</p>
+      <ul>
+        <li>Download the template file straight away</li>
+        <li>Fill in your details using the included form</li>
+        <li>Update the content manually, any time</li>
+        <li>No AI involved — you're in full control</li>
+      </ul>
+      <a class="btn btn-secondary" href="https://resumeprotemplate.gumroad.com/resume-collection" target="_blank" rel="noopener">Browse templates</a>
+    </div>
+
+    <div class="doc-card builder" id="builder">
+      <div class="price-row">
+        <span class="price">$15</span>
+        <span class="price-unit">unlock key</span>
+      </div>
+      <h3>AI resume builder</h3>
+      <p class="desc">Upload your existing resume, pick a template, and AI rewrites and formats it for you.</p>
+      <ul>
+        <li>Upload your current resume as a starting point</li>
+        <li>AI restructures it into your chosen template</li>
+        <li>Buy one key, unlock unlimited future updates</li>
+        <li>Re-run it any time your experience changes</li>
+      </ul>
+      <a class="btn btn-primary" href="https://resumepro.pages.dev/resume-builder/">Generate your resume</a>
+    </div>
+
+  </div>
+</section>
+
+<section class="how wrap" id="how">
+  <div class="section-head">
+    <h2>How each one works</h2>
+    <p>Both roads end with a resume you can send today.</p>
+  </div>
+  <div class="how-grid">
+    <div class="how-col">
+      <h4>// templates, $10</h4>
+      <ol class="steps">
+        <li data-n="1"><strong>Pick a template</strong><span>Choose the layout you like from the template gallery.</span></li>
+        <li data-n="2"><strong>Download the file</strong><span>It arrives with an editable form built right in.</span></li>
+        <li data-n="3"><strong>Fill it in</strong><span>Add your details manually, section by section.</span></li>
+        <li data-n="4"><strong>Update whenever</strong><span>Reopen the file and edit it again any time you need to.</span></li>
+      </ol>
+    </div>
+    <div class="how-col">
+      <h4>// AI builder, $15</h4>
+      <ol class="steps">
+        <li data-n="1"><strong>Buy your key</strong><span>One purchase unlocks unlimited use of the builder.</span></li>
+        <li data-n="2"><strong>Upload your resume</strong><span>Bring what you already have — no need to start blank.</span></li>
+        <li data-n="3"><strong>Pick a template</strong><span>Choose the design you want your new resume built into.</span></li>
+        <li data-n="4"><strong>Let AI build it</strong><span>Come back and regenerate it any time your resume changes.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-row">
+    <span>ResumePro</span>
+    <span>Templates $10 · AI builder $15</span>
+  </div>
+</footer>
+
+<div class="promo-popup" id="promoPopup">
+  <button class="promo-close" id="promoClose" aria-label="Close">✕</button>
+  <p class="promo-tag">// also available</p>
+  <h5>Building a portfolio too?</h5>
+  <p>Check out our portfolio templates — same easy setup, made to show off your work.</p>
+  <a class="btn btn-primary" href="https://resumeprotemplate.gumroad.com/portfolio-collection" target="_blank" rel="noopener">Check portfolio templates</a>
+</div>
+
+<script>
+  (function () {
+    var popup = document.getElementById('promoPopup');
+    var closeBtn = document.getElementById('promoClose');
+    var dismissed = false;
+    setTimeout(function () {
+      if (!dismissed) popup.classList.add('show');
+    }, 2500);
+    closeBtn.addEventListener('click', function () {
+      dismissed = true;
+      popup.classList.remove('show');
+    });
+  })();
+</script>
+</body>
+</html>

@@ -17,26 +17,28 @@
 <link rel="stylesheet" href="../header.css">
 <link rel="stylesheet" href="../footer.css">  
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #1B2333;
-    --ink-soft: #5B6478;
-    --primary: #2952E3;
-    --primary-dark: #1F3FB8;
-    --primary-tint: #EBF0FE;
-    --accent: #D98E3F;
-    --accent-tint: #FBF0E1;
-    --paper: #FAF8F4;
-    --card: #FFFFFF;
-    --border: #E8E4DC;
-    --success: #1E8E5A;
-    --error: #C0392B;
-    --dark: #2b2d42;
+    --ink: #0e0e12;
+    --ink-soft: #6b6b78;
+    --paper: #fafaf8;
+    --paper-warm: #f4f1eb;
+    --card: #ffffff;
+    --accent: #c8a96e;
+    --accent-light: #e8d9b8;
+    --accent-dark: #9a7a3f;
+    --accent-tint: #f7f1e4;
+    --border: #e2e0d8;
+    --success: #2d7a4f;
+    --error: #b3432f;
+    --error-tint: #fbeae6;
+    --dark: #0e0e12;
     --font-display: 'Playfair Display', Georgia, serif;
-    --font-body: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+    --font-body: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
     /* legacy aliases so nothing else needs renaming */
-    --primary-color: var(--primary);
+    --primary-color: var(--ink);
     --text-color: var(--ink);
     --muted-color: var(--ink-soft);
     --bg-color: var(--paper);
@@ -47,58 +49,62 @@
     padding: 0;
     box-sizing: border-box;
   }
-  body { font-family: var(--font-body); background: var(--paper); color: var(--ink); margin:0; padding:0; overflow-x: hidden; }
+  body { font-family: var(--font-body); background: var(--paper); color: var(--ink); margin:0; padding:0; overflow-x: hidden; line-height: 1.6; }
   .page-content {padding: 32px 24px 60px;}
   .wrap { max-width: 1200px; margin: 0 auto; display:grid; gap:24px; grid-template-columns: 1fr; min-width: 0; }
   @media (min-width:1000px){ .wrap.two-col { grid-template-columns: 480px 1fr; } }
 
   .brand-bar { max-width:1200px; margin:60px auto 28px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
   .brand-mark { display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:700; font-size:20px; color: var(--ink); }
-  .brand-mark .doc-icon { width:30px; height:30px; border-radius:7px; background:var(--primary); display:flex; align-items:center; justify-content:center; color:white; font-size:15px; flex-shrink:0; }
-  .badge-pill { display:inline-flex; align-items:center; gap:6px; background:var(--accent-tint); color:var(--accent); font-size:12px; font-weight:600; padding:5px 12px; border-radius:999px; }
+  .brand-mark .doc-icon { width:30px; height:30px; border-radius:7px; background:var(--ink); display:flex; align-items:center; justify-content:center; color:var(--accent); font-size:12px; font-weight:700; letter-spacing:0.02em; flex-shrink:0; font-family:var(--font-body); }
+  .badge-pill { display:inline-flex; align-items:center; gap:6px; background:var(--ink); color:var(--accent); font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:6px 14px; border-radius:999px; }
 
-  .panel { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:24px; box-shadow:0 1px 2px rgba(27,35,51,0.04), 0 8px 24px rgba(27,35,51,0.04); min-width: 0; }
+  .panel { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:24px; box-shadow:0 1px 2px rgba(14,14,18,0.03), 0 8px 24px rgba(14,14,18,0.04); min-width: 0; }
   .step-head { display:flex; align-items:center; gap:14px; margin-bottom:4px; }
-  .step-badge { width:36px; height:36px; border-radius:50%; background:var(--primary-tint); color:var(--primary); font-family:var(--font-display); font-weight:700; font-size:17px; display:flex; align-items:center; justify-content:center; flex-shrink:0; border:1px solid rgba(41,82,227,0.18); }
+  .step-badge { width:36px; height:36px; border-radius:50%; background:var(--accent-tint); color:var(--accent-dark); font-family:var(--font-display); font-weight:700; font-size:17px; display:flex; align-items:center; justify-content:center; flex-shrink:0; border:1px solid rgba(154,122,63,0.22); }
   h1 { font-family: var(--font-display); font-size:19px; font-weight:700; margin:0; color:var(--ink); letter-spacing:-0.01em; }
-  h2 { font-family: var(--font-display); font-size:15px; font-weight:600; margin:22px 0 12px; color:var(--primary); border-bottom:1px solid var(--border); padding-bottom:8px; }
-  .sub { color:var(--ink-soft); font-size:13px; margin:8px 0 14px; line-height:1.5; }
+  h2 { font-family: var(--font-display); font-size:15px; font-weight:600; margin:22px 0 12px; color:var(--accent-dark); border-bottom:1px solid var(--border); padding-bottom:8px; }
+  .sub { color:var(--ink-soft); font-size:13px; margin:8px 0 14px; line-height:1.55; }
   label { font-size:12px; font-weight:600; display:block; margin:8px 0 4px; color:var(--ink); }
   input[type=text], input[type=number], textarea, select {
     width:100%; padding:9px 11px; border:1px solid var(--border); border-radius:8px; font-size:13px; font-family:var(--font-body); background:var(--paper); color:var(--ink);
   }
-  input:focus, textarea:focus, select:focus { outline:2px solid var(--primary); outline-offset:1px; }
+  input:focus, textarea:focus, select:focus { outline:2px solid var(--accent-dark); outline-offset:1px; }
   textarea { min-height:60px; resize:vertical; }
   .item-card { border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:10px; background:var(--paper); position:relative; }
-  .item-card .remove-btn { position:absolute; top:8px; right:8px; background:#FBE4E1; color:var(--error); border:none; border-radius:6px; padding:4px 8px; font-size:11px; cursor:pointer; font-family:var(--font-body); }
-  .add-btn { background:var(--primary-tint); color:var(--primary); border:1px dashed var(--primary); padding:8px; border-radius:8px; font-size:13px; cursor:pointer; width:100%; margin-top:4px; font-family:var(--font-body); font-weight:500; }
-  button.primary { background:var(--primary); color:white; border:none; padding:11px 20px; border-radius:10px; font-size:14px; cursor:pointer; font-weight:600; margin-top:10px; font-family:var(--font-body); transition:background 0.15s; }
-  button.primary:hover:not(:disabled) { background:var(--primary-dark); }
+  .item-card .remove-btn { position:absolute; top:8px; right:8px; background:var(--error-tint); color:var(--error); border:none; border-radius:6px; padding:4px 8px; font-size:11px; cursor:pointer; font-family:var(--font-body); font-weight:600; }
+  .add-btn { background:var(--accent-tint); color:var(--accent-dark); border:1px dashed var(--accent-dark); padding:8px; border-radius:8px; font-size:13px; cursor:pointer; width:100%; margin-top:4px; font-family:var(--font-body); font-weight:600; }
+  .add-btn:hover { background:var(--accent-light); }
+  button.primary { background:var(--ink); color:var(--paper); border:none; padding:11px 20px; border-radius:10px; font-size:14px; cursor:pointer; font-weight:600; margin-top:10px; font-family:var(--font-body); transition:background 0.15s; }
+  button.primary:hover:not(:disabled) { background:var(--accent-dark); }
   button.primary:disabled { opacity:0.5; cursor:not-allowed; }
   button.secondary { background:var(--card); color:var(--ink); border:1px solid var(--border); padding:10px 18px; border-radius:10px; font-size:14px; cursor:pointer; font-weight:600; font-family:var(--font-body); transition:background 0.15s; }
-  button.secondary:hover:not(:disabled) { background:var(--paper); }
+  button.secondary:hover:not(:disabled) { background:var(--paper-warm); }
   .status { font-size:13px; color:var(--ink-soft); margin-top:8px; min-height:18px; }
   .status.error { color:var(--error); } .status.success { color:var(--success); }
-  .prefill-box { background:var(--accent-tint); border:1px solid rgba(217,142,63,0.3); border-radius:12px; padding:16px; margin-bottom:20px; }
+  .prefill-box { background:var(--accent-tint); border:1px solid rgba(154,122,63,0.28); border-radius:12px; padding:16px; margin-bottom:20px; }
   .prefill-box textarea { min-height:100px; margin-bottom:8px; }
   .file-drop {
     border: 2px dashed var(--border); border-radius: 12px; padding: 16px; text-align: center;
     font-size: 13px; color: var(--ink-soft); cursor: pointer; margin-bottom: 10px; transition: border-color 0.15s, background 0.15s;
     background: var(--card);
   }
-  .file-drop.dragover { border-color: var(--primary); background: var(--primary-tint); }
-  .file-drop strong { color: var(--primary); }
-  .filename-tag { font-size: 12px; background: var(--primary-tint); color: var(--primary-dark); padding: 5px 12px; border-radius: 999px; display: inline-block; margin-top: 8px; font-weight:500; }
+  .file-drop.dragover { border-color: var(--accent); background: var(--accent-light); }
+  .file-drop strong { color: var(--accent-dark); }
+  .filename-tag { font-size: 12px; background: var(--accent-tint); color: var(--accent-dark); padding: 5px 12px; border-radius: 999px; display: inline-block; margin-top: 8px; font-weight:600; }
+  .filename-tag.is-error { background: var(--error-tint); color: var(--error); }
   .tab-row { display: flex; gap: 8px; margin-bottom: 10px; }
   .tab-btn { flex: 1; padding: 7px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); cursor: pointer; font-size: 12px; font-weight: 600; color: var(--ink-soft); font-family:var(--font-body); }
-  .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+  .tab-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .tab-btn:hover:not(.active) { background: var(--paper-warm); }
   .img-upload { display:flex; align-items:center; gap:12px; margin-top:6px; }
   .img-preview { width:64px; height:64px; border-radius:10px; object-fit:cover; background:var(--paper); border:1px solid var(--border); }
-  .json-box { background:#17203A; color:#8FE3B0; font-family:'Courier New',monospace; font-size:12px; padding:14px; border-radius:10px; max-height:480px; width:600px; max-width:100%; overflow:auto; white-space:pre-wrap; min-width:0; }
-  a.cta-link { background: var(--primary); color: white; text-decoration: none; padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; white-space: nowrap; font-family: var(--font-body); transition: background 0.15s; }
-  a.cta-link:hover { background: var(--primary-dark); }
+  .json-box { background:var(--ink); color:var(--accent-light); font-family:'Courier New',monospace; font-size:12px; padding:14px; border-radius:10px; max-height:480px; width:600px; max-width:100%; overflow:auto; white-space:pre-wrap; min-width:0; border:1px solid rgba(255,255,255,0.06); }
+  a.cta-link { background: var(--accent); color: var(--ink); text-decoration: none; padding: 10px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; white-space: nowrap; font-family: var(--font-body); transition: all 0.15s; display:inline-flex; align-items:center; gap:6px; }
+  a.cta-link:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(200,169,110,0.4); }
   a.cta-link.ghost { background: var(--card); color: var(--ink); border: 1px solid var(--border); }
-  a.cta-link.ghost:hover { background: var(--paper); }
+  a.cta-link.ghost:hover { background: var(--paper-warm); box-shadow:none; }
+  ::selection { background: var(--accent-light); color: var(--ink); }
 </style>
 </head>
 <body>
@@ -107,13 +113,17 @@
 
         <!-- Logo -->
         <a href="../index.html" class="logo">
-            <span class="logo-icon">📄</span>
+            <span class="logo-icon">RP</span>
             <span>ResumePro</span>
         </a>
 
         <!-- Nav + Hamburger -->
         <div class="nav-container">
-            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+            </button>
 
             <ul class="header-nav-menu" role="menubar">
 
@@ -124,7 +134,7 @@
                 <li class="header-nav-item header-dropdown" role="none">
                     <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                         Templates
-                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                        <span class="header-dropdown-icon" aria-hidden="true">▾</span>
                     </a>
                     <div class="header-dropdown-content" role="menu">
                         <a href="../resume-templates.html"   class="header-dropdown-item" role="menuitem">Resume Templates</a>
@@ -135,7 +145,7 @@
                 <li class="header-nav-item header-dropdown" role="none">
                     <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                         Apps
-                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                        <span class="header-dropdown-icon" aria-hidden="true">▾</span>
                     </a>
                     <div class="header-dropdown-content" role="menu">
                         <a href="../android-applications.html"   class="header-dropdown-item" role="menuitem">Android Applications</a>
@@ -154,7 +164,7 @@
                 <li class="header-nav-item header-dropdown" role="none">
                     <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                         Tools
-                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                        <span class="header-dropdown-icon" aria-hidden="true">▾</span>
                     </a>
                     <div class="header-dropdown-content" role="menu">
                         <a href="../email-builder.html"  class="header-dropdown-item" role="menuitem">Email Builder</a>
@@ -162,7 +172,7 @@
                         <a href="../klaviyo-tool.html"               class="header-dropdown-item" role="menuitem">Klaviyo Tool</a>
                         <a href="../omnisend.html"                   class="header-dropdown-item" role="menuitem">Omnisend Analytics</a>
 						<a href="../adg-customer-service-agent.html"   class="header-dropdown-item" role="menuitem">CS Agent</a>
-						<a href="../campfire.html"   class="header-dropdown-item" role="menuitem">Campfire🔥</a>
+						<a href="../campfire.html"   class="header-dropdown-item" role="menuitem">Campfire</a>
                     </div>
                 </li>
 
@@ -181,8 +191,8 @@
   
 <div class="page-content">
 <div class="brand-bar">
-  <div class="brand-mark"><span class="doc-icon">📄</span> ResumePro <span style="color:var(--ink-soft); font-weight:400; font-size:14px; margin-left:4px;">/ Builder</span></div>
-  <span class="badge-pill">✨ AI-assisted</span>
+  <div class="brand-mark"><span class="doc-icon">RP</span> ResumePro <span style="color:var(--ink-soft); font-weight:400; font-size:14px; margin-left:4px;">/ Builder</span></div>
+  <span class="badge-pill">AI-assisted</span>
 </div>
 
 <div class="wrap">
@@ -191,7 +201,7 @@
       <h1>Fill out your resume</h1>
       <div class="sub" style="margin:6px 0 0;">Prefer to just paste or upload a file? Use quick fill instead.</div>
     </div>
-    <a href="index.html" class="cta-link ghost">⚡ Quick fill →</a>
+    <a href="index.html" class="cta-link ghost">Quick fill →</a>
   </div>
 </div>
 
@@ -231,7 +241,7 @@
     <div class="sub">Fill in the form, or auto-fill it from a pasted/uploaded resume first.</div>
 
     <div class="prefill-box">
-      <label style="margin-top:0;">✨ Auto-fill (optional)</label>
+      <label style="margin-top:0;">Auto-fill (optional)</label>
 
       <div class="tab-row">
         <button type="button" class="tab-btn active" id="tabUpload">Upload file</button>
@@ -241,7 +251,7 @@
 
       <div id="uploadPane">
         <div class="file-drop" id="dropZone">
-          <div>📄 Drop a <strong>PDF, Word (.docx), or .txt</strong> file here, or click to browse</div>
+          <div>Drop a <strong>PDF, Word (.docx), or .txt</strong> file here, or click to browse</div>
           <input type="file" id="fileInput" accept=".pdf,.docx,.txt" style="display:none;">
           <div id="fileTag"></div>
         </div>
@@ -273,11 +283,11 @@
     <div class="step-head"><span class="step-badge">3</span><h1>Result</h1></div>
     <div class="sub">This is the filled data.json in the real template's exact shape — ready to drop into the preview/download pipeline.</div>
     <div class="json-box" id="resultBox">Nothing generated yet.</div>
-    <button class="secondary" id="downloadJsonBtn" style="display:none; margin-top:10px;">⬇ Download data.json</button>
+    <button class="secondary" id="downloadJsonBtn" style="display:none; margin-top:10px;">Download data.json</button>
 
     <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
       <button class="primary" id="previewBtn" type="button">Live preview</button>
-      <button class="secondary" id="downloadSiteBtn" type="button">⬇ Download full site (.zip)</button>
+      <button class="secondary" id="downloadSiteBtn" type="button">Download full site (.zip)</button>
     </div>
     <div class="status" id="previewStatus"></div>
     <div id="previewContainer" style="margin-top:12px;"></div>
@@ -571,10 +581,10 @@ async function handleFile(file) {
     } else {
       extractedFileText = await file.text();
     }
-    fileTag.innerHTML = `<span class="filename-tag">✓ ${file.name} (${extractedFileText.length.toLocaleString()} chars extracted)</span>`;
+    fileTag.innerHTML = `<span class="filename-tag">${file.name} (${extractedFileText.length.toLocaleString()} chars extracted)</span>`;
   } catch (err) {
     console.error(err);
-    fileTag.innerHTML = `<span class="filename-tag" style="background:#fee2e2; color:#dc2626;">Failed to read ${file.name}</span>`;
+    fileTag.innerHTML = `<span class="filename-tag is-error">Failed to read ${file.name}</span>`;
   }
 }
 

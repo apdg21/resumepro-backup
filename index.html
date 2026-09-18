@@ -308,10 +308,29 @@
             font-size: 1.1rem;
             font-weight: 700;
             margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .t-card-desc { font-size: 0.83rem; color: var(--mid); line-height: 1.5; }
         .t-card-arrow { font-size: 1rem; color: var(--accent); opacity: 0; transition: all 0.28s ease; }
         .t-card:hover .t-card-arrow { opacity: 1; transform: translateX(4px); }
+        .t-card.is-new { border-color: rgba(200,169,110,0.5); background: linear-gradient(180deg, #fffdf8, var(--white)); }
+
+        /* pill badge (replaces emoji "NEW" tags) */
+        .pill-new {
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--ink);
+            background: var(--accent);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-family: 'DM Sans', sans-serif;
+            vertical-align: middle;
+        }
+        .pill-new.on-dark { color: var(--ink); background: var(--accent); }
 
         /* stats row inside hero */
         .hero-stats {
@@ -345,6 +364,47 @@
             pointer-events: none;
         }
 
+        /* ─── ANNOUNCEMENT BAR ────────────────────────────────── */
+        .announce-bar {
+            background: var(--ink);
+            border-bottom: 1px solid rgba(200,169,110,0.25);
+            padding: 10px 0;
+            position: relative;
+            z-index: 50;
+        }
+        .announce-inner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            text-align: center;
+        }
+        .announce-tag {
+            font-size: 0.66rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--ink);
+            background: var(--accent);
+            padding: 3px 10px;
+            border-radius: 20px;
+            flex-shrink: 0;
+        }
+        .announce-text {
+            font-size: 0.84rem;
+            color: rgba(255,255,255,0.82);
+        }
+        .announce-link {
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(200,169,110,0.4);
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .announce-link:hover { color: var(--white); border-color: var(--white); }
+
         /* ─── TRUST STRIP ─────────────────────────────────────── */
         .trust-strip {
             background: var(--white);
@@ -362,12 +422,12 @@
         .trust-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 9px;
             font-size: 0.82rem;
             color: var(--mid);
             font-weight: 500;
         }
-        .trust-item span:first-child { font-size: 1rem; }
+        .trust-item svg { flex-shrink: 0; color: var(--accent-dark); }
 
         /* ─── FEATURED TEMPLATES ──────────────────────────────── */
         .templates-section {
@@ -557,7 +617,7 @@
         .tmpl-cta { font-size: 0.82rem; font-weight: 600; color: var(--accent-dark); display: flex; align-items: center; gap: 5px; }
         .tmpl-card:hover .tmpl-cta { gap: 8px; }
 
-        /* ─── FEATURED TOOL (CS AGENT) ────────────────────────── */
+        /* ─── FEATURED TOOL (RESUME BUILDER) ─────────────────── */
         .featured-tool {
             background: var(--ink);
             padding: 80px 0;
@@ -565,7 +625,7 @@
             overflow: hidden;
         }
         .featured-tool::before {
-            content: 'CS AGENT';
+            content: 'BUILDER';
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%,-50%);
@@ -616,16 +676,16 @@
             font-size: 0.92rem; color: rgba(255,255,255,0.72);
         }
         .ft-features li::before {
-            content: '✓';
-            width: 20px; height: 20px;
+            content: '';
+            width: 18px; height: 18px;
             border-radius: 50%;
             background: rgba(200,169,110,0.18);
-            color: var(--accent);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.72rem;
-            font-weight: 700;
             flex-shrink: 0;
-            margin-top: 2px;
+            margin-top: 3px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23c8a96e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 8.5 6.5 12 13 4'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 9px;
         }
         .btn-gold {
             display: inline-flex;
@@ -659,26 +719,26 @@
         }
         .ft-mock-dot { width: 10px; height: 10px; border-radius: 50%; }
         .ft-mock-title { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-left: 4px; flex: 1; text-align: center; }
-        .ft-mock-body { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
-        .ft-msg {
-            padding: 12px 16px;
-            border-radius: 10px;
-            font-size: 0.83rem;
-            line-height: 1.55;
-            max-width: 85%;
+        .ft-mock-body { padding: 22px 20px; display: flex; flex-direction: column; gap: 16px; }
+        .ft-step { display: flex; align-items: center; gap: 14px; }
+        .ft-step-num {
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            background: rgba(200,169,110,0.16);
+            color: var(--accent);
+            font-size: 0.78rem;
+            font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
         }
-        .ft-msg-user {
-            background: var(--accent);
-            color: var(--ink);
-            align-self: flex-end;
-            border-bottom-right-radius: 3px;
-            font-weight: 500;
-        }
-        .ft-msg-agent {
-            background: rgba(255,255,255,0.09);
-            color: rgba(255,255,255,0.82);
-            align-self: flex-start;
-            border-bottom-left-radius: 3px;
+        .ft-step-body { flex: 1; }
+        .ft-step-title { font-size: 0.86rem; font-weight: 600; color: rgba(255,255,255,0.85); margin-bottom: 2px; }
+        .ft-step-sub { font-size: 0.76rem; color: rgba(255,255,255,0.4); }
+        .ft-step-line {
+            width: 1px;
+            height: 18px;
+            background: rgba(255,255,255,0.12);
+            margin-left: 13px;
         }
         .ft-mock-input {
             margin: 0 20px 20px;
@@ -696,7 +756,6 @@
             border-radius: 6px;
             background: var(--accent);
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.7rem;
             color: var(--ink);
         }
 
@@ -732,11 +791,11 @@
             background: var(--ink);
             border-radius: 10px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem;
             margin-bottom: 18px;
             transition: background 0.26s, transform 0.26s;
+            color: var(--accent);
         }
-        .tool-card:hover .tool-icon { background: var(--accent-dark); transform: rotate(-5deg) scale(1.05); }
+        .tool-card:hover .tool-icon { background: var(--accent-dark); color: var(--ink); transform: rotate(-5deg) scale(1.05); }
         .tool-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
         .tool-desc { font-size: 0.83rem; color: var(--mid); line-height: 1.6; flex: 1; }
         .tool-link { font-size: 0.8rem; font-weight: 600; color: var(--accent-dark); margin-top: 16px; display: flex; align-items: center; gap: 5px; }
@@ -822,8 +881,8 @@
             border-radius: 14px;
             background: rgba(255,255,255,0.07);
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem;
             flex-shrink: 0;
+            color: var(--accent);
         }
         .app-info { flex: 1; }
         .app-name { font-weight: 600; color: var(--white); margin-bottom: 3px; font-size: 0.93rem; }
@@ -865,11 +924,11 @@
             background: var(--ink);
             border-radius: 10px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.05rem;
             margin-bottom: 16px;
             transition: background 0.26s, transform 0.26s;
+            color: var(--accent);
         }
-        .feat-card:hover .feat-icon-wrap { background: var(--accent-dark); transform: rotate(-5deg) scale(1.05); }
+        .feat-card:hover .feat-icon-wrap { background: var(--accent-dark); color: var(--ink); transform: rotate(-5deg) scale(1.05); }
         .feat-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
         .feat-desc { font-size: 0.84rem; color: var(--mid); line-height: 1.7; }
 
@@ -897,7 +956,8 @@
             width: 36px; height: 36px;
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.95rem;
+            font-size: 0.8rem;
+            font-weight: 700;
             flex-shrink: 0;
         }
         .testi-name { font-size: 0.88rem; font-weight: 600; }
@@ -1103,23 +1163,37 @@
             .newsletter-input { width: 100%; }
             .trust-inner { gap: 20px; }
             .floating-cta { bottom: 16px; right: 16px; }
+            .announce-inner { font-size: 0.8rem; }
         }
     </style>
 </head>
 <body>
+
+<!-- ═══════════════════════════════════════════════════ ANNOUNCEMENT BAR -->
+<div class="announce-bar">
+    <div class="container announce-inner">
+        <span class="announce-tag">New</span>
+        <span class="announce-text">The AI Resume Builder just launched — upload your CV and get a finished site in minutes.</span>
+        <a href="resume-builder" class="announce-link">Try it now →</a>
+    </div>
+</div>
 
 <header>
     <div class="header-content">
 
         <!-- Logo -->
         <a href="index.html" class="logo">
-            <span class="logo-icon">📄</span>
+            <span class="logo-icon">RP</span>
             <span>ResumePro</span>
         </a>
 
         <!-- Nav + Hamburger -->
         <div class="nav-container">
-            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+            </button>
 
             <ul class="header-nav-menu" role="menubar">
 
@@ -1130,19 +1204,19 @@
                 <li class="header-nav-item header-dropdown" role="none">
                     <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                         Templates
-                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                        <span class="header-dropdown-icon" aria-hidden="true">▾</span>
                     </a>
                     <div class="header-dropdown-content" role="menu">
                         <a href="resume-templates.html"   class="header-dropdown-item" role="menuitem">Resume Templates</a>
                         <a href="portfolio-templates.html" class="header-dropdown-item" role="menuitem">Portfolio Templates</a>
-						<a href="resume-builder" class="header-dropdown-item" role="menuitem">Resume Builder</a>
+						<a href="resume-builder" class="header-dropdown-item" role="menuitem">Resume Builder <span class="pill-new">New</span></a>
                     </div>
                 </li>
 
                 <li class="header-nav-item header-dropdown" role="none">
                     <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                         Apps
-                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                        <span class="header-dropdown-icon" aria-hidden="true">▾</span>
                     </a>
                     <div class="header-dropdown-content" role="menu">
                         <a href="android-applications.html"   class="header-dropdown-item" role="menuitem">Android Applications</a>
@@ -1161,7 +1235,7 @@
                 <li class="header-nav-item header-dropdown" role="none">
                     <a href="#" class="header-nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                         Tools
-                        <span class="header-dropdown-icon" aria-hidden="true">▼</span>
+                        <span class="header-dropdown-icon" aria-hidden="true">▾</span>
                     </a>
                     <div class="header-dropdown-content" role="menu">
                         <a href="email-builder.html"  class="header-dropdown-item" role="menuitem">Email Builder</a>
@@ -1169,7 +1243,7 @@
                         <a href="klaviyo-tool.html"               class="header-dropdown-item" role="menuitem">Klaviyo Tool</a>
                         <a href="omnisend.html"                   class="header-dropdown-item" role="menuitem">Omnisend Analytics</a>
 						<a href="adg-customer-service-agent.html"   class="header-dropdown-item" role="menuitem">CS Agent</a>
-						<a href="campfire.html"   class="header-dropdown-item" role="menuitem">Campfire🔥</a>
+						<a href="campfire.html"   class="header-dropdown-item" role="menuitem">Campfire</a>
                     </div>
                 </li>
 
@@ -1190,7 +1264,7 @@
 <!-- ═══════════════════════════════════════════════════ HERO -->
 <section class="hero">
     <div class="hero-left">
-        <span class="hero-eyebrow">Solo-built. Production-ready.</span>
+        <span class="hero-eyebrow">Solo-built · Production-ready · Now with AI</span>
         <h1 class="hero-title">
             Stand out.<br>
             Get <em>noticed.</em><br>
@@ -1200,8 +1274,8 @@
             Professional resume &amp; portfolio templates plus free productivity tools — designed and built by one developer who actually cares about craft.
         </p>
         <div class="hero-actions">
-            <a href="resume-templates.html" class="btn-primary">Browse Templates →</a>
-            <a href="adg-customer-service-agent.html" class="btn-outline">Try CS Agent Free</a>
+            <a href="resume-builder" class="btn-primary">Try the AI Resume Builder →</a>
+            <a href="resume-templates.html" class="btn-outline">Browse Templates</a>
         </div>
 
         <div class="hero-stats">
@@ -1220,7 +1294,7 @@
         </div>
 
         <div class="maker-badge">
-            <div class="maker-avatar">👤</div>
+            <div class="maker-avatar">AG</div>
             <div class="maker-info">
                 <div class="maker-name">Adolf de Guzman</div>
                 <div class="maker-role">Solo creator · designer · developer</div>
@@ -1231,8 +1305,26 @@
     <div class="hero-right">
         <p class="hero-right-label">Choose your category</p>
         <div class="template-cards-stack">
+            <a href="resume-builder" class="t-card is-new">
+                <div class="t-card-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 3L13.8 8.5L19 10.3L13.8 12.1L12 17.6L10.2 12.1L5 10.3L10.2 8.5L12 3Z" stroke="var(--accent-dark)" stroke-width="1.4" stroke-linejoin="round"/>
+                        <path d="M19 15L19.7 17.1L21.8 17.8L19.7 18.5L19 20.6L18.3 18.5L16.2 17.8L18.3 17.1L19 15Z" fill="var(--accent-dark)"/>
+                    </svg>
+                </div>
+                <div class="t-card-body">
+                    <div class="t-card-title">Resume Builder <span class="pill-new">New</span></div>
+                    <div class="t-card-desc">Upload your CV and let AI turn it into a finished, templated resume site in minutes.</div>
+                </div>
+                <span class="t-card-arrow">→</span>
+            </a>
             <a href="resume-templates.html" class="t-card">
-                <div class="t-card-icon">📝</div>
+                <div class="t-card-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="5" y="3.5" width="14" height="17" rx="1.5" stroke="var(--accent-dark)" stroke-width="1.4"/>
+                        <path d="M8.5 8H15.5M8.5 11.5H15.5M8.5 15H12.5" stroke="var(--accent-dark)" stroke-width="1.4" stroke-linecap="round"/>
+                    </svg>
+                </div>
                 <div class="t-card-body">
                     <div class="t-card-title">Resume Templates</div>
                     <div class="t-card-desc">Modern, responsive designs that showcase your career journey on any device.</div>
@@ -1240,7 +1332,13 @@
                 <span class="t-card-arrow">→</span>
             </a>
             <a href="portfolio-templates.html" class="t-card">
-                <div class="t-card-icon">🎨</div>
+                <div class="t-card-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3.5" y="4" width="17" height="13" rx="1.5" stroke="var(--accent-dark)" stroke-width="1.4"/>
+                        <circle cx="8" cy="9" r="1.6" stroke="var(--accent-dark)" stroke-width="1.3"/>
+                        <path d="M3.5 15L8.5 11L12.5 14L16 10.5L20.5 15" stroke="var(--accent-dark)" stroke-width="1.4" stroke-linejoin="round"/>
+                    </svg>
+                </div>
                 <div class="t-card-body">
                     <div class="t-card-title">Portfolio Templates</div>
                     <div class="t-card-desc">Highlight your best projects with professional portfolios that impress.</div>
@@ -1248,18 +1346,15 @@
                 <span class="t-card-arrow">→</span>
             </a>
             <a href="android-applications.html" class="t-card">
-                <div class="t-card-icon">📱</div>
+                <div class="t-card-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="7" y="3" width="10" height="18" rx="2" stroke="var(--accent-dark)" stroke-width="1.4"/>
+                        <path d="M10.5 18.3H13.5" stroke="var(--accent-dark)" stroke-width="1.4" stroke-linecap="round"/>
+                    </svg>
+                </div>
                 <div class="t-card-body">
                     <div class="t-card-title">Android Applications</div>
                     <div class="t-card-desc">Productivity tools and utilities built with Material Design 3.</div>
-                </div>
-                <span class="t-card-arrow">→</span>
-            </a>
-            <a href="adg-customer-service-agent.html" class="t-card">
-                <div class="t-card-icon">🤖</div>
-                <div class="t-card-body">
-                    <div class="t-card-title">CS Agent <span style="font-size:0.65rem;background:#eef1fd;color:#2d5be3;padding:2px 7px;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:600;vertical-align:middle;">NEW</span></div>
-                    <div class="t-card-desc">AI-powered customer service assistant — free to use, right in your browser.</div>
                 </div>
                 <span class="t-card-arrow">→</span>
             </a>
@@ -1272,11 +1367,26 @@
 <div class="trust-strip">
     <div class="container">
         <div class="trust-inner">
-            <div class="trust-item"><span>✅</span><span>100% Free to Host</span></div>
-            <div class="trust-item"><span>📱</span><span>Fully Responsive</span></div>
-            <div class="trust-item"><span>⚡</span><span>Fast Loading</span></div>
-            <div class="trust-item"><span>🎨</span><span>No Coding Required</span></div>
-            <div class="trust-item"><span>🔧</span><span>Works on GitHub Pages & Netlify</span></div>
+            <div class="trust-item">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5L6.5 12L13 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span>100% Free to Host</span>
+            </div>
+            <div class="trust-item">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="5" y="2" width="6" height="12" rx="1" stroke="currentColor" stroke-width="1.4"/><path d="M7 12.5H9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                <span>Fully Responsive</span>
+            </div>
+            <div class="trust-item">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M9 1L3 9H7.5L6.5 15L13 6.5H8.5L9 1Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+                <span>Fast Loading</span>
+            </div>
+            <div class="trust-item">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5L9.3 5.9L13.5 7.3L9.3 8.7L8 13.1L6.7 8.7L2.5 7.3L6.7 5.9L8 1.5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+                <span>No Coding Required</span>
+            </div>
+            <div class="trust-item">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M9.5 2.5L4 8L6.5 8.5L5.5 13.5L11 8L8.5 7.5L9.5 2.5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+                <span>Works on GitHub Pages & Netlify</span>
+            </div>
         </div>
     </div>
 </div>
@@ -1412,47 +1522,58 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════ FEATURED TOOL: CS AGENT -->
+<!-- ═══════════════════════════════════════════════════ FEATURED TOOL: RESUME BUILDER -->
 <section class="featured-tool">
     <div class="container">
         <div class="ft-inner reveal">
             <div>
-                <div class="ft-tag">✦ Featured Tool — Free to Use</div>
-                <h2 class="ft-title">Meet the <em>CS Agent</em> —<br>your AI support assistant</h2>
+                <div class="ft-tag">Just Launched — Free to Use</div>
+                <h2 class="ft-title">Meet the <em>Resume Builder</em> —<br>AI does the formatting</h2>
                 <p class="ft-desc">
-                    A ready-to-deploy AI customer service agent that handles inquiries, drafts responses, and keeps your support queue moving — all from your browser, no API key needed.
+                    Upload your existing resume or CV and let AI extract, structure, and drop your info straight into a polished template — no manual formatting, no design decisions.
                 </p>
                 <ul class="ft-features">
-                    <li>Answer common customer questions instantly</li>
-                    <li>Draft professional email replies in seconds</li>
-                    <li>Tone-matching for your brand voice</li>
-                    <li>Works in any browser, zero setup</li>
+                    <li>Upload a PDF, Word doc, or pasted text</li>
+                    <li>AI structures your info into a clean data file</li>
+                    <li>Instant live preview in your chosen template</li>
+                    <li>Download the finished site, ready to host</li>
                 </ul>
-                <a href="adg-customer-service-agent.html" class="btn-gold">Try CS Agent Free →</a>
+                <a href="resume-builder" class="btn-gold">Try the Resume Builder →</a>
             </div>
             <div class="ft-mockup">
                 <div class="ft-mock-bar">
                     <div class="ft-mock-dot" style="background:#ff5f57;"></div>
                     <div class="ft-mock-dot" style="background:#ffbd2e;"></div>
                     <div class="ft-mock-dot" style="background:#28c840;"></div>
-                    <div class="ft-mock-title">CS Agent · ResumePro</div>
+                    <div class="ft-mock-title">Resume Builder · ResumePro</div>
                 </div>
                 <div class="ft-mock-body">
-                    <div class="ft-msg ft-msg-user">
-                        Hi, my order hasn't arrived in 3 weeks. Can you help?
+                    <div class="ft-step">
+                        <div class="ft-step-num">1</div>
+                        <div class="ft-step-body">
+                            <div class="ft-step-title">Pick a template</div>
+                            <div class="ft-step-sub">Choose from 20+ resume designs</div>
+                        </div>
                     </div>
-                    <div class="ft-msg ft-msg-agent">
-                        I'm sorry to hear about the delay! I can look into your order right away. Could you share your order number? I'll check the status and arrange a resolution within 24 hours.
+                    <div class="ft-step-line"></div>
+                    <div class="ft-step">
+                        <div class="ft-step-num">2</div>
+                        <div class="ft-step-body">
+                            <div class="ft-step-title">Upload your CV</div>
+                            <div class="ft-step-sub">PDF, Word, or pasted text</div>
+                        </div>
                     </div>
-                    <div class="ft-msg ft-msg-user">
-                        Order #RP-22941. Thanks!
-                    </div>
-                    <div class="ft-msg ft-msg-agent" style="opacity:0.5;">
-                        <span style="display:flex;gap:4px;align-items:center;"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.4s ease infinite;"></span><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.4s ease 0.25s infinite;"></span><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.4s ease 0.5s infinite;"></span></span>
+                    <div class="ft-step-line"></div>
+                    <div class="ft-step">
+                        <div class="ft-step-num">3</div>
+                        <div class="ft-step-body">
+                            <div class="ft-step-title">Download your site</div>
+                            <div class="ft-step-sub">Live preview, ready to host</div>
+                        </div>
                     </div>
                 </div>
                 <div class="ft-mock-input">
-                    <span>Type your message…</span>
+                    <span>Drop your resume file here…</span>
                     <div class="ft-mock-send">↑</div>
                 </div>
             </div>
@@ -1472,25 +1593,33 @@
         </div>
         <div class="tools-grid reveal">
             <a href="email-builder.html" class="tool-card">
-                <div class="tool-icon">✉️</div>
+                <div class="tool-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4 6.5L12 13L20 6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
                 <div class="tool-name">Email Builder</div>
                 <div class="tool-desc">Design and export responsive HTML emails visually — no code editor needed.</div>
                 <div class="tool-link">Open tool →</div>
             </a>
             <a href="inliner.html" class="tool-card">
-                <div class="tool-icon">⚡</div>
+                <div class="tool-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 3L5 13.5H11L10.5 21L19 9.5H13.5L13 3Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+                </div>
                 <div class="tool-name">CSS Inliner</div>
                 <div class="tool-desc">Paste your HTML and get inline-styled output ready for any email client.</div>
                 <div class="tool-link">Open tool →</div>
             </a>
             <a href="klaviyo-tool.html" class="tool-card">
-                <div class="tool-icon">📊</div>
+                <div class="tool-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 20V13M9.5 20V8M15 20V15M20 20V5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                </div>
                 <div class="tool-name">Klaviyo Tool</div>
                 <div class="tool-desc">Analyze and visualize your Klaviyo email performance data in one place.</div>
                 <div class="tool-link">Open tool →</div>
             </a>
             <a href="omnisend.html" class="tool-card">
-                <div class="tool-icon">📈</div>
+                <div class="tool-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 16L9 10L13 13L20 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 5H20V10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
                 <div class="tool-name">Omnisend Analytics</div>
                 <div class="tool-desc">Pull campaign stats and track automation performance from Omnisend.</div>
                 <div class="tool-link">Open tool →</div>
@@ -1504,22 +1633,24 @@
     <div class="container">
         <div class="android-inner reveal">
             <div>
-                <div class="android-badge">🚀 New · April 2025</div>
+                <div class="android-badge">New · April 2025</div>
                 <h2 class="android-title">Now building <em>Android</em> apps.</h2>
                 <p class="android-desc">
                     Expanding beyond web into native mobile. Crafting purposeful productivity tools for Android using Material Design 3 — clean, fast, and useful.
                 </p>
                 <div class="android-tags">
-                    <span class="android-tag">🤖 Android Dev</span>
-                    <span class="android-tag">📱 Material Design 3</span>
-                    <span class="android-tag">🚀 Play Store</span>
-                    <span class="android-tag">🎯 Productivity</span>
+                    <span class="android-tag">Android Dev</span>
+                    <span class="android-tag">Material Design 3</span>
+                    <span class="android-tag">Play Store</span>
+                    <span class="android-tag">Productivity</span>
                 </div>
                 <a href="android-applications.html" class="btn-gold">View All Android Apps →</a>
             </div>
             <div class="android-apps">
                 <a href="android-applications.html" class="android-app-card" style="text-decoration:none;">
-                    <div class="app-icon-wrap">🎤</div>
+                    <div class="app-icon-wrap">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3C9.5 3 7.5 5 7.5 7.5V12C7.5 14.5 9.5 16.5 12 16.5C14.5 16.5 16.5 14.5 16.5 12V7.5C16.5 5 14.5 3 12 3Z" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 11V12.5C5.5 16 8.4 19 12 19C15.6 19 18.5 16 18.5 12.5V11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M12 19V21.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                    </div>
                     <div class="app-info">
                         <div class="app-name">Voco — Voice Type Smart</div>
                         <div class="app-sub">Floating mic voice typing, anywhere</div>
@@ -1527,12 +1658,14 @@
                     <span class="app-pill">In Dev</span>
                 </a>
                 <a href="https://play.google.com/store/apps/details?id=com.adolf.notesreminder" class="android-app-card" style="text-decoration:none;" target="_blank" rel="noopener">
-                    <div class="app-icon-wrap">📝</div>
+                    <div class="app-icon-wrap">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="5" y="3.5" width="14" height="17" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M8.5 8H15.5M8.5 11.5H15.5M8.5 15H12.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                    </div>
                     <div class="app-info">
                         <div class="app-name">RemindMe — Notes &amp; Reminder</div>
                         <div class="app-sub">Smart productivity &amp; task management</div>
                     </div>
-                    <span class="app-pill" style="background:rgba(45,122,79,0.18);color:#4fc785;">✅ Live</span>
+                    <span class="app-pill" style="background:rgba(45,122,79,0.18);color:#4fc785;">Live</span>
                 </a>
             </div>
         </div>
@@ -1550,22 +1683,30 @@
         </div>
         <div class="features-grid reveal">
             <div class="feat-card">
-                <div class="feat-icon-wrap">🚀</div>
+                <div class="feat-icon-wrap">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M13 3L5 13.5H11L10.5 21L19 9.5H13.5L13 3Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+                </div>
                 <h3 class="feat-title">Easy Customization</h3>
                 <p class="feat-desc">Change colors, fonts, and layouts with simple CSS edits. No coding experience needed.</p>
             </div>
             <div class="feat-card">
-                <div class="feat-icon-wrap">📱</div>
+                <div class="feat-icon-wrap">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="5" y="2" width="6" height="12" rx="1" stroke="currentColor" stroke-width="1.4"/><path d="M7 12.5H9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                </div>
                 <h3 class="feat-title">Fully Responsive</h3>
                 <p class="feat-desc">Looks pixel-perfect on every device — from desktop to the smallest phone screen.</p>
             </div>
             <div class="feat-card">
-                <div class="feat-icon-wrap">🔧</div>
+                <div class="feat-icon-wrap">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9.5 2.5L4 8L6.5 8.5L5.5 13.5L11 8L8.5 7.5L9.5 2.5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+                </div>
                 <h3 class="feat-title">Free Hosting</h3>
                 <p class="feat-desc">Deploy to GitHub Pages or Netlify in minutes. No server costs, no catch.</p>
             </div>
             <div class="feat-card">
-                <div class="feat-icon-wrap">📚</div>
+                <div class="feat-icon-wrap">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 4.5C4 4 4.5 3.5 6 3.5H14C15.5 3.5 16 4 16 4.5V19.5C16 19 15.5 18.5 14 18.5H6C4.5 18.5 4 19 4 19.5V4.5Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M16 4.5C16 4 16.5 3.5 18 3.5H20V18.5H18C16.5 18.5 16 19 16 19.5" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+                </div>
                 <h3 class="feat-title">Step-by-Step Guides</h3>
                 <p class="feat-desc">Every template ships with detailed setup instructions and customization tips.</p>
             </div>
@@ -1587,7 +1728,7 @@
                 <div class="testi-stars">★★★★★</div>
                 <p class="testi-quote">"Got three interview callbacks within a week of switching to a ResumePro template. The design genuinely makes a difference."</p>
                 <div class="testi-author">
-                    <div class="testi-avatar" style="background:#eef1fd;">👩‍💼</div>
+                    <div class="testi-avatar" style="background:#eef1fd; color:#2d5be3;">MS</div>
                     <div>
                         <div class="testi-name">Maria S.</div>
                         <div class="testi-role">Software Engineer · Hired at a startup</div>
@@ -1596,9 +1737,9 @@
             </div>
             <div class="testi-card">
                 <div class="testi-stars">★★★★★</div>
-                <p class="testi-quote">"The CS Agent saved our small team hours every week. Clean, fast, and actually useful — rare for a free tool."</p>
+                <p class="testi-quote">"The Resume Builder turned my messy old CV into a finished site in about two minutes. Genuinely didn't expect it to work that well."</p>
                 <div class="testi-author">
-                    <div class="testi-avatar" style="background:#eaf4ee;">👨‍💻</div>
+                    <div class="testi-avatar" style="background:#eaf4ee; color:#2d7a4f;">JT</div>
                     <div>
                         <div class="testi-name">James T.</div>
                         <div class="testi-role">Operations Lead · E-commerce brand</div>
@@ -1609,7 +1750,7 @@
                 <div class="testi-stars">★★★★★</div>
                 <p class="testi-quote">"I've tried many portfolio templates. ResumePro's stood out because it's minimal, fast, and didn't need a framework to run."</p>
                 <div class="testi-author">
-                    <div class="testi-avatar" style="background:#f4f1eb;">🎨</div>
+                    <div class="testi-avatar" style="background:#f4f1eb; color:#9a7a3f;">AR</div>
                     <div>
                         <div class="testi-name">Aiko R.</div>
                         <div class="testi-role">Freelance Designer</div>
@@ -1641,7 +1782,7 @@
                     <div class="blog-category">Email Marketing</div>
                     <div class="blog-title">Seasonality in Email Marketing: Why Your Numbers Are Lying to You</div>
                     <div class="blog-excerpt">A performance dip doesn't always mean something is broken. Learn how seasonality silently shapes your email results — and how to stop fixing problems that were never there.</div>
-                    <div class="blog-meta">📅 <span>May 21, 2026</span></div>
+                    <div class="blog-meta"><span>May 21, 2026</span></div>
                 </div>
             </a>
 
@@ -1654,7 +1795,7 @@
                     <div class="blog-category">Email Design</div>
                     <div class="blog-title">Why Leading Email Platforms Favor Balanced Image–Text Designs</div>
                     <div class="blog-excerpt">Discover why Klaviyo, Omnisend, and Figma use balanced text-image emails — improving deliverability, accessibility, and engagement while avoiding spam filters.</div>
-                    <div class="blog-meta">📅 <span>March 13, 2026</span></div>
+                    <div class="blog-meta"><span>March 13, 2026</span></div>
                 </div>
             </a>
 
@@ -1667,7 +1808,7 @@
                     <div class="blog-category">Email Marketing</div>
                     <div class="blog-title">Beyond Revenue: How to Measure True Email Marketing Success</div>
                     <div class="blog-excerpt">Revenue isn't everything. Learn to balance trust metrics like subscriber growth, engagement, and deliverability for lasting email success.</div>
-                    <div class="blog-meta">📅 <span>February 25, 2026</span></div>
+                    <div class="blog-meta"><span>February 25, 2026</span></div>
                 </div>
             </a>
 
@@ -1681,11 +1822,11 @@
         <div class="cta-inner reveal">
             <div>
                 <h2 class="cta-title">Ready to build your<br><em>online presence?</em></h2>
-                <p class="cta-sub">Browse templates, try the tools, or follow along as more products ship. Built by one person — made for everyone.</p>
+                <p class="cta-sub">Browse templates, try the AI Resume Builder, or follow along as more products ship. Built by one person — made for everyone.</p>
             </div>
             <div class="cta-btns">
-                <a href="resume-templates.html" class="btn-gold">Browse Templates →</a>
-                <a href="adg-customer-service-agent.html" class="btn-gold-outline">Try CS Agent Free</a>
+                <a href="resume-builder" class="btn-gold">Try the Resume Builder →</a>
+                <a href="resume-templates.html" class="btn-gold-outline">Browse Templates</a>
             </div>
         </div>
 
@@ -1713,6 +1854,7 @@
         <div class="footer-column">
             <h3>Templates</h3>
             <ul class="footer-links">
+                <li><a href="resume-builder">Resume Builder</a></li>
                 <li><a href="resume-templates.html">Resume Templates</a></li>
                 <li><a href="portfolio-templates.html">Portfolio Templates</a></li>
                 <li><a href="#">All Templates</a></li>
@@ -1745,9 +1887,9 @@
 </footer>
 
 <!-- floating CTA button -->
-<a href="adg-customer-service-agent.html" class="floating-cta" id="floatingCta">
+<a href="resume-builder" class="floating-cta" id="floatingCta">
     <div class="floating-dot"></div>
-    Try CS Agent Free
+    Try the Resume Builder
 </a>
 
 <script>
@@ -1803,7 +1945,7 @@
 
         // Check endpoint is configured
         if (SHEET_ENDPOINT === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
-            showMsg('⚠ Endpoint not configured yet.', '#c8a96e');
+            showMsg('Endpoint not configured yet.', '#c8a96e');
             return;
         }
 
@@ -1826,7 +1968,7 @@
             });
 
             // no-cors means we can't read the response — treat reaching here as success
-            newsletterBtn.textContent = '✓ Subscribed!';
+            newsletterBtn.textContent = 'Subscribed!';
             newsletterBtn.style.background = '#2d7a4f';
             newsletterEmail.value = '';
             showMsg('Thanks! You\'re on the list.', '#2d7a4f');

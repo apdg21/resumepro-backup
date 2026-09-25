@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-W52LYHBGZY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-W52LYHBGZY');
-</script>
+<script>document.documentElement.className+=" js"</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ResumePro — Your Resume, Now a Website</title>
@@ -238,14 +233,53 @@
     .mobile-cta{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;align-items:center;justify-content:space-between;gap:12px;
       background:rgba(11,15,35,.96);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.12);
       padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
-    .mobile-cta span{color:var(--muted-d);font-size:11.5px;font-weight:700;line-height:1.3;max-width:120px}
+    .mobile-cta span{color:var(--muted-d);font-size:12.4px;font-weight:700;line-height:1.3;max-width:120px}
     .mobile-cta .btn{flex:1;justify-content:center;padding:13px 18px}
   }
 
   /* reveal animation */
-  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
-  .reveal.in{opacity:1;transform:none}
-  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+  .js .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+  .js .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.js .reveal{opacity:1;transform:none;transition:none}}
+
+  /* ================= MOBILE POLISH ================= */
+  *{-webkit-text-size-adjust:100%}
+  body{overflow-x:hidden}
+  a,button{-webkit-tap-highlight-color:transparent}
+  img,svg{max-width:100%}
+
+  @media(max-width:760px){
+    .wrap{padding:0 18px}
+    section{padding:58px 0}
+    html{scroll-padding-top:72px}
+    .head{margin-bottom:34px}
+
+    /* sticky CTA: slimmer + slides in only after the hero */
+    .js .sticky,.js .mobile-cta{transform:translateY(120%);transition:transform .3s ease}
+    .js .sticky.show,.js .mobile-cta.show{transform:none}
+    .sticky{padding:10px 14px calc(10px + env(safe-area-inset-bottom))}
+    .sticky span{font-size:12.6px;max-width:54%;line-height:1.25}
+    .sticky a{padding:10px 16px;font-size:13.6px}
+    .mobile-cta{padding:10px 14px calc(10px + env(safe-area-inset-bottom))}
+    .mobile-cta span{font-size:12.6px;max-width:42%;line-height:1.25}
+    .mobile-cta .btn{padding:11px 16px;font-size:14px}
+  }
+  @media(max-width:520px){
+    .hero-ctas .btn,.hero-cta .btn,.ctas .btn{width:100%;justify-content:center}
+    .head h2,.sec-head h2,h2.disp{font-size:clamp(26px,8.4vw,34px)}
+    .path,.quote,.step,.panel,.feat,.card,.helpbar,.helpband,.band,.folio,.studio,.vs-col{padding:22px}
+    .price b,.panel .big{font-size:38px}
+  }
+
+  /* comfortable tap targets (WCAG 44px) */
+  .chip,.chips .chip,.tab{min-height:44px}
+  .chip,.tab{display:inline-flex;align-items:center;justify-content:center}
+  footer .foot-links a,footer .foot .links a,footer .links a{display:inline-block;padding:10px 0}
+  .sub a,.fine a,.note a,.tmpl-note a,.band .note a{display:inline-block;padding:10px 0}
+  .sec-head a,.head a{display:inline-block;padding:8px 0}
+  header .logo,footer .logo{display:inline-flex;align-items:center;min-height:44px}
+  summary{cursor:pointer;min-height:44px}
+  /* ================ /MOBILE POLISH ================ */
 </style>
 </head>
 <body>
@@ -283,6 +317,7 @@
         <div class="hero-checks">
           <span><i>✓</i> No coding needed</span>
           <span><i>✓</i> Mobile friendly</span>
+          <span><i>✓</i> Publish in one click</span>
           <span><i>✓</i> One-time prices</span>
         </div>
       </div>
@@ -365,7 +400,7 @@
             <li><i>✓</i> Pixel-perfect on every screen size</li>
             <li><i>✓</i> Update once — always current</li>
             <li><i>✓</i> 22 designs recruiters remember</li>
-            <li><i>✓</i> AI auto-fill from your old file</li>
+            <li><i>✓</i> AI auto-fill, then publish in one click</li>
           </ul>
         </div>
       </div>
@@ -396,12 +431,13 @@
         <div class="step reveal">
           <span class="num">$15</span>
           <h3>AI resume builder</h3>
-          <p>Upload your existing resume, pick a template, and AI rewrites and formats it for you. Preview it live for free before you unlock.</p>
+          <p>Upload your existing resume, pick a template, and AI rewrites and formats it for you. Preview it live for free — then publish it in one click, or download the site and host it your own way.</p>
           <ul class="mini">
-            <li>Buy one key — unlock unlimited use of the builder</li>
+            <li>Buy one key — unlock unlimited use, re-run any time</li>
             <li>Upload what you already have, no blank page</li>
             <li>AI restructures it into your chosen template</li>
-            <li>Re-run it any time your experience changes</li>
+            <li>Preview it live, then publish in one click — your link is ready</li>
+            <li>Prefer your own host? Download the full site and upload wherever you like</li>
           </ul>
           <a class="btn btn-primary" href="https://resumepro.pages.dev/resume-builder/">Generate your resume →</a>
         </div>
@@ -487,7 +523,7 @@
         </details>
         <details class="reveal">
           <summary>How do I host my digital resume?</summary>
-          <p>Every download includes detailed instructions for free hosting options like GitHub Pages and Netlify. You can also host on any standard web hosting service — no special server requirements needed.</p>
+          <p>Two options. <strong>Publish straight from the AI builder</strong> — happy with the live preview? Hit publish and your link is ready to share, no setup at all. Or <strong>download the full site as a ZIP</strong> and host it yourself: every download includes detailed instructions for free hosting like GitHub Pages and Netlify, and it works on any standard web host — no special server requirements.</p>
         </details>
         <details class="reveal">
           <summary>Can I customize the colors and fonts?</summary>
@@ -546,5 +582,17 @@
   document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
   document.getElementById('yr').textContent = new Date().getFullYear();
 </script>
-</body>
+
+<script>
+  /* show the sticky CTA only after the visitor scrolls past the hero */
+  (function(){
+    var bar = document.querySelector('.sticky') || document.querySelector('.mobile-cta');
+    if(!bar || !window.addEventListener) return;
+    var upd = function(){ if(window.scrollY > 380){ bar.classList.add('show'); } else { bar.classList.remove('show'); } };
+    window.addEventListener('scroll', upd, {passive:true});
+    window.addEventListener('resize', upd);
+    upd();
+  })();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a40a39925b91ffdf',t:'MTc5MDM0MTM2Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

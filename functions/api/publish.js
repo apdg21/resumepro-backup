@@ -37,6 +37,7 @@ export async function onRequestPost({ request, env }) {
         Authorization: `Bearer ${token}`,
         Accept: 'application/vnd.github+json',
         'Content-Type': 'application/json',
+        'User-Agent': 'resumepro-publish', // GitHub rejects requests with no User-Agent
         ...opts.headers,
       },
     });

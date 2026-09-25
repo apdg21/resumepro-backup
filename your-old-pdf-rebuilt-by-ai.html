@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResumePro — Your Resume, Now a Website</title>
+<meta name="description" content="ResumePro turns your old PDF into a sleek, mobile-friendly web resume. 22 pro templates for $10, or let AI build it for you with a $15 unlock key — free preview, yours forever.">
+<meta property="og:title" content="ResumePro — Your Resume, Now a Website">
+<meta property="og:description" content="Ditch the boring attachments. One link. No downloads. Instant access. Templates $10 · AI builder $15 key.">
+<meta property="og:type" content="website">
+<!-- After deploying this folder to /landing/ on your site, Facebook will pick up this card image: -->
+<meta property="og:url" content="https://resumepro.pages.dev/landing/">
+<meta property="og:image" content="https://resumepro.pages.dev/landing/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ResumePro — Your Resume, Now a Website">
+<meta name="twitter:description" content="Ditch the boring attachments. One link. No downloads. Templates $10 · AI builder $15 key.">
+<meta name="twitter:image" content="https://resumepro.pages.dev/landing/og-image.jpg">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+<style>
+  :root{
+    --bg:#0b0f23; --bg2:#101636; --ink:#11142b; --muted:#5c6279; --muted-d:#aeb4cf;
+    --paper:#ffffff; --soft:#f5f6fc; --line:#e5e8f4;
+    --indigo:#4f46e5; --indigo-2:#6366f1; --violet:#8b5cf6; --mint:#10b981; --gold:#d4af37;
+    --radius:18px; --shadow:0 20px 50px -20px rgba(17,20,43,.25);
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:84px}
+  body{font-family:var(--font);color:var(--ink);background:var(--paper);line-height:1.6;-webkit-font-smoothing:antialiased}
+  img,svg{display:block}
+  a{color:inherit}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+  /* ---------- buttons ---------- */
+  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:15px;text-decoration:none;
+    border-radius:999px;padding:14px 26px;transition:transform .18s ease,box-shadow .18s ease,background .18s ease;border:0;cursor:pointer}
+  .btn-primary{background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;box-shadow:0 12px 30px -10px rgba(99,102,241,.55)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 36px -12px rgba(99,102,241,.65)}
+  .btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.22)}
+  .btn-ghost:hover{background:rgba(255,255,255,.14);transform:translateY(-2px)}
+  .btn-light{background:#fff;color:var(--indigo);border:1px solid var(--line)}
+  .btn-light:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+  .btn-sm{padding:10px 18px;font-size:14px}
+
+  /* ---------- nav ---------- */
+  header{position:sticky;top:0;z-index:50;background:rgba(11,15,35,.82);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:#fff;text-decoration:none;letter-spacing:-.2px}
+  .logo b{color:#8f95ff}
+  .logo svg{width:26px;height:26px}
+  .nav-links{display:flex;gap:28px;align-items:center}
+  .nav-links a{color:var(--muted-d);text-decoration:none;font-size:14.5px;font-weight:600}
+  .nav-links a:hover{color:#fff}
+  @media(max-width:900px){.nav-links a:not(.btn){display:none}}
+
+  /* ---------- hero ---------- */
+  .hero{background:
+      radial-gradient(900px 480px at 85% -10%,rgba(139,92,246,.35),transparent 60%),
+      radial-gradient(700px 420px at -10% 30%,rgba(79,70,229,.35),transparent 60%),
+      linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);
+      color:#fff;padding:88px 0 96px;overflow:hidden}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+  @media(max-width:960px){.hero-grid{grid-template-columns:1fr;gap:48px}.hero{padding:64px 0 72px}}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.4px;
+    color:#c7cbff;background:rgba(99,102,241,.18);border:1px solid rgba(139,145,255,.35);border-radius:999px;padding:7px 14px;margin-bottom:22px}
+  .hero h1{font-size:clamp(38px,5.2vw,60px);line-height:1.06;letter-spacing:-1.5px;font-weight:800}
+  .hero h1 .grad{background:linear-gradient(90deg,#8f95ff,#c4b5fd 60%,#7dd3fc);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.sub{margin:22px 0 30px;font-size:18px;color:var(--muted-d);max-width:520px}
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+  .hero-checks{display:flex;gap:22px;flex-wrap:wrap;margin-top:26px;font-size:14px;color:var(--muted-d);font-weight:600}
+  .hero-checks span{display:inline-flex;align-items:center;gap:7px}
+  .hero-checks i{width:18px;height:18px;border-radius:50%;background:rgba(16,185,129,.18);color:#34d399;
+    display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-size:11px;font-weight:800}
+
+  /* browser mock */
+  .browser{position:relative;background:#fff;border-radius:20px;box-shadow:0 40px 90px -30px rgba(0,0,0,.6);overflow:hidden;transform:rotate(1.2deg)}
+  .b-bar{display:flex;align-items:center;gap:7px;background:#eef0f8;padding:12px 16px}
+  .b-bar i{width:11px;height:11px;border-radius:50%}
+  .b-bar i:nth-child(1){background:#ff5f57}.b-bar i:nth-child(2){background:#febc2e}.b-bar i:nth-child(3){background:#28c840}
+  .b-url{margin-left:10px;background:#fff;border:1px solid var(--line);border-radius:8px;font-size:12px;color:#8a90a8;padding:4px 14px;flex:1;max-width:300px}
+  .b-body{display:grid;grid-template-columns:150px 1fr;min-height:340px}
+  .b-side{background:linear-gradient(180deg,#4f46e5,#6d5cf0);padding:22px 18px;display:flex;flex-direction:column;gap:10px}
+  .b-ava{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.9);border:3px solid rgba(255,255,255,.5)}
+  .b-side .b-line.strong{background:#fff;opacity:.95}
+  .b-side .b-line{background:rgba(255,255,255,.55)}
+  .b-nav{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+  .b-nav i{height:8px;border-radius:4px;background:rgba(255,255,255,.35)}
+  .b-nav i:first-child{background:#fff;width:70%}
+  .b-nav i:nth-child(2){width:55%}.b-nav i:nth-child(3){width:62%}
+  .b-main{padding:26px 26px}
+  .b-line{display:block;height:8px;border-radius:4px;background:#dfe3f0;margin:9px 0}
+  .b-line.strong{background:#232a4d;height:12px}
+  .w50{width:50%}.w60{width:60%}.w70{width:70%}.w75{width:75%}.w80{width:80%}.w90{width:90%}.w100{width:100%}
+  .b-pills{display:flex;gap:8px;margin:16px 0 18px;flex-wrap:wrap}
+  .b-pills i{height:22px;width:64px;border-radius:999px;background:#e7e9ff;border:1px solid #d6d9ff}
+  .b-pills i:nth-child(2){background:#dcfce7;border-color:#bbf7d0}
+  .b-pills i:nth-child(3){background:#fef3c7;border-color:#fde68a}
+  .b-btn{display:inline-block;margin-top:16px;background:var(--mint);color:#fff;font-size:12.5px;font-weight:700;border-radius:8px;padding:8px 16px}
+  .chip{position:absolute;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.94);color:#20244a;
+    border-radius:14px;padding:10px 16px;font-size:13px;font-weight:700;box-shadow:0 18px 40px -14px rgba(0,0,0,.5);backdrop-filter:blur(6px)}
+  .chip .dot{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
+  .chip-ai{top:-18px;left:-22px;transform:rotate(-3deg)}
+  .chip-ai .dot{background:#ede9fe}
+  .chip-link{bottom:34px;right:-20px;transform:rotate(2deg)}
+  .chip-link .dot{background:#dcfce7}
+  .chip-styles{bottom:-18px;left:44px;transform:rotate(-1deg)}
+  .chip-styles .dot{background:#e0f2fe}
+
+  /* ---------- stats ---------- */
+  .stats{background:#fff;border-bottom:1px solid var(--line)}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding:34px 0}
+  @media(max-width:860px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+  .stat{text-align:center}
+  .stat b{display:block;font-size:30px;letter-spacing:-1px;color:var(--indigo);font-weight:800}
+  .stat span{font-size:13.5px;color:var(--muted);font-weight:600}
+
+  /* ---------- sections ---------- */
+  section{padding:92px 0}
+  @media(max-width:700px){section{padding:64px 0}}
+  .kicker{display:inline-block;font-size:12.5px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--indigo);
+    background:#eef0ff;border-radius:999px;padding:6px 14px;margin-bottom:16px}
+  h2{font-size:clamp(28px,3.6vw,42px);letter-spacing:-1px;line-height:1.15;font-weight:800}
+  .sec-sub{color:var(--muted);font-size:17px;margin-top:14px;max-width:640px}
+  .sec-head{margin-bottom:48px}
+  .center{text-align:center}.center .sec-sub{margin-left:auto;margin-right:auto}
+
+  /* features */
+  .feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+  @media(max-width:1000px){.feat-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.feat-grid{grid-template-columns:1fr}}
+  .feat{background:var(--soft);border:1px solid var(--line);border-radius:var(--radius);padding:28px 24px;transition:transform .2s ease,box-shadow .2s ease}
+  .feat:hover{transform:translateY(-4px);box-shadow:var(--shadow);background:#fff}
+  .feat .ic{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px}
+  .feat h3{font-size:17.5px;letter-spacing:-.3px;margin-bottom:8px}
+  .feat p{font-size:14.5px;color:var(--muted)}
+  .ic-1{background:#eef0ff}.ic-2{background:#dcfce7}.ic-3{background:#e0f2fe}.ic-4{background:#fef3c7}
+
+  /* pdf vs web comparison */
+  .compare{background:#fff}
+  .vs{display:grid;grid-template-columns:1fr 64px 1fr;gap:18px;align-items:stretch;max-width:920px;margin:0 auto}
+  @media(max-width:760px){.vs{grid-template-columns:1fr}.vs-mid{margin:-6px auto}}
+  .vs-col{border-radius:var(--radius);padding:32px 28px;border:1px solid var(--line)}
+  .vs-col h3{font-size:19px;letter-spacing:-.3px;margin-bottom:18px}
+  .vs-col ul{list-style:none;display:grid;gap:13px;font-size:15px}
+  .vs-col li{display:flex;gap:11px;align-items:flex-start}
+  .vs-col li i{font-style:normal;font-weight:800;flex:none;margin-top:1px}
+  .vs-bad{background:#fdf7f7;border-color:#f2e0e0}
+  .vs-bad li{color:#6b6470}
+  .vs-bad li i{color:#dc2626}
+  .vs-good{background:linear-gradient(160deg,#eef0ff,#f2fdf8);border-color:#d9ddf6;box-shadow:var(--shadow)}
+  .vs-good li{color:#2c3150}
+  .vs-good li i{color:#10b981}
+  .vs-mid{align-self:center;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--indigo),var(--violet));
+    color:#fff;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 26px -10px rgba(99,102,241,.6)}
+
+  /* paths / pricing */
+  .paths-sec{background:linear-gradient(180deg,#fff, var(--soft))}
+  .steps{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;max-width:960px;margin:0 auto}
+  @media(max-width:900px){.steps{grid-template-columns:1fr}}
+  .step{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:34px 30px 30px;box-shadow:var(--shadow)}
+  .step .num{position:absolute;top:-20px;left:28px;height:42px;padding:0 14px;border-radius:12px;background:linear-gradient(135deg,var(--indigo),var(--violet));
+    color:#fff;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px -8px rgba(99,102,241,.6)}
+  .step h3{margin:12px 0 10px;font-size:21px;letter-spacing:-.4px}
+  .step > p{font-size:15px;color:var(--muted)}
+  .mini{list-style:none;display:grid;gap:10px;margin:18px 0 24px;font-size:14.5px;color:#3c4160}
+  .mini li{padding-left:22px;position:relative}
+  .mini li:before{content:"✓";position:absolute;left:0;color:var(--mint);font-weight:800}
+  .helpbar{margin-top:40px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+    background:linear-gradient(135deg,#111435,#241b52);color:#fff;border-radius:var(--radius);padding:26px 30px;max-width:960px;margin-left:auto;margin-right:auto}
+  .helpbar b{font-size:17px}
+  .helpbar p{color:var(--muted-d);font-size:14.5px}
+  .btn-messenger{background:#fff;color:#1877f2}
+
+  /* templates (compact) */
+  .templates{background:var(--bg);color:#fff;text-align:center}
+  .templates .kicker{background:rgba(99,102,241,.2);color:#c7cbff}
+  .templates .sec-sub{color:var(--muted-d);margin-left:auto;margin-right:auto}
+  .names{margin:26px auto 34px;color:var(--muted-d);font-size:13.5px;letter-spacing:.3px;max-width:760px}
+  .tmpl-note{margin-top:18px;font-size:14px;color:var(--muted-d)}
+  .tmpl-note a{color:#8f95ff;font-weight:700;text-decoration:none}
+  .tmpl-note a:hover{text-decoration:underline}
+
+  /* testimonials */
+  .quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  @media(max-width:900px){.quotes{grid-template-columns:1fr}}
+  .quote{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px 26px;box-shadow:var(--shadow);position:relative}
+  .quote .mark{font-size:52px;line-height:1;color:#c7cbff;font-weight:800;font-family:Georgia,serif;height:30px}
+  .quote p{font-size:15px;color:#3c4160;margin:10px 0 20px}
+  .quote .who{display:flex;align-items:center;gap:12px}
+  .quote .who i{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--indigo),var(--violet));flex:none}
+  .quote .who b{display:block;font-size:14.5px}
+  .quote .who span{font-size:13px;color:var(--muted)}
+  .stars{color:#fbbf24;letter-spacing:2px;font-size:14px}
+
+  /* portfolio strip */
+  .port{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;
+    background:var(--soft);border:1px solid var(--line);border-radius:var(--radius);padding:32px 36px}
+  .port b{font-size:19px;letter-spacing:-.3px}
+  .port p{color:var(--muted);margin-top:6px;font-size:15px}
+
+  /* faq */
+  .faq{max-width:780px;margin:0 auto}
+  details{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden}
+  summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 24px;font-weight:700;font-size:16px}
+  summary::-webkit-details-marker{display:none}
+  summary:after{content:"+";font-size:22px;color:var(--indigo);font-weight:600;transition:transform .2s}
+  details[open] summary:after{transform:rotate(45deg)}
+  details p{padding:0 24px 22px;color:var(--muted);font-size:15px}
+  details code{background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:2px 7px;font-size:13px}
+
+  /* final cta */
+  .final{background:
+      radial-gradient(700px 380px at 50% -20%,rgba(139,92,246,.4),transparent 65%),
+      linear-gradient(180deg,var(--bg2),var(--bg));color:#fff;text-align:center}
+  .final h2{max-width:640px;margin:0 auto}
+  .final p{color:var(--muted-d);margin:18px auto 34px;max-width:520px;font-size:17px}
+  .final .hero-ctas{justify-content:center}
+
+  footer{background:var(--bg);border-top:1px solid rgba(255,255,255,.08);color:var(--muted-d);padding:34px 0}
+  .foot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;font-size:14px}
+  .foot a{color:var(--muted-d);text-decoration:none;font-weight:600}
+  .foot a:hover{color:#fff}
+  .foot .links{display:flex;gap:22px;flex-wrap:wrap}
+
+  /* mobile sticky cta */
+  .mobile-cta{display:none}
+  @media(max-width:700px){
+    body{padding-bottom:78px}
+    .mobile-cta{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;align-items:center;justify-content:space-between;gap:12px;
+      background:rgba(11,15,35,.96);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.12);
+      padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
+    .mobile-cta span{color:var(--muted-d);font-size:11.5px;font-weight:700;line-height:1.3;max-width:120px}
+    .mobile-cta .btn{flex:1;justify-content:center;padding:13px 18px}
+  }
+
+  /* reveal animation */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#top" aria-label="ResumePro home">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2c4 2 6 6 6 10l-2.5 2.5h-7L6 12c0-4 2-8 6-10Z" fill="#8f95ff"/><circle cx="12" cy="10" r="2.2" fill="#0b0f23"/><path d="M8.5 14.5 6 19l3.4-1.2M15.5 14.5 18 19l-3.4-1.2M12 15v5" stroke="#34d399" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Resume<b>Pro</b>
+    </a>
+    <nav class="nav-links">
+      <a href="#why">Why digital</a>
+      <a href="#paths">Pricing</a>
+      <a href="#templates">Templates</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn btn-primary btn-sm" href="https://resumepro.pages.dev/resume-builder/">Try the AI builder →</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="wrap hero-grid">
+      <div class="reveal in">
+        <span class="eyebrow">✨ AI-assisted · Free live preview</span>
+        <h1>Ditch the boring attachments.<br><span class="grad">Your resume, now a website.</span></h1>
+        <p class="sub">ResumePro turns your old PDF or Word file into a sleek, mobile-friendly personal site. Recruiters get one link — no downloads, no zooming, no forgotten attachments.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="https://resumepro.pages.dev/resume-builder/">Try the AI builder — $15</a>
+          <a class="btn btn-ghost" href="https://resumepro.pages.dev/resume-templates">Browse templates — $10</a>
+        </div>
+        <div class="hero-checks">
+          <span><i>✓</i> No coding needed</span>
+          <span><i>✓</i> Mobile friendly</span>
+          <span><i>✓</i> Publish in one click</span>
+          <span><i>✓</i> One-time prices</span>
+        </div>
+      </div>
+      <div class="reveal in" style="position:relative">
+        <div class="browser" aria-hidden="true">
+          <div class="b-bar"><i></i><i></i><i></i><span class="b-url">🔒 resumepro.pages.dev/your-name</span></div>
+          <div class="b-body">
+            <div class="b-side">
+              <span class="b-ava"></span>
+              <i class="b-line strong w80"></i>
+              <i class="b-line w60"></i>
+              <div class="b-nav"><i></i><i></i><i></i></div>
+            </div>
+            <div class="b-main">
+              <i class="b-line strong w70"></i>
+              <div class="b-pills"><i></i><i></i><i></i><i></i></div>
+              <i class="b-line w100"></i>
+              <i class="b-line w90"></i>
+              <i class="b-line w75"></i>
+              <span class="b-btn">View live resume</span>
+            </div>
+          </div>
+          <span class="chip chip-ai"><span class="dot">✨</span> AI auto-fill</span>
+          <span class="chip chip-link"><span class="dot">🔗</span> One simple link</span>
+          <span class="chip chip-styles"><span class="dot">🎨</span> 22 web-ready styles</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="wrap stats-grid">
+      <div class="stat reveal"><b>22</b><span>Pro templates</span></div>
+      <div class="stat reveal"><b>7 sec</b><span>Recruiter first scan — make it count</span></div>
+      <div class="stat reveal"><b>$10·$15</b><span>One-time. No subscriptions.</span></div>
+      <div class="stat reveal"><b>1 link</b><span>Share it everywhere</span></div>
+    </div>
+  </div>
+
+  <!-- WHY -->
+  <section id="why">
+    <div class="wrap">
+      <div class="sec-head center reveal">
+        <span class="kicker">Why go digital</span>
+        <h2>Traditional PDFs are forgettable.<br>Here's your edge.</h2>
+      </div>
+      <div class="feat-grid">
+        <div class="feat reveal"><div class="ic ic-1">🚀</div><h3>Instant first impression</h3><p>Recruiters spend just 7 seconds scanning a resume. A stunning digital layout makes every second count.</p></div>
+        <div class="feat reveal"><div class="ic ic-2">📱</div><h3>Mobile optimized</h3><p>Looks perfect on every device — phone, tablet, or desktop. No more awkward PDF zooming.</p></div>
+        <div class="feat reveal"><div class="ic ic-3">🔗</div><h3>One simple link</h3><p>Share your entire resume with one URL — in your email signature, LinkedIn, or job applications.</p></div>
+        <div class="feat reveal"><div class="ic ic-4">⚡</div><h3>Always updated</h3><p>Update your information instantly without resending files to everyone in your network.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARE -->
+  <section id="compare" class="compare">
+    <div class="wrap">
+      <div class="sec-head center reveal">
+        <span class="kicker">The upgrade</span>
+        <h2>PDF vs. web resume. No contest.</h2>
+      </div>
+      <div class="vs">
+        <div class="vs-col vs-bad reveal">
+          <h3>📄 Static PDF</h3>
+          <ul>
+            <li><i>✗</i> Gets lost in inboxes and attachment black holes</li>
+            <li><i>✗</i> Awkward pinch-and-zoom on phones</li>
+            <li><i>✗</i> Outdated the moment you hit send</li>
+            <li><i>✗</i> Looks like everyone else's file</li>
+            <li><i>✗</i> Resend to everyone for every update</li>
+          </ul>
+        </div>
+        <div class="vs-mid reveal">VS</div>
+        <div class="vs-col vs-good reveal">
+          <h3>🚀 ResumePro web resume</h3>
+          <ul>
+            <li><i>✓</i> One link that opens instantly, anywhere</li>
+            <li><i>✓</i> Pixel-perfect on every screen size</li>
+            <li><i>✓</i> Update once — always current</li>
+            <li><i>✓</i> 22 designs recruiters remember</li>
+            <li><i>✓</i> AI auto-fill, then publish in one click</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PATHS / PRICING -->
+  <section id="paths" class="paths-sec">
+    <div class="wrap">
+      <div class="sec-head center reveal">
+        <span class="kicker">Choose your path</span>
+        <h2>Write it yourself. Or let AI write it for you.</h2>
+        <p class="sec-sub">Two ways to end up with a finished resume. Pick the one that matches how much time you want to spend.</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <span class="num">$10</span>
+          <h3>Resume templates</h3>
+          <p>Download a professionally designed template and fill it in yourself, at your own pace, using the built-in form.</p>
+          <ul class="mini">
+            <li>Pick a template from the gallery</li>
+            <li>Download the template file straight away</li>
+            <li>Fill in your details with the included form</li>
+            <li>Update the content manually, any time — no AI, you're in full control</li>
+          </ul>
+          <a class="btn btn-light" href="https://resumepro.pages.dev/resume-templates">Browse templates →</a>
+        </div>
+        <div class="step reveal">
+          <span class="num">$15</span>
+          <h3>AI resume builder</h3>
+          <p>Upload your existing resume, pick a template, and AI rewrites and formats it for you. Preview it live for free — then publish it in one click, or download the site and host it your own way.</p>
+          <ul class="mini">
+            <li>Buy one key — unlock unlimited use, re-run any time</li>
+            <li>Upload what you already have, no blank page</li>
+            <li>AI restructures it into your chosen template</li>
+            <li>Preview it live, then publish in one click — your link is ready</li>
+            <li>Prefer your own host? Download the full site and upload wherever you like</li>
+          </ul>
+          <a class="btn btn-primary" href="https://resumepro.pages.dev/resume-builder/">Generate your resume →</a>
+        </div>
+      </div>
+      <div class="helpbar reveal">
+        <div>
+          <b>⚡ No tech skills? No problem!</b>
+          <p>Chat with us on Messenger — we can set it up for you.</p>
+        </div>
+        <a class="btn btn-messenger" href="https://m.me/61578437432961">💬 Chat on Messenger</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEMPLATES (compact) -->
+  <section id="templates" class="templates">
+    <div class="wrap">
+      <div class="reveal">
+        <span class="kicker">The collection</span>
+        <h2>22 templates. One-time $10.<br>Yours forever.</h2>
+        <p class="sec-sub">Fully editable · Mobile friendly · No coding · Free updates for a year</p>
+        <p class="names">Timeless · Sleek · Executive · Vivid · Pure · Refined · Dynamic · SkillFocus · Corporate · Trendy · Horizon · Midnight · Ember · Canvas · Graphite · Ivory · Storm · Linen · Prism · Obsidian · Aurora · Meridian</p>
+        <a class="btn btn-primary" href="https://resumepro.pages.dev/resume-templates">Browse the full collection →</a>
+        <p class="tmpl-note">Prefer zero form-filling? The <a href="https://resumepro.pages.dev/resume-builder/">$15 AI builder</a> fills any template for you.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section id="reviews">
+    <div class="wrap">
+      <div class="sec-head center reveal">
+        <span class="kicker">Success stories</span>
+        <h2>What our customers say.</h2>
+      </div>
+      <div class="quotes">
+        <div class="quote reveal">
+          <div class="mark">"</div>
+          <div class="stars">★★★★★</div>
+          <p>I landed 3 interviews in the first week after switching to a digital resume. The hiring managers all commented on how professional it looked.</p>
+          <div class="who"><i></i><div><b>Sarah K.</b><span>Marketing Director</span></div></div>
+        </div>
+        <div class="quote reveal">
+          <div class="mark">"</div>
+          <div class="stars">★★★★★</div>
+          <p>As a freelance designer, my digital resume has become my portfolio landing page. I've gotten more client inquiries since using this template.</p>
+          <div class="who"><i></i><div><b>Michael T.</b><span>UX Designer</span></div></div>
+        </div>
+        <div class="quote reveal">
+          <div class="mark">"</div>
+          <div class="stars">★★★★★</div>
+          <p>The easy customization meant I could set this up in an evening. My new employer said my resume stood out from hundreds of applicants.</p>
+          <div class="who"><i></i><div><b>David R.</b><span>Software Engineer</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO STRIP -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="port reveal">
+        <div>
+          <b>🎨 Building a portfolio too?</b>
+          <p>Check out our portfolio templates — same easy setup, made to show off your work.</p>
+        </div>
+        <a class="btn btn-light" href="https://resumeprotemplate.gumroad.com/portfolio-collection">Check portfolio templates →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head center reveal">
+        <span class="kicker">Questions</span>
+        <h2>Frequently asked questions.</h2>
+      </div>
+      <div class="faq">
+        <details class="reveal" open>
+          <summary>Do I need coding skills to use these templates?</summary>
+          <p>No coding skills required! The templates come with simple editable files — just replace the placeholder text using the built-in form, or let the AI builder fill everything for you. The templates handle all the design and layout automatically.</p>
+        </details>
+        <details class="reveal">
+          <summary>How do I host my digital resume?</summary>
+          <p>Two options. <strong>Publish straight from the AI builder</strong> — happy with the live preview? Hit publish and your link is ready to share, no setup at all. Or <strong>download the full site as a ZIP</strong> and host it yourself: every download includes detailed instructions for free hosting like GitHub Pages and Netlify, and it works on any standard web host — no special server requirements.</p>
+        </details>
+        <details class="reveal">
+          <summary>Can I customize the colors and fonts?</summary>
+          <p>Absolutely! Open <code>style.css</code> in any text editor and change the color variables at the top — every template includes a <code>Template_Guide</code> with step-by-step instructions.</p>
+        </details>
+        <details class="reveal">
+          <summary>What's included in the template download?</summary>
+          <p>A ZIP file with all HTML, CSS and JavaScript files, a simple data file to edit your information, detailed setup instructions, and bonus tips for optimizing your digital resume.</p>
+        </details>
+        <details class="reveal">
+          <summary>Is this a subscription or one-time payment?</summary>
+          <p>Everything is one-time: $10 per template with lifetime access (plus free updates for one year), or a $15 key that unlocks unlimited use of the AI builder — re-run it any time your resume changes. No subscriptions, ever.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final">
+    <div class="wrap reveal">
+      <h2>Ready to transform your resume?</h2>
+      <p>One template can make the difference between getting noticed and getting ignored. Stop emailing standard files — go live today.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="https://resumepro.pages.dev/resume-builder/">Try the AI builder — $15</a>
+        <a class="btn btn-ghost" href="https://resumepro.pages.dev/resume-templates">Browse templates — $10</a>
+        <a class="btn btn-ghost" href="https://m.me/61578437432961">💬 Chat on Messenger</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© <span id="yr">2026</span> ResumePro — Your resume, now a website.</span>
+    <div class="links">
+      <a href="https://resumepro.pages.dev/resume-templates">Templates</a>
+      <a href="https://resumepro.pages.dev/resume-builder/">Builder</a>
+      <a href="https://resumepro.pages.dev/resume-builder/resume-form.html">Form fill</a>
+      <a href="https://resumeprotemplate.gumroad.com/resume-collection">Gumroad</a>
+      <a href="https://m.me/61578437432961">Messenger</a>
+    </div>
+  </div>
+</footer>
+
+<div class="mobile-cta">
+  <span>Templates $10 · AI builder $15</span>
+  <a class="btn btn-primary" href="https://resumepro.pages.dev/resume-builder/">Try the AI builder →</a>
+</div>
+
+<script>
+  // scroll reveal
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4083042db5ba0d8',t:'MTc5MDMyMDAxMA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

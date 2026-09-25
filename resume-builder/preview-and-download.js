@@ -1,5 +1,5 @@
 /*
-  ADD-ON MODULE: preview + full-site download
+  ADD-ON MODULE: preview + full-site download + publish
   ---------------------------------------------
   Drop this <script> block into your existing resume-portfolio-builder/index.html,
   after your existing generate.js logic (i.e. after `lastResult` gets set from
@@ -9,9 +9,11 @@
     - categorySelect     (the <select> for resume/portfolio)
     - templateSelect     (the <select> for style1..style20 etc.)
 
-  It adds two things to the page automatically: a live preview (opens in a
-  full-screen modal) and a "Download full site (.zip)" button, both driven
-  by TEMPLATES_BASE + manifests.json.
+  It adds three things to the page automatically: a live preview (opens in a
+  full-screen modal), a "Download full site (.zip)" button, and a
+  "Publish now" button that pushes the site to a GitHub branch (which a
+  connected Cloudflare Pages project auto-builds into a live URL), all
+  driven by TEMPLATES_BASE + manifests.json.
 
   IMPORTANT: templates only exist for combos present in
   /templates/manifests.json. Right now that's resume/style1 and
@@ -396,13 +398,41 @@ async function renderPreview(dataObj) {
   iframeWrap.appendChild(iframe);
 }
 
+// --- SHARED: fetch manifest files once, used by both zip download and publish ---
+async function fetchTemplateFiles(key) {
+  const manifests = await getManifests();
+  if (!manifests[key]) return null;
+
+  const result = {};
+  await Promise.all(manifests[key].map(async (relPath) => {
+    const url = `${TEMPLATES_BASE}/${key}/${relPath}`;
+    const res = await fetch(url);
+    if (relPath.match(/\.(jpg|jpeg|png|gif|webp|ico)$/i)) {
+      const blob = await res.blob();
+      result[relPath] = { content: await blobToBase64(blob), encoding: 'base64' };
+    } else {
+      result[relPath] = { content: await res.text(), encoding: 'utf-8' };
+    }
+  }));
+  return result;
+}
+
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]); // strip data: prefix
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
 // --- FULL SITE DOWNLOAD (.zip) -----------------------------------------
 
 async function downloadFullSite(dataObj) {
   const key = templateKey();
-  const manifests = await getManifests();
+  const files = await fetchTemplateFiles(key);
 
-  if (!manifests[key]) {
+  if (!files) {
     alert(`No bundled template files yet for "${key}". This style only supports JSON download right now.`);
     return;
   }
@@ -411,18 +441,9 @@ async function downloadFullSite(dataObj) {
   if (downloadStatus) downloadStatus.textContent = 'Packaging your site...';
 
   const zip = new JSZip();
-  const files = manifests[key];
-
-  await Promise.all(files.map(async (relPath) => {
-    const url = `${TEMPLATES_BASE}/${key}/${relPath}`;
-    const res = await fetch(url);
-    if (relPath.match(/\.(jpg|jpeg|png|gif|webp|ico)$/i)) {
-      zip.file(relPath, await res.blob());
-    } else {
-      zip.file(relPath, await res.text());
-    }
-  }));
-
+  for (const [relPath, file] of Object.entries(files)) {
+    zip.file(relPath, file.content, file.encoding === 'base64' ? { base64: true } : undefined);
+  }
   zip.file('data.json', JSON.stringify(dataObj, null, 2));
 
   const blob = await zip.generateAsync({ type: 'blob' });
@@ -436,9 +457,60 @@ async function downloadFullSite(dataObj) {
   if (downloadStatus) downloadStatus.textContent = 'Downloaded — unzip and open index.html, or host the folder anywhere.';
 }
 
+// --- PUBLISH (push to GitHub branch → auto-deploys via connected Cloudflare Pages project) ---
+
+let publishedResumeId = localStorage.getItem('publishedResumeId') || null;
+
+async function publishSite(dataObj) {
+  const key = templateKey();
+  const publishStatus = document.getElementById('publishStatus');
+  const publishResult = document.getElementById('publishResult');
+  const publishBtn = document.getElementById('publishBtn');
+
+  const files = await fetchTemplateFiles(key);
+  if (!files) {
+    if (publishStatus) { publishStatus.textContent = `No bundled template files yet for "${key}" — publishing isn't available for this style.`; publishStatus.className = 'status error'; }
+    return;
+  }
+
+  if (publishBtn) publishBtn.disabled = true;
+  if (publishStatus) { publishStatus.textContent = publishedResumeId ? 'Updating your live resume…' : 'Publishing your resume…'; publishStatus.className = 'status'; }
+  if (publishResult) publishResult.innerHTML = '';
+
+  const payload = { ...files, 'data.json': { content: JSON.stringify(dataObj, null, 2), encoding: 'utf-8' } };
+
+  try {
+    const res = await fetch('/api/publish', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(publishedResumeId ? { 'X-Resume-Id': publishedResumeId } : {}),
+      },
+      body: JSON.stringify(payload),
+    });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Publish failed');
+
+    publishedResumeId = result.resume_id;
+    localStorage.setItem('publishedResumeId', publishedResumeId);
+
+    if (publishStatus) { publishStatus.textContent = 'Live!'; publishStatus.className = 'status success'; }
+    if (publishResult) {
+      publishResult.innerHTML = `<a href="${result.url}" target="_blank" rel="noopener" class="cta-link">View your live resume →</a> <button type="button" class="secondary" id="copyLinkBtn">Copy link</button>`;
+      document.getElementById('copyLinkBtn')?.addEventListener('click', () => navigator.clipboard.writeText(result.url));
+    }
+    if (publishBtn) publishBtn.textContent = 'Update published site →';
+
+  } catch (err) {
+    if (publishStatus) { publishStatus.textContent = 'Error: ' + err.message; publishStatus.className = 'status error'; }
+  } finally {
+    if (publishBtn) publishBtn.disabled = false;
+  }
+}
+
 // --- LICENSE GATE -------------------------------------------------------
-// Gates downloads (not preview) behind a valid Gumroad license key. Two
-// paths to unlock:
+// Gates downloads and publishing (not preview) behind a valid Gumroad
+// license key. Two paths to unlock:
 //   1. Automatic — Gumroad's post-purchase redirect appends ?license_key=...
 //      to the URL. Detected and verified silently on page load.
 //   2. Manual fallback — a small modal with an input field, for anyone
@@ -591,7 +663,8 @@ function ensureLicenseModal() {
   return licenseModalEls;
 }
 
-// Call as requireLicense(() => { ...actual download logic... }). Three paths:
+// Call as requireLicense(() => { ...actual download/publish logic... }).
+// Three paths:
 //   1. Already verified this visit -> run immediately.
 //   2. A key arrived via Gumroad's redirect URL but hasn't been verified yet
 //      -> verify it NOW, using the template the user has actually selected
@@ -663,7 +736,10 @@ function showLicenseModal(onVerified, prefilledError) {
 // Wire these up to buttons in your existing page:
 //   <button id="previewBtn">Live preview</button>
 //   <button id="downloadSiteBtn">Download full site (.zip)</button>
+//   <button id="publishBtn">Publish now</button>
 //   <div id="previewStatus"></div>
+//   <div id="publishStatus"></div>
+//   <div id="publishResult"></div>
 document.getElementById('previewBtn')?.addEventListener('click', () => {
   if (!lastResult) { alert('Generate first.'); return; }
   renderPreview(lastResult); // preview stays free, no license check
@@ -671,4 +747,8 @@ document.getElementById('previewBtn')?.addEventListener('click', () => {
 document.getElementById('downloadSiteBtn')?.addEventListener('click', () => {
   if (!lastResult) { alert('Generate first.'); return; }
   requireLicense(() => downloadFullSite(lastResult));
+});
+document.getElementById('publishBtn')?.addEventListener('click', () => {
+  if (!lastResult) { alert('Generate first.'); return; }
+  requireLicense(() => publishSite(lastResult));
 });

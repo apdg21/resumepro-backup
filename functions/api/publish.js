@@ -16,7 +16,7 @@
 // created every time.
 
 // TODO: replace with your actual GitHub username or org.
-const OWNER = 'your-github-username-or-org';
+const OWNER = 'apdg21';
 const REPO = 'resumepro-builds';
 const BASE_BRANCH = 'main';
 

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>document.documentElement.className+=" js"</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ResumePro — Your Resume, Now a Website</title>
@@ -231,14 +233,53 @@
     .mobile-cta{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;align-items:center;justify-content:space-between;gap:12px;
       background:rgba(11,15,35,.96);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.12);
       padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
-    .mobile-cta span{color:var(--muted-d);font-size:11.5px;font-weight:700;line-height:1.3;max-width:120px}
+    .mobile-cta span{color:var(--muted-d);font-size:12.4px;font-weight:700;line-height:1.3;max-width:120px}
     .mobile-cta .btn{flex:1;justify-content:center;padding:13px 18px}
   }
 
   /* reveal animation */
-  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
-  .reveal.in{opacity:1;transform:none}
-  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+  .js .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+  .js .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.js .reveal{opacity:1;transform:none;transition:none}}
+
+  /* ================= MOBILE POLISH ================= */
+  *{-webkit-text-size-adjust:100%}
+  body{overflow-x:hidden}
+  a,button{-webkit-tap-highlight-color:transparent}
+  img,svg{max-width:100%}
+
+  @media(max-width:760px){
+    .wrap{padding:0 18px}
+    section{padding:58px 0}
+    html{scroll-padding-top:72px}
+    .head{margin-bottom:34px}
+
+    /* sticky CTA: slimmer + slides in only after the hero */
+    .js .sticky,.js .mobile-cta{transform:translateY(120%);transition:transform .3s ease}
+    .js .sticky.show,.js .mobile-cta.show{transform:none}
+    .sticky{padding:10px 14px calc(10px + env(safe-area-inset-bottom))}
+    .sticky span{font-size:12.6px;max-width:54%;line-height:1.25}
+    .sticky a{padding:10px 16px;font-size:13.6px}
+    .mobile-cta{padding:10px 14px calc(10px + env(safe-area-inset-bottom))}
+    .mobile-cta span{font-size:12.6px;max-width:42%;line-height:1.25}
+    .mobile-cta .btn{padding:11px 16px;font-size:14px}
+  }
+  @media(max-width:520px){
+    .hero-ctas .btn,.hero-cta .btn,.ctas .btn{width:100%;justify-content:center}
+    .head h2,.sec-head h2,h2.disp{font-size:clamp(26px,8.4vw,34px)}
+    .path,.quote,.step,.panel,.feat,.card,.helpbar,.helpband,.band,.folio,.studio,.vs-col{padding:22px}
+    .price b,.panel .big{font-size:38px}
+  }
+
+  /* comfortable tap targets (WCAG 44px) */
+  .chip,.chips .chip,.tab{min-height:44px}
+  .chip,.tab{display:inline-flex;align-items:center;justify-content:center}
+  footer .foot-links a,footer .foot .links a,footer .links a{display:inline-block;padding:10px 0}
+  .sub a,.fine a,.note a,.tmpl-note a,.band .note a{display:inline-block;padding:10px 0}
+  .sec-head a,.head a{display:inline-block;padding:8px 0}
+  header .logo,footer .logo{display:inline-flex;align-items:center;min-height:44px}
+  summary{cursor:pointer;min-height:44px}
+  /* ================ /MOBILE POLISH ================ */
 </style>
 </head>
 <body>
@@ -541,5 +582,17 @@
   document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
   document.getElementById('yr').textContent = new Date().getFullYear();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4083042db5ba0d8',t:'MTc5MDMyMDAxMA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+
+<script>
+  /* show the sticky CTA only after the visitor scrolls past the hero */
+  (function(){
+    var bar = document.querySelector('.sticky') || document.querySelector('.mobile-cta');
+    if(!bar || !window.addEventListener) return;
+    var upd = function(){ if(window.scrollY > 380){ bar.classList.add('show'); } else { bar.classList.remove('show'); } };
+    window.addEventListener('scroll', upd, {passive:true});
+    window.addEventListener('resize', upd);
+    upd();
+  })();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a40a39925b91ffdf',t:'MTc5MDM0MTM2Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

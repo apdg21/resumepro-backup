@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>document.documentElement.className+=" js"</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ResumePro — Nobody opens the attachment</title>
@@ -21,6 +23,7 @@
     --indigo:#3B3BD6; --violet:#7B5CF0; --mint:#12B981; --mint-soft:#E6F8F1;
     --line:#E4E5F2; --warn:#B4232A; --warn-soft:#FDECEE;
     --r:18px; --shadow:0 12px 34px rgba(20,21,47,.07);
+    --pv1:#3B3BD6; --pv2:#C9CCF5; --pv3:#12B981;  /* template preview defaults (were undefined → blank card) */
   }
   html{scroll-behavior:smooth;scroll-padding-top:84px}
   body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
@@ -79,9 +82,9 @@
   .mail:last-child{margin-bottom:0}
   .mail .av{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:18px;flex:0 0 auto}
   .mail-d{min-width:0;flex:1}
-  .mail-d strong{display:block;font-size:14.4px;letter-spacing:-.01em}
+  .mail-d strong{display:block;font-size:14.4px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .mail-d span{display:block;font-size:12.9px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .tag{font-size:11.6px;font-weight:800;padding:5px 11px;border-radius:999px;flex:0 0 auto}
+  .tag{font-size:12.2px;font-weight:800;padding:5px 11px;border-radius:999px;flex:0 0 auto}
   .tag-bad{background:var(--warn-soft);color:var(--warn)}
   .tag-ok{background:var(--mint-soft);color:var(--mint)}
   .mail-old{opacity:.72}
@@ -137,7 +140,7 @@
   .paths{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
   .path{background:var(--paper);border:1.5px solid var(--line);border-radius:24px;padding:32px;position:relative}
   .path.hot{background:linear-gradient(180deg,#FBFAFF,#F3F3FE);border-color:#CFCFF6;box-shadow:0 18px 44px rgba(59,59,214,.13)}
-  .badge{position:absolute;top:-13px;left:32px;background:var(--ink);color:#fff;font-size:11.6px;font-weight:800;
+  .badge{position:absolute;top:-13px;left:32px;background:var(--ink);color:#fff;font-size:12.2px;font-weight:800;
          letter-spacing:.1em;text-transform:uppercase;padding:6px 13px;border-radius:999px}
   .price{display:flex;align-items:baseline;gap:8px;margin-bottom:6px}
   .price b{font-size:46px;font-weight:800;letter-spacing:-.04em}
@@ -215,8 +218,47 @@
   .sticky a{background:linear-gradient(135deg,#5B5BF0,#8B6CF6);padding:11px 20px;border-radius:999px;
             font-size:14px;font-weight:800}
   @media(max-width:760px){.sticky{display:flex}footer{padding-bottom:120px}}
-  .reveal{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
-  .reveal.in{opacity:1;transform:none}
+  .js .reveal{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
+  .js .reveal.in{opacity:1;transform:none}
+
+  /* ================= MOBILE POLISH ================= */
+  *{-webkit-text-size-adjust:100%}
+  body{overflow-x:hidden}
+  a,button{-webkit-tap-highlight-color:transparent}
+  img,svg{max-width:100%}
+
+  @media(max-width:760px){
+    .wrap{padding:0 18px}
+    section{padding:58px 0}
+    html{scroll-padding-top:72px}
+    .head{margin-bottom:34px}
+
+    /* sticky CTA: slimmer + slides in only after the hero */
+    .js .sticky,.js .mobile-cta{transform:translateY(120%);transition:transform .3s ease}
+    .js .sticky.show,.js .mobile-cta.show{transform:none}
+    .sticky{padding:10px 14px calc(10px + env(safe-area-inset-bottom))}
+    .sticky span{font-size:12.6px;max-width:54%;line-height:1.25}
+    .sticky a{padding:10px 16px;font-size:13.6px}
+    .mobile-cta{padding:10px 14px calc(10px + env(safe-area-inset-bottom))}
+    .mobile-cta span{font-size:12.6px;max-width:42%;line-height:1.25}
+    .mobile-cta .btn{padding:11px 16px;font-size:14px}
+  }
+  @media(max-width:520px){
+    .hero-ctas .btn,.hero-cta .btn,.ctas .btn{width:100%;justify-content:center}
+    .head h2,.sec-head h2,h2.disp{font-size:clamp(26px,8.4vw,34px)}
+    .path,.quote,.step,.panel,.feat,.card,.helpbar,.helpband,.band,.folio,.studio,.vs-col{padding:22px}
+    .price b,.panel .big{font-size:38px}
+  }
+
+  /* comfortable tap targets (WCAG 44px) */
+  .chip,.chips .chip,.tab{min-height:44px}
+  .chip,.tab{display:inline-flex;align-items:center;justify-content:center}
+  footer .foot-links a,footer .foot .links a,footer .links a{display:inline-block;padding:10px 0}
+  .sub a,.fine a,.note a{display:inline-block;padding:10px 0}
+  .sec-head a,.head a{display:inline-block;padding:8px 0}
+  header .logo,footer .logo{display:inline-flex;align-items:center;min-height:44px}
+  summary{cursor:pointer;min-height:44px}
+  /* ================ /MOBILE POLISH ================ */
 </style>
 </head>
 <body>
@@ -248,6 +290,7 @@
         </div>
         <div class="micro">
           <span>Free live preview</span>
+          <span>Publish in one click</span>
           <span>One-time prices</span>
           <span>No coding needed</span>
         </div>
@@ -290,7 +333,7 @@
       <div class="card reveal"><div class="ic">🚀</div><h3>Instant first impression</h3><p>Recruiters spend just 7 seconds scanning a resume. A stunning digital layout makes every second count.</p></div>
       <div class="card reveal"><div class="ic">📱</div><h3>Mobile optimized</h3><p>Looks perfect on every device — phone, tablet, or desktop. No more awkward PDF pinch-and-zoom.</p></div>
       <div class="card reveal"><div class="ic">🔗</div><h3>One simple link</h3><p>Share your entire resume with one URL — in your email signature, on LinkedIn, or with every application.</p></div>
-      <div class="card reveal"><div class="ic">⚡</div><h3>Always updated</h3><p>Update your information instantly without resending files to everyone in your network.</p></div>
+      <div class="card reveal"><div class="ic">⚡</div><h3>Always updated</h3><p>Update your information instantly — republish in a click — without resending files to everyone in your network.</p></div>
     </div>
   </div>
 </section>
@@ -357,12 +400,13 @@
         <span class="badge">Most popular</span>
         <div class="price"><b>$15</b><span>one-time key</span></div>
         <h3>AI resume builder</h3>
-        <p>Upload your existing resume, pick a template, and AI rewrites and formats it for you. Preview it live for free before you unlock.</p>
+        <p>Upload your existing resume, pick a template, and AI rewrites and formats it for you. Preview it live for free — then publish in one click, or download the site and host it your own way.</p>
         <ul class="steps">
-          <li>Buy one key — unlock unlimited use of the builder</li>
+          <li>Buy one key — unlock unlimited use, re-run any time</li>
           <li>Upload what you already have, no blank page</li>
           <li>AI restructures it into your chosen template</li>
-          <li>Re-run it any time your experience changes</li>
+          <li>Preview it live, then publish in one click — your link is ready</li>
+          <li>Prefer your own host? Download the full site and upload wherever you like</li>
         </ul>
         <a class="btn btn-mint" href="https://resumepro.pages.dev/resume-builder/">Generate your resume →</a>
         <div class="sub">Prefer typing it yourself? <a href="https://resumepro.pages.dev/resume-builder/resume-form.html" style="color:var(--indigo);font-weight:700">Use the form version →</a></div>
@@ -442,7 +486,7 @@
       </details>
       <details class="faq">
         <summary>How do I host my digital resume?</summary>
-        <div class="ans">Every download includes detailed instructions for free hosting options like GitHub Pages and Netlify. You can also host on any standard web hosting service — no special server requirements needed.</div>
+        <div class="ans">Two options. <strong>Publish straight from the AI builder</strong> — happy with the live preview? Hit publish and your link is ready to share, no setup at all. Or <strong>download the full site as a ZIP</strong> and host it yourself: downloads include detailed instructions for free hosting like GitHub Pages and Netlify, and it works on any standard web host.</div>
       </details>
       <details class="faq">
         <summary>Can I customize the colors and fonts?</summary>
@@ -521,5 +565,17 @@
     }
   })();
 </script>
-</body>
+
+<script>
+  /* show the sticky CTA only after the visitor scrolls past the hero */
+  (function(){
+    var bar = document.querySelector('.sticky') || document.querySelector('.mobile-cta');
+    if(!bar || !window.addEventListener) return;
+    var upd = function(){ if(window.scrollY > 380){ bar.classList.add('show'); } else { bar.classList.remove('show'); } };
+    window.addEventListener('scroll', upd, {passive:true});
+    window.addEventListener('resize', upd);
+    upd();
+  })();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a40a39ca4cb3ffdf',t:'MTc5MDM0MTM3Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

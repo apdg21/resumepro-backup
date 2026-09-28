@@ -1,595 +1,611 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <script async src="https://www.googletagmanager.com/gtag/js?id=G-W52LYHBGZY"></script>
+<script>document.documentElement.className+=" js"</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResumePro — Nobody opens the attachment</title>
+<meta name="description" content="Ditch the boring attachments. One link. No downloads. Instant access. Templates $10 · AI builder $15 key.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ResumePro — Nobody opens the attachment">
+<meta property="og:description" content="Your resume, now a link. 22 web-ready templates for $10, or let AI rebuild your old PDF with a $15 key. Free live preview.">
+<meta property="og:url" content="https://resumepro.pages.dev/write-it-yourself-or-let-ai-write-it-for-you/">
+<meta property="og:image" content="https://resumepro.pages.dev/write-it-yourself-or-let-ai-write-it-for-you/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ResumePro — Nobody opens the attachment">
+<meta name="twitter:description" content="Ditch the boring attachments. One link. No downloads. Templates $10 · AI builder $15 key.">
+<meta name="twitter:image" content="https://resumepro.pages.dev/write-it-yourself-or-let-ai-write-it-for-you/og-image.jpg">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --ink:#14152F; --muted:#5A5C7A; --paper:#F7F7FB; --card:#FFFFFF;
+    --indigo:#3B3BD6; --violet:#7B5CF0; --mint:#12B981; --mint-soft:#E6F8F1;
+    --line:#E4E5F2; --warn:#B4232A; --warn-soft:#FDECEE;
+    --r:18px; --shadow:0 12px 34px rgba(20,21,47,.07);
+    --pv1:#3B3BD6; --pv2:#C9CCF5; --pv3:#12B981;  /* template preview defaults (were undefined → blank card) */
+  }
+  html{scroll-behavior:smooth;scroll-padding-top:84px}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+  a{color:inherit;text-decoration:none}
+  h1,h2,h3{line-height:1.12;letter-spacing:-.022em;font-weight:800}
+  .eyebrow{display:inline-block;font-size:12.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+           color:var(--indigo);background:#ECECFD;border:1px solid #DADAF8;padding:7px 14px;border-radius:999px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-weight:700;font-size:15.5px;
+       padding:15px 26px;border-radius:999px;border:1.5px solid transparent;transition:.18s;white-space:nowrap}
+  .btn-primary{background:var(--ink);color:#fff;box-shadow:0 10px 24px rgba(20,21,47,.21)}
+  .btn-primary:hover{transform:translateY(-2px);background:#000}
+  .btn-ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--ink);transform:translateY(-2px)}
+  .btn-mint{background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;box-shadow:0 12px 26px rgba(59,59,214,.3)}
+  .btn-mint:hover{transform:translateY(-2px)}
+  section{padding:86px 0}
+  .sec-head{max-width:760px;margin:0 auto 46px;text-align:center}
+  .sec-head h2{font-size:clamp(28px,4vw,42px);margin:16px 0 12px}
+  .sec-head p{color:var(--muted);font-size:17px}
+
+  /* NAV */
+  header.nav{position:sticky;top:0;z-index:60;background:rgba(247,247,251,.86);backdrop-filter:blur(12px);
+             border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px 0}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:18.5px;letter-spacing:-.02em}
+  .logo .rk{font-size:19px}
+  .logo b{color:var(--indigo)}
+  .nav-links{display:flex;gap:26px;font-size:14.8px;font-weight:600;color:var(--muted)}
+  .nav-links a:hover{color:var(--ink)}
+  @media(max-width:860px){.nav-links{display:none}}
+
+  /* HERO */
+  .hero{padding:74px 0 66px;background:
+     radial-gradient(900px 460px at 88% -12%,rgba(123,92,240,.14),transparent 62%),
+     radial-gradient(700px 380px at 4% 8%,rgba(18,185,129,.10),transparent 60%)}
+  .hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:52px;align-items:center}
+  .hero h1{font-size:clamp(38px,5.6vw,62px);margin:20px 0 16px}
+  .hero h1 em{font-style:normal;background:linear-gradient(100deg,var(--indigo),var(--violet));
+              -webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.lead{font-size:18px;color:var(--muted);max-width:520px}
+  .hero-cta{display:flex;gap:13px;flex-wrap:wrap;margin:28px 0 16px}
+  .micro{display:flex;gap:18px;flex-wrap:wrap;font-size:13.6px;color:var(--muted);font-weight:600}
+  .micro span::before{content:"✓";color:var(--mint);font-weight:800;margin-right:7px}
+  @media(max-width:960px){.hero-grid{grid-template-columns:1fr;gap:40px}.hero{padding:52px 0}}
+
+  /* INBOX MOCK */
+  .inbox{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+  .inbox-bar{display:flex;align-items:center;gap:8px;padding:13px 18px;border-bottom:1px solid var(--line);
+             font-size:13px;font-weight:700;color:var(--muted);background:#FCFCFE}
+  .inbox-bar i{width:9px;height:9px;border-radius:50%;background:#DFE1EE;display:inline-block}
+  .inbox-body{padding:16px}
+  .mail{display:flex;align-items:center;gap:13px;padding:14px;border-radius:14px;border:1px solid var(--line);
+        margin-bottom:11px;background:#fff}
+  .mail:last-child{margin-bottom:0}
+  .mail .av{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:18px;flex:0 0 auto}
+  .mail-d{min-width:0;flex:1}
+  .mail-d strong{display:block;font-size:14.4px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mail-d span{display:block;font-size:12.9px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tag{font-size:12.2px;font-weight:800;padding:5px 11px;border-radius:999px;flex:0 0 auto}
+  .tag-bad{background:var(--warn-soft);color:var(--warn)}
+  .tag-ok{background:var(--mint-soft);color:var(--mint)}
+  .mail-old{opacity:.72}
+  .mail-old .av{background:#EEF0F7}
+  .mail-new{border-color:#BFF0DD;box-shadow:0 10px 24px rgba(18,185,129,.14);animation:pop 3.4s ease-in-out infinite}
+  .mail-new .av{background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff}
+  @keyframes pop{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  .inbox-foot{padding:4px 16px 18px;font-size:13px;color:var(--muted);text-align:center}
+
+  /* STATS */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:46px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:22px;text-align:center}
+  .stat b{display:block;font-size:26px;letter-spacing:-.03em}
+  .stat span{font-size:13.2px;color:var(--muted);font-weight:600}
+  @media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+  /* FEATURES */
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:26px;transition:.18s}
+  .card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:#D5D7EE}
+  .card .ic{font-size:24px;margin-bottom:12px}
+  .card h3{font-size:17.5px;margin-bottom:8px}
+  .card p{font-size:14.6px;color:var(--muted)}
+  @media(max-width:960px){.grid4{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.grid4{grid-template-columns:1fr}}
+
+  /* THEME SWITCHER */
+  .studio{background:#fff;border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow);
+          padding:32px;display:grid;grid-template-columns:.92fr 1.08fr;gap:40px;align-items:center}
+  .chips{display:flex;flex-wrap:wrap;gap:9px;margin:20px 0 18px}
+  .chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:10px 17px;font-size:14px;
+        font-weight:700;cursor:pointer;font-family:inherit;transition:.16s;color:var(--muted)}
+  .chip:hover{border-color:#C9CBEA;color:var(--ink)}
+  .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .studio h2{font-size:clamp(25px,3.4vw,35px);margin-bottom:12px}
+  .pv{background:#F4F5FA;border:1px solid var(--line);border-radius:20px;padding:20px}
+  .pv-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 14px 30px rgba(20,21,47,.1)}
+  .pv-top{height:66px;background:var(--pv1);display:flex;align-items:center;gap:12px;padding:0 18px}
+  .pv-av{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.28);border:2px solid rgba(255,255,255,.55)}
+  .pv-nm{height:11px;width:112px;border-radius:6px;background:rgba(255,255,255,.85)}
+  .pv-role{height:8px;width:74px;border-radius:6px;background:rgba(255,255,255,.5);margin-top:7px}
+  .pv-mid{padding:18px}
+  .pv-bar{height:9px;border-radius:6px;background:#E9EAF3;margin-bottom:9px}
+  .pv-bar.s{width:64%}.pv-bar.m{width:82%}
+  .pv-pills{display:flex;gap:8px;margin:15px 0 4px;flex-wrap:wrap}
+  .pv-pill{height:22px;width:62px;border-radius:999px;background:var(--pv2);opacity:.9}
+  .pv-foot{height:34px;border-radius:10px;background:var(--pv3);margin-top:16px}
+  .studio .fine{font-size:14px;color:var(--muted);margin-top:14px}
+  @media(max-width:900px){.studio{grid-template-columns:1fr;gap:26px;padding:24px}}
+
+  /* PRICING */
+  #pricing{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .paths{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+  .path{background:var(--paper);border:1.5px solid var(--line);border-radius:24px;padding:32px;position:relative}
+  .path.hot{background:linear-gradient(180deg,#FBFAFF,#F3F3FE);border-color:#CFCFF6;box-shadow:0 18px 44px rgba(59,59,214,.13)}
+  .badge{position:absolute;top:-13px;left:32px;background:var(--ink);color:#fff;font-size:12.2px;font-weight:800;
+         letter-spacing:.1em;text-transform:uppercase;padding:6px 13px;border-radius:999px}
+  .price{display:flex;align-items:baseline;gap:8px;margin-bottom:6px}
+  .price b{font-size:46px;font-weight:800;letter-spacing:-.04em}
+  .price span{font-size:14px;color:var(--muted);font-weight:700}
+  .path h3{font-size:21px;margin-bottom:10px}
+  .path>p{font-size:15px;color:var(--muted);margin-bottom:20px}
+  .steps{list-style:none;margin:0 0 26px}
+  .steps li{position:relative;padding-left:32px;margin-bottom:12px;font-size:14.9px}
+  .steps li::before{content:"✓";position:absolute;left:0;top:1px;width:21px;height:21px;border-radius:50%;
+     background:var(--mint-soft);color:var(--mint);font-size:12px;font-weight:800;display:grid;place-items:center}
+  .path .btn{width:100%}
+  .path .sub{font-size:13px;color:var(--muted);text-align:center;margin-top:12px}
+  @media(max-width:880px){.paths{grid-template-columns:1fr}}
+
+  /* HELP BAR */
+  .helpbar{margin-top:22px;background:#fff;border:1px dashed #C9CBEA;border-radius:20px;padding:22px 26px;
+           display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+  .helpbar b{font-size:16.5px}
+  .helpbar p{font-size:14.4px;color:var(--muted)}
+
+  /* TEMPLATES BAND */
+  .band{background:var(--ink);color:#fff;border-radius:26px;padding:44px 40px;text-align:center}
+  .band h2{font-size:clamp(27px,3.8vw,40px);margin-bottom:10px}
+  .band .sub{color:#B9BBDA;font-size:16px;margin-bottom:22px}
+  .names{font-size:13.6px;color:#A5A7CC;line-height:2;max-width:820px;margin:0 auto 26px}
+  .band .note{font-size:14px;color:#B9BBDA;margin-top:18px}
+  .band .note a{color:#fff;font-weight:700;text-decoration:underline}
+
+  /* REVIEWS */
+  .quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .quote{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:26px}
+  .stars{color:#F5A524;font-size:15px;letter-spacing:2px;margin-bottom:12px}
+  .quote p{font-size:15.2px;margin-bottom:18px}
+  .who{display:flex;align-items:center;gap:11px}
+  .who .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--indigo),var(--violet));
+           color:#fff;display:grid;place-items:center;font-weight:800;font-size:14.5px}
+  .who b{display:block;font-size:14.4px}
+  .who span{font-size:12.8px;color:var(--muted)}
+  @media(max-width:900px){.quotes{grid-template-columns:1fr}}
+
+  /* PORTFOLIO */
+  .folio{background:#fff;border:1px solid var(--line);border-radius:24px;padding:32px;display:flex;
+         align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .folio h3{font-size:22px;margin-bottom:8px}
+  .folio p{color:var(--muted);font-size:15px;max-width:560px}
+
+  /* FAQ */
+  details.faq{background:#fff;border:1px solid var(--line);border-radius:16px;padding:0;margin-bottom:12px;overflow:hidden}
+  details.faq[open]{border-color:#CFCFF6;box-shadow:var(--shadow)}
+  details.faq summary{cursor:pointer;list-style:none;padding:21px 24px;font-weight:700;font-size:16.4px;
+        display:flex;justify-content:space-between;gap:16px;align-items:center}
+  details.faq summary::-webkit-details-marker{display:none}
+  details.faq summary::after{content:"+";font-size:22px;font-weight:700;color:var(--indigo);flex:0 0 auto;line-height:1}
+  details.faq[open] summary::after{content:"–"}
+  details.faq .ans{padding:0 24px 22px;color:var(--muted);font-size:15px}
+  details.faq .ans code{background:#F0F1F8;padding:2px 7px;border-radius:6px;font-size:13.6px}
+
+  /* FINAL */
+  .final{text-align:center;background:
+     radial-gradient(760px 380px at 50% 0%,rgba(123,92,240,.16),transparent 66%)}
+  .final h2{font-size:clamp(30px,4.6vw,50px);margin:16px 0 14px}
+  .final p{color:var(--muted);font-size:17.4px;max-width:620px;margin:0 auto 28px}
+  .final .hero-cta{justify-content:center}
+
+  footer{background:var(--ink);color:#A5A7CC;padding:44px 0 110px;font-size:14.4px}
+  .foot-grid{display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap;align-items:center}
+  footer a:hover{color:#fff}
+  .foot-links{display:flex;gap:20px;flex-wrap:wrap}
+  .foot-links a{font-weight:600}
+
+  /* STICKY MOBILE */
+  .sticky{position:fixed;left:0;right:0;bottom:0;z-index:70;background:rgba(20,21,47,.97);backdrop-filter:blur(10px);
+          color:#fff;padding:12px 18px;display:none;align-items:center;justify-content:space-between;gap:14px}
+  .sticky span{font-size:13.6px;font-weight:700}
+  .sticky a{background:linear-gradient(135deg,#5B5BF0,#8B6CF6);padding:11px 20px;border-radius:999px;
+            font-size:14px;font-weight:800}
+  @media(max-width:760px){.sticky{display:flex}footer{padding-bottom:120px}}
+  .js .reveal{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
+  .js .reveal.in{opacity:1;transform:none}
+
+  /* ================= MOBILE POLISH ================= */
+  *{-webkit-text-size-adjust:100%}
+  body{overflow-x:hidden}
+  a,button{-webkit-tap-highlight-color:transparent}
+  img,svg{max-width:100%}
+
+  @media(max-width:760px){
+    .wrap{padding:0 18px}
+    section{padding:58px 0}
+    html{scroll-padding-top:72px}
+    .head{margin-bottom:34px}
+
+    /* sticky CTA: slimmer + slides in only after the hero */
+    .js .sticky,.js .mobile-cta{transform:translateY(120%);transition:transform .3s ease}
+    .js .sticky.show,.js .mobile-cta.show{transform:none}
+    .sticky{padding:10px 14px calc(10px + env(safe-area-inset-bottom))}
+    .sticky span{font-size:12.6px;max-width:54%;line-height:1.25}
+    .sticky a{padding:10px 16px;font-size:13.6px}
+    .mobile-cta{padding:10px 14px calc(10px + env(safe-area-inset-bottom))}
+    .mobile-cta span{font-size:12.6px;max-width:42%;line-height:1.25}
+    .mobile-cta .btn{padding:11px 16px;font-size:14px}
+  }
+  @media(max-width:520px){
+    .hero-ctas .btn,.hero-cta .btn,.ctas .btn{width:100%;justify-content:center}
+    .head h2,.sec-head h2,h2.disp{font-size:clamp(26px,8.4vw,34px)}
+    .path,.quote,.step,.panel,.feat,.card,.helpbar,.helpband,.band,.folio,.studio,.vs-col{padding:22px}
+    .price b,.panel .big{font-size:38px}
+  }
+
+  /* comfortable tap targets (WCAG 44px) */
+  .chip,.chips .chip,.tab{min-height:44px}
+  .chip,.tab{display:inline-flex;align-items:center;justify-content:center}
+  footer .foot-links a,footer .foot .links a,footer .links a{display:inline-block;padding:10px 0}
+  .sub a,.fine a,.note a{display:inline-block;padding:10px 0}
+  .sec-head a,.head a{display:inline-block;padding:8px 0}
+  header .logo,footer .logo{display:inline-flex;align-items:center;min-height:44px}
+  summary{cursor:pointer;min-height:44px}
+  /* ================ /MOBILE POLISH ================ */
+</style>
+<!-- Meta Pixel — ResumePro -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2153303078555379');
+fbq('track', 'PageView');
+fbq('track', 'ViewContent', {content_name: 'landing-b'});
+</script>
+<!-- End Meta Pixel -->
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W52LYHBGZY"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-W52LYHBGZY');
-</script> 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ResumePro — Two ways to write a resume that gets read</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --paper: #F6F4EE;
-    --paper-raised: #FFFFFF;
-    --ink: #1B1B18;
-    --ink-soft: #55534C;
-    --rule: #D9D4C6;
-    --rule-strong: #B9B29E;
-    --pen: #B33F2E;
-    --pen-dark: #8F311F;
-    --pen-tint: #F1D9D2;
-    --focus: #2B5FAD;
-  }
-  :root:not([data-theme="light"]) {
-    @media (prefers-color-scheme: dark) {
-      --paper: #17160F;
-      --paper-raised: #201F17;
-      --ink: #F1EEE4;
-      --ink-soft: #B8B3A2;
-      --rule: #3A3826;
-      --rule-strong: #4E4B34;
-      --pen: #E2694F;
-      --pen-dark: #F08165;
-      --pen-tint: #3A241E;
-      --focus: #7FAAFF;
-    }
-  }
-  :root[data-theme="dark"] {
-    --paper: #17160F;
-    --paper-raised: #201F17;
-    --ink: #F1EEE4;
-    --ink-soft: #B8B3A2;
-    --rule: #3A3826;
-    --rule-strong: #4E4B34;
-    --pen: #E2694F;
-    --pen-dark: #F08165;
-    --pen-tint: #3A241E;
-    --focus: #7FAAFF;
-  }
-
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: 'IBM Plex Sans', sans-serif;
-    line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: inherit; }
-  img { max-width: 100%; display: block; }
-
-  .wrap {
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: 0 28px;
-  }
-
-  :focus-visible {
-    outline: 2px solid var(--focus);
-    outline-offset: 3px;
-  }
-
-  /* ---------- Header ---------- */
-  header {
-    border-bottom: 1px solid var(--rule);
-    position: sticky;
-    top: 0;
-    background: var(--paper);
-    z-index: 20;
-  }
-  .header-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 0;
-  }
-  .logo {
-    font-family: 'Special Elite', cursive;
-    font-size: 1.25rem;
-    letter-spacing: 0.02em;
-  }
-  .logo span { color: var(--pen); }
-  nav.primary-nav {
-    display: flex;
-    gap: 28px;
-    font-size: 0.95rem;
-    color: var(--ink-soft);
-  }
-  nav.primary-nav a { text-decoration: none; }
-  nav.primary-nav a:hover { color: var(--ink); }
-  .header-cta {
-    display: inline-flex;
-    padding: 9px 18px;
-    border: 1px solid var(--ink);
-    border-radius: 3px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-decoration: none;
-    white-space: nowrap;
-  }
-  .header-cta:hover { background: var(--ink); color: var(--paper); }
-
-  @media (max-width: 760px) {
-    nav.primary-nav { display: none; }
-  }
-
-  /* ---------- Hero ---------- */
-  .hero {
-    padding: 76px 0 88px;
-  }
-  .hero-grid {
-    display: grid;
-    grid-template-columns: 0.85fr 1.15fr;
-    gap: 48px;
-    align-items: center;
-  }
-  @media (max-width: 860px) {
-    .hero-grid { grid-template-columns: 1fr; }
-    .hero { padding: 48px 0 56px; }
-  }
-  .hero-kicker {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.82rem;
-    color: var(--pen);
-    margin: 0 0 18px;
-  }
-  h1 {
-    font-family: 'Special Elite', cursive;
-    font-weight: 400;
-    font-size: clamp(2.1rem, 4.2vw, 3.15rem);
-    line-height: 1.18;
-    margin: 0 0 22px;
-    max-width: 15ch;
-  }
-  .hero-sub {
-    font-size: 1.08rem;
-    color: var(--ink-soft);
-    max-width: 46ch;
-    margin: 0 0 30px;
-  }
-  .hero-actions {
-    display: flex;
-    gap: 14px;
-    flex-wrap: wrap;
-  }
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 13px 22px;
-    border-radius: 3px;
-    font-size: 0.98rem;
-    font-weight: 600;
-    text-decoration: none;
-    border: 1px solid transparent;
-    cursor: pointer;
-  }
-  .btn-primary {
-    background: var(--pen);
-    color: #fff;
-  }
-  .btn-primary:hover { background: var(--pen-dark); }
-  .btn-secondary {
-    background: transparent;
-    color: var(--ink);
-    border-color: var(--ink);
-  }
-  .btn-secondary:hover { background: var(--ink); color: var(--paper); }
-
-  /* Hero placeholder image */
-  .hero-visual {
-    position: relative;
-  }
-  .hero-visual .placeholder-frame {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    border: 1px dashed var(--rule-strong);
-    border-radius: 6px;
-    background:
-      repeating-linear-gradient(135deg, transparent, transparent 10px, var(--rule) 10px, var(--rule) 11px),
-      var(--paper-raised);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-  }
-  .placeholder-inner {
-    text-align: center;
-    max-width: 280px;
-  }
-  .placeholder-inner .tag {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.04em;
-    color: var(--ink-soft);
-    background: var(--paper);
-    border: 1px solid var(--rule-strong);
-    border-radius: 20px;
-    padding: 5px 12px;
-    display: inline-block;
-    margin-bottom: 12px;
-  }
-  .placeholder-inner p {
-    font-size: 0.88rem;
-    color: var(--ink-soft);
-    margin: 0;
-  }
-  .placeholder-inner svg { margin: 0 auto 14px; opacity: 0.85; }
-
-  .hero-visual img {
-    width: 100%;
-    height: 100%;
-    min-height: 420px;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 18px 40px -14px rgba(27, 27, 24, 0.35);
-  }
-  @media (max-width: 860px) {
-    .hero-visual img { min-height: 280px; }
-  }
-
-  /* ---------- Products ---------- */
-  .products {
-    padding: 8px 0 96px;
-  }
-  .section-head {
-    max-width: 56ch;
-    margin: 0 0 44px;
-  }
-  .section-head h2 {
-    font-family: 'Special Elite', cursive;
-    font-weight: 400;
-    font-size: clamp(1.6rem, 2.6vw, 2.1rem);
-    margin: 0 0 10px;
-  }
-  .section-head p {
-    color: var(--ink-soft);
-    margin: 0;
-    font-size: 1.02rem;
-  }
-
-  .product-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-  }
-  @media (max-width: 780px) {
-    .product-grid { grid-template-columns: 1fr; }
-  }
-
-  .doc-card {
-    background: var(--paper-raised);
-    border: 1px solid var(--rule);
-    border-radius: 4px;
-    padding: 34px 30px 30px;
-    position: relative;
-    box-shadow: 0 1px 0 var(--rule);
-  }
-  .doc-card::before {
-    content: "";
-    position: absolute;
-    top: 22px;
-    right: 24px;
-    width: 34px;
-    height: 34px;
-    border: 2px solid var(--rule-strong);
-    border-radius: 50%;
-    opacity: 0.55;
-  }
-  .doc-card .price-row {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    margin-bottom: 6px;
-  }
-  .doc-card .price {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 2.1rem;
-    font-weight: 500;
-    color: var(--pen);
-  }
-  .doc-card .price-unit {
-    color: var(--ink-soft);
-    font-size: 0.92rem;
-  }
-  .doc-card h3 {
-    font-size: 1.32rem;
-    margin: 4px 0 12px;
-    max-width: 20ch;
-  }
-  .doc-card .desc {
-    color: var(--ink-soft);
-    margin: 0 0 22px;
-    font-size: 0.98rem;
-  }
-  .doc-card ul {
-    list-style: none;
-    margin: 0 0 28px;
-    padding: 0;
-    border-top: 1px solid var(--rule);
-    padding-top: 18px;
-  }
-  .doc-card li {
-    display: flex;
-    gap: 10px;
-    padding: 7px 0;
-    font-size: 0.95rem;
-  }
-  .doc-card li::before {
-    content: "—";
-    color: var(--pen);
-    flex-shrink: 0;
-  }
-  .doc-card .btn { width: 100%; justify-content: center; }
-
-  .doc-card.builder { border-color: var(--pen); }
-  .doc-card.builder .price { color: var(--pen-dark); }
-
-  /* ---------- How it works ---------- */
-  .how {
-    padding: 0 0 100px;
-  }
-  .how-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-  }
-  @media (max-width: 780px) {
-    .how-grid { grid-template-columns: 1fr; gap: 40px; }
-  }
-  .how-col h4 {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.82rem;
-    color: var(--pen);
-    margin: 0 0 18px;
-    text-transform: none;
-  }
-  .steps {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    border-left: 1px solid var(--rule);
-  }
-  .steps li {
-    position: relative;
-    padding: 0 0 26px 26px;
-  }
-  .steps li:last-child { padding-bottom: 0; }
-  .steps li::before {
-    content: attr(data-n);
-    position: absolute;
-    left: -11px;
-    top: 0;
-    width: 21px;
-    height: 21px;
-    border-radius: 50%;
-    background: var(--paper);
-    border: 1px solid var(--rule-strong);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.68rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--ink-soft);
-  }
-  .steps li strong { display: block; margin-bottom: 3px; font-size: 1rem; }
-  .steps li span { color: var(--ink-soft); font-size: 0.92rem; }
-
-  /* ---------- Popup ad banner ---------- */
-  .promo-popup {
-    position: fixed;
-    right: 22px;
-    bottom: 22px;
-    max-width: 320px;
-    background: var(--paper-raised);
-    border: 1px solid var(--rule-strong);
-    border-radius: 8px;
-    box-shadow: 0 20px 44px -18px rgba(27, 27, 24, 0.45);
-    padding: 20px 20px 18px;
-    z-index: 50;
-    transform: translateY(20px);
-    opacity: 0;
-    pointer-events: none;
-    transition: transform 0.35s ease, opacity 0.35s ease;
-  }
-  .promo-popup.show {
-    transform: translateY(0);
-    opacity: 1;
-    pointer-events: auto;
-  }
-  .promo-popup .promo-close {
-    position: absolute;
-    top: 8px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 1rem;
-    line-height: 1;
-    color: var(--ink-soft);
-    cursor: pointer;
-    padding: 4px;
-  }
-  .promo-popup .promo-close:hover { color: var(--ink); }
-  .promo-popup .promo-tag {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--pen);
-    letter-spacing: 0.04em;
-    margin: 0 0 8px;
-  }
-  .promo-popup h5 {
-    margin: 0 0 6px;
-    font-size: 1.02rem;
-  }
-  .promo-popup p {
-    margin: 0 0 14px;
-    font-size: 0.88rem;
-    color: var(--ink-soft);
-  }
-  .promo-popup .btn {
-    padding: 9px 16px;
-    font-size: 0.88rem;
-    width: 100%;
-    justify-content: center;
-  }
-  @media (max-width: 480px) {
-    .promo-popup { left: 16px; right: 16px; max-width: none; bottom: 16px; }
-  }
-
-  /* ---------- Footer ---------- */
-  footer {
-    border-top: 1px solid var(--rule);
-    padding: 30px 0;
-  }
-  .footer-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    font-size: 0.88rem;
-    color: var(--ink-soft);
-  }
-</style>
+</script>
+<!-- End Google Analytics 4 -->
+<link rel="canonical" href="https://resumepro.pages.dev/write-it-yourself-or-let-ai-write-it-for-you/">
 </head>
 <body>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2153303078555379&ev=PageView&noscript=1"
+/></noscript>
 
-<header>
-  <div class="wrap header-row">
-    <div class="logo">Resume<span>Pro</span></div>
-    <nav class="primary-nav">
-      <a href="#templates">Templates</a>
-      <a href="#builder">AI Builder</a>
-      <a href="#how">How it works</a>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="logo" href="#top"><span class="rk">🚀</span>Resume<b>Pro</b></a>
+    <nav class="nav-links">
+      <a href="#why">Why a link</a>
+      <a href="#colors">Templates</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
     </nav>
-    <a class="header-cta" href="https://resumepro.pages.dev/resume-builder/">Get started</a>
+    <a class="btn btn-primary" href="https://resumepro.pages.dev/resume-builder/" style="padding:12px 20px">Try free preview</a>
   </div>
 </header>
 
+<main id="top">
 <section class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <p class="hero-kicker">// resume tools for job seekers</p>
-      <h1>Write it yourself. Or let AI write it for you.</h1>
-      <p class="hero-sub">Download a template and fill it in on your own terms, or upload what you've already got and let AI turn it into a polished resume in the template you pick. Either way, you walk away with a resume worth sending.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="https://resumepro.pages.dev/resume-builder/">Try the AI builder — $15</a>
-        <a class="btn btn-secondary" href="https://resumeprotemplate.gumroad.com/resume-collection" target="_blank" rel="noopener">Browse templates — $10</a>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">No more forgotten attachments</span>
+        <h1>Nobody opens<br>the <em>attachment.</em></h1>
+        <p class="lead">Your resume deserves better than "Resume_FINAL_v7.pdf" sitting unread in an inbox. ResumePro turns your old PDF or Word file into a polished personal website — one link, opens instantly, everywhere.</p>
+        <div class="hero-cta">
+          <a class="btn btn-mint" href="https://resumepro.pages.dev/resume-builder/">Try the AI builder — $15</a>
+          <a class="btn btn-ghost" href="https://resumepro.pages.dev/resume-templates">Browse templates — $10</a>
+        </div>
+        <div class="micro">
+          <span>Free live preview</span>
+          <span>Publish in one click</span>
+          <span>One-time prices</span>
+          <span>No coding needed</span>
+        </div>
+      </div>
+
+      <div class="inbox">
+        <div class="inbox-bar"><i></i><i></i><i></i>&nbsp; Inbox — application follow-ups</div>
+        <div class="inbox-body">
+          <div class="mail mail-old">
+            <div class="av">📄</div>
+            <div class="mail-d"><strong>Application — Alex Rivera</strong><span>Resume_FINAL_v7.pdf · 2.4 MB</span></div>
+            <div class="tag tag-bad">Not opened</div>
+          </div>
+          <div class="mail mail-new">
+            <div class="av">🚀</div>
+            <div class="mail-d"><strong>Application — Alex Rivera</strong><span>resumepro.pages.dev/alex-rivera</span></div>
+            <div class="tag tag-ok">Opened ✓</div>
+          </div>
+        </div>
+        <div class="inbox-foot">Same candidate. Same experience. Completely different first impression.</div>
       </div>
     </div>
-    <div class="hero-visual">
-         <img src="hero.webp">
+
+    <div class="stats reveal">
+      <div class="stat"><b>7 sec</b><span>Recruiter's first scan — make it count</span></div>
+      <div class="stat"><b>22</b><span>Pro web-ready templates</span></div>
+      <div class="stat"><b>$10 · $15</b><span>One-time. No subscriptions.</span></div>
+      <div class="stat"><b>1 link</b><span>Email · LinkedIn · everywhere</span></div>
     </div>
   </div>
 </section>
 
-<section class="products wrap">
-  <div class="section-head">
-    <h2>Choose your path</h2>
-    <p>Two ways to end up with a finished resume. Pick the one that matches how much time you want to spend on it.</p>
-  </div>
-
-  <div class="product-grid">
-
-    <div class="doc-card" id="templates">
-      <div class="price-row">
-        <span class="price">$10</span>
-        <span class="price-unit">one-time</span>
-      </div>
-      <h3>Resume templates</h3>
-      <p class="desc">Download a professionally designed template and fill it in yourself, at your own pace, using the built-in form.</p>
-      <ul>
-        <li>Download the template file straight away</li>
-        <li>Fill in your details using the included form</li>
-        <li>Update the content manually, any time</li>
-        <li>No AI involved — you're in full control</li>
-      </ul>
-      <a class="btn btn-secondary" href="https://resumeprotemplate.gumroad.com/resume-collection" target="_blank" rel="noopener">Browse templates</a>
+<section id="why">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Why a link beats a file</span>
+      <h2>Traditional PDFs are forgettable.<br>Here's your edge.</h2>
     </div>
-
-    <div class="doc-card builder" id="builder">
-      <div class="price-row">
-        <span class="price">$15</span>
-        <span class="price-unit">unlock key</span>
-      </div>
-      <h3>AI resume builder</h3>
-      <p class="desc">Upload your existing resume, pick a template, and AI rewrites and formats it for you.</p>
-      <ul>
-        <li>Upload your current resume as a starting point</li>
-        <li>AI restructures it into your chosen template</li>
-        <li>Buy one key, unlock unlimited future updates</li>
-        <li>Re-run it any time your experience changes</li>
-      </ul>
-      <a class="btn btn-primary" href="https://resumepro.pages.dev/resume-builder/">Generate your resume</a>
-    </div>
-
-  </div>
-</section>
-
-<section class="how wrap" id="how">
-  <div class="section-head">
-    <h2>How each one works</h2>
-    <p>Both roads end with a resume you can send today.</p>
-  </div>
-  <div class="how-grid">
-    <div class="how-col">
-      <h4>// templates, $10</h4>
-      <ol class="steps">
-        <li data-n="1"><strong>Pick a template</strong><span>Choose the layout you like from the template gallery.</span></li>
-        <li data-n="2"><strong>Download the file</strong><span>It arrives with an editable form built right in.</span></li>
-        <li data-n="3"><strong>Fill it in</strong><span>Add your details manually, section by section.</span></li>
-        <li data-n="4"><strong>Update whenever</strong><span>Reopen the file and edit it again any time you need to.</span></li>
-      </ol>
-    </div>
-    <div class="how-col">
-      <h4>// AI builder, $15</h4>
-      <ol class="steps">
-        <li data-n="1"><strong>Buy your key</strong><span>One purchase unlocks unlimited use of the builder.</span></li>
-        <li data-n="2"><strong>Upload your resume</strong><span>Bring what you already have — no need to start blank.</span></li>
-        <li data-n="3"><strong>Pick a template</strong><span>Choose the design you want your new resume built into.</span></li>
-        <li data-n="4"><strong>Let AI build it</strong><span>Come back and regenerate it any time your resume changes.</span></li>
-      </ol>
+    <div class="grid4">
+      <div class="card reveal"><div class="ic">🚀</div><h3>Instant first impression</h3><p>Recruiters spend just 7 seconds scanning a resume. A stunning digital layout makes every second count.</p></div>
+      <div class="card reveal"><div class="ic">📱</div><h3>Mobile optimized</h3><p>Looks perfect on every device — phone, tablet, or desktop. No more awkward PDF pinch-and-zoom.</p></div>
+      <div class="card reveal"><div class="ic">🔗</div><h3>One simple link</h3><p>Share your entire resume with one URL — in your email signature, on LinkedIn, or with every application.</p></div>
+      <div class="card reveal"><div class="ic">⚡</div><h3>Always updated</h3><p>Update your information instantly — republish in a click — without resending files to everyone in your network.</p></div>
     </div>
   </div>
 </section>
+
+<section id="colors">
+  <div class="wrap">
+    <div class="studio reveal">
+      <div>
+        <span class="eyebrow">22 templates · fully editable</span>
+        <h2 style="margin-top:16px">See it in your colors.</h2>
+        <p style="color:var(--muted);font-size:16px">Every template ships with editable HTML, CSS and a data file — swap the colors, fonts and layout to match your industry. Tap a palette to preview it:</p>
+        <div class="chips" id="chips">
+          <button class="chip on" data-a="#3B3BD6" data-b="#C9CCF5" data-c="#12B981">Indigo</button>
+          <button class="chip" data-a="#0B7A5B" data-b="#BFE9DA" data-c="#F5A524">Emerald</button>
+          <button class="chip" data-a="#E4572E" data-b="#FBD7C8" data-c="#3B3BD6">Sunset</button>
+          <button class="chip" data-a="#16172B" data-b="#D6D8E8" data-c="#F5C451">Obsidian</button>
+          <button class="chip" data-a="#B3345F" data-b="#F6CFDD" data-c="#7B5CF0">Rose</button>
+        </div>
+        <p class="fine">Prefer zero fiddling? The $15 AI builder picks up your old resume and fills any template for you — free preview first.</p>
+      </div>
+      <div class="pv">
+        <div class="pv-card">
+          <div class="pv-top" id="pv1">
+            <div class="pv-av"></div>
+            <div><div class="pv-nm"></div><div class="pv-role"></div></div>
+          </div>
+          <div class="pv-mid">
+            <div class="pv-bar s"></div>
+            <div class="pv-bar"></div>
+            <div class="pv-bar m"></div>
+            <div class="pv-pills" id="pv2"><span class="pv-pill"></span><span class="pv-pill"></span><span class="pv-pill"></span></div>
+            <div class="pv-foot" id="pv3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Choose your path</span>
+      <h2>Write it yourself.<br>Or let AI write it for you.</h2>
+      <p>Two ways to end up with a finished resume. Pick the one that matches how much time you want to spend.</p>
+    </div>
+
+    <div class="paths">
+      <div class="path reveal">
+        <div class="price"><b>$10</b><span>one-time</span></div>
+        <h3>Resume templates</h3>
+        <p>Download a professionally designed template and fill it in yourself, at your own pace, using the built-in form.</p>
+        <ul class="steps">
+          <li>Pick a template from the gallery</li>
+          <li>Download the template file straight away</li>
+          <li>Fill in your details with the included form</li>
+          <li>Update the content manually any time — no AI, you're in full control</li>
+        </ul>
+        <a class="btn btn-primary" href="https://resumepro.pages.dev/resume-templates">Browse templates →</a>
+        <div class="sub">Lifetime access · free updates for a year</div>
+      </div>
+
+      <div class="path hot reveal">
+        <span class="badge">Most popular</span>
+        <div class="price"><b>$15</b><span>one-time key</span></div>
+        <h3>AI resume builder</h3>
+        <p>Upload your existing resume, pick a template, and AI rewrites and formats it for you. Preview it live for free — then publish in one click, or download the site and host it your own way.</p>
+        <ul class="steps">
+          <li>Buy one key — unlock unlimited use, re-run any time</li>
+          <li>Upload what you already have, no blank page</li>
+          <li>AI restructures it into your chosen template</li>
+          <li>Preview it live, then publish in one click — your link is ready</li>
+          <li>Prefer your own host? Download the full site and upload wherever you like</li>
+        </ul>
+        <a class="btn btn-mint" href="https://resumepro.pages.dev/resume-builder/">Generate your resume →</a>
+        <div class="sub">Prefer typing it yourself? <a href="https://resumepro.pages.dev/resume-builder/resume-form.html" style="color:var(--indigo);font-weight:700">Use the form version →</a></div>
+      </div>
+    </div>
+
+    <div class="helpbar reveal">
+      <div>
+        <b>⚡ No tech skills? No problem.</b>
+        <p>Chat with us on Messenger — we can set it up for you.</p>
+      </div>
+      <a class="btn btn-ghost" href="https://m.me/61578437432961">💬 Chat on Messenger</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="band reveal">
+      <h2>22 templates. One-time $10. Yours forever.</h2>
+      <p class="sub">Fully editable · Mobile friendly · No coding · Free updates for a year</p>
+      <p class="names">Timeless · Sleek · Executive · Vivid · Pure · Refined · Dynamic · SkillFocus · Corporate · Trendy · Horizon · Midnight · Ember · Canvas · Graphite · Ivory · Storm · Linen · Prism · Obsidian · Aurora · Meridian</p>
+      <a class="btn btn-mint" href="https://resumeprotemplate.gumroad.com/resume-collection">Browse the full collection →</a>
+      <p class="note">Prefer zero form-filling? The <a href="https://resumepro.pages.dev/resume-builder/">$15 AI builder</a> fills any template for you.</p>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Success stories</span>
+      <h2>What our customers say.</h2>
+    </div>
+    <div class="quotes">
+      <div class="quote reveal">
+        <div class="stars">★★★★★</div>
+        <p>"I landed 3 interviews in the first week after switching to a digital resume. The hiring managers all commented on how professional it looked."</p>
+        <div class="who"><div class="av">S</div><div><b>Sarah K.</b><span>Marketing Director</span></div></div>
+      </div>
+      <div class="quote reveal">
+        <div class="stars">★★★★★</div>
+        <p>"As a freelance designer, my digital resume has become my portfolio landing page. I've gotten more client inquiries since using this template."</p>
+        <div class="who"><div class="av">M</div><div><b>Michael T.</b><span>UX Designer</span></div></div>
+      </div>
+      <div class="quote reveal">
+        <div class="stars">★★★★★</div>
+        <p>"The easy customization meant I could set this up in an evening. My new employer said my resume stood out from hundreds of applicants."</p>
+        <div class="who"><div class="av">D</div><div><b>David R.</b><span>Software Engineer</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="folio reveal">
+      <div>
+        <h3>🎨 Building a portfolio too?</h3>
+        <p>Check out our portfolio templates — same easy setup, made to show off your work.</p>
+      </div>
+      <a class="btn btn-ghost" href="https://resumeprotemplate.gumroad.com/portfolio-collection">Check portfolio templates →</a>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style="background:#fff;border-top:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Questions</span>
+      <h2>Frequently asked questions.</h2>
+    </div>
+    <div style="max-width:820px;margin:0 auto">
+      <details class="faq" open>
+        <summary>Do I need coding skills to use these templates?</summary>
+        <div class="ans">No coding skills required! The templates come with simple editable files — just replace the placeholder text using the built-in form, or let the AI builder fill everything for you. The templates handle all the design and layout automatically.</div>
+      </details>
+      <details class="faq">
+        <summary>How do I host my digital resume?</summary>
+        <div class="ans">Two options. <strong>Publish straight from the AI builder</strong> — happy with the live preview? Hit publish and your link is ready to share, no setup at all. Or <strong>download the full site as a ZIP</strong> and host it yourself: downloads include detailed instructions for free hosting like GitHub Pages and Netlify, and it works on any standard web host.</div>
+      </details>
+      <details class="faq">
+        <summary>Can I customize the colors and fonts?</summary>
+        <div class="ans">Absolutely! Open <code>style.css</code> in any text editor and change the color variables at the top — every template includes a <code>Template_Guide</code> with step-by-step instructions.</div>
+      </details>
+      <details class="faq">
+        <summary>What's included in the template download?</summary>
+        <div class="ans">A ZIP file with all HTML, CSS and JavaScript files, a simple data file to edit your information, detailed setup instructions, and bonus tips for optimizing your digital resume.</div>
+      </details>
+      <details class="faq">
+        <summary>Is this a subscription or a one-time payment?</summary>
+        <div class="ans">Everything is one-time: $10 per template with lifetime access (plus free updates for one year), or a $15 key that unlocks unlimited use of the AI builder — re-run it any time your resume changes. No subscriptions, ever.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <span class="eyebrow">Your move</span>
+    <h2>Stop being a PDF.<br>Start being a link.</h2>
+    <p>One template can make the difference between getting noticed and getting ignored. Build yours in an evening — preview it free before you pay a cent.</p>
+    <div class="hero-cta">
+      <a class="btn btn-mint" href="https://resumepro.pages.dev/resume-builder/">Try the AI builder — $15</a>
+      <a class="btn btn-ghost" href="https://resumepro.pages.dev/resume-templates">Browse templates — $10</a>
+      <a class="btn btn-ghost" href="https://m.me/61578437432961">💬 Chat on Messenger</a>
+    </div>
+  </div>
+</section>
+</main>
 
 <footer>
-  <div class="wrap footer-row">
-    <span>ResumePro</span>
-    <span>Templates $10 · AI builder $15</span>
+  <div class="wrap foot-grid">
+    <div>
+      <a class="logo" href="#top" style="color:#fff"><span class="rk">🚀</span>Resume<b style="color:#8B8BF5">Pro</b></a>
+      <div style="margin-top:8px;font-size:13.4px">© 2026 ResumePro — Your resume, now a website.</div>
+    </div>
+    <div class="foot-links">
+      <a href="https://resumepro.pages.dev/resume-templates">Templates</a>
+      <a href="https://resumepro.pages.dev/resume-builder/">Builder</a>
+      <a href="https://resumepro.pages.dev/resume-builder/resume-form.html">Form fill</a>
+      <a href="https://resumeprotemplate.gumroad.com/resume-collection">Gumroad</a>
+      <a href="https://m.me/61578437432961">Messenger</a>
+    </div>
   </div>
 </footer>
 
-<div class="promo-popup" id="promoPopup">
-  <button class="promo-close" id="promoClose" aria-label="Close">✕</button>
-  <p class="promo-tag">// also available</p>
-  <h5>Building a portfolio too?</h5>
-  <p>Check out our portfolio templates — same easy setup, made to show off your work.</p>
-  <a class="btn btn-primary" href="https://resumeprotemplate.gumroad.com/portfolio-collection" target="_blank" rel="noopener">Check portfolio templates</a>
+<div class="sticky">
+  <span>Templates $10 · AI builder $15</span>
+  <a href="https://resumepro.pages.dev/resume-builder/">Try free →</a>
 </div>
 
 <script>
-  (function () {
-    var popup = document.getElementById('promoPopup');
-    var closeBtn = document.getElementById('promoClose');
-    var dismissed = false;
-    setTimeout(function () {
-      if (!dismissed) popup.classList.add('show');
-    }, 2500);
-    closeBtn.addEventListener('click', function () {
-      dismissed = true;
-      popup.classList.remove('show');
+  (function(){
+    var chips = document.querySelectorAll('#chips .chip');
+    var pv1 = document.getElementById('pv1'),
+        pv2 = document.getElementById('pv2'),
+        pv3 = document.getElementById('pv3');
+    chips.forEach(function(c){
+      c.addEventListener('click', function(){
+        chips.forEach(function(x){ x.classList.remove('on'); });
+        c.classList.add('on');
+        pv1.style.background = c.dataset.a;
+        pv2.querySelectorAll('.pv-pill').forEach(function(p){ p.style.background = c.dataset.b; });
+        pv3.style.background = c.dataset.c;
+      });
     });
+
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, {threshold:.14});
+      document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+    } else {
+      document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+    }
   })();
 </script>
+
+<script>
+  /* show the sticky CTA only after the visitor scrolls past the hero */
+  (function(){
+    var bar = document.querySelector('.sticky') || document.querySelector('.mobile-cta');
+    if(!bar || !window.addEventListener) return;
+    var upd = function(){ if(window.scrollY > 380){ bar.classList.add('show'); } else { bar.classList.remove('show'); } };
+    window.addEventListener('scroll', upd, {passive:true});
+    window.addEventListener('resize', upd);
+    upd();
+  })();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a422e8a4d9e2cc5a',t:'MTc5MDYwMDE5Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>

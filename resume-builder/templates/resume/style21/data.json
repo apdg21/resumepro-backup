@@ -5,17 +5,39 @@
     "jobTitle": "Virtual Assistant & E-commerce Operations Specialist",
     "email": "marisol.reyes.va@gmail.com",
     "phone": "0927 481 3390",
-    "location": "Bacoor City, Cavite, Philippines"
+    "location": "Bacoor City, Cavite, Philippines",
+    "profileImage": "assets/profile.jpg"
   },
   "about": "Organized and reliable Virtual Assistant with over 5 years of experience supporting e-commerce operations, order fulfillment, and supplier coordination for Shopify and WooCommerce stores. I specialize in keeping product catalogs clean, inventory accurate, and customer communication timely. Having worked with teams in Australia, Canada, and the Philippines, I bring strong written English, calm problem-solving under pressure, and a genuine interest in making online stores run smoothly from the back end.",
   "skills": [
-    { "name": "Shopify & WooCommerce Management", "level": 93 },
-    { "name": "Order Fulfillment & Tracking", "level": 90 },
-    { "name": "Customer Support (Email/Chat)", "level": 88 },
-    { "name": "Inventory & Supplier Coordination", "level": 85 },
-    { "name": "Data Entry & Reporting", "level": 87 },
-    { "name": "Calendar & Inbox Management", "level": 80 },
-    { "name": "Canva & Basic Graphic Design", "level": 72 }
+    {
+      "name": "Shopify & WooCommerce Management",
+      "level": 93
+    },
+    {
+      "name": "Order Fulfillment & Tracking",
+      "level": 90
+    },
+    {
+      "name": "Customer Support (Email/Chat)",
+      "level": 88
+    },
+    {
+      "name": "Inventory & Supplier Coordination",
+      "level": 85
+    },
+    {
+      "name": "Data Entry & Reporting",
+      "level": 87
+    },
+    {
+      "name": "Calendar & Inbox Management",
+      "level": 80
+    },
+    {
+      "name": "Canva & Basic Graphic Design",
+      "level": 72
+    }
   ],
   "experience": [
     {
@@ -73,8 +95,14 @@
     }
   ],
   "languages": [
-    { "name": "Filipino", "level": 100 },
-    { "name": "English", "level": 88 }
+    {
+      "name": "Filipino",
+      "level": 100
+    },
+    {
+      "name": "English",
+      "level": 88
+    }
   ],
   "projects": [
     {
@@ -91,7 +119,13 @@
     }
   ],
   "socialLinks": [
-    { "name": "Portfolio", "url": "https://marisol-reyes.pages.dev" },
-    { "name": "LinkedIn", "url": "https://linkedin.com/in/marisolreyesva" }
+    {
+      "name": "Portfolio",
+      "url": "https://marisol-reyes.pages.dev"
+    },
+    {
+      "name": "LinkedIn",
+      "url": "https://linkedin.com/in/marisolreyesva"
+    }
   ]
 }

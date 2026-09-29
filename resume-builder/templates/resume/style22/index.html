@@ -776,6 +776,13 @@ function populateResume(data) {
   document.getElementById('aboutText').textContent = data.about;
   document.title = `${fullName} — Resume`;
 
+  // Profile photo — apply from data so user-uploaded images work both
+  // in standalone mode (offline file:// or hosted) and in the live preview.
+  if (p.profileImage) {
+    const profileImageEl = document.getElementById('profileImage');
+    if (profileImageEl) profileImageEl.src = p.profileImage;
+  }
+
   // Skills
   const sl = document.getElementById('skillsList');
   sl.innerHTML = '';

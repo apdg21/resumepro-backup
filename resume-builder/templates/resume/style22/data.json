@@ -5,17 +5,39 @@
     "jobTitle": "Email Marketing & CRM Strategist",
     "email": "ramon.villareal.crm@gmail.com",
     "phone": "+63 917 204 5581",
-    "location": "Tagaytay City, Cavite, Philippines · Available Remote"
+    "location": "Tagaytay City, Cavite, Philippines · Available Remote",
+    "profileImage": "assets/profile.jpg"
   },
   "about": "CRM and email marketing strategist with a focus on lifecycle campaigns that keep revenue steady between big promotions. I design and maintain Klaviyo and Mailchimp flows, write direct-response copy, and lean on testing rather than guesswork to improve open and click performance. Over the past several years I've supported DTC brands in the US and Australia, balancing hands-on template building with the reporting side — tracking what a flow actually contributes to revenue, not just how it looks.",
   "skills": [
-    { "name": "Email Marketing Strategy", "level": 93 },
-    { "name": "Klaviyo Flow Building", "level": 91 },
-    { "name": "Copywriting / CRO", "level": 89 },
-    { "name": "List Segmentation", "level": 87 },
-    { "name": "Mailchimp & ActiveCampaign", "level": 82 },
-    { "name": "HTML Email Development", "level": 80 },
-    { "name": "Campaign Reporting & Analytics", "level": 84 }
+    {
+      "name": "Email Marketing Strategy",
+      "level": 93
+    },
+    {
+      "name": "Klaviyo Flow Building",
+      "level": 91
+    },
+    {
+      "name": "Copywriting / CRO",
+      "level": 89
+    },
+    {
+      "name": "List Segmentation",
+      "level": 87
+    },
+    {
+      "name": "Mailchimp & ActiveCampaign",
+      "level": 82
+    },
+    {
+      "name": "HTML Email Development",
+      "level": 80
+    },
+    {
+      "name": "Campaign Reporting & Analytics",
+      "level": 84
+    }
   ],
   "experience": [
     {
@@ -72,8 +94,14 @@
     }
   ],
   "languages": [
-    { "name": "Filipino", "level": 100 },
-    { "name": "English", "level": 92 }
+    {
+      "name": "Filipino",
+      "level": 100
+    },
+    {
+      "name": "English",
+      "level": 92
+    }
   ],
   "projects": [
     {
@@ -96,8 +124,17 @@
     }
   ],
   "socialLinks": [
-    { "name": "Portfolio", "url": "https://ramon-villareal.pages.dev" },
-    { "name": "LinkedIn", "url": "https://linkedin.com/in/ramonvillarealcrm" },
-    { "name": "GitHub", "url": "https://github.com/rvillareal" }
+    {
+      "name": "Portfolio",
+      "url": "https://ramon-villareal.pages.dev"
+    },
+    {
+      "name": "LinkedIn",
+      "url": "https://linkedin.com/in/ramonvillarealcrm"
+    },
+    {
+      "name": "GitHub",
+      "url": "https://github.com/rvillareal"
+    }
   ]
 }

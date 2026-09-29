@@ -1272,5 +1272,137 @@
         "valueFrom": "url"
       }
     }
+  },
+  "style21": {
+    "_note": "Name is split via splitName below, not scalar mapping. Photo field was added to this template (previously had none).",
+    "scalar": {
+      "jobTitle": "personalInfo.jobTitle",
+      "summary": "about",
+      "profileImage": "personalInfo.profileImage",
+      "contact.email": "personalInfo.email",
+      "contact.phone": "personalInfo.phone",
+      "contact.location": "personalInfo.location"
+    },
+    "splitName": {
+      "sourcePath": "fullName",
+      "firstNameTarget": "personalInfo.firstName",
+      "lastNameTarget": "personalInfo.lastName"
+    },
+    "arrays": {
+      "skills": {
+        "targetPath": "skills",
+        "itemMap": {
+          "name": "name",
+          "level": "level"
+        }
+      },
+      "languages": {
+        "targetPath": "languages",
+        "itemMap": {
+          "name": "name",
+          "level": "level"
+        }
+      },
+      "experience": {
+        "targetPath": "experience",
+        "itemMap": {
+          "jobTitle": "position",
+          "company": "company",
+          "startDate": "startDate",
+          "endDate": "endDate",
+          "bullets": "details"
+        }
+      },
+      "education": {
+        "targetPath": "education",
+        "itemMap": {
+          "degree": "degree",
+          "institution": "institution",
+          "endDate": "year"
+        }
+      },
+      "projects": {
+        "targetPath": "projects",
+        "itemMap": {
+          "name": "name",
+          "description": "description",
+          "liveUrl": "liveUrl",
+          "codeUrl": "codeUrl"
+        }
+      },
+      "socialLinks": {
+        "targetPath": "socialLinks",
+        "itemMap": {
+          "platform": "name",
+          "url": "url"
+        }
+      }
+    }
+  },
+  "style22": {
+    "_note": "Name is split via splitName below, not scalar mapping. Photo field was added to this template (previously had none).",
+    "scalar": {
+      "jobTitle": "personalInfo.jobTitle",
+      "summary": "about",
+      "profileImage": "personalInfo.profileImage",
+      "contact.email": "personalInfo.email",
+      "contact.phone": "personalInfo.phone",
+      "contact.location": "personalInfo.location"
+    },
+    "splitName": {
+      "sourcePath": "fullName",
+      "firstNameTarget": "personalInfo.firstName",
+      "lastNameTarget": "personalInfo.lastName"
+    },
+    "arrays": {
+      "skills": {
+        "targetPath": "skills",
+        "itemMap": {
+          "name": "name",
+          "level": "level"
+        }
+      },
+      "languages": {
+        "targetPath": "languages",
+        "itemMap": {
+          "name": "name",
+          "level": "level"
+        }
+      },
+      "experience": {
+        "targetPath": "experience",
+        "itemMap": {
+          "jobTitle": "position",
+          "company": "company",
+          "startDate": "startDate",
+          "endDate": "endDate",
+          "bullets": "details"
+        }
+      },
+      "education": {
+        "targetPath": "education",
+        "itemMap": {
+          "degree": "degree",
+          "institution": "institution",
+          "endDate": "year"
+        }
+      },
+      "projects": {
+        "targetPath": "projects",
+        "itemMap": {
+          "name": "name",
+          "description": "description",
+          "liveUrl": "liveUrl",
+          "codeUrl": "codeUrl"
+        }
+      },
+      "socialLinks": {
+        "targetPath": "socialLinks",
+        "itemMap": {
+          "platform": "name",
+          "url": "url"
+        }
+      }
+    }
   }
 }

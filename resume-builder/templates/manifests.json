@@ -367,5 +367,14 @@
     "index.html",
     "main.js",
     "style.css"
+  ],
+  "resume/style21": [
+    "assets/profile.jpg",
+    "assets/profile1.jpg",
+    "index.html"
+  ],
+  "resume/style22": [
+    "assets/profile.jpg",
+    "index.html"
   ]
 }

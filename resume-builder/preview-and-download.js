@@ -94,6 +94,8 @@ const NAME_TO_STYLE_KEY = {
   LINEN: "style18",
   PRISM: "style19",
   OBSIDIAN: "style20",
+  AURORA: "style21",
+  MERIDIAN: "style22",
 };
 
 function templateKey() {
@@ -547,6 +549,8 @@ const CHECKOUT_URL_BY_TEMPLATE = {
   "resume/style18": "https://resumeprotemplate.gumroad.com/l/generated-resume-linen",
   "resume/style19": "https://resumeprotemplate.gumroad.com/l/generated-resume-prism",
   "resume/style20": "https://resumeprotemplate.gumroad.com/l/generated-resume-obsidian",
+  "resume/style21": "https://resumeprotemplate.gumroad.com/l/generated-resume-aurora",
+  "resume/style22": "https://resumeprotemplate.gumroad.com/l/generated-resume-meridian",
 };
 const DEFAULT_CHECKOUT_URL = "https://resumeprotemplate.gumroad.com/l/generated-resume";
 
